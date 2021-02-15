@@ -9,3 +9,5 @@ project(Build_in_Cpp)
 set(FLATBUFFERS_BUILD_CPP17 ON CACHE BOOL "Flatbuffers C++17 support")
 set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "Flatbuffers disable tests")
 add_subdirectory(flatbuffers)
+
+add_subdirectory(spdlog)
