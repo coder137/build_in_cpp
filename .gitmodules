@@ -1,3 +1,6 @@
 [submodule "flatbuffers"]
 	path = flatbuffers
 	url = https://github.com/google/flatbuffers.git
+[submodule "spdlog"]
+	path = spdlog
+	url = https://github.com/gabime/spdlog.git
