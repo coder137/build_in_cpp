@@ -18,7 +18,8 @@ add_custom_target(fbs_to_header
 )
 
 # Library
-add_library(buildcc)
+# NOTE, Added buildcc as OBJECT library to reduce link time
+add_library(buildcc OBJECT)
 target_sources(buildcc PRIVATE 
     src/target.cpp
     src/fbs_utils.cpp

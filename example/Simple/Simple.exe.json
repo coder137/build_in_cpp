@@ -1,0 +1,15 @@
+{
+  "name": "Simple.exe",
+  "relative_path": "D:/Repositories/build_in_cpp/example/Simple",
+  "toolchain": {
+    "name": "gcc",
+    "c_compiler": "gcc",
+    "cpp_compiler": "g++"
+  },
+  "source_files": [
+    {
+      "filename": "D:/Repositories/build_in_cpp/example/Simple\\main.cpp",
+      "last_write_timestamp": 132580300330166413
+    }
+  ]
+}
