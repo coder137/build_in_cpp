@@ -1,0 +1,38 @@
+namespace schema.internal;
+
+table Toolchain {
+    name:string (key);
+    c_compiler:string;
+    cpp_compiler:string;
+
+    preprocessor_flags:[string];
+    c_compile_flags:[string];
+    cpp_compile_flags:[string];
+    link_flags:[string];
+}
+
+table File {
+    filename:string (key);
+    last_write_timestamp:uint64;
+}
+
+enum TargetType : byte {
+    Executable,
+    StaticLibrary,
+    DynamicLibrary
+}
+
+table Target {
+    name:string (key);
+    relative_path:string;
+    type:TargetType;
+    toolchain:Toolchain;
+
+    source_files:[File];
+    include_dirs:[string];
+
+    lib_deps:[Target];
+    lib_dirs:[string];
+}
+
+root_type Target;
