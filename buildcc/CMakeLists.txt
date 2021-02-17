@@ -16,3 +16,20 @@ add_custom_command(OUTPUT ${FBS_GEN_FILES}
 add_custom_target(fbs_to_header
     DEPENDS ${FBS_GEN_FILES}
 )
+
+# Library
+add_library(buildcc)
+target_sources(buildcc PRIVATE 
+    src/target.cpp
+    src/fbs_utils.cpp
+)
+target_include_directories(buildcc PUBLIC include)
+add_dependencies(buildcc fbs_to_header)
+
+# PRIVATE linkages
+target_include_directories(buildcc PRIVATE
+    ${FlatBuffers_SOURCE_DIR}/include
+    generated
+    fbs
+)
+target_link_libraries(buildcc PRIVATE flatbuffers spdlog::spdlog)
