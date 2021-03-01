@@ -11,7 +11,7 @@ CTestTestfile.cmake
 _deps
 
 # Folder
-build/
+*build/
 .vscode/
 
 # Files
