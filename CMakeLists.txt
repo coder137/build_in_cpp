@@ -24,3 +24,6 @@ set(TESTS_BUILD_DISCOVER OFF CACHE BOOL "CppUTests Tests discover")
 add_subdirectory(cpputest)
 
 add_subdirectory(buildcc)
+
+# Custom Targets
+include(cmake/target/lcov.cmake)
