@@ -4,17 +4,40 @@
 #include <filesystem>
 #include <string>
 
+// The Path class defined below is meant to be used with Sets
+#include <unordered_set>
+
 namespace buildcc::internal {
 
 class Path {
 public:
+  /**
+   * @brief Create a Existing Path object and sets last_write_timstamp to file
+   * timestamp
+   * NOTE, Throws filesystem exception if file not found
+   *
+   * @param pathname
+   * @return Path
+   */
   static Path CreateExistingPath(const std::string &pathname) {
-    return Path(pathname);
+    uint64_t last_write_timestamp =
+        std::filesystem::last_write_time(pathname).time_since_epoch().count();
+    return Path(pathname, last_write_timestamp);
   }
 
   static Path CreateNewPath(const std::string &pathname,
-                            uint64_t last_write_timestamp) {
+                            uint64_t last_write_timestamp) noexcept {
     return Path(pathname, last_write_timestamp);
+  }
+
+  /**
+   * @brief Create a New Path object and sets last_write_timestamp to 0
+   *
+   * @param pathname
+   * @return Path
+   */
+  static Path CreateNewPath(const std::string &pathname) noexcept {
+    return Path(pathname, 0);
   }
 
   // Setters
@@ -36,14 +59,7 @@ public:
   }
 
 private:
-  explicit Path(const std::string &pathname)
-      : pathname_(pathname),
-        last_write_timestamp_(std::filesystem::last_write_time(pathname)
-                                  .time_since_epoch()
-                                  .count()) {}
-
-  explicit Path(const std::string &pathname,
-                std::uint64_t last_write_timestamp) noexcept
+  explicit Path(const std::string &pathname, std::uint64_t last_write_timestamp)
       : pathname_(pathname), last_write_timestamp_(last_write_timestamp) {}
 
 private:
@@ -58,6 +74,8 @@ public:
     return std::hash<std::string>()(p.GetPathname());
   }
 };
+
+typedef std::unordered_set<Path, PathHash> path_unordered_set;
 
 } // namespace buildcc::internal
 

@@ -22,8 +22,10 @@ public:
   bool Load();
 
   // Getters
-  const std::unordered_set<Path, PathHash> &GetLoadedSources() const {
-    return loaded_sources_;
+  const path_unordered_set &GetLoadedSources() const { return loaded_sources_; }
+
+  const path_unordered_set &GetLoadedIncludeDirs() const {
+    return loaded_include_dirs_;
   }
 
 private:
@@ -33,7 +35,8 @@ private:
   std::string name_;
   fs::path relative_path_;
 
-  std::unordered_set<Path, PathHash> loaded_sources_;
+  path_unordered_set loaded_sources_;
+  path_unordered_set loaded_include_dirs_;
 };
 
 } // namespace buildcc::internal

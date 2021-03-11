@@ -9,18 +9,20 @@
 namespace fbs = schema::internal;
 
 namespace {
-void ExtractSources(
+void ExtractPaths(
     const flatbuffers::Vector<flatbuffers::Offset<schema::internal::Path>>
-        *fbs_sources,
-    std::unordered_set<buildcc::internal::Path, buildcc::internal::PathHash>
-        *loaded_sources) {
-  for (auto iter = fbs_sources->begin(); iter != fbs_sources->end(); iter++) {
+        *fbs_paths,
+    buildcc::internal::path_unordered_set *loaded_sources) {
+  if (fbs_paths == nullptr || loaded_sources == nullptr) {
+    return;
+  }
+
+  for (auto iter = fbs_paths->begin(); iter != fbs_paths->end(); iter++) {
     loaded_sources->insert(buildcc::internal::Path::CreateNewPath(
         iter->pathname()->c_str(), iter->last_write_timestamp()));
   }
 }
 
-// TODO, ExtractIncludeDirs
 // TODO, ExtractLibs
 
 } // namespace
@@ -39,10 +41,9 @@ bool SchemaLoader::Load() {
     return false;
   }
   auto target = fbs::GetTarget((const void *)buffer.c_str());
-  ExtractSources(target->source_files(), &loaded_sources_);
-  // TODO, ExtractDirs
+  ExtractPaths(target->source_files(), &loaded_sources_);
+  ExtractPaths(target->include_dirs(), &loaded_include_dirs_);
   // TODO, ExtractLibDirs
-
   return true;
 }
 
