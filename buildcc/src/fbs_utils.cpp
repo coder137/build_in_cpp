@@ -2,7 +2,11 @@
 
 #include <filesystem>
 
+#include "target_generated.h"
+
 #include "flatbuffers/util.h"
+
+namespace fbs = schema::internal;
 
 namespace {
 
@@ -39,82 +43,43 @@ fbs_utils_get_fbs_toolchain(flatbuffers::FlatBufferBuilder &builder,
                               fbs_cpp_compiler);
 }
 
-flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<fbs::File>>>
-fbs_utils_get_fbs_files(flatbuffers::FlatBufferBuilder &builder,
-                        const std::unordered_set<std::string> &source_files) {
-  std::vector<flatbuffers::Offset<fbs::File>> sources;
+std::vector<flatbuffers::Offset<fbs::Path>> fbs_utils_get_fbs_path(
+    flatbuffers::FlatBufferBuilder &builder,
+    const buildcc::internal::path_unordered_set &source_files) {
+  std::vector<flatbuffers::Offset<fbs::Path>> sources;
   for (const auto &source : source_files) {
-    // uint64_t timestamp =
-    // fs::last_write_time(source).time_since_epoch().count();
-    auto current_file = buildcc::internal::File(source);
-    auto fbs_file =
-        fbs::CreateFileDirect(builder, current_file.GetFilename().c_str(),
-                              current_file.GetLastWriteTimestamp());
+    auto fbs_file = fbs::CreatePathDirect(builder, source.GetPathname().c_str(),
+                                          source.GetLastWriteTimestamp());
     sources.push_back(fbs_file);
   }
-
-  auto fbs_sources = builder.CreateVectorOfSortedTables(&sources);
-  return fbs_sources;
+  return sources;
 }
 
 } // namespace
 
 namespace buildcc::internal {
 
-// TODO, Improve with the direct API if possible
-bool fbs_utils_save_fbs_target(const buildcc::Target &target) {
+bool fbs_utils_store_target(const std::string &name,
+                            const fs::path &relative_path,
+                            TargetType target_type, const Toolchain &toolchain,
+                            const path_unordered_set &source_files,
+                            const path_unordered_set &include_dirs) {
   flatbuffers::FlatBufferBuilder builder;
-  auto fbs_name = builder.CreateString(target.GetName());
-  auto fbs_relative_path =
-      builder.CreateString(target.GetRelativePath().string());
-  auto fbs_target_type = fbs_utils_get_fbs_target_type(target.GetTargetType());
-  auto fbs_toolchain =
-      fbs_utils_get_fbs_toolchain(builder, target.GetToolchain());
 
-  auto fbs_source_files = fbs_utils_get_fbs_files(builder, target.GetSources());
-  // TODO, Add more conversions here
+  auto fbs_target_type = fbs_utils_get_fbs_target_type(target_type);
+  auto fbs_toolchain = fbs_utils_get_fbs_toolchain(builder, toolchain);
+  auto fbs_source_files = fbs_utils_get_fbs_path(builder, source_files);
+  auto fbs_include_dirs = fbs_utils_get_fbs_path(builder, include_dirs);
 
-  auto fbs_target =
-      fbs::CreateTarget(builder, fbs_name, fbs_relative_path, fbs_target_type,
-                        fbs_toolchain, fbs_source_files);
+  auto fbs_target = fbs::CreateTargetDirect(
+      builder, name.c_str(), relative_path.string().c_str(), fbs_target_type,
+      fbs_toolchain, &fbs_source_files, &fbs_include_dirs);
   fbs::FinishTargetBuffer(builder, fbs_target);
 
-  auto file_path = target.GetRelativePath() / (target.GetName() + ".bin");
+  auto file_path = relative_path / (name + ".bin");
   return flatbuffers::SaveFile(file_path.string().c_str(),
                                (const char *)builder.GetBufferPointer(),
                                builder.GetSize(), true);
-}
-
-bool fbs_utils_fbs_load_target(const buildcc::Target &target,
-                               fbs::TargetT *targetT) {
-  return fbs_utils_fbs_load_target(target.GetName(), target.GetRelativePath(),
-                                   targetT);
-}
-
-bool fbs_utils_fbs_load_target(const std::string &name,
-                               const fs::path &relative_path,
-                               fbs::TargetT *targetT) {
-  auto file_path = relative_path / (name + ".bin");
-  std::string buffer;
-  bool is_loaded =
-      flatbuffers::LoadFile(file_path.string().c_str(), true, &buffer);
-  if (is_loaded) {
-    auto target = fbs::GetTarget((const void *)buffer.c_str());
-    target->UnPackTo(targetT);
-  }
-
-  return is_loaded;
-}
-
-bool fbs_utils_fbs_target_exists(const buildcc::Target &target) {
-  return fbs_utils_fbs_target_exists(target.GetName(),
-                                     target.GetRelativePath());
-}
-
-bool fbs_utils_fbs_target_exists(const std::string &name,
-                                 const fs::path &relative_path) {
-  auto file_path = relative_path / (name + ".bin");
-  return fs::exists(file_path);
 }
 
 } // namespace buildcc::internal
