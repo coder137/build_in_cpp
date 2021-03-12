@@ -3,7 +3,6 @@
 #include "flatbuffers/util.h"
 #include "target_generated.h"
 
-#include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 
 namespace fbs = schema::internal;

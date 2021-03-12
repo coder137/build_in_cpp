@@ -20,6 +20,59 @@ TEST_GROUP(FbsUtilsTestGroup)
 };
 // clang-format on
 
+TEST(FbsUtilsTestGroup, FbsTargetTypeTest) {
+  {
+    constexpr const char *const NAME = "CreateTargetTypeExecutable.exe";
+
+    // Store
+    buildcc::internal::fbs_utils_store_target(
+        NAME, BUILD_SCRIPT_SOURCE, buildcc::TargetType::Executable,
+        buildcc::Toolchain("gcc", "gcc", "g++"),
+        buildcc::internal::path_unordered_set(),
+        buildcc::internal::path_unordered_set());
+
+    // TODO, Use Schema Loader to verify TargetType
+  }
+
+  {
+    constexpr const char *const NAME = "CreateTargetTypeStaticLibrary.a";
+
+    // Store
+    buildcc::internal::fbs_utils_store_target(
+        NAME, BUILD_SCRIPT_SOURCE, buildcc::TargetType::StaticLibrary,
+        buildcc::Toolchain("gcc", "gcc", "g++"),
+        buildcc::internal::path_unordered_set(),
+        buildcc::internal::path_unordered_set());
+
+    // TODO, Use Schema Loader to verify TargetType
+  }
+
+  {
+    constexpr const char *const NAME = "CreateTargetTypeDynamicLibrary.so";
+
+    // Store
+    buildcc::internal::fbs_utils_store_target(
+        NAME, BUILD_SCRIPT_SOURCE, buildcc::TargetType::DynamicLibrary,
+        buildcc::Toolchain("gcc", "gcc", "g++"),
+        buildcc::internal::path_unordered_set(),
+        buildcc::internal::path_unordered_set());
+
+    // TODO, Use Schema Loader to verify TargetType
+  }
+
+  {
+    constexpr const char *const NAME = "CreateTargetTypeError";
+
+    // Store
+    CHECK_THROWS(std::string,
+                 buildcc::internal::fbs_utils_store_target(
+                     NAME, BUILD_SCRIPT_SOURCE, (buildcc::TargetType)3,
+                     buildcc::Toolchain("gcc", "gcc", "g++"),
+                     buildcc::internal::path_unordered_set(),
+                     buildcc::internal::path_unordered_set()));
+  }
+}
+
 TEST(FbsUtilsTestGroup, FbsTargetStoreEmptyTest) {
   constexpr const char *const NAME = "CreateEmpty.exe";
   // Store
