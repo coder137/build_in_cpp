@@ -1,10 +1,12 @@
-cmake_minimum_required(VERSION 3.17.0)
+cmake_minimum_required(VERSION 3.10.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(simple)
 
 # buildcc should be added as a Shared Library, or Object Library
 # Link time for Static libraries is huge
+set(BUILDCC_TESTING OFF CACHE BOOL "BuildCC Testing")
 add_subdirectory(../../ BuildCC)
 
 # build executable
