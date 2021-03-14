@@ -29,7 +29,7 @@ void ExtractPaths(
 namespace buildcc::internal {
 
 // Public functions
-bool SchemaLoader::Load() {
+bool FbsLoader::Load() {
   spdlog::trace(__FUNCTION__);
 
   auto file_path = relative_path_ / (name_ + ".bin");
@@ -47,7 +47,7 @@ bool SchemaLoader::Load() {
 }
 
 // Private functions
-void SchemaLoader::Initialize() {
+void FbsLoader::Initialize() {
   spdlog::set_level(spdlog::level::trace);
   spdlog::trace(__FUNCTION__);
 }

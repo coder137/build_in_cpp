@@ -11,9 +11,9 @@ namespace fs = std::filesystem;
 
 namespace buildcc::internal {
 
-class SchemaLoader {
+class FbsLoader {
 public:
-  SchemaLoader(const std::string &name, const fs::path &relative_path)
+  FbsLoader(const std::string &name, const fs::path &relative_path)
       : name_(name), relative_path_(relative_path) {
     Initialize();
   }

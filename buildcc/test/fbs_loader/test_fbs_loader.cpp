@@ -8,27 +8,27 @@
 #include "CppUTest/Utest.h"
 
 // clang-format off
-TEST_GROUP(SchemaLoaderTestGroup)
+TEST_GROUP(FbsLoaderTestGroup)
 {
 };
 // clang-format on
 
-TEST(SchemaLoaderTestGroup, LoadSchemaData) {
+TEST(FbsLoaderTestGroup, LoadSchemaData) {
   {
-    buildcc::internal::SchemaLoader loader("Simple.exe", "");
+    buildcc::internal::FbsLoader loader("Simple.exe", "");
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
   }
 
   {
-    buildcc::internal::SchemaLoader loader("NotExist.exe", "");
+    buildcc::internal::FbsLoader loader("NotExist.exe", "");
     bool is_loaded = loader.Load();
     CHECK_FALSE(is_loaded);
   }
 }
 
-TEST(SchemaLoaderTestGroup, GetLoadedSources) {
-  buildcc::internal::SchemaLoader loader("Simple.exe", "");
+TEST(FbsLoaderTestGroup, GetLoadedSources) {
+  buildcc::internal::FbsLoader loader("Simple.exe", "");
   bool is_loaded = loader.Load();
   CHECK_TRUE(is_loaded);
 

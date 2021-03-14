@@ -64,7 +64,7 @@ private:
 
   // TODO, Add more internal variables
 
-  internal::SchemaLoader loader_;
+  internal::FbsLoader loader_;
   bool dirty_ = false;
 };
 

@@ -35,7 +35,7 @@ TEST(TargetTestGroup, TargetAddSource) {
   CHECK_THROWS(std::string, simple.AddSource(DUMMY_MAIN));
   simple.Build();
 
-  buildcc::internal::SchemaLoader loader(NAME, BUILD_SCRIPT_SOURCE);
+  buildcc::internal::FbsLoader loader(NAME, BUILD_SCRIPT_SOURCE);
   bool is_loaded = loader.Load();
   CHECK_TRUE(is_loaded);
 
@@ -60,7 +60,7 @@ TEST(TargetTestGroup, TargetBuildCompile) {
   simple.AddSource(DUMMY_MAIN);
   simple.Build();
 
-  buildcc::internal::SchemaLoader loader(NAME, BUILD_SCRIPT_SOURCE);
+  buildcc::internal::FbsLoader loader(NAME, BUILD_SCRIPT_SOURCE);
   bool is_loaded = loader.Load();
   CHECK_TRUE(is_loaded);
 
@@ -93,7 +93,7 @@ TEST(TargetTestGroup, TargetBuildRecompile) {
     // * Simple recompile
     simple.Build();
 
-    buildcc::internal::SchemaLoader loader(NAME, BUILD_SCRIPT_SOURCE);
+    buildcc::internal::FbsLoader loader(NAME, BUILD_SCRIPT_SOURCE);
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
 
@@ -114,7 +114,7 @@ TEST(TargetTestGroup, TargetBuildRecompile) {
     // Run the second Build to test Recompile
     simple.Build();
 
-    buildcc::internal::SchemaLoader loader(NAME, BUILD_SCRIPT_SOURCE);
+    buildcc::internal::FbsLoader loader(NAME, BUILD_SCRIPT_SOURCE);
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
 
@@ -138,7 +138,7 @@ TEST(TargetTestGroup, TargetBuildRecompile) {
     // Run the second Build to test Recompile
     simple.Build();
 
-    buildcc::internal::SchemaLoader loader(NAME, BUILD_SCRIPT_SOURCE);
+    buildcc::internal::FbsLoader loader(NAME, BUILD_SCRIPT_SOURCE);
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
 
