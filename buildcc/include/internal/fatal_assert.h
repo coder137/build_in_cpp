@@ -5,7 +5,7 @@
 
 #include "spdlog/spdlog.h"
 
-namespace buildcc {
+namespace buildcc::internal {
 
 template <typename T>
 void assert_fatal(T first, T second, const std::string &message) {
@@ -15,11 +15,10 @@ void assert_fatal(T first, T second, const std::string &message) {
   }
 }
 
-template <typename T>
-void assert_fatal_true(T first, const std::string &message) {
+inline void assert_fatal_true(bool first, const std::string &message) {
   assert_fatal(first, true, message);
 }
 
-} // namespace buildcc
+} // namespace buildcc::internal
 
 #endif
