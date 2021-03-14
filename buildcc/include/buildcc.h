@@ -7,8 +7,8 @@
 #include <vector>
 
 // Internal
-#include "path.h"
-#include "schema_loader.h"
+#include "internal/path.h"
+#include "internal/schema_loader.h"
 
 // Public
 #include "target_type.h"

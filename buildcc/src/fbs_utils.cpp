@@ -1,8 +1,8 @@
-#include "fbs_utils.h"
+#include "internal/fbs_utils.h"
 
 #include <filesystem>
 
-#include "fatal_assert.h"
+#include "internal/fatal_assert.h"
 
 #include "flatbuffers/util.h"
 #include "target_generated.h"

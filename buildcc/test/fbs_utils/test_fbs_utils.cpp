@@ -1,6 +1,8 @@
 #include "constants.h"
-#include "fbs_utils.h"
-#include "schema_loader.h"
+
+// Internal
+#include "internal/fbs_utils.h"
+#include "internal/schema_loader.h"
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"

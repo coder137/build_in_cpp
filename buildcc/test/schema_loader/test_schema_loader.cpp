@@ -1,4 +1,5 @@
-#include "schema_loader.h"
+// Internal
+#include "internal/schema_loader.h"
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"

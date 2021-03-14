@@ -1,4 +1,6 @@
-#include "path.h"
+// Internal
+#include "internal/path.h"
+
 #include <cstdint>
 #include <unordered_set>
 

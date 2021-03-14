@@ -1,6 +1,8 @@
 #include "buildcc.h"
-#include "fatal_assert.h"
-#include "fbs_utils.h"
+
+// Internal
+#include "internal/fatal_assert.h"
+#include "internal/fbs_utils.h"
 
 // Spdlog
 #include "spdlog/spdlog.h"

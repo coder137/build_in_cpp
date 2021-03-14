@@ -1,4 +1,7 @@
-#include "fatal_assert.h"
+// Internal
+#include "internal/fatal_assert.h"
+
+// Third Party
 #include "spdlog/spdlog.h"
 
 // NOTE, Make sure all these includes are AFTER the system and header includes

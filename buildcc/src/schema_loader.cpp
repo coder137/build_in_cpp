@@ -1,4 +1,4 @@
-#include "schema_loader.h"
+#include "internal/schema_loader.h"
 
 #include "flatbuffers/util.h"
 #include "target_generated.h"
