@@ -29,7 +29,7 @@ add_dependencies(buildcc fbs_to_header)
 target_sources(buildcc PRIVATE 
     src/target.cpp
     src/fbs_utils.cpp
-    src/schema_loader.cpp
+    src/fbs_loader.cpp
 )
 target_include_directories(buildcc PRIVATE
     generated

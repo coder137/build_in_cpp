@@ -1,5 +1,5 @@
 // Internal
-#include "internal/schema_loader.h"
+#include "internal/fbs_loader.h"
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"

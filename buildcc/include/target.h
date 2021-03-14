@@ -7,8 +7,8 @@
 #include <vector>
 
 // Internal
+#include "internal/fbs_loader.h"
 #include "internal/path.h"
-#include "internal/schema_loader.h"
 
 // Buildcc
 #include "target_type.h"
