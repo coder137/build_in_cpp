@@ -1,5 +1,5 @@
-#ifndef BUILDCC_INCLUDE_PATH_H_
-#define BUILDCC_INCLUDE_PATH_H_
+#ifndef BUILDCC_INCLUDE_INTERNAL_PATH_H_
+#define BUILDCC_INCLUDE_INTERNAL_PATH_H_
 
 #include <filesystem>
 #include <string>

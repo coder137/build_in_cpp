@@ -1,5 +1,5 @@
-#ifndef BUILDCC_INCLUDE_FBS_UTILS_H_
-#define BUILDCC_INCLUDE_FBS_UTILS_H_
+#ifndef BUILDCC_INCLUDE_INTERNAL_FBS_UTILS_H_
+#define BUILDCC_INCLUDE_INTERNAL_FBS_UTILS_H_
 
 #include <filesystem>
 #include <string>
