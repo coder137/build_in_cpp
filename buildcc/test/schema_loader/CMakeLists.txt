@@ -1,0 +1,23 @@
+file(COPY Simple.exe.bin DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+set(TEST_NAME "test_schema_loader")
+add_executable(
+    ${TEST_NAME}
+    ${TEST_NAME}.cpp
+    ${BUILDCC_DIR}/src/schema_loader.cpp
+)
+target_include_directories(${TEST_NAME} PRIVATE
+    ${BUILDCC_DIR}/include
+    # ${BUILDCC_DIR}/fbs
+    ${BUILDCC_DIR}/generated
+)
+target_link_libraries(${TEST_NAME} PRIVATE
+    flatbuffers
+    spdlog
+    CppUTest
+    CppUTestExt
+    gcov
+)
+target_compile_options(${TEST_NAME} PRIVATE -g -fprofile-arcs -ftest-coverage -O0)
+target_link_options(${TEST_NAME} PRIVATE -g -fprofile-arcs -ftest-coverage -O0)
+
+add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})

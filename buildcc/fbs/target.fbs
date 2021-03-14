@@ -11,8 +11,8 @@ table Toolchain {
     link_flags:[string];
 }
 
-table File {
-    filename:string (key);
+table Path {
+    pathname:string (key);
     last_write_timestamp:uint64;
 }
 
@@ -28,11 +28,11 @@ table Target {
     type:TargetType;
     toolchain:Toolchain;
 
-    source_files:[File];
-    include_dirs:[string];
+    source_files:[Path];
+    include_dirs:[Path];
 
-    lib_deps:[Target];
-    lib_dirs:[string];
+    lib_deps:[Target]; // Doesnt have to be an entire Target, could just be a path
+    lib_dirs:[Path];
 }
 
 root_type Target;

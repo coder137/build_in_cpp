@@ -6,24 +6,46 @@
 #include "spdlog/spdlog.h"
 
 namespace fs = std::filesystem;
-namespace fbs = schema::internal;
+
+namespace {
+
+// RecompileSources
+bool IsOneOrMorePreviousSourceDeleted(
+    const buildcc::internal::path_unordered_set &previous_source_files,
+    const buildcc::internal::path_unordered_set &current_source_files) {
+  bool one_or_more_previous_source_deleted = false;
+  for (const auto &file : previous_source_files) {
+    auto iter = current_source_files.find(file);
+    if (iter == current_source_files.end()) {
+      one_or_more_previous_source_deleted = true;
+      break;
+    }
+  }
+
+  return one_or_more_previous_source_deleted;
+}
+
+} // namespace
 
 namespace buildcc {
 
 void Target::AddSource(
     const std::string &relative_filename,
     const std::filesystem::path &relative_to_base_relative_path) {
+
   // Check Source
   fs::path absolute_filepath =
       relative_path_ / relative_to_base_relative_path / relative_filename;
-
   assert_fatal_true(fs::exists(absolute_filepath),
                     absolute_filepath.string() + " not found");
-  assert_fatal(current_source_files_.find(absolute_filepath.string()),
+
+  auto current_file =
+      buildcc::internal::Path::CreateExistingPath(absolute_filepath.string());
+  assert_fatal(current_source_files_.find(current_file),
                current_source_files_.end(),
                absolute_filepath.string() + " duplicate found");
 
-  current_source_files_.insert(absolute_filepath.string());
+  current_source_files_.insert(current_file);
 }
 
 void Target::AddSource(const std::string &relative_filename) {
@@ -32,7 +54,7 @@ void Target::AddSource(const std::string &relative_filename) {
 
 void Target::Build() {
   std::vector<std::string> compiled_sources;
-  if (!internal::fbs_utils_fbs_target_exists(*this)) {
+  if (!loader_.Load()) {
     compiled_sources = CompileSources();
     dirty_ = true;
   } else {
@@ -41,8 +63,13 @@ void Target::Build() {
 
   if (dirty_) {
     BuildTarget(compiled_sources);
-    internal::fbs_utils_save_fbs_target(*this);
   }
+
+  // Write back
+  // TODO, Update this with include directory
+  internal::fbs_utils_store_target(name_, relative_path_, type_, toolchain_,
+                                   current_source_files_,
+                                   buildcc::internal::path_unordered_set());
 }
 
 // PRIVATE
@@ -51,27 +78,6 @@ void Target::Initialize() {
   // Set spdlog initialization levels
   spdlog::set_level(spdlog::level::trace);
   spdlog::set_pattern("%^[%l]%$ : %v");
-
-  // Check for serialized file
-  bool exists = internal::fbs_utils_fbs_target_exists(*this);
-  if (!exists) {
-    dirty_ = true;
-    return;
-  }
-
-  // Get target
-  fbs::TargetT targetT;
-  bool is_loaded = internal::fbs_utils_fbs_load_target(*this, &targetT);
-  assert_fatal_true(is_loaded,
-                    "Expected to load the '" + name_ + "' serialized file");
-
-  // Update sources
-  for (const auto &source_it : targetT.source_files) {
-    loaded_source_files_.insert(
-        internal::File(source_it->filename, source_it->last_write_timestamp));
-  }
-
-  // TODO, Update other deps here
 }
 
 void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
@@ -89,10 +95,11 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   std::string command =
       toolchain_.GetCppCompiler() + " -g -o " + target.string() + files;
   spdlog::debug(command);
-  system(command.c_str());
+  int err = system(command.c_str());
+  assert_fatal(err, 0, "Compilation failed for: " + name_);
 }
 
-std::string Target::CompileSource(const std::string &source) {
+void Target::CompileSource(const std::string &source) {
   fs::path source_path = source;
   std::string compiler = source_path.extension() == ".c"
                              ? toolchain_.GetCCompiler()
@@ -101,15 +108,16 @@ std::string Target::CompileSource(const std::string &source) {
   std::string output_filename = source + ".o";
   std::string command = compiler + " -c " + source + " -o " + output_filename;
   spdlog::debug(command);
-  system(command.c_str());
-  return output_filename;
+  int err = system(command.c_str());
+  assert_fatal(err, 0, "Compilation failed for: " + source);
 }
 
 std::vector<std::string> Target::CompileSources() {
   spdlog::trace(__FUNCTION__);
   std::vector<std::string> compiled_files;
-  for (const auto &filename : current_source_files_) {
-    std::string compiled_filename = CompileSource(filename);
+  for (const auto &file : current_source_files_) {
+    std::string compiled_filename = file.GetPathname() + ".o";
+    CompileSource(file.GetPathname());
     compiled_files.push_back(compiled_filename);
   }
 
@@ -118,33 +126,32 @@ std::vector<std::string> Target::CompileSources() {
 
 std::vector<std::string> Target::RecompileSources() {
   spdlog::trace(__FUNCTION__);
-  for (const auto &file : loaded_source_files_) {
-    auto iter = current_source_files_.find(file.GetFilename());
-    if (iter == current_source_files_.end()) {
-      // erase this file from the loaded_source_files;
-      loaded_source_files_.erase(file);
-    }
-  }
+  const auto &previous_source_files = loader_.GetLoadedSources();
+
+  // * Cannot find previous source in current source files
+  bool is_source_removed = IsOneOrMorePreviousSourceDeleted(
+      previous_source_files, current_source_files_);
+  dirty_ = dirty_ || is_source_removed;
 
   std::vector<std::string> compiled_files;
-  for (const auto &filename : current_source_files_) {
-    auto current_file = internal::File(filename);
-    auto iter = loaded_source_files_.find(current_file);
-    std::string compiled_filename;
+  for (const auto &current_file : current_source_files_) {
+    std::string compiled_filename = current_file.GetPathname() + ".o";
 
-    // New source file added to build
-    if (iter == loaded_source_files_.end()) {
-      compiled_filename = CompileSource(filename);
+    // Find current_file in the loaded sources
+    auto iter = previous_source_files.find(current_file);
+
+    if (iter == previous_source_files.end()) {
+      // *1 New source file added to build
+      CompileSource(current_file.GetPathname());
       dirty_ = true;
     } else {
-      // Current file is updated
+      // *2 Current file is updated
       if (current_file.GetLastWriteTimestamp() >
           iter->GetLastWriteTimestamp()) {
-        compiled_filename = CompileSource(filename);
+        CompileSource(current_file.GetPathname());
         dirty_ = true;
       } else {
-        // Do nothing
-        compiled_filename = filename + ".o";
+        // *3 Do nothing
       }
     }
     compiled_files.push_back(compiled_filename);

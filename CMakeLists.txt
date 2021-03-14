@@ -5,14 +5,23 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(BuildCC)
 
-include(CTest)
-enable_testing()
+option(BUILDCC_TESTING "Enable BuildCC Testing" ON)
+
+if (BUILDCC_TESTING)
+    include(CTest)
+endif()
+
+# TODO, Update FLATBUFFERS option to conditionally compile FLATC
 
 # Set flatbuffer specific options here
 set(FLATBUFFERS_BUILD_CPP17 ON CACHE BOOL "Flatbuffers C++17 support")
-set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "Flatbuffers disable tests")
+set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "Flatbuffers build tests")
+set(FLATBUFFERS_BUILD_FLATHASH OFF CACHE BOOL "Flatbuffers build flathash")
+set(FLATBUFFERS_BUILD_FLATLIB ON CACHE BOOL "Flatbuffers build flatlib")
+# set(FLATBUFFERS_BUILD_SHAREDLIB ON CACHE BOOL "Flatbuffers built as dynamic library")
 add_subdirectory(flatbuffers)
 
+# set(SPDLOG_BUILD_SHARED ON CACHE BOOL "Spdlog built as dynamic library")
 add_subdirectory(spdlog)
 
 set(C++11 ON CACHE BOOL "CppUTests C++11 support")

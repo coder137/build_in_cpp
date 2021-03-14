@@ -1,7 +1,6 @@
 #ifndef BUILDCC_INCLUDE_ASSERT_H_
 #define BUILDCC_INCLUDE_ASSERT_H_
 
-#include <cassert>
 #include <string>
 
 #include "spdlog/spdlog.h"
@@ -12,7 +11,7 @@ template <typename T>
 void assert_fatal(T first, T second, const std::string &message) {
   if (first != second) {
     spdlog::error(message);
-    assert(first == second);
+    throw message;
   }
 }
 
