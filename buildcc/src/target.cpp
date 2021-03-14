@@ -1,4 +1,4 @@
-#include "buildcc.h"
+#include "target.h"
 
 // Internal
 #include "internal/fatal_assert.h"
