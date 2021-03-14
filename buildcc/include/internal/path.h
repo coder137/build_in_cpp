@@ -40,11 +40,6 @@ public:
     return Path(pathname, 0);
   }
 
-  // Setters
-  void SetLastWriteTimestamp(uint64_t last_write_timestamp) {
-    last_write_timestamp_ = last_write_timestamp;
-  }
-
   // Getters
   std::uint64_t GetLastWriteTimestamp() const { return last_write_timestamp_; }
   const std::string &GetPathname() const { return pathname_; }

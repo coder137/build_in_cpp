@@ -51,15 +51,6 @@ TEST(PathTestGroup, PathConstructor_NewPathStaticConstructor) {
   UNSIGNED_LONGLONGS_EQUAL(p.GetLastWriteTimestamp(), 12345ULL);
 }
 
-TEST(PathTestGroup, Path_SetTimestamp) {
-  buildcc::internal::Path p =
-      buildcc::internal::Path::CreateExistingPath("path_main.cpp");
-  STRCMP_EQUAL(p.GetPathname().c_str(), "path_main.cpp");
-
-  p.SetLastWriteTimestamp(12345ULL);
-  UNSIGNED_LONGLONGS_EQUAL(p.GetLastWriteTimestamp(), 12345ULL);
-}
-
 TEST(PathTestGroup, Path_EqualityOperator) {
   buildcc::internal::Path p =
       buildcc::internal::Path::CreateExistingPath("path_main.cpp");
