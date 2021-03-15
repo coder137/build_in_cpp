@@ -1,5 +1,5 @@
 add_subdirectory(fatal_assert)
 add_subdirectory(path)
-add_subdirectory(schema_loader)
+add_subdirectory(fbs_loader)
 add_subdirectory(fbs_utils)
 add_subdirectory(target)

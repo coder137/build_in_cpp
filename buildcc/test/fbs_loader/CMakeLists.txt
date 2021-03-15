@@ -1,9 +1,9 @@
 file(COPY Simple.exe.bin DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-set(TEST_NAME "test_schema_loader")
+set(TEST_NAME "test_fbs_loader")
 add_executable(
     ${TEST_NAME}
     ${TEST_NAME}.cpp
-    ${BUILDCC_DIR}/src/schema_loader.cpp
+    ${BUILDCC_DIR}/src/fbs_loader.cpp
 )
 target_include_directories(${TEST_NAME} PRIVATE
     ${BUILDCC_DIR}/include

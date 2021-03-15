@@ -1,6 +1,8 @@
 #include "constants.h"
-#include "fbs_utils.h"
-#include "schema_loader.h"
+
+// Internal
+#include "internal/fbs_loader.h"
+#include "internal/fbs_utils.h"
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
@@ -83,7 +85,7 @@ TEST(FbsUtilsTestGroup, FbsTargetStoreEmptyTest) {
       buildcc::internal::path_unordered_set());
 
   // Load
-  buildcc::internal::SchemaLoader loader(NAME, BUILD_SCRIPT_SOURCE);
+  buildcc::internal::FbsLoader loader(NAME, BUILD_SCRIPT_SOURCE);
   bool is_loaded = loader.Load();
   CHECK_TRUE(is_loaded);
 
@@ -106,7 +108,7 @@ TEST(FbsUtilsTestGroup, FbsTargetStoreSourceTest) {
       buildcc::internal::path_unordered_set());
 
   // Load
-  buildcc::internal::SchemaLoader loader(NAME, BUILD_SCRIPT_SOURCE);
+  buildcc::internal::FbsLoader loader(NAME, BUILD_SCRIPT_SOURCE);
   bool is_loaded = loader.Load();
   CHECK_TRUE(is_loaded);
 
@@ -141,7 +143,7 @@ TEST(FbsUtilsTestGroup, FbsTargetStoreIncludeDirsTest) {
       buildcc::internal::path_unordered_set(), include_dirs);
 
   // Load
-  buildcc::internal::SchemaLoader loader(NAME, BUILD_SCRIPT_SOURCE);
+  buildcc::internal::FbsLoader loader(NAME, BUILD_SCRIPT_SOURCE);
   bool is_loaded = loader.Load();
   CHECK_TRUE(is_loaded);
 

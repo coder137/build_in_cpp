@@ -1,8 +1,8 @@
-#include "fbs_utils.h"
+#include "internal/fbs_utils.h"
 
 #include <filesystem>
 
-#include "fatal_assert.h"
+#include "internal/fatal_assert.h"
 
 #include "flatbuffers/util.h"
 #include "target_generated.h"
@@ -23,7 +23,7 @@ fbs::TargetType fbs_utils_get_fbs_target_type(buildcc::TargetType type) {
     target_type = fbs::TargetType_DynamicLibrary;
     break;
   default:
-    buildcc::assert_fatal_true(false, "Not a valid TargetType");
+    buildcc::internal::assert_fatal_true(false, "Not a valid TargetType");
   }
   return target_type;
 }

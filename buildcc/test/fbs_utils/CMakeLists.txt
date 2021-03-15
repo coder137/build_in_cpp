@@ -5,7 +5,7 @@ add_executable(
     ${TEST_NAME}
     ${TEST_NAME}.cpp
     ${BUILDCC_DIR}/src/fbs_utils.cpp
-    ${BUILDCC_DIR}/src/schema_loader.cpp
+    ${BUILDCC_DIR}/src/fbs_loader.cpp
 )
 target_include_directories(${TEST_NAME} PRIVATE
     generated

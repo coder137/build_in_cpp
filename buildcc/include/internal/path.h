@@ -1,5 +1,5 @@
-#ifndef BUILDCC_INCLUDE_PATH_H_
-#define BUILDCC_INCLUDE_PATH_H_
+#ifndef BUILDCC_INCLUDE_INTERNAL_PATH_H_
+#define BUILDCC_INCLUDE_INTERNAL_PATH_H_
 
 #include <filesystem>
 #include <string>
@@ -38,11 +38,6 @@ public:
    */
   static Path CreateNewPath(const std::string &pathname) noexcept {
     return Path(pathname, 0);
-  }
-
-  // Setters
-  void SetLastWriteTimestamp(uint64_t last_write_timestamp) {
-    last_write_timestamp_ = last_write_timestamp;
   }
 
   // Getters

@@ -1,4 +1,6 @@
-#include "path.h"
+// Internal
+#include "internal/path.h"
+
 #include <cstdint>
 #include <unordered_set>
 
@@ -46,15 +48,6 @@ TEST(PathTestGroup, PathConstructor_NewPathStaticConstructor) {
   buildcc::internal::Path p =
       buildcc::internal::Path::CreateNewPath("random_path_main.cpp", 12345ULL);
   STRCMP_EQUAL(p.GetPathname().c_str(), "random_path_main.cpp");
-  UNSIGNED_LONGLONGS_EQUAL(p.GetLastWriteTimestamp(), 12345ULL);
-}
-
-TEST(PathTestGroup, Path_SetTimestamp) {
-  buildcc::internal::Path p =
-      buildcc::internal::Path::CreateExistingPath("path_main.cpp");
-  STRCMP_EQUAL(p.GetPathname().c_str(), "path_main.cpp");
-
-  p.SetLastWriteTimestamp(12345ULL);
   UNSIGNED_LONGLONGS_EQUAL(p.GetLastWriteTimestamp(), 12345ULL);
 }
 

@@ -1,6 +1,8 @@
-#include "buildcc.h"
-#include "fatal_assert.h"
-#include "fbs_utils.h"
+#include "target.h"
+
+// Internal
+#include "internal/fatal_assert.h"
+#include "internal/fbs_utils.h"
 
 // Spdlog
 #include "spdlog/spdlog.h"
@@ -36,14 +38,14 @@ void Target::AddSource(
   // Check Source
   fs::path absolute_filepath =
       relative_path_ / relative_to_base_relative_path / relative_filename;
-  assert_fatal_true(fs::exists(absolute_filepath),
-                    absolute_filepath.string() + " not found");
+  internal::assert_fatal_true(fs::exists(absolute_filepath),
+                              absolute_filepath.string() + " not found");
 
   auto current_file =
       buildcc::internal::Path::CreateExistingPath(absolute_filepath.string());
-  assert_fatal(current_source_files_.find(current_file),
-               current_source_files_.end(),
-               absolute_filepath.string() + " duplicate found");
+  internal::assert_fatal(current_source_files_.find(current_file),
+                         current_source_files_.end(),
+                         absolute_filepath.string() + " duplicate found");
 
   current_source_files_.insert(current_file);
 }
@@ -96,7 +98,7 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
       toolchain_.GetCppCompiler() + " -g -o " + target.string() + files;
   spdlog::debug(command);
   int err = system(command.c_str());
-  assert_fatal(err, 0, "Compilation failed for: " + name_);
+  internal::assert_fatal(err, 0, "Compilation failed for: " + name_);
 }
 
 void Target::CompileSource(const std::string &source) {
@@ -109,7 +111,7 @@ void Target::CompileSource(const std::string &source) {
   std::string command = compiler + " -c " + source + " -o " + output_filename;
   spdlog::debug(command);
   int err = system(command.c_str());
-  assert_fatal(err, 0, "Compilation failed for: " + source);
+  internal::assert_fatal(err, 0, "Compilation failed for: " + source);
 }
 
 std::vector<std::string> Target::CompileSources() {
