@@ -86,10 +86,10 @@ NOTE: We can use multiple inheritance on this to create customized Toolchains
 
 ## Functions
 
-- [ ] `env::set_env`
-- [ ] `env::set_log_level`
-- [ ] `env::log_trace`
-- [ ] `env::log_debug`
-- [ ] `env::log_info`
-- [ ] `env::log_warning`
-- [ ] `env::log_fatal`
+- [ ] `set_env`
+- [ ] `set_log_level`
+- [ ] `log_trace`
+- [ ] `log_debug`
+- [ ] `log_info`
+- [ ] `log_warning`
+- [ ] `log_fatal`
