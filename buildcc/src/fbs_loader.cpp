@@ -3,7 +3,7 @@
 #include "flatbuffers/util.h"
 #include "target_generated.h"
 
-#include "spdlog/spdlog.h"
+#include "env.h"
 
 namespace fbs = schema::internal;
 
@@ -30,7 +30,7 @@ namespace buildcc::internal {
 
 // Public functions
 bool FbsLoader::Load() {
-  spdlog::trace(__FUNCTION__);
+  env::log_trace(__FUNCTION__, name_);
 
   auto file_path = relative_path_ / (name_ + ".bin");
   std::string buffer;
@@ -47,9 +47,6 @@ bool FbsLoader::Load() {
 }
 
 // Private functions
-void FbsLoader::Initialize() {
-  spdlog::set_level(spdlog::level::trace);
-  spdlog::trace(__FUNCTION__);
-}
+void FbsLoader::Initialize() {}
 
 } // namespace buildcc::internal

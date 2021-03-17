@@ -3,14 +3,14 @@
 
 #include <string>
 
-#include "spdlog/spdlog.h"
+#include "env.h"
 
 namespace buildcc::internal {
 
 template <typename T>
 void assert_fatal(T first, T second, const std::string &message) {
   if (first != second) {
-    spdlog::error(message);
+    buildcc::env::log_critical(message, "assert");
     throw message;
   }
 }

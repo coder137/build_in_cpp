@@ -4,8 +4,8 @@
 #include "internal/fatal_assert.h"
 #include "internal/fbs_utils.h"
 
-// Spdlog
-#include "spdlog/spdlog.h"
+// Env
+#include "env.h"
 
 namespace fs = std::filesystem;
 
@@ -34,6 +34,7 @@ namespace buildcc {
 void Target::AddSource(
     const std::string &relative_filename,
     const std::filesystem::path &relative_to_base_relative_path) {
+  env::log_trace(__FUNCTION__, name_);
 
   // Check Source
   fs::path absolute_filepath =
@@ -55,6 +56,8 @@ void Target::AddSource(const std::string &relative_filename) {
 }
 
 void Target::Build() {
+  env::log_trace(__FUNCTION__, name_);
+
   std::vector<std::string> compiled_sources;
   if (!loader_.Load()) {
     compiled_sources = CompileSources();
@@ -76,13 +79,11 @@ void Target::Build() {
 
 // PRIVATE
 
-void Target::Initialize() {
-  // Set spdlog initialization levels
-  spdlog::set_level(spdlog::level::trace);
-  spdlog::set_pattern("%^[%l]%$ : %v");
-}
+void Target::Initialize() {}
 
 void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
+  env::log_trace(__FUNCTION__, name_);
+
   // Add compiled sources
   std::string files = "";
   for (const auto &output_file : compiled_sources) {
@@ -96,12 +97,14 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   auto target = relative_path_ / name_;
   std::string command =
       toolchain_.GetCppCompiler() + " -g -o " + target.string() + files;
-  spdlog::debug(command);
+  env::log_debug(command, name_);
   int err = system(command.c_str());
   internal::assert_fatal(err, 0, "Compilation failed for: " + name_);
 }
 
 void Target::CompileSource(const std::string &source) {
+  env::log_trace(__FUNCTION__, name_);
+
   fs::path source_path = source;
   std::string compiler = source_path.extension() == ".c"
                              ? toolchain_.GetCCompiler()
@@ -109,13 +112,14 @@ void Target::CompileSource(const std::string &source) {
 
   std::string output_filename = source + ".o";
   std::string command = compiler + " -c " + source + " -o " + output_filename;
-  spdlog::debug(command);
+  env::log_debug(command, name_);
   int err = system(command.c_str());
   internal::assert_fatal(err, 0, "Compilation failed for: " + source);
 }
 
 std::vector<std::string> Target::CompileSources() {
-  spdlog::trace(__FUNCTION__);
+  env::log_trace(__FUNCTION__, name_);
+
   std::vector<std::string> compiled_files;
   for (const auto &file : current_source_files_) {
     std::string compiled_filename = file.GetPathname() + ".o";
@@ -127,7 +131,8 @@ std::vector<std::string> Target::CompileSources() {
 }
 
 std::vector<std::string> Target::RecompileSources() {
-  spdlog::trace(__FUNCTION__);
+  env::log_trace(__FUNCTION__, name_);
+
   const auto &previous_source_files = loader_.GetLoadedSources();
 
   // * Cannot find previous source in current source files
@@ -144,12 +149,15 @@ std::vector<std::string> Target::RecompileSources() {
 
     if (iter == previous_source_files.end()) {
       // *1 New source file added to build
+      env::log_trace("New source added", name_);
       CompileSource(current_file.GetPathname());
       dirty_ = true;
     } else {
       // *2 Current file is updated
       if (current_file.GetLastWriteTimestamp() >
           iter->GetLastWriteTimestamp()) {
+        env::log_trace("Current file is newer " + current_file.GetPathname(),
+                       name_);
         CompileSource(current_file.GetPathname());
         dirty_ = true;
       } else {
