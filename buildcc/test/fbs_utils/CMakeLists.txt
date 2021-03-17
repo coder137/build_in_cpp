@@ -13,11 +13,11 @@ target_include_directories(${TEST_NAME} PRIVATE
     ${BUILDCC_DIR}/generated
 )
 target_link_libraries(${TEST_NAME} PRIVATE
+    env
     flatbuffers
     CppUTest
     CppUTestExt
     gcov
-    spdlog::spdlog
 )
 target_compile_options(${TEST_NAME} PRIVATE -g -fprofile-arcs -ftest-coverage -O0)
 target_link_options(${TEST_NAME} PRIVATE -g -fprofile-arcs -ftest-coverage -O0)
