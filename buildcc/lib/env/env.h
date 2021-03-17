@@ -16,11 +16,19 @@ enum class LogLevel {
   Fatal = Critical,
 };
 
+// Basic Initialization
 void init(const std::string &build_root_location,
           const std::string &build_intermediate_location);
 void set_log_level(LogLevel level);
 
-void log(LogLevel level, const std::string &message, const std::string &name = "env");
+// Getters
+bool is_init(void);
+const std::string &get_build_root_location();
+const std::string &get_build_intermediate_location();
+
+// Logging
+void log(LogLevel level, const std::string &message,
+         const std::string &name = "env");
 void log_trace(const std::string &message, const std::string &name = "env");
 void log_debug(const std::string &message, const std::string &name = "env");
 void log_info(const std::string &message, const std::string &name = "env");
