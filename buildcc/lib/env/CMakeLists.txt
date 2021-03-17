@@ -1,5 +1,6 @@
 add_library(env
     src/env.cpp
+    src/logging.cpp
 )
 target_include_directories(env PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/include
