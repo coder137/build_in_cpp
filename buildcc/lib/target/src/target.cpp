@@ -1,7 +1,7 @@
 #include "target.h"
 
 // Internal
-#include "internal/fatal_assert.h"
+#include "internal/assert_fatal.h"
 #include "internal/fbs_utils.h"
 
 // Env

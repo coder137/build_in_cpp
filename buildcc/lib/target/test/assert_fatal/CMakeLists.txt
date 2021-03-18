@@ -1,4 +1,4 @@
-set(TEST_NAME "test_fatal_assert")
+set(TEST_NAME "test_assert_fatal")
 add_executable(
     ${TEST_NAME}
     ${TEST_NAME}.cpp

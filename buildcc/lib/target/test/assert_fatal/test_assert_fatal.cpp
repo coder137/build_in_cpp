@@ -1,5 +1,5 @@
 // Internal
-#include "internal/fatal_assert.h"
+#include "internal/assert_fatal.h"
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
@@ -8,12 +8,12 @@
 #include "CppUTest/Utest.h"
 
 // clang-format off
-TEST_GROUP(FatalAssertTestGroup)
+TEST_GROUP(AssertFatalTestGroup)
 {
 };
 // clang-format on
 
-TEST(FatalAssertTestGroup, FatalAssertTest_NoThrow) {
+TEST(AssertFatalTestGroup, AssertFatalTest_NoThrow) {
   buildcc::internal::assert_fatal(false, false, "Not valid");
   buildcc::internal::assert_fatal(true, true, "Not valid");
   buildcc::internal::assert_fatal("true", "true", "Not valid");
@@ -21,7 +21,7 @@ TEST(FatalAssertTestGroup, FatalAssertTest_NoThrow) {
   buildcc::internal::assert_fatal(10.10, 10.10, "Not valid");
 }
 
-TEST(FatalAssertTestGroup, FatalAssertTest_Throw) {
+TEST(AssertFatalTestGroup, AssertFatalTest_Throw) {
   MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
 
   CHECK_THROWS(std::string,
@@ -38,7 +38,7 @@ TEST(FatalAssertTestGroup, FatalAssertTest_Throw) {
   MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 }
 
-TEST(FatalAssertTestGroup, FatalAssertTrueTest_NoThrow) {
+TEST(AssertFatalTestGroup, AssertFatalTrueTest_NoThrow) {
   buildcc::internal::assert_fatal_true(false == false, "Not valid");
   buildcc::internal::assert_fatal_true(true, "Not valid");
   buildcc::internal::assert_fatal_true("true" == "true", "Not valid");
@@ -46,7 +46,7 @@ TEST(FatalAssertTestGroup, FatalAssertTrueTest_NoThrow) {
   buildcc::internal::assert_fatal_true(10.10 == 10.10, "Not valid");
 }
 
-TEST(FatalAssertTestGroup, FatalAssertTrueTest_Throw) {
+TEST(AssertFatalTestGroup, AssertFatalTrueTest_Throw) {
   MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
 
   CHECK_THROWS(std::string,
