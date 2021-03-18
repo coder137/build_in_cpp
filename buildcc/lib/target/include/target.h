@@ -1,5 +1,5 @@
-#ifndef BUILDCC_INCLUDE_TARGET_H_
-#define BUILDCC_INCLUDE_TARGET_H_
+#ifndef TARGET_INCLUDE_TARGET_H_
+#define TARGET_INCLUDE_TARGET_H_
 
 #include <filesystem>
 #include <string>
