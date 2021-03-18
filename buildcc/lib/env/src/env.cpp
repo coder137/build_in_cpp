@@ -1,7 +1,5 @@
 #include "env.h"
 
-#include "spdlog/spdlog.h"
-
 namespace {
 
 std::string project_root_{""};

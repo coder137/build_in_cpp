@@ -12,7 +12,7 @@ void init(const std::string &project_root,
           const std::string &intermediate_build_dir);
 
 // Getters
-bool is_init(void);
+bool is_init();
 const std::string &get_project_root();
 const std::string &get_intermediate_build_dir();
 
