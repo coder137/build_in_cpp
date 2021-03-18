@@ -18,6 +18,9 @@ add_custom_target(fbs_to_header
 )
 
 # Library
+# TODO, Add env
+add_subdirectory(lib/env)
+
 # NOTE, Added buildcc as OBJECT library to reduce link time
 add_library(buildcc)
 target_include_directories(buildcc PUBLIC 
@@ -31,19 +34,22 @@ target_sources(buildcc PRIVATE
     src/fbs_utils.cpp
     src/fbs_loader.cpp
 )
+target_include_directories(buildcc PUBLIC
+    include
+)
 target_include_directories(buildcc PRIVATE
     generated
 )
+target_link_libraries(buildcc PUBLIC 
+    env
+)
 target_link_libraries(buildcc PRIVATE 
     flatbuffers 
-    spdlog::spdlog
 )
-
-# Mocks
-add_subdirectory(mock)
 
 # Tests
 if (BUILDCC_TESTING)
     set(BUILDCC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    add_subdirectory(mock)
     add_subdirectory(test)
 endif()

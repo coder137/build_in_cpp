@@ -4,6 +4,8 @@
 
 #include "internal/fatal_assert.h"
 
+#include "env.h"
+
 #include "flatbuffers/util.h"
 #include "target_generated.h"
 
@@ -63,6 +65,8 @@ bool fbs_utils_store_target(const std::string &name,
                             TargetType target_type, const Toolchain &toolchain,
                             const path_unordered_set &source_files,
                             const path_unordered_set &include_dirs) {
+  env::log_trace(__FUNCTION__, name);
+
   flatbuffers::FlatBufferBuilder builder;
 
   auto fbs_target_type = fbs_utils_get_fbs_target_type(target_type);

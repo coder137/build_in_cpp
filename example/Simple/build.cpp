@@ -7,6 +7,14 @@
 using namespace buildcc;
 
 int main(void) {
+  // Environment is meant to define
+  // 1. Project Root path i.e all files and targets will be added relative to
+  // this path
+  // 2. Intermediate build folder i.e all intermediate generated files should go
+  // here
+  env::init(BUILD_SCRIPT_SOURCE, BUILD_SCRIPT_FOLDER);
+  env::set_log_level(env::LogLevel::Trace);
+
   Target target("Simple.exe", TargetType::Executable,
                 Toolchain("gcc", "gcc", "g++"), BUILD_SCRIPT_SOURCE);
   target.AddSource("main.cpp");

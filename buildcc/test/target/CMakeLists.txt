@@ -14,8 +14,8 @@ target_include_directories(${TEST_NAME} PRIVATE
     ${BUILDCC_DIR}/generated
 )
 target_link_libraries(${TEST_NAME} PRIVATE
+    env
     flatbuffers
-    spdlog
     CppUTest
     CppUTestExt
     gcov
