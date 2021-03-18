@@ -3,16 +3,9 @@ set(TEST_NAME "test_fbs_loader")
 add_executable(
     ${TEST_NAME}
     ${TEST_NAME}.cpp
-    ${BUILDCC_DIR}/src/fbs_loader.cpp
-)
-target_include_directories(${TEST_NAME} PRIVATE
-    ${BUILDCC_DIR}/include
-    # ${BUILDCC_DIR}/fbs
-    ${BUILDCC_DIR}/generated
 )
 target_link_libraries(${TEST_NAME} PRIVATE
-    env
-    flatbuffers
+    target
     CppUTest
     CppUTestExt
     gcov
