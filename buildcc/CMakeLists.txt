@@ -13,6 +13,5 @@ target_link_libraries(buildcc INTERFACE
 
 # Tests
 if (BUILDCC_TESTING)
-    set(BUILDCC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-    add_subdirectory(test)
+    add_subdirectory(lib/target/test)
 endif()
