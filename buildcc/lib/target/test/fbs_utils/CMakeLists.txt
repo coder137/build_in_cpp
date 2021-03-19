@@ -4,13 +4,13 @@ set(TEST_NAME "test_fbs_utils")
 add_executable(
     ${TEST_NAME}
     ${TEST_NAME}.cpp
-    ${BUILDCC_DIR}/src/fbs_utils.cpp
-    ${BUILDCC_DIR}/src/fbs_loader.cpp
+    ${TARGET_DIR}/src/fbs_utils.cpp
+    ${TARGET_DIR}/src/fbs_loader.cpp
 )
 target_include_directories(${TEST_NAME} PRIVATE
     generated
-    ${BUILDCC_DIR}/include
-    ${BUILDCC_DIR}/generated
+    ${TARGET_DIR}/include
+    ${TARGET_DIR}/generated
 )
 target_link_libraries(${TEST_NAME} PRIVATE
     env

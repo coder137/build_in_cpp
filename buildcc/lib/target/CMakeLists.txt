@@ -38,3 +38,9 @@ target_include_directories(target PRIVATE
 target_link_libraries(target PRIVATE 
     flatbuffers 
 )
+
+# Tests
+if (BUILDCC_TESTING)
+    set(TARGET_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    add_subdirectory(test)
+endif()

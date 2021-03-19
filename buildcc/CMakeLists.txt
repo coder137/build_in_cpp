@@ -10,8 +10,3 @@ target_link_libraries(buildcc INTERFACE
     env
     target
 )
-
-# Tests
-if (BUILDCC_TESTING)
-    add_subdirectory(lib/target/test)
-endif()
