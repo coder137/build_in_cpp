@@ -4,8 +4,10 @@ add_executable(
     ${TEST_NAME}
     ${TEST_NAME}.cpp
 )
+target_include_directories(${TEST_NAME} PRIVATE
+    ${BUILDCC_DIR}/include
+)
 target_link_libraries(${TEST_NAME} PRIVATE
-    target
     CppUTest
     CppUTestExt
     gcov
