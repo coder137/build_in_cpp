@@ -2,5 +2,5 @@
 
 // clang-format off
 inline constexpr char const *BUILD_SCRIPT_SOURCE = "@CMAKE_CURRENT_SOURCE_DIR@";
-inline constexpr char const *BUILD_SCRIPT_EXE = "@CMAKE_CURRENT_BINARY_DIR@";
+inline constexpr char const *BUILD_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate";
 
