@@ -24,6 +24,15 @@ bool IsOneOrMorePreviousSourceDeleted(
   return one_or_more_previous_source_deleted;
 }
 
+bool Command(const std::vector<std::string> &tokens) {
+  std::string command{""};
+  for (const auto &t : tokens) {
+    command += t + " ";
+  }
+  buildcc::env::log_debug(command, "system");
+  return system(command.c_str()) == 0;
+}
+
 } // namespace
 
 namespace buildcc {
@@ -88,43 +97,40 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   env::log_trace(__FUNCTION__, name_);
 
   // Add compiled sources
+  // TODO, AggregateSources
   std::string files = "";
   for (const auto &output_file : compiled_sources) {
     files += " " + output_file;
   }
 
-  // TODO, Add headers
+  // TODO, Aggregate include headers
   // TODO, Add compiled libs
 
   // Final Target
-
-  fs::path target = target_intermediate_dir_ / name_;
-  std::string command =
-      toolchain_.GetCppCompiler() + " -g -o " + target.string() + files;
-  env::log_debug(command, name_);
-  int err = system(command.c_str());
-  internal::assert_fatal(err, 0, "Compilation failed for: " + name_);
-}
-
-std::string Target::GetCompiledSourceName(const fs::path &source) {
-  const auto output_filename =
-      target_intermediate_dir_ / (source.filename().string() + ".o");
-  return output_filename.string();
+  const fs::path target = target_intermediate_dir_ / name_;
+  bool success = Command({
+      toolchain_.GetCppCompiler(),
+      "-g",
+      "-o",
+      target.string(),
+      files,
+  });
+  internal::assert_fatal_true(success, "Compilation failed for: " + name_);
 }
 
 void Target::CompileSource(const std::string &source) {
   env::log_trace(__FUNCTION__, name_);
 
-  fs::path source_path = source;
-  std::string compiler = source_path.extension() == ".c"
-                             ? toolchain_.GetCCompiler()
-                             : toolchain_.GetCppCompiler();
-  auto output_filename = GetCompiledSourceName(source);
-
-  std::string command = compiler + " -c " + source + " -o " + output_filename;
-  env::log_debug(command, name_);
-  int err = system(command.c_str());
-  internal::assert_fatal(err, 0, "Compilation failed for: " + source);
+  const std::string compiler = GetCompiler(source);
+  const std::string output_filename = GetCompiledSourceName(source);
+  bool success = Command({
+      compiler,
+      "-c",
+      source,
+      "-o",
+      output_filename,
+  });
+  internal::assert_fatal_true(success, "Compilation failed for: " + source);
 }
 
 std::vector<std::string> Target::CompileSources() {
@@ -179,6 +185,21 @@ std::vector<std::string> Target::RecompileSources() {
   }
 
   return compiled_files;
+}
+
+std::string Target::GetCompiledSourceName(const fs::path &source) {
+  const auto output_filename =
+      target_intermediate_dir_ / (source.filename().string() + ".o");
+  return output_filename.string();
+}
+
+std::string Target::GetCompiler(const fs::path &source) {
+  // .cpp -> GetCppCompiler
+  // .c / .asm -> GetCCompiler
+  std::string compiler = source.extension() == ".cpp"
+                             ? toolchain_.GetCppCompiler()
+                             : toolchain_.GetCCompiler();
+  return compiler;
 }
 
 } // namespace buildcc

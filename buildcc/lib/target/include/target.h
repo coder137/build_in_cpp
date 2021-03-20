@@ -58,7 +58,9 @@ private:
 
   void BuildTarget(const std::vector<std::string> &compiled_sources);
   void CompileSource(const std::string &source);
+
   std::string GetCompiledSourceName(const fs::path &source);
+  std::string GetCompiler(const fs::path &source);
 
 private:
   // Constructor defined
