@@ -22,6 +22,12 @@ void init(const std::string &project_root,
   set_log_level(LogLevel::Info);
 }
 
+void deinit() {
+  project_root_ = "";
+  intermediate_build_dir_ = "";
+  init_ = false;
+}
+
 bool is_init(void) { return init_; }
 const std::string &get_project_root() { return project_root_; }
 const std::string &get_intermediate_build_dir() {

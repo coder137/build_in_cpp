@@ -79,7 +79,11 @@ void Target::Build() {
 
 // PRIVATE
 
-void Target::Initialize() {}
+void Target::Initialize() {
+  internal::assert_fatal_true(
+      env::is_init(),
+      "Environment is not initialized. Use the buildcc::env::init API");
+}
 
 void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   env::log_trace(__FUNCTION__, name_);

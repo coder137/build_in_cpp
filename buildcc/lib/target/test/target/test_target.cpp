@@ -1,6 +1,8 @@
 #include "constants.h"
 #include "target.h"
 
+#include "env.h"
+
 // Third Party
 #include "flatbuffers/util.h"
 
@@ -16,11 +18,23 @@ TEST_GROUP(TargetTestGroup)
 };
 // clang-format on
 
+TEST(TargetTestGroup, TargetInit) {
+  constexpr const char *const NAME = "Init.exe";
+  constexpr const char *const BIN = "AddSource.exe.bin";
+
+  CHECK_THROWS(std::string,
+               buildcc::Target(NAME, buildcc::TargetType::Executable,
+                               buildcc::Toolchain("gcc", "gcc", "g++"),
+                               BUILD_SCRIPT_SOURCE));
+}
+
 TEST(TargetTestGroup, TargetAddSource) {
   constexpr const char *const NAME = "AddSource.exe";
   constexpr const char *const BIN = "AddSource.exe.bin";
   constexpr const char *const DUMMY_MAIN = "data/dummy_main.cpp";
   constexpr const char *const NO_FILE = "data/no_file.cpp";
+
+  buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_SCRIPT_SOURCE);
 
   // Delete
   fs::remove(std::string(BUILD_SCRIPT_SOURCE) + "/" + BIN);
@@ -44,12 +58,16 @@ TEST(TargetTestGroup, TargetAddSource) {
   CHECK_FALSE(loaded_sources.find(buildcc::internal::Path::CreateExistingPath(
                   std::string(BUILD_SCRIPT_SOURCE) + "/" + DUMMY_MAIN)) ==
               loaded_sources.end());
+
+  buildcc::env::deinit();
 }
 
 TEST(TargetTestGroup, TargetBuildCompile) {
   constexpr const char *const NAME = "Compile.exe";
   constexpr const char *const BIN = "Compile.exe.bin";
   constexpr const char *const DUMMY_MAIN = "data/dummy_main.cpp";
+
+  buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_SCRIPT_SOURCE);
 
   // Delete
   fs::remove(std::string(BUILD_SCRIPT_SOURCE) + "/" + BIN);
@@ -69,6 +87,8 @@ TEST(TargetTestGroup, TargetBuildCompile) {
   CHECK_FALSE(loaded_sources.find(buildcc::internal::Path::CreateExistingPath(
                   std::string(BUILD_SCRIPT_SOURCE) + "/" + DUMMY_MAIN)) ==
               loaded_sources.end());
+
+  buildcc::env::deinit();
 }
 
 TEST(TargetTestGroup, TargetBuildRecompile) {
@@ -77,6 +97,8 @@ TEST(TargetTestGroup, TargetBuildRecompile) {
   constexpr const char *const DUMMY_MAIN_CPP = "data/dummy_main.cpp";
   constexpr const char *const DUMMY_MAIN_C = "data/dummy_main.c";
   constexpr const char *const NEW_SOURCE = "data/new_source.cpp";
+
+  buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_SCRIPT_SOURCE);
 
   // Delete
   fs::remove(std::string(BUILD_SCRIPT_SOURCE) + "/" + BIN);
@@ -148,6 +170,8 @@ TEST(TargetTestGroup, TargetBuildRecompile) {
                     std::string(BUILD_SCRIPT_SOURCE) + "/" + DUMMY_MAIN_CPP)) ==
                 loaded_sources.end());
   }
+
+  buildcc::env::deinit();
 }
 
 // TODO, Check toolchain change

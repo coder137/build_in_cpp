@@ -10,6 +10,7 @@ namespace buildcc::env {
 // Basic Initialization
 void init(const std::string &project_root,
           const std::string &intermediate_build_dir);
+void deinit();
 
 // Getters
 bool is_init();
