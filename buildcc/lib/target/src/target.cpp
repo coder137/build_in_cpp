@@ -152,7 +152,8 @@ std::vector<std::string> Target::RecompileSources() {
 
   std::vector<std::string> compiled_files;
   for (const auto &current_file : current_source_files_) {
-    std::string compiled_filename = current_file.GetPathname() + ".o";
+    std::string compiled_filename =
+        GetCompiledSourceName(current_file.GetPathname());
 
     // Find current_file in the loaded sources
     auto iter = previous_source_files.find(current_file);
