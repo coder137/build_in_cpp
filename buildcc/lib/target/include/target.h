@@ -14,6 +14,9 @@
 #include "target_type.h"
 #include "toolchain.h"
 
+// Env
+#include "env.h"
+
 namespace buildcc {
 
 namespace fs = std::filesystem;
@@ -22,9 +25,13 @@ class Target {
 public:
   explicit Target(const std::string &name, TargetType type,
                   const Toolchain &toolchain,
-                  const std::filesystem::path &base_relative_path)
-      : loader_(name, base_relative_path), name_(name), type_(type),
-        toolchain_(toolchain), relative_path_(base_relative_path) {
+                  const std::filesystem::path &target_path_relative_to_root)
+      : loader_(name, fs::path(env::get_intermediate_build_dir()) / name),
+        name_(name), type_(type), toolchain_(toolchain),
+        target_root_source_dir_(env::get_project_root() /
+                                target_path_relative_to_root),
+        target_intermediate_dir_(fs::path(env::get_intermediate_build_dir()) /
+                                 name) {
     Initialize();
   }
 
@@ -34,7 +41,7 @@ public:
   // Setters
   void AddSource(const std::string &relative_filename);
   void AddSource(const std::string &relative_filename,
-                 const std::filesystem::path &relative_to_base_relative_path);
+                 const std::filesystem::path &relative_to_target_path);
 
   // TODO, Add more setters
 
@@ -51,12 +58,14 @@ private:
 
   void BuildTarget(const std::vector<std::string> &compiled_sources);
   void CompileSource(const std::string &source);
+  std::string GetCompiledSourceName(const fs::path &source);
 
 private:
   // Constructor defined
   std::string name_;
   Toolchain toolchain_;
-  std::filesystem::path relative_path_;
+  std::filesystem::path target_root_source_dir_;
+  std::filesystem::path target_intermediate_dir_;
   TargetType type_;
 
   // Internal

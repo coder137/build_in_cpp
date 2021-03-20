@@ -4,9 +4,6 @@
 #include "internal/assert_fatal.h"
 #include "internal/fbs_utils.h"
 
-// Env
-#include "env.h"
-
 namespace fs = std::filesystem;
 
 namespace {
@@ -37,8 +34,9 @@ void Target::AddSource(
   env::log_trace(__FUNCTION__, name_);
 
   // Check Source
-  fs::path absolute_filepath =
-      relative_path_ / relative_to_base_relative_path / relative_filename;
+  fs::path absolute_filepath = target_root_source_dir_ /
+                               relative_to_base_relative_path /
+                               relative_filename;
   internal::assert_fatal_true(fs::exists(absolute_filepath),
                               absolute_filepath.string() + " not found");
 
@@ -72,14 +70,19 @@ void Target::Build() {
 
   // Write back
   // TODO, Update this with include directory
-  internal::fbs_utils_store_target(name_, relative_path_, type_, toolchain_,
-                                   current_source_files_,
+  internal::fbs_utils_store_target(name_, target_intermediate_dir_, type_,
+                                   toolchain_, current_source_files_,
                                    buildcc::internal::path_unordered_set());
 }
 
 // PRIVATE
 
-void Target::Initialize() {}
+void Target::Initialize() {
+  internal::assert_fatal_true(
+      env::is_init(),
+      "Environment is not initialized. Use the buildcc::env::init API");
+  fs::create_directories(target_intermediate_dir_);
+}
 
 void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   env::log_trace(__FUNCTION__, name_);
@@ -94,12 +97,19 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   // TODO, Add compiled libs
 
   // Final Target
-  auto target = relative_path_ / name_;
+
+  fs::path target = target_intermediate_dir_ / name_;
   std::string command =
       toolchain_.GetCppCompiler() + " -g -o " + target.string() + files;
   env::log_debug(command, name_);
   int err = system(command.c_str());
   internal::assert_fatal(err, 0, "Compilation failed for: " + name_);
+}
+
+std::string Target::GetCompiledSourceName(const fs::path &source) {
+  const auto output_filename =
+      target_intermediate_dir_ / (source.filename().string() + ".o");
+  return output_filename.string();
 }
 
 void Target::CompileSource(const std::string &source) {
@@ -109,8 +119,8 @@ void Target::CompileSource(const std::string &source) {
   std::string compiler = source_path.extension() == ".c"
                              ? toolchain_.GetCCompiler()
                              : toolchain_.GetCppCompiler();
+  auto output_filename = GetCompiledSourceName(source);
 
-  std::string output_filename = source + ".o";
   std::string command = compiler + " -c " + source + " -o " + output_filename;
   env::log_debug(command, name_);
   int err = system(command.c_str());
@@ -122,7 +132,7 @@ std::vector<std::string> Target::CompileSources() {
 
   std::vector<std::string> compiled_files;
   for (const auto &file : current_source_files_) {
-    std::string compiled_filename = file.GetPathname() + ".o";
+    std::string compiled_filename = GetCompiledSourceName(file.GetPathname());
     CompileSource(file.GetPathname());
     compiled_files.push_back(compiled_filename);
   }
@@ -142,7 +152,8 @@ std::vector<std::string> Target::RecompileSources() {
 
   std::vector<std::string> compiled_files;
   for (const auto &current_file : current_source_files_) {
-    std::string compiled_filename = current_file.GetPathname() + ".o";
+    std::string compiled_filename =
+        GetCompiledSourceName(current_file.GetPathname());
 
     // Find current_file in the loaded sources
     auto iter = previous_source_files.find(current_file);
