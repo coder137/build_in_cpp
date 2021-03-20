@@ -12,6 +12,7 @@ else()
     set(LCOV_REMOVE_OPTIONS 
         "/usr*"
         "*/generated*"
+        "*/CppUTestExt*"
         "*/spdlog*"
         "*/flatbuffers*"
     )

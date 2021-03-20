@@ -1,5 +1,5 @@
-#ifndef BUILDCC_INCLUDE_TOOLCHAIN_H_
-#define BUILDCC_INCLUDE_TOOLCHAIN_H_
+#ifndef TARGET_INCLUDE_TOOLCHAIN_H_
+#define TARGET_INCLUDE_TOOLCHAIN_H_
 
 #include <string>
 #include <vector>

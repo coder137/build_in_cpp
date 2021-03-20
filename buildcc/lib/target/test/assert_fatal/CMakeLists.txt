@@ -1,18 +1,13 @@
-file(COPY Simple.exe.bin DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-set(TEST_NAME "test_fbs_loader")
+set(TEST_NAME "test_assert_fatal")
 add_executable(
     ${TEST_NAME}
     ${TEST_NAME}.cpp
-    ${BUILDCC_DIR}/src/fbs_loader.cpp
 )
 target_include_directories(${TEST_NAME} PRIVATE
-    ${BUILDCC_DIR}/include
-    # ${BUILDCC_DIR}/fbs
-    ${BUILDCC_DIR}/generated
+    ${TARGET_DIR}/include
 )
 target_link_libraries(${TEST_NAME} PRIVATE
     env
-    flatbuffers
     CppUTest
     CppUTestExt
     gcov

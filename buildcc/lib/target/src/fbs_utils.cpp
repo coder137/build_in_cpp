@@ -2,7 +2,7 @@
 
 #include <filesystem>
 
-#include "internal/fatal_assert.h"
+#include "internal/assert_fatal.h"
 
 #include "env.h"
 

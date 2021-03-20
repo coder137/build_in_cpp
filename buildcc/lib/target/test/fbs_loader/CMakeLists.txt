@@ -1,16 +1,14 @@
-configure_file(constants.h.in ${CMAKE_CURRENT_SOURCE_DIR}/generated/constants.h @ONLY)
-
-set(TEST_NAME "test_fbs_utils")
+file(COPY Simple.exe.bin DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+set(TEST_NAME "test_fbs_loader")
 add_executable(
     ${TEST_NAME}
     ${TEST_NAME}.cpp
-    ${BUILDCC_DIR}/src/fbs_utils.cpp
-    ${BUILDCC_DIR}/src/fbs_loader.cpp
+    ${TARGET_DIR}/src/fbs_loader.cpp
 )
 target_include_directories(${TEST_NAME} PRIVATE
-    generated
-    ${BUILDCC_DIR}/include
-    ${BUILDCC_DIR}/generated
+    ${TARGET_DIR}/include
+    # ${TARGET_DIR}/fbs
+    ${TARGET_DIR}/generated
 )
 target_link_libraries(${TEST_NAME} PRIVATE
     env
