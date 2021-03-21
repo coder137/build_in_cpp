@@ -43,6 +43,8 @@ public:
   void AddSource(const std::string &relative_filename,
                  const std::filesystem::path &relative_to_target_path);
 
+  void AddIncludeDir(const std::string &relative_include_dir);
+
   // TODO, Add more setters
 
   // Getters
@@ -55,6 +57,7 @@ private:
 
   std::vector<std::string> CompileSources();
   std::vector<std::string> RecompileSources();
+  void RecheckIncludeDirs();
 
   void BuildTarget(const std::vector<std::string> &compiled_sources);
   void CompileSource(const std::string &source);
@@ -72,6 +75,7 @@ private:
 
   // Internal
   buildcc::internal::path_unordered_set current_source_files_;
+  buildcc::internal::path_unordered_set current_include_dirs_;
 
   // TODO, Add more internal variables
 

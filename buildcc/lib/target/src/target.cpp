@@ -4,6 +4,8 @@
 #include "internal/assert_fatal.h"
 #include "internal/fbs_utils.h"
 
+#include <algorithm>
+
 namespace fs = std::filesystem;
 
 namespace {
@@ -31,6 +33,15 @@ bool Command(const std::vector<std::string> &tokens) {
   }
   buildcc::env::log_debug(command, "system");
   return system(command.c_str()) == 0;
+}
+
+std::string AggregateIncludeDirs(
+    const buildcc::internal::path_unordered_set &include_dirs) {
+  std::string idir{""};
+  for (const auto &dirs : include_dirs) {
+    idir += std::string("-I") + dirs.GetPathname() + " ";
+  }
+  return idir;
 }
 
 } // namespace
@@ -62,11 +73,31 @@ void Target::AddSource(const std::string &relative_filename) {
   AddSource(relative_filename, "");
 }
 
+void Target::AddIncludeDir(const std::string &relative_include_dir) {
+  env::log_trace(__FUNCTION__, name_);
+
+  fs::path absolute_include_dir =
+      target_root_source_dir_ / relative_include_dir;
+  uint64_t max_timestamp_count = 0;
+  for (const auto d : fs::directory_iterator(absolute_include_dir)) {
+    max_timestamp_count = std::max(
+        max_timestamp_count,
+        static_cast<uint64_t>(d.last_write_time().time_since_epoch().count()));
+  }
+  auto current_dir = buildcc::internal::Path::CreateNewPath(
+      absolute_include_dir.string(), max_timestamp_count);
+  current_include_dirs_.insert(current_dir);
+}
+
 void Target::Build() {
   env::log_trace(__FUNCTION__, name_);
 
   std::vector<std::string> compiled_sources;
-  if (!loader_.Load()) {
+
+  const bool is_loaded = loader_.Load();
+  RecheckIncludeDirs();
+
+  if (!is_loaded || dirty_) {
     compiled_sources = CompileSources();
     dirty_ = true;
   } else {
@@ -75,13 +106,10 @@ void Target::Build() {
 
   if (dirty_) {
     BuildTarget(compiled_sources);
+    internal::fbs_utils_store_target(name_, target_intermediate_dir_, type_,
+                                     toolchain_, current_source_files_,
+                                     current_include_dirs_);
   }
-
-  // Write back
-  // TODO, Update this with include directory
-  internal::fbs_utils_store_target(name_, target_intermediate_dir_, type_,
-                                   toolchain_, current_source_files_,
-                                   buildcc::internal::path_unordered_set());
 }
 
 // PRIVATE
@@ -121,12 +149,16 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
 void Target::CompileSource(const std::string &source) {
   env::log_trace(__FUNCTION__, name_);
 
+  // TODO, These are computationally expensive, Cache them
   const std::string compiler = GetCompiler(source);
   const std::string output_filename = GetCompiledSourceName(source);
+  const std::string include_dirs = AggregateIncludeDirs(current_include_dirs_);
+
   bool success = Command({
       compiler,
-      "-c",
       source,
+      "-c",
+      include_dirs,
       "-o",
       output_filename,
   });
@@ -185,6 +217,36 @@ std::vector<std::string> Target::RecompileSources() {
   }
 
   return compiled_files;
+}
+
+void Target::RecheckIncludeDirs() {
+  env::log_trace(__FUNCTION__, name_);
+
+  const auto &previous_include_dirs = loader_.GetLoadedIncludeDirs();
+  // * Cannot find previous include dir in current include dirs
+  bool is_dir_removed = IsOneOrMorePreviousSourceDeleted(previous_include_dirs,
+                                                         current_include_dirs_);
+  dirty_ = dirty_ || is_dir_removed;
+
+  for (auto &current_dir : current_include_dirs_) {
+    auto iter = previous_include_dirs.find(current_dir);
+
+    if (iter == previous_include_dirs.end()) {
+      // * New include dir added
+      dirty_ = true;
+      break;
+    } else {
+      // * A file in current dir is updated
+      if (current_dir.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
+        env::log_trace("Current dir is newer " + current_dir.GetPathname(),
+                       name_);
+        dirty_ = true;
+        break;
+      } else {
+        // * Do nothing
+      }
+    }
+  }
 }
 
 std::string Target::GetCompiledSourceName(const fs::path &source) {
