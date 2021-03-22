@@ -23,10 +23,11 @@ public:
 
   // Getters
   const path_unordered_set &GetLoadedSources() const { return loaded_sources_; }
-
   const path_unordered_set &GetLoadedIncludeDirs() const {
     return loaded_include_dirs_;
   }
+
+  fs::path GetBinaryPath() { return relative_path_ / (name_ + ".bin"); }
 
 private:
   void Initialize();

@@ -48,6 +48,8 @@ public:
   // TODO, Add more setters
 
   // Getters
+  fs::path GetTargetPath() { return target_intermediate_dir_ / name_; }
+  fs::path GetBinaryPath() { return loader_.GetBinaryPath(); }
 
   // TODO, Add more getters
 
@@ -55,15 +57,23 @@ private:
   // Open the serialized file and parse the target
   void Initialize();
 
+  // Sources
   std::vector<std::string> CompileSources();
   std::vector<std::string> RecompileSources();
-  void RecheckIncludeDirs();
-
-  void BuildTarget(const std::vector<std::string> &compiled_sources);
   void CompileSource(const std::string &source);
 
+  // Includes
+  void RecheckIncludeDirs();
+
+  // Target
+  void BuildTarget(const std::vector<std::string> &compiled_sources);
+
+  // Getters
   std::string GetCompiledSourceName(const fs::path &source);
   std::string GetCompiler(const fs::path &source);
+
+  // Fbs
+  bool Store();
 
 private:
   // Constructor defined
