@@ -2,9 +2,6 @@
 
 // Internal
 #include "internal/assert_fatal.h"
-#include "internal/fbs_utils.h"
-
-#include <algorithm>
 
 namespace fs = std::filesystem;
 
@@ -106,9 +103,7 @@ void Target::Build() {
 
   if (dirty_) {
     BuildTarget(compiled_sources);
-    internal::fbs_utils_store_target(name_, target_intermediate_dir_, type_,
-                                     toolchain_, current_source_files_,
-                                     current_include_dirs_);
+    Store();
   }
 }
 

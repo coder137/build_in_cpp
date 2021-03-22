@@ -1,4 +1,4 @@
-#include "internal/fbs_utils.h"
+#include "target.h"
 
 #include <filesystem>
 
@@ -13,7 +13,7 @@ namespace fbs = schema::internal;
 
 namespace {
 
-fbs::TargetType fbs_utils_get_fbs_target_type(buildcc::TargetType type) {
+fbs::TargetType get_fbs_target_type(buildcc::TargetType type) {
   fbs::TargetType target_type = fbs::TargetType_Executable;
   switch (type) {
   case buildcc::TargetType::Executable:
@@ -30,9 +30,10 @@ fbs::TargetType fbs_utils_get_fbs_target_type(buildcc::TargetType type) {
   return target_type;
 }
 
+// TODO, Improve this
 flatbuffers::Offset<fbs::Toolchain>
-fbs_utils_get_fbs_toolchain(flatbuffers::FlatBufferBuilder &builder,
-                            const buildcc::Toolchain &toolchain) {
+get_fbs_toolchain(flatbuffers::FlatBufferBuilder &builder,
+                  const buildcc::Toolchain &toolchain) {
   auto fbs_toolchain_name = builder.CreateString(toolchain.GetName());
   auto fbs_c_compiler = builder.CreateString(toolchain.GetCCompiler());
   auto fbs_cpp_compiler = builder.CreateString(toolchain.GetCppCompiler());
@@ -44,9 +45,9 @@ fbs_utils_get_fbs_toolchain(flatbuffers::FlatBufferBuilder &builder,
                               fbs_cpp_compiler);
 }
 
-std::vector<flatbuffers::Offset<fbs::Path>> fbs_utils_get_fbs_path(
-    flatbuffers::FlatBufferBuilder &builder,
-    const buildcc::internal::path_unordered_set &source_files) {
+std::vector<flatbuffers::Offset<fbs::Path>>
+get_fbs_path(flatbuffers::FlatBufferBuilder &builder,
+             const buildcc::internal::path_unordered_set &source_files) {
   std::vector<flatbuffers::Offset<fbs::Path>> sources;
   for (const auto &source : source_files) {
     auto fbs_file = fbs::CreatePathDirect(builder, source.GetPathname().c_str(),
@@ -58,31 +59,27 @@ std::vector<flatbuffers::Offset<fbs::Path>> fbs_utils_get_fbs_path(
 
 } // namespace
 
-namespace buildcc::internal {
+namespace buildcc {
 
-bool fbs_utils_store_target(const std::string &name,
-                            const fs::path &relative_path,
-                            TargetType target_type, const Toolchain &toolchain,
-                            const path_unordered_set &source_files,
-                            const path_unordered_set &include_dirs) {
-  env::log_trace(__FUNCTION__, name);
+bool Target::Store() {
+  env::log_trace(__FUNCTION__, name_);
 
   flatbuffers::FlatBufferBuilder builder;
 
-  auto fbs_target_type = fbs_utils_get_fbs_target_type(target_type);
-  auto fbs_toolchain = fbs_utils_get_fbs_toolchain(builder, toolchain);
-  auto fbs_source_files = fbs_utils_get_fbs_path(builder, source_files);
-  auto fbs_include_dirs = fbs_utils_get_fbs_path(builder, include_dirs);
+  auto fbs_target_type = get_fbs_target_type(type_);
+  auto fbs_toolchain = get_fbs_toolchain(builder, toolchain_);
+  auto fbs_source_files = get_fbs_path(builder, current_source_files_);
+  auto fbs_include_dirs = get_fbs_path(builder, current_include_dirs_);
 
   auto fbs_target = fbs::CreateTargetDirect(
-      builder, name.c_str(), relative_path.string().c_str(), fbs_target_type,
-      fbs_toolchain, &fbs_source_files, &fbs_include_dirs);
+      builder, name_.c_str(), target_intermediate_dir_.string().c_str(),
+      fbs_target_type, fbs_toolchain, &fbs_source_files, &fbs_include_dirs);
   fbs::FinishTargetBuffer(builder, fbs_target);
 
-  auto file_path = relative_path / (name + ".bin");
+  auto file_path = GetBinaryPath();
   return flatbuffers::SaveFile(file_path.string().c_str(),
                                (const char *)builder.GetBufferPointer(),
                                builder.GetSize(), true);
 }
 
-} // namespace buildcc::internal
+} // namespace buildcc
