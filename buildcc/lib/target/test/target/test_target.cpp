@@ -18,6 +18,57 @@ TEST_GROUP(TargetTestGroup)
 };
 // clang-format on
 
+TEST(TargetTestGroup, TargetType) {
+  constexpr const char *const EXE_NAME = "ExeTest.exe";
+  constexpr const char *const STATIC_NAME = "StaticTest.a";
+  constexpr const char *const SHARED_NAME = "SharedTest.so";
+  constexpr const char *const INVALID_NAME = "Invalid.random";
+
+  buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_INTERMEDIATE_DIR);
+
+  auto intermediate_path = fs::path(BUILD_INTERMEDIATE_DIR);
+
+  fs::remove(intermediate_path / EXE_NAME / (std::string(EXE_NAME) + ".bin"));
+  fs::remove(intermediate_path / STATIC_NAME /
+             (std::string(STATIC_NAME) + ".bin"));
+  fs::remove(intermediate_path / SHARED_NAME /
+             (std::string(SHARED_NAME) + ".bin"));
+  fs::remove(intermediate_path / INVALID_NAME /
+             (std::string(INVALID_NAME) + ".bin"));
+
+  {
+    buildcc::Target exe_target(EXE_NAME, buildcc::TargetType::Executable,
+                               buildcc::Toolchain("gcc", "gcc", "g++"), "");
+    exe_target.AddSource("data/dummy_main.cpp");
+    exe_target.Build();
+  }
+
+  {
+    buildcc::Target static_target(STATIC_NAME,
+                                  buildcc::TargetType::StaticLibrary,
+                                  buildcc::Toolchain("gcc", "gcc", "g++"), "");
+    static_target.AddSource("data/dummy_main.cpp");
+    static_target.Build();
+  }
+
+  {
+    buildcc::Target shared_target(SHARED_NAME,
+                                  buildcc::TargetType::DynamicLibrary,
+                                  buildcc::Toolchain("gcc", "gcc", "g++"), "");
+    shared_target.AddSource("data/dummy_main.cpp");
+    shared_target.Build();
+  }
+
+  {
+    buildcc::Target invalid_target(INVALID_NAME, (buildcc::TargetType)3,
+                                   buildcc::Toolchain("gcc", "gcc", "g++"), "");
+    invalid_target.AddSource("data/dummy_main.cpp");
+    CHECK_THROWS(std::string, invalid_target.Build());
+  }
+
+  buildcc::env::deinit();
+}
+
 TEST(TargetTestGroup, TargetInit) {
   constexpr const char *const NAME = "Init.exe";
   constexpr const char *const BIN = "AddSource.exe.bin";
@@ -208,6 +259,8 @@ TEST(TargetTestGroup, TargetBuildIncludeDir) {
                                     "data");
     include_compile.AddSource(DUMMY_MAIN_C);
     include_compile.AddSource(INCLUDE_HEADER_SOURCE);
+    include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
+    // Duplicate include directory
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
     include_compile.Build();
 
