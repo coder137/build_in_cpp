@@ -54,13 +54,12 @@ public:
   // TODO, Add more getters
 
 private:
-  // Open the serialized file and parse the target
   void Initialize();
 
   // Sources
   std::vector<std::string> CompileSources();
   std::vector<std::string> RecompileSources();
-  void CompileSource(const std::string &source);
+  void CompileSource(const fs::path &source);
 
   // Includes
   void RecheckIncludeDirs();

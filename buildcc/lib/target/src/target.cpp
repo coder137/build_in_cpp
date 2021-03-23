@@ -36,7 +36,7 @@ std::string AggregateIncludeDirs(
     const buildcc::internal::path_unordered_set &include_dirs) {
   std::string idir{""};
   for (const auto &dirs : include_dirs) {
-    idir += std::string("-I") + dirs.GetPathname() + " ";
+    idir += std::string("-I") + dirs.GetPathname().string() + " ";
   }
   return idir;
 }
@@ -58,7 +58,7 @@ void Target::AddSource(
                               absolute_filepath.string() + " not found");
 
   auto current_file =
-      buildcc::internal::Path::CreateExistingPath(absolute_filepath.string());
+      buildcc::internal::Path::CreateExistingPath(absolute_filepath);
   internal::assert_fatal(current_source_files_.find(current_file),
                          current_source_files_.end(),
                          absolute_filepath.string() + " duplicate found");
@@ -77,7 +77,7 @@ void Target::AddIncludeDir(const std::string &relative_include_dir) {
       target_root_source_dir_ / relative_include_dir;
 
   auto current_dir =
-      buildcc::internal::Path::CreateNewPath(absolute_include_dir.string());
+      buildcc::internal::Path::CreateNewPath(absolute_include_dir);
   if (current_include_dirs_.find(current_dir) != current_include_dirs_.end()) {
     return;
   }
@@ -147,7 +147,7 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   internal::assert_fatal_true(success, "Compilation failed for: " + name_);
 }
 
-void Target::CompileSource(const std::string &source) {
+void Target::CompileSource(const fs::path &source) {
   env::log_trace(__FUNCTION__, name_);
 
   // TODO, These are computationally expensive, Cache them
@@ -157,13 +157,14 @@ void Target::CompileSource(const std::string &source) {
 
   bool success = Command({
       compiler,
-      source,
+      source.string(),
       "-c",
       include_dirs,
       "-o",
       output_filename,
   });
-  internal::assert_fatal_true(success, "Compilation failed for: " + source);
+  internal::assert_fatal_true(success,
+                              "Compilation failed for: " + source.string());
 }
 
 std::vector<std::string> Target::CompileSources() {
@@ -206,7 +207,8 @@ std::vector<std::string> Target::RecompileSources() {
       // *2 Current file is updated
       if (current_file.GetLastWriteTimestamp() >
           iter->GetLastWriteTimestamp()) {
-        env::log_trace("Current file is newer " + current_file.GetPathname(),
+        env::log_trace("Current file is newer " +
+                           current_file.GetPathname().string(),
                        name_);
         CompileSource(current_file.GetPathname());
         dirty_ = true;
@@ -239,7 +241,8 @@ void Target::RecheckIncludeDirs() {
     } else {
       // * A file in current dir is updated
       if (current_dir.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
-        env::log_trace("Current dir is newer " + current_dir.GetPathname(),
+        env::log_trace("Current dir is newer " +
+                           current_dir.GetPathname().string(),
                        name_);
         dirty_ = true;
         break;

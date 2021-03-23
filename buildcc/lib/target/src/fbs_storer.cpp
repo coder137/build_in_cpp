@@ -50,8 +50,9 @@ get_fbs_path(flatbuffers::FlatBufferBuilder &builder,
              const buildcc::internal::path_unordered_set &source_files) {
   std::vector<flatbuffers::Offset<fbs::Path>> sources;
   for (const auto &source : source_files) {
-    auto fbs_file = fbs::CreatePathDirect(builder, source.GetPathname().c_str(),
-                                          source.GetLastWriteTimestamp());
+    auto fbs_file =
+        fbs::CreatePathDirect(builder, source.GetPathname().string().c_str(),
+                              source.GetLastWriteTimestamp());
     sources.push_back(fbs_file);
   }
   return sources;

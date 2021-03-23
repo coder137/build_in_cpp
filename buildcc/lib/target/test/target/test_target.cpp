@@ -56,8 +56,8 @@ TEST(TargetTestGroup, TargetAddSource) {
 
   const auto &loaded_sources = loader.GetLoadedSources();
   CHECK_EQUAL(loaded_sources.size(), 1);
-  auto dummy_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / DUMMY_MAIN).string());
+  auto dummy_file =
+      buildcc::internal::Path::CreateExistingPath((source_path / DUMMY_MAIN));
   CHECK_FALSE(loaded_sources.find(dummy_file) == loaded_sources.end());
 
   buildcc::env::deinit();
@@ -106,12 +106,12 @@ TEST(TargetTestGroup, TargetBuildSourceRecompile) {
 
   // Delete
   fs::remove(intermediate_path / BIN);
-  auto dummy_c_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / DUMMY_MAIN_C).string());
+  auto dummy_c_file =
+      buildcc::internal::Path::CreateExistingPath((source_path / DUMMY_MAIN_C));
   auto dummy_cpp_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / DUMMY_MAIN_CPP).string());
-  auto new_source_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / NEW_SOURCE).string());
+      (source_path / DUMMY_MAIN_CPP));
+  auto new_source_file =
+      buildcc::internal::Path::CreateExistingPath((source_path / NEW_SOURCE));
 
   {
     buildcc::Target simple(NAME, buildcc::TargetType::Executable,
@@ -195,12 +195,12 @@ TEST(TargetTestGroup, TargetBuildIncludeDir) {
   // Delete
   fs::remove(intermediate_path / BIN);
 
-  auto dummy_c_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / DUMMY_MAIN_C).string());
+  auto dummy_c_file =
+      buildcc::internal::Path::CreateExistingPath((source_path / DUMMY_MAIN_C));
   auto include_header_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / INCLUDE_HEADER_SOURCE).string());
+      (source_path / INCLUDE_HEADER_SOURCE));
   auto include_header_path = buildcc::internal::Path::CreateExistingPath(
-      (source_path / RELATIVE_INCLUDE_DIR).string());
+      (source_path / RELATIVE_INCLUDE_DIR));
 
   {
     buildcc::Target include_compile(NAME, buildcc::TargetType::Executable,
