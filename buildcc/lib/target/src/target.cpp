@@ -8,13 +8,13 @@ namespace fs = std::filesystem;
 namespace {
 
 // RecompileSources
-bool IsOneOrMorePreviousSourceDeleted(
-    const buildcc::internal::path_unordered_set &previous_source_files,
-    const buildcc::internal::path_unordered_set &current_source_files) {
+bool IsOneOrMorePreviousPathDeleted(
+    const buildcc::internal::path_unordered_set &previous_path,
+    const buildcc::internal::path_unordered_set &current_path) {
   bool one_or_more_previous_source_deleted = false;
-  for (const auto &file : previous_source_files) {
-    auto iter = current_source_files.find(file);
-    if (iter == current_source_files.end()) {
+  for (const auto &file : previous_path) {
+    auto iter = current_path.find(file);
+    if (iter == current_path.end()) {
       one_or_more_previous_source_deleted = true;
       break;
     }
@@ -193,7 +193,7 @@ std::vector<std::string> Target::RecompileSources() {
   const auto &previous_source_files = loader_.GetLoadedSources();
 
   // * Cannot find previous source in current source files
-  bool is_source_removed = IsOneOrMorePreviousSourceDeleted(
+  bool is_source_removed = IsOneOrMorePreviousPathDeleted(
       previous_source_files, current_source_files_);
   dirty_ = dirty_ || is_source_removed;
 
@@ -234,8 +234,8 @@ void Target::RecheckIncludeDirs() {
 
   const auto &previous_include_dirs = loader_.GetLoadedIncludeDirs();
   // * Cannot find previous include dir in current include dirs
-  bool is_dir_removed = IsOneOrMorePreviousSourceDeleted(previous_include_dirs,
-                                                         current_include_dirs_);
+  bool is_dir_removed = IsOneOrMorePreviousPathDeleted(previous_include_dirs,
+                                                       current_include_dirs_);
   dirty_ = dirty_ || is_dir_removed;
 
   for (auto &current_dir : current_include_dirs_) {
