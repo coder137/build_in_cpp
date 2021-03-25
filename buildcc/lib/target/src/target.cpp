@@ -32,6 +32,14 @@ bool Command(const std::vector<std::string> &tokens) {
   return system(command.c_str()) == 0;
 }
 
+std::string AggregateSources(const std::vector<std::string> &compiled_sources) {
+  std::string files = "";
+  for (const auto &output_file : compiled_sources) {
+    files += " " + output_file;
+  }
+  return files;
+}
+
 std::string AggregateIncludeDirs(
     const buildcc::internal::path_unordered_set &include_dirs) {
   std::string idir{""};
@@ -126,23 +134,22 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   env::log_trace(__FUNCTION__, name_);
 
   // Add compiled sources
-  // TODO, AggregateSources
-  std::string files = "";
-  for (const auto &output_file : compiled_sources) {
-    files += " " + output_file;
-  }
+  std::string aggregated_compiled_sources = AggregateSources(compiled_sources);
 
-  // TODO, Aggregate include headers
   // TODO, Add compiled libs
 
   // Final Target
   const fs::path target = target_intermediate_dir_ / name_;
   bool success = Command({
+      // TODO, Improve this logic
+      // Select cpp compiler for building target only if there is .cpp file
+      // added
+      // Else use c compiler
       toolchain_.GetCppCompiler(),
       "-g",
       "-o",
       target.string(),
-      files,
+      aggregated_compiled_sources,
   });
   internal::assert_fatal_true(success, "Compilation failed for: " + name_);
 }
