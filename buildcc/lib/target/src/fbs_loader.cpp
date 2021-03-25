@@ -32,7 +32,7 @@ namespace buildcc::internal {
 bool FbsLoader::Load() {
   env::log_trace(__FUNCTION__, name_);
 
-  auto file_path = relative_path_ / (name_ + ".bin");
+  auto file_path = GetBinaryPath();
   std::string buffer;
   bool is_loaded =
       flatbuffers::LoadFile(file_path.string().c_str(), true, &buffer);

@@ -2,26 +2,51 @@
 
 // Internal
 #include "internal/assert_fatal.h"
-#include "internal/fbs_utils.h"
 
 namespace fs = std::filesystem;
 
 namespace {
 
 // RecompileSources
-bool IsOneOrMorePreviousSourceDeleted(
-    const buildcc::internal::path_unordered_set &previous_source_files,
-    const buildcc::internal::path_unordered_set &current_source_files) {
+bool IsOneOrMorePreviousPathDeleted(
+    const buildcc::internal::path_unordered_set &previous_path,
+    const buildcc::internal::path_unordered_set &current_path) {
   bool one_or_more_previous_source_deleted = false;
-  for (const auto &file : previous_source_files) {
-    auto iter = current_source_files.find(file);
-    if (iter == current_source_files.end()) {
+  for (const auto &file : previous_path) {
+    auto iter = current_path.find(file);
+    if (iter == current_path.end()) {
       one_or_more_previous_source_deleted = true;
       break;
     }
   }
 
   return one_or_more_previous_source_deleted;
+}
+
+bool Command(const std::vector<std::string> &tokens) {
+  std::string command{""};
+  for (const auto &t : tokens) {
+    command += t + " ";
+  }
+  buildcc::env::log_debug(command, "system");
+  return system(command.c_str()) == 0;
+}
+
+std::string AggregateSources(const std::vector<std::string> &compiled_sources) {
+  std::string files = "";
+  for (const auto &output_file : compiled_sources) {
+    files += " " + output_file;
+  }
+  return files;
+}
+
+std::string AggregateIncludeDirs(
+    const buildcc::internal::path_unordered_set &include_dirs) {
+  std::string idir{""};
+  for (const auto &dirs : include_dirs) {
+    idir += std::string("-I") + dirs.GetPathname().string() + " ";
+  }
+  return idir;
 }
 
 } // namespace
@@ -41,7 +66,7 @@ void Target::AddSource(
                               absolute_filepath.string() + " not found");
 
   auto current_file =
-      buildcc::internal::Path::CreateExistingPath(absolute_filepath.string());
+      buildcc::internal::Path::CreateExistingPath(absolute_filepath);
   internal::assert_fatal(current_source_files_.find(current_file),
                          current_source_files_.end(),
                          absolute_filepath.string() + " duplicate found");
@@ -53,26 +78,43 @@ void Target::AddSource(const std::string &relative_filename) {
   AddSource(relative_filename, "");
 }
 
+void Target::AddIncludeDir(const std::string &relative_include_dir) {
+  env::log_trace(__FUNCTION__, name_);
+
+  fs::path absolute_include_dir =
+      target_root_source_dir_ / relative_include_dir;
+
+  auto current_dir =
+      buildcc::internal::Path::CreateNewPath(absolute_include_dir);
+  if (current_include_dirs_.find(current_dir) != current_include_dirs_.end()) {
+    return;
+  }
+
+  uint64_t max_timestamp_count = 0;
+  for (const auto d : fs::directory_iterator(absolute_include_dir)) {
+    max_timestamp_count = std::max(
+        max_timestamp_count,
+        static_cast<uint64_t>(d.last_write_time().time_since_epoch().count()));
+  }
+  current_dir.SetLastWriteTimestamp(max_timestamp_count);
+  current_include_dirs_.insert(current_dir);
+}
+
 void Target::Build() {
   env::log_trace(__FUNCTION__, name_);
 
-  std::vector<std::string> compiled_sources;
-  if (!loader_.Load()) {
-    compiled_sources = CompileSources();
+  const bool is_loaded = loader_.Load();
+  if (!is_loaded) {
     dirty_ = true;
   } else {
-    compiled_sources = RecompileSources();
+    RecheckIncludeDirs();
   }
 
+  const auto compiled_sources = BuildSources();
   if (dirty_) {
     BuildTarget(compiled_sources);
+    Store();
   }
-
-  // Write back
-  // TODO, Update this with include directory
-  internal::fbs_utils_store_target(name_, target_intermediate_dir_, type_,
-                                   toolchain_, current_source_files_,
-                                   buildcc::internal::path_unordered_set());
 }
 
 // PRIVATE
@@ -84,57 +126,66 @@ void Target::Initialize() {
   fs::create_directories(target_intermediate_dir_);
 }
 
+std::vector<std::string> Target::BuildSources() {
+  if (dirty_) {
+    return CompileSources();
+  } else {
+    return RecompileSources();
+  }
+}
+
 void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   env::log_trace(__FUNCTION__, name_);
 
   // Add compiled sources
-  std::string files = "";
-  for (const auto &output_file : compiled_sources) {
-    files += " " + output_file;
-  }
+  std::string aggregated_compiled_sources = AggregateSources(compiled_sources);
 
-  // TODO, Add headers
   // TODO, Add compiled libs
 
   // Final Target
-
-  fs::path target = target_intermediate_dir_ / name_;
-  std::string command =
-      toolchain_.GetCppCompiler() + " -g -o " + target.string() + files;
-  env::log_debug(command, name_);
-  int err = system(command.c_str());
-  internal::assert_fatal(err, 0, "Compilation failed for: " + name_);
+  const fs::path target = target_intermediate_dir_ / name_;
+  bool success = Command({
+      // TODO, Improve this logic
+      // Select cpp compiler for building target only if there is .cpp file
+      // added
+      // Else use c compiler
+      toolchain_.GetCppCompiler(),
+      "-g",
+      "-o",
+      target.string(),
+      aggregated_compiled_sources,
+  });
+  internal::assert_fatal_true(success, "Compilation failed for: " + name_);
 }
 
-std::string Target::GetCompiledSourceName(const fs::path &source) {
-  const auto output_filename =
-      target_intermediate_dir_ / (source.filename().string() + ".o");
-  return output_filename.string();
-}
-
-void Target::CompileSource(const std::string &source) {
-  env::log_trace(__FUNCTION__, name_);
-
-  fs::path source_path = source;
-  std::string compiler = source_path.extension() == ".c"
-                             ? toolchain_.GetCCompiler()
-                             : toolchain_.GetCppCompiler();
-  auto output_filename = GetCompiledSourceName(source);
-
-  std::string command = compiler + " -c " + source + " -o " + output_filename;
-  env::log_debug(command, name_);
-  int err = system(command.c_str());
-  internal::assert_fatal(err, 0, "Compilation failed for: " + source);
+void Target::CompileSource(const fs::path &current_source,
+                           const std::string &aggregated_include_dirs) {
+  const std::string compiled_source = GetCompiledSourceName(current_source);
+  const std::string compiler = GetCompiler(current_source);
+  bool success = Command({
+      compiler,
+      current_source.string(),
+      "-c",
+      aggregated_include_dirs,
+      "-o",
+      compiled_source,
+  });
+  buildcc::internal::assert_fatal_true(success, "Compilation failed for: " +
+                                                    current_source.string());
 }
 
 std::vector<std::string> Target::CompileSources() {
   env::log_trace(__FUNCTION__, name_);
+  const std::string aggregated_include_dirs =
+      AggregateIncludeDirs(current_include_dirs_);
 
   std::vector<std::string> compiled_files;
   for (const auto &file : current_source_files_) {
-    std::string compiled_filename = GetCompiledSourceName(file.GetPathname());
-    CompileSource(file.GetPathname());
-    compiled_files.push_back(compiled_filename);
+    const auto &current_source = file.GetPathname();
+    const std::string compiled_source = GetCompiledSourceName(current_source);
+
+    CompileSource(current_source, aggregated_include_dirs);
+    compiled_files.push_back(compiled_source);
   }
 
   return compiled_files;
@@ -146,14 +197,17 @@ std::vector<std::string> Target::RecompileSources() {
   const auto &previous_source_files = loader_.GetLoadedSources();
 
   // * Cannot find previous source in current source files
-  bool is_source_removed = IsOneOrMorePreviousSourceDeleted(
+  bool is_source_removed = IsOneOrMorePreviousPathDeleted(
       previous_source_files, current_source_files_);
   dirty_ = dirty_ || is_source_removed;
 
+  std::string aggregated_include_dirs =
+      AggregateIncludeDirs(current_include_dirs_);
+
   std::vector<std::string> compiled_files;
   for (const auto &current_file : current_source_files_) {
-    std::string compiled_filename =
-        GetCompiledSourceName(current_file.GetPathname());
+    const auto &current_source = current_file.GetPathname();
+    const std::string compiled_source = GetCompiledSourceName(current_source);
 
     // Find current_file in the loaded sources
     auto iter = previous_source_files.find(current_file);
@@ -161,24 +215,74 @@ std::vector<std::string> Target::RecompileSources() {
     if (iter == previous_source_files.end()) {
       // *1 New source file added to build
       env::log_trace("New source added", name_);
-      CompileSource(current_file.GetPathname());
+      CompileSource(current_source, aggregated_include_dirs);
       dirty_ = true;
     } else {
       // *2 Current file is updated
       if (current_file.GetLastWriteTimestamp() >
           iter->GetLastWriteTimestamp()) {
-        env::log_trace("Current file is newer " + current_file.GetPathname(),
+        env::log_trace("Current file is newer " +
+                           current_file.GetPathname().string(),
                        name_);
-        CompileSource(current_file.GetPathname());
+        CompileSource(current_source, aggregated_include_dirs);
         dirty_ = true;
       } else {
         // *3 Do nothing
       }
     }
-    compiled_files.push_back(compiled_filename);
+    compiled_files.push_back(compiled_source);
   }
 
   return compiled_files;
+}
+
+void Target::RecheckIncludeDirs() {
+  env::log_trace(__FUNCTION__, name_);
+
+  const auto &previous_include_dirs = loader_.GetLoadedIncludeDirs();
+  // * Cannot find previous include dir in current include dirs
+  bool is_dir_removed = IsOneOrMorePreviousPathDeleted(previous_include_dirs,
+                                                       current_include_dirs_);
+  if (is_dir_removed) {
+    dirty_ = true;
+    return;
+  }
+
+  for (auto &current_dir : current_include_dirs_) {
+    auto iter = previous_include_dirs.find(current_dir);
+
+    if (iter == previous_include_dirs.end()) {
+      // * New include dir added
+      dirty_ = true;
+      break;
+    } else {
+      // * A file in current dir is updated
+      if (current_dir.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
+        env::log_trace("Current dir is newer " +
+                           current_dir.GetPathname().string(),
+                       name_);
+        dirty_ = true;
+        break;
+      } else {
+        // * Do nothing
+      }
+    }
+  }
+}
+
+std::string Target::GetCompiledSourceName(const fs::path &source) {
+  const auto output_filename =
+      target_intermediate_dir_ / (source.filename().string() + ".o");
+  return output_filename.string();
+}
+
+std::string Target::GetCompiler(const fs::path &source) {
+  // .cpp -> GetCppCompiler
+  // .c / .asm -> GetCCompiler
+  std::string compiler = source.extension() == ".cpp"
+                             ? toolchain_.GetCppCompiler()
+                             : toolchain_.GetCCompiler();
+  return compiler;
 }
 
 } // namespace buildcc

@@ -43,22 +43,38 @@ public:
   void AddSource(const std::string &relative_filename,
                  const std::filesystem::path &relative_to_target_path);
 
+  void AddIncludeDir(const std::string &relative_include_dir);
+
   // TODO, Add more setters
 
   // Getters
+  fs::path GetTargetPath() { return target_intermediate_dir_ / name_; }
+  fs::path GetBinaryPath() { return loader_.GetBinaryPath(); }
 
   // TODO, Add more getters
 
 private:
-  // Open the serialized file and parse the target
   void Initialize();
 
+  // Sources
   std::vector<std::string> CompileSources();
   std::vector<std::string> RecompileSources();
+  void CompileSource(const fs::path &current_source,
+                     const std::string &aggregated_include_dirs);
 
+  // Includes
+  void RecheckIncludeDirs();
+
+  // Builders
+  std::vector<std::string> BuildSources();
   void BuildTarget(const std::vector<std::string> &compiled_sources);
-  void CompileSource(const std::string &source);
+
+  // Getters
   std::string GetCompiledSourceName(const fs::path &source);
+  std::string GetCompiler(const fs::path &source);
+
+  // Fbs
+  bool Store();
 
 private:
   // Constructor defined
@@ -70,6 +86,7 @@ private:
 
   // Internal
   buildcc::internal::path_unordered_set current_source_files_;
+  buildcc::internal::path_unordered_set current_include_dirs_;
 
   // TODO, Add more internal variables
 

@@ -1,4 +1,7 @@
 # Folder
+generated
 
 # Files
+*.exe
+*.o
 *.bin

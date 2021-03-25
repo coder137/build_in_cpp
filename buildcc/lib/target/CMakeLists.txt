@@ -29,8 +29,8 @@ add_dependencies(target fbs_to_header)
 
 target_sources(target PRIVATE
     src/target.cpp
-    src/fbs_utils.cpp
     src/fbs_loader.cpp
+    src/fbs_storer.cpp
 )
 target_include_directories(target PRIVATE
     generated
