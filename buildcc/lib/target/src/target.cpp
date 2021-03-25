@@ -103,18 +103,14 @@ void Target::AddIncludeDir(const std::string &relative_include_dir) {
 void Target::Build() {
   env::log_trace(__FUNCTION__, name_);
 
-  std::vector<std::string> compiled_sources;
-
   const bool is_loaded = loader_.Load();
-  RecheckIncludeDirs();
-
-  if (!is_loaded || dirty_) {
-    compiled_sources = CompileSources();
+  if (!is_loaded) {
     dirty_ = true;
   } else {
-    compiled_sources = RecompileSources();
+    RecheckIncludeDirs();
   }
 
+  const auto compiled_sources = BuildSources();
   if (dirty_) {
     BuildTarget(compiled_sources);
     Store();
@@ -128,6 +124,14 @@ void Target::Initialize() {
       env::is_init(),
       "Environment is not initialized. Use the buildcc::env::init API");
   fs::create_directories(target_intermediate_dir_);
+}
+
+std::vector<std::string> Target::BuildSources() {
+  if (dirty_) {
+    return CompileSources();
+  } else {
+    return RecompileSources();
+  }
 }
 
 void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
@@ -154,34 +158,34 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   internal::assert_fatal_true(success, "Compilation failed for: " + name_);
 }
 
-void Target::CompileSource(const fs::path &source) {
-  env::log_trace(__FUNCTION__, name_);
-
-  // TODO, These are computationally expensive, Cache them
-  const std::string compiler = GetCompiler(source);
-  const std::string output_filename = GetCompiledSourceName(source);
-  const std::string include_dirs = AggregateIncludeDirs(current_include_dirs_);
-
+void Target::CompileSource(const fs::path &current_source,
+                           const std::string &aggregated_include_dirs) {
+  const std::string compiled_source = GetCompiledSourceName(current_source);
+  const std::string compiler = GetCompiler(current_source);
   bool success = Command({
       compiler,
-      source.string(),
+      current_source.string(),
       "-c",
-      include_dirs,
+      aggregated_include_dirs,
       "-o",
-      output_filename,
+      compiled_source,
   });
-  internal::assert_fatal_true(success,
-                              "Compilation failed for: " + source.string());
+  buildcc::internal::assert_fatal_true(success, "Compilation failed for: " +
+                                                    current_source.string());
 }
 
 std::vector<std::string> Target::CompileSources() {
   env::log_trace(__FUNCTION__, name_);
+  const std::string aggregated_include_dirs =
+      AggregateIncludeDirs(current_include_dirs_);
 
   std::vector<std::string> compiled_files;
   for (const auto &file : current_source_files_) {
-    std::string compiled_filename = GetCompiledSourceName(file.GetPathname());
-    CompileSource(file.GetPathname());
-    compiled_files.push_back(compiled_filename);
+    const auto &current_source = file.GetPathname();
+    const std::string compiled_source = GetCompiledSourceName(current_source);
+
+    CompileSource(current_source, aggregated_include_dirs);
+    compiled_files.push_back(compiled_source);
   }
 
   return compiled_files;
@@ -197,10 +201,13 @@ std::vector<std::string> Target::RecompileSources() {
       previous_source_files, current_source_files_);
   dirty_ = dirty_ || is_source_removed;
 
+  std::string aggregated_include_dirs =
+      AggregateIncludeDirs(current_include_dirs_);
+
   std::vector<std::string> compiled_files;
   for (const auto &current_file : current_source_files_) {
-    std::string compiled_filename =
-        GetCompiledSourceName(current_file.GetPathname());
+    const auto &current_source = current_file.GetPathname();
+    const std::string compiled_source = GetCompiledSourceName(current_source);
 
     // Find current_file in the loaded sources
     auto iter = previous_source_files.find(current_file);
@@ -208,7 +215,7 @@ std::vector<std::string> Target::RecompileSources() {
     if (iter == previous_source_files.end()) {
       // *1 New source file added to build
       env::log_trace("New source added", name_);
-      CompileSource(current_file.GetPathname());
+      CompileSource(current_source, aggregated_include_dirs);
       dirty_ = true;
     } else {
       // *2 Current file is updated
@@ -217,13 +224,13 @@ std::vector<std::string> Target::RecompileSources() {
         env::log_trace("Current file is newer " +
                            current_file.GetPathname().string(),
                        name_);
-        CompileSource(current_file.GetPathname());
+        CompileSource(current_source, aggregated_include_dirs);
         dirty_ = true;
       } else {
         // *3 Do nothing
       }
     }
-    compiled_files.push_back(compiled_filename);
+    compiled_files.push_back(compiled_source);
   }
 
   return compiled_files;
@@ -236,7 +243,10 @@ void Target::RecheckIncludeDirs() {
   // * Cannot find previous include dir in current include dirs
   bool is_dir_removed = IsOneOrMorePreviousPathDeleted(previous_include_dirs,
                                                        current_include_dirs_);
-  dirty_ = dirty_ || is_dir_removed;
+  if (is_dir_removed) {
+    dirty_ = true;
+    return;
+  }
 
   for (auto &current_dir : current_include_dirs_) {
     auto iter = previous_include_dirs.find(current_dir);

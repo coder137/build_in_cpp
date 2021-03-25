@@ -279,12 +279,63 @@ TEST(TargetTestGroup, TargetBuildIncludeDir) {
     CHECK_FALSE(loaded_dirs.find(include_header_path) == loaded_dirs.end());
   }
   {
+    // * 1 Adding new include directory
+    buildcc::Target include_compile(NAME, buildcc::TargetType::Executable,
+                                    buildcc::Toolchain("gcc", "gcc", "g++"),
+                                    "data");
+    include_compile.AddSource(DUMMY_MAIN_C);
+    include_compile.AddSource(INCLUDE_HEADER_SOURCE);
+    include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
+    // Adds the data directory
+    include_compile.AddIncludeDir("");
+    include_compile.Build();
+
+    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    bool is_loaded = loader.Load();
+    CHECK_TRUE(is_loaded);
+    const auto &loaded_sources = loader.GetLoadedSources();
+    const auto &loaded_dirs = loader.GetLoadedIncludeDirs();
+
+    CHECK_EQUAL(loaded_sources.size(), 2);
+    CHECK_EQUAL(loaded_dirs.size(), 2);
+
+    CHECK_FALSE(loaded_sources.find(dummy_c_file) == loaded_sources.end());
+    CHECK_FALSE(loaded_sources.find(include_header_file) ==
+                loaded_sources.end());
+    CHECK_FALSE(loaded_dirs.find(include_header_path) == loaded_dirs.end());
+  }
+  {
     // * Force copy to trigger recompile when HEADER changes
     // *2 Current file is updated
     auto file_path =
         source_path / RELATIVE_INCLUDE_DIR / INCLUDE_HEADER_INCLUDE;
     flatbuffers::SaveFile(file_path.string().c_str(), std::string{""}, false);
 
+    buildcc::Target include_compile(NAME, buildcc::TargetType::Executable,
+                                    buildcc::Toolchain("gcc", "gcc", "g++"),
+                                    "data");
+    include_compile.AddSource(DUMMY_MAIN_C);
+    include_compile.AddSource(INCLUDE_HEADER_SOURCE);
+    include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
+    include_compile.AddIncludeDir("");
+    include_compile.Build();
+
+    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    bool is_loaded = loader.Load();
+    CHECK_TRUE(is_loaded);
+    const auto &loaded_sources = loader.GetLoadedSources();
+    const auto &loaded_dirs = loader.GetLoadedIncludeDirs();
+
+    CHECK_EQUAL(loaded_sources.size(), 2);
+    CHECK_EQUAL(loaded_dirs.size(), 2);
+
+    CHECK_FALSE(loaded_sources.find(dummy_c_file) == loaded_sources.end());
+    CHECK_FALSE(loaded_sources.find(include_header_file) ==
+                loaded_sources.end());
+    CHECK_FALSE(loaded_dirs.find(include_header_path) == loaded_dirs.end());
+  }
+  {
+    // * Remove include directory
     buildcc::Target include_compile(NAME, buildcc::TargetType::Executable,
                                     buildcc::Toolchain("gcc", "gcc", "g++"),
                                     "data");

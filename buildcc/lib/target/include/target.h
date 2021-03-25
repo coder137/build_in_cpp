@@ -59,12 +59,14 @@ private:
   // Sources
   std::vector<std::string> CompileSources();
   std::vector<std::string> RecompileSources();
-  void CompileSource(const fs::path &source);
+  void CompileSource(const fs::path &current_source,
+                     const std::string &aggregated_include_dirs);
 
   // Includes
   void RecheckIncludeDirs();
 
-  // Target
+  // Builders
+  std::vector<std::string> BuildSources();
   void BuildTarget(const std::vector<std::string> &compiled_sources);
 
   // Getters
