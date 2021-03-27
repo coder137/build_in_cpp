@@ -137,6 +137,23 @@ std::vector<std::string> Target::BuildSources() {
 void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   env::log_trace(__FUNCTION__, name_);
 
+  switch (type_) {
+  case TargetType::Executable:
+    BuildTargetExecutable(compiled_sources);
+    break;
+  case TargetType::StaticLibrary:
+    BuildTargetStaticLibrary(compiled_sources);
+    break;
+  case TargetType::DynamicLibrary:
+    BuildTargetDynamicLibrary(compiled_sources);
+    break;
+  }
+}
+
+void Target::BuildTargetExecutable(
+    const std::vector<std::string> &compiled_sources) {
+  env::log_trace(__FUNCTION__, name_);
+
   // Add compiled sources
   std::string aggregated_compiled_sources = AggregateSources(compiled_sources);
 
@@ -150,12 +167,43 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
       // added
       // Else use c compiler
       toolchain_.GetCppCompiler(),
-      "-g",
+      aggregated_compiled_sources,
       "-o",
       target.string(),
-      aggregated_compiled_sources,
   });
+  // TODO, Library dependencies come after
+
   internal::assert_fatal_true(success, "Compilation failed for: " + name_);
+}
+
+// TODO, Shift to different file if required
+void Target::BuildTargetStaticLibrary(
+    const std::vector<std::string> &compiled_sources) {
+  env::log_trace(__FUNCTION__, name_);
+
+  // Add compiled sources
+  std::string aggregated_compiled_sources = AggregateSources(compiled_sources);
+
+  try {
+    const std::string &ar = toolchain_.GetExecutable("ar");
+    // Final Target
+    const fs::path target = target_intermediate_dir_ / name_;
+    bool success = Command({
+        ar,
+        "rcs",
+        target.string(),
+        aggregated_compiled_sources,
+    });
+    internal::assert_fatal_true(success, "Compilation failed for: " + name_);
+  } catch (std::out_of_range) {
+    internal::assert_fatal_true(false, "Could not find 'ar' executable");
+  }
+}
+
+// TODO, Shift to different file if required
+void Target::BuildTargetDynamicLibrary(
+    const std::vector<std::string> &compiled_sources) {
+  env::log_trace(__FUNCTION__, name_);
 }
 
 void Target::CompileSource(const fs::path &current_source,
@@ -164,11 +212,11 @@ void Target::CompileSource(const fs::path &current_source,
   const std::string compiler = GetCompiler(current_source);
   bool success = Command({
       compiler,
-      current_source.string(),
-      "-c",
       aggregated_include_dirs,
       "-o",
       compiled_source,
+      "-c",
+      current_source.string(),
   });
   buildcc::internal::assert_fatal_true(success, "Compilation failed for: " +
                                                     current_source.string());

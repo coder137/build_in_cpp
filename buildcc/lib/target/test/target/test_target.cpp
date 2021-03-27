@@ -44,10 +44,12 @@ TEST(TargetTestGroup, TargetType) {
   }
 
   {
+    buildcc::Toolchain gcc("gcc", "gcc", "g++");
+    gcc.AddExecutable("ar", "ar");
     buildcc::Target static_target(STATIC_NAME,
-                                  buildcc::TargetType::StaticLibrary,
-                                  buildcc::Toolchain("gcc", "gcc", "g++"), "");
-    static_target.AddSource("data/dummy_main.cpp");
+                                  buildcc::TargetType::StaticLibrary, gcc, "");
+    static_target.AddSource("data/include_header.cpp");
+    static_target.AddIncludeDir("data/include");
     static_target.Build();
   }
 
