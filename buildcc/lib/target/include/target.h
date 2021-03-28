@@ -56,24 +56,23 @@ public:
 private:
   void Initialize();
 
-  // Sources
+  // Compiling
+  std::vector<std::string> BuildSources();
   std::vector<std::string> CompileSources();
   std::vector<std::string> RecompileSources();
-  void CompileSource(const fs::path &current_source,
-                     const std::string &aggregated_include_dirs);
+  virtual void CompileSource(const fs::path &current_source,
+                             const std::string &aggregated_include_dirs);
 
   // Includes
   void RecheckIncludeDirs();
 
-  // Builders
-  std::vector<std::string> BuildSources();
-  void BuildTarget(const std::vector<std::string> &compiled_sources);
+  // Linking
+  virtual void BuildTarget(const std::vector<std::string> &compiled_sources);
 
+  // TODO, Use virtual methods instead, Remove these functions
   void BuildTargetExecutable(const std::vector<std::string> &compiled_sources);
   void
   BuildTargetStaticLibrary(const std::vector<std::string> &compiled_sources);
-
-  // TODO,
   void
   BuildTargetDynamicLibrary(const std::vector<std::string> &compiled_sources);
 

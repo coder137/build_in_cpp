@@ -183,6 +183,7 @@ void Target::BuildTargetExecutable(
       // added
       // Else use c compiler
       toolchain_.GetCppCompiler(),
+      // TODO, Add Link Flags
       aggregated_compiled_sources,
       "-o",
       target.string(),
@@ -229,7 +230,9 @@ void Target::CompileSource(const fs::path &current_source,
   const std::string compiler = GetCompiler(current_source);
   bool success = Command({
       compiler,
+      // TODO, Add Preprocessor Flags
       aggregated_include_dirs,
+      // TODO, Add C/Cpp Compile Flags
       "-o",
       compiled_source,
       "-c",
