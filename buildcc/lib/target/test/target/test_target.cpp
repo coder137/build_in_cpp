@@ -50,10 +50,9 @@ TEST(TargetTestGroup, TargetType) {
   }
 
   {
-    buildcc::Target invalid_target(INVALID_NAME, (buildcc::TargetType)3,
-                                   buildcc::Toolchain("gcc", "gcc", "g++"), "");
-    invalid_target.AddSource("data/dummy_main.cpp");
-    CHECK_THROWS(std::string, invalid_target.Build());
+    CHECK_THROWS(std::string,
+                 buildcc::Target(INVALID_NAME, (buildcc::TargetType)3,
+                                 buildcc::Toolchain("gcc", "gcc", "g++"), ""));
   }
 
   buildcc::env::deinit();

@@ -24,8 +24,6 @@ fbs::TargetType get_fbs_target_type(buildcc::TargetType type) {
   case buildcc::TargetType::DynamicLibrary:
     target_type = fbs::TargetType_DynamicLibrary;
     break;
-  default:
-    buildcc::internal::assert_fatal_true(false, "Not a valid TargetType");
   }
   return target_type;
 }

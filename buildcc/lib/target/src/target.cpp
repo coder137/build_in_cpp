@@ -7,6 +7,19 @@ namespace fs = std::filesystem;
 
 namespace {
 
+bool IsValidTargetType(buildcc::TargetType type) {
+  switch (type) {
+  case buildcc::TargetType::Executable:
+  case buildcc::TargetType::StaticLibrary:
+  case buildcc::TargetType::DynamicLibrary:
+    return true;
+    break;
+  default:
+    return false;
+    break;
+  }
+}
+
 // RecompileSources
 bool IsOneOrMorePreviousPathDeleted(
     const buildcc::internal::path_unordered_set &previous_path,
@@ -123,6 +136,7 @@ void Target::Initialize() {
   internal::assert_fatal_true(
       env::is_init(),
       "Environment is not initialized. Use the buildcc::env::init API");
+  internal::assert_fatal_true(IsValidTargetType(type_), "Invalid Target Type");
   fs::create_directories(target_intermediate_dir_);
 }
 
