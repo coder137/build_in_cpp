@@ -32,6 +32,9 @@ target_sources(target PRIVATE
     src/toolchain.cpp
     src/fbs_loader.cpp
     src/fbs_storer.cpp
+
+    src/dynamic_target.cpp
+    src/static_target.cpp
 )
 target_include_directories(target PRIVATE
     generated
