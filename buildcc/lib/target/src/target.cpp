@@ -45,7 +45,8 @@ bool Command(const std::vector<std::string> &tokens) {
   return system(command.c_str()) == 0;
 }
 
-std::string AggregateSources(const std::vector<std::string> &compiled_sources) {
+std::string
+AggregateCompiledSources(const std::vector<std::string> &compiled_sources) {
   std::string files = "";
   for (const auto &output_file : compiled_sources) {
     files += " " + output_file;
@@ -169,7 +170,8 @@ void Target::BuildTargetExecutable(
   env::log_trace(__FUNCTION__, name_);
 
   // Add compiled sources
-  std::string aggregated_compiled_sources = AggregateSources(compiled_sources);
+  std::string aggregated_compiled_sources =
+      AggregateCompiledSources(compiled_sources);
 
   // TODO, Add compiled libs
 
@@ -196,7 +198,8 @@ void Target::BuildTargetStaticLibrary(
   env::log_trace(__FUNCTION__, name_);
 
   // Add compiled sources
-  std::string aggregated_compiled_sources = AggregateSources(compiled_sources);
+  std::string aggregated_compiled_sources =
+      AggregateCompiledSources(compiled_sources);
 
   try {
     const std::string &ar = toolchain_.GetExecutable("ar");
