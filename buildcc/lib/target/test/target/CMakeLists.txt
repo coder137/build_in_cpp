@@ -5,6 +5,7 @@ add_executable(
     ${TEST_NAME}
     ${TEST_NAME}.cpp
     ${TARGET_DIR}/src/target.cpp
+    ${TARGET_DIR}/src/toolchain.cpp
     ${TARGET_DIR}/src/fbs_loader.cpp
     ${TARGET_DIR}/src/fbs_storer.cpp
 )

@@ -20,7 +20,6 @@ TEST_GROUP(TargetTestGroup)
 
 TEST(TargetTestGroup, TargetType) {
   constexpr const char *const EXE_NAME = "ExeTest.exe";
-  constexpr const char *const STATIC_NAME = "StaticTest.a";
   constexpr const char *const SHARED_NAME = "SharedTest.so";
   constexpr const char *const INVALID_NAME = "Invalid.random";
 
@@ -29,8 +28,7 @@ TEST(TargetTestGroup, TargetType) {
   auto intermediate_path = fs::path(BUILD_INTERMEDIATE_DIR);
 
   fs::remove(intermediate_path / EXE_NAME / (std::string(EXE_NAME) + ".bin"));
-  fs::remove(intermediate_path / STATIC_NAME /
-             (std::string(STATIC_NAME) + ".bin"));
+
   fs::remove(intermediate_path / SHARED_NAME /
              (std::string(SHARED_NAME) + ".bin"));
   fs::remove(intermediate_path / INVALID_NAME /
@@ -44,14 +42,6 @@ TEST(TargetTestGroup, TargetType) {
   }
 
   {
-    buildcc::Target static_target(STATIC_NAME,
-                                  buildcc::TargetType::StaticLibrary,
-                                  buildcc::Toolchain("gcc", "gcc", "g++"), "");
-    static_target.AddSource("data/dummy_main.cpp");
-    static_target.Build();
-  }
-
-  {
     buildcc::Target shared_target(SHARED_NAME,
                                   buildcc::TargetType::DynamicLibrary,
                                   buildcc::Toolchain("gcc", "gcc", "g++"), "");
@@ -60,13 +50,45 @@ TEST(TargetTestGroup, TargetType) {
   }
 
   {
-    buildcc::Target invalid_target(INVALID_NAME, (buildcc::TargetType)3,
-                                   buildcc::Toolchain("gcc", "gcc", "g++"), "");
-    invalid_target.AddSource("data/dummy_main.cpp");
-    CHECK_THROWS(std::string, invalid_target.Build());
+    CHECK_THROWS(std::string,
+                 buildcc::Target(INVALID_NAME, (buildcc::TargetType)3,
+                                 buildcc::Toolchain("gcc", "gcc", "g++"), ""));
   }
 
   buildcc::env::deinit();
+}
+
+TEST(TargetTestGroup, TargetTypeStaticLibrary) {
+  constexpr const char *const STATIC_NAME = "libStaticTest.a";
+  buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_INTERMEDIATE_DIR);
+
+  auto intermediate_path = fs::path(BUILD_INTERMEDIATE_DIR);
+  fs::remove(intermediate_path / STATIC_NAME /
+             (std::string(STATIC_NAME) + ".bin"));
+  {
+    buildcc::Toolchain gcc("gcc", "gcc", "g++");
+    CHECK_TRUE(gcc.AddExecutable("ar", "ar"));
+    // Re adding it should not be allowed
+    CHECK_FALSE(gcc.AddExecutable("ar", "ar"));
+
+    buildcc::Target static_target(STATIC_NAME,
+                                  buildcc::TargetType::StaticLibrary, gcc, "");
+    static_target.AddSource("data/include_header.cpp");
+    static_target.AddIncludeDir("data/include");
+    static_target.Build();
+  }
+  {
+    // Check if "ar" compiler is present
+    fs::remove(intermediate_path / STATIC_NAME /
+               (std::string(STATIC_NAME) + ".bin"));
+
+    buildcc::Toolchain gcc("gcc", "gcc", "g++");
+    buildcc::Target static_target(STATIC_NAME,
+                                  buildcc::TargetType::StaticLibrary, gcc, "");
+    static_target.AddSource("data/include_header.cpp");
+    static_target.AddIncludeDir("data/include");
+    CHECK_THROWS(std::string, static_target.Build());
+  }
 }
 
 TEST(TargetTestGroup, TargetInit) {

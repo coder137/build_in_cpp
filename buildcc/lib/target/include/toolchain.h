@@ -2,6 +2,7 @@
 #define TARGET_INCLUDE_TOOLCHAIN_H_
 
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace buildcc {
@@ -14,23 +15,21 @@ public:
       : name_(name), c_compiler_(c_compiler), cpp_compiler_(cpp_compiler) {}
 
   // Setters
-  // TODO, Add an Append equivalent for the same
-  void AddPreprocessorFlag() {}
-  void AppendPreprocessorFlags() {}
+  bool AddExecutable(std::string name, std::string executable);
 
-  void AddCCompileFlag() {}
-  void AppendCCompileFlags() {}
-
-  void AddCppCompileFlag() {}
-  void AppendCppCompileFlags() {}
-
-  void AddLinkFlag() {}
-  void AppendLinkFlags() {}
+  // TODO, Add Append equivalent
+  void AddPreprocessorFlag(const std::string &preprocessor_flag);
+  void AddCCompileFlag(const std::string &c_compile_flag);
+  void AddCppCompileFlag(const std::string &cpp_compile_flag);
+  void AddLinkFlag(const std::string &link_flag);
 
   // Getters
   const std::string &GetName() const { return name_; }
   const std::string &GetCCompiler() const { return c_compiler_; }
   const std::string &GetCppCompiler() const { return cpp_compiler_; }
+  const std::string &GetExecutable(const std::string &name) const {
+    return executables_.at(name);
+  }
 
   const std::vector<std::string> &GetPreprocessorFlags() const {
     return preprocessor_flags_;
@@ -47,6 +46,7 @@ private:
   std::string name_;
   std::string c_compiler_;
   std::string cpp_compiler_;
+  std::unordered_map<std::string, std::string> executables_;
 
   std::vector<std::string> preprocessor_flags_;
   std::vector<std::string> c_compile_flags_;

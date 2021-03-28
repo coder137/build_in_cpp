@@ -69,6 +69,14 @@ private:
   std::vector<std::string> BuildSources();
   void BuildTarget(const std::vector<std::string> &compiled_sources);
 
+  void BuildTargetExecutable(const std::vector<std::string> &compiled_sources);
+  void
+  BuildTargetStaticLibrary(const std::vector<std::string> &compiled_sources);
+
+  // TODO,
+  void
+  BuildTargetDynamicLibrary(const std::vector<std::string> &compiled_sources);
+
   // Getters
   std::string GetCompiledSourceName(const fs::path &source);
   std::string GetCompiler(const fs::path &source);
