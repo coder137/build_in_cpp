@@ -15,26 +15,13 @@ public:
       : name_(name), c_compiler_(c_compiler), cpp_compiler_(cpp_compiler) {}
 
   // Setters
-  bool AddExecutable(std::string name, std::string executable) {
-    if (executables_.find(name) == executables_.end()) {
-      executables_[name] = executable;
-      return true;
-    }
-    return false;
-  }
+  bool AddExecutable(std::string name, std::string executable);
 
-  // TODO, Add an Append equivalent for the same
-  void AddPreprocessorFlag() {}
-  void AppendPreprocessorFlags() {}
-
-  void AddCCompileFlag() {}
-  void AppendCCompileFlags() {}
-
-  void AddCppCompileFlag() {}
-  void AppendCppCompileFlags() {}
-
-  void AddLinkFlag() {}
-  void AppendLinkFlags() {}
+  // TODO, Add Append equivalent
+  void AddPreprocessorFlag(const std::string &preprocessor_flag);
+  void AddCCompileFlag(const std::string &c_compile_flag);
+  void AddCppCompileFlag(const std::string &cpp_compile_flag);
+  void AddLinkFlag(const std::string &link_flag);
 
   // Getters
   const std::string &GetName() const { return name_; }
