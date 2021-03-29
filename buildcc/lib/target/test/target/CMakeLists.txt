@@ -13,6 +13,7 @@ add_executable(
     ${TARGET_DIR}/src/util.cpp
 
     ${TARGET_DIR}/src/static_target.cpp
+    ${TARGET_DIR}/src/dynamic_target.cpp
 )
 target_include_directories(${TEST_NAME} PRIVATE
     generated

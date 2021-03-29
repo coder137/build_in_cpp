@@ -3,6 +3,7 @@
 #include "base/target.h"
 
 // TODO, Create a seperate test suite for this
+#include "dynamic_target.h"
 #include "static_target.h"
 
 #include "env.h"
@@ -24,7 +25,6 @@ TEST_GROUP(TargetTestGroup)
 
 TEST(TargetTestGroup, TargetTypes) {
   constexpr const char *const EXE_NAME = "ExeTest.exe";
-  constexpr const char *const SHARED_NAME = "SharedTest.so";
   constexpr const char *const INVALID_NAME = "Invalid.random";
 
   buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_INTERMEDIATE_DIR);
@@ -32,9 +32,6 @@ TEST(TargetTestGroup, TargetTypes) {
   auto intermediate_path = fs::path(BUILD_INTERMEDIATE_DIR);
 
   fs::remove(intermediate_path / EXE_NAME / (std::string(EXE_NAME) + ".bin"));
-
-  fs::remove(intermediate_path / SHARED_NAME /
-             (std::string(SHARED_NAME) + ".bin"));
   fs::remove(intermediate_path / INVALID_NAME /
              (std::string(INVALID_NAME) + ".bin"));
 
@@ -44,14 +41,6 @@ TEST(TargetTestGroup, TargetTypes) {
         buildcc::Toolchain("gcc", "gcc", "g++"), "");
     exe_target.AddSource("data/dummy_main.cpp");
     exe_target.Build();
-  }
-
-  {
-    buildcc::base::Target shared_target(
-        SHARED_NAME, buildcc::base::TargetType::DynamicLibrary,
-        buildcc::Toolchain("gcc", "gcc", "g++"), "");
-    shared_target.AddSource("data/dummy_main.cpp");
-    shared_target.Build();
   }
 
   {
@@ -91,6 +80,23 @@ TEST(TargetTestGroup, TargetTypeStaticLibrary) {
     static_target.AddSource("data/include_header.cpp");
     static_target.AddIncludeDir("data/include");
     CHECK_THROWS(std::string, static_target.Build());
+  }
+}
+
+TEST(TargetTestGroup, TargetTypeDynamicLibrary) {
+  constexpr const char *const DYNAMIC_TARGET = "libDynamicTest.so";
+  buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_INTERMEDIATE_DIR);
+
+  auto intermediate_path = fs::path(BUILD_INTERMEDIATE_DIR);
+  fs::remove(intermediate_path / DYNAMIC_TARGET /
+             (std::string(DYNAMIC_TARGET) + ".bin"));
+
+  {
+    buildcc::Toolchain gcc("gcc", "gcc", "g++");
+    buildcc::DynamicTarget dynamic_target(DYNAMIC_TARGET, gcc, "");
+    dynamic_target.AddSource("data/include_header.cpp");
+    dynamic_target.AddIncludeDir("data/include");
+    dynamic_target.Build();
   }
 }
 
