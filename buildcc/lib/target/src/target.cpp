@@ -117,13 +117,13 @@ void Target::Build() {
 // PROTECTED
 
 // Getters
-std::string Target::GetCompiledSourceName(const fs::path &source) {
+std::string Target::GetCompiledSourceName(const fs::path &source) const {
   const auto output_filename =
-      target_intermediate_dir_ / (source.filename().string() + ".o");
+      GetTargetIntermediateDir() / (source.filename().string() + ".o");
   return output_filename.string();
 }
 
-std::string Target::GetCompiler(const fs::path &source) {
+std::string Target::GetCompiler(const fs::path &source) const {
   // .cpp -> GetCppCompiler
   // .c / .asm -> GetCCompiler
   std::string compiler = source.extension() == ".cpp"

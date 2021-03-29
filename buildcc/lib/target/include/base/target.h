@@ -53,15 +53,27 @@ public:
   // TODO, Add more setters
 
   // Getters
-  fs::path GetTargetPath() { return target_intermediate_dir_ / name_; }
-  fs::path GetBinaryPath() { return loader_.GetBinaryPath(); }
+  fs::path GetTargetPath() const {
+    return (GetTargetIntermediateDir() / GetName());
+  }
+  fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
 
-  const std::string &GetName() { return name_; }
-  const Toolchain &GetToolchain() { return toolchain_; }
-  const fs::path &GetTargetRoot() { return target_root_source_dir_; }
-  const fs::path &GetTargetIntermediate() { return target_intermediate_dir_; }
+  // Const references
+  const std::string &GetName() const { return name_; }
+  const Toolchain &GetToolchain() const { return toolchain_; }
+  base::TargetType GetTargetType() const { return type_; }
+
+  const fs::path &GetTargetRootDir() const { return target_root_source_dir_; }
+  const fs::path &GetTargetIntermediateDir() const {
+    return target_intermediate_dir_;
+  }
 
   // TODO, Add more getters
+
+protected:
+  // Getters
+  std::string GetCompiledSourceName(const fs::path &source) const;
+  std::string GetCompiler(const fs::path &source) const;
 
 private:
   void Initialize();
@@ -82,14 +94,10 @@ private:
   // Fbs
   bool Store();
 
-protected:
-  // Getters
-  std::string GetCompiledSourceName(const fs::path &source);
-  std::string GetCompiler(const fs::path &source);
-
 private:
   // Constructor defined
   std::string name_;
+  // TODO, Consider making this const reference
   Toolchain toolchain_;
   fs::path target_root_source_dir_;
   fs::path target_intermediate_dir_;
