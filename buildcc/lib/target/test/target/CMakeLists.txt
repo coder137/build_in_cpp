@@ -6,8 +6,13 @@ add_executable(
     ${TEST_NAME}.cpp
     ${TARGET_DIR}/src/target.cpp
     ${TARGET_DIR}/src/toolchain.cpp
+
     ${TARGET_DIR}/src/fbs_loader.cpp
     ${TARGET_DIR}/src/fbs_storer.cpp
+
+    ${TARGET_DIR}/src/util.cpp
+
+    ${TARGET_DIR}/src/static_target.cpp
 )
 target_include_directories(${TEST_NAME} PRIVATE
     generated

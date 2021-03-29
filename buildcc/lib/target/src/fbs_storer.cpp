@@ -1,4 +1,4 @@
-#include "target.h"
+#include "base/target.h"
 
 #include <filesystem>
 
@@ -13,15 +13,15 @@ namespace fbs = schema::internal;
 
 namespace {
 
-fbs::TargetType get_fbs_target_type(buildcc::TargetType type) {
+fbs::TargetType get_fbs_target_type(buildcc::base::TargetType type) {
   fbs::TargetType target_type = fbs::TargetType_Executable;
   switch (type) {
-  case buildcc::TargetType::Executable:
+  case buildcc::base::TargetType::Executable:
     break;
-  case buildcc::TargetType::StaticLibrary:
+  case buildcc::base::TargetType::StaticLibrary:
     target_type = fbs::TargetType::TargetType_StaticLibrary;
     break;
-  case buildcc::TargetType::DynamicLibrary:
+  case buildcc::base::TargetType::DynamicLibrary:
     target_type = fbs::TargetType_DynamicLibrary;
     break;
   }
@@ -58,7 +58,7 @@ get_fbs_path(flatbuffers::FlatBufferBuilder &builder,
 
 } // namespace
 
-namespace buildcc {
+namespace buildcc::base {
 
 bool Target::Store() {
   env::log_trace(__FUNCTION__, name_);
@@ -81,4 +81,4 @@ bool Target::Store() {
                                builder.GetSize(), true);
 }
 
-} // namespace buildcc
+} // namespace buildcc::base
