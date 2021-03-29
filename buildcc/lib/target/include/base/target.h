@@ -11,7 +11,6 @@
 #include "internal/path.h"
 
 // Buildcc
-#include "target_type.h"
 #include "toolchain.h"
 
 // Env
@@ -20,6 +19,12 @@
 namespace buildcc {
 
 namespace fs = std::filesystem;
+
+enum class TargetType {
+  Executable,
+  StaticLibrary,
+  DynamicLibrary,
+};
 
 class Target {
 public:
@@ -51,11 +56,12 @@ public:
   fs::path GetTargetPath() { return target_intermediate_dir_ / name_; }
   fs::path GetBinaryPath() { return loader_.GetBinaryPath(); }
 
-  // TODO, Add more getters
   const std::string &GetName() { return name_; }
   const Toolchain &GetToolchain() { return toolchain_; }
   const fs::path &GetTargetRoot() { return target_root_source_dir_; }
   const fs::path &GetTargetIntermediate() { return target_intermediate_dir_; }
+
+  // TODO, Add more getters
 
 private:
   void Initialize();

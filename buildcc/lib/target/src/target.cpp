@@ -1,4 +1,4 @@
-#include "target.h"
+#include "base/target.h"
 
 // Internal
 #include "internal/assert_fatal.h"
@@ -124,14 +124,7 @@ void Target::Initialize() {
   fs::create_directories(target_intermediate_dir_);
 }
 
-std::vector<std::string> Target::BuildSources() {
-  if (dirty_) {
-    return CompileSources();
-  } else {
-    return RecompileSources();
-  }
-}
-
+// Linking
 void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   env::log_trace(__FUNCTION__, name_);
 
@@ -142,7 +135,7 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   // TODO, Add compiled libs
 
   // Final Target
-  const fs::path target = target_intermediate_dir_ / name_;
+  const fs::path target = GetTargetIntermediate() / GetName();
   bool success = internal::command({
       // TODO, Improve this logic
       // Select cpp compiler for building target only if there is .cpp file
@@ -156,25 +149,16 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   });
   // TODO, Library dependencies come after
 
-  internal::assert_fatal_true(success, "Compilation failed for: " + name_);
+  internal::assert_fatal_true(success, "Compilation failed for: " + GetName());
 }
 
-void Target::CompileSource(const fs::path &current_source,
-                           const std::string &aggregated_include_dirs) {
-  const std::string compiled_source = GetCompiledSourceName(current_source);
-  const std::string compiler = GetCompiler(current_source);
-  bool success = internal::command({
-      compiler,
-      // TODO, Add Preprocessor Flags
-      aggregated_include_dirs,
-      // TODO, Add C/Cpp Compile Flags
-      "-o",
-      compiled_source,
-      "-c",
-      current_source.string(),
-  });
-  buildcc::internal::assert_fatal_true(success, "Compilation failed for: " +
-                                                    current_source.string());
+// Compilation
+std::vector<std::string> Target::BuildSources() {
+  if (dirty_) {
+    return CompileSources();
+  } else {
+    return RecompileSources();
+  }
 }
 
 std::vector<std::string> Target::CompileSources() {
@@ -239,6 +223,25 @@ std::vector<std::string> Target::RecompileSources() {
   return compiled_files;
 }
 
+void Target::CompileSource(const fs::path &current_source,
+                           const std::string &aggregated_include_dirs) {
+  const std::string compiled_source = GetCompiledSourceName(current_source);
+  const std::string compiler = GetCompiler(current_source);
+  bool success = internal::command({
+      compiler,
+      // TODO, Add Preprocessor Flags
+      aggregated_include_dirs,
+      // TODO, Add C/Cpp Compile Flags
+      "-o",
+      compiled_source,
+      "-c",
+      current_source.string(),
+  });
+  buildcc::internal::assert_fatal_true(success, "Compilation failed for: " +
+                                                    current_source.string());
+}
+
+// Includes
 void Target::RecheckIncludeDirs() {
   env::log_trace(__FUNCTION__, name_);
 
@@ -273,6 +276,7 @@ void Target::RecheckIncludeDirs() {
   }
 }
 
+// Getters
 std::string Target::GetCompiledSourceName(const fs::path &source) {
   const auto output_filename =
       target_intermediate_dir_ / (source.filename().string() + ".o");

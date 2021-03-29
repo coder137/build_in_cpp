@@ -1,7 +1,9 @@
 #include "constants.h"
 
+#include "base/target.h"
+
+// TODO, Create a seperate test suite for this
 #include "static_target.h"
-#include "target.h"
 
 #include "env.h"
 
