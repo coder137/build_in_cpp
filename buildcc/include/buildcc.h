@@ -6,6 +6,7 @@
 // TODO, Make target specific headers
 // TODO, Test these with different compilers
 // Currently tested with `gcc and g++`
+#include "dynamic_target.h"
 #include "executable_target.h"
 #include "static_target.h"
 

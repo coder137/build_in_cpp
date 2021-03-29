@@ -27,7 +27,7 @@ public:
     return loaded_include_dirs_;
   }
 
-  fs::path GetBinaryPath() { return relative_path_ / (name_ + ".bin"); }
+  fs::path GetBinaryPath() const { return relative_path_ / (name_ + ".bin"); }
 
 private:
   void Initialize();
