@@ -26,6 +26,9 @@ public:
   const path_unordered_set &GetLoadedIncludeDirs() const {
     return loaded_include_dirs_;
   }
+  const path_unordered_set &GetLoadedLibDeps() const {
+    return loaded_lib_deps_;
+  }
 
   fs::path GetBinaryPath() const { return relative_path_ / (name_ + ".bin"); }
 
@@ -38,6 +41,7 @@ private:
 
   path_unordered_set loaded_sources_;
   path_unordered_set loaded_include_dirs_;
+  path_unordered_set loaded_lib_deps_;
 };
 
 } // namespace buildcc::internal
