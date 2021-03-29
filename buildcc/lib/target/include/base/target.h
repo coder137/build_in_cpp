@@ -1,5 +1,5 @@
-#ifndef TARGET_INCLUDE_TARGET_H_
-#define TARGET_INCLUDE_TARGET_H_
+#ifndef TARGET_INCLUDE_BASE_TARGET_H_
+#define TARGET_INCLUDE_BASE_TARGET_H_
 
 #include <filesystem>
 #include <string>
@@ -16,7 +16,7 @@
 // Env
 #include "env.h"
 
-namespace buildcc {
+namespace buildcc::base {
 
 namespace fs = std::filesystem;
 
@@ -104,6 +104,6 @@ private:
   bool dirty_ = false;
 };
 
-} // namespace buildcc
+} // namespace buildcc::base
 
 #endif

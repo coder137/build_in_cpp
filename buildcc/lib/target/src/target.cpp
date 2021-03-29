@@ -8,11 +8,11 @@ namespace fs = std::filesystem;
 
 namespace {
 
-bool IsValidTargetType(buildcc::TargetType type) {
+bool IsValidTargetType(buildcc::base::TargetType type) {
   switch (type) {
-  case buildcc::TargetType::Executable:
-  case buildcc::TargetType::StaticLibrary:
-  case buildcc::TargetType::DynamicLibrary:
+  case buildcc::base::TargetType::Executable:
+  case buildcc::base::TargetType::StaticLibrary:
+  case buildcc::base::TargetType::DynamicLibrary:
     return true;
     break;
   default:
@@ -48,7 +48,7 @@ std::string AggregateIncludeDirs(
 
 } // namespace
 
-namespace buildcc {
+namespace buildcc::base {
 
 void Target::AddSource(
     const std::string &relative_filename,
@@ -292,4 +292,4 @@ std::string Target::GetCompiler(const fs::path &source) {
   return compiler;
 }
 
-} // namespace buildcc
+} // namespace buildcc::base

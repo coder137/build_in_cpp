@@ -5,12 +5,12 @@
 
 namespace buildcc {
 
-class DynamicTarget : public Target {
+class DynamicTarget : public base::Target {
 public:
-  DynamicTarget(const std::string &name, TargetType type,
-                const Toolchain &toolchain,
+  DynamicTarget(const std::string &name, const Toolchain &toolchain,
                 const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, type, toolchain, target_path_relative_to_root) {}
+      : Target(name, base::TargetType::DynamicLibrary, toolchain,
+               target_path_relative_to_root) {}
 
 private:
   // Compiling

@@ -5,11 +5,11 @@
 
 namespace buildcc {
 
-class StaticTarget : public Target {
+class StaticTarget : public base::Target {
 public:
   StaticTarget(const std::string &name, const Toolchain &toolchain,
                const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, TargetType::StaticLibrary, toolchain,
+      : Target(name, base::TargetType::StaticLibrary, toolchain,
                target_path_relative_to_root) {}
 
 private:

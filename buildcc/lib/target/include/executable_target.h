@@ -5,11 +5,11 @@
 
 namespace buildcc {
 
-class ExecutableTarget : public Target {
+class ExecutableTarget : public base::Target {
 public:
   ExecutableTarget(const std::string &name, const Toolchain &toolchain,
                    const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, TargetType::Executable, toolchain,
+      : Target(name, base::TargetType::Executable, toolchain,
                target_path_relative_to_root) {}
 };
 
