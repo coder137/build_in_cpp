@@ -30,11 +30,14 @@ add_dependencies(target fbs_to_header)
 target_sources(target PRIVATE
     src/target.cpp
     src/toolchain.cpp
-    src/fbs_loader.cpp
-    src/fbs_storer.cpp
 
     src/dynamic_target.cpp
     src/static_target.cpp
+
+    src/fbs_loader.cpp
+    src/fbs_storer.cpp
+
+    src/util.cpp
 )
 target_include_directories(target PRIVATE
     generated

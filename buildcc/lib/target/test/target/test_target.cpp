@@ -1,4 +1,6 @@
 #include "constants.h"
+
+#include "static_target.h"
 #include "target.h"
 
 #include "env.h"
@@ -71,8 +73,7 @@ TEST(TargetTestGroup, TargetTypeStaticLibrary) {
     // Re adding it should not be allowed
     CHECK_FALSE(gcc.AddExecutable("ar", "ar"));
 
-    buildcc::Target static_target(STATIC_NAME,
-                                  buildcc::TargetType::StaticLibrary, gcc, "");
+    buildcc::StaticTarget static_target(STATIC_NAME, gcc, "");
     static_target.AddSource("data/include_header.cpp");
     static_target.AddIncludeDir("data/include");
     static_target.Build();
@@ -83,8 +84,7 @@ TEST(TargetTestGroup, TargetTypeStaticLibrary) {
                (std::string(STATIC_NAME) + ".bin"));
 
     buildcc::Toolchain gcc("gcc", "gcc", "g++");
-    buildcc::Target static_target(STATIC_NAME,
-                                  buildcc::TargetType::StaticLibrary, gcc, "");
+    buildcc::StaticTarget static_target(STATIC_NAME, gcc, "");
     static_target.AddSource("data/include_header.cpp");
     static_target.AddIncludeDir("data/include");
     CHECK_THROWS(std::string, static_target.Build());

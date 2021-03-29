@@ -6,10 +6,11 @@
 namespace buildcc {
 
 class StaticTarget : public Target {
-  StaticTarget(const std::string &name, TargetType type,
-               const Toolchain &toolchain,
+public:
+  StaticTarget(const std::string &name, const Toolchain &toolchain,
                const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, type, toolchain, target_path_relative_to_root) {}
+      : Target(name, TargetType::StaticLibrary, toolchain,
+               target_path_relative_to_root) {}
 
 private:
   // NOTE: Compiling does not need to change

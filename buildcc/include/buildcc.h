@@ -4,4 +4,7 @@
 #include "env.h"
 #include "target.h"
 
+// TODO, Make target specific headers and hide target.h
+#include "static_target.h"
+
 #endif

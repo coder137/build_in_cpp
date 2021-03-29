@@ -25,7 +25,7 @@ class Target {
 public:
   explicit Target(const std::string &name, TargetType type,
                   const Toolchain &toolchain,
-                  const std::filesystem::path &target_path_relative_to_root)
+                  const fs::path &target_path_relative_to_root)
       : loader_(name, fs::path(env::get_intermediate_build_dir()) / name),
         name_(name), type_(type), toolchain_(toolchain),
         target_root_source_dir_(env::get_project_root() /
@@ -41,7 +41,7 @@ public:
   // Setters
   void AddSource(const std::string &relative_filename);
   void AddSource(const std::string &relative_filename,
-                 const std::filesystem::path &relative_to_target_path);
+                 const fs::path &relative_to_target_path);
 
   void AddIncludeDir(const std::string &relative_include_dir);
 
@@ -52,6 +52,10 @@ public:
   fs::path GetBinaryPath() { return loader_.GetBinaryPath(); }
 
   // TODO, Add more getters
+  const std::string &GetName() { return name_; }
+  const Toolchain &GetToolchain() { return toolchain_; }
+  const fs::path &GetTargetRoot() { return target_root_source_dir_; }
+  const fs::path &GetTargetIntermediate() { return target_intermediate_dir_; }
 
 private:
   void Initialize();
@@ -69,13 +73,6 @@ private:
   // Linking
   virtual void BuildTarget(const std::vector<std::string> &compiled_sources);
 
-  // TODO, Use virtual methods instead, Remove these functions
-  void BuildTargetExecutable(const std::vector<std::string> &compiled_sources);
-  void
-  BuildTargetStaticLibrary(const std::vector<std::string> &compiled_sources);
-  void
-  BuildTargetDynamicLibrary(const std::vector<std::string> &compiled_sources);
-
   // Getters
   std::string GetCompiledSourceName(const fs::path &source);
   std::string GetCompiler(const fs::path &source);
@@ -87,8 +84,8 @@ private:
   // Constructor defined
   std::string name_;
   Toolchain toolchain_;
-  std::filesystem::path target_root_source_dir_;
-  std::filesystem::path target_intermediate_dir_;
+  fs::path target_root_source_dir_;
+  fs::path target_intermediate_dir_;
   TargetType type_;
 
   // Internal

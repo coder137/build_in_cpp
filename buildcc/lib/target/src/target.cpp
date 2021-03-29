@@ -2,6 +2,7 @@
 
 // Internal
 #include "internal/assert_fatal.h"
+#include "internal/util.h"
 
 namespace fs = std::filesystem;
 
@@ -34,24 +35,6 @@ bool IsOneOrMorePreviousPathDeleted(
   }
 
   return one_or_more_previous_source_deleted;
-}
-
-bool Command(const std::vector<std::string> &tokens) {
-  std::string command{""};
-  for (const auto &t : tokens) {
-    command += t + " ";
-  }
-  buildcc::env::log_debug(command, "system");
-  return system(command.c_str()) == 0;
-}
-
-std::string
-AggregateCompiledSources(const std::vector<std::string> &compiled_sources) {
-  std::string files = "";
-  for (const auto &output_file : compiled_sources) {
-    files += " " + output_file;
-  }
-  return files;
 }
 
 std::string AggregateIncludeDirs(
@@ -152,32 +135,15 @@ std::vector<std::string> Target::BuildSources() {
 void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   env::log_trace(__FUNCTION__, name_);
 
-  switch (type_) {
-  case TargetType::Executable:
-    BuildTargetExecutable(compiled_sources);
-    break;
-  case TargetType::StaticLibrary:
-    BuildTargetStaticLibrary(compiled_sources);
-    break;
-  case TargetType::DynamicLibrary:
-    BuildTargetDynamicLibrary(compiled_sources);
-    break;
-  }
-}
-
-void Target::BuildTargetExecutable(
-    const std::vector<std::string> &compiled_sources) {
-  env::log_trace(__FUNCTION__, name_);
-
   // Add compiled sources
   std::string aggregated_compiled_sources =
-      AggregateCompiledSources(compiled_sources);
+      internal::aggregate_compiled_sources(compiled_sources);
 
   // TODO, Add compiled libs
 
   // Final Target
   const fs::path target = target_intermediate_dir_ / name_;
-  bool success = Command({
+  bool success = internal::command({
       // TODO, Improve this logic
       // Select cpp compiler for building target only if there is .cpp file
       // added
@@ -193,42 +159,11 @@ void Target::BuildTargetExecutable(
   internal::assert_fatal_true(success, "Compilation failed for: " + name_);
 }
 
-// TODO, Shift to different file if required
-void Target::BuildTargetStaticLibrary(
-    const std::vector<std::string> &compiled_sources) {
-  env::log_trace(__FUNCTION__, name_);
-
-  // Add compiled sources
-  std::string aggregated_compiled_sources =
-      AggregateCompiledSources(compiled_sources);
-
-  try {
-    const std::string &ar = toolchain_.GetExecutable("ar");
-    // Final Target
-    const fs::path target = target_intermediate_dir_ / name_;
-    bool success = Command({
-        ar,
-        "rcs",
-        target.string(),
-        aggregated_compiled_sources,
-    });
-    internal::assert_fatal_true(success, "Compilation failed for: " + name_);
-  } catch (std::out_of_range) {
-    internal::assert_fatal_true(false, "Could not find 'ar' executable");
-  }
-}
-
-// TODO, Shift to different file if required
-void Target::BuildTargetDynamicLibrary(
-    const std::vector<std::string> &compiled_sources) {
-  env::log_trace(__FUNCTION__, name_);
-}
-
 void Target::CompileSource(const fs::path &current_source,
                            const std::string &aggregated_include_dirs) {
   const std::string compiled_source = GetCompiledSourceName(current_source);
   const std::string compiler = GetCompiler(current_source);
-  bool success = Command({
+  bool success = internal::command({
       compiler,
       // TODO, Add Preprocessor Flags
       aggregated_include_dirs,
