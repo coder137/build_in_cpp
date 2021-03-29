@@ -79,12 +79,13 @@ private:
   // Linking
   virtual void BuildTarget(const std::vector<std::string> &compiled_sources);
 
+  // Fbs
+  bool Store();
+
+protected:
   // Getters
   std::string GetCompiledSourceName(const fs::path &source);
   std::string GetCompiler(const fs::path &source);
-
-  // Fbs
-  bool Store();
 
 private:
   // Constructor defined

@@ -114,6 +114,24 @@ void Target::Build() {
   }
 }
 
+// PROTECTED
+
+// Getters
+std::string Target::GetCompiledSourceName(const fs::path &source) {
+  const auto output_filename =
+      target_intermediate_dir_ / (source.filename().string() + ".o");
+  return output_filename.string();
+}
+
+std::string Target::GetCompiler(const fs::path &source) {
+  // .cpp -> GetCppCompiler
+  // .c / .asm -> GetCCompiler
+  std::string compiler = source.extension() == ".cpp"
+                             ? toolchain_.GetCppCompiler()
+                             : toolchain_.GetCCompiler();
+  return compiler;
+}
+
 // PRIVATE
 
 void Target::Initialize() {
@@ -135,7 +153,7 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   // TODO, Add compiled libs
 
   // Final Target
-  const fs::path target = GetTargetIntermediate() / GetName();
+  const fs::path target = GetTargetPath();
   bool success = internal::command({
       // TODO, Improve this logic
       // Select cpp compiler for building target only if there is .cpp file
@@ -274,22 +292,6 @@ void Target::RecheckIncludeDirs() {
       }
     }
   }
-}
-
-// Getters
-std::string Target::GetCompiledSourceName(const fs::path &source) {
-  const auto output_filename =
-      target_intermediate_dir_ / (source.filename().string() + ".o");
-  return output_filename.string();
-}
-
-std::string Target::GetCompiler(const fs::path &source) {
-  // .cpp -> GetCppCompiler
-  // .c / .asm -> GetCCompiler
-  std::string compiler = source.extension() == ".cpp"
-                             ? toolchain_.GetCppCompiler()
-                             : toolchain_.GetCCompiler();
-  return compiler;
 }
 
 } // namespace buildcc::base

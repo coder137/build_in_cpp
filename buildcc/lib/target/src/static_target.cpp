@@ -16,7 +16,7 @@ void StaticTarget::BuildTarget(
   try {
     const std::string &ar = GetToolchain().GetExecutable("ar");
     // Final Target
-    const fs::path target = GetTargetIntermediate() / GetName();
+    const fs::path target = GetTargetPath();
     bool success = internal::command({
         ar,
         "rcs",
