@@ -131,7 +131,9 @@ void Target::Build() {
   const auto compiled_sources = BuildSources();
 
   // Linking depends on library dependencies
-  RecheckLibDeps();
+  if (!dirty_) {
+    RecheckLibDeps();
+  }
   if (dirty_) {
     BuildTarget(compiled_sources);
     Store();
