@@ -31,9 +31,8 @@ TEST(TargetTestGroup, TargetTypes) {
 
   auto intermediate_path = fs::path(BUILD_INTERMEDIATE_DIR);
 
-  fs::remove(intermediate_path / EXE_NAME / (std::string(EXE_NAME) + ".bin"));
-  fs::remove(intermediate_path / INVALID_NAME /
-             (std::string(INVALID_NAME) + ".bin"));
+  fs::remove_all(intermediate_path / EXE_NAME);
+  fs::remove_all(intermediate_path / INVALID_NAME);
 
   {
     buildcc::base::Target exe_target(
@@ -57,8 +56,7 @@ TEST(TargetTestGroup, TargetTypeStaticLibrary) {
   buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_INTERMEDIATE_DIR);
 
   auto intermediate_path = fs::path(BUILD_INTERMEDIATE_DIR);
-  fs::remove(intermediate_path / STATIC_NAME /
-             (std::string(STATIC_NAME) + ".bin"));
+  fs::remove_all(intermediate_path / STATIC_NAME);
   {
     buildcc::Toolchain gcc("gcc", "gcc", "g++");
     CHECK_TRUE(gcc.AddExecutable("ar", "ar"));
@@ -72,8 +70,7 @@ TEST(TargetTestGroup, TargetTypeStaticLibrary) {
   }
   {
     // Check if "ar" compiler is present
-    fs::remove(intermediate_path / STATIC_NAME /
-               (std::string(STATIC_NAME) + ".bin"));
+    fs::remove_all(intermediate_path / STATIC_NAME);
 
     buildcc::Toolchain gcc("gcc", "gcc", "g++");
     buildcc::StaticTarget static_target(STATIC_NAME, gcc, "");
@@ -88,8 +85,7 @@ TEST(TargetTestGroup, TargetTypeDynamicLibrary) {
   buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_INTERMEDIATE_DIR);
 
   auto intermediate_path = fs::path(BUILD_INTERMEDIATE_DIR);
-  fs::remove(intermediate_path / DYNAMIC_TARGET /
-             (std::string(DYNAMIC_TARGET) + ".bin"));
+  fs::remove_all(intermediate_path / DYNAMIC_TARGET);
 
   {
     buildcc::Toolchain gcc("gcc", "gcc", "g++");
@@ -121,7 +117,7 @@ TEST(TargetTestGroup, TargetAddSource) {
   auto intermediate_path = fs::path(BUILD_INTERMEDIATE_DIR) / NAME;
 
   // Delete
-  fs::remove(intermediate_path / BIN);
+  fs::remove_all(intermediate_path);
 
   buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
                                buildcc::Toolchain("gcc", "gcc", "g++"), "data");
@@ -155,7 +151,7 @@ TEST(TargetTestGroup, TargetBuildSourceCompile) {
   auto intermediate_path = fs::path(BUILD_INTERMEDIATE_DIR) / NAME;
 
   // Delete
-  fs::remove(intermediate_path / BIN);
+  fs::remove_all(intermediate_path);
 
   buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
                                buildcc::Toolchain("gcc", "gcc", "g++"), "data");
@@ -187,7 +183,7 @@ TEST(TargetTestGroup, TargetBuildSourceRecompile) {
   auto intermediate_path = fs::path(BUILD_INTERMEDIATE_DIR) / NAME;
 
   // Delete
-  fs::remove(intermediate_path / BIN);
+  fs::remove_all(intermediate_path);
   auto dummy_c_file =
       buildcc::internal::Path::CreateExistingPath((source_path / DUMMY_MAIN_C));
   auto dummy_cpp_file = buildcc::internal::Path::CreateExistingPath(
@@ -278,7 +274,7 @@ TEST(TargetTestGroup, TargetBuildIncludeDir) {
   auto intermediate_path = fs::path(BUILD_INTERMEDIATE_DIR) / NAME;
 
   // Delete
-  fs::remove(intermediate_path / BIN);
+  fs::remove_all(intermediate_path);
 
   auto dummy_c_file =
       buildcc::internal::Path::CreateExistingPath((source_path / DUMMY_MAIN_C));
