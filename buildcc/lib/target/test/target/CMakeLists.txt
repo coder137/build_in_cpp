@@ -20,7 +20,11 @@ add_executable(test_target_source
 )
 target_link_libraries(test_target_source PRIVATE target_interface)
 
-# TODO, Test target include dir
+# Test target include dir
+add_executable(test_target_include_dir
+    test_target_include_dir.cpp
+)
+target_link_libraries(test_target_include_dir PRIVATE target_interface)
 
 # TODO, Test target static lib
 
@@ -35,3 +39,4 @@ target_link_libraries(test_target_source PRIVATE target_interface)
 # Tests
 # add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 add_test(NAME test_target_source COMMAND test_target_source)
+add_test(NAME test_target_include_dir COMMAND test_target_include_dir)

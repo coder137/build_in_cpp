@@ -5,3 +5,4 @@ inline constexpr char const *BUILD_SCRIPT_SOURCE = "@CMAKE_CURRENT_SOURCE_DIR@";
 inline constexpr char const *BUILD_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate";
 
 inline constexpr char const * BUILD_TARGET_SOURCE_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_source";
+inline constexpr char const * BUILD_TARGET_INCLUDE_DIR_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_include_dir";
