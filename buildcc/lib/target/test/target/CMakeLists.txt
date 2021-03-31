@@ -1,32 +1,37 @@
-configure_file(constants.h.in ${CMAKE_CURRENT_SOURCE_DIR}/generated/constants.h @ONLY)
+configure_file(constants.h.in ${CMAKE_CURRENT_BINARY_DIR}/generated/constants.h @ONLY)
 
+include(target_interface.cmake)
+
+# Add Test
 set(TEST_NAME "test_target")
 add_executable(
     ${TEST_NAME}
     ${TEST_NAME}.cpp
-    ${TARGET_DIR}/src/target.cpp
-    ${TARGET_DIR}/src/toolchain.cpp
-
-    ${TARGET_DIR}/src/fbs_loader.cpp
-    ${TARGET_DIR}/src/fbs_storer.cpp
-
-    ${TARGET_DIR}/src/util.cpp
-
     ${TARGET_DIR}/src/static_target.cpp
-    ${TARGET_DIR}/src/dynamic_target.cpp
-)
-target_include_directories(${TEST_NAME} PRIVATE
-    generated
-    ${TARGET_DIR}/include
-    ${TARGET_DIR}/generated
+    ${TARGET_DIR}/src/dynamic_target.cpp   
 )
 target_link_libraries(${TEST_NAME} PRIVATE
-    env
-    flatbuffers
-    CppUTest
-    CppUTestExt
-    gcov
+    target_interface
 )
-target_compile_options(${TEST_NAME} PRIVATE -g -fprofile-arcs -ftest-coverage -O0)
-target_link_options(${TEST_NAME} PRIVATE -g -fprofile-arcs -ftest-coverage -O0)
-add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
+
+# Test target sources
+add_executable(test_target_source
+    test_target_source.cpp
+)
+target_link_libraries(test_target_source PRIVATE target_interface)
+
+# TODO, Test target include dir
+
+# TODO, Test target static lib
+
+# TODO, Test target dynamic lib
+
+# TODO, Test target toolchain preprocessor flags
+
+# TODO, Test target toolchain compile flags
+
+# TODO Test target toolchain link flags
+
+# Tests
+# add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
+add_test(NAME test_target_source COMMAND test_target_source)
