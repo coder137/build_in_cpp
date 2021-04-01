@@ -27,13 +27,17 @@ add_executable(test_target_include_dir
 )
 target_link_libraries(test_target_include_dir PRIVATE target_interface)
 
-# TODO, Test target static lib
+# Test target static lib
 add_executable(test_target_static_lib
     test_target_static_lib.cpp
 )
 target_link_libraries(test_target_static_lib PRIVATE target_interface)
 
-# TODO, Test target dynamic lib
+# Test target dynamic lib
+add_executable(test_target_dynamic_lib
+    test_target_dynamic_lib.cpp
+)
+target_link_libraries(test_target_dynamic_lib PRIVATE target_interface)
 
 # TODO, Test target toolchain preprocessor flags
 
@@ -46,3 +50,4 @@ target_link_libraries(test_target_static_lib PRIVATE target_interface)
 add_test(NAME test_target_source COMMAND test_target_source)
 add_test(NAME test_target_include_dir COMMAND test_target_include_dir)
 add_test(NAME test_target_static_lib COMMAND test_target_static_lib)
+add_test(NAME test_target_dynamic_lib COMMAND test_target_dynamic_lib)
