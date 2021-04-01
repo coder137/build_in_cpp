@@ -22,6 +22,8 @@ public:
   bool Load();
 
   // Getters
+  bool IsLoaded() const { return loaded_; }
+
   const path_unordered_set &GetLoadedSources() const { return loaded_sources_; }
   const path_unordered_set &GetLoadedIncludeDirs() const {
     return loaded_include_dirs_;
@@ -38,6 +40,7 @@ private:
 private:
   std::string name_;
   fs::path relative_path_;
+  bool loaded_ = false;
 
   path_unordered_set loaded_sources_;
   path_unordered_set loaded_include_dirs_;
