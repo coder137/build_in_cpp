@@ -138,6 +138,9 @@ void Target::Build() {
     BuildTarget(compiled_sources);
     Store();
   }
+
+  // Reset state variables
+  dirty_ = false;
 }
 
 // PROTECTED
@@ -175,6 +178,8 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   // Add compiled sources
   std::string aggregated_compiled_sources =
       internal::aggregate_compiled_sources(compiled_sources);
+  std::string aggregated_lib_deps =
+      internal::aggregate_lib_deps(current_lib_deps_);
 
   // TODO, Add compiled libs
 
@@ -190,6 +195,7 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
       aggregated_compiled_sources,
       "-o",
       target.string(),
+      aggregated_lib_deps,
   });
   // TODO, Library dependencies come after
 
@@ -294,6 +300,7 @@ void Target::RecheckIncludeDirs() {
   bool is_dir_removed = IsOneOrMorePreviousPathDeleted(previous_include_dirs,
                                                        current_include_dirs_);
   if (is_dir_removed) {
+    env::log_trace("One or more include dir is removed", name_);
     dirty_ = true;
     return;
   }
@@ -303,6 +310,8 @@ void Target::RecheckIncludeDirs() {
 
     if (iter == previous_include_dirs.end()) {
       // * New include dir added
+      env::log_trace(
+          "New include dir added " + current_dir.GetPathname().string(), name_);
       dirty_ = true;
       break;
     } else {
