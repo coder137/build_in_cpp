@@ -27,13 +27,13 @@ TEST(TargetTestDynamicLibGroup, DynamicLibrarySimple) {
 
   fs::remove_all(intermediate_path / DYNAMIC_TARGET);
 
-  {
-    buildcc::Toolchain gcc("gcc", "gcc", "g++");
-    buildcc::DynamicTarget dynamic_target(DYNAMIC_TARGET, gcc, "");
-    dynamic_target.AddSource("data/include_header.cpp");
-    dynamic_target.AddIncludeDir("data/include");
-    dynamic_target.Build();
-  }
+  buildcc::Toolchain gcc("gcc", "gcc", "g++");
+  buildcc::DynamicTarget dynamic_target(DYNAMIC_TARGET, gcc, "");
+  dynamic_target.AddSource("data/include_header.cpp");
+  dynamic_target.AddIncludeDir("data/include");
+  dynamic_target.Build();
+
+  // TODO, Add Verification
 }
 
 int main(int ac, char **av) {
