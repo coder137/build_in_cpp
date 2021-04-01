@@ -7,6 +7,9 @@ target_sources(target_interface INTERFACE
     ${TARGET_DIR}/src/fbs_storer.cpp
 
     ${TARGET_DIR}/src/util.cpp
+
+    ${TARGET_DIR}/src/static_target.cpp
+    ${TARGET_DIR}/src/dynamic_target.cpp   
 )
 target_include_directories(target_interface INTERFACE
     ${TARGET_DIR}/include
