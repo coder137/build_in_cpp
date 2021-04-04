@@ -36,3 +36,4 @@ add_subdirectory(buildcc)
 
 # Custom Targets
 include(cmake/target/lcov.cmake)
+include(cmake/target/gcovr.cmake)
