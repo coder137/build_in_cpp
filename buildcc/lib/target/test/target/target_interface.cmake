@@ -23,9 +23,6 @@ target_link_libraries(target_interface INTERFACE
     CppUTestExt
     gcov
 )
-set(COMMON_TEST_FLAGS -g -Og -fprofile-arcs -ftest-coverage)
-target_compile_options(target_interface INTERFACE ${COMMON_TEST_FLAGS}
-    -fno-omit-frame-pointer -fno-optimize-sibling-calls
-    -fno-inline
+target_compile_options(target_interface INTERFACE ${TEST_COMPILE_FLAGS}
 )
-target_link_options(target_interface INTERFACE ${COMMON_TEST_FLAGS})
+target_link_options(target_interface INTERFACE ${TEST_LINK_FLAGS})

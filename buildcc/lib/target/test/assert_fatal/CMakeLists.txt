@@ -12,7 +12,7 @@ target_link_libraries(${TEST_NAME} PRIVATE
     CppUTestExt
     gcov
 )
-target_compile_options(${TEST_NAME} PRIVATE -g -fprofile-arcs -ftest-coverage -O0)
-target_link_options(${TEST_NAME} PRIVATE -g -fprofile-arcs -ftest-coverage -O0)
+target_compile_options(${TEST_NAME} PRIVATE ${TEST_COMPILE_FLAGS})
+target_link_options(${TEST_NAME} PRIVATE ${TEST_LINK_FLAGS})
 
 add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
