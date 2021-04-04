@@ -11,6 +11,8 @@ message("GCOVR at ${gcovr_program}")
 set(GCOVR_REMOVE_OPTIONS 
     --exclude "(.+/)?generated(.+/)?"
     --exclude "(.+/)?test(.+/)?"
+    --exclude "(.+/)?flatbuffers(.+/)?"
+    --exclude "(.+/)?spdlog(.+/)?"
 )
 
 # TODO, Update
@@ -26,7 +28,7 @@ set(GCOVR_SEARCH_PATHS
 set(GCOVR_DIR ${CMAKE_BINARY_DIR}/gcovr_coverage)
 add_custom_target(gcovr_coverage
 
-    COMMAND ${gcovr_program} -r ${CMAKE_CURRENT_SOURCE_DIR} --html-details ${GCOVR_DIR}/gcovr.html --object-directory ${GCOVR_DIR} ${GCOVR_VERBOSE} ${GCOVR_UNNECESSARY_ARCS} ${GCOVR_REMOVE_OPTIONS} ${GCOVR_SEARCH_PATHS}
+    COMMAND ${gcovr_program} -r ${CMAKE_CURRENT_SOURCE_DIR} --html-details ${CMAKE_BINARY_DIR}/gcovr_coverage/gcovr.html ${GCOVR_VERBOSE} ${GCOVR_UNNECESSARY_ARCS} ${GCOVR_REMOVE_OPTIONS} ${GCOVR_SEARCH_PATHS}
 
     DEPENDS buildcc test
 
