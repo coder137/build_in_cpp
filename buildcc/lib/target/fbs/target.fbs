@@ -1,5 +1,6 @@
 namespace schema.internal;
 
+// TODO, Custom executables
 table Toolchain {
     name:string (key);
     c_compiler:string;
@@ -31,7 +32,7 @@ table Target {
     source_files:[Path];
     include_dirs:[Path];
 
-    lib_deps:[Target]; // Doesnt have to be an entire Target, could just be a path
+    lib_deps:[Path];
     lib_dirs:[Path];
 }
 

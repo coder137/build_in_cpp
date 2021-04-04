@@ -50,6 +50,8 @@ public:
 
   void AddIncludeDir(const std::string &relative_include_dir);
 
+  void AddLibDep(const Target &lib_dep);
+
   // TODO, Add more setters
 
   // Getters
@@ -85,8 +87,9 @@ private:
   virtual void CompileSource(const fs::path &current_source,
                              const std::string &aggregated_include_dirs);
 
-  // Includes
+  // Recompilation checks
   void RecheckIncludeDirs();
+  void RecheckLibDeps();
 
   // Linking
   virtual void BuildTarget(const std::vector<std::string> &compiled_sources);
@@ -106,6 +109,7 @@ private:
   // Internal
   buildcc::internal::path_unordered_set current_source_files_;
   buildcc::internal::path_unordered_set current_include_dirs_;
+  buildcc::internal::path_unordered_set current_lib_deps_;
 
   // TODO, Add more internal variables
 

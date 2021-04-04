@@ -32,6 +32,10 @@ namespace buildcc::internal {
 bool FbsLoader::Load() {
   env::log_trace(__FUNCTION__, name_);
 
+  if (IsLoaded()) {
+    return true;
+  }
+
   auto file_path = GetBinaryPath();
   std::string buffer;
   bool is_loaded =
@@ -40,9 +44,16 @@ bool FbsLoader::Load() {
     return false;
   }
   auto target = fbs::GetTarget((const void *)buffer.c_str());
+  // target->name()->c_str();
+  // target->relative_path()->c_str();
+  // target->type();
+  // target->toolchain();
   ExtractPaths(target->source_files(), &loaded_sources_);
   ExtractPaths(target->include_dirs(), &loaded_include_dirs_);
-  // TODO, ExtractLibDirs
+  ExtractPaths(target->lib_deps(), &loaded_lib_deps_);
+  // target->lib_dirs();
+
+  loaded_ = true;
   return true;
 }
 

@@ -97,6 +97,26 @@ void Target::AddIncludeDir(const std::string &relative_include_dir) {
   current_include_dirs_.insert(current_dir);
 }
 
+void Target::AddLibDep(const Target &lib_dep) {
+  env::log_trace(__FUNCTION__, name_);
+
+  const fs::path lib_dep_path = lib_dep.GetTargetPath();
+  internal::assert_fatal_true(fs::exists(lib_dep_path),
+                              lib_dep_path.string() + " not found");
+
+  const auto lib_dep_file = internal::Path::CreateExistingPath(lib_dep_path);
+  internal::assert_fatal(current_lib_deps_.find(lib_dep_file),
+                         current_lib_deps_.end(),
+                         lib_dep_path.string() + " duplicate found");
+  current_lib_deps_.insert(lib_dep_file);
+}
+
+// * Load
+// TODO, Verify things that cannot be changed
+// * Compile
+// Include directories dependencies
+// * Link
+// Library dependencies
 void Target::Build() {
   env::log_trace(__FUNCTION__, name_);
 
@@ -104,14 +124,23 @@ void Target::Build() {
   if (!is_loaded) {
     dirty_ = true;
   } else {
+    // Compilation depends on include dirs
     RecheckIncludeDirs();
   }
 
   const auto compiled_sources = BuildSources();
+
+  // Linking depends on library dependencies
+  if (!dirty_) {
+    RecheckLibDeps();
+  }
   if (dirty_) {
     BuildTarget(compiled_sources);
     Store();
   }
+
+  // Reset state variables
+  dirty_ = false;
 }
 
 // PROTECTED
@@ -149,6 +178,8 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   // Add compiled sources
   std::string aggregated_compiled_sources =
       internal::aggregate_compiled_sources(compiled_sources);
+  std::string aggregated_lib_deps =
+      internal::aggregate_lib_deps(current_lib_deps_);
 
   // TODO, Add compiled libs
 
@@ -164,6 +195,7 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
       aggregated_compiled_sources,
       "-o",
       target.string(),
+      aggregated_lib_deps,
   });
   // TODO, Library dependencies come after
 
@@ -268,6 +300,7 @@ void Target::RecheckIncludeDirs() {
   bool is_dir_removed = IsOneOrMorePreviousPathDeleted(previous_include_dirs,
                                                        current_include_dirs_);
   if (is_dir_removed) {
+    env::log_trace("One or more include dir is removed", name_);
     dirty_ = true;
     return;
   }
@@ -277,6 +310,8 @@ void Target::RecheckIncludeDirs() {
 
     if (iter == previous_include_dirs.end()) {
       // * New include dir added
+      env::log_trace(
+          "New include dir added " + current_dir.GetPathname().string(), name_);
       dirty_ = true;
       break;
     } else {
@@ -284,6 +319,40 @@ void Target::RecheckIncludeDirs() {
       if (current_dir.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
         env::log_trace("Current dir is newer " +
                            current_dir.GetPathname().string(),
+                       name_);
+        dirty_ = true;
+        break;
+      } else {
+        // * Do nothing
+      }
+    }
+  }
+}
+
+void Target::RecheckLibDeps() {
+  env::log_trace(__FUNCTION__, name_);
+  const auto &previous_lib_deps = loader_.GetLoadedLibDeps();
+
+  bool is_lib_dep_removed =
+      IsOneOrMorePreviousPathDeleted(previous_lib_deps, current_lib_deps_);
+
+  if (is_lib_dep_removed) {
+    dirty_ = true;
+    return;
+  }
+
+  for (auto &current_dep : current_lib_deps_) {
+    auto iter = previous_lib_deps.find(current_dep);
+
+    if (iter == previous_lib_deps.end()) {
+      // * New lib dep added
+      dirty_ = true;
+      break;
+    } else {
+      // * Lib dep has updated
+      if (current_dep.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
+        env::log_trace("Current dep is newer " +
+                           current_dep.GetPathname().string(),
                        name_);
         dirty_ = true;
         break;

@@ -4,12 +4,21 @@
 
 namespace {
 
-std::string aggregate_strlist(const std::vector<std::string> &list) {
+std::string aggregate_string_vector(const std::vector<std::string> &list) {
   std::string files = "";
   for (const auto &l : list) {
     files += l + " ";
   }
   return files;
+}
+
+std::string aggregate_path_unordered_set(
+    const buildcc::internal::path_unordered_set &paths) {
+  std::string aggregated_path = "";
+  for (const auto &p : paths) {
+    aggregated_path += p.GetPathname().string() + " ";
+  }
+  return aggregated_path;
 }
 
 } // namespace
@@ -27,7 +36,11 @@ bool command(const std::vector<std::string> &command_tokens) {
 
 std::string
 aggregate_compiled_sources(const std::vector<std::string> &compiled_sources) {
-  return aggregate_strlist(compiled_sources);
+  return aggregate_string_vector(compiled_sources);
+}
+
+std::string aggregate_lib_deps(const path_unordered_set &lib_deps) {
+  return aggregate_path_unordered_set(lib_deps);
 }
 
 } // namespace buildcc::internal
