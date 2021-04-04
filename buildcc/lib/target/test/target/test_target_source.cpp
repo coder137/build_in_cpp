@@ -156,6 +156,9 @@ TEST(TargetTestSourceGroup, TargetBuildSourceRecompile) {
     // Run the second Build to test Recompile
     simple.Build();
 
+    // Cached if called multiple times
+    simple.Build();
+
     buildcc::internal::FbsLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
