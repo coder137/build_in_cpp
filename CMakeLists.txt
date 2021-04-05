@@ -8,6 +8,9 @@ project(BuildCC)
 option(BUILDCC_TESTING "Enable BuildCC Testing" ON)
 
 if (BUILDCC_TESTING)
+    set(TEST_COMPILE_FLAGS -g -Og -fprofile-arcs -ftest-coverage -fno-omit-frame-pointer -fno-optimize-sibling-calls
+    -fno-inline)
+    set(TEST_LINK_FLAGS -g -Og -fprofile-arcs -ftest-coverage)
     include(CTest)
 endif()
 
@@ -36,3 +39,4 @@ add_subdirectory(buildcc)
 
 # Custom Targets
 include(cmake/target/lcov.cmake)
+include(cmake/target/gcovr.cmake)

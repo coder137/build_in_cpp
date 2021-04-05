@@ -23,5 +23,6 @@ target_link_libraries(target_interface INTERFACE
     CppUTestExt
     gcov
 )
-target_compile_options(target_interface INTERFACE -g -fprofile-arcs -ftest-coverage -O0)
-target_link_options(target_interface INTERFACE -g -fprofile-arcs -ftest-coverage -O0)
+target_compile_options(target_interface INTERFACE ${TEST_COMPILE_FLAGS}
+)
+target_link_options(target_interface INTERFACE ${TEST_LINK_FLAGS})
