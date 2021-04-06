@@ -1,7 +1,9 @@
 #include "dynamic_target.h"
 
-#include "internal/assert_fatal.h"
 #include "internal/util.h"
+
+// Env
+#include "assert_fatal.h"
 
 namespace buildcc {
 
@@ -22,8 +24,8 @@ void DynamicTarget::CompileSource(const fs::path &current_source,
       "-c",
       current_source.string(),
   });
-  buildcc::internal::assert_fatal_true(success, "Compilation failed for: " +
-                                                    current_source.string());
+  env::assert_fatal(success,
+                    "Compilation failed for: " + current_source.string());
 }
 
 // Linking
@@ -53,7 +55,7 @@ void DynamicTarget::BuildTarget(
   });
   // TODO, Library dependencies come after
 
-  internal::assert_fatal_true(success, "Compilation failed for: " + GetName());
+  env::assert_fatal(success, "Compilation failed for: " + GetName());
 }
 
 } // namespace buildcc

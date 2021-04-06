@@ -1,8 +1,10 @@
 #include "base/target.h"
 
 // Internal
-#include "internal/assert_fatal.h"
 #include "internal/util.h"
+
+// Env
+#include "assert_fatal.h"
 
 namespace fs = std::filesystem;
 
@@ -59,14 +61,14 @@ void Target::AddSource(
   fs::path absolute_filepath = target_root_source_dir_ /
                                relative_to_base_relative_path /
                                relative_filename;
-  internal::assert_fatal_true(fs::exists(absolute_filepath),
-                              absolute_filepath.string() + " not found");
+  env::assert_fatal(fs::exists(absolute_filepath),
+                    absolute_filepath.string() + " not found");
 
   auto current_file =
       buildcc::internal::Path::CreateExistingPath(absolute_filepath);
-  internal::assert_fatal(current_source_files_.find(current_file),
-                         current_source_files_.end(),
-                         absolute_filepath.string() + " duplicate found");
+  env::assert_fatal(current_source_files_.find(current_file) ==
+                        current_source_files_.end(),
+                    absolute_filepath.string() + " duplicate found");
 
   current_source_files_.insert(current_file);
 }
@@ -101,13 +103,13 @@ void Target::AddLibDep(const Target &lib_dep) {
   env::log_trace(__FUNCTION__, name_);
 
   const fs::path lib_dep_path = lib_dep.GetTargetPath();
-  internal::assert_fatal_true(fs::exists(lib_dep_path),
-                              lib_dep_path.string() + " not found");
+  env::assert_fatal(fs::exists(lib_dep_path),
+                    lib_dep_path.string() + " not found");
 
   const auto lib_dep_file = internal::Path::CreateExistingPath(lib_dep_path);
-  internal::assert_fatal(current_lib_deps_.find(lib_dep_file),
-                         current_lib_deps_.end(),
-                         lib_dep_path.string() + " duplicate found");
+  env::assert_fatal(current_lib_deps_.find(lib_dep_file) ==
+                        current_lib_deps_.end(),
+                    lib_dep_path.string() + " duplicate found");
   current_lib_deps_.insert(lib_dep_file);
 }
 
@@ -164,10 +166,10 @@ std::string Target::GetCompiler(const fs::path &source) const {
 // PRIVATE
 
 void Target::Initialize() {
-  internal::assert_fatal_true(
+  env::assert_fatal(
       env::is_init(),
       "Environment is not initialized. Use the buildcc::env::init API");
-  internal::assert_fatal_true(IsValidTargetType(type_), "Invalid Target Type");
+  env::assert_fatal(IsValidTargetType(type_), "Invalid Target Type");
   fs::create_directories(target_intermediate_dir_);
 }
 
@@ -199,7 +201,7 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   });
   // TODO, Library dependencies come after
 
-  internal::assert_fatal_true(success, "Compilation failed for: " + GetName());
+  env::assert_fatal(success, "Compilation failed for: " + GetName());
 }
 
 // Compilation
@@ -287,8 +289,8 @@ void Target::CompileSource(const fs::path &current_source,
       "-c",
       current_source.string(),
   });
-  buildcc::internal::assert_fatal_true(success, "Compilation failed for: " +
-                                                    current_source.string());
+  env::assert_fatal(success,
+                    "Compilation failed for: " + current_source.string());
 }
 
 // Includes
