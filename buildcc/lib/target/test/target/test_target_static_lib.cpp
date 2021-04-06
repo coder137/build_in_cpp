@@ -33,7 +33,7 @@ TEST(TargetTestStaticLibGroup, StaticLibCheckAr) {
   buildcc::StaticTarget static_target(STATIC_NAME, gcc, "");
   static_target.AddSource("data/include_header.cpp");
   static_target.AddIncludeDir("data/include");
-  CHECK_THROWS(std::string, static_target.Build());
+  CHECK_THROWS(std::exception, static_target.Build());
 }
 
 TEST(TargetTestStaticLibGroup, StaticLibrary_SimpleBuildTest) {

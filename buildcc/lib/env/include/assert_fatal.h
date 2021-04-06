@@ -1,17 +1,27 @@
 #ifndef ENV_INCLUDE_ASSERT_FATAL_H_
 #define ENV_INCLUDE_ASSERT_FATAL_H_
 
-#include <error.h>
 #include <string>
 
 #include "env.h"
 
 namespace buildcc::env {
 
-inline void assert_fatal(bool expression, const std::string &message) {
+class assert_exception : public std::exception {
+public:
+  assert_exception(const std::string_view &message) : message_(message) {}
+
+private:
+  virtual const char *what() const throw() { return message_.data(); }
+
+private:
+  std::string_view message_;
+};
+
+inline void assert_fatal(bool expression, const std::string_view &message) {
   if (!expression) {
     buildcc::env::log_critical(message, "assert");
-    throw message;
+    throw assert_exception(message);
   }
 }
 
