@@ -13,7 +13,7 @@ target_sources(target_interface INTERFACE
 )
 target_include_directories(target_interface INTERFACE
     ${target_SOURCE_DIR}/include
-    ${target_SOURCE_DIR}/generated
+    ${target_BINARY_DIR}/generated
     ${CMAKE_CURRENT_BINARY_DIR}/generated
 )
 target_link_libraries(target_interface INTERFACE
