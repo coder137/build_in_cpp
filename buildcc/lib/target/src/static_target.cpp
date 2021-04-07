@@ -1,7 +1,9 @@
 #include "static_target.h"
 
-#include "internal/assert_fatal.h"
 #include "internal/util.h"
+
+// Env
+#include "assert_fatal.h"
 
 namespace buildcc {
 
@@ -23,10 +25,9 @@ void StaticTarget::BuildTarget(
         target.string(),
         aggregated_compiled_sources,
     });
-    internal::assert_fatal_true(success,
-                                "Compilation failed for: " + GetName());
+    env::assert_fatal(success, "Compilation failed for: " + GetName());
   } catch (std::out_of_range) {
-    internal::assert_fatal_true(false, "Could not find 'ar' executable");
+    env::assert_fatal(false, "Could not find 'ar' executable");
   }
 }
 

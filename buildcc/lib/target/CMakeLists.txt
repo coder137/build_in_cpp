@@ -1,3 +1,5 @@
+project(target)
+
 # Generate files
 set(FBS_FILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/fbs/target.fbs

@@ -2,8 +2,6 @@
 
 #include <filesystem>
 
-#include "internal/assert_fatal.h"
-
 #include "env.h"
 
 #include "flatbuffers/util.h"

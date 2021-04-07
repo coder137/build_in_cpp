@@ -38,9 +38,9 @@ TEST(TargetTestSourceGroup, TargetAddSource) {
                                buildcc::Toolchain("gcc", "gcc", "g++"), "data");
   simple.AddSource(DUMMY_MAIN);
   // File does not exist
-  CHECK_THROWS(std::string, simple.AddSource(NO_FILE));
+  CHECK_THROWS(std::exception, simple.AddSource(NO_FILE));
   // Duplicate file added
-  CHECK_THROWS(std::string, simple.AddSource(DUMMY_MAIN));
+  CHECK_THROWS(std::exception, simple.AddSource(DUMMY_MAIN));
   simple.Build();
 
   buildcc::internal::FbsLoader loader(NAME, intermediate_path);

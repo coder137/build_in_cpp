@@ -28,9 +28,10 @@ TEST(TargetBaseTestGroup, InvalidTargetType) {
 
   fs::remove_all(intermediate_path / INVALID_NAME);
 
-  CHECK_THROWS(std::string, buildcc::base::Target(
-                                INVALID_NAME, (buildcc::base::TargetType)3,
-                                buildcc::Toolchain("gcc", "gcc", "g++"), ""));
+  CHECK_THROWS(std::exception,
+               buildcc::base::Target(INVALID_NAME, (buildcc::base::TargetType)3,
+                                     buildcc::Toolchain("gcc", "gcc", "g++"),
+                                     ""));
 
   buildcc::env::deinit();
 }
@@ -39,7 +40,7 @@ TEST(TargetBaseTestGroup, NoEnvInit) {
   constexpr const char *const NAME = "Init.exe";
 
   CHECK_THROWS(
-      std::string,
+      std::exception,
       buildcc::base::Target(NAME, buildcc::base::TargetType::Executable,
                             buildcc::Toolchain("gcc", "gcc", "g++"), "data"));
 }
