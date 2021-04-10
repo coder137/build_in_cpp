@@ -103,6 +103,8 @@ private:
                  const std::string &aggregated_include_dirs);
 
   // Recompilation checks
+  void Recheck(const internal::path_unordered_set &previous_path,
+               const internal::path_unordered_set &current_path);
   void RecheckIncludeDirs();
   void RecheckLibDeps();
 

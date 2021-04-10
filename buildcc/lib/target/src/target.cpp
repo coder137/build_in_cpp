@@ -357,38 +357,33 @@ Target::CompileCommand(const std::string &input_source,
   };
 }
 
-// Includes
-void Target::RecheckIncludeDirs() {
-  env::log_trace(__FUNCTION__, name_);
-
+void Target::Recheck(const internal::path_unordered_set &previous_path,
+                     const internal::path_unordered_set &current_path) {
+  // * Compile sources / Target already requires rebuild
   if (dirty_) {
     return;
   }
 
-  const auto &previous_include_dirs = loader_.GetLoadedIncludeDirs();
-  // * Cannot find previous include dir in current include dirs
-  bool is_dir_removed = IsOneOrMorePreviousPathDeleted(previous_include_dirs,
-                                                       current_include_dirs_);
-  if (is_dir_removed) {
-    env::log_trace("One or more include dir is removed", name_);
+  // * Old path is removed
+  bool removed = IsOneOrMorePreviousPathDeleted(previous_path, current_path);
+  if (removed) {
     dirty_ = true;
     return;
   }
 
-  for (auto &current_dir : current_include_dirs_) {
-    auto iter = previous_include_dirs.find(current_dir);
+  for (auto &path : current_path) {
+    auto iter = previous_path.find(path);
 
-    if (iter == previous_include_dirs.end()) {
-      // * New include dir added
-      env::log_trace(
-          "New include dir added " + current_dir.GetPathname().string(), name_);
+    if (iter == previous_path.end()) {
+      // * New path added
+      env::log_trace("New include dir added " + path.GetPathname().string(),
+                     name_);
       dirty_ = true;
       break;
     } else {
-      // * A file in current dir is updated
-      if (current_dir.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
-        env::log_trace("Current dir is newer " +
-                           current_dir.GetPathname().string(),
+      // * Path is updated
+      if (path.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
+        env::log_trace("Current dir is newer " + path.GetPathname().string(),
                        name_);
         dirty_ = true;
         break;
@@ -399,43 +394,14 @@ void Target::RecheckIncludeDirs() {
   }
 }
 
+void Target::RecheckIncludeDirs() {
+  env::log_trace(__FUNCTION__, name_);
+  Recheck(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
+}
+
 void Target::RecheckLibDeps() {
   env::log_trace(__FUNCTION__, name_);
-
-  if (dirty_) {
-    return;
-  }
-
-  const auto &previous_lib_deps = loader_.GetLoadedLibDeps();
-
-  bool is_lib_dep_removed =
-      IsOneOrMorePreviousPathDeleted(previous_lib_deps, current_lib_deps_);
-
-  if (is_lib_dep_removed) {
-    dirty_ = true;
-    return;
-  }
-
-  for (auto &current_dep : current_lib_deps_) {
-    auto iter = previous_lib_deps.find(current_dep);
-
-    if (iter == previous_lib_deps.end()) {
-      // * New lib dep added
-      dirty_ = true;
-      break;
-    } else {
-      // * Lib dep has updated
-      if (current_dep.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
-        env::log_trace("Current dep is newer " +
-                           current_dep.GetPathname().string(),
-                       name_);
-        dirty_ = true;
-        break;
-      } else {
-        // * Do nothing
-      }
-    }
-  }
+  Recheck(loader_.GetLoadedLibDeps(), current_lib_deps_);
 }
 
 } // namespace buildcc::base
