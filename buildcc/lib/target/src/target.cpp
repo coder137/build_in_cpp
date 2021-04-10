@@ -175,9 +175,7 @@ void Target::BuildRecompile() {
   // Target compiled source files either during Compile / Recompile
   // Target library dependencies
   // TODO, Target library directories
-  if (!dirty_) {
-    RecheckLibDeps();
-  }
+  RecheckLibDeps();
   if (dirty_) {
     BuildTarget(compiled_sources);
     Store();
@@ -363,6 +361,10 @@ Target::CompileCommand(const std::string &input_source,
 void Target::RecheckIncludeDirs() {
   env::log_trace(__FUNCTION__, name_);
 
+  if (dirty_) {
+    return;
+  }
+
   const auto &previous_include_dirs = loader_.GetLoadedIncludeDirs();
   // * Cannot find previous include dir in current include dirs
   bool is_dir_removed = IsOneOrMorePreviousPathDeleted(previous_include_dirs,
@@ -399,6 +401,11 @@ void Target::RecheckIncludeDirs() {
 
 void Target::RecheckLibDeps() {
   env::log_trace(__FUNCTION__, name_);
+
+  if (dirty_) {
+    return;
+  }
+
   const auto &previous_lib_deps = loader_.GetLoadedLibDeps();
 
   bool is_lib_dep_removed =
