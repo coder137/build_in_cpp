@@ -39,6 +39,11 @@ aggregate_compiled_sources(const std::vector<std::string> &compiled_sources) {
   return aggregate_string_vector(compiled_sources);
 }
 
+std::string
+aggregate_link_flags(const std::vector<std::string> &compiled_sources) {
+  return aggregate_string_vector(compiled_sources);
+}
+
 std::string aggregate_lib_deps(const path_unordered_set &lib_deps) {
   return aggregate_path_unordered_set(lib_deps);
 }

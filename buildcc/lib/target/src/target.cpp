@@ -174,32 +174,50 @@ void Target::Initialize() {
 }
 
 // Linking
+std::vector<std::string>
+Target::Link(const std::string &default_linker,
+             const std::string &output_target,
+             const std::string &aggregated_link_flags,
+             const std::string &aggregated_compiled_sources,
+             const std::string &aggregated_lib_deps) {
+  return {
+      default_linker,
+
+      aggregated_link_flags,
+
+      aggregated_compiled_sources,
+
+      "-o",
+
+      output_target,
+
+      aggregated_lib_deps,
+  };
+}
+
 void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   env::log_trace(__FUNCTION__, name_);
 
   // Add compiled sources
-  std::string aggregated_compiled_sources =
+  const std::string aggregated_link_flags =
+      internal::aggregate_link_flags(toolchain_.GetLinkFlags());
+  const std::string aggregated_compiled_sources =
       internal::aggregate_compiled_sources(compiled_sources);
-  std::string aggregated_lib_deps =
+
+  const std::string aggregated_lib_deps =
       internal::aggregate_lib_deps(current_lib_deps_);
 
-  // TODO, Add compiled libs
-
   // Final Target
+  // TODO, Improve this logic
+  // Select cpp compiler for building target only if there is .cpp file
+  // added
+  // Else use c compiler
+  const std::string default_linker = toolchain_.GetCppCompiler();
   const fs::path target = GetTargetPath();
-  bool success = internal::command({
-      // TODO, Improve this logic
-      // Select cpp compiler for building target only if there is .cpp file
-      // added
-      // Else use c compiler
-      toolchain_.GetCppCompiler(),
-      // TODO, Add Link Flags
-      aggregated_compiled_sources,
-      "-o",
-      target.string(),
-      aggregated_lib_deps,
-  });
-  // TODO, Library dependencies come after
+
+  bool success = internal::command(
+      Link(default_linker, target.string(), aggregated_link_flags,
+           aggregated_compiled_sources, aggregated_lib_deps));
 
   env::assert_fatal(success, "Compilation failed for: " + GetName());
 }
