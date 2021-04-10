@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace buildcc {
+namespace buildcc::base {
 
 // Base toolchain class
 class Toolchain {
@@ -54,6 +54,6 @@ private:
   std::vector<std::string> link_flags_;
 };
 
-} // namespace buildcc
+} // namespace buildcc::base
 
 #endif
