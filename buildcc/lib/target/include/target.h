@@ -97,15 +97,15 @@ private:
   // Linking
   virtual void BuildTarget(const std::vector<std::string> &compiled_sources);
 
-  virtual std::vector<std::string>
-  Link(const std::string &default_linker, const std::string &output_target,
-       const std::string &aggregated_link_flags,
-       const std::string &aggregated_compiled_sources,
-       const std::string &aggregated_lib_deps);
-
+  // * Virtual
   // PreLink();
   // Link();
   // PostLink();
+  virtual std::vector<std::string>
+  Link(const std::string &output_target,
+       const std::string &aggregated_link_flags,
+       const std::string &aggregated_compiled_sources,
+       const std::string &aggregated_lib_deps);
 
   // Fbs
   bool Store();

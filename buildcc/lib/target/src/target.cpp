@@ -175,13 +175,12 @@ void Target::Initialize() {
 
 // Linking
 std::vector<std::string>
-Target::Link(const std::string &default_linker,
-             const std::string &output_target,
+Target::Link(const std::string &output_target,
              const std::string &aggregated_link_flags,
              const std::string &aggregated_compiled_sources,
              const std::string &aggregated_lib_deps) {
   return {
-      default_linker,
+      toolchain_.GetCppCompiler(),
 
       aggregated_link_flags,
 
@@ -212,12 +211,11 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   // Select cpp compiler for building target only if there is .cpp file
   // added
   // Else use c compiler
-  const std::string default_linker = toolchain_.GetCppCompiler();
   const fs::path target = GetTargetPath();
 
-  bool success = internal::command(
-      Link(default_linker, target.string(), aggregated_link_flags,
-           aggregated_compiled_sources, aggregated_lib_deps));
+  bool success =
+      internal::command(Link(target.string(), aggregated_link_flags,
+                             aggregated_compiled_sources, aggregated_lib_deps));
 
   env::assert_fatal(success, "Compilation failed for: " + GetName());
 }
