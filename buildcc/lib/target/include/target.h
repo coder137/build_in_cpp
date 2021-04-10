@@ -81,8 +81,11 @@ protected:
 private:
   void Initialize();
 
+  // Build
+  void BuildCompile();
+  void BuildRecompile();
+
   // Compiling
-  std::vector<std::string> BuildSources();
   std::vector<std::string> CompileSources();
   std::vector<std::string> RecompileSources();
   void CompileSource(const fs::path &current_source,

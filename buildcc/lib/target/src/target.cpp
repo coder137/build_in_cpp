@@ -124,15 +124,57 @@ void Target::Build() {
 
   const bool is_loaded = loader_.Load();
   if (!is_loaded) {
-    dirty_ = true;
+    BuildCompile();
   } else {
-    // Compilation depends on include dirs
-    RecheckIncludeDirs();
+    BuildRecompile();
   }
 
-  const auto compiled_sources = BuildSources();
+  dirty_ = false;
+}
 
-  // Linking depends on library dependencies
+void Target::BuildCompile() {
+  const std::vector<std::string> compiled_sources = CompileSources();
+  BuildTarget(compiled_sources);
+  Store();
+}
+
+// * Target rebuild depends on
+// TODO, Toolchain name
+// TODO, Toolchain preprocessor flags
+// TODO, Toolchain compile flags
+// TODO, Toolchain link flags
+// TODO, Target preprocessor flags
+// TODO, Target compile flags
+// TODO, Target link flags
+// Target source files
+// Target include dirs
+// Target library dependencies
+// TODO, Target library directories
+void Target::BuildRecompile() {
+
+  // * Completely compile sources if any of the following change
+  // TODO, Toolchain, ASM, C, C++ compiler
+  // TODO, Toolchain preprocessor flags
+  // TODO, Toolchain compile flags
+  // TODO, Target preprocessor flags
+  // TODO, Target compile flags
+  // Target include dirs
+  RecheckIncludeDirs();
+
+  // * Compile sources
+  std::vector<std::string> compiled_sources;
+  if (dirty_) {
+    compiled_sources = CompileSources();
+  } else {
+    compiled_sources = RecompileSources();
+  }
+
+  // * Completely rebuild target / link if any of the following change
+  // TODO, Toolchain link flags
+  // TODO, Target link flags
+  // Target compiled source files either during Compile / Recompile
+  // Target library dependencies
+  // TODO, Target library directories
   if (!dirty_) {
     RecheckLibDeps();
   }
@@ -140,9 +182,6 @@ void Target::Build() {
     BuildTarget(compiled_sources);
     Store();
   }
-
-  // Reset state variables
-  dirty_ = false;
 }
 
 // PROTECTED
@@ -221,14 +260,6 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
 }
 
 // Compilation
-std::vector<std::string> Target::BuildSources() {
-  if (dirty_) {
-    return CompileSources();
-  } else {
-    return RecompileSources();
-  }
-}
-
 std::vector<std::string> Target::CompileSources() {
   env::log_trace(__FUNCTION__, name_);
   const std::string aggregated_include_dirs =
