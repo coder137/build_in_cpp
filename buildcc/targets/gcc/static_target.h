@@ -1,7 +1,7 @@
 #ifndef TARGET_INCLUDE_STATIC_TARGET_H_
 #define TARGET_INCLUDE_STATIC_TARGET_H_
 
-#include "base/target.h"
+#include "target.h"
 
 namespace buildcc {
 
