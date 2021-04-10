@@ -15,8 +15,9 @@ int main(void) {
   env::init(BUILD_ROOT, BUILD_INTERMEDIATE_DIR);
   env::set_log_level(env::LogLevel::Trace);
 
-  ExecutableTarget target("IncludeDir.exe", Toolchain("gcc", "gcc", "g++"),
-                          "files");
+  ExecutableTarget target(
+      "IncludeDir.exe", base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
+      "files");
   target.AddSource("main.cpp", "src");
   target.AddSource("src/random.cpp");
   target.AddIncludeDir("include");

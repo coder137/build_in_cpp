@@ -11,11 +11,11 @@ add_subdirectory(../../ BuildCC)
 
 # build executable
 add_executable(build build.cpp)
-target_include_directories(build PRIVATE generated)
+target_include_directories(build PRIVATE ${CMAKE_BINARY_DIR}/generated)
 target_link_libraries(build PRIVATE buildcc)
 
 # Add your constants file for the environment
-configure_file(constants.h.in ${CMAKE_SOURCE_DIR}/generated/constants.h @ONLY)
+configure_file(constants.h.in ${CMAKE_BINARY_DIR}/generated/constants.h @ONLY)
 
 # # Convert binary serialized targets to readable json format
 # set(FLATC_CONVERSION_OPTIONS
