@@ -24,14 +24,9 @@ add_library(target)
 target_include_directories(target PUBLIC
     include
 )
-target_link_libraries(target PUBLIC 
-    env
-)
-add_dependencies(target fbs_to_header)
 
 target_sources(target PRIVATE
     src/target.cpp
-    src/toolchain.cpp
 
     src/dynamic_target.cpp
     src/static_target.cpp
@@ -46,7 +41,10 @@ target_include_directories(target PRIVATE
 )
 target_link_libraries(target PRIVATE 
     flatbuffers 
+    env
+    toolchain
 )
+add_dependencies(target fbs_to_header)
 
 # Tests
 if (BUILDCC_TESTING)
