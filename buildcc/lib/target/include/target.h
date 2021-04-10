@@ -31,12 +31,13 @@ public:
   explicit Target(const std::string &name, TargetType type,
                   const Toolchain &toolchain,
                   const fs::path &target_path_relative_to_root)
-      : loader_(name, fs::path(env::get_intermediate_build_dir()) / name),
-        name_(name), type_(type), toolchain_(toolchain),
+      : name_(name), toolchain_(toolchain),
         target_root_source_dir_(env::get_project_root() /
                                 target_path_relative_to_root),
         target_intermediate_dir_(fs::path(env::get_intermediate_build_dir()) /
-                                 name) {
+                                 name),
+        type_(type),
+        loader_(name, fs::path(env::get_intermediate_build_dir()) / name) {
     Initialize();
   }
 

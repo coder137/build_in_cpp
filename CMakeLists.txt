@@ -33,6 +33,7 @@ set(TESTS OFF CACHE BOOL "CppUTests tests off")
 set(TESTS_BUILD_DISCOVER OFF CACHE BOOL "CppUTests Tests discover")
 add_subdirectory(cpputest)
 
+include(cmake/flags/build_flags.cmake)
 add_subdirectory(buildcc)
 
 # Custom Targets

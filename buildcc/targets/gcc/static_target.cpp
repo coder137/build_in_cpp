@@ -12,6 +12,8 @@ StaticTarget::Link(const std::string &output_target,
                    const std::string &aggregated_link_flags,
                    const std::string &aggregated_compiled_sources,
                    const std::string &aggregated_lib_deps) {
+  (void)aggregated_link_flags;
+  (void)aggregated_lib_deps;
   return {
       GetToolchain().GetStaticLibCompiler(),
       "rcs",

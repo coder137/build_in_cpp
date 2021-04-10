@@ -13,3 +13,4 @@ target_link_libraries(target_gcc PRIVATE
     toolchain
     target
 )
+target_compile_options(target_gcc PRIVATE ${BUILD_COMPILE_FLAGS})

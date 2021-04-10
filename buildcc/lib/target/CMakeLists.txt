@@ -19,6 +19,8 @@ target_sources(target PRIVATE
 target_include_directories(target PRIVATE
    ${CMAKE_CURRENT_BINARY_DIR}/generated
 )
+target_compile_options(target PRIVATE ${BUILD_COMPILE_FLAGS})
+target_link_options(target PRIVATE ${BUILD_COMPILE_FLAGS})
 target_link_libraries(target PRIVATE 
     flatbuffers 
     env

@@ -35,9 +35,11 @@ DynamicTarget::Link(const std::string &output_target,
                     const std::string &aggregated_link_flags,
                     const std::string &aggregated_compiled_sources,
                     const std::string &aggregated_lib_deps) {
+  (void)aggregated_lib_deps;
   return {
       GetToolchain().GetDynamicLibCompiler(),
       "-shared",
+      aggregated_link_flags,
       aggregated_compiled_sources,
       "-o",
       output_target,

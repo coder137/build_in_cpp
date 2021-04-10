@@ -7,6 +7,7 @@ add_library(env
 target_include_directories(env PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+target_compile_options(env PRIVATE ${BUILD_COMPILE_FLAGS})
 # Private stuff here
 target_link_libraries(env PRIVATE
     spdlog::spdlog
