@@ -84,11 +84,19 @@ private:
   std::vector<std::string> BuildSources();
   std::vector<std::string> CompileSources();
   std::vector<std::string> RecompileSources();
-  virtual void CompileSource(const fs::path &current_source,
-                             const std::string &aggregated_include_dirs);
+  void CompileSource(const fs::path &current_source,
+                     const std::string &aggregated_include_dirs);
+
+  // * Virtual
   // PreCompile();
   // Compile();
   // PostCompile();
+  virtual std::vector<std::string>
+  CompileCommand(const std::string &input_source,
+                 const std::string &output_source, const std::string &compiler,
+                 const std::string &aggregated_preprocessor_flags,
+                 const std::string &aggregated_compile_flags,
+                 const std::string &aggregated_include_dirs);
 
   // Recompilation checks
   void RecheckIncludeDirs();
@@ -101,6 +109,8 @@ private:
   // PreLink();
   // Link();
   // PostLink();
+
+  // TODO, Add Link library paths
   virtual std::vector<std::string>
   Link(const std::string &output_target,
        const std::string &aggregated_link_flags,

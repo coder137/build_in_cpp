@@ -293,20 +293,38 @@ std::vector<std::string> Target::RecompileSources() {
 
 void Target::CompileSource(const fs::path &current_source,
                            const std::string &aggregated_include_dirs) {
-  const std::string compiled_source = GetCompiledSourceName(current_source);
+  const std::string output_source = GetCompiledSourceName(current_source);
   const std::string compiler = GetCompiler(current_source);
-  bool success = internal::command({
-      compiler,
-      // TODO, Add Preprocessor Flags
-      aggregated_include_dirs,
-      // TODO, Add C/Cpp Compile Flags
-      "-o",
-      compiled_source,
-      "-c",
-      current_source.string(),
-  });
+  const std::string aggregated_compile_flags =
+      current_source.extension() == ".cpp"
+          ? internal::aggregate_compile_flags(toolchain_.GetCppCompileFlags())
+          : internal::aggregate_compile_flags(toolchain_.GetCCompileFlags());
+
+  bool success = internal::command(CompileCommand(
+      current_source.string(), output_source, compiler,
+      internal::aggregate_preprocessor_flags(toolchain_.GetPreprocessorFlags()),
+      aggregated_compile_flags, aggregated_include_dirs));
+
   env::assert_fatal(success,
                     "Compilation failed for: " + current_source.string());
+}
+
+std::vector<std::string>
+Target::CompileCommand(const std::string &input_source,
+                       const std::string &output_source,
+                       const std::string &compiler,
+                       const std::string &aggregated_preprocessor_flags,
+                       const std::string &aggregated_compile_flags,
+                       const std::string &aggregated_include_dirs) {
+  return {
+      compiler,
+      aggregated_preprocessor_flags,
+      aggregated_include_dirs,
+      "-o",
+      output_source,
+      "-c",
+      input_source,
+  };
 }
 
 // Includes

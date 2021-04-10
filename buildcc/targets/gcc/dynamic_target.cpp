@@ -8,24 +8,25 @@
 namespace buildcc {
 
 // Compiling
-void DynamicTarget::CompileSource(const fs::path &current_source,
-                                  const std::string &aggregated_include_dirs) {
-  const std::string compiled_source = GetCompiledSourceName(current_source);
-  const std::string compiler = GetCompiler(current_source);
-
-  bool success = internal::command({
+std::vector<std::string>
+DynamicTarget::CompileCommand(const std::string &input_source,
+                              const std::string &output_source,
+                              const std::string &compiler,
+                              const std::string &aggregated_preprocessor_flags,
+                              const std::string &aggregated_compile_flags,
+                              const std::string &aggregated_include_dirs) {
+  return {
       compiler,
-      // TODO, Add Preprocessor Flags
+      aggregated_preprocessor_flags,
       aggregated_include_dirs,
+      aggregated_compile_flags,
       "-fpic",
       // TODO, Add C/Cpp Compile Flags
       "-o",
-      compiled_source,
+      output_source,
       "-c",
-      current_source.string(),
-  });
-  env::assert_fatal(success,
-                    "Compilation failed for: " + current_source.string());
+      input_source,
+  };
 }
 
 // Linking

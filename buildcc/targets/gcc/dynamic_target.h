@@ -14,8 +14,12 @@ public:
 
 private:
   // Compiling
-  void CompileSource(const fs::path &current_source,
-                     const std::string &aggregated_include_dirs) override;
+  virtual std::vector<std::string>
+  CompileCommand(const std::string &input_source,
+                 const std::string &output_source, const std::string &compiler,
+                 const std::string &aggregated_preprocessor_flags,
+                 const std::string &aggregated_compile_flags,
+                 const std::string &aggregated_include_dirs) override;
 
   // Linking
   virtual std::vector<std::string>

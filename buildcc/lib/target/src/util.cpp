@@ -39,6 +39,16 @@ aggregate_compiled_sources(const std::vector<std::string> &compiled_sources) {
   return aggregate_string_vector(compiled_sources);
 }
 
+std::string aggregate_preprocessor_flags(
+    const std::vector<std::string> &preprocessor_flags) {
+  return aggregate_string_vector(preprocessor_flags);
+}
+
+std::string
+aggregate_compile_flags(const std::vector<std::string> &compile_flags) {
+  return aggregate_string_vector(compile_flags);
+}
+
 std::string
 aggregate_link_flags(const std::vector<std::string> &compiled_sources) {
   return aggregate_string_vector(compiled_sources);
