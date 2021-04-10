@@ -13,6 +13,8 @@ set(GCOVR_REMOVE_OPTIONS
     --exclude "(.+/)?test(.+/)?"
     --exclude "(.+/)?flatbuffers(.+/)?"
     --exclude "(.+/)?spdlog(.+/)?"
+    --exclude "(.+/)?CppUTest(.+/)?"
+    --exclude "(.+/)?CppUTestExt(.+/)?"
 )
 
 # TODO, Update
