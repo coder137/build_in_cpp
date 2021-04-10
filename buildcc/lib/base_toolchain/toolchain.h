@@ -54,15 +54,6 @@ private:
   std::vector<std::string> link_flags_;
 };
 
-// Overrides for certain systems
-class Toolchain_Gcc : public Toolchain {
-  explicit Toolchain_Gcc(const std::string &name, const std::string &c_compiler,
-                         const std::string &cpp_compiler)
-      : Toolchain(name, c_compiler, cpp_compiler) {
-    // TODO, Add some flags by default here
-  }
-};
-
 } // namespace buildcc
 
 #endif
