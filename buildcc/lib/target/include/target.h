@@ -95,7 +95,7 @@ private:
   void RecheckLibDeps();
 
   // Linking
-  virtual void BuildTarget(const std::vector<std::string> &compiled_sources);
+  void BuildTarget(const std::vector<std::string> &compiled_sources);
 
   // * Virtual
   // PreLink();

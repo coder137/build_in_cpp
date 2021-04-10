@@ -29,33 +29,18 @@ void DynamicTarget::CompileSource(const fs::path &current_source,
 }
 
 // Linking
-void DynamicTarget::BuildTarget(
-    const std::vector<std::string> &compiled_sources) {
-  env::log_trace(__FUNCTION__, GetName());
-
-  // Add compiled sources
-  std::string aggregated_compiled_sources =
-      internal::aggregate_compiled_sources(compiled_sources);
-
-  // TODO, Add compiled libs
-
-  // Final Target
-  const fs::path target = GetTargetPath();
-  bool success = internal::command({
-      // TODO, Improve this logic
-      // Select cpp compiler for building target only if there is .cpp file
-      // added
-      // Else use c compiler
-      GetToolchain().GetCppCompiler(),
+std::vector<std::string>
+DynamicTarget::Link(const std::string &output_target,
+                    const std::string &aggregated_link_flags,
+                    const std::string &aggregated_compiled_sources,
+                    const std::string &aggregated_lib_deps) {
+  return {
+      GetToolchain().GetDynamicLibCompiler(),
       "-shared",
-      // TODO, Add Link Flags
       aggregated_compiled_sources,
       "-o",
-      target.string(),
-  });
-  // TODO, Library dependencies come after
-
-  env::assert_fatal(success, "Compilation failed for: " + GetName());
+      output_target,
+  };
 }
 
 } // namespace buildcc

@@ -7,28 +7,17 @@
 
 namespace buildcc {
 
-void StaticTarget::BuildTarget(
-    const std::vector<std::string> &compiled_sources) {
-  env::log_trace(__FUNCTION__, GetName());
-
-  // Add compiled sources
-  std::string aggregated_compiled_sources =
-      internal::aggregate_compiled_sources(compiled_sources);
-
-  try {
-    const std::string &ar = GetToolchain().GetExecutable("ar");
-    // Final Target
-    const fs::path target = GetTargetPath();
-    bool success = internal::command({
-        ar,
-        "rcs",
-        target.string(),
-        aggregated_compiled_sources,
-    });
-    env::assert_fatal(success, "Compilation failed for: " + GetName());
-  } catch (std::out_of_range) {
-    env::assert_fatal(false, "Could not find 'ar' executable");
-  }
+std::vector<std::string>
+StaticTarget::Link(const std::string &output_target,
+                   const std::string &aggregated_link_flags,
+                   const std::string &aggregated_compiled_sources,
+                   const std::string &aggregated_lib_deps) {
+  return {
+      GetToolchain().GetStaticLibCompiler(),
+      "rcs",
+      output_target,
+      aggregated_compiled_sources,
+  };
 }
 
 } // namespace buildcc
