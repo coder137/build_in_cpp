@@ -1,6 +1,6 @@
 #include "constants.h"
 
-#include "base/target.h"
+#include "target.h"
 
 #include "env.h"
 
@@ -34,8 +34,9 @@ TEST(TargetTestSourceGroup, TargetAddSource) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
-                               buildcc::Toolchain("gcc", "gcc", "g++"), "data");
+  buildcc::base::Target simple(
+      NAME, buildcc::base::TargetType::Executable,
+      buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"), "data");
   simple.AddSource(DUMMY_MAIN);
   // File does not exist
   CHECK_THROWS(std::exception, simple.AddSource(NO_FILE));
@@ -65,8 +66,9 @@ TEST(TargetTestSourceGroup, TargetBuildSourceCompile) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
-                               buildcc::Toolchain("gcc", "gcc", "g++"), "data");
+  buildcc::base::Target simple(
+      NAME, buildcc::base::TargetType::Executable,
+      buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"), "data");
   simple.AddSource(DUMMY_MAIN);
   simple.Build();
 
@@ -101,9 +103,10 @@ TEST(TargetTestSourceGroup, TargetBuildSourceRecompile) {
       buildcc::internal::Path::CreateExistingPath((source_path / NEW_SOURCE));
 
   {
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
-                                 buildcc::Toolchain("gcc", "gcc", "g++"),
-                                 "data");
+    buildcc::base::Target simple(
+        NAME, buildcc::base::TargetType::Executable,
+        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
+        "data");
     // * Test C compile
     simple.AddSource(DUMMY_MAIN_C);
     simple.AddSource(NEW_SOURCE);
@@ -123,9 +126,10 @@ TEST(TargetTestSourceGroup, TargetBuildSourceRecompile) {
     CHECK_FALSE(loaded_sources.find(new_source_file) == loaded_sources.end());
   }
   {
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
-                                 buildcc::Toolchain("gcc", "gcc", "g++"),
-                                 "data");
+    buildcc::base::Target simple(
+        NAME, buildcc::base::TargetType::Executable,
+        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
+        "data");
     // * Remove C source
     // * Add CPP source
     simple.AddSource(DUMMY_MAIN_CPP);
@@ -148,9 +152,10 @@ TEST(TargetTestSourceGroup, TargetBuildSourceRecompile) {
     auto file_path = source_path / NEW_SOURCE;
     flatbuffers::SaveFile(file_path.string().c_str(), std::string{""}, false);
 
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
-                                 buildcc::Toolchain("gcc", "gcc", "g++"),
-                                 "data");
+    buildcc::base::Target simple(
+        NAME, buildcc::base::TargetType::Executable,
+        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
+        "data");
     simple.AddSource(DUMMY_MAIN_CPP);
     simple.AddSource(NEW_SOURCE);
     // Run the second Build to test Recompile

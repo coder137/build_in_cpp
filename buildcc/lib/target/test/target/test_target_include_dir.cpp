@@ -1,6 +1,6 @@
 #include "constants.h"
 
-#include "base/target.h"
+#include "target.h"
 
 #include "env.h"
 
@@ -47,7 +47,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
   {
     buildcc::base::Target include_compile(
         NAME, buildcc::base::TargetType::Executable,
-        buildcc::Toolchain("gcc", "gcc", "g++"), "data");
+        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
+        "data");
     include_compile.AddSource(DUMMY_MAIN_C);
     include_compile.AddSource(INCLUDE_HEADER_SOURCE);
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
@@ -73,7 +74,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     // * 1 Adding new include directory
     buildcc::base::Target include_compile(
         NAME, buildcc::base::TargetType::Executable,
-        buildcc::Toolchain("gcc", "gcc", "g++"), "data");
+        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
+        "data");
     include_compile.AddSource(DUMMY_MAIN_C);
     include_compile.AddSource(INCLUDE_HEADER_SOURCE);
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
@@ -104,7 +106,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
 
     buildcc::base::Target include_compile(
         NAME, buildcc::base::TargetType::Executable,
-        buildcc::Toolchain("gcc", "gcc", "g++"), "data");
+        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
+        "data");
     include_compile.AddSource(DUMMY_MAIN_C);
     include_compile.AddSource(INCLUDE_HEADER_SOURCE);
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
@@ -129,7 +132,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     // * Remove include directory
     buildcc::base::Target include_compile(
         NAME, buildcc::base::TargetType::Executable,
-        buildcc::Toolchain("gcc", "gcc", "g++"), "data");
+        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
+        "data");
     include_compile.AddSource(DUMMY_MAIN_C);
     include_compile.AddSource(INCLUDE_HEADER_SOURCE);
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
