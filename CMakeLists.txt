@@ -10,6 +10,7 @@ option(BUILDCC_TESTING "Enable BuildCC Testing" ON)
 if (BUILDCC_TESTING)
     include(cmake/flags/test_flags.cmake)
     include(CTest)
+    enable_testing()
 endif()
 
 # TODO, Update FLATBUFFERS option to conditionally compile FLATC
