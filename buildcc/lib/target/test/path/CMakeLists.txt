@@ -1,11 +1,13 @@
-file(COPY path_main.cpp DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+configure_file(constants.h.in ${CMAKE_CURRENT_BINARY_DIR}/generated/constants.h @ONLY)
+
 set(TEST_NAME "test_path")
 add_executable(
     ${TEST_NAME}
     ${TEST_NAME}.cpp
 )
 target_include_directories(${TEST_NAME} PRIVATE
-    ${TARGET_DIR}/include
+    ${target_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_BINARY_DIR}/generated
 )
 target_link_libraries(${TEST_NAME} PRIVATE
     CppUTest

@@ -1,6 +1,8 @@
 // Internal
 #include "internal/path.h"
 
+#include "constants.h"
+
 #include <cstdint>
 #include <unordered_set>
 
@@ -16,10 +18,14 @@ TEST_GROUP(PathTestGroup)
 };
 // clang-format on
 
+static const std::string current_file_path =
+    std::string(BUILD_SCRIPT_SOURCE) + "/" + "path_main.cpp";
+
 TEST(PathTestGroup, Path_ExistingPathStaticConstructor) {
   auto existing_path =
-      buildcc::internal::Path::CreateExistingPath("path_main.cpp");
-  STRCMP_EQUAL(existing_path.GetPathname().string().c_str(), "path_main.cpp");
+      buildcc::internal::Path::CreateExistingPath(current_file_path);
+  STRCMP_EQUAL(existing_path.GetPathname().string().c_str(),
+               current_file_path.c_str());
   // * NOTE, Last write timestamp changes whenever we resave or re-download
   // This would not work well with Git
   //   UNSIGNED_LONGLONGS_EQUAL(existing_path.GetLastWriteTimestamp(),
@@ -53,17 +59,17 @@ TEST(PathTestGroup, PathConstructor_NewPathStaticConstructor) {
 
 TEST(PathTestGroup, Path_EqualityOperator) {
   buildcc::internal::Path p =
-      buildcc::internal::Path::CreateExistingPath("path_main.cpp");
-  STRCMP_EQUAL(p.GetPathname().string().c_str(), "path_main.cpp");
+      buildcc::internal::Path::CreateExistingPath(current_file_path);
+  STRCMP_EQUAL(p.GetPathname().string().c_str(), current_file_path.c_str());
 
   buildcc::internal::Path newp =
-      buildcc::internal::Path::CreateNewPath("path_main.cpp", 12345ULL);
+      buildcc::internal::Path::CreateNewPath(current_file_path, 12345ULL);
 
   // NOTE, Equality does not match the last_write_timestamp
   // ONLY matches the string
   CHECK(p == newp);
-  CHECK(p == std::string("path_main.cpp"));
-  CHECK(p == "path_main.cpp");
+  CHECK(p == current_file_path);
+  CHECK(p == current_file_path);
 }
 
 TEST(PathTestGroup, Path_UnorderedSet) {
@@ -71,13 +77,13 @@ TEST(PathTestGroup, Path_UnorderedSet) {
       unique_paths;
 
   // Check inserts
-  CHECK_TRUE(
-      unique_paths
-          .insert(buildcc::internal::Path::CreateExistingPath("path_main.cpp"))
-          .second);
+  CHECK_TRUE(unique_paths
+                 .insert(buildcc::internal::Path::CreateExistingPath(
+                     current_file_path))
+                 .second);
   CHECK_FALSE(unique_paths
                   .insert(buildcc::internal::Path::CreateNewPath(
-                      "path_main.cpp", 12345ULL))
+                      current_file_path, 12345ULL))
                   .second);
   CHECK_TRUE(unique_paths
                  .insert(buildcc::internal::Path::CreateNewPath(
@@ -87,10 +93,10 @@ TEST(PathTestGroup, Path_UnorderedSet) {
   // Check finds
   // * NOTE, Only matches pathname
   CHECK_FALSE(unique_paths.find(buildcc::internal::Path::CreateExistingPath(
-                  "path_main.cpp")) == unique_paths.end());
+                  current_file_path)) == unique_paths.end());
 
   CHECK_FALSE(unique_paths.find(buildcc::internal::Path::CreateNewPath(
-                  "path_main.cpp", 1111ULL)) == unique_paths.end());
+                  current_file_path, 1111ULL)) == unique_paths.end());
   CHECK_FALSE(unique_paths.find(buildcc::internal::Path::CreateNewPath(
                   "random_path_main.cpp", 12345ULL)) == unique_paths.end());
   CHECK_TRUE(unique_paths.find(buildcc::internal::Path::CreateNewPath(
