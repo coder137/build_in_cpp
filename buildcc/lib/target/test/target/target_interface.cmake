@@ -7,6 +7,7 @@ target_sources(target_interface PUBLIC
     ${target_SOURCE_DIR}/src/fbs/fbs_storer.cpp
 
     ${target_SOURCE_DIR}/src/util/util.cpp
+    ${target_SOURCE_DIR}/src/util/command.cpp
 )
 
 target_include_directories(target_interface PUBLIC

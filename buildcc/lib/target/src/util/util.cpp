@@ -25,16 +25,6 @@ std::string aggregate_path_unordered_set(
 
 namespace buildcc::internal {
 
-// command
-bool command(const std::vector<std::string> &command_tokens) {
-  std::string command{""};
-  for (const auto &t : command_tokens) {
-    command += t + " ";
-  }
-  buildcc::env::log_debug(command, "system");
-  return system(command.c_str()) == 0;
-}
-
 // rechecks
 bool is_previous_paths_different(const path_unordered_set &previous_paths,
                                  const path_unordered_set &current_paths) {
