@@ -9,12 +9,12 @@ target_include_directories(target PUBLIC
 )
 
 target_sources(target PRIVATE
-    src/target.cpp
+    src/target/target.cpp
 
-    src/fbs_loader.cpp
-    src/fbs_storer.cpp
+    src/fbs/fbs_loader.cpp
+    src/fbs/fbs_storer.cpp
 
-    src/util.cpp
+    src/util/util.cpp
 )
 target_include_directories(target PRIVATE
    ${CMAKE_CURRENT_BINARY_DIR}/generated

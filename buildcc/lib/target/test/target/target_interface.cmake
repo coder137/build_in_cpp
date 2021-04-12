@@ -1,12 +1,12 @@
 add_library(target_interface STATIC)
 
 target_sources(target_interface PUBLIC
-    ${target_SOURCE_DIR}/src/target.cpp
+    ${target_SOURCE_DIR}/src/target/target.cpp
 
-    ${target_SOURCE_DIR}/src/fbs_loader.cpp
-    ${target_SOURCE_DIR}/src/fbs_storer.cpp
+    ${target_SOURCE_DIR}/src/fbs/fbs_loader.cpp
+    ${target_SOURCE_DIR}/src/fbs/fbs_storer.cpp
 
-    ${target_SOURCE_DIR}/src/util.cpp
+    ${target_SOURCE_DIR}/src/util/util.cpp
 )
 
 target_include_directories(target_interface PUBLIC
