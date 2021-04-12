@@ -25,6 +25,7 @@ std::string aggregate_path_unordered_set(
 
 namespace buildcc::internal {
 
+// command
 bool command(const std::vector<std::string> &command_tokens) {
   std::string command{""};
   for (const auto &t : command_tokens) {
@@ -34,6 +35,19 @@ bool command(const std::vector<std::string> &command_tokens) {
   return system(command.c_str()) == 0;
 }
 
+// rechecks
+bool is_previous_paths_different(const path_unordered_set &previous_paths,
+                                 const path_unordered_set &current_paths) {
+  for (const auto &file : previous_paths) {
+    if (current_paths.find(file) == current_paths.end()) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+// Aggregates
 std::string
 aggregate_compiled_sources(const std::vector<std::string> &compiled_sources) {
   return aggregate_string_vector(compiled_sources);

@@ -24,20 +24,6 @@ bool IsValidTargetType(buildcc::base::TargetType type) {
 }
 
 // RecompileSources
-bool IsOneOrMorePreviousPathDeleted(
-    const buildcc::internal::path_unordered_set &previous_path,
-    const buildcc::internal::path_unordered_set &current_path) {
-  bool one_or_more_previous_source_deleted = false;
-  for (const auto &file : previous_path) {
-    auto iter = current_path.find(file);
-    if (iter == current_path.end()) {
-      one_or_more_previous_source_deleted = true;
-      break;
-    }
-  }
-
-  return one_or_more_previous_source_deleted;
-}
 
 std::string AggregateIncludeDirs(
     const buildcc::internal::path_unordered_set &include_dirs) {
@@ -218,15 +204,10 @@ Target::Link(const std::string &output_target,
              const std::string &aggregated_lib_deps) {
   return {
       toolchain_.GetCppCompiler(),
-
       aggregated_link_flags,
-
       aggregated_compiled_sources,
-
       "-o",
-
       output_target,
-
       aggregated_lib_deps,
   };
 }
@@ -281,7 +262,7 @@ std::vector<std::string> Target::RecompileSources() {
   const auto &previous_source_files = loader_.GetLoadedSources();
 
   // * Cannot find previous source in current source files
-  bool is_source_removed = IsOneOrMorePreviousPathDeleted(
+  bool is_source_removed = internal::is_previous_paths_different(
       previous_source_files, current_source_files_);
   dirty_ = dirty_ || is_source_removed;
 
@@ -365,7 +346,8 @@ void Target::Recheck(const internal::path_unordered_set &previous_path,
   }
 
   // * Old path is removed
-  bool removed = IsOneOrMorePreviousPathDeleted(previous_path, current_path);
+  bool removed =
+      internal::is_previous_paths_different(previous_path, current_path);
   if (removed) {
     dirty_ = true;
     return;
