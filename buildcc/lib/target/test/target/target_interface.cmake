@@ -2,6 +2,7 @@ add_library(target_interface STATIC)
 
 target_sources(target_interface PUBLIC
     ${target_SOURCE_DIR}/src/target/target.cpp
+    ${target_SOURCE_DIR}/src/target/rebuild.cpp
 
     ${target_SOURCE_DIR}/src/fbs/fbs_loader.cpp
     ${target_SOURCE_DIR}/src/fbs/fbs_storer.cpp

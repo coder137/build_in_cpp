@@ -88,6 +88,10 @@ private:
   // Compiling
   std::vector<std::string> CompileSources();
   std::vector<std::string> RecompileSources();
+  void SourceRemoved();
+  void SourceAdded();
+  void SourceUpdated();
+
   void CompileSource(const fs::path &current_source,
                      const std::string &aggregated_include_dirs);
 
@@ -105,6 +109,10 @@ private:
   // Recompilation checks
   void Recheck(const internal::path_unordered_set &previous_path,
                const internal::path_unordered_set &current_path);
+  void PathRemoved();
+  void PathAdded();
+  void PathUpdated();
+
   void RecheckIncludeDirs();
   void RecheckLibDeps();
 

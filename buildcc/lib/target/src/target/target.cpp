@@ -256,15 +256,19 @@ std::vector<std::string> Target::CompileSources() {
   return compiled_files;
 }
 
+// TODO, Do the same as Recheck
 std::vector<std::string> Target::RecompileSources() {
   env::log_trace(__FUNCTION__, name_);
 
   const auto &previous_source_files = loader_.GetLoadedSources();
 
   // * Cannot find previous source in current source files
-  bool is_source_removed = internal::is_previous_paths_different(
+  const bool is_source_removed = internal::is_previous_paths_different(
       previous_source_files, current_source_files_);
-  dirty_ = dirty_ || is_source_removed;
+  if (is_source_removed) {
+    dirty_ = true;
+    SourceRemoved();
+  }
 
   std::string aggregated_include_dirs =
       AggregateIncludeDirs(current_include_dirs_);
@@ -279,18 +283,16 @@ std::vector<std::string> Target::RecompileSources() {
 
     if (iter == previous_source_files.end()) {
       // *1 New source file added to build
-      env::log_trace("New source added", name_);
       CompileSource(current_source, aggregated_include_dirs);
       dirty_ = true;
+      SourceAdded();
     } else {
       // *2 Current file is updated
       if (current_file.GetLastWriteTimestamp() >
           iter->GetLastWriteTimestamp()) {
-        env::log_trace("Current file is newer " +
-                           current_file.GetPathname().string(),
-                       name_);
         CompileSource(current_source, aggregated_include_dirs);
         dirty_ = true;
+        SourceUpdated();
       } else {
         // *3 Do nothing
       }
@@ -346,9 +348,10 @@ void Target::Recheck(const internal::path_unordered_set &previous_path,
   }
 
   // * Old path is removed
-  bool removed =
+  const bool removed =
       internal::is_previous_paths_different(previous_path, current_path);
   if (removed) {
+    PathRemoved();
     dirty_ = true;
     return;
   }
@@ -358,16 +361,14 @@ void Target::Recheck(const internal::path_unordered_set &previous_path,
 
     if (iter == previous_path.end()) {
       // * New path added
-      env::log_trace("New include dir added " + path.GetPathname().string(),
-                     name_);
       dirty_ = true;
+      PathAdded();
       break;
     } else {
       // * Path is updated
       if (path.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
-        env::log_trace("Current dir is newer " + path.GetPathname().string(),
-                       name_);
         dirty_ = true;
+        PathUpdated();
         break;
       } else {
         // * Do nothing
