@@ -8,5 +8,6 @@ include(cmake/target.cmake)
 # Tests
 if (BUILDCC_TESTING)
     include(cmake/mock_target.cmake)
-    add_subdirectory(test)
+    add_subdirectory(test/path)
+    add_subdirectory(test/target)
 endif()
