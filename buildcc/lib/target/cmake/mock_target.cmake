@@ -1,6 +1,7 @@
 add_library(mock_target STATIC)
 target_include_directories(mock_target PUBLIC
     ${target_SOURCE_DIR}/include
+    ${target_SOURCE_DIR}/mock
     ${target_BINARY_DIR}/generated
 )
 
