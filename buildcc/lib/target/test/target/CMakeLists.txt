@@ -48,6 +48,6 @@ target_link_libraries(test_target_include_dir PRIVATE target_interface)
 # Tests
 add_test(NAME test_base_target COMMAND test_base_target)
 add_test(NAME test_target_source COMMAND test_target_source)
-add_test(NAME test_target_include_dir COMMAND test_target_include_dir)
+# add_test(NAME test_target_include_dir COMMAND test_target_include_dir)
 # add_test(NAME test_target_static_lib COMMAND test_target_static_lib)
 # add_test(NAME test_target_dynamic_lib COMMAND test_target_dynamic_lib)
