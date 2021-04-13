@@ -16,8 +16,8 @@ target_sources(mock_target PUBLIC
     ${target_SOURCE_DIR}/mock/util/command.cpp
 )
 
-target_compile_options(mock_target PUBLIC ${TEST_COMPILE_FLAGS})
-target_link_options(mock_target PUBLIC ${TEST_LINK_FLAGS})
+target_compile_options(mock_target PUBLIC ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_FLAGS})
+target_link_options(mock_target PUBLIC ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS})
 target_link_libraries(mock_target PUBLIC 
     flatbuffers 
     mock_env

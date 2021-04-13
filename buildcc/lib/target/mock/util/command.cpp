@@ -8,6 +8,7 @@ static constexpr const char *const COMMAND_FUNCTION = "command";
 
 // command
 bool command(const std::vector<std::string> &command_tokens) {
+  (void)command_tokens;
   return mock().actualCall(COMMAND_FUNCTION).returnBoolValue();
 }
 

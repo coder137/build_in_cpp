@@ -32,10 +32,6 @@ namespace buildcc::internal {
 bool FbsLoader::Load() {
   env::log_trace(__FUNCTION__, name_);
 
-  if (IsLoaded()) {
-    return true;
-  }
-
   auto file_path = GetBinaryPath();
   std::string buffer;
   bool is_loaded =
