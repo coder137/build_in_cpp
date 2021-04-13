@@ -6,10 +6,10 @@ include(cmake/fbs_gen.cmake)
 include(cmake/target.cmake)
 
 # Mock Target
-include(cmake/mock_target.cmake)
 
 # Tests
 if (BUILDCC_TESTING)
     set(TARGET_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    include(cmake/mock_target.cmake)
     add_subdirectory(test)
 endif()
