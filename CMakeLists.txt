@@ -6,6 +6,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(BuildCC)
 
 option(BUILDCC_TESTING "Enable BuildCC Testing" ON)
+option(BUILDCC_GCC_TESTING "Enable Buildcc GCC Testing" OFF)
 
 if (BUILDCC_TESTING)
     include(cmake/flags/test_flags.cmake)
