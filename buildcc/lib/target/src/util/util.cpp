@@ -25,17 +25,36 @@ std::string aggregate_path_unordered_set(
 
 namespace buildcc::internal {
 
-bool command(const std::vector<std::string> &command_tokens) {
-  std::string command{""};
-  for (const auto &t : command_tokens) {
-    command += t + " ";
+// rechecks
+bool is_previous_paths_different(const path_unordered_set &previous_paths,
+                                 const path_unordered_set &current_paths) {
+  for (const auto &file : previous_paths) {
+    if (current_paths.find(file) == current_paths.end()) {
+      return true;
+    }
   }
-  buildcc::env::log_debug(command, "system");
-  return system(command.c_str()) == 0;
+
+  return false;
+}
+
+// Aggregates
+std::string
+aggregate_compiled_sources(const std::vector<std::string> &compiled_sources) {
+  return aggregate_string_vector(compiled_sources);
+}
+
+std::string aggregate_preprocessor_flags(
+    const std::vector<std::string> &preprocessor_flags) {
+  return aggregate_string_vector(preprocessor_flags);
 }
 
 std::string
-aggregate_compiled_sources(const std::vector<std::string> &compiled_sources) {
+aggregate_compile_flags(const std::vector<std::string> &compile_flags) {
+  return aggregate_string_vector(compile_flags);
+}
+
+std::string
+aggregate_link_flags(const std::vector<std::string> &compiled_sources) {
   return aggregate_string_vector(compiled_sources);
 }
 

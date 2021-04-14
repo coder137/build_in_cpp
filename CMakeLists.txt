@@ -6,10 +6,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(BuildCC)
 
 option(BUILDCC_TESTING "Enable BuildCC Testing" ON)
+option(BUILDCC_GCC_TESTING "Enable Buildcc GCC Testing" OFF)
 
 if (BUILDCC_TESTING)
     include(cmake/flags/test_flags.cmake)
     include(CTest)
+    enable_testing()
 endif()
 
 # TODO, Update FLATBUFFERS option to conditionally compile FLATC
@@ -33,6 +35,7 @@ set(TESTS OFF CACHE BOOL "CppUTests tests off")
 set(TESTS_BUILD_DISCOVER OFF CACHE BOOL "CppUTests Tests discover")
 add_subdirectory(cpputest)
 
+include(cmake/flags/build_flags.cmake)
 add_subdirectory(buildcc)
 
 # Custom Targets

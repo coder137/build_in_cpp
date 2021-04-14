@@ -1,4 +1,4 @@
-#include "base/target.h"
+#include "target.h"
 
 #include <filesystem>
 
@@ -29,7 +29,7 @@ fbs::TargetType get_fbs_target_type(buildcc::base::TargetType type) {
 // TODO, Complete this with additional flags
 flatbuffers::Offset<fbs::Toolchain>
 get_fbs_toolchain(flatbuffers::FlatBufferBuilder &builder,
-                  const buildcc::Toolchain &toolchain) {
+                  const buildcc::base::Toolchain &toolchain) {
   // auto fbs_preprocessor_flags;
   // auto fbs_c_compile_flags;
   // auto fbs_cpp_compile_flags;

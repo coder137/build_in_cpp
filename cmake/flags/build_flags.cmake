@@ -1,0 +1,2 @@
+set(BUILD_COMPILE_FLAGS -Wall -Wextra)
+set(BUILD_LINK_FLAGS )

@@ -5,14 +5,19 @@
 #include <unordered_map>
 #include <vector>
 
-namespace buildcc {
+namespace buildcc::base {
 
 // Base toolchain class
 class Toolchain {
 public:
-  explicit Toolchain(const std::string &name, const std::string &c_compiler,
-                     const std::string &cpp_compiler)
-      : name_(name), c_compiler_(c_compiler), cpp_compiler_(cpp_compiler) {}
+  explicit Toolchain(const std::string &name, const std::string &asm_compiler,
+                     const std::string &c_compiler,
+                     const std::string &cpp_compiler,
+                     const std::string &static_lib_compiler,
+                     const std::string &dynamic_lib_compiler)
+      : name_(name), asm_compiler_(asm_compiler), c_compiler_(c_compiler),
+        cpp_compiler_(cpp_compiler), static_lib_compiler_(static_lib_compiler),
+        dynamic_lib_compiler_(dynamic_lib_compiler) {}
 
   // Setters
   bool AddExecutable(std::string name, std::string executable);
@@ -25,8 +30,15 @@ public:
 
   // Getters
   const std::string &GetName() const { return name_; }
+  const std::string &GetAsmCompiler() const { return asm_compiler_; }
   const std::string &GetCCompiler() const { return c_compiler_; }
   const std::string &GetCppCompiler() const { return cpp_compiler_; }
+  const std::string &GetStaticLibCompiler() const {
+    return static_lib_compiler_;
+  }
+  const std::string &GetDynamicLibCompiler() const {
+    return dynamic_lib_compiler_;
+  }
   const std::string &GetExecutable(const std::string &name) const {
     return executables_.at(name);
   }
@@ -44,8 +56,12 @@ public:
 
 private:
   std::string name_;
+  std::string asm_compiler_;
   std::string c_compiler_;
   std::string cpp_compiler_;
+  std::string static_lib_compiler_;
+  std::string dynamic_lib_compiler_;
+
   std::unordered_map<std::string, std::string> executables_;
 
   std::vector<std::string> preprocessor_flags_;
@@ -54,15 +70,6 @@ private:
   std::vector<std::string> link_flags_;
 };
 
-// Overrides for certain systems
-class Toolchain_Gcc : public Toolchain {
-  explicit Toolchain_Gcc(const std::string &name, const std::string &c_compiler,
-                         const std::string &cpp_compiler)
-      : Toolchain(name, c_compiler, cpp_compiler) {
-    // TODO, Add some flags by default here
-  }
-};
-
-} // namespace buildcc
+} // namespace buildcc::base
 
 #endif

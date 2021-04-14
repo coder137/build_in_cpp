@@ -15,12 +15,18 @@ int main(void) {
   env::init(BUILD_ROOT, BUILD_INTERMEDIATE_DIR);
   env::set_log_level(env::LogLevel::Trace);
 
-  ExecutableTarget target(
-      "IncludeDir.exe", base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-      "files");
+  base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
+
+  StaticTarget randomLib("libran.a", gcc, "files");
+  randomLib.AddSource("src/random.cpp");
+  randomLib.AddIncludeDir("include");
+  randomLib.Build();
+
+  ExecutableTarget target("statictest.exe", gcc, "files");
   target.AddSource("main.cpp", "src");
-  target.AddSource("src/random.cpp");
   target.AddIncludeDir("include");
+  target.AddLibDep(randomLib);
   target.Build();
+
   return 0;
 }

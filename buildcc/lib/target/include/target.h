@@ -31,12 +31,13 @@ public:
   explicit Target(const std::string &name, TargetType type,
                   const Toolchain &toolchain,
                   const fs::path &target_path_relative_to_root)
-      : loader_(name, fs::path(env::get_intermediate_build_dir()) / name),
-        name_(name), type_(type), toolchain_(toolchain),
+      : name_(name), toolchain_(toolchain),
         target_root_source_dir_(env::get_project_root() /
                                 target_path_relative_to_root),
         target_intermediate_dir_(fs::path(env::get_intermediate_build_dir()) /
-                                 name) {
+                                 name),
+        type_(type),
+        loader_(name, fs::path(env::get_intermediate_build_dir()) / name) {
     Initialize();
   }
 
@@ -80,19 +81,55 @@ protected:
 private:
   void Initialize();
 
+  // Build
+  void BuildCompile();
+  void BuildRecompile();
+
   // Compiling
-  std::vector<std::string> BuildSources();
   std::vector<std::string> CompileSources();
   std::vector<std::string> RecompileSources();
-  virtual void CompileSource(const fs::path &current_source,
-                             const std::string &aggregated_include_dirs);
+  void SourceRemoved();
+  void SourceAdded();
+  void SourceUpdated();
+
+  void CompileSource(const fs::path &current_source,
+                     const std::string &aggregated_include_dirs);
+
+  // * Virtual
+  // PreCompile();
+  // Compile();
+  // PostCompile();
+  virtual std::vector<std::string>
+  CompileCommand(const std::string &input_source,
+                 const std::string &output_source, const std::string &compiler,
+                 const std::string &aggregated_preprocessor_flags,
+                 const std::string &aggregated_compile_flags,
+                 const std::string &aggregated_include_dirs);
 
   // Recompilation checks
+  void Recheck(const internal::path_unordered_set &previous_path,
+               const internal::path_unordered_set &current_path);
+  void PathRemoved();
+  void PathAdded();
+  void PathUpdated();
+
   void RecheckIncludeDirs();
   void RecheckLibDeps();
 
   // Linking
-  virtual void BuildTarget(const std::vector<std::string> &compiled_sources);
+  void BuildTarget(const std::vector<std::string> &compiled_sources);
+
+  // * Virtual
+  // PreLink();
+  // Link();
+  // PostLink();
+
+  // TODO, Add Link library paths
+  virtual std::vector<std::string>
+  Link(const std::string &output_target,
+       const std::string &aggregated_link_flags,
+       const std::string &aggregated_compiled_sources,
+       const std::string &aggregated_lib_deps);
 
   // Fbs
   bool Store();

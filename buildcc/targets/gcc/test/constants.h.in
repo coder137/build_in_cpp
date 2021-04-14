@@ -1,0 +1,7 @@
+#pragma once
+
+// clang-format off
+constexpr const char * const BUILD_SCRIPT_SOURCE = "@CMAKE_CURRENT_SOURCE_DIR@";
+
+constexpr const char * const BUILD_TARGET_STATIC_LIB_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/static_lib";
+constexpr const char * const BUILD_TARGET_DYNAMIC_LIB_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/dynamic_lib";

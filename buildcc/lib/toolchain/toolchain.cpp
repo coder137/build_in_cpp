@@ -1,6 +1,6 @@
 #include "toolchain.h"
 
-namespace buildcc {
+namespace buildcc::base {
 
 bool Toolchain::AddExecutable(std::string name, std::string executable) {
   if (executables_.find(name) == executables_.end()) {
@@ -12,4 +12,4 @@ bool Toolchain::AddExecutable(std::string name, std::string executable) {
 
 // TODO, Add other setter definitions here
 
-} // namespace buildcc
+} // namespace buildcc::base

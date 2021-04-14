@@ -1,10 +1,6 @@
 #include "constants.h"
 
-#include "base/target.h"
-
-// TODO, Create a seperate test suite for this
-#include "dynamic_target.h"
-#include "static_target.h"
+#include "target.h"
 
 #include "env.h"
 
@@ -28,10 +24,11 @@ TEST(TargetBaseTestGroup, InvalidTargetType) {
 
   fs::remove_all(intermediate_path / INVALID_NAME);
 
-  CHECK_THROWS(std::exception,
-               buildcc::base::Target(INVALID_NAME, (buildcc::base::TargetType)3,
-                                     buildcc::Toolchain("gcc", "gcc", "g++"),
-                                     ""));
+  CHECK_THROWS(
+      std::exception,
+      buildcc::base::Target(
+          INVALID_NAME, (buildcc::base::TargetType)3,
+          buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"), ""));
 
   buildcc::env::deinit();
 }
@@ -39,10 +36,11 @@ TEST(TargetBaseTestGroup, InvalidTargetType) {
 TEST(TargetBaseTestGroup, NoEnvInit) {
   constexpr const char *const NAME = "Init.exe";
 
-  CHECK_THROWS(
-      std::exception,
-      buildcc::base::Target(NAME, buildcc::base::TargetType::Executable,
-                            buildcc::Toolchain("gcc", "gcc", "g++"), "data"));
+  CHECK_THROWS(std::exception, buildcc::base::Target(
+                                   NAME, buildcc::base::TargetType::Executable,
+                                   buildcc::base::Toolchain("gcc", "as", "gcc",
+                                                            "g++", "ar", "ld"),
+                                   "data"));
 }
 
 // TODO, Check toolchain change

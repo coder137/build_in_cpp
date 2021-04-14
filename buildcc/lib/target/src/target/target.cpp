@@ -1,4 +1,4 @@
-#include "base/target.h"
+#include "target.h"
 
 // Internal
 #include "internal/util.h"
@@ -24,20 +24,6 @@ bool IsValidTargetType(buildcc::base::TargetType type) {
 }
 
 // RecompileSources
-bool IsOneOrMorePreviousPathDeleted(
-    const buildcc::internal::path_unordered_set &previous_path,
-    const buildcc::internal::path_unordered_set &current_path) {
-  bool one_or_more_previous_source_deleted = false;
-  for (const auto &file : previous_path) {
-    auto iter = current_path.find(file);
-    if (iter == current_path.end()) {
-      one_or_more_previous_source_deleted = true;
-      break;
-    }
-  }
-
-  return one_or_more_previous_source_deleted;
-}
 
 std::string AggregateIncludeDirs(
     const buildcc::internal::path_unordered_set &include_dirs) {
@@ -124,25 +110,62 @@ void Target::Build() {
 
   const bool is_loaded = loader_.Load();
   if (!is_loaded) {
-    dirty_ = true;
+    BuildCompile();
   } else {
-    // Compilation depends on include dirs
-    RecheckIncludeDirs();
+    BuildRecompile();
   }
 
-  const auto compiled_sources = BuildSources();
+  dirty_ = false;
+}
 
-  // Linking depends on library dependencies
-  if (!dirty_) {
-    RecheckLibDeps();
+void Target::BuildCompile() {
+  const std::vector<std::string> compiled_sources = CompileSources();
+  BuildTarget(compiled_sources);
+  Store();
+}
+
+// * Target rebuild depends on
+// TODO, Toolchain name
+// TODO, Toolchain preprocessor flags
+// TODO, Toolchain compile flags
+// TODO, Toolchain link flags
+// TODO, Target preprocessor flags
+// TODO, Target compile flags
+// TODO, Target link flags
+// Target source files
+// Target include dirs
+// Target library dependencies
+// TODO, Target library directories
+void Target::BuildRecompile() {
+
+  // * Completely compile sources if any of the following change
+  // TODO, Toolchain, ASM, C, C++ compiler
+  // TODO, Toolchain preprocessor flags
+  // TODO, Toolchain compile flags
+  // TODO, Target preprocessor flags
+  // TODO, Target compile flags
+  // Target include dirs
+  RecheckIncludeDirs();
+
+  // * Compile sources
+  std::vector<std::string> compiled_sources;
+  if (dirty_) {
+    compiled_sources = CompileSources();
+  } else {
+    compiled_sources = RecompileSources();
   }
+
+  // * Completely rebuild target / link if any of the following change
+  // TODO, Toolchain link flags
+  // TODO, Target link flags
+  // Target compiled source files either during Compile / Recompile
+  // Target library dependencies
+  // TODO, Target library directories
+  RecheckLibDeps();
   if (dirty_) {
     BuildTarget(compiled_sources);
     Store();
   }
-
-  // Reset state variables
-  dirty_ = false;
 }
 
 // PROTECTED
@@ -174,45 +197,48 @@ void Target::Initialize() {
 }
 
 // Linking
+std::vector<std::string>
+Target::Link(const std::string &output_target,
+             const std::string &aggregated_link_flags,
+             const std::string &aggregated_compiled_sources,
+             const std::string &aggregated_lib_deps) {
+  return {
+      toolchain_.GetCppCompiler(),
+      aggregated_link_flags,
+      aggregated_compiled_sources,
+      "-o",
+      output_target,
+      aggregated_lib_deps,
+  };
+}
+
 void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   env::log_trace(__FUNCTION__, name_);
 
   // Add compiled sources
-  std::string aggregated_compiled_sources =
+  const std::string aggregated_link_flags =
+      internal::aggregate_link_flags(toolchain_.GetLinkFlags());
+  const std::string aggregated_compiled_sources =
       internal::aggregate_compiled_sources(compiled_sources);
-  std::string aggregated_lib_deps =
+
+  const std::string aggregated_lib_deps =
       internal::aggregate_lib_deps(current_lib_deps_);
 
-  // TODO, Add compiled libs
-
   // Final Target
+  // TODO, Improve this logic
+  // Select cpp compiler for building target only if there is .cpp file
+  // added
+  // Else use c compiler
   const fs::path target = GetTargetPath();
-  bool success = internal::command({
-      // TODO, Improve this logic
-      // Select cpp compiler for building target only if there is .cpp file
-      // added
-      // Else use c compiler
-      toolchain_.GetCppCompiler(),
-      // TODO, Add Link Flags
-      aggregated_compiled_sources,
-      "-o",
-      target.string(),
-      aggregated_lib_deps,
-  });
-  // TODO, Library dependencies come after
+
+  bool success =
+      internal::command(Link(target.string(), aggregated_link_flags,
+                             aggregated_compiled_sources, aggregated_lib_deps));
 
   env::assert_fatal(success, "Compilation failed for: " + GetName());
 }
 
 // Compilation
-std::vector<std::string> Target::BuildSources() {
-  if (dirty_) {
-    return CompileSources();
-  } else {
-    return RecompileSources();
-  }
-}
-
 std::vector<std::string> Target::CompileSources() {
   env::log_trace(__FUNCTION__, name_);
   const std::string aggregated_include_dirs =
@@ -230,15 +256,19 @@ std::vector<std::string> Target::CompileSources() {
   return compiled_files;
 }
 
+// TODO, Do the same as Recheck
 std::vector<std::string> Target::RecompileSources() {
   env::log_trace(__FUNCTION__, name_);
 
   const auto &previous_source_files = loader_.GetLoadedSources();
 
   // * Cannot find previous source in current source files
-  bool is_source_removed = IsOneOrMorePreviousPathDeleted(
+  const bool is_source_removed = internal::is_previous_paths_different(
       previous_source_files, current_source_files_);
-  dirty_ = dirty_ || is_source_removed;
+  if (is_source_removed) {
+    dirty_ = true;
+    SourceRemoved();
+  }
 
   std::string aggregated_include_dirs =
       AggregateIncludeDirs(current_include_dirs_);
@@ -253,18 +283,16 @@ std::vector<std::string> Target::RecompileSources() {
 
     if (iter == previous_source_files.end()) {
       // *1 New source file added to build
-      env::log_trace("New source added", name_);
       CompileSource(current_source, aggregated_include_dirs);
       dirty_ = true;
+      SourceAdded();
     } else {
       // *2 Current file is updated
       if (current_file.GetLastWriteTimestamp() >
           iter->GetLastWriteTimestamp()) {
-        env::log_trace("Current file is newer " +
-                           current_file.GetPathname().string(),
-                       name_);
         CompileSource(current_source, aggregated_include_dirs);
         dirty_ = true;
+        SourceUpdated();
       } else {
         // *3 Do nothing
       }
@@ -277,52 +305,70 @@ std::vector<std::string> Target::RecompileSources() {
 
 void Target::CompileSource(const fs::path &current_source,
                            const std::string &aggregated_include_dirs) {
-  const std::string compiled_source = GetCompiledSourceName(current_source);
+  const std::string output_source = GetCompiledSourceName(current_source);
   const std::string compiler = GetCompiler(current_source);
-  bool success = internal::command({
-      compiler,
-      // TODO, Add Preprocessor Flags
-      aggregated_include_dirs,
-      // TODO, Add C/Cpp Compile Flags
-      "-o",
-      compiled_source,
-      "-c",
-      current_source.string(),
-  });
+  const std::string aggregated_compile_flags =
+      current_source.extension() == ".cpp"
+          ? internal::aggregate_compile_flags(toolchain_.GetCppCompileFlags())
+          : internal::aggregate_compile_flags(toolchain_.GetCCompileFlags());
+
+  bool success = internal::command(CompileCommand(
+      current_source.string(), output_source, compiler,
+      internal::aggregate_preprocessor_flags(toolchain_.GetPreprocessorFlags()),
+      aggregated_compile_flags, aggregated_include_dirs));
+
   env::assert_fatal(success,
                     "Compilation failed for: " + current_source.string());
 }
 
-// Includes
-void Target::RecheckIncludeDirs() {
-  env::log_trace(__FUNCTION__, name_);
+std::vector<std::string>
+Target::CompileCommand(const std::string &input_source,
+                       const std::string &output_source,
+                       const std::string &compiler,
+                       const std::string &aggregated_preprocessor_flags,
+                       const std::string &aggregated_compile_flags,
+                       const std::string &aggregated_include_dirs) {
+  return {
+      compiler,
+      aggregated_preprocessor_flags,
+      aggregated_include_dirs,
+      aggregated_compile_flags,
+      "-o",
+      output_source,
+      "-c",
+      input_source,
+  };
+}
 
-  const auto &previous_include_dirs = loader_.GetLoadedIncludeDirs();
-  // * Cannot find previous include dir in current include dirs
-  bool is_dir_removed = IsOneOrMorePreviousPathDeleted(previous_include_dirs,
-                                                       current_include_dirs_);
-  if (is_dir_removed) {
-    env::log_trace("One or more include dir is removed", name_);
+void Target::Recheck(const internal::path_unordered_set &previous_path,
+                     const internal::path_unordered_set &current_path) {
+  // * Compile sources / Target already requires rebuild
+  if (dirty_) {
+    return;
+  }
+
+  // * Old path is removed
+  const bool removed =
+      internal::is_previous_paths_different(previous_path, current_path);
+  if (removed) {
+    PathRemoved();
     dirty_ = true;
     return;
   }
 
-  for (auto &current_dir : current_include_dirs_) {
-    auto iter = previous_include_dirs.find(current_dir);
+  for (auto &path : current_path) {
+    auto iter = previous_path.find(path);
 
-    if (iter == previous_include_dirs.end()) {
-      // * New include dir added
-      env::log_trace(
-          "New include dir added " + current_dir.GetPathname().string(), name_);
+    if (iter == previous_path.end()) {
+      // * New path added
       dirty_ = true;
+      PathAdded();
       break;
     } else {
-      // * A file in current dir is updated
-      if (current_dir.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
-        env::log_trace("Current dir is newer " +
-                           current_dir.GetPathname().string(),
-                       name_);
+      // * Path is updated
+      if (path.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
         dirty_ = true;
+        PathUpdated();
         break;
       } else {
         // * Do nothing
@@ -331,38 +377,14 @@ void Target::RecheckIncludeDirs() {
   }
 }
 
+void Target::RecheckIncludeDirs() {
+  env::log_trace(__FUNCTION__, name_);
+  Recheck(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
+}
+
 void Target::RecheckLibDeps() {
   env::log_trace(__FUNCTION__, name_);
-  const auto &previous_lib_deps = loader_.GetLoadedLibDeps();
-
-  bool is_lib_dep_removed =
-      IsOneOrMorePreviousPathDeleted(previous_lib_deps, current_lib_deps_);
-
-  if (is_lib_dep_removed) {
-    dirty_ = true;
-    return;
-  }
-
-  for (auto &current_dep : current_lib_deps_) {
-    auto iter = previous_lib_deps.find(current_dep);
-
-    if (iter == previous_lib_deps.end()) {
-      // * New lib dep added
-      dirty_ = true;
-      break;
-    } else {
-      // * Lib dep has updated
-      if (current_dep.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
-        env::log_trace("Current dep is newer " +
-                           current_dep.GetPathname().string(),
-                       name_);
-        dirty_ = true;
-        break;
-      } else {
-        // * Do nothing
-      }
-    }
-  }
+  Recheck(loader_.GetLoadedLibDeps(), current_lib_deps_);
 }
 
 } // namespace buildcc::base
