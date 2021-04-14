@@ -7,6 +7,7 @@ target_include_directories(mock_target PUBLIC
 
 target_sources(mock_target PUBLIC
     ${target_SOURCE_DIR}/src/target/target.cpp
+    ${target_SOURCE_DIR}/src/target/source.cpp
     ${target_SOURCE_DIR}/mock/target/recheck_states.cpp
 
     ${target_SOURCE_DIR}/src/fbs/fbs_loader.cpp
