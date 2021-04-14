@@ -18,6 +18,9 @@ bool is_previous_paths_different(const path_unordered_set &previous_paths,
 // Aggregates
 std::string
 aggregate_compiled_sources(const std::vector<std::string> &compiled_sources);
+
+std::string aggregate_include_dirs(const path_unordered_set &include_dirs);
+
 std::string aggregate_preprocessor_flags(
     const std::vector<std::string> &preprocessor_flags);
 std::string

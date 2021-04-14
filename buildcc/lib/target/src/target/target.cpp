@@ -23,17 +23,6 @@ bool IsValidTargetType(buildcc::base::TargetType type) {
   }
 }
 
-// RecompileSources
-
-std::string AggregateIncludeDirs(
-    const buildcc::internal::path_unordered_set &include_dirs) {
-  std::string idir{""};
-  for (const auto &dirs : include_dirs) {
-    idir += std::string("-I") + dirs.GetPathname().string() + " ";
-  }
-  return idir;
-}
-
 } // namespace
 
 namespace buildcc::base {
@@ -242,7 +231,7 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
 std::vector<std::string> Target::CompileSources() {
   env::log_trace(__FUNCTION__, name_);
   const std::string aggregated_include_dirs =
-      AggregateIncludeDirs(current_include_dirs_);
+      internal::aggregate_include_dirs(current_include_dirs_);
 
   std::vector<std::string> compiled_files;
   for (const auto &file : current_source_files_) {
@@ -271,7 +260,7 @@ std::vector<std::string> Target::RecompileSources() {
   }
 
   std::string aggregated_include_dirs =
-      AggregateIncludeDirs(current_include_dirs_);
+      internal::aggregate_include_dirs(current_include_dirs_);
 
   std::vector<std::string> compiled_files;
   for (const auto &current_file : current_source_files_) {
