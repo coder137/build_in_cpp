@@ -14,15 +14,15 @@
 #include "CppUTest/Utest.h"
 
 // clang-format off
-TEST_GROUP(TargetTestStaticLibGroup)
+TEST_GROUP(TargetTestLibDep)
 {
 };
 // clang-format on
 
 static fs::path intermediate_path =
-    fs::path(BUILD_TARGET_STATIC_LIB_INTERMEDIATE_DIR);
+    fs::path(BUILD_TARGET_LIB_DEP_INTERMEDIATE_DIR);
 
-TEST(TargetTestStaticLibGroup, StaticLibrary_SimpleBuildTest) {
+TEST(TargetTestLibDep, StaticLibrary_SimpleBuildTest) {
   constexpr const char *const STATIC_NAME = "libStaticTest.a";
 
   fs::remove_all(intermediate_path / STATIC_NAME);
@@ -41,7 +41,7 @@ TEST(TargetTestStaticLibGroup, StaticLibrary_SimpleBuildTest) {
   // TODO, Verify .binary file
 }
 
-TEST(TargetTestStaticLibGroup, TargetDep_RebuildTest) {
+TEST(TargetTestLibDep, TargetDep_RebuildTest) {
   constexpr const char *const STATIC_FOO_LIB = "libfoo.a";
   constexpr const char *const EXE_NAME = "staticTestExe.exe";
 
@@ -94,7 +94,7 @@ TEST(TargetTestStaticLibGroup, TargetDep_RebuildTest) {
   }
 }
 
-TEST(TargetTestStaticLibGroup, TargetDep_AddRemoveTest) {
+TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
   constexpr const char *const STATIC_NAME = "libAddRemoveRandomTest.a";
   constexpr const char *const EXE_NAME = "staticAddRemoveTestExe.exe";
 
@@ -155,7 +155,7 @@ TEST(TargetTestStaticLibGroup, TargetDep_AddRemoveTest) {
   }
 }
 
-TEST(TargetTestStaticLibGroup, TargetDep_UpdateExistingLibraryTest) {
+TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
   constexpr const char *const STATIC_NAME = "libUpdateLibRandomTest.a";
   constexpr const char *const EXE_NAME = "staticUpdateLibTestExe.exe";
 
@@ -220,7 +220,7 @@ TEST(TargetTestStaticLibGroup, TargetDep_UpdateExistingLibraryTest) {
 int main(int ac, char **av) {
   MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
   buildcc::env::init(BUILD_SCRIPT_SOURCE,
-                     BUILD_TARGET_STATIC_LIB_INTERMEDIATE_DIR);
+                     BUILD_TARGET_LIB_DEP_INTERMEDIATE_DIR);
   buildcc::env::set_log_level(buildcc::env::LogLevel::Trace);
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
