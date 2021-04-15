@@ -90,8 +90,6 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   // Add compiled sources
   const std::string aggregated_compiled_sources =
       internal::aggregate(compiled_sources);
-  const std::string aggregated_lib_deps =
-      internal::aggregate(current_lib_deps_);
 
   // Final Target
   // TODO, Improve this logic
@@ -100,9 +98,9 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   // Else use c compiler
   const fs::path target = GetTargetPath();
 
-  bool success =
-      internal::command(Link(target.string(), aggregated_link_flags_,
-                             aggregated_compiled_sources, aggregated_lib_deps));
+  bool success = internal::command(Link(target.string(), aggregated_link_flags_,
+                                        aggregated_compiled_sources,
+                                        aggregated_lib_deps_));
 
   env::assert_fatal(success, "Compilation failed for: " + GetName());
 }

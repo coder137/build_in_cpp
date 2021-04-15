@@ -36,8 +36,6 @@ void Target::AddSource(const std::string &relative_filename) {
 
 std::vector<std::string> Target::CompileSources() {
   env::log_trace(__FUNCTION__, name_);
-  const std::string aggregated_include_dirs =
-      internal::aggregate_include_dirs(current_include_dirs_);
 
   std::vector<std::string> compiled_files;
   for (const auto &file : current_source_files_) {
