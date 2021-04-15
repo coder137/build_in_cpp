@@ -38,6 +38,15 @@ bool is_previous_paths_different(const path_unordered_set &previous_paths,
 }
 
 // Aggregates
+std::string aggregate_include_dirs(
+    const buildcc::internal::path_unordered_set &include_dirs) {
+  std::string idir{""};
+  for (const auto &dirs : include_dirs) {
+    idir += std::string("-I") + dirs.GetPathname().string() + " ";
+  }
+  return idir;
+}
+
 std::string
 aggregate_compiled_sources(const std::vector<std::string> &compiled_sources) {
   return aggregate_string_vector(compiled_sources);
