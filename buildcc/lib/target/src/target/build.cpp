@@ -56,12 +56,10 @@ void Target::BuildRecompile() {
 
   // * Completely compile sources if any of the following change
   // TODO, Toolchain, ASM, C, C++ compiler
-  // TODO, Target preprocessor flags
-  // TODO, Target compile flags
-  // Target include dirs
-  //   RecheckPreprocessorFlags();
-  //   RecheckCCompileFlags();
-  //   RecheckCppCompileFlags();
+  RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
+               current_preprocessor_flags_);
+  RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
+  RecheckFlags(loader_.GetLoadedCppCompileFlags(), current_cpp_compile_flags_);
   RecheckPaths(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
 
   // * Compile sources
@@ -76,7 +74,7 @@ void Target::BuildRecompile() {
   // Target compiled source files either during Compile / Recompile
   // Target library dependencies
   // TODO, Target library directories
-  //   RecheckLinkFlags();
+  RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
   RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
   if (dirty_) {
     BuildTarget(compiled_sources);

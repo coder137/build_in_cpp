@@ -42,7 +42,7 @@ public:
   const std::unordered_set<std::string> &GetLoadedCppCompileFlags() const {
     return loaded_cpp_compile_flags_;
   }
-  const std::unordered_set<std::string> &GetLinkFlags() const {
+  const std::unordered_set<std::string> &GetLoadedLinkFlags() const {
     return loaded_link_flags_;
   }
 

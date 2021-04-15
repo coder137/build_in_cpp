@@ -93,7 +93,16 @@ void Target::RecheckPaths(const internal::path_unordered_set &previous_path,
   }
 }
 
-void RecheckFlags(const std::unordered_set<std::string> &previous_flags,
-                  const std::unordered_set<std::string> &current_flags);
+void Target::RecheckFlags(
+    const std::unordered_set<std::string> &previous_flags,
+    const std::unordered_set<std::string> &current_flags) {
+  if (dirty_) {
+    return;
+  }
+
+  if (previous_flags != current_flags) {
+    dirty_ = true;
+  }
+}
 
 } // namespace buildcc::base
