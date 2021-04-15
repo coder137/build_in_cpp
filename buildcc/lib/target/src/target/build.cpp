@@ -21,8 +21,10 @@ void Target::Build() {
   aggregated_cpp_compile_flags_ =
       internal::aggregate(current_cpp_compile_flags_);
   aggregated_link_flags_ = internal::aggregate(current_link_flags_);
+
   aggregated_include_dirs_ =
       internal::aggregate_include_dirs(current_include_dirs_);
+  aggregated_lib_deps_ = internal::aggregate(current_lib_deps_);
 
   const bool is_loaded = loader_.Load();
   if (!is_loaded) {
@@ -42,20 +44,17 @@ void Target::BuildCompile() {
 
 // * Target rebuild depends on
 // TODO, Toolchain name
-// TODO, Toolchain preprocessor flags
-// TODO, Toolchain compile flags
-// TODO, Toolchain link flags
-// TODO, Target preprocessor flags
-// TODO, Target compile flags
-// TODO, Target link flags
-// Target source files
-// Target include dirs
-// Target library dependencies
+// DONE, Target preprocessor flags
+// DONE, Target compile flags
+// DONE, Target link flags
+// DONE, Target source files
+// DONE, Target include dirs
+// DONE, Target library dependencies
 // TODO, Target library directories
 void Target::BuildRecompile() {
 
   // * Completely compile sources if any of the following change
-  // TODO, Toolchain, ASM, C, C++ compiler
+  // TODO, Toolchain, ASM, C, C++ compiler related to a particular name
   RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
                current_preprocessor_flags_);
   RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);

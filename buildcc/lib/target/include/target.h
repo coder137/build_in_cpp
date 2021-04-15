@@ -160,11 +160,12 @@ private:
 
   // TODO, Make appending to this more efficient
   std::string aggregated_include_dirs_;
+  std::string aggregated_lib_deps_;
+
   std::string aggregated_preprocessor_flags_;
   std::string aggregated_c_compile_flags_;
   std::string aggregated_cpp_compile_flags_;
   std::string aggregated_link_flags_;
-  std::string aggregated_lib_deps_;
 
   // TODO, Add more internal variables
 
