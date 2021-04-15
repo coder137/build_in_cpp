@@ -7,6 +7,7 @@ target_sources(target PRIVATE
     src/target/target.cpp
     src/target/source.cpp
     src/target/include_dir.cpp
+    src/target/lib_dep.cpp
     src/target/recheck_states.cpp
 
     src/fbs/fbs_loader.cpp

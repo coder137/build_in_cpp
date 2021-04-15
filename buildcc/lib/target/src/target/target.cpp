@@ -27,20 +27,6 @@ bool IsValidTargetType(buildcc::base::TargetType type) {
 
 namespace buildcc::base {
 
-void Target::AddLibDep(const Target &lib_dep) {
-  env::log_trace(__FUNCTION__, name_);
-
-  const fs::path lib_dep_path = lib_dep.GetTargetPath();
-  env::assert_fatal(fs::exists(lib_dep_path),
-                    lib_dep_path.string() + " not found");
-
-  const auto lib_dep_file = internal::Path::CreateExistingPath(lib_dep_path);
-  env::assert_fatal(current_lib_deps_.find(lib_dep_file) ==
-                        current_lib_deps_.end(),
-                    lib_dep_path.string() + " duplicate found");
-  current_lib_deps_.insert(lib_dep_file);
-}
-
 // * Load
 // TODO, Verify things that cannot be changed
 // * Compile
@@ -216,11 +202,6 @@ void Target::Recheck(const internal::path_unordered_set &previous_path,
       }
     }
   }
-}
-
-void Target::RecheckLibDeps() {
-  env::log_trace(__FUNCTION__, name_);
-  Recheck(loader_.GetLoadedLibDeps(), current_lib_deps_);
 }
 
 } // namespace buildcc::base
