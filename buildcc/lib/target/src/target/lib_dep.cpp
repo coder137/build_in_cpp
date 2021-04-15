@@ -18,10 +18,4 @@ void Target::AddLibDep(const Target &lib_dep) {
   current_lib_deps_.insert(lib_dep_file);
 }
 
-// Private
-void Target::RecheckLibDeps() {
-  env::log_trace(__FUNCTION__, name_);
-  Recheck(loader_.GetLoadedLibDeps(), current_lib_deps_);
-}
-
 } // namespace buildcc::base

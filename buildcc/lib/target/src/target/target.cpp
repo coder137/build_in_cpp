@@ -56,8 +56,8 @@ void Target::Initialize() {
 }
 
 // Rechecks
-void Target::Recheck(const internal::path_unordered_set &previous_path,
-                     const internal::path_unordered_set &current_path) {
+void Target::RecheckPaths(const internal::path_unordered_set &previous_path,
+                          const internal::path_unordered_set &current_path) {
   // * Compile sources / Target already requires rebuild
   if (dirty_) {
     return;
@@ -92,5 +92,8 @@ void Target::Recheck(const internal::path_unordered_set &previous_path,
     }
   }
 }
+
+void RecheckFlags(const std::unordered_set<std::string> &previous_flags,
+                  const std::unordered_set<std::string> &current_flags);
 
 } // namespace buildcc::base

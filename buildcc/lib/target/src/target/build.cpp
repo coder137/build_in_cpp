@@ -56,12 +56,13 @@ void Target::BuildRecompile() {
 
   // * Completely compile sources if any of the following change
   // TODO, Toolchain, ASM, C, C++ compiler
-  // TODO, Toolchain preprocessor flags
-  // TODO, Toolchain compile flags
   // TODO, Target preprocessor flags
   // TODO, Target compile flags
   // Target include dirs
-  RecheckIncludeDirs();
+  //   RecheckPreprocessorFlags();
+  //   RecheckCCompileFlags();
+  //   RecheckCppCompileFlags();
+  RecheckPaths(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
 
   // * Compile sources
   std::vector<std::string> compiled_sources;
@@ -72,12 +73,11 @@ void Target::BuildRecompile() {
   }
 
   // * Completely rebuild target / link if any of the following change
-  // TODO, Toolchain link flags
-  // TODO, Target link flags
   // Target compiled source files either during Compile / Recompile
   // Target library dependencies
   // TODO, Target library directories
-  RecheckLibDeps();
+  //   RecheckLinkFlags();
+  RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
   if (dirty_) {
     BuildTarget(compiled_sources);
     Store();

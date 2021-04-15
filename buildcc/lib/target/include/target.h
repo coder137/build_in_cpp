@@ -112,14 +112,14 @@ private:
                  const std::string &aggregated_include_dirs);
 
   // Recompilation checks
-  void Recheck(const internal::path_unordered_set &previous_path,
-               const internal::path_unordered_set &current_path);
+  void RecheckPaths(const internal::path_unordered_set &previous_path,
+                    const internal::path_unordered_set &current_path);
+  void RecheckFlags(const std::unordered_set<std::string> &previous_flags,
+                    const std::unordered_set<std::string> &current_flags);
+
   void PathRemoved();
   void PathAdded();
   void PathUpdated();
-
-  void RecheckIncludeDirs();
-  void RecheckLibDeps();
 
   // Linking
   void BuildTarget(const std::vector<std::string> &compiled_sources);
