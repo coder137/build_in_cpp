@@ -23,6 +23,7 @@ public:
 
   // Getters
   bool IsLoaded() const { return loaded_; }
+  fs::path GetBinaryPath() const { return relative_path_ / (name_ + ".bin"); }
 
   const path_unordered_set &GetLoadedSources() const { return loaded_sources_; }
   const path_unordered_set &GetLoadedIncludeDirs() const {
@@ -32,7 +33,18 @@ public:
     return loaded_lib_deps_;
   }
 
-  fs::path GetBinaryPath() const { return relative_path_ / (name_ + ".bin"); }
+  const std::unordered_set<std::string> &GetLoadedPreprocessorFlags() const {
+    return loaded_preprocessor_flags_;
+  }
+  const std::unordered_set<std::string> &GetLoadedCCompileFlags() const {
+    return loaded_c_compile_flags_;
+  }
+  const std::unordered_set<std::string> &GetLoadedCppCompileFlags() const {
+    return loaded_cpp_compile_flags_;
+  }
+  const std::unordered_set<std::string> &GetLinkFlags() const {
+    return loaded_link_flags_;
+  }
 
 private:
   void Initialize();
@@ -45,6 +57,11 @@ private:
   path_unordered_set loaded_sources_;
   path_unordered_set loaded_include_dirs_;
   path_unordered_set loaded_lib_deps_;
+
+  std::unordered_set<std::string> loaded_preprocessor_flags_;
+  std::unordered_set<std::string> loaded_c_compile_flags_;
+  std::unordered_set<std::string> loaded_cpp_compile_flags_;
+  std::unordered_set<std::string> loaded_link_flags_;
 };
 
 } // namespace buildcc::internal
