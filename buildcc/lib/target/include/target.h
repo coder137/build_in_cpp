@@ -98,8 +98,7 @@ private:
   void SourceAdded();
   void SourceUpdated();
 
-  void CompileSource(const fs::path &current_source,
-                     const std::string &aggregated_include_dirs);
+  void CompileSource(const fs::path &current_source);
 
   // * Virtual
   // PreCompile();
@@ -154,10 +153,18 @@ private:
   buildcc::internal::path_unordered_set current_include_dirs_;
   buildcc::internal::path_unordered_set current_lib_deps_;
 
-  std::unordered_set<std::string> preprocessor_flags_;
-  std::unordered_set<std::string> c_compile_flags_;
-  std::unordered_set<std::string> cpp_compile_flags_;
-  std::unordered_set<std::string> link_flags_;
+  std::unordered_set<std::string> current_preprocessor_flags_;
+  std::unordered_set<std::string> current_c_compile_flags_;
+  std::unordered_set<std::string> current_cpp_compile_flags_;
+  std::unordered_set<std::string> current_link_flags_;
+
+  // TODO, Make appending to this more efficient
+  std::string aggregated_include_dirs_;
+  std::string aggregated_preprocessor_flags_;
+  std::string aggregated_c_compile_flags_;
+  std::string aggregated_cpp_compile_flags_;
+  std::string aggregated_link_flags_;
+  std::string aggregated_lib_deps_;
 
   // TODO, Add more internal variables
 

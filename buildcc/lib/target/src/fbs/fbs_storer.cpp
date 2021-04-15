@@ -75,11 +75,12 @@ bool Target::Store() {
   auto fbs_lib_deps = get_fbs_vector_path(builder, current_lib_deps_);
   // TODO, lib_dirs
   auto fbs_preprocessor_flags =
-      get_fbs_vector_string(builder, preprocessor_flags_);
-  auto fbs_c_compiler_flags = get_fbs_vector_string(builder, c_compile_flags_);
+      get_fbs_vector_string(builder, current_preprocessor_flags_);
+  auto fbs_c_compiler_flags =
+      get_fbs_vector_string(builder, current_c_compile_flags_);
   auto fbs_cpp_compiler_flags =
-      get_fbs_vector_string(builder, cpp_compile_flags_);
-  auto fbs_link_flags = get_fbs_vector_string(builder, link_flags_);
+      get_fbs_vector_string(builder, current_cpp_compile_flags_);
+  auto fbs_link_flags = get_fbs_vector_string(builder, current_link_flags_);
 
   auto fbs_target = fbs::CreateTargetDirect(
       builder, name_.c_str(), target_intermediate_dir_.string().c_str(),

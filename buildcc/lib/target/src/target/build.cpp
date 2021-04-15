@@ -15,6 +15,15 @@ namespace buildcc::base {
 void Target::Build() {
   env::log_trace(__FUNCTION__, name_);
 
+  aggregated_preprocessor_flags_ =
+      internal::aggregate(current_preprocessor_flags_);
+  aggregated_c_compile_flags_ = internal::aggregate(current_c_compile_flags_);
+  aggregated_cpp_compile_flags_ =
+      internal::aggregate(current_cpp_compile_flags_);
+  aggregated_link_flags_ = internal::aggregate(current_link_flags_);
+  aggregated_include_dirs_ =
+      internal::aggregate_include_dirs(current_include_dirs_);
+
   const bool is_loaded = loader_.Load();
   if (!is_loaded) {
     BuildCompile();
@@ -79,13 +88,10 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   env::log_trace(__FUNCTION__, name_);
 
   // Add compiled sources
-  const std::string aggregated_link_flags =
-      internal::aggregate_link_flags(link_flags_);
   const std::string aggregated_compiled_sources =
-      internal::aggregate_compiled_sources(compiled_sources);
-
+      internal::aggregate(compiled_sources);
   const std::string aggregated_lib_deps =
-      internal::aggregate_lib_deps(current_lib_deps_);
+      internal::aggregate(current_lib_deps_);
 
   // Final Target
   // TODO, Improve this logic
@@ -95,7 +101,7 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   const fs::path target = GetTargetPath();
 
   bool success =
-      internal::command(Link(target.string(), aggregated_link_flags,
+      internal::command(Link(target.string(), aggregated_link_flags_,
                              aggregated_compiled_sources, aggregated_lib_deps));
 
   env::assert_fatal(success, "Compilation failed for: " + GetName());

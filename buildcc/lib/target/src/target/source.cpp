@@ -44,7 +44,7 @@ std::vector<std::string> Target::CompileSources() {
     const auto &current_source = file.GetPathname();
     const std::string compiled_source = GetCompiledSourceName(current_source);
 
-    CompileSource(current_source, aggregated_include_dirs);
+    CompileSource(current_source);
     compiled_files.push_back(compiled_source);
   }
 
@@ -64,9 +64,6 @@ std::vector<std::string> Target::RecompileSources() {
     SourceRemoved();
   }
 
-  std::string aggregated_include_dirs =
-      internal::aggregate_include_dirs(current_include_dirs_);
-
   std::vector<std::string> compiled_files;
   for (const auto &current_file : current_source_files_) {
     const auto &current_source = current_file.GetPathname();
@@ -77,14 +74,14 @@ std::vector<std::string> Target::RecompileSources() {
 
     if (iter == previous_source_files.end()) {
       // *1 New source file added to build
-      CompileSource(current_source, aggregated_include_dirs);
+      CompileSource(current_source);
       dirty_ = true;
       SourceAdded();
     } else {
       // *2 Current file is updated
       if (current_file.GetLastWriteTimestamp() >
           iter->GetLastWriteTimestamp()) {
-        CompileSource(current_source, aggregated_include_dirs);
+        CompileSource(current_source);
         dirty_ = true;
         SourceUpdated();
       } else {
@@ -97,19 +94,14 @@ std::vector<std::string> Target::RecompileSources() {
   return compiled_files;
 }
 
-void Target::CompileSource(const fs::path &current_source,
-                           const std::string &aggregated_include_dirs) {
+void Target::CompileSource(const fs::path &current_source) {
   const std::string output_source = GetCompiledSourceName(current_source);
   const std::string compiler = GetCompiler(current_source);
-  const std::string aggregated_compile_flags =
-      current_source.extension() == ".cpp"
-          ? internal::aggregate_compile_flags(cpp_compile_flags_)
-          : internal::aggregate_compile_flags(c_compile_flags_);
 
-  bool success = internal::command(CompileCommand(
-      current_source.string(), output_source, compiler,
-      internal::aggregate_preprocessor_flags(preprocessor_flags_),
-      aggregated_compile_flags, aggregated_include_dirs));
+  bool success = internal::command(
+      CompileCommand(current_source.string(), output_source, compiler,
+                     aggregated_preprocessor_flags_,
+                     aggregated_c_compile_flags_, aggregated_include_dirs_));
 
   env::assert_fatal(success,
                     "Compilation failed for: " + current_source.string());
