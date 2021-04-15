@@ -4,21 +4,28 @@
 
 namespace {
 
-std::string aggregate_string_vector(const std::vector<std::string> &list) {
-  std::string files = "";
+std::string aggregate(const std::vector<std::string> &list) {
+  std::string agg = "";
   for (const auto &l : list) {
-    files += l + " ";
+    agg += l + " ";
   }
-  return files;
+  return agg;
 }
 
-std::string aggregate_path_unordered_set(
-    const buildcc::internal::path_unordered_set &paths) {
-  std::string aggregated_path = "";
-  for (const auto &p : paths) {
-    aggregated_path += p.GetPathname().string() + " ";
+std::string aggregate(const std::unordered_set<std::string> &list) {
+  std::string agg = "";
+  for (const auto &l : list) {
+    agg += l + " ";
   }
-  return aggregated_path;
+  return agg;
+}
+
+std::string aggregate(const buildcc::internal::path_unordered_set &paths) {
+  std::string agg = "";
+  for (const auto &p : paths) {
+    agg += p.GetPathname().string() + " ";
+  }
+  return agg;
 }
 
 } // namespace
@@ -49,26 +56,26 @@ std::string aggregate_include_dirs(
 
 std::string
 aggregate_compiled_sources(const std::vector<std::string> &compiled_sources) {
-  return aggregate_string_vector(compiled_sources);
+  return aggregate(compiled_sources);
 }
 
 std::string aggregate_preprocessor_flags(
-    const std::vector<std::string> &preprocessor_flags) {
-  return aggregate_string_vector(preprocessor_flags);
+    const std::unordered_set<std::string> &preprocessor_flags) {
+  return aggregate(preprocessor_flags);
 }
 
 std::string
-aggregate_compile_flags(const std::vector<std::string> &compile_flags) {
-  return aggregate_string_vector(compile_flags);
+aggregate_compile_flags(const std::unordered_set<std::string> &compile_flags) {
+  return aggregate(compile_flags);
 }
 
 std::string
-aggregate_link_flags(const std::vector<std::string> &compiled_sources) {
-  return aggregate_string_vector(compiled_sources);
+aggregate_link_flags(const std::unordered_set<std::string> &compiled_sources) {
+  return aggregate(compiled_sources);
 }
 
 std::string aggregate_lib_deps(const path_unordered_set &lib_deps) {
-  return aggregate_path_unordered_set(lib_deps);
+  return aggregate(lib_deps);
 }
 
 } // namespace buildcc::internal
