@@ -43,17 +43,6 @@ public:
     return executables_.at(name);
   }
 
-  const std::vector<std::string> &GetPreprocessorFlags() const {
-    return preprocessor_flags_;
-  }
-  const std::vector<std::string> &GetCCompileFlags() const {
-    return c_compile_flags_;
-  }
-  const std::vector<std::string> &GetCppCompileFlags() const {
-    return cpp_compile_flags_;
-  }
-  const std::vector<std::string> &GetLinkFlags() const { return link_flags_; }
-
 private:
   std::string name_;
   std::string asm_compiler_;
@@ -63,11 +52,6 @@ private:
   std::string dynamic_lib_compiler_;
 
   std::unordered_map<std::string, std::string> executables_;
-
-  std::vector<std::string> preprocessor_flags_;
-  std::vector<std::string> c_compile_flags_;
-  std::vector<std::string> cpp_compile_flags_;
-  std::vector<std::string> link_flags_;
 };
 
 } // namespace buildcc::base

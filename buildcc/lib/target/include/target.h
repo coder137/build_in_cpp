@@ -51,7 +51,13 @@ public:
 
   void AddIncludeDir(const std::string &relative_include_dir);
 
+  // TODO, Add fs::path version of the same, can be found using lib_dirs
   void AddLibDep(const Target &lib_dep);
+
+  void AddPreprocessorFlag(const std::string &flag);
+  void AddCCompileFlag(const std::string &flag);
+  void AddCppCompileFlag(const std::string &flag);
+  void AddLinkFlag(const std::string &flag);
 
   // TODO, Add more setters
 
@@ -147,6 +153,11 @@ private:
   buildcc::internal::path_unordered_set current_source_files_;
   buildcc::internal::path_unordered_set current_include_dirs_;
   buildcc::internal::path_unordered_set current_lib_deps_;
+
+  std::unordered_set<std::string> preprocessor_flags_;
+  std::unordered_set<std::string> c_compile_flags_;
+  std::unordered_set<std::string> cpp_compile_flags_;
+  std::unordered_set<std::string> link_flags_;
 
   // TODO, Add more internal variables
 
