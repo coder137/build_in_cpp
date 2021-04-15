@@ -103,12 +103,12 @@ void Target::CompileSource(const fs::path &current_source,
   const std::string compiler = GetCompiler(current_source);
   const std::string aggregated_compile_flags =
       current_source.extension() == ".cpp"
-          ? internal::aggregate_compile_flags(toolchain_.GetCppCompileFlags())
-          : internal::aggregate_compile_flags(toolchain_.GetCCompileFlags());
+          ? internal::aggregate_compile_flags(cpp_compile_flags_)
+          : internal::aggregate_compile_flags(c_compile_flags_);
 
   bool success = internal::command(CompileCommand(
       current_source.string(), output_source, compiler,
-      internal::aggregate_preprocessor_flags(toolchain_.GetPreprocessorFlags()),
+      internal::aggregate_preprocessor_flags(preprocessor_flags_),
       aggregated_compile_flags, aggregated_include_dirs));
 
   env::assert_fatal(success,
