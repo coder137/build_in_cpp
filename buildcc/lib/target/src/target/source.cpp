@@ -96,10 +96,14 @@ void Target::CompileSource(const fs::path &current_source) {
   const std::string output_source = GetCompiledSourceName(current_source);
   const std::string compiler = GetCompiler(current_source);
 
+  const std::string &aggregated_compile_flags =
+      compiler == toolchain_.GetCCompiler() ? aggregated_c_compile_flags_
+                                            : aggregated_cpp_compile_flags_;
+
   bool success = internal::command(
       CompileCommand(current_source.string(), output_source, compiler,
-                     aggregated_preprocessor_flags_,
-                     aggregated_c_compile_flags_, aggregated_include_dirs_));
+                     aggregated_preprocessor_flags_, aggregated_compile_flags,
+                     aggregated_include_dirs_));
 
   env::assert_fatal(success,
                     "Compilation failed for: " + current_source.string());
