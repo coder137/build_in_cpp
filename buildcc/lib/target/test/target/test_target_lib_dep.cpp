@@ -7,11 +7,15 @@
 
 #include "flatbuffers/util.h"
 
+#include <iostream>
+#include <unistd.h>
+
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/Utest.h"
+#include "CppUTestExt/MockSupport.h"
 
 // clang-format off
 TEST_GROUP(TargetTestLibDep)
@@ -37,6 +41,8 @@ TEST(TargetTestLibDep, StaticLibrary_SimpleBuildTest) {
   buildcc::internal::m::Expect_command(1, true);
   buildcc::internal::m::Expect_command(1, true);
   foolib.Build();
+
+  mock().checkExpectations();
 
   // TODO, Verify .binary file
 }
@@ -79,9 +85,6 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
         STATIC_FOO_LIB, buildcc::base::TargetType::StaticLibrary, gcc, "data");
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
-
-    buildcc::internal::m::Expect_command(1, true);
-    buildcc::internal::m::Expect_command(1, true);
     foolib.Build();
 
     // Executable for static
@@ -92,6 +95,8 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     exe_target.AddLibDep(foolib);
     exe_target.Build();
   }
+
+  mock().checkExpectations();
 }
 
 TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
@@ -153,6 +158,8 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
     buildcc::internal::m::Expect_command(1, true);
     exe_target.Build();
   }
+
+  mock().checkExpectations();
 }
 
 TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
@@ -175,8 +182,9 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     buildcc::internal::m::Expect_command(1, true);
     foolib.Build();
 
-    flatbuffers::SaveFile(foolib.GetTargetPath().string().c_str(),
-                          std::string{""}, false);
+    bool saved = flatbuffers::SaveFile(foolib.GetTargetPath().string().c_str(),
+                                       std::string{""}, false);
+    CHECK_TRUE(saved);
 
     buildcc::base::Target exe_target(
         EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
@@ -202,8 +210,11 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     buildcc::internal::m::Expect_command(1, true);
     foolib.Build();
 
-    flatbuffers::SaveFile(foolib.GetTargetPath().string().c_str(),
-                          std::string{""}, false);
+    // * To make sure that SaveFile is newer
+    sleep(1);
+    bool saved = flatbuffers::SaveFile(foolib.GetTargetPath().string().c_str(),
+                                       std::string{""}, false);
+    CHECK_TRUE(saved);
 
     buildcc::base::Target exe_target(
         EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
@@ -215,6 +226,8 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     buildcc::internal::m::Expect_command(1, true);
     exe_target.Build();
   }
+
+  mock().checkExpectations();
 }
 
 int main(int ac, char **av) {

@@ -13,6 +13,7 @@
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/Utest.h"
+#include "CppUTestExt/MockSupport.h"
 
 // clang-format off
 TEST_GROUP(TargetTestPreprocessorFlagGroup)
@@ -88,6 +89,8 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
     buildcc::internal::m::Expect_command(1, true);
     simple.Build();
   }
+
+  mock().checkExpectations();
 }
 
 int main(int ac, char **av) {

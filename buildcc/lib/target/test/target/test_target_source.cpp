@@ -13,6 +13,7 @@
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/Utest.h"
+#include "CppUTestExt/MockSupport.h"
 
 // clang-format off
 TEST_GROUP(TargetTestSourceGroup)
@@ -64,6 +65,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
   simple.AddSource(DUMMY_MAIN);
   simple.Build();
 
+  mock().checkExpectations();
+
   buildcc::internal::FbsLoader loader(NAME, intermediate_path);
   bool is_loaded = loader.Load();
   CHECK_TRUE(is_loaded);
@@ -108,6 +111,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompileError) {
     buildcc::internal::m::Expect_command(1, false); // compile
     CHECK_THROWS(std::exception, simple.Build());
   }
+
+  mock().checkExpectations();
 }
 
 TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
@@ -213,6 +218,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     CHECK_FALSE(loaded_sources.find(dummy_cpp_file) == loaded_sources.end());
     CHECK_FALSE(loaded_sources.find(new_source_file) == loaded_sources.end());
   }
+
+  mock().checkExpectations();
 }
 
 int main(int ac, char **av) {
