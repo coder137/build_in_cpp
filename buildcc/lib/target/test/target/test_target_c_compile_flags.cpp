@@ -15,17 +15,17 @@
 #include "CppUTest/Utest.h"
 
 // clang-format off
-TEST_GROUP(TargetTestPreprocessorFlagGroup)
+TEST_GROUP(TargetTestCCompileFlagsGroup)
 {
 };
 // clang-format on
 
 static fs::path target_source_intermediate_path =
-    fs::path(BUILD_TARGET_PREPROCESSOR_INTERMEDIATE_DIR);
+    fs::path(BUILD_TARGET_C_COMPILE_INTERMEDIATE_DIR);
 
-TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
-  constexpr const char *const NAME = "AddPreprocessorFlag.exe";
-  constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
+TEST(TargetTestCCompileFlagsGroup, Target_AddCompileFlag) {
+  constexpr const char *const NAME = "AddCCompileFlag.exe";
+  constexpr const char *const DUMMY_MAIN = "dummy_main.c";
 
   auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
   auto intermediate_path = target_source_intermediate_path / NAME;
@@ -37,12 +37,12 @@ TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
       NAME, buildcc::base::TargetType::Executable,
       buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"), "data");
   simple.AddSource(DUMMY_MAIN);
-  simple.AddPreprocessorFlag("-DCOMPILE=1");
+  simple.AddCCompileFlag("-std=c11");
 }
 
-TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
-  constexpr const char *const NAME = "ChangedPreprocessorFlag.exe";
-  constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
+TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
+  constexpr const char *const NAME = "ChangedCCompileFlag.exe";
+  constexpr const char *const DUMMY_MAIN = "dummy_main.c";
 
   auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
   auto intermediate_path = target_source_intermediate_path / NAME;
@@ -56,7 +56,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
         buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
         "data");
     simple.AddSource(DUMMY_MAIN);
-    simple.AddPreprocessorFlag("-DCOMPILE=1");
+    simple.AddCCompileFlag("-std=c11");
 
     buildcc::internal::m::Expect_command(1, true);
     buildcc::internal::m::Expect_command(1, true);
@@ -82,7 +82,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
         buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
         "data");
     simple.AddSource(DUMMY_MAIN);
-    simple.AddPreprocessorFlag("-DRANDOM=1");
+    simple.AddCCompileFlag("-std=c11");
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::internal::m::Expect_command(1, true);
     buildcc::internal::m::Expect_command(1, true);
@@ -93,6 +93,6 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
 int main(int ac, char **av) {
   MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
   buildcc::env::init(BUILD_SCRIPT_SOURCE,
-                     BUILD_TARGET_PREPROCESSOR_INTERMEDIATE_DIR);
+                     BUILD_TARGET_C_COMPILE_INTERMEDIATE_DIR);
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

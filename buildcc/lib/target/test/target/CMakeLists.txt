@@ -39,9 +39,15 @@ add_executable(test_target_preprocessor_flags
 )
 target_link_libraries(test_target_preprocessor_flags PRIVATE target_interface)
 
-# TODO, Test target c compile flags
+# Test target c compile flags
+add_executable(test_target_c_compile_flags
+    test_target_c_compile_flags.cpp
+)
+target_link_libraries(test_target_c_compile_flags PRIVATE target_interface)
 
-# TODO Test target cpp toolchain link flags
+# TODO, Test target cpp compile flags
+
+# TODO Test target link flags
 
 # Tests
 add_test(NAME test_base_target COMMAND test_base_target)
@@ -49,3 +55,4 @@ add_test(NAME test_target_source COMMAND test_target_source)
 add_test(NAME test_target_include_dir COMMAND test_target_include_dir)
 add_test(NAME test_target_lib_dep COMMAND test_target_lib_dep)
 add_test(NAME test_target_preprocessor_flags COMMAND test_target_preprocessor_flags)
+add_test(NAME test_target_c_compile_flags COMMAND test_target_c_compile_flags)
