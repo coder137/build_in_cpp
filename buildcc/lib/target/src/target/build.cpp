@@ -15,6 +15,17 @@ namespace buildcc::base {
 void Target::Build() {
   env::log_trace(__FUNCTION__, name_);
 
+  aggregated_preprocessor_flags_ =
+      internal::aggregate(current_preprocessor_flags_);
+  aggregated_c_compile_flags_ = internal::aggregate(current_c_compile_flags_);
+  aggregated_cpp_compile_flags_ =
+      internal::aggregate(current_cpp_compile_flags_);
+  aggregated_link_flags_ = internal::aggregate(current_link_flags_);
+
+  aggregated_include_dirs_ =
+      internal::aggregate_include_dirs(current_include_dirs_);
+  aggregated_lib_deps_ = internal::aggregate(current_lib_deps_);
+
   const bool is_loaded = loader_.Load();
   if (!is_loaded) {
     BuildCompile();
@@ -33,26 +44,22 @@ void Target::BuildCompile() {
 
 // * Target rebuild depends on
 // TODO, Toolchain name
-// TODO, Toolchain preprocessor flags
-// TODO, Toolchain compile flags
-// TODO, Toolchain link flags
-// TODO, Target preprocessor flags
-// TODO, Target compile flags
-// TODO, Target link flags
-// Target source files
-// Target include dirs
-// Target library dependencies
+// DONE, Target preprocessor flags
+// DONE, Target compile flags
+// DONE, Target link flags
+// DONE, Target source files
+// DONE, Target include dirs
+// DONE, Target library dependencies
 // TODO, Target library directories
 void Target::BuildRecompile() {
 
   // * Completely compile sources if any of the following change
-  // TODO, Toolchain, ASM, C, C++ compiler
-  // TODO, Toolchain preprocessor flags
-  // TODO, Toolchain compile flags
-  // TODO, Target preprocessor flags
-  // TODO, Target compile flags
-  // Target include dirs
-  RecheckIncludeDirs();
+  // TODO, Toolchain, ASM, C, C++ compiler related to a particular name
+  RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
+               current_preprocessor_flags_);
+  RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
+  RecheckFlags(loader_.GetLoadedCppCompileFlags(), current_cpp_compile_flags_);
+  RecheckPaths(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
 
   // * Compile sources
   std::vector<std::string> compiled_sources;
@@ -63,12 +70,11 @@ void Target::BuildRecompile() {
   }
 
   // * Completely rebuild target / link if any of the following change
-  // TODO, Toolchain link flags
-  // TODO, Target link flags
   // Target compiled source files either during Compile / Recompile
   // Target library dependencies
   // TODO, Target library directories
-  RecheckLibDeps();
+  RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
+  RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
   if (dirty_) {
     BuildTarget(compiled_sources);
     Store();
@@ -79,13 +85,8 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   env::log_trace(__FUNCTION__, name_);
 
   // Add compiled sources
-  const std::string aggregated_link_flags =
-      internal::aggregate_link_flags(link_flags_);
   const std::string aggregated_compiled_sources =
-      internal::aggregate_compiled_sources(compiled_sources);
-
-  const std::string aggregated_lib_deps =
-      internal::aggregate_lib_deps(current_lib_deps_);
+      internal::aggregate(compiled_sources);
 
   // Final Target
   // TODO, Improve this logic
@@ -94,9 +95,9 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   // Else use c compiler
   const fs::path target = GetTargetPath();
 
-  bool success =
-      internal::command(Link(target.string(), aggregated_link_flags,
-                             aggregated_compiled_sources, aggregated_lib_deps));
+  bool success = internal::command(Link(target.string(), aggregated_link_flags_,
+                                        aggregated_compiled_sources,
+                                        aggregated_lib_deps_));
 
   env::assert_fatal(success, "Compilation failed for: " + GetName());
 }

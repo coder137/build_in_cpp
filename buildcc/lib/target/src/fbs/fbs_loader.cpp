@@ -8,17 +8,29 @@
 namespace fbs = schema::internal;
 
 namespace {
-void ExtractPaths(
+void Extract(
     const flatbuffers::Vector<flatbuffers::Offset<schema::internal::Path>>
         *fbs_paths,
-    buildcc::internal::path_unordered_set *loaded_sources) {
-  if (fbs_paths == nullptr || loaded_sources == nullptr) {
+    buildcc::internal::path_unordered_set &out) {
+  if (fbs_paths == nullptr) {
     return;
   }
 
   for (auto iter = fbs_paths->begin(); iter != fbs_paths->end(); iter++) {
-    loaded_sources->insert(buildcc::internal::Path::CreateNewPath(
+    out.insert(buildcc::internal::Path::CreateNewPath(
         iter->pathname()->c_str(), iter->last_write_timestamp()));
+  }
+}
+
+void Extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
+                 *fbs_paths,
+             std::unordered_set<std::string> &out) {
+  if (fbs_paths == nullptr) {
+    return;
+  }
+
+  for (auto iter = fbs_paths->begin(); iter != fbs_paths->end(); iter++) {
+    out.insert(iter->str());
   }
 }
 
@@ -44,10 +56,15 @@ bool FbsLoader::Load() {
   // target->relative_path()->c_str();
   // target->type();
   // target->toolchain();
-  ExtractPaths(target->source_files(), &loaded_sources_);
-  ExtractPaths(target->include_dirs(), &loaded_include_dirs_);
-  ExtractPaths(target->lib_deps(), &loaded_lib_deps_);
+  Extract(target->source_files(), loaded_sources_);
+  Extract(target->include_dirs(), loaded_include_dirs_);
+  Extract(target->lib_deps(), loaded_lib_deps_);
   // target->lib_dirs();
+
+  Extract(target->preprocessor_flags(), loaded_preprocessor_flags_);
+  Extract(target->c_compile_flags(), loaded_c_compile_flags_);
+  Extract(target->cpp_compile_flags(), loaded_cpp_compile_flags_);
+  Extract(target->link_flags(), loaded_link_flags_);
 
   loaded_ = true;
   return true;

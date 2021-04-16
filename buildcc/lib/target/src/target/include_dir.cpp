@@ -25,11 +25,4 @@ void Target::AddIncludeDir(const std::string &relative_include_dir) {
   current_include_dirs_.insert(current_dir);
 }
 
-// Private
-
-void Target::RecheckIncludeDirs() {
-  env::log_trace(__FUNCTION__, name_);
-  Recheck(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
-}
-
 } // namespace buildcc::base

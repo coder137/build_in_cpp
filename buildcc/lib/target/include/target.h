@@ -51,7 +51,13 @@ public:
 
   void AddIncludeDir(const std::string &relative_include_dir);
 
+  // TODO, Add fs::path version of the same, can be found using lib_dirs
   void AddLibDep(const Target &lib_dep);
+
+  void AddPreprocessorFlag(const std::string &flag);
+  void AddCCompileFlag(const std::string &flag);
+  void AddCppCompileFlag(const std::string &flag);
+  void AddLinkFlag(const std::string &flag);
 
   // TODO, Add more setters
 
@@ -92,8 +98,7 @@ private:
   void SourceAdded();
   void SourceUpdated();
 
-  void CompileSource(const fs::path &current_source,
-                     const std::string &aggregated_include_dirs);
+  void CompileSource(const fs::path &current_source);
 
   // * Virtual
   // PreCompile();
@@ -107,14 +112,16 @@ private:
                  const std::string &aggregated_include_dirs);
 
   // Recompilation checks
-  void Recheck(const internal::path_unordered_set &previous_path,
-               const internal::path_unordered_set &current_path);
+  void RecheckPaths(const internal::path_unordered_set &previous_path,
+                    const internal::path_unordered_set &current_path);
+  void RecheckFlags(const std::unordered_set<std::string> &previous_flags,
+                    const std::unordered_set<std::string> &current_flags);
+
   void PathRemoved();
   void PathAdded();
   void PathUpdated();
 
-  void RecheckIncludeDirs();
-  void RecheckLibDeps();
+  void FlagChanged();
 
   // Linking
   void BuildTarget(const std::vector<std::string> &compiled_sources);
@@ -147,6 +154,20 @@ private:
   buildcc::internal::path_unordered_set current_source_files_;
   buildcc::internal::path_unordered_set current_include_dirs_;
   buildcc::internal::path_unordered_set current_lib_deps_;
+
+  std::unordered_set<std::string> current_preprocessor_flags_;
+  std::unordered_set<std::string> current_c_compile_flags_;
+  std::unordered_set<std::string> current_cpp_compile_flags_;
+  std::unordered_set<std::string> current_link_flags_;
+
+  // TODO, Make appending to this more efficient
+  std::string aggregated_include_dirs_;
+  std::string aggregated_lib_deps_;
+
+  std::string aggregated_preprocessor_flags_;
+  std::string aggregated_c_compile_flags_;
+  std::string aggregated_cpp_compile_flags_;
+  std::string aggregated_link_flags_;
 
   // TODO, Add more internal variables
 

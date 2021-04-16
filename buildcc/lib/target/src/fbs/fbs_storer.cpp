@@ -30,26 +30,33 @@ fbs::TargetType get_fbs_target_type(buildcc::base::TargetType type) {
 flatbuffers::Offset<fbs::Toolchain>
 get_fbs_toolchain(flatbuffers::FlatBufferBuilder &builder,
                   const buildcc::base::Toolchain &toolchain) {
-  // auto fbs_preprocessor_flags;
-  // auto fbs_c_compile_flags;
-  // auto fbs_cpp_compile_flags;
-  // auto fbs_link_flags;
-  return fbs::CreateToolchainDirect(builder, toolchain.GetName().c_str(),
-                                    toolchain.GetCCompiler().c_str(),
-                                    toolchain.GetCppCompiler().c_str());
+  return fbs::CreateToolchainDirect(
+      builder, toolchain.GetName().c_str(), toolchain.GetAsmCompiler().c_str(),
+      toolchain.GetCCompiler().c_str(), toolchain.GetCppCompiler().c_str(),
+      toolchain.GetStaticLibCompiler().c_str(),
+      toolchain.GetDynamicLibCompiler().c_str());
 }
 
 std::vector<flatbuffers::Offset<fbs::Path>>
-get_fbs_path(flatbuffers::FlatBufferBuilder &builder,
-             const buildcc::internal::path_unordered_set &source_files) {
-  std::vector<flatbuffers::Offset<fbs::Path>> sources;
-  for (const auto &source : source_files) {
-    auto fbs_file =
-        fbs::CreatePathDirect(builder, source.GetPathname().string().c_str(),
-                              source.GetLastWriteTimestamp());
-    sources.push_back(fbs_file);
+get_fbs_vector_path(flatbuffers::FlatBufferBuilder &builder,
+                    const buildcc::internal::path_unordered_set &pathlist) {
+  std::vector<flatbuffers::Offset<fbs::Path>> paths;
+  for (const auto &p : pathlist) {
+    auto fbs_file = fbs::CreatePathDirect(
+        builder, p.GetPathname().string().c_str(), p.GetLastWriteTimestamp());
+    paths.push_back(fbs_file);
   }
-  return sources;
+  return paths;
+}
+
+std::vector<flatbuffers::Offset<flatbuffers::String>>
+get_fbs_vector_string(flatbuffers::FlatBufferBuilder &builder,
+                      const std::unordered_set<std::string> &strlist) {
+  std::vector<flatbuffers::Offset<flatbuffers::String>> strs;
+  for (const auto &s : strlist) {
+    strs.push_back(builder.CreateString(s));
+  }
+  return strs;
 }
 
 } // namespace
@@ -63,15 +70,23 @@ bool Target::Store() {
 
   auto fbs_target_type = get_fbs_target_type(type_);
   auto fbs_toolchain = get_fbs_toolchain(builder, toolchain_);
-  auto fbs_source_files = get_fbs_path(builder, current_source_files_);
-  auto fbs_include_dirs = get_fbs_path(builder, current_include_dirs_);
-  auto fbs_lib_deps = get_fbs_path(builder, current_lib_deps_);
-  // lib_dirs
+  auto fbs_source_files = get_fbs_vector_path(builder, current_source_files_);
+  auto fbs_include_dirs = get_fbs_vector_path(builder, current_include_dirs_);
+  auto fbs_lib_deps = get_fbs_vector_path(builder, current_lib_deps_);
+  // TODO, lib_dirs
+  auto fbs_preprocessor_flags =
+      get_fbs_vector_string(builder, current_preprocessor_flags_);
+  auto fbs_c_compiler_flags =
+      get_fbs_vector_string(builder, current_c_compile_flags_);
+  auto fbs_cpp_compiler_flags =
+      get_fbs_vector_string(builder, current_cpp_compile_flags_);
+  auto fbs_link_flags = get_fbs_vector_string(builder, current_link_flags_);
 
   auto fbs_target = fbs::CreateTargetDirect(
       builder, name_.c_str(), target_intermediate_dir_.string().c_str(),
       fbs_target_type, fbs_toolchain, &fbs_source_files, &fbs_include_dirs,
-      &fbs_lib_deps);
+      &fbs_lib_deps, nullptr, &fbs_preprocessor_flags, &fbs_c_compiler_flags,
+      &fbs_cpp_compiler_flags, &fbs_link_flags);
   fbs::FinishTargetBuffer(builder, fbs_target);
 
   auto file_path = GetBinaryPath();

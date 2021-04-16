@@ -13,6 +13,7 @@
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/Utest.h"
+#include "CppUTestExt/MockSupport.h"
 
 // clang-format off
 TEST_GROUP(TargetTestIncludeDirGroup)
@@ -168,6 +169,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
                 loaded_sources.end());
     CHECK_FALSE(loaded_dirs.find(include_header_path) == loaded_dirs.end());
   }
+
+  mock().checkExpectations();
 }
 
 int main(int ac, char **av) {

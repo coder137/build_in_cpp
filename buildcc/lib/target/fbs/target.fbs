@@ -3,13 +3,11 @@ namespace schema.internal;
 // TODO, Custom executables
 table Toolchain {
     name:string (key);
+    asm_compiler:string;
     c_compiler:string;
     cpp_compiler:string;
-
-    preprocessor_flags:[string];
-    c_compile_flags:[string];
-    cpp_compile_flags:[string];
-    link_flags:[string];
+    static_lib_compiler:string;
+    dynamic_lib_compiler:string;
 }
 
 table Path {
@@ -29,13 +27,17 @@ table Target {
     type:TargetType;
     toolchain:Toolchain;
 
+    // Inputs
     source_files:[Path];
     include_dirs:[Path];
-
     lib_deps:[Path];
     lib_dirs:[Path];
 
-    // TODO, Add preprocessor, compile and link flags here to customize each target
+    // Flags
+    preprocessor_flags:[string];
+    c_compile_flags:[string];
+    cpp_compile_flags:[string];
+    link_flags:[string];
 }
 
 root_type Target;

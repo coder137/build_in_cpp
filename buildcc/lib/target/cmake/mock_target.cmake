@@ -11,6 +11,7 @@ target_sources(mock_target PUBLIC
     ${target_SOURCE_DIR}/src/target/include_dir.cpp
     ${target_SOURCE_DIR}/src/target/lib_dep.cpp
     ${target_SOURCE_DIR}/src/target/build.cpp
+    ${target_SOURCE_DIR}/src/target/flags.cpp
     ${target_SOURCE_DIR}/mock/target/recheck_states.cpp
 
     ${target_SOURCE_DIR}/src/fbs/fbs_loader.cpp

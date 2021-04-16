@@ -33,15 +33,36 @@ add_executable(test_target_lib_dep
 )
 target_link_libraries(test_target_lib_dep PRIVATE target_interface)
 
-# TODO, Test target toolchain preprocessor flags
+# Test target preprocessor flags
+add_executable(test_target_preprocessor_flags
+    test_target_preprocessor_flags.cpp
+)
+target_link_libraries(test_target_preprocessor_flags PRIVATE target_interface)
 
-# TODO, Test target toolchain compile flags
+# Test target c compile flags
+add_executable(test_target_c_compile_flags
+    test_target_c_compile_flags.cpp
+)
+target_link_libraries(test_target_c_compile_flags PRIVATE target_interface)
 
-# TODO Test target toolchain link flags
+# Test target cpp compile flags
+add_executable(test_target_cpp_compile_flags
+    test_target_cpp_compile_flags.cpp
+)
+target_link_libraries(test_target_cpp_compile_flags PRIVATE target_interface)
+
+# Test target link flags
+add_executable(test_target_link_flags
+    test_target_link_flags.cpp
+)
+target_link_libraries(test_target_link_flags PRIVATE target_interface)
 
 # Tests
 add_test(NAME test_base_target COMMAND test_base_target)
 add_test(NAME test_target_source COMMAND test_target_source)
 add_test(NAME test_target_include_dir COMMAND test_target_include_dir)
 add_test(NAME test_target_lib_dep COMMAND test_target_lib_dep)
-# add_test(NAME test_target_dynamic_lib COMMAND test_target_dynamic_lib)
+add_test(NAME test_target_preprocessor_flags COMMAND test_target_preprocessor_flags)
+add_test(NAME test_target_c_compile_flags COMMAND test_target_c_compile_flags)
+add_test(NAME test_target_cpp_compile_flags COMMAND test_target_cpp_compile_flags)
+add_test(NAME test_target_link_flags COMMAND test_target_link_flags)
