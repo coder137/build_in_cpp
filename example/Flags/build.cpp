@@ -21,7 +21,6 @@ int main(void) {
         "CppFlags.exe", base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
         "files");
 
-    target.SetDefaultLinker("cpp");
     target.AddSource("main.cpp", "src");
     target.AddSource("src/random.cpp");
     target.AddIncludeDir("include");
@@ -37,7 +36,6 @@ int main(void) {
     ExecutableTarget target(
         "CFlags.exe", base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
         "files");
-    target.SetDefaultLinker("c");
     target.AddSource("main.c", "src");
     target.AddPreprocessorFlag("-DRANDOM=1");
     target.AddCCompileFlag("-Wall");
