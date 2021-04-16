@@ -121,6 +121,8 @@ private:
   void PathAdded();
   void PathUpdated();
 
+  void FlagChanged();
+
   // Linking
   void BuildTarget(const std::vector<std::string> &compiled_sources);
 

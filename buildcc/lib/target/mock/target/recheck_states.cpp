@@ -18,6 +18,8 @@ static constexpr const char *const PATH_REMOVED_FUNCTION =
 static constexpr const char *const PATH_ADDED_FUNCTION = "Target::PathAdded";
 static constexpr const char *const PATH_UPDATED_FUNCTION =
     "Target::PathUpdated";
+static constexpr const char *const FLAG_CHANGED_FUNCTION =
+    "Target::FlagChanged";
 
 // Source rechecks
 void Target::SourceRemoved() {
@@ -41,6 +43,10 @@ void Target::PathUpdated() {
   mock().actualCall(PATH_UPDATED_FUNCTION).onObject(this);
 }
 
+void Target::FlagChanged() {
+  mock().actualCall(FLAG_CHANGED_FUNCTION).onObject(this);
+}
+
 namespace m {
 
 void TargetExpect_SourceRemoved(unsigned int calls, Target *target) {
@@ -61,6 +67,9 @@ void TargetExpect_PathAdded(unsigned int calls, Target *target) {
 }
 void TargetExpect_PathUpdated(unsigned int calls, Target *target) {
   mock().expectNCalls(calls, PATH_UPDATED_FUNCTION).onObject(target);
+}
+void TargetExpect_FlagChanged(unsigned int calls, Target *target) {
+  mock().expectNCalls(calls, FLAG_CHANGED_FUNCTION).onObject(target);
 }
 
 } // namespace m

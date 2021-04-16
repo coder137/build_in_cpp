@@ -1,3 +1,5 @@
+// NOTE, This source file is only present so that `mock/recheck_states.cpp` can
+// be used accurately
 #include "target.h"
 
 namespace buildcc::base {
@@ -11,5 +13,7 @@ void Target::SourceUpdated() {}
 void Target::PathRemoved() {}
 void Target::PathAdded() {}
 void Target::PathUpdated() {}
+
+void Target::FlagChanged() {}
 
 } // namespace buildcc::base

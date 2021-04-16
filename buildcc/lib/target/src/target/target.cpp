@@ -101,6 +101,7 @@ void Target::RecheckFlags(
   }
 
   if (previous_flags != current_flags) {
+    FlagChanged();
     dirty_ = true;
   }
 }
