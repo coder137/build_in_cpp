@@ -24,7 +24,7 @@ static fs::path target_source_intermediate_path =
     fs::path(BUILD_TARGET_PREPROCESSOR_INTERMEDIATE_DIR);
 
 TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
-  constexpr const char *const NAME = "AddSource.exe";
+  constexpr const char *const NAME = "AddPreprocessorFlag.exe";
   constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
 
   auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
@@ -41,7 +41,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
 }
 
 TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
-  constexpr const char *const NAME = "AddSource.exe";
+  constexpr const char *const NAME = "ChangedPreprocessorFlag.exe";
   constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
 
   auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
