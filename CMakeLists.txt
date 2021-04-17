@@ -32,6 +32,7 @@ set(FLATBUFFERS_BUILD_FLATLIB ON CACHE BOOL "Flatbuffers build flatlib")
 add_subdirectory(flatbuffers)
 
 # set(SPDLOG_BUILD_SHARED ON CACHE BOOL "Spdlog built as dynamic library")
+set(SPDLOG_INSTALL ON CACHE BOOL "Spdlog install")
 add_subdirectory(spdlog)
 
 set(C++11 ON CACHE BOOL "CppUTests C++11 support")
@@ -51,3 +52,8 @@ if (${TESTING})
     include(cmake/coverage/lcov.cmake)
     include(cmake/coverage/gcovr.cmake)
 endif()
+
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE)
+include(CPack)

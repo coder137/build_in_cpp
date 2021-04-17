@@ -1,6 +1,12 @@
 add_library(target)
+target_sources(target PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/target.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/internal/fbs_loader.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/internal/path.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/internal/util.h
+)
 target_include_directories(target PUBLIC
-    include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 target_sources(target PRIVATE
