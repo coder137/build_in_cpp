@@ -14,11 +14,13 @@ target_link_libraries(env PRIVATE
 )
 
 # Mock
-add_library(mock_env)
-target_sources(mock_env PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/mock/logging.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/env.cpp
-)
-target_include_directories(mock_env PUBLIC 
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
+if (${TESTING})
+    add_library(mock_env STATIC)
+    target_sources(mock_env PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/mock/logging.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/env.cpp
+    )
+    target_include_directories(mock_env PUBLIC 
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+    )
+endif()
