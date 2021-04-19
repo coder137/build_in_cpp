@@ -1,3 +1,4 @@
+# TODO, Might have to remove it
 project(env)
 
 add_library(env
@@ -9,7 +10,7 @@ add_library(env
 )
 target_include_directories(env PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+    $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
 )
 target_compile_options(env PRIVATE ${BUILD_COMPILE_FLAGS})
 target_link_options(env PRIVATE ${BUILD_LINK_FLAGS})
@@ -29,4 +30,15 @@ if (${TESTING})
     target_include_directories(mock_env PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR}/include
     )
+endif()
+
+if (${BUILDCC_INSTALL})
+    install(TARGETS env DESTINATION lib EXPORT envConfig)
+    install(FILES         
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/assert_fatal.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/env.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/logging.h
+        DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}"
+    )
+    install(EXPORT envConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/env")
 endif()

@@ -11,3 +11,7 @@ if (${TESTING})
     add_subdirectory(test/path)
     add_subdirectory(test/target)
 endif()
+
+if (${BUILDCC_INSTALL})
+    include(cmake/target_install.cmake)
+endif()
