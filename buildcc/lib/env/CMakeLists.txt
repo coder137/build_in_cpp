@@ -3,14 +3,13 @@ project(env)
 add_library(env
     src/env.cpp
     src/logging.cpp
-)
-target_sources(env PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/env.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/assert_fatal.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/logging.h
+    include/env.h
+    include/assert_fatal.h
+    include/logging.h
 )
 target_include_directories(env PUBLIC 
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
 )
 target_compile_options(env PRIVATE ${BUILD_COMPILE_FLAGS})
 target_link_options(env PRIVATE ${BUILD_LINK_FLAGS})

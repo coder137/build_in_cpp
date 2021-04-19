@@ -1,16 +1,15 @@
 project(target_gcc)
 
-add_library(target_gcc)
-target_sources(target_gcc PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/static_target.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/dynamic_target.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/executable_target.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/static_target.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/dynamic_target.h
-
+add_library(target_gcc
+    static_target.cpp
+    dynamic_target.cpp
+    executable_target.h
+    static_target.h
+    dynamic_target.h
 )
 target_include_directories(target_gcc PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> 
+    $<INSTALL_INTERFACE:.>
 )
 target_link_libraries(target_gcc PRIVATE
     env
