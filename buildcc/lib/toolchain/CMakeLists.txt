@@ -1,5 +1,4 @@
-project(toolchain)
-
+# Toolchain lib
 add_library(toolchain
     toolchain.cpp
     toolchain.h
@@ -13,6 +12,7 @@ target_link_options(toolchain PRIVATE ${BUILD_LINK_FLAGS})
 
 # TODO, Add Mocks here if required
 
+# Toolchain install
 if (${BUILDCC_INSTALL})
     install(TARGETS toolchain DESTINATION lib EXPORT toolchainConfig)
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/toolchain.h DESTINATION include/buildcc)

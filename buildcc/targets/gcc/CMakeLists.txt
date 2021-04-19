@@ -1,5 +1,4 @@
-project(target_gcc)
-
+# Target_gcc lib
 add_library(target_gcc
     static_target.cpp
     dynamic_target.cpp
@@ -19,7 +18,9 @@ target_link_libraries(target_gcc PRIVATE
 target_compile_options(target_gcc PRIVATE ${BUILD_COMPILE_FLAGS})
 target_link_options(target_gcc PRIVATE ${BUILD_LINK_FLAGS})
 
-# Install
+# TODO, Add Target_gcc tests
+
+# Target_gcc Install
 if (${BUILDCC_INSTALL})
     install(TARGETS target_gcc DESTINATION lib EXPORT target_gccConfig)
     install(FILES  

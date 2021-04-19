@@ -1,6 +1,4 @@
-# TODO, Might have to remove it
-project(env)
-
+# Env lib
 add_library(env
     src/env.cpp
     src/logging.cpp
@@ -14,13 +12,11 @@ target_include_directories(env PUBLIC
 )
 target_compile_options(env PRIVATE ${BUILD_COMPILE_FLAGS})
 target_link_options(env PRIVATE ${BUILD_LINK_FLAGS})
-
-# Private stuff here
 target_link_libraries(env PRIVATE
     spdlog::spdlog
 )
 
-# Mock
+# Env test
 if (${TESTING})
     add_library(mock_env STATIC)
     target_sources(mock_env PUBLIC
@@ -32,6 +28,7 @@ if (${TESTING})
     )
 endif()
 
+# Env install
 if (${BUILDCC_INSTALL})
     install(TARGETS env DESTINATION lib EXPORT envConfig)
     install(FILES         
