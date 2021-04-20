@@ -6,7 +6,7 @@ add_executable(
     ${TEST_NAME}.cpp
 )
 target_include_directories(${TEST_NAME} PRIVATE
-    ${target_SOURCE_DIR}/include
+    ${TARGET_DIR}/include
     ${CMAKE_CURRENT_BINARY_DIR}/generated
 )
 target_link_libraries(${TEST_NAME} PRIVATE
