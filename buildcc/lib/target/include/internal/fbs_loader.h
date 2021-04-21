@@ -13,10 +13,12 @@ namespace buildcc::internal {
 
 class FbsLoader {
 public:
-  FbsLoader(const std::string &name, const fs::path &relative_path)
+  explicit FbsLoader(const std::string &name, const fs::path &relative_path)
       : name_(name), relative_path_(relative_path) {
     Initialize();
   }
+
+  FbsLoader(const FbsLoader &loader) = delete;
 
 public:
   bool Load();
