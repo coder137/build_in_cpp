@@ -19,6 +19,8 @@ public:
         cpp_compiler_(cpp_compiler), static_lib_compiler_(static_lib_compiler),
         dynamic_lib_compiler_(dynamic_lib_compiler) {}
 
+  Toolchain(const Toolchain &toolchain) = delete;
+
   // Setters
   bool AddExecutable(std::string name, std::string executable);
 

@@ -146,8 +146,7 @@ private:
 private:
   // Constructor defined
   std::string name_;
-  // TODO, Consider making this const reference
-  Toolchain toolchain_;
+  const Toolchain &toolchain_;
   fs::path target_root_source_dir_;
   fs::path target_intermediate_dir_;
   TargetType type_;
