@@ -79,6 +79,10 @@ public:
     return target_intermediate_dir_;
   }
 
+  const internal::path_unordered_set &GetCurrentSourceFiles() const {
+    return current_source_files_;
+  }
+
   // TODO, Add more getters
 
 protected:
@@ -152,9 +156,9 @@ private:
   TargetType type_;
 
   // Internal
-  buildcc::internal::path_unordered_set current_source_files_;
-  buildcc::internal::path_unordered_set current_include_dirs_;
-  buildcc::internal::path_unordered_set current_lib_deps_;
+  internal::path_unordered_set current_source_files_;
+  internal::path_unordered_set current_include_dirs_;
+  internal::path_unordered_set current_lib_deps_;
 
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;
