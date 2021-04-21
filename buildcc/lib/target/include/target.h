@@ -41,6 +41,8 @@ public:
     Initialize();
   }
 
+  Target(const Target &target) = delete;
+
   // Builders
   void Build();
 
