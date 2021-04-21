@@ -1,3 +1,7 @@
+# Install constants
+set(BUILDCC_INSTALL_LIB_PREFIX "lib/cmake")
+set(BUILDCC_INSTALL_HEADER_PREFIX "include/buildcc")
+
 # Library
 add_subdirectory(lib/env)
 add_subdirectory(lib/toolchain)
@@ -8,7 +12,8 @@ add_subdirectory(targets/gcc)
 
 add_library(buildcc INTERFACE)
 target_include_directories(buildcc INTERFACE 
-    include
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
+    $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
 )
 target_link_libraries(buildcc INTERFACE 
     env
@@ -20,3 +25,11 @@ target_link_libraries(buildcc INTERFACE
     # GCC, Clang, MSVC
     target_gcc
 )
+
+if (${BUILDCC_INSTALL})
+    install(TARGETS buildcc DESTINATION lib EXPORT buildccConfig)
+    install(FILES  
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/buildcc.h
+        DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
+    install(EXPORT buildccConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/buildcc")
+endif()
