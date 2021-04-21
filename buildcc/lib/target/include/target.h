@@ -64,6 +64,8 @@ public:
   // TODO, Add more setters
 
   // Getters
+  std::vector<std::string> CompileCommand(const fs::path &current_source) const;
+
   fs::path GetTargetPath() const {
     return (GetTargetIntermediateDir() / GetName());
   }

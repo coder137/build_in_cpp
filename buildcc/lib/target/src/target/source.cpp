@@ -93,6 +93,13 @@ std::vector<std::string> Target::RecompileSources() {
 }
 
 void Target::CompileSource(const fs::path &current_source) {
+  const bool success = internal::command(CompileCommand(current_source));
+  env::assert_fatal(success,
+                    "Compilation failed for: " + current_source.string());
+}
+
+std::vector<std::string>
+Target::CompileCommand(const fs::path &current_source) const {
   const std::string output_source = GetCompiledSourceName(current_source);
   const std::string compiler = GetCompiler(current_source);
 
@@ -101,11 +108,9 @@ void Target::CompileSource(const fs::path &current_source) {
                                             : aggregated_cpp_compile_flags_;
 
   const std::string input_source = current_source.string();
-  const auto command = CompileCommand(
-      input_source, output_source, compiler, aggregated_preprocessor_flags_,
-      aggregated_compile_flags, aggregated_include_dirs_);
-  const bool success = internal::command(command);
-  env::assert_fatal(success, "Compilation failed for: " + input_source);
+  return CompileCommand(input_source, output_source, compiler,
+                        aggregated_preprocessor_flags_,
+                        aggregated_compile_flags, aggregated_include_dirs_);
 }
 
 std::vector<std::string>
