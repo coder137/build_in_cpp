@@ -109,7 +109,7 @@ private:
                  const std::string &output_source, const std::string &compiler,
                  const std::string &aggregated_preprocessor_flags,
                  const std::string &aggregated_compile_flags,
-                 const std::string &aggregated_include_dirs);
+                 const std::string &aggregated_include_dirs) const;
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
@@ -136,7 +136,7 @@ private:
   Link(const std::string &output_target,
        const std::string &aggregated_link_flags,
        const std::string &aggregated_compiled_sources,
-       const std::string &aggregated_lib_deps);
+       const std::string &aggregated_lib_deps) const;
 
   // Fbs
   bool Store();

@@ -106,7 +106,7 @@ std::vector<std::string>
 Target::Link(const std::string &output_target,
              const std::string &aggregated_link_flags,
              const std::string &aggregated_compiled_sources,
-             const std::string &aggregated_lib_deps) {
+             const std::string &aggregated_lib_deps) const {
   return {
       toolchain_.GetCppCompiler(),
       aggregated_link_flags,

@@ -100,13 +100,12 @@ void Target::CompileSource(const fs::path &current_source) {
       compiler == toolchain_.GetCCompiler() ? aggregated_c_compile_flags_
                                             : aggregated_cpp_compile_flags_;
 
-  bool success = internal::command(
-      CompileCommand(current_source.string(), output_source, compiler,
-                     aggregated_preprocessor_flags_, aggregated_compile_flags,
-                     aggregated_include_dirs_));
-
-  env::assert_fatal(success,
-                    "Compilation failed for: " + current_source.string());
+  const std::string input_source = current_source.string();
+  const auto command = CompileCommand(
+      input_source, output_source, compiler, aggregated_preprocessor_flags_,
+      aggregated_compile_flags, aggregated_include_dirs_);
+  const bool success = internal::command(command);
+  env::assert_fatal(success, "Compilation failed for: " + input_source);
 }
 
 std::vector<std::string>
@@ -115,7 +114,7 @@ Target::CompileCommand(const std::string &input_source,
                        const std::string &compiler,
                        const std::string &aggregated_preprocessor_flags,
                        const std::string &aggregated_compile_flags,
-                       const std::string &aggregated_include_dirs) {
+                       const std::string &aggregated_include_dirs) const {
   return {
       compiler,
       aggregated_preprocessor_flags,
