@@ -85,6 +85,9 @@ public:
     return current_source_files_;
   }
 
+  bool FirstBuild() const { return first_build_; }
+  bool Rebuild() const { return rebuild_; }
+
   // TODO, Add more getters
 
 protected:
@@ -180,6 +183,10 @@ private:
 
   internal::FbsLoader loader_;
   bool dirty_ = false;
+
+  // Build states
+  bool first_build_ = false;
+  bool rebuild_ = false;
 };
 
 } // namespace buildcc::base

@@ -40,6 +40,7 @@ void Target::BuildCompile() {
   const std::vector<std::string> compiled_sources = CompileSources();
   BuildTarget(compiled_sources);
   Store();
+  first_build_ = true;
 }
 
 // * Target rebuild depends on
@@ -78,6 +79,7 @@ void Target::BuildRecompile() {
   if (dirty_) {
     BuildTarget(compiled_sources);
     Store();
+    rebuild_ = true;
   }
 }
 
