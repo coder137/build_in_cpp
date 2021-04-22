@@ -15,8 +15,10 @@ int main(void) {
   env::init(BUILD_SCRIPT_SOURCE, BUILD_SCRIPT_FOLDER);
   env::set_log_level(env::LogLevel::Trace);
 
-  ExecutableTarget target(
-      "Simple.exe", base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"), "");
+  // Stored as const & in target
+  base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
+
+  ExecutableTarget target("Simple.exe", gcc, "");
   target.AddSource("main.cpp");
   target.Build();
   return 0;
