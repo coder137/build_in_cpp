@@ -3,7 +3,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-project(BuildCC)
+project(BuildCC 
+    DESCRIPTION "Build ASM,C,C++ files in C++"
+    HOMEPAGE_URL "https://github.com/coder137/build_in_cpp"
+    VERSION 0.1.1.0
+    LANGUAGES CXX
+)
 
 option(BUILDCC_TESTING "Enable BuildCC Testing" ON)
 option(BUILDCC_GCC_TESTING "Enable Buildcc GCC Testing" OFF)
@@ -57,6 +62,7 @@ if (${TESTING})
 endif()
 
 if (${BUILDCC_INSTALL})
+    message("Project Version: ${PROJECT_VERSION}")
     set(CPACK_PROJECT_NAME ${PROJECT_NAME})
     set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
     set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE)
