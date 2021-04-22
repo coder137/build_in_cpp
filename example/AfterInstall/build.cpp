@@ -15,12 +15,12 @@ int main(void) {
   env::init(BUILD_ROOT, BUILD_INTERMEDIATE_DIR);
   env::set_log_level(env::LogLevel::Trace);
 
-  // CppTarget
-  {
-    ExecutableTarget target(
-        "CppFlags.exe", base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "files");
+  // Stored as a const & in target
+  base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
 
+  {
+    // CppTarget
+    ExecutableTarget target("CppFlags.exe", gcc, "files");
     target.AddSource("main.cpp", "src");
     target.AddSource("src/random.cpp");
     target.AddIncludeDir("include");
@@ -31,11 +31,9 @@ int main(void) {
     target.Build();
   }
 
-  // CTarget
   {
-    ExecutableTarget target(
-        "CFlags.exe", base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "files");
+    // CTarget
+    ExecutableTarget target("CFlags.exe", gcc, "files");
     target.AddSource("main.c", "src");
     target.AddPreprocessorFlag("-DRANDOM=1");
     target.AddCCompileFlag("-Wall");
