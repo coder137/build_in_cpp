@@ -11,7 +11,7 @@ add_subdirectory(lib/target)
 add_subdirectory(targets/gcc)
 
 # First party plugins
-add_subdirectory(plugin)
+add_subdirectory(plugins)
 
 add_library(buildcc INTERFACE)
 target_include_directories(buildcc INTERFACE 
