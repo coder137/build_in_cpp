@@ -10,6 +10,9 @@ add_subdirectory(lib/target)
 # Specialized
 add_subdirectory(targets/gcc)
 
+# First party plugins
+add_subdirectory(plugin)
+
 add_library(buildcc INTERFACE)
 target_include_directories(buildcc INTERFACE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
@@ -19,11 +22,15 @@ target_link_libraries(buildcc INTERFACE
     env
     target
     toolchain
-    # TODO, Add specialized targets
-    # GCC, Clang, MSVC
     # TODO, Add specialized toolchains
     # GCC, Clang, MSVC
+
+    # TODO, Add specialized targets
+    # GCC, Clang, MSVC
     target_gcc
+
+    # TODO, Add plugins
+    clang_compile_commands
 )
 
 if (${BUILDCC_INSTALL})
