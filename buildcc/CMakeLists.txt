@@ -27,8 +27,7 @@ target_link_libraries(buildcc INTERFACE
     # GCC, Clang, MSVC
     target_gcc
 
-    # TODO, Add plugins
-    clang_compile_commands
+    plugins
 )
 
 if (${BUILDCC_INSTALL})
