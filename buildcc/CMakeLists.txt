@@ -19,9 +19,7 @@ target_include_directories(buildcc INTERFACE
     $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
 )
 target_link_libraries(buildcc INTERFACE 
-    env
     target
-    toolchain
     # TODO, Add specialized toolchains
     # GCC, Clang, MSVC
 
