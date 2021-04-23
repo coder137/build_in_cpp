@@ -11,8 +11,6 @@ target_include_directories(target_gcc PUBLIC
     $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
 )
 target_link_libraries(target_gcc PRIVATE
-    env
-    toolchain
     target
 )
 target_compile_options(target_gcc PRIVATE ${BUILD_COMPILE_FLAGS})

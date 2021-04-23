@@ -40,6 +40,7 @@ void Target::BuildCompile() {
   const std::vector<std::string> compiled_sources = CompileSources();
   BuildTarget(compiled_sources);
   Store();
+  first_build_ = true;
 }
 
 // * Target rebuild depends on
@@ -78,6 +79,7 @@ void Target::BuildRecompile() {
   if (dirty_) {
     BuildTarget(compiled_sources);
     Store();
+    rebuild_ = true;
   }
 }
 
@@ -106,7 +108,7 @@ std::vector<std::string>
 Target::Link(const std::string &output_target,
              const std::string &aggregated_link_flags,
              const std::string &aggregated_compiled_sources,
-             const std::string &aggregated_lib_deps) {
+             const std::string &aggregated_lib_deps) const {
   return {
       toolchain_.GetCppCompiler(),
       aggregated_link_flags,

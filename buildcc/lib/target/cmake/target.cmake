@@ -3,6 +3,10 @@ target_include_directories(target PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
 )
+target_link_libraries(target PUBLIC 
+    env
+    toolchain
+)
 
 target_sources(target PRIVATE
     src/target/target.cpp
@@ -31,7 +35,5 @@ target_compile_options(target PRIVATE ${BUILD_COMPILE_FLAGS})
 target_link_options(target PRIVATE ${BUILD_LINK_FLAGS})
 target_link_libraries(target PRIVATE 
     flatbuffers 
-    env
-    toolchain
 )
 add_dependencies(target fbs_to_header)

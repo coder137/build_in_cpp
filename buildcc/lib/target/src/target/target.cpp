@@ -77,14 +77,14 @@ void Target::RecheckPaths(const internal::path_unordered_set &previous_path,
 
     if (iter == previous_path.end()) {
       // * New path added
-      dirty_ = true;
       PathAdded();
+      dirty_ = true;
       break;
     } else {
       // * Path is updated
       if (path.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
-        dirty_ = true;
         PathUpdated();
+        dirty_ = true;
         break;
       } else {
         // * Do nothing

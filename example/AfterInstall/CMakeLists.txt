@@ -14,6 +14,8 @@ find_package(target_package NAMES "target" REQUIRED)
 
 find_package(target_gcc_package NAMES "target_gcc" REQUIRED)
 
+find_package(plugins NAMES "plugins" REQUIRED)
+
 find_package(buildcc_package NAMES "buildcc" REQUIRED)
 
 message("Find package: ${spdlog_package_DIR}")
@@ -22,6 +24,7 @@ message("Find package: ${toolchain_package_DIR}")
 message("Find package: ${flatbuffers_package_DIR}")
 message("Find package: ${target_package_DIR}")
 message("Find package: ${target_gcc_package_DIR}")
+message("Find package: ${plugins_DIR}")
 message("Find package: ${buildcc_package_DIR}")
 
 # build executable

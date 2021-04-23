@@ -41,6 +41,8 @@ public:
     Initialize();
   }
 
+  Target(const Target &target) = delete;
+
   // Builders
   void Build();
 
@@ -62,6 +64,8 @@ public:
   // TODO, Add more setters
 
   // Getters
+  std::vector<std::string> CompileCommand(const fs::path &current_source) const;
+
   fs::path GetTargetPath() const {
     return (GetTargetIntermediateDir() / GetName());
   }
@@ -76,6 +80,13 @@ public:
   const fs::path &GetTargetIntermediateDir() const {
     return target_intermediate_dir_;
   }
+
+  const internal::path_unordered_set &GetCurrentSourceFiles() const {
+    return current_source_files_;
+  }
+
+  bool FirstBuild() const { return first_build_; }
+  bool Rebuild() const { return rebuild_; }
 
   // TODO, Add more getters
 
@@ -109,7 +120,7 @@ private:
                  const std::string &output_source, const std::string &compiler,
                  const std::string &aggregated_preprocessor_flags,
                  const std::string &aggregated_compile_flags,
-                 const std::string &aggregated_include_dirs);
+                 const std::string &aggregated_include_dirs) const;
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
@@ -136,7 +147,7 @@ private:
   Link(const std::string &output_target,
        const std::string &aggregated_link_flags,
        const std::string &aggregated_compiled_sources,
-       const std::string &aggregated_lib_deps);
+       const std::string &aggregated_lib_deps) const;
 
   // Fbs
   bool Store();
@@ -144,16 +155,15 @@ private:
 private:
   // Constructor defined
   std::string name_;
-  // TODO, Consider making this const reference
-  Toolchain toolchain_;
+  const Toolchain &toolchain_;
   fs::path target_root_source_dir_;
   fs::path target_intermediate_dir_;
   TargetType type_;
 
   // Internal
-  buildcc::internal::path_unordered_set current_source_files_;
-  buildcc::internal::path_unordered_set current_include_dirs_;
-  buildcc::internal::path_unordered_set current_lib_deps_;
+  internal::path_unordered_set current_source_files_;
+  internal::path_unordered_set current_include_dirs_;
+  internal::path_unordered_set current_lib_deps_;
 
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;
@@ -173,6 +183,10 @@ private:
 
   internal::FbsLoader loader_;
   bool dirty_ = false;
+
+  // Build states
+  bool first_build_ = false;
+  bool rebuild_ = false;
 };
 
 } // namespace buildcc::base
