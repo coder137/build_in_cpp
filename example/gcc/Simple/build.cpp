@@ -18,7 +18,7 @@ int main(void) {
   // Stored as const & in target
   base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
 
-  ExecutableTarget target("Simple.exe", gcc, "");
+  ExecutableTarget_gcc target("Simple.exe", gcc, "");
   target.AddSource("main.cpp");
   target.Build();
   return 0;
