@@ -19,7 +19,7 @@ int main(void) {
 
   // CppTarget
   base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
-  ExecutableTarget cppflags("CppFlags.exe", gcc, "files");
+  ExecutableTarget_gcc cppflags("CppFlags.exe", gcc, "files");
 
   cppflags.AddSource("main.cpp", "src");
   cppflags.AddSource("src/random.cpp");
@@ -31,7 +31,7 @@ int main(void) {
   cppflags.Build();
 
   // CTarget
-  ExecutableTarget cflags("CFlags.exe", gcc, "files");
+  ExecutableTarget_gcc cflags("CFlags.exe", gcc, "files");
   cflags.AddSource("main.c", "src");
   cflags.AddPreprocessorFlag("-DRANDOM=1");
   cflags.AddCCompileFlag("-Wall");
