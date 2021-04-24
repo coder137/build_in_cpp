@@ -17,12 +17,12 @@ int main(void) {
 
   base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
 
-  StaticTarget randomLib("libran.a", gcc, "files");
+  StaticTarget_gcc randomLib("libran.a", gcc, "files");
   randomLib.AddSource("src/random.cpp");
   randomLib.AddIncludeDir("include");
   randomLib.Build();
 
-  ExecutableTarget target("statictest.exe", gcc, "files");
+  ExecutableTarget_gcc target("statictest.exe", gcc, "files");
   target.AddSource("main.cpp", "src");
   target.AddIncludeDir("include");
   target.AddLibDep(randomLib);
