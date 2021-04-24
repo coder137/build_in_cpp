@@ -18,7 +18,7 @@ int main(void) {
   // Stored as const & in target
   base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
 
-  ExecutableTarget target("IncludeDir.exe", gcc, "files");
+  ExecutableTarget_gcc target("IncludeDir.exe", gcc, "files");
   target.AddSource("main.cpp", "src");
   target.AddSource("src/random.cpp");
   target.AddIncludeDir("include");
