@@ -7,7 +7,7 @@ project(simple)
 # buildcc should be added as a Shared Library, or Object Library
 # Link time for Static libraries is huge
 set(BUILDCC_TESTING OFF CACHE BOOL "BuildCC Testing")
-add_subdirectory(../../ BuildCC)
+add_subdirectory(../../../ BuildCC)
 
 # build executable
 add_executable(build build.cpp)
