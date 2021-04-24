@@ -1,5 +1,7 @@
 #include "env.h"
 
+#include "logging.h"
+
 namespace {
 
 std::string project_root_{""};

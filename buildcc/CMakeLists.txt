@@ -14,6 +14,9 @@ add_subdirectory(targets/gcc)
 add_subdirectory(plugins)
 
 add_library(buildcc INTERFACE)
+target_sources(buildcc PUBLIC 
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/buildcc.h>
+)
 target_include_directories(buildcc INTERFACE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
     $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>

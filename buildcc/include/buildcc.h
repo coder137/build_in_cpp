@@ -1,14 +1,14 @@
 #ifndef BUILDCC_INCLUDE_BUILDCC_H_
 #define BUILDCC_INCLUDE_BUILDCC_H_
 
+// Core persistent environment
 #include "env.h"
+#include "logging.h"
 
-// TODO, Make target specific headers
-// TODO, Test these with different compilers
-// Currently tested with `gcc and g++`
-#include "dynamic_target.h"
-#include "executable_target.h"
-#include "static_target.h"
+// Tested with `gcc and g++`
+#include "dynamic_target_gcc.h"
+#include "executable_target_gcc.h"
+#include "static_target_gcc.h"
 
 // TODO, Add 'compiler specific' target headers here for
 // Executable Target

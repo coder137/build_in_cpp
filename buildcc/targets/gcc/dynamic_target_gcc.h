@@ -1,14 +1,14 @@
-#ifndef TARGET_INCLUDE_DYNAMIC_TARGET_H_
-#define TARGET_INCLUDE_DYNAMIC_TARGET_H_
+#ifndef TARGETS_GCC_DYNAMIC_TARGET_GCC_H_
+#define TARGETS_GCC_DYNAMIC_TARGET_GCC_H_
 
 #include "target.h"
 
 namespace buildcc {
 
-class DynamicTarget : public base::Target {
+class DynamicTarget_gcc : public base::Target {
 public:
-  DynamicTarget(const std::string &name, const base::Toolchain &toolchain,
-                const std::filesystem::path &target_path_relative_to_root)
+  DynamicTarget_gcc(const std::string &name, const base::Toolchain &toolchain,
+                    const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::DynamicLibrary, toolchain,
                target_path_relative_to_root) {}
 

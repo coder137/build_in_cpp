@@ -1,5 +1,7 @@
 #include "target.h"
 
+#include "logging.h"
+
 namespace buildcc::base {
 
 // Public

@@ -1,6 +1,6 @@
 #include "internal/util.h"
 
-#include "env.h"
+#include "logging.h"
 
 namespace buildcc::internal {
 
