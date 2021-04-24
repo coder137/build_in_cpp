@@ -20,7 +20,7 @@ int main(void) {
 
   {
     // CppTarget
-    ExecutableTarget target("CppFlags.exe", gcc, "files");
+    ExecutableTarget_gcc target("CppFlags.exe", gcc, "files");
     target.AddSource("main.cpp", "src");
     target.AddSource("src/random.cpp");
     target.AddIncludeDir("include");
@@ -33,7 +33,7 @@ int main(void) {
 
   {
     // CTarget
-    ExecutableTarget target("CFlags.exe", gcc, "files");
+    ExecutableTarget_gcc target("CFlags.exe", gcc, "files");
     target.AddSource("main.c", "src");
     target.AddPreprocessorFlag("-DRANDOM=1");
     target.AddCCompileFlag("-Wall");
