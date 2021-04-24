@@ -1,4 +1,4 @@
-#include "dynamic_target.h"
+#include "dynamic_target_gcc.h"
 
 #include "internal/util.h"
 
@@ -8,7 +8,7 @@
 namespace buildcc {
 
 // Compiling
-std::vector<std::string> DynamicTarget::CompileCommand(
+std::vector<std::string> DynamicTarget_gcc::CompileCommand(
     const std::string &input_source, const std::string &output_source,
     const std::string &compiler,
     const std::string &aggregated_preprocessor_flags,
@@ -30,10 +30,10 @@ std::vector<std::string> DynamicTarget::CompileCommand(
 
 // Linking
 std::vector<std::string>
-DynamicTarget::Link(const std::string &output_target,
-                    const std::string &aggregated_link_flags,
-                    const std::string &aggregated_compiled_sources,
-                    const std::string &aggregated_lib_deps) const {
+DynamicTarget_gcc::Link(const std::string &output_target,
+                        const std::string &aggregated_link_flags,
+                        const std::string &aggregated_compiled_sources,
+                        const std::string &aggregated_lib_deps) const {
   (void)aggregated_lib_deps;
   return {
       GetToolchain().GetDynamicLibCompiler(),

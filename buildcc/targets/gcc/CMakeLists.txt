@@ -1,10 +1,10 @@
 # Target_gcc lib
 add_library(target_gcc
-    static_target.cpp
-    dynamic_target.cpp
-    executable_target.h
-    static_target.h
-    dynamic_target.h
+    static_target_gcc.cpp
+    dynamic_target_gcc.cpp
+    executable_target_gcc.h
+    static_target_gcc.h
+    dynamic_target_gcc.h
 )
 target_include_directories(target_gcc PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> 
@@ -22,9 +22,9 @@ target_link_options(target_gcc PRIVATE ${BUILD_LINK_FLAGS})
 if (${BUILDCC_INSTALL})
     install(TARGETS target_gcc DESTINATION lib EXPORT target_gccConfig)
     install(FILES  
-        ${CMAKE_CURRENT_SOURCE_DIR}/executable_target.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/static_target.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/dynamic_target.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/executable_target_gcc.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/static_target_gcc.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/dynamic_target_gcc.h
         DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}"
     )
     install(EXPORT target_gccConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/target_gcc")
