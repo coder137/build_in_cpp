@@ -35,8 +35,9 @@ DynamicTarget_gcc::Link(const std::string &output_target,
                         const std::string &aggregated_compiled_sources,
                         const std::string &aggregated_lib_deps) const {
   (void)aggregated_lib_deps;
+  // clang-format off
   return {
-      GetToolchain().GetDynamicLibCompiler(),
+      GetToolchain().GetCppCompiler(),
       "-shared",
       aggregated_link_flags,
       aggregated_compiled_sources,
