@@ -23,10 +23,10 @@ TEST_GROUP(TargetTestLibDep)
 };
 // clang-format on
 
-static const fs::path intermediate_path =
-    fs::path(BUILD_TARGET_LIB_DEP_INTERMEDIATE_DIR);
 static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
                                           "ld");
+static const fs::path intermediate_path =
+    fs::path(BUILD_TARGET_LIB_DEP_INTERMEDIATE_DIR) / gcc.GetName();
 
 TEST(TargetTestLibDep, StaticLibrary_SimpleBuildTest) {
   constexpr const char *const STATIC_NAME = "libStaticTest.a";

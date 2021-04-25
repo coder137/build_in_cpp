@@ -21,10 +21,10 @@ TEST_GROUP(TargetTestPreprocessorFlagGroup)
 };
 // clang-format on
 
-static const fs::path target_source_intermediate_path =
-    fs::path(BUILD_TARGET_PREPROCESSOR_INTERMEDIATE_DIR);
 static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
                                           "ld");
+static const fs::path target_source_intermediate_path =
+    fs::path(BUILD_TARGET_PREPROCESSOR_INTERMEDIATE_DIR) / gcc.GetName();
 
 TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
   constexpr const char *const NAME = "AddPreprocessorFlag.exe";

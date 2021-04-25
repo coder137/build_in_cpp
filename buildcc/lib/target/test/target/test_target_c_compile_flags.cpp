@@ -21,10 +21,10 @@ TEST_GROUP(TargetTestCCompileFlagsGroup)
 };
 // clang-format on
 
-static const fs::path target_source_intermediate_path =
-    fs::path(BUILD_TARGET_C_COMPILE_INTERMEDIATE_DIR);
 static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
                                           "ld");
+static const fs::path target_source_intermediate_path =
+    fs::path(BUILD_TARGET_C_COMPILE_INTERMEDIATE_DIR) / gcc.GetName();
 
 TEST(TargetTestCCompileFlagsGroup, Target_AddCompileFlag) {
   constexpr const char *const NAME = "AddCCompileFlag.exe";

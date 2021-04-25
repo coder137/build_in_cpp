@@ -21,10 +21,10 @@ TEST_GROUP(TargetTestLinkFlagsGroup)
 };
 // clang-format on
 
-static const fs::path target_source_intermediate_path =
-    fs::path(BUILD_TARGET_LINK_INTERMEDIATE_DIR);
 static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
                                           "ld");
+static const fs::path target_source_intermediate_path =
+    fs::path(BUILD_TARGET_LINK_INTERMEDIATE_DIR) / gcc.GetName();
 
 TEST(TargetTestLinkFlagsGroup, Target_AddLinkFlag) {
   constexpr const char *const NAME = "AddLinkFlag.exe";

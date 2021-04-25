@@ -22,7 +22,8 @@ TEST(TargetBaseTestGroup, InvalidTargetType) {
   constexpr const char *const INVALID_NAME = "Invalid.random";
 
   buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_TARGET_BASE_INTERMEDIATE_DIR);
-  auto intermediate_path = fs::path(BUILD_TARGET_BASE_INTERMEDIATE_DIR);
+  auto intermediate_path =
+      fs::path(BUILD_TARGET_BASE_INTERMEDIATE_DIR) / gcc.GetName();
 
   fs::remove_all(intermediate_path / INVALID_NAME);
 
