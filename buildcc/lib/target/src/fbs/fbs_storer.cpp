@@ -33,8 +33,7 @@ get_fbs_toolchain(flatbuffers::FlatBufferBuilder &builder,
   return fbs::CreateToolchainDirect(
       builder, toolchain.GetName().c_str(), toolchain.GetAsmCompiler().c_str(),
       toolchain.GetCCompiler().c_str(), toolchain.GetCppCompiler().c_str(),
-      toolchain.GetStaticLibCompiler().c_str(),
-      toolchain.GetDynamicLibCompiler().c_str());
+      toolchain.GetArchiver().c_str(), toolchain.GetLinker().c_str());
 }
 
 std::vector<flatbuffers::Offset<fbs::Path>>

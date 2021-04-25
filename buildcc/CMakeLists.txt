@@ -2,20 +2,22 @@
 set(BUILDCC_INSTALL_LIB_PREFIX "lib/cmake")
 set(BUILDCC_INSTALL_HEADER_PREFIX "include/buildcc")
 
-# Library
+# Environment
 add_subdirectory(lib/env)
-add_subdirectory(lib/toolchain)
-add_subdirectory(lib/target)
 
-# Specialized
+# Toolchain
+add_subdirectory(lib/toolchain)
+add_subdirectory(toolchains)
+
+# Targets
+add_subdirectory(lib/target)
 add_subdirectory(targets/gcc)
 
 # First party plugins
 add_subdirectory(plugins)
 
-add_library(buildcc INTERFACE)
-target_sources(buildcc PUBLIC 
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/buildcc.h>
+add_library(buildcc INTERFACE
+    include/buildcc.h
 )
 target_include_directories(buildcc INTERFACE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
@@ -23,8 +25,8 @@ target_include_directories(buildcc INTERFACE
 )
 target_link_libraries(buildcc INTERFACE 
     target
-    # TODO, Add specialized toolchains
-    # GCC, Clang, MSVC
+    
+    toolchain_specialized
 
     # TODO, Add specialized targets
     # GCC, Clang, MSVC

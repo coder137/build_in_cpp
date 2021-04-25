@@ -21,8 +21,10 @@ TEST_GROUP(TargetTestPreprocessorFlagGroup)
 };
 // clang-format on
 
-static fs::path target_source_intermediate_path =
-    fs::path(BUILD_TARGET_PREPROCESSOR_INTERMEDIATE_DIR);
+static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
+                                          "ld");
+static const fs::path target_source_intermediate_path =
+    fs::path(BUILD_TARGET_PREPROCESSOR_INTERMEDIATE_DIR) / gcc.GetName();
 
 TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
   constexpr const char *const NAME = "AddPreprocessorFlag.exe";
@@ -34,9 +36,8 @@ TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(
-      NAME, buildcc::base::TargetType::Executable,
-      buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"), "data");
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
   simple.AddSource(DUMMY_MAIN);
   simple.AddPreprocessorFlag("-DCOMPILE=1");
 }
@@ -52,10 +53,8 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
   fs::remove_all(intermediate_path);
 
   {
-    buildcc::base::Target simple(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddPreprocessorFlag("-DCOMPILE=1");
 
@@ -65,10 +64,8 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
   }
   {
     // * Remove flag
-    buildcc::base::Target simple(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::internal::m::Expect_command(1, true);
@@ -78,10 +75,8 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
 
   {
     // * Add flag
-    buildcc::base::Target simple(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddPreprocessorFlag("-DRANDOM=1");
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);

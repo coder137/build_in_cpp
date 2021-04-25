@@ -21,8 +21,10 @@ TEST_GROUP(TargetTestCCompileFlagsGroup)
 };
 // clang-format on
 
-static fs::path target_source_intermediate_path =
-    fs::path(BUILD_TARGET_C_COMPILE_INTERMEDIATE_DIR);
+static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
+                                          "ld");
+static const fs::path target_source_intermediate_path =
+    fs::path(BUILD_TARGET_C_COMPILE_INTERMEDIATE_DIR) / gcc.GetName();
 
 TEST(TargetTestCCompileFlagsGroup, Target_AddCompileFlag) {
   constexpr const char *const NAME = "AddCCompileFlag.exe";
@@ -34,9 +36,8 @@ TEST(TargetTestCCompileFlagsGroup, Target_AddCompileFlag) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(
-      NAME, buildcc::base::TargetType::Executable,
-      buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"), "data");
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
   simple.AddSource(DUMMY_MAIN);
   simple.AddCCompileFlag("-std=c11");
 }
@@ -52,10 +53,8 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
   fs::remove_all(intermediate_path);
 
   {
-    buildcc::base::Target simple(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddCCompileFlag("-std=c11");
 
@@ -65,10 +64,8 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
   }
   {
     // * Remove flag
-    buildcc::base::Target simple(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::internal::m::Expect_command(1, true);
@@ -78,10 +75,8 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
 
   {
     // * Add flag
-    buildcc::base::Target simple(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddCCompileFlag("-std=c11");
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);

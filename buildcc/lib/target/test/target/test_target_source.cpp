@@ -21,8 +21,10 @@ TEST_GROUP(TargetTestSourceGroup)
 };
 // clang-format on
 
-static fs::path target_source_intermediate_path =
-    fs::path(BUILD_TARGET_SOURCE_INTERMEDIATE_DIR);
+static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
+                                          "ld");
+static const fs::path target_source_intermediate_path =
+    fs::path(BUILD_TARGET_SOURCE_INTERMEDIATE_DIR) / gcc.GetName();
 
 TEST(TargetTestSourceGroup, Target_AddSource) {
   constexpr const char *const NAME = "AddSource.exe";
@@ -35,9 +37,8 @@ TEST(TargetTestSourceGroup, Target_AddSource) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(
-      NAME, buildcc::base::TargetType::Executable,
-      buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"), "data");
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
   simple.AddSource(DUMMY_MAIN);
   // File does not exist
   CHECK_THROWS(std::exception, simple.AddSource(NO_FILE));
@@ -55,9 +56,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(
-      NAME, buildcc::base::TargetType::Executable,
-      buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"), "data");
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
 
   buildcc::internal::m::Expect_command(1, true); // compile
   buildcc::internal::m::Expect_command(1, true); // link
@@ -89,10 +89,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompileError) {
 
   {
     fs::remove_all(intermediate_path);
-    buildcc::base::Target simple(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
 
     simple.AddSource(DUMMY_MAIN);
     buildcc::internal::m::Expect_command(1, false); // compile
@@ -101,10 +99,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompileError) {
 
   {
     fs::remove_all(intermediate_path);
-    buildcc::base::Target simple(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
 
     simple.AddSource(DUMMY_MAIN);
     buildcc::internal::m::Expect_command(1, true);  // compile
@@ -134,10 +130,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
       buildcc::internal::Path::CreateExistingPath((source_path / NEW_SOURCE));
 
   {
-    buildcc::base::Target simple(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
 
     // * Test C compile
     simple.AddSource(DUMMY_MAIN_C);
@@ -159,10 +153,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     CHECK_FALSE(loaded_sources.find(new_source_file) == loaded_sources.end());
   }
   {
-    buildcc::base::Target simple(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
     // * Remove C source
     // * Add CPP source
     simple.AddSource(DUMMY_MAIN_CPP);
@@ -195,10 +187,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     auto file_path = source_path / NEW_SOURCE;
     flatbuffers::SaveFile(file_path.string().c_str(), std::string{""}, false);
 
-    buildcc::base::Target simple(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
     simple.AddSource(DUMMY_MAIN_CPP);
     simple.AddSource(NEW_SOURCE);
     // Run the second Build to test Recompile

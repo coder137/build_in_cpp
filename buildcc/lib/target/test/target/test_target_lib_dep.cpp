@@ -23,15 +23,15 @@ TEST_GROUP(TargetTestLibDep)
 };
 // clang-format on
 
-static fs::path intermediate_path =
-    fs::path(BUILD_TARGET_LIB_DEP_INTERMEDIATE_DIR);
+static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
+                                          "ld");
+static const fs::path intermediate_path =
+    fs::path(BUILD_TARGET_LIB_DEP_INTERMEDIATE_DIR) / gcc.GetName();
 
 TEST(TargetTestLibDep, StaticLibrary_SimpleBuildTest) {
   constexpr const char *const STATIC_NAME = "libStaticTest.a";
 
   fs::remove_all(intermediate_path / STATIC_NAME);
-
-  buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
 
   buildcc::base::Target foolib(
       STATIC_NAME, buildcc::base::TargetType::StaticLibrary, gcc, "data");
@@ -53,8 +53,6 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
 
   fs::remove_all(intermediate_path / STATIC_FOO_LIB);
   fs::remove_all(intermediate_path / EXE_NAME);
-
-  buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
 
   {
     buildcc::base::Target foolib(
@@ -105,8 +103,6 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
 
   fs::remove_all(intermediate_path / STATIC_NAME);
   fs::remove_all(intermediate_path / EXE_NAME);
-
-  buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
 
   buildcc::base::Target foolib(
       STATIC_NAME, buildcc::base::TargetType::StaticLibrary, gcc, "data");
@@ -168,8 +164,6 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
 
   fs::remove_all(intermediate_path / STATIC_NAME);
   fs::remove_all(intermediate_path / EXE_NAME);
-
-  buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
 
   // Build initial
   {

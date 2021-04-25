@@ -31,13 +31,12 @@ public:
   explicit Target(const std::string &name, TargetType type,
                   const Toolchain &toolchain,
                   const fs::path &target_path_relative_to_root)
-      : name_(name), toolchain_(toolchain),
+      : name_(name), type_(type), toolchain_(toolchain),
         target_root_source_dir_(env::get_project_root() /
                                 target_path_relative_to_root),
         target_intermediate_dir_(fs::path(env::get_intermediate_build_dir()) /
-                                 name),
-        type_(type),
-        loader_(name, fs::path(env::get_intermediate_build_dir()) / name) {
+                                 toolchain.GetName() / name),
+        loader_(name, target_intermediate_dir_) {
     Initialize();
   }
 
@@ -155,10 +154,10 @@ private:
 private:
   // Constructor defined
   std::string name_;
+  TargetType type_;
   const Toolchain &toolchain_;
   fs::path target_root_source_dir_;
   fs::path target_intermediate_dir_;
-  TargetType type_;
 
   // Internal
   internal::path_unordered_set current_source_files_;
