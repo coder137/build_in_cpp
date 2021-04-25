@@ -21,8 +21,10 @@ TEST_GROUP(TargetTestIncludeDirGroup)
 };
 // clang-format on
 
-static fs::path target_include_dir_intermediate_path =
+static const fs::path target_include_dir_intermediate_path =
     fs::path(BUILD_TARGET_INCLUDE_DIR_INTERMEDIATE_DIR);
+static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
+                                          "ld");
 
 TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
   constexpr const char *const NAME = "IncludeDir.exe";
@@ -47,9 +49,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
 
   {
     buildcc::base::Target include_compile(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+        NAME, buildcc::base::TargetType::Executable, gcc, "data");
     include_compile.AddSource(DUMMY_MAIN_C);
     include_compile.AddSource(INCLUDE_HEADER_SOURCE);
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
@@ -77,9 +77,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
   {
     // * 1 Adding new include directory
     buildcc::base::Target include_compile(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+        NAME, buildcc::base::TargetType::Executable, gcc, "data");
     include_compile.AddSource(DUMMY_MAIN_C);
     include_compile.AddSource(INCLUDE_HEADER_SOURCE);
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
@@ -113,9 +111,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     flatbuffers::SaveFile(file_path.string().c_str(), std::string{""}, false);
 
     buildcc::base::Target include_compile(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+        NAME, buildcc::base::TargetType::Executable, gcc, "data");
     include_compile.AddSource(DUMMY_MAIN_C);
     include_compile.AddSource(INCLUDE_HEADER_SOURCE);
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
@@ -143,9 +139,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
   {
     // * Remove include directory
     buildcc::base::Target include_compile(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+        NAME, buildcc::base::TargetType::Executable, gcc, "data");
     include_compile.AddSource(DUMMY_MAIN_C);
     include_compile.AddSource(INCLUDE_HEADER_SOURCE);
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);

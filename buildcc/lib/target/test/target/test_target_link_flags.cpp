@@ -21,8 +21,10 @@ TEST_GROUP(TargetTestLinkFlagsGroup)
 };
 // clang-format on
 
-static fs::path target_source_intermediate_path =
+static const fs::path target_source_intermediate_path =
     fs::path(BUILD_TARGET_LINK_INTERMEDIATE_DIR);
+static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
+                                          "ld");
 
 TEST(TargetTestLinkFlagsGroup, Target_AddLinkFlag) {
   constexpr const char *const NAME = "AddLinkFlag.exe";
@@ -34,9 +36,8 @@ TEST(TargetTestLinkFlagsGroup, Target_AddLinkFlag) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(
-      NAME, buildcc::base::TargetType::Executable,
-      buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"), "data");
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
   simple.AddSource(DUMMY_MAIN);
   simple.AddLinkFlag("-lm");
 }
@@ -52,10 +53,8 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
   fs::remove_all(intermediate_path);
 
   {
-    buildcc::base::Target simple(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddLinkFlag("-lm");
 
@@ -65,10 +64,8 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
   }
   {
     // * Remove flag
-    buildcc::base::Target simple(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::internal::m::Expect_command(1, true);
@@ -77,10 +74,8 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
 
   {
     // * Add flag
-    buildcc::base::Target simple(
-        NAME, buildcc::base::TargetType::Executable,
-        buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"),
-        "data");
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddLinkFlag("-lm");
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);

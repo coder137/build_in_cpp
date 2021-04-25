@@ -15,6 +15,8 @@ TEST_GROUP(TargetBaseTestGroup)
 {
 };
 // clang-format on
+static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
+                                          "ld");
 
 TEST(TargetBaseTestGroup, InvalidTargetType) {
   constexpr const char *const INVALID_NAME = "Invalid.random";
@@ -24,11 +26,9 @@ TEST(TargetBaseTestGroup, InvalidTargetType) {
 
   fs::remove_all(intermediate_path / INVALID_NAME);
 
-  CHECK_THROWS(
-      std::exception,
-      buildcc::base::Target(
-          INVALID_NAME, (buildcc::base::TargetType)3,
-          buildcc::base::Toolchain("gcc", "as", "gcc", "g++", "ar", "ld"), ""));
+  CHECK_THROWS(std::exception,
+               buildcc::base::Target(INVALID_NAME, (buildcc::base::TargetType)3,
+                                     gcc, ""));
 
   buildcc::env::deinit();
 }
@@ -36,11 +36,9 @@ TEST(TargetBaseTestGroup, InvalidTargetType) {
 TEST(TargetBaseTestGroup, NoEnvInit) {
   constexpr const char *const NAME = "Init.exe";
 
-  CHECK_THROWS(std::exception, buildcc::base::Target(
-                                   NAME, buildcc::base::TargetType::Executable,
-                                   buildcc::base::Toolchain("gcc", "as", "gcc",
-                                                            "g++", "ar", "ld"),
-                                   "data"));
+  CHECK_THROWS(std::exception,
+               buildcc::base::Target(
+                   NAME, buildcc::base::TargetType::Executable, gcc, "data"));
 }
 
 // TODO, Check toolchain change
