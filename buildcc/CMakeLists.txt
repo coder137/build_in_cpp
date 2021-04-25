@@ -25,8 +25,8 @@ target_include_directories(buildcc INTERFACE
 )
 target_link_libraries(buildcc INTERFACE 
     target
-    # TODO, Add specialized toolchains
-    # GCC, Clang, MSVC
+    
+    toolchain_specialized
 
     # TODO, Add specialized targets
     # GCC, Clang, MSVC
