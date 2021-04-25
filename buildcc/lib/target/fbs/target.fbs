@@ -6,8 +6,8 @@ table Toolchain {
     asm_compiler:string;
     c_compiler:string;
     cpp_compiler:string;
-    static_lib_compiler:string;
-    dynamic_lib_compiler:string;
+    archiver:string;
+    linker:string;
 }
 
 table Path {
