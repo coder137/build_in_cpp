@@ -27,11 +27,14 @@ table Target {
     type:TargetType;
     toolchain:Toolchain;
 
-    // Inputs
+    // Files
     source_files:[Path];
-    include_dirs:[Path];
+    header_files:[Path];
     lib_deps:[Path];
-    lib_dirs:[Path];
+
+    // Directories
+    include_dirs:[string];
+    lib_dirs:[string];
 
     // Flags
     preprocessor_flags:[string];
