@@ -26,13 +26,18 @@ void Target::AddHeader(const std::string &relative_filename) {
 void Target::AddIncludeDir(const std::string &relative_include_dir) {
   env::log_trace(__FUNCTION__, name_);
 
-  fs::path absolute_include_dir =
-      target_root_source_dir_ / relative_include_dir;
-  const std::string include_dir =
-      absolute_include_dir.make_preferred().string();
+  const std::string absolute_include_dir =
+      (target_root_source_dir_ / relative_include_dir)
+          .make_preferred()
+          .string();
+  if (current_include_dirs_.find(absolute_include_dir) !=
+      current_include_dirs_.end()) {
+    return;
+  }
 
-  current_include_dirs_.insert(include_dir);
-  aggregated_include_dirs_ += (prefix_include_dir_ + include_dir + " ");
+  current_include_dirs_.insert(absolute_include_dir);
+  aggregated_include_dirs_ +=
+      (prefix_include_dir_ + absolute_include_dir + " ");
 }
 
 } // namespace buildcc::base
