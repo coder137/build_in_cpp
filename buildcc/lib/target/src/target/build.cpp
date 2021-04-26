@@ -57,9 +57,8 @@ void Target::BuildRecompile() {
                current_preprocessor_flags_);
   RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
   RecheckFlags(loader_.GetLoadedCppCompileFlags(), current_cpp_compile_flags_);
-
-  // TODO, Update this
   RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
+  RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_);
 
   // * Compile sources
   std::vector<std::string> compiled_sources;
