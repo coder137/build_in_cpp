@@ -20,7 +20,8 @@ std::string aggregate(const std::vector<std::string> &list);
 std::string aggregate(const std::unordered_set<std::string> &list);
 std::string aggregate(const buildcc::internal::path_unordered_set &paths);
 
-std::string aggregate_include_dirs(const path_unordered_set &include_dirs);
+std::string aggregate_include_dirs(const std::string &prefix,
+                                   const path_unordered_set &include_dirs);
 
 } // namespace buildcc::internal
 

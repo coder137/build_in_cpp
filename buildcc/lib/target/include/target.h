@@ -89,6 +89,9 @@ public:
 
   // TODO, Add more getters
 
+public:
+  std::string prefix_include_dir_{"-I"};
+
 protected:
   // Getters
   std::string GetCompiledSourceName(const fs::path &source) const;
@@ -170,9 +173,9 @@ private:
   std::unordered_set<std::string> current_link_flags_;
 
   // TODO, Make appending to this more efficient
+  // TODO, Might not need to be persistent
   std::string aggregated_include_dirs_;
   std::string aggregated_lib_deps_;
-
   std::string aggregated_preprocessor_flags_;
   std::string aggregated_c_compile_flags_;
   std::string aggregated_cpp_compile_flags_;
