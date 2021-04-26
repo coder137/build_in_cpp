@@ -137,6 +137,121 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
   mock().checkExpectations();
 }
 
+TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
+  constexpr const char *const NAME = "AddHeader.exe";
+
+  constexpr const char *const DUMMY_MAIN_C = "dummy_main.c";
+  constexpr const char *const RELATIVE_HEADER_FILE = "include/include_header.h";
+  constexpr const char *const RELATIVE_INCLUDE_DIR = "include";
+  constexpr const char *const INCLUDE_HEADER_SOURCE = "include_header.cpp";
+
+  auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
+  auto intermediate_path = target_include_dir_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+
+  auto dummy_c_file =
+      buildcc::internal::Path::CreateExistingPath((source_path / DUMMY_MAIN_C));
+  auto include_header_file = buildcc::internal::Path::CreateExistingPath(
+      (source_path / INCLUDE_HEADER_SOURCE));
+  auto include_header_path =
+      (source_path / RELATIVE_INCLUDE_DIR).make_preferred();
+
+  // Initial build
+  {
+    buildcc::base::Target add_header(
+        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+    add_header.AddSource(DUMMY_MAIN_C);
+    add_header.AddSource(INCLUDE_HEADER_SOURCE);
+    add_header.AddIncludeDir(RELATIVE_INCLUDE_DIR);
+
+    buildcc::internal::m::Expect_command(2, true);
+    buildcc::internal::m::Expect_command(1, true);
+    add_header.Build();
+
+    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    bool is_loaded = loader.Load();
+    CHECK_TRUE(is_loaded);
+    CHECK_EQUAL(loader.GetLoadedSources().size(), 2);
+    CHECK_EQUAL(loader.GetLoadedIncludeDirs().size(), 1);
+    CHECK_EQUAL(loader.GetLoadedHeaders().size(), 0);
+  }
+
+  // Add header
+  {
+    buildcc::base::Target add_header(
+        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+    add_header.AddSource(DUMMY_MAIN_C);
+    add_header.AddSource(INCLUDE_HEADER_SOURCE);
+    add_header.AddHeader(RELATIVE_HEADER_FILE);
+    add_header.AddIncludeDir(RELATIVE_INCLUDE_DIR);
+
+    buildcc::base::m::TargetExpect_PathAdded(1, &add_header);
+    buildcc::internal::m::Expect_command(2, true);
+    buildcc::internal::m::Expect_command(1, true);
+    add_header.Build();
+
+    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    bool is_loaded = loader.Load();
+    CHECK_TRUE(is_loaded);
+    CHECK_EQUAL(loader.GetLoadedSources().size(), 2);
+    CHECK_EQUAL(loader.GetLoadedIncludeDirs().size(), 1);
+    CHECK_EQUAL(loader.GetLoadedHeaders().size(), 1);
+  }
+
+  // Update header
+
+  {
+    const fs::path absolute_header_path =
+        fs::path(BUILD_SCRIPT_SOURCE) / "data" / RELATIVE_HEADER_FILE;
+    flatbuffers::SaveFile(absolute_header_path.string().c_str(),
+                          std::string{""}, false);
+
+    buildcc::base::Target add_header(
+        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+    add_header.AddSource(DUMMY_MAIN_C);
+    add_header.AddSource(INCLUDE_HEADER_SOURCE);
+    add_header.AddHeader(RELATIVE_HEADER_FILE);
+    add_header.AddIncludeDir(RELATIVE_INCLUDE_DIR);
+
+    buildcc::base::m::TargetExpect_PathUpdated(1, &add_header);
+    buildcc::internal::m::Expect_command(2, true);
+    buildcc::internal::m::Expect_command(1, true);
+    add_header.Build();
+
+    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    bool is_loaded = loader.Load();
+    CHECK_TRUE(is_loaded);
+    CHECK_EQUAL(loader.GetLoadedSources().size(), 2);
+    CHECK_EQUAL(loader.GetLoadedIncludeDirs().size(), 1);
+    CHECK_EQUAL(loader.GetLoadedHeaders().size(), 1);
+  }
+
+  // Remove header
+  {
+    buildcc::base::Target add_header(
+        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+    add_header.AddSource(DUMMY_MAIN_C);
+    add_header.AddSource(INCLUDE_HEADER_SOURCE);
+    add_header.AddIncludeDir(RELATIVE_INCLUDE_DIR);
+
+    buildcc::base::m::TargetExpect_PathRemoved(1, &add_header);
+    buildcc::internal::m::Expect_command(2, true);
+    buildcc::internal::m::Expect_command(1, true);
+    add_header.Build();
+
+    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    bool is_loaded = loader.Load();
+    CHECK_TRUE(is_loaded);
+    CHECK_EQUAL(loader.GetLoadedSources().size(), 2);
+    CHECK_EQUAL(loader.GetLoadedIncludeDirs().size(), 1);
+    CHECK_EQUAL(loader.GetLoadedHeaders().size(), 0);
+  }
+
+  mock().checkExpectations();
+}
+
 int main(int ac, char **av) {
   MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
   buildcc::env::init(BUILD_SCRIPT_SOURCE,
