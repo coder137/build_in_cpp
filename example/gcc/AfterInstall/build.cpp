@@ -23,6 +23,7 @@ int main(void) {
     ExecutableTarget_gcc target("CppFlags.exe", gcc, "files");
     target.AddSource("main.cpp", "src");
     target.AddSource("src/random.cpp");
+    target.AddHeader("include/random.h");
     target.AddIncludeDir("include");
     target.AddPreprocessorFlag("-DRANDOM=1");
     target.AddCppCompileFlag("-Wall");
