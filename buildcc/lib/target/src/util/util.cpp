@@ -30,15 +30,6 @@ void add_path(const fs::path &path, path_unordered_set &stored_paths) {
 }
 
 // Aggregates
-std::string aggregate_include_dirs(
-    const std::string &prefix,
-    const buildcc::internal::path_unordered_set &include_dirs) {
-  std::string idir{""};
-  for (const auto &dirs : include_dirs) {
-    idir += prefix + dirs.GetPathname().string() + " ";
-  }
-  return idir;
-}
 
 std::string aggregate(const std::vector<std::string> &list) {
   std::string agg = "";
