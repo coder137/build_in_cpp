@@ -14,6 +14,7 @@ void Target::PathRemoved() {}
 void Target::PathAdded() {}
 void Target::PathUpdated() {}
 
+void Target::DirChanged() {}
 void Target::FlagChanged() {}
 
 } // namespace buildcc::base

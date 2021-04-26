@@ -197,9 +197,9 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
         STATIC_NAME, buildcc::base::TargetType::StaticLibrary, gcc, "data");
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
-    foolib.AddIncludeDir(".");
+    foolib.AddIncludeDir("");
 
-    buildcc::base::m::TargetExpect_PathAdded(1, &foolib);
+    buildcc::base::m::TargetExpect_DirChanged(1, &foolib);
     buildcc::internal::m::Expect_command(1, true);
     buildcc::internal::m::Expect_command(1, true);
     foolib.Build();
