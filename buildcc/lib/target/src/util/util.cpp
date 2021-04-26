@@ -1,5 +1,6 @@
 #include "internal/util.h"
 
+#include "assert_fatal.h"
 #include "env.h"
 
 namespace buildcc::internal {
@@ -14,6 +15,18 @@ bool is_previous_paths_different(const path_unordered_set &previous_paths,
   }
 
   return false;
+}
+
+// Additions
+void add_path(const fs::path &path, path_unordered_set &stored_paths) {
+  env::assert_fatal(fs::exists(path), path.string() + " not found");
+  auto current_file = buildcc::internal::Path::CreateExistingPath(path);
+
+  // TODO, Note, we might not require this check
+  env::assert_fatal(stored_paths.find(current_file) == stored_paths.end(),
+                    path.string() + " duplicate found");
+
+  stored_paths.insert(current_file);
 }
 
 // Aggregates

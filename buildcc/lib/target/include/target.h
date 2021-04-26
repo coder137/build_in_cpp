@@ -50,6 +50,10 @@ public:
   void AddSource(const std::string &relative_filename,
                  const fs::path &relative_to_target_path);
 
+  void AddHeader(const std::string &relative_filename);
+  void AddHeader(const std::string &relative_filename,
+                 const fs::path &relative_to_target_path);
+
   void AddIncludeDir(const std::string &relative_include_dir);
 
   // TODO, Add fs::path version of the same, can be found using lib_dirs
@@ -164,8 +168,10 @@ private:
 
   // Internal
   internal::path_unordered_set current_source_files_;
-  internal::path_unordered_set current_include_dirs_;
+  internal::path_unordered_set current_header_files_;
   internal::path_unordered_set current_lib_deps_;
+
+  internal::path_unordered_set current_include_dirs_;
 
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;

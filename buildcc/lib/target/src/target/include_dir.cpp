@@ -1,10 +1,29 @@
 #include "target.h"
 
+#include "assert_fatal.h"
 #include "logging.h"
+
+#include "internal/util.h"
 
 namespace buildcc::base {
 
+void Target::AddHeader(const std::string &relative_filename,
+                       const fs::path &relative_to_target_path) {
+  env::log_trace(__FUNCTION__, name_);
+
+  // Check Source
+  fs::path absolute_filepath =
+      target_root_source_dir_ / relative_to_target_path / relative_filename;
+
+  internal::add_path(absolute_filepath, current_header_files_);
+}
+
+void Target::AddHeader(const std::string &relative_filename) {
+  AddHeader(relative_filename, "");
+}
+
 // Public
+// TODO, Change the functionality of this
 void Target::AddIncludeDir(const std::string &relative_include_dir) {
   env::log_trace(__FUNCTION__, name_);
 
