@@ -20,6 +20,13 @@ namespace buildcc::base {
 
 namespace fs = std::filesystem;
 
+enum class SourceType {
+  Asm,
+  C,
+  Cpp,
+  Invalid,
+};
+
 enum class TargetType {
   Executable,
   StaticLibrary,
@@ -98,8 +105,9 @@ public:
 
 protected:
   // Getters
+  SourceType GetSourceType(const fs::path &source) const;
   std::string GetCompiledSourceName(const fs::path &source) const;
-  std::string GetCompiler(const fs::path &source) const;
+  const std::string &GetCompiler(const fs::path &source) const;
 
 private:
   void Initialize();
