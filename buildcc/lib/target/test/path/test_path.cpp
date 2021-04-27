@@ -18,14 +18,14 @@ TEST_GROUP(PathTestGroup)
 };
 // clang-format on
 
-static const std::string current_file_path =
-    std::string(BUILD_SCRIPT_SOURCE) + "/" + "path_main.cpp";
+static const auto current_file_path =
+    (fs::path(BUILD_SCRIPT_SOURCE) / "path_main.cpp").make_preferred();
 
 TEST(PathTestGroup, Path_ExistingPathStaticConstructor) {
   auto existing_path =
       buildcc::internal::Path::CreateExistingPath(current_file_path);
   STRCMP_EQUAL(existing_path.GetPathname().string().c_str(),
-               current_file_path.c_str());
+               current_file_path.string().c_str());
   // * NOTE, Last write timestamp changes whenever we resave or re-download
   // This would not work well with Git
   //   UNSIGNED_LONGLONGS_EQUAL(existing_path.GetLastWriteTimestamp(),
@@ -60,7 +60,8 @@ TEST(PathTestGroup, PathConstructor_NewPathStaticConstructor) {
 TEST(PathTestGroup, Path_EqualityOperator) {
   buildcc::internal::Path p =
       buildcc::internal::Path::CreateExistingPath(current_file_path);
-  STRCMP_EQUAL(p.GetPathname().string().c_str(), current_file_path.c_str());
+  STRCMP_EQUAL(p.GetPathname().string().c_str(),
+               current_file_path.string().c_str());
 
   buildcc::internal::Path newp =
       buildcc::internal::Path::CreateNewPath(current_file_path, 12345ULL);
