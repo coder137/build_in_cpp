@@ -88,13 +88,7 @@ void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
   const std::string aggregated_compiled_sources =
       internal::aggregate(compiled_sources);
 
-  // Final Target
-  // TODO, Improve this logic
-  // Select cpp compiler for building target only if there is .cpp file
-  // added
-  // Else use c compiler
   const fs::path target = GetTargetPath();
-
   bool success = internal::command(Link(target.string(), aggregated_link_flags_,
                                         aggregated_compiled_sources,
                                         aggregated_lib_deps_));
@@ -108,6 +102,7 @@ Target::Link(const std::string &output_target,
              const std::string &aggregated_compiled_sources,
              const std::string &aggregated_lib_deps) const {
   return {
+      // TODO, Let user decide this during Linking phase
       toolchain_.GetCppCompiler(),
       aggregated_link_flags,
       aggregated_compiled_sources,
