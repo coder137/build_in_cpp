@@ -92,9 +92,11 @@ Target::CompileCommand(const fs::path &current_source) const {
   const std::string output_source = GetCompiledSourceName(current_source);
   const std::string compiler = GetCompiler(current_source);
 
+  const auto type = GetSourceType(current_source);
   const std::string &aggregated_compile_flags =
-      compiler == toolchain_.GetCCompiler() ? aggregated_c_compile_flags_
-                                            : aggregated_cpp_compile_flags_;
+      type == SourceType::C     ? aggregated_c_compile_flags_
+      : type == SourceType::Cpp ? aggregated_cpp_compile_flags_
+                                : "";
 
   const std::string input_source = current_source.string();
   return CompileCommand(input_source, output_source, compiler,
