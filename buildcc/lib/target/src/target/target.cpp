@@ -30,19 +30,45 @@ namespace buildcc::base {
 // PROTECTED
 
 // Getters
+
+SourceType Target::GetSourceType(const fs::path &source) const {
+  SourceType type = SourceType::Invalid;
+  const auto ext = source.extension();
+
+  if (ext == ".c") {
+    type = SourceType::C;
+  } else if (ext == ".cpp" || ext == ".cxx" || ext == ".cc") {
+    type = SourceType::Cpp;
+  } else if (ext == ".s" || ext == ".S" || ext == ".asm") {
+    type = SourceType::Asm;
+  }
+
+  return type;
+}
+
 std::string Target::GetCompiledSourceName(const fs::path &source) const {
   const auto output_filename =
       GetTargetIntermediateDir() / (source.filename().string() + ".o");
   return output_filename.string();
 }
 
-std::string Target::GetCompiler(const fs::path &source) const {
+const std::string &Target::GetCompiler(const fs::path &source) const {
   // .cpp -> GetCppCompiler
   // .c / .asm -> GetCCompiler
-  std::string compiler = source.extension() == ".cpp"
-                             ? toolchain_.GetCppCompiler()
-                             : toolchain_.GetCCompiler();
-  return compiler;
+  switch (GetSourceType(source)) {
+  case SourceType::Asm:
+    return toolchain_.GetAsmCompiler();
+    break;
+  case SourceType::C:
+    return toolchain_.GetCCompiler();
+    break;
+  case SourceType::Cpp:
+    break;
+  default:
+    buildcc::env::assert_fatal(false, "Invalid source " + source.string());
+    break;
+  }
+  return toolchain_.GetCppCompiler();
 }
 
 // PRIVATE
