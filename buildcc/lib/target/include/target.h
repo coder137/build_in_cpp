@@ -77,7 +77,7 @@ public:
   std::vector<std::string> CompileCommand(const fs::path &current_source) const;
 
   fs::path GetTargetPath() const {
-    return (GetTargetIntermediateDir() / GetName());
+    return (GetTargetIntermediateDir() / GetName()).make_preferred();
   }
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
 

@@ -47,9 +47,9 @@ SourceType Target::GetSourceType(const fs::path &source) const {
 }
 
 std::string Target::GetCompiledSourceName(const fs::path &source) const {
-  const auto output_filename =
-      GetTargetIntermediateDir() / (source.filename().string() + ".o");
-  return output_filename.string();
+  return (GetTargetIntermediateDir() / (source.filename().string() + ".o"))
+      .make_preferred()
+      .string();
 }
 
 const std::string &Target::GetCompiler(const fs::path &source) const {
