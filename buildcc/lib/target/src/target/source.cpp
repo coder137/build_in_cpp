@@ -29,7 +29,7 @@ std::vector<std::string> Target::CompileSources() {
   std::vector<std::string> compiled_files;
   for (const auto &file : current_source_files_) {
     const auto &current_source = file.GetPathname();
-    const std::string compiled_source = GetCompiledSourceName(current_source);
+    const std::string compiled_source = GetCompiledSourcePath(current_source);
 
     CompileSource(current_source);
     compiled_files.push_back(compiled_source);
@@ -54,7 +54,7 @@ std::vector<std::string> Target::RecompileSources() {
   std::vector<std::string> compiled_files;
   for (const auto &current_file : current_source_files_) {
     const auto &current_source = current_file.GetPathname();
-    const std::string compiled_source = GetCompiledSourceName(current_source);
+    const std::string compiled_source = GetCompiledSourcePath(current_source);
 
     // Find current_file in the loaded sources
     auto iter = previous_source_files.find(current_file);
@@ -89,7 +89,7 @@ void Target::CompileSource(const fs::path &current_source) {
 
 std::vector<std::string>
 Target::CompileCommand(const fs::path &current_source) const {
-  const std::string output_source = GetCompiledSourceName(current_source);
+  const std::string output_source = GetCompiledSourcePath(current_source);
   const std::string compiler = GetCompiler(current_source);
 
   const auto type = GetSourceType(current_source);

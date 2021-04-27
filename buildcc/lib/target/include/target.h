@@ -106,7 +106,7 @@ public:
 protected:
   // Getters
   SourceType GetSourceType(const fs::path &source) const;
-  std::string GetCompiledSourceName(const fs::path &source) const;
+  std::string GetCompiledSourcePath(const fs::path &source) const;
   const std::string &GetCompiler(const fs::path &source) const;
 
 private:
