@@ -28,13 +28,14 @@ public:
   fs::path GetBinaryPath() const { return relative_path_ / (name_ + ".bin"); }
 
   const path_unordered_set &GetLoadedSources() const { return loaded_sources_; }
-  const path_unordered_set &GetLoadedIncludeDirs() const {
-    return loaded_include_dirs_;
-  }
+  const path_unordered_set &GetLoadedHeaders() const { return loaded_headers_; }
   const path_unordered_set &GetLoadedLibDeps() const {
     return loaded_lib_deps_;
   }
 
+  const std::unordered_set<std::string> &GetLoadedIncludeDirs() const {
+    return loaded_include_dirs_;
+  }
   const std::unordered_set<std::string> &GetLoadedPreprocessorFlags() const {
     return loaded_preprocessor_flags_;
   }
@@ -57,8 +58,10 @@ private:
   bool loaded_ = false;
 
   path_unordered_set loaded_sources_;
-  path_unordered_set loaded_include_dirs_;
+  path_unordered_set loaded_headers_;
   path_unordered_set loaded_lib_deps_;
+
+  std::unordered_set<std::string> loaded_include_dirs_;
 
   std::unordered_set<std::string> loaded_preprocessor_flags_;
   std::unordered_set<std::string> loaded_c_compile_flags_;

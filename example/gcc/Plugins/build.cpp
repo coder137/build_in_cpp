@@ -23,6 +23,7 @@ int main(void) {
 
   cppflags.AddSource("main.cpp", "src");
   cppflags.AddSource("src/random.cpp");
+  cppflags.AddHeader("include/random.h");
   cppflags.AddIncludeDir("include");
   cppflags.AddPreprocessorFlag("-DRANDOM=1");
   cppflags.AddCppCompileFlag("-Wall");

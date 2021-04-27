@@ -57,8 +57,10 @@ bool FbsLoader::Load() {
   // target->type();
   // target->toolchain();
   Extract(target->source_files(), loaded_sources_);
-  Extract(target->include_dirs(), loaded_include_dirs_);
+  Extract(target->header_files(), loaded_headers_);
   Extract(target->lib_deps(), loaded_lib_deps_);
+
+  Extract(target->include_dirs(), loaded_include_dirs_);
   // target->lib_dirs();
 
   Extract(target->preprocessor_flags(), loaded_preprocessor_flags_);

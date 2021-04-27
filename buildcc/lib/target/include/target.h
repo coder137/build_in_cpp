@@ -50,6 +50,10 @@ public:
   void AddSource(const std::string &relative_filename,
                  const fs::path &relative_to_target_path);
 
+  void AddHeader(const std::string &relative_filename);
+  void AddHeader(const std::string &relative_filename,
+                 const fs::path &relative_to_target_path);
+
   void AddIncludeDir(const std::string &relative_include_dir);
 
   // TODO, Add fs::path version of the same, can be found using lib_dirs
@@ -127,12 +131,16 @@ private:
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
                     const internal::path_unordered_set &current_path);
+  void RecheckDirs(const std::unordered_set<std::string> &previous_dirs,
+                   const std::unordered_set<std::string> &current_dirs);
   void RecheckFlags(const std::unordered_set<std::string> &previous_flags,
                     const std::unordered_set<std::string> &current_flags);
 
   void PathRemoved();
   void PathAdded();
   void PathUpdated();
+
+  void DirChanged();
 
   void FlagChanged();
 
@@ -164,8 +172,11 @@ private:
 
   // Internal
   internal::path_unordered_set current_source_files_;
-  internal::path_unordered_set current_include_dirs_;
+  internal::path_unordered_set current_header_files_;
   internal::path_unordered_set current_lib_deps_;
+
+  std::unordered_set<std::string> current_include_dirs_;
+  // TODO, Add lib dirs similar to include_dirs
 
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;

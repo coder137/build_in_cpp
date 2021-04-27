@@ -18,6 +18,8 @@ static constexpr const char *const PATH_REMOVED_FUNCTION =
 static constexpr const char *const PATH_ADDED_FUNCTION = "Target::PathAdded";
 static constexpr const char *const PATH_UPDATED_FUNCTION =
     "Target::PathUpdated";
+
+static constexpr const char *const DIR_CHANGED_FUNCTION = "Target::DirChanged";
 static constexpr const char *const FLAG_CHANGED_FUNCTION =
     "Target::FlagChanged";
 
@@ -41,6 +43,10 @@ void Target::PathAdded() {
 }
 void Target::PathUpdated() {
   mock().actualCall(PATH_UPDATED_FUNCTION).onObject(this);
+}
+
+void Target::DirChanged() {
+  mock().actualCall(DIR_CHANGED_FUNCTION).onObject(this);
 }
 
 void Target::FlagChanged() {
@@ -68,6 +74,11 @@ void TargetExpect_PathAdded(unsigned int calls, Target *target) {
 void TargetExpect_PathUpdated(unsigned int calls, Target *target) {
   mock().expectNCalls(calls, PATH_UPDATED_FUNCTION).onObject(target);
 }
+
+void TargetExpect_DirChanged(unsigned int calls, Target *target) {
+  mock().expectNCalls(calls, DIR_CHANGED_FUNCTION).onObject(target);
+}
+
 void TargetExpect_FlagChanged(unsigned int calls, Target *target) {
   mock().expectNCalls(calls, FLAG_CHANGED_FUNCTION).onObject(target);
 }

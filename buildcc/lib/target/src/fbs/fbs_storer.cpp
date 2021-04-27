@@ -69,10 +69,14 @@ bool Target::Store() {
 
   auto fbs_target_type = get_fbs_target_type(type_);
   auto fbs_toolchain = get_fbs_toolchain(builder, toolchain_);
+
   auto fbs_source_files = get_fbs_vector_path(builder, current_source_files_);
-  auto fbs_include_dirs = get_fbs_vector_path(builder, current_include_dirs_);
+  auto fbs_header_files = get_fbs_vector_path(builder, current_header_files_);
   auto fbs_lib_deps = get_fbs_vector_path(builder, current_lib_deps_);
+
+  auto fbs_include_dirs = get_fbs_vector_string(builder, current_include_dirs_);
   // TODO, lib_dirs
+
   auto fbs_preprocessor_flags =
       get_fbs_vector_string(builder, current_preprocessor_flags_);
   auto fbs_c_compiler_flags =
@@ -83,9 +87,9 @@ bool Target::Store() {
 
   auto fbs_target = fbs::CreateTargetDirect(
       builder, name_.c_str(), target_intermediate_dir_.string().c_str(),
-      fbs_target_type, fbs_toolchain, &fbs_source_files, &fbs_include_dirs,
-      &fbs_lib_deps, nullptr, &fbs_preprocessor_flags, &fbs_c_compiler_flags,
-      &fbs_cpp_compiler_flags, &fbs_link_flags);
+      fbs_target_type, fbs_toolchain, &fbs_source_files, &fbs_header_files,
+      &fbs_lib_deps, &fbs_include_dirs, nullptr, &fbs_preprocessor_flags,
+      &fbs_c_compiler_flags, &fbs_cpp_compiler_flags, &fbs_link_flags);
   fbs::FinishTargetBuffer(builder, fbs_target);
 
   auto file_path = GetBinaryPath();

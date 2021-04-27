@@ -19,6 +19,7 @@ int main(void) {
 
   StaticTarget_gcc randomLib("libran.a", gcc, "files");
   randomLib.AddSource("src/random.cpp");
+  randomLib.AddHeader("include/random.h");
   randomLib.AddIncludeDir("include");
   randomLib.Build();
 

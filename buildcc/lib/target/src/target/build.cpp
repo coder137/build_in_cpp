@@ -21,9 +21,6 @@ void Target::Build() {
   aggregated_cpp_compile_flags_ =
       internal::aggregate(current_cpp_compile_flags_);
   aggregated_link_flags_ = internal::aggregate(current_link_flags_);
-
-  aggregated_include_dirs_ = internal::aggregate_include_dirs(
-      prefix_include_dir_, current_include_dirs_);
   aggregated_lib_deps_ = internal::aggregate(current_lib_deps_);
 
   const bool is_loaded = loader_.Load();
@@ -60,7 +57,8 @@ void Target::BuildRecompile() {
                current_preprocessor_flags_);
   RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
   RecheckFlags(loader_.GetLoadedCppCompileFlags(), current_cpp_compile_flags_);
-  RecheckPaths(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
+  RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
+  RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_);
 
   // * Compile sources
   std::vector<std::string> compiled_sources;

@@ -93,6 +93,18 @@ void Target::RecheckPaths(const internal::path_unordered_set &previous_path,
   }
 }
 
+void Target::RecheckDirs(const std::unordered_set<std::string> &previous_dirs,
+                         const std::unordered_set<std::string> &current_dirs) {
+  if (dirty_) {
+    return;
+  }
+
+  if (previous_dirs != current_dirs) {
+    DirChanged();
+    dirty_ = true;
+  }
+}
+
 void Target::RecheckFlags(
     const std::unordered_set<std::string> &previous_flags,
     const std::unordered_set<std::string> &current_flags) {

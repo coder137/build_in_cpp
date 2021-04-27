@@ -7,25 +7,14 @@
 namespace buildcc::base {
 
 // Public
-void Target::AddSource(
-    const std::string &relative_filename,
-    const std::filesystem::path &relative_to_base_relative_path) {
+void Target::AddSource(const std::string &relative_filename,
+                       const std::filesystem::path &relative_to_target_path) {
   env::log_trace(__FUNCTION__, name_);
 
   // Check Source
-  fs::path absolute_filepath = target_root_source_dir_ /
-                               relative_to_base_relative_path /
-                               relative_filename;
-  env::assert_fatal(fs::exists(absolute_filepath),
-                    absolute_filepath.string() + " not found");
-
-  auto current_file =
-      buildcc::internal::Path::CreateExistingPath(absolute_filepath);
-  env::assert_fatal(current_source_files_.find(current_file) ==
-                        current_source_files_.end(),
-                    absolute_filepath.string() + " duplicate found");
-
-  current_source_files_.insert(current_file);
+  fs::path absolute_filepath =
+      target_root_source_dir_ / relative_to_target_path / relative_filename;
+  internal::add_path(absolute_filepath, current_source_files_);
 }
 
 void Target::AddSource(const std::string &relative_filename) {
