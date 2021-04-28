@@ -18,7 +18,7 @@ bool is_previous_paths_different(const path_unordered_set &previous_paths,
 }
 
 // Additions
-void add_path(const fs::path &path, path_unordered_set &stored_paths) {
+bool add_path(const fs::path &path, path_unordered_set &stored_paths) {
   env::assert_fatal(fs::exists(path), path.string() + " not found");
   auto current_file = buildcc::internal::Path::CreateExistingPath(path);
 
@@ -26,7 +26,8 @@ void add_path(const fs::path &path, path_unordered_set &stored_paths) {
   env::assert_fatal(stored_paths.find(current_file) == stored_paths.end(),
                     path.string() + " duplicate found");
 
-  stored_paths.insert(current_file);
+  auto [_, added] = stored_paths.insert(current_file);
+  return added;
 }
 
 std::string quote(const std::string &str) {

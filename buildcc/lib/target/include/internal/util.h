@@ -12,7 +12,17 @@ namespace buildcc::internal {
 bool command(const std::vector<std::string> &command_tokens);
 
 // Additions
-void add_path(const fs::path &path, path_unordered_set &stored_paths);
+/**
+ * @brief Existing path is stored inside stored_paths
+ * Returns false if path is stored
+ * Throws exception if path does not exist
+ *
+ * @param path
+ * @param stored_paths
+ * @return true
+ * @return false
+ */
+bool add_path(const fs::path &path, path_unordered_set &stored_paths);
 
 /**
  * @brief Attach quotes to filesystem::path::string if space detected
