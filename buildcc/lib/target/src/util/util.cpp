@@ -29,6 +29,14 @@ void add_path(const fs::path &path, path_unordered_set &stored_paths) {
   stored_paths.insert(current_file);
 }
 
+std::string quote(const std::string &str) {
+  if (str.find(" ") == std::string::npos) {
+    return str;
+  }
+
+  return "\"" + str + "\"";
+}
+
 // Aggregates
 
 std::string aggregate(const std::vector<std::string> &list) {
