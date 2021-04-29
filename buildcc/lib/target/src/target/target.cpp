@@ -46,10 +46,13 @@ SourceType Target::GetSourceType(const fs::path &source) const {
   return type;
 }
 
-std::string Target::GetCompiledSourcePath(const fs::path &source) const {
-  return (GetTargetIntermediateDir() / (source.filename().string() + ".o"))
-      .make_preferred()
-      .string();
+fs::path Target::GetCompiledSourcePath(const fs::path &source) const {
+  fs::path absolute_compiled_source =
+      target_intermediate_dir_ /
+      source.lexically_relative(env::get_project_root());
+  absolute_compiled_source.replace_filename(source.filename().string() + ".o");
+  absolute_compiled_source.make_preferred();
+  return absolute_compiled_source;
 }
 
 const std::string &Target::GetCompiler(const fs::path &source) const {

@@ -106,7 +106,7 @@ public:
 protected:
   // Getters
   SourceType GetSourceType(const fs::path &source) const;
-  std::string GetCompiledSourcePath(const fs::path &source) const;
+  fs::path GetCompiledSourcePath(const fs::path &source) const;
   const std::string &GetCompiler(const fs::path &source) const;
 
 private:
@@ -116,7 +116,7 @@ private:
   void BuildCompile();
   void BuildRecompile();
 
-  // Compiling
+  // Compile
   std::vector<std::string> CompileSources();
   std::vector<std::string> RecompileSources();
   void SourceRemoved();
