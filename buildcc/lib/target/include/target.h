@@ -106,8 +106,10 @@ public:
 protected:
   // Getters
   SourceType GetSourceType(const fs::path &source) const;
-  fs::path GetCompiledSourcePath(const fs::path &source) const;
   const std::string &GetCompiler(const fs::path &source) const;
+
+  fs::path GetCompiledSourcePath(const fs::path &source) const;
+  std::vector<std::string> GetCompiledSources() const;
 
 private:
   void Initialize();
@@ -117,11 +119,8 @@ private:
   void BuildRecompile();
 
   // Compile
-  std::vector<std::string> CompileSources();
-  std::vector<std::string> RecompileSources();
-  void SourceRemoved();
-  void SourceAdded();
-  void SourceUpdated();
+  void CompileSources();
+  void RecompileSources();
 
   void CompileSource(const fs::path &current_source);
 
@@ -144,14 +143,6 @@ private:
   void RecheckFlags(const std::unordered_set<std::string> &previous_flags,
                     const std::unordered_set<std::string> &current_flags);
 
-  void PathRemoved();
-  void PathAdded();
-  void PathUpdated();
-
-  void DirChanged();
-
-  void FlagChanged();
-
   // Linking
   void BuildTarget(const std::vector<std::string> &compiled_sources);
 
@@ -169,6 +160,16 @@ private:
 
   // Fbs
   bool Store();
+
+  // Callbacks
+  void SourceRemoved();
+  void SourceAdded();
+  void SourceUpdated();
+  void PathRemoved();
+  void PathAdded();
+  void PathUpdated();
+  void DirChanged();
+  void FlagChanged();
 
 private:
   // Constructor defined

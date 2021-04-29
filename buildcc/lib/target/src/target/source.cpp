@@ -27,24 +27,15 @@ void Target::AddSource(const std::string &relative_filename) {
 
 // Private
 
-std::vector<std::string> Target::CompileSources() {
+void Target::CompileSources() {
   env::log_trace(__FUNCTION__, name_);
-
-  std::vector<std::string> compiled_files;
   for (const auto &file : current_source_files_) {
     const auto &current_source = file.GetPathname();
-
-    const std::string compiled_source =
-        GetCompiledSourcePath(current_source).string();
-
     CompileSource(current_source);
-    compiled_files.push_back(compiled_source);
   }
-
-  return compiled_files;
 }
 
-std::vector<std::string> Target::RecompileSources() {
+void Target::RecompileSources() {
   env::log_trace(__FUNCTION__, name_);
 
   const auto &previous_source_files = loader_.GetLoadedSources();
@@ -57,11 +48,8 @@ std::vector<std::string> Target::RecompileSources() {
     SourceRemoved();
   }
 
-  std::vector<std::string> compiled_files;
   for (const auto &current_file : current_source_files_) {
     const auto &current_source = current_file.GetPathname();
-    const std::string compiled_source =
-        GetCompiledSourcePath(current_source).string();
 
     // Find current_file in the loaded sources
     auto iter = previous_source_files.find(current_file);
@@ -82,10 +70,7 @@ std::vector<std::string> Target::RecompileSources() {
         // *3 Do nothing
       }
     }
-    compiled_files.push_back(compiled_source);
   }
-
-  return compiled_files;
 }
 
 void Target::CompileSource(const fs::path &current_source) {

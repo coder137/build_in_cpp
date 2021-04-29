@@ -15,6 +15,7 @@ namespace buildcc::base {
 void Target::Build() {
   env::log_trace(__FUNCTION__, name_);
 
+  // TODO, Optimize these
   aggregated_preprocessor_flags_ =
       internal::aggregate(current_preprocessor_flags_);
   aggregated_c_compile_flags_ = internal::aggregate(current_c_compile_flags_);
@@ -34,8 +35,8 @@ void Target::Build() {
 }
 
 void Target::BuildCompile() {
-  const std::vector<std::string> compiled_sources = CompileSources();
-  BuildTarget(compiled_sources);
+  CompileSources();
+  BuildTarget(GetCompiledSources());
   Store();
   first_build_ = true;
 }
@@ -61,11 +62,10 @@ void Target::BuildRecompile() {
   RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_);
 
   // * Compile sources
-  std::vector<std::string> compiled_sources;
   if (dirty_) {
-    compiled_sources = CompileSources();
+    CompileSources();
   } else {
-    compiled_sources = RecompileSources();
+    RecompileSources();
   }
 
   // * Completely rebuild target / link if any of the following change
@@ -75,7 +75,7 @@ void Target::BuildRecompile() {
   RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
   RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
   if (dirty_) {
-    BuildTarget(compiled_sources);
+    BuildTarget(GetCompiledSources());
     Store();
     rebuild_ = true;
   }
