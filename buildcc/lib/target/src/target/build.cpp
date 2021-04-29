@@ -36,7 +36,7 @@ void Target::Build() {
 
 void Target::BuildCompile() {
   CompileSources();
-  BuildTarget(GetCompiledSources());
+  BuildTarget();
   Store();
   first_build_ = true;
 }
@@ -75,21 +75,21 @@ void Target::BuildRecompile() {
   RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
   RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
   if (dirty_) {
-    BuildTarget(GetCompiledSources());
+    BuildTarget();
     Store();
     rebuild_ = true;
   }
 }
 
-void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
+void Target::BuildTarget() {
   env::log_trace(__FUNCTION__, name_);
 
   // Add compiled sources
   const std::string aggregated_compiled_sources =
-      internal::aggregate(compiled_sources);
+      internal::aggregate(GetCompiledSources());
 
-  const fs::path target = GetTargetPath();
-  bool success = internal::command(Link(target.string(), aggregated_link_flags_,
+  const std::string output_target = GetTargetPath().string();
+  bool success = internal::command(Link(output_target, aggregated_link_flags_,
                                         aggregated_compiled_sources,
                                         aggregated_lib_deps_));
 

@@ -144,7 +144,7 @@ private:
                     const std::unordered_set<std::string> &current_flags);
 
   // Linking
-  void BuildTarget(const std::vector<std::string> &compiled_sources);
+  void BuildTarget();
 
   // * Virtual
   // PreLink();
