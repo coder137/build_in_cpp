@@ -36,8 +36,9 @@ void Target::AddIncludeDir(const std::string &relative_include_dir) {
   }
 
   current_include_dirs_.insert(absolute_include_dir);
+  std::string temp{""};
   aggregated_include_dirs_ +=
-      (prefix_include_dir_ + absolute_include_dir + " ");
+      temp.append(prefix_include_dir_).append(absolute_include_dir).append(" ");
 }
 
 } // namespace buildcc::base
