@@ -16,6 +16,7 @@ set(GCOVR_REMOVE_OPTIONS
     --exclude "(.+/)?CppUTest(.+/)?"
     --exclude "(.+/)?CppUTestExt(.+/)?"
     --exclude "(.+/)?mock(.+/)?"
+    --exclude "(.+/)?fmt(.+/)?"
 )
 
 # TODO, Update
