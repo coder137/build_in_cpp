@@ -30,16 +30,7 @@ void Target::AddIncludeDir(const fs::path &relative_include_dir) {
       (target_root_source_dir_ / relative_include_dir)
           .make_preferred()
           .string();
-  if (current_include_dirs_.find(absolute_include_dir) !=
-      current_include_dirs_.end()) {
-    return;
-  }
-
   current_include_dirs_.insert(absolute_include_dir);
-  std::string temp{""};
-  aggregated_include_dirs_ += temp.append(prefix_include_dir_)
-                                  .append(internal::quote(absolute_include_dir))
-                                  .append(" ");
 }
 
 } // namespace buildcc::base
