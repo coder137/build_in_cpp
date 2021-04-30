@@ -37,8 +37,12 @@ set(FLATBUFFERS_BUILD_FLATLIB ON CACHE BOOL "Flatbuffers build flatlib")
 # set(FLATBUFFERS_BUILD_SHAREDLIB ON CACHE BOOL "Flatbuffers built as dynamic library")
 add_subdirectory(flatbuffers)
 
+set(FMT_INSTALL ON CACHE BOOL "Fmt install")
+add_subdirectory(fmt)
+
 # set(SPDLOG_BUILD_SHARED ON CACHE BOOL "Spdlog built as dynamic library")
 set(SPDLOG_INSTALL ON CACHE BOOL "Spdlog install")
+set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "Spdlog FMT external lib")
 add_subdirectory(spdlog)
 
 if (${TESTING})

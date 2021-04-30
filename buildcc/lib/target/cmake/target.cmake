@@ -34,6 +34,7 @@ target_include_directories(target PRIVATE
 target_compile_options(target PRIVATE ${BUILD_COMPILE_FLAGS})
 target_link_options(target PRIVATE ${BUILD_LINK_FLAGS})
 target_link_libraries(target PRIVATE 
-    flatbuffers 
+    flatbuffers
+    fmt::fmt
 )
 add_dependencies(target fbs_to_header)

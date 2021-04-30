@@ -3,6 +3,8 @@
 #include "assert_fatal.h"
 #include "env.h"
 
+#include "fmt/format.h"
+
 namespace buildcc::internal {
 
 // rechecks
@@ -34,35 +36,37 @@ std::string quote(const std::string &str) {
   if (str.find(" ") == std::string::npos) {
     return str;
   }
-
-  return "\"" + str + "\"";
+  return fmt::format("\"{}\"", str);
 }
 
 // Aggregates
 
 std::string aggregate(const std::vector<std::string> &list) {
-  std::string agg = "";
-  for (const auto &l : list) {
-    agg += l + " ";
-  }
-  return agg;
+  return fmt::format("{}", fmt::join(list, " "));
 }
 
 std::string aggregate(const std::unordered_set<std::string> &list) {
-  std::string agg = "";
-  for (const auto &l : list) {
-    agg += l + " ";
-  }
-  return agg;
+  return fmt::format("{}", fmt::join(list, " "));
 }
 
 std::string aggregate(const buildcc::internal::path_unordered_set &paths) {
-  std::string agg = "";
-  for (const auto &p : paths) {
-    std::string temp{""};
-    agg += temp.append(internal::quote(p.GetPathname().string())).append(" ");
-  }
-  return agg;
+  std::vector<std::string> agg;
+  std::transform(paths.begin(), paths.end(), std::back_inserter(agg),
+                 [](const buildcc::internal::Path &p) -> std::string {
+                   return quote(p.GetPathname().string());
+                 });
+  return aggregate(agg);
+}
+
+std::string
+aggregate_include_dirs(const std::string &prefix,
+                       const std::unordered_set<std::string> &dirs) {
+  std::vector<std::string> agg;
+  std::transform(dirs.begin(), dirs.end(), std::back_inserter(agg),
+                 [&](const std::string &dir) -> std::string {
+                   return fmt::format("{}{}", prefix, quote(dir));
+                 });
+  return aggregate(agg);
 }
 
 } // namespace buildcc::internal

@@ -24,6 +24,8 @@ void Target::Build() {
   aggregated_link_flags_ = internal::aggregate(current_link_flags_);
 
   aggregated_lib_deps_ = internal::aggregate(current_lib_deps_);
+  aggregated_include_dirs_ = internal::aggregate_include_dirs(
+      prefix_include_dir_, current_include_dirs_);
 
   const bool is_loaded = loader_.Load();
   if (!is_loaded) {

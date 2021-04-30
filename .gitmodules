@@ -7,3 +7,6 @@
 [submodule "cpputest"]
 	path = cpputest
 	url = https://github.com/cpputest/cpputest.git
+[submodule "fmt"]
+	path = fmt
+	url = https://github.com/fmtlib/fmt.git
