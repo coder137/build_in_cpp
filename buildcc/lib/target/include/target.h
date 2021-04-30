@@ -61,7 +61,7 @@ public:
   void AddHeader(const std::string &relative_filename,
                  const fs::path &relative_to_target_path);
 
-  void AddIncludeDir(const std::string &relative_include_dir);
+  void AddIncludeDir(const fs::path &relative_include_dir);
 
   // TODO, Add fs::path version of the same, can be found using lib_dirs
   void AddLibDep(const Target &lib_dep);

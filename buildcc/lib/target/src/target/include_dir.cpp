@@ -23,7 +23,7 @@ void Target::AddHeader(const std::string &relative_filename) {
 }
 
 // Public
-void Target::AddIncludeDir(const std::string &relative_include_dir) {
+void Target::AddIncludeDir(const fs::path &relative_include_dir) {
   env::log_trace(__FUNCTION__, name_);
 
   const std::string absolute_include_dir =
