@@ -49,7 +49,7 @@ void ClangCompileCommands::Generate() {
 
       // DONE, Use flatbuffers::Flexbuffer to create binary format
       fbb.Map([&]() {
-        fbb.String("directory", directory);
+        fbb.String("directory", directory.string());
         fbb.String("command", internal::aggregate(command));
         fbb.String("file", input_file.string());
       });
