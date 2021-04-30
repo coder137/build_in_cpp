@@ -59,7 +59,8 @@ std::string aggregate(const std::unordered_set<std::string> &list) {
 std::string aggregate(const buildcc::internal::path_unordered_set &paths) {
   std::string agg = "";
   for (const auto &p : paths) {
-    agg += p.GetPathname().string() + " ";
+    std::string temp{""};
+    agg += temp.append(internal::quote(p.GetPathname().string())).append(" ");
   }
   return agg;
 }

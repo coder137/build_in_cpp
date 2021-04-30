@@ -82,7 +82,7 @@ void Target::CompileSource(const fs::path &current_source) {
 std::vector<std::string>
 Target::CompileCommand(const fs::path &current_source) const {
   const std::string output_source =
-      GetCompiledSourcePath(current_source).string();
+      internal::quote(GetCompiledSourcePath(current_source).string());
   const std::string compiler = GetCompiler(current_source);
 
   const auto type = GetSourceType(current_source);
@@ -91,7 +91,7 @@ Target::CompileCommand(const fs::path &current_source) const {
       : type == SourceType::Cpp ? aggregated_cpp_compile_flags_
                                 : "";
 
-  const std::string input_source = current_source.string();
+  const std::string input_source = internal::quote(current_source.string());
   return CompileCommand(input_source, output_source, compiler,
                         aggregated_preprocessor_flags_,
                         aggregated_compile_flags, aggregated_include_dirs_);

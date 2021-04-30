@@ -77,8 +77,8 @@ fs::path Target::GetCompiledSourcePath(const fs::path &source) const {
 std::vector<std::string> Target::GetCompiledSources() const {
   std::vector<std::string> compiled_sources;
   for (const auto &current_source : current_source_files_) {
-    compiled_sources.push_back(
-        GetCompiledSourcePath(current_source.GetPathname()).string());
+    compiled_sources.push_back(internal::quote(
+        GetCompiledSourcePath(current_source.GetPathname()).string()));
   }
   return compiled_sources;
 }

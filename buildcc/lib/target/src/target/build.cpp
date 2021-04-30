@@ -22,6 +22,7 @@ void Target::Build() {
   aggregated_cpp_compile_flags_ =
       internal::aggregate(current_cpp_compile_flags_);
   aggregated_link_flags_ = internal::aggregate(current_link_flags_);
+
   aggregated_lib_deps_ = internal::aggregate(current_lib_deps_);
 
   const bool is_loaded = loader_.Load();
@@ -88,7 +89,7 @@ void Target::BuildTarget() {
   const std::string aggregated_compiled_sources =
       internal::aggregate(GetCompiledSources());
 
-  const std::string output_target = GetTargetPath().string();
+  const std::string output_target = internal::quote(GetTargetPath().string());
   bool success = internal::command(Link(output_target, aggregated_link_flags_,
                                         aggregated_compiled_sources,
                                         aggregated_lib_deps_));
