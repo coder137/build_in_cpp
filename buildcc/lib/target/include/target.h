@@ -61,7 +61,7 @@ public:
   void AddHeader(const std::string &relative_filename,
                  const fs::path &relative_to_target_path);
 
-  void AddIncludeDir(const std::string &relative_include_dir);
+  void AddIncludeDir(const fs::path &relative_include_dir);
 
   // TODO, Add fs::path version of the same, can be found using lib_dirs
   void AddLibDep(const Target &lib_dep);
@@ -77,7 +77,7 @@ public:
   std::vector<std::string> CompileCommand(const fs::path &current_source) const;
 
   fs::path GetTargetPath() const {
-    return (GetTargetIntermediateDir() / GetName());
+    return (GetTargetIntermediateDir() / GetName()).make_preferred();
   }
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
 
@@ -106,8 +106,10 @@ public:
 protected:
   // Getters
   SourceType GetSourceType(const fs::path &source) const;
-  std::string GetCompiledSourceName(const fs::path &source) const;
   const std::string &GetCompiler(const fs::path &source) const;
+
+  fs::path GetCompiledSourcePath(const fs::path &source) const;
+  std::vector<std::string> GetCompiledSources() const;
 
 private:
   void Initialize();
@@ -116,12 +118,9 @@ private:
   void BuildCompile();
   void BuildRecompile();
 
-  // Compiling
-  std::vector<std::string> CompileSources();
-  std::vector<std::string> RecompileSources();
-  void SourceRemoved();
-  void SourceAdded();
-  void SourceUpdated();
+  // Compile
+  void CompileSources();
+  void RecompileSources();
 
   void CompileSource(const fs::path &current_source);
 
@@ -144,16 +143,8 @@ private:
   void RecheckFlags(const std::unordered_set<std::string> &previous_flags,
                     const std::unordered_set<std::string> &current_flags);
 
-  void PathRemoved();
-  void PathAdded();
-  void PathUpdated();
-
-  void DirChanged();
-
-  void FlagChanged();
-
   // Linking
-  void BuildTarget(const std::vector<std::string> &compiled_sources);
+  void BuildTarget();
 
   // * Virtual
   // PreLink();
@@ -169,6 +160,16 @@ private:
 
   // Fbs
   bool Store();
+
+  // Callbacks
+  void SourceRemoved();
+  void SourceAdded();
+  void SourceUpdated();
+  void PathRemoved();
+  void PathAdded();
+  void PathUpdated();
+  void DirChanged();
+  void FlagChanged();
 
 private:
   // Constructor defined

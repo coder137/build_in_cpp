@@ -15,6 +15,10 @@ void Target::AddSource(const std::string &relative_filename,
   fs::path absolute_filepath =
       target_root_source_dir_ / relative_to_target_path / relative_filename;
   internal::add_path(absolute_filepath, current_source_files_);
+
+  const fs::path compiled_source_parent_path =
+      GetCompiledSourcePath(absolute_filepath).parent_path();
+  fs::create_directories(compiled_source_parent_path);
 }
 
 void Target::AddSource(const std::string &relative_filename) {
@@ -23,22 +27,15 @@ void Target::AddSource(const std::string &relative_filename) {
 
 // Private
 
-std::vector<std::string> Target::CompileSources() {
+void Target::CompileSources() {
   env::log_trace(__FUNCTION__, name_);
-
-  std::vector<std::string> compiled_files;
   for (const auto &file : current_source_files_) {
     const auto &current_source = file.GetPathname();
-    const std::string compiled_source = GetCompiledSourceName(current_source);
-
     CompileSource(current_source);
-    compiled_files.push_back(compiled_source);
   }
-
-  return compiled_files;
 }
 
-std::vector<std::string> Target::RecompileSources() {
+void Target::RecompileSources() {
   env::log_trace(__FUNCTION__, name_);
 
   const auto &previous_source_files = loader_.GetLoadedSources();
@@ -51,10 +48,8 @@ std::vector<std::string> Target::RecompileSources() {
     SourceRemoved();
   }
 
-  std::vector<std::string> compiled_files;
   for (const auto &current_file : current_source_files_) {
     const auto &current_source = current_file.GetPathname();
-    const std::string compiled_source = GetCompiledSourceName(current_source);
 
     // Find current_file in the loaded sources
     auto iter = previous_source_files.find(current_file);
@@ -75,10 +70,7 @@ std::vector<std::string> Target::RecompileSources() {
         // *3 Do nothing
       }
     }
-    compiled_files.push_back(compiled_source);
   }
-
-  return compiled_files;
 }
 
 void Target::CompileSource(const fs::path &current_source) {
@@ -89,7 +81,8 @@ void Target::CompileSource(const fs::path &current_source) {
 
 std::vector<std::string>
 Target::CompileCommand(const fs::path &current_source) const {
-  const std::string output_source = GetCompiledSourceName(current_source);
+  const std::string output_source =
+      internal::quote(GetCompiledSourcePath(current_source).string());
   const std::string compiler = GetCompiler(current_source);
 
   const auto type = GetSourceType(current_source);
@@ -98,7 +91,7 @@ Target::CompileCommand(const fs::path &current_source) const {
       : type == SourceType::Cpp ? aggregated_cpp_compile_flags_
                                 : "";
 
-  const std::string input_source = current_source.string();
+  const std::string input_source = internal::quote(current_source.string());
   return CompileCommand(input_source, output_source, compiler,
                         aggregated_preprocessor_flags_,
                         aggregated_compile_flags, aggregated_include_dirs_);

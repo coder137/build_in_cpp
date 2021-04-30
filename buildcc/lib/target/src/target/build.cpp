@@ -15,12 +15,14 @@ namespace buildcc::base {
 void Target::Build() {
   env::log_trace(__FUNCTION__, name_);
 
+  // TODO, Optimize these
   aggregated_preprocessor_flags_ =
       internal::aggregate(current_preprocessor_flags_);
   aggregated_c_compile_flags_ = internal::aggregate(current_c_compile_flags_);
   aggregated_cpp_compile_flags_ =
       internal::aggregate(current_cpp_compile_flags_);
   aggregated_link_flags_ = internal::aggregate(current_link_flags_);
+
   aggregated_lib_deps_ = internal::aggregate(current_lib_deps_);
 
   const bool is_loaded = loader_.Load();
@@ -34,8 +36,8 @@ void Target::Build() {
 }
 
 void Target::BuildCompile() {
-  const std::vector<std::string> compiled_sources = CompileSources();
-  BuildTarget(compiled_sources);
+  CompileSources();
+  BuildTarget();
   Store();
   first_build_ = true;
 }
@@ -61,11 +63,10 @@ void Target::BuildRecompile() {
   RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_);
 
   // * Compile sources
-  std::vector<std::string> compiled_sources;
   if (dirty_) {
-    compiled_sources = CompileSources();
+    CompileSources();
   } else {
-    compiled_sources = RecompileSources();
+    RecompileSources();
   }
 
   // * Completely rebuild target / link if any of the following change
@@ -75,27 +76,21 @@ void Target::BuildRecompile() {
   RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
   RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
   if (dirty_) {
-    BuildTarget(compiled_sources);
+    BuildTarget();
     Store();
     rebuild_ = true;
   }
 }
 
-void Target::BuildTarget(const std::vector<std::string> &compiled_sources) {
+void Target::BuildTarget() {
   env::log_trace(__FUNCTION__, name_);
 
   // Add compiled sources
   const std::string aggregated_compiled_sources =
-      internal::aggregate(compiled_sources);
+      internal::aggregate(GetCompiledSources());
 
-  // Final Target
-  // TODO, Improve this logic
-  // Select cpp compiler for building target only if there is .cpp file
-  // added
-  // Else use c compiler
-  const fs::path target = GetTargetPath();
-
-  bool success = internal::command(Link(target.string(), aggregated_link_flags_,
+  const std::string output_target = internal::quote(GetTargetPath().string());
+  bool success = internal::command(Link(output_target, aggregated_link_flags_,
                                         aggregated_compiled_sources,
                                         aggregated_lib_deps_));
 
@@ -108,6 +103,7 @@ Target::Link(const std::string &output_target,
              const std::string &aggregated_compiled_sources,
              const std::string &aggregated_lib_deps) const {
   return {
+      // TODO, Let user decide this during Linking phase
       toolchain_.GetCppCompiler(),
       aggregated_link_flags,
       aggregated_compiled_sources,

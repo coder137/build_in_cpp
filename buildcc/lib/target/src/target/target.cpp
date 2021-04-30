@@ -46,12 +46,6 @@ SourceType Target::GetSourceType(const fs::path &source) const {
   return type;
 }
 
-std::string Target::GetCompiledSourceName(const fs::path &source) const {
-  const auto output_filename =
-      GetTargetIntermediateDir() / (source.filename().string() + ".o");
-  return output_filename.string();
-}
-
 const std::string &Target::GetCompiler(const fs::path &source) const {
   // .cpp -> GetCppCompiler
   // .c / .asm -> GetCCompiler
@@ -69,6 +63,24 @@ const std::string &Target::GetCompiler(const fs::path &source) const {
     break;
   }
   return toolchain_.GetCppCompiler();
+}
+
+fs::path Target::GetCompiledSourcePath(const fs::path &source) const {
+  fs::path absolute_compiled_source =
+      target_intermediate_dir_ /
+      source.lexically_relative(env::get_project_root());
+  absolute_compiled_source.replace_filename(source.filename().string() + ".o");
+  absolute_compiled_source.make_preferred();
+  return absolute_compiled_source;
+}
+
+std::vector<std::string> Target::GetCompiledSources() const {
+  std::vector<std::string> compiled_sources;
+  for (const auto &current_source : current_source_files_) {
+    compiled_sources.push_back(internal::quote(
+        GetCompiledSourcePath(current_source.GetPathname()).string()));
+  }
+  return compiled_sources;
 }
 
 // PRIVATE

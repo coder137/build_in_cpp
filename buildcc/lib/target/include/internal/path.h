@@ -62,7 +62,8 @@ public:
 
 private:
   explicit Path(const fs::path &pathname, std::uint64_t last_write_timestamp)
-      : pathname_(pathname), last_write_timestamp_(last_write_timestamp) {}
+      : pathname_(fs::path(pathname).make_preferred()),
+        last_write_timestamp_(last_write_timestamp) {}
 
 private:
   fs::path pathname_;
