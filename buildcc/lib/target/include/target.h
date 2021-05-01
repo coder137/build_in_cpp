@@ -63,7 +63,6 @@ public:
 
   void AddIncludeDir(const fs::path &relative_include_dir);
 
-  // TODO, Add fs::path version of the same, can be found using lib_dirs
   void AddLibDep(const Target &lib_dep);
 
   void AddPreprocessorFlag(const std::string &flag);
@@ -102,6 +101,7 @@ public:
 
 public:
   std::string prefix_include_dir_{"-I"};
+  std::string prefix_lib_dir_{"-L"};
 
 protected:
   // Getters
@@ -156,6 +156,7 @@ private:
   Link(const std::string &output_target,
        const std::string &aggregated_link_flags,
        const std::string &aggregated_compiled_sources,
+       const std::string &aggregated_lib_dirs,
        const std::string &aggregated_lib_deps) const;
 
   // Fbs
@@ -185,7 +186,7 @@ private:
   internal::path_unordered_set current_lib_deps_;
 
   std::unordered_set<std::string> current_include_dirs_;
-  // TODO, Add lib dirs similar to include_dirs
+  std::unordered_set<std::string> current_lib_dirs_;
 
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;
@@ -195,7 +196,9 @@ private:
   // TODO, Make appending to this more efficient
   // TODO, Might not need to be persistent
   std::string aggregated_include_dirs_;
+  std::string aggregated_lib_dirs_;
   std::string aggregated_lib_deps_;
+
   std::string aggregated_preprocessor_flags_;
   std::string aggregated_c_compile_flags_;
   std::string aggregated_cpp_compile_flags_;

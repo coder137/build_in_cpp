@@ -26,6 +26,7 @@ private:
   Link(const std::string &output_target,
        const std::string &aggregated_link_flags,
        const std::string &aggregated_compiled_sources,
+       const std::string &aggregated_lib_dirs,
        const std::string &aggregated_lib_deps) const override;
 };
 
