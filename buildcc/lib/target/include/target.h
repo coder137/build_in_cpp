@@ -2,6 +2,7 @@
 #define TARGET_INCLUDE_BASE_TARGET_H_
 
 #include <filesystem>
+#include <functional>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -140,10 +141,19 @@ private:
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
                     const internal::path_unordered_set &current_path);
+
   void RecheckDirs(const std::unordered_set<std::string> &previous_dirs,
                    const std::unordered_set<std::string> &current_dirs);
   void RecheckFlags(const std::unordered_set<std::string> &previous_flags,
                     const std::unordered_set<std::string> &current_flags);
+  void RecheckExternalLib(
+      const std::unordered_set<std::string> &previous_external_libs,
+      const std::unordered_set<std::string> &current_external_libs);
+
+  // Helper function
+  void RecheckChanged(const std::unordered_set<std::string> &previous,
+                      const std::unordered_set<std::string> &current,
+                      std::function<void(void)> callback);
 
   // Linking
   void BuildTarget();
@@ -171,8 +181,10 @@ private:
   void PathRemoved();
   void PathAdded();
   void PathUpdated();
+
   void DirChanged();
   void FlagChanged();
+  void ExternalLibChanged();
 
 private:
   // Constructor defined
