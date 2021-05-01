@@ -4,6 +4,8 @@
 
 #include "assert_fatal.h"
 
+#include "fmt/format.h"
+
 namespace buildcc::base {
 
 // Public
@@ -76,8 +78,8 @@ void Target::RecompileSources() {
 
 void Target::CompileSource(const fs::path &current_source) {
   const bool success = internal::command(CompileCommand(current_source));
-  env::assert_fatal(success,
-                    "Compilation failed for: " + current_source.string());
+  env::assert_fatal(success, fmt::format("Compilation failed for: {}",
+                                         current_source.string()));
 }
 
 std::vector<std::string>
