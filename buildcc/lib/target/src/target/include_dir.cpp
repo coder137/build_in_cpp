@@ -9,7 +9,7 @@ namespace buildcc::base {
 
 void Target::AddHeader(const std::string &relative_filename,
                        const fs::path &relative_to_target_path) {
-  env::log_trace(__FUNCTION__, name_);
+  env::log_trace(name_, __FUNCTION__);
 
   // Check Source
   fs::path absolute_filepath =
@@ -24,7 +24,7 @@ void Target::AddHeader(const std::string &relative_filename) {
 
 // Public
 void Target::AddIncludeDir(const fs::path &relative_include_dir) {
-  env::log_trace(__FUNCTION__, name_);
+  env::log_trace(name_, __FUNCTION__);
 
   const std::string absolute_include_dir =
       (target_root_source_dir_ / relative_include_dir)

@@ -27,10 +27,10 @@ void ClangCompileCommands::Generate() {
   }
 
   if (!regenerate) {
-    env::log_trace("Generate -> false", "ClangCompileCommands");
+    env::log_trace("ClangCompileCommands", "Generate -> false");
     return;
   }
-  env::log_trace("Generate -> true", "ClangCompileCommands");
+  env::log_trace("ClangCompileCommands", "Generate -> true");
 
   // DONE, Create custom flexbuffer binary compile_commands interface
   flexbuffers::Builder fbb;

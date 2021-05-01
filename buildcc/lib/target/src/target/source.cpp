@@ -9,7 +9,7 @@ namespace buildcc::base {
 // Public
 void Target::AddSource(const std::string &relative_filename,
                        const std::filesystem::path &relative_to_target_path) {
-  env::log_trace(__FUNCTION__, name_);
+  env::log_trace(name_, __FUNCTION__);
 
   // Check Source
   fs::path absolute_filepath =
@@ -28,7 +28,8 @@ void Target::AddSource(const std::string &relative_filename) {
 // Private
 
 void Target::CompileSources() {
-  env::log_trace(__FUNCTION__, name_);
+  env::log_trace(name_, __FUNCTION__);
+
   for (const auto &file : current_source_files_) {
     const auto &current_source = file.GetPathname();
     CompileSource(current_source);
@@ -36,7 +37,7 @@ void Target::CompileSources() {
 }
 
 void Target::RecompileSources() {
-  env::log_trace(__FUNCTION__, name_);
+  env::log_trace(name_, __FUNCTION__);
 
   const auto &previous_source_files = loader_.GetLoadedSources();
 

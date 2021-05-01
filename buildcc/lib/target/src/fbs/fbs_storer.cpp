@@ -63,7 +63,7 @@ get_fbs_vector_string(flatbuffers::FlatBufferBuilder &builder,
 namespace buildcc::base {
 
 bool Target::Store() {
-  env::log_trace(__FUNCTION__, name_);
+  env::log_trace(name_, __FUNCTION__);
 
   flatbuffers::FlatBufferBuilder builder;
 

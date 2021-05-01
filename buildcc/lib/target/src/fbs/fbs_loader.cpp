@@ -42,7 +42,7 @@ namespace buildcc::internal {
 
 // Public functions
 bool FbsLoader::Load() {
-  env::log_trace(__FUNCTION__, name_);
+  env::log_trace(name_, __FUNCTION__);
 
   auto file_path = GetBinaryPath();
   std::string buffer;

@@ -20,7 +20,7 @@ private:
 
 inline void assert_fatal(bool expression, std::string_view message) {
   if (!expression) {
-    buildcc::env::log_critical(message, "assert");
+    buildcc::env::log_critical("assert", message);
     throw assert_exception(message);
   }
 }

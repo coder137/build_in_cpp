@@ -13,7 +13,7 @@ namespace buildcc::base {
 // * Link
 // Library dependencies
 void Target::Build() {
-  env::log_trace(__FUNCTION__, name_);
+  env::log_trace(name_, __FUNCTION__);
 
   // TODO, Optimize these
   aggregated_preprocessor_flags_ =
@@ -85,7 +85,7 @@ void Target::BuildRecompile() {
 }
 
 void Target::BuildTarget() {
-  env::log_trace(__FUNCTION__, name_);
+  env::log_trace(name_, __FUNCTION__);
 
   // Add compiled sources
   const std::string aggregated_compiled_sources =
