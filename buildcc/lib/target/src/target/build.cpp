@@ -84,6 +84,8 @@ void Target::BuildRecompile() {
   RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
   RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
   RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
+  RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
+                     current_external_lib_deps_);
   if (dirty_) {
     BuildTarget();
     Store();
