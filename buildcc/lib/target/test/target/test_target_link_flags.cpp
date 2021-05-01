@@ -5,6 +5,9 @@
 
 #include "env.h"
 
+//
+#include "internal/fbs_loader.h"
+
 // Third Party
 #include "flatbuffers/util.h"
 
@@ -18,6 +21,9 @@
 // clang-format off
 TEST_GROUP(TargetTestLinkFlagsGroup)
 {
+    void teardown() {
+      mock().clear();
+    }
 };
 // clang-format on
 
@@ -40,6 +46,19 @@ TEST(TargetTestLinkFlagsGroup, Target_AddLinkFlag) {
                                "data");
   simple.AddSource(DUMMY_MAIN);
   simple.AddLinkFlag("-lm");
+
+  buildcc::internal::m::Expect_command(1, true);
+  buildcc::internal::m::Expect_command(1, true);
+  simple.Build();
+
+  mock().checkExpectations();
+
+  // Verify binary
+  buildcc::internal::FbsLoader loader(NAME, simple.GetTargetIntermediateDir());
+  bool loaded = loader.Load();
+  CHECK_TRUE(loaded);
+
+  CHECK_EQUAL(loader.GetLoadedLinkFlags().size(), 1);
 }
 
 TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
@@ -87,7 +106,6 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
 }
 
 int main(int ac, char **av) {
-  MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
   buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_TARGET_LINK_INTERMEDIATE_DIR);
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

@@ -18,6 +18,9 @@
 // clang-format off
 TEST_GROUP(TargetTestIncludeDirGroup)
 {
+    void teardown() {
+      mock().clear();
+    }
 };
 // clang-format on
 
@@ -253,7 +256,6 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
 }
 
 int main(int ac, char **av) {
-  MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
   buildcc::env::init(BUILD_SCRIPT_SOURCE,
                      BUILD_TARGET_INCLUDE_DIR_INTERMEDIATE_DIR);
   return CommandLineTestRunner::RunAllTests(ac, av);

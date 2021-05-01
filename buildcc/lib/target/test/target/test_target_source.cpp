@@ -18,6 +18,9 @@
 // clang-format off
 TEST_GROUP(TargetTestSourceGroup)
 {
+    void teardown() {
+      mock().clear();
+    }
 };
 // clang-format on
 
@@ -213,7 +216,6 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
 }
 
 int main(int ac, char **av) {
-  MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
   buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_TARGET_SOURCE_INTERMEDIATE_DIR);
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
