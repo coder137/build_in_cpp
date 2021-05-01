@@ -62,6 +62,7 @@ private:
   path_unordered_set loaded_lib_deps_;
 
   std::unordered_set<std::string> loaded_include_dirs_;
+  std::unordered_set<std::string> loaded_lib_dirs_;
 
   std::unordered_set<std::string> loaded_preprocessor_flags_;
   std::unordered_set<std::string> loaded_c_compile_flags_;

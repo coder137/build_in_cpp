@@ -75,7 +75,7 @@ bool Target::Store() {
   auto fbs_lib_deps = get_fbs_vector_path(builder, current_lib_deps_);
 
   auto fbs_include_dirs = get_fbs_vector_string(builder, current_include_dirs_);
-  // TODO, lib_dirs
+  auto fbs_lib_dirs = get_fbs_vector_string(builder, current_lib_dirs_);
 
   auto fbs_preprocessor_flags =
       get_fbs_vector_string(builder, current_preprocessor_flags_);
@@ -88,7 +88,7 @@ bool Target::Store() {
   auto fbs_target = fbs::CreateTargetDirect(
       builder, name_.c_str(), target_intermediate_dir_.string().c_str(),
       fbs_target_type, fbs_toolchain, &fbs_source_files, &fbs_header_files,
-      &fbs_lib_deps, &fbs_include_dirs, nullptr, &fbs_preprocessor_flags,
+      &fbs_lib_deps, &fbs_include_dirs, &fbs_lib_dirs, &fbs_preprocessor_flags,
       &fbs_c_compiler_flags, &fbs_cpp_compiler_flags, &fbs_link_flags);
   fbs::FinishTargetBuffer(builder, fbs_target);
 
