@@ -32,6 +32,9 @@ table Target {
     header_files:[Path];
     lib_deps:[Path];
 
+    // Links
+    external_lib_deps:[string];
+
     // Directories
     include_dirs:[string];
     lib_dirs:[string];
