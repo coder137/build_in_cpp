@@ -9,7 +9,7 @@ target_sources(mock_target PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/target/target.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/target/source.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/target/include_dir.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/target/lib_dep.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/target/lib.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/target/build.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/target/flags.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/mock/target/recheck_states.cpp
