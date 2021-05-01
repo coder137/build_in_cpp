@@ -4,6 +4,8 @@
 
 #include "assert_fatal.h"
 
+#include "fmt/format.h"
+
 namespace buildcc::base {
 
 // * Load
@@ -13,7 +15,7 @@ namespace buildcc::base {
 // * Link
 // Library dependencies
 void Target::Build() {
-  env::log_trace(__FUNCTION__, name_);
+  env::log_trace(name_, __FUNCTION__);
 
   // TODO, Optimize these
   aggregated_preprocessor_flags_ =
@@ -85,7 +87,7 @@ void Target::BuildRecompile() {
 }
 
 void Target::BuildTarget() {
-  env::log_trace(__FUNCTION__, name_);
+  env::log_trace(name_, __FUNCTION__);
 
   // Add compiled sources
   const std::string aggregated_compiled_sources =
@@ -96,7 +98,7 @@ void Target::BuildTarget() {
                                         aggregated_compiled_sources,
                                         aggregated_lib_deps_));
 
-  env::assert_fatal(success, "Compilation failed for: " + GetName());
+  env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
 }
 
 std::vector<std::string>

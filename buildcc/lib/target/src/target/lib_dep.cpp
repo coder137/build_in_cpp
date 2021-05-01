@@ -7,7 +7,7 @@
 namespace buildcc::base {
 
 void Target::AddLibDep(const Target &lib_dep) {
-  env::log_trace(__FUNCTION__, name_);
+  env::log_trace(name_, __FUNCTION__);
 
   const fs::path lib_dep_path = lib_dep.GetTargetPath();
   internal::add_path(lib_dep_path, current_lib_deps_);

@@ -6,6 +6,9 @@
 // Env
 #include "assert_fatal.h"
 
+// Fmt
+#include "fmt/format.h"
+
 namespace fs = std::filesystem;
 
 namespace {
@@ -59,7 +62,8 @@ const std::string &Target::GetCompiler(const fs::path &source) const {
   case SourceType::Cpp:
     break;
   default:
-    buildcc::env::assert_fatal(false, "Invalid source " + source.string());
+    buildcc::env::assert_fatal(
+        false, fmt::format("Invalid source {}", source.string()));
     break;
   }
   return toolchain_.GetCppCompiler();
