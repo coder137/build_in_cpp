@@ -62,6 +62,7 @@ public:
                  const fs::path &relative_to_target_path);
 
   void AddIncludeDir(const fs::path &relative_include_dir);
+  void AddLibDir(const fs::path &absolute_lib_dir);
 
   void AddLibDep(const Target &lib_dep);
 
