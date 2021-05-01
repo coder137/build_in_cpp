@@ -25,7 +25,9 @@ void Target::Build() {
       internal::aggregate(current_cpp_compile_flags_);
   aggregated_link_flags_ = internal::aggregate(current_link_flags_);
 
-  aggregated_lib_deps_ = internal::aggregate(current_lib_deps_);
+  aggregated_lib_deps_ =
+      fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
+                  internal::aggregate(current_lib_deps_));
 
   aggregated_include_dirs_ = internal::aggregate_with_prefix(
       prefix_include_dir_, current_include_dirs_);

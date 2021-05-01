@@ -65,6 +65,7 @@ public:
   void AddLibDir(const fs::path &absolute_lib_dir);
 
   void AddLibDep(const Target &lib_dep);
+  void AddLibDep(const std::string &lib_dep);
 
   void AddPreprocessorFlag(const std::string &flag);
   void AddCCompileFlag(const std::string &flag);
@@ -186,6 +187,8 @@ private:
   internal::path_unordered_set current_header_files_;
   internal::path_unordered_set current_lib_deps_;
 
+  std::unordered_set<std::string> current_external_lib_deps_;
+
   std::unordered_set<std::string> current_include_dirs_;
   std::unordered_set<std::string> current_lib_dirs_;
 
@@ -198,6 +201,7 @@ private:
   // TODO, Might not need to be persistent
   std::string aggregated_include_dirs_;
   std::string aggregated_lib_dirs_;
+  // NOTE, This contains current_external_lib_deps_ + current_lib_deps_
   std::string aggregated_lib_deps_;
 
   std::string aggregated_preprocessor_flags_;
