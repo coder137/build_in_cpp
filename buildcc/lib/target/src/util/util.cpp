@@ -59,9 +59,8 @@ std::string aggregate(const buildcc::internal::path_unordered_set &paths) {
   return aggregate(agg);
 }
 
-std::string
-aggregate_include_dirs(const std::string &prefix,
-                       const std::unordered_set<std::string> &dirs) {
+std::string aggregate_with_prefix(const std::string &prefix,
+                                  const std::unordered_set<std::string> &dirs) {
   std::vector<std::string> agg;
   std::transform(dirs.begin(), dirs.end(), std::back_inserter(agg),
                  [&](const std::string &dir) -> std::string {
