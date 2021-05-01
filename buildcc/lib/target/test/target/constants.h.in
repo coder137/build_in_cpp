@@ -7,6 +7,7 @@ inline constexpr char const *BUILD_TARGET_BASE_INTERMEDIATE_DIR = "@CMAKE_CURREN
 inline constexpr char const * BUILD_TARGET_SOURCE_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_source";
 inline constexpr char const * BUILD_TARGET_INCLUDE_DIR_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_include_dir";
 inline constexpr char const * BUILD_TARGET_LIB_DEP_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_lib_dep";
+inline constexpr char const * BUILD_TARGET_EXTERNAL_LIB_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_external_lib";
 
 inline constexpr char const * BUILD_TARGET_PREPROCESSOR_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_preprocessor_flag";
 inline constexpr char const * BUILD_TARGET_C_COMPILE_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_c_compile_flag";
