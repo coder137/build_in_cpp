@@ -16,22 +16,17 @@ enum class LogLevel {
   Fatal = Critical,
 };
 
-void set_log_pattern(const std::string_view &pattern);
+void set_log_pattern(std::string_view pattern);
 void set_log_level(LogLevel level);
 
 // Logging functions
-void log(LogLevel level, const std::string_view &message,
-         const std::string_view &name = "env");
-void log_trace(const std::string_view &message,
-               const std::string_view &name = "env");
-void log_debug(const std::string_view &message,
-               const std::string_view &name = "env");
-void log_info(const std::string_view &message,
-              const std::string_view &name = "env");
-void log_warning(const std::string_view &message,
-                 const std::string_view &name = "env");
-void log_critical(const std::string_view &message,
-                  const std::string_view &name = "env");
+void log(LogLevel level, std::string_view message,
+         std::string_view name = "env");
+void log_trace(std::string_view message, std::string_view name = "env");
+void log_debug(std::string_view message, std::string_view name = "env");
+void log_info(std::string_view message, std::string_view name = "env");
+void log_warning(std::string_view message, std::string_view name = "env");
+void log_critical(std::string_view message, std::string_view name = "env");
 
 } // namespace buildcc::env
 
