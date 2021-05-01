@@ -20,13 +20,12 @@ void set_log_pattern(std::string_view pattern);
 void set_log_level(LogLevel level);
 
 // Logging functions
-void log(LogLevel level, std::string_view message,
-         std::string_view name = "env");
-void log_trace(std::string_view message, std::string_view name = "env");
-void log_debug(std::string_view message, std::string_view name = "env");
-void log_info(std::string_view message, std::string_view name = "env");
-void log_warning(std::string_view message, std::string_view name = "env");
-void log_critical(std::string_view message, std::string_view name = "env");
+void log(LogLevel level, std::string_view tag, std::string_view message);
+void log_trace(std::string_view tag, std::string_view message);
+void log_debug(std::string_view tag, std::string_view message);
+void log_info(std::string_view tag, std::string_view message);
+void log_warning(std::string_view tag, std::string_view message);
+void log_critical(std::string_view tag, std::string_view message);
 
 } // namespace buildcc::env
 

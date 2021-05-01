@@ -12,23 +12,23 @@ void set_log_level(LogLevel level) {
   spdlog::set_level((spdlog::level::level_enum)level);
 }
 
-void log(LogLevel level, std::string_view message, std::string_view name) {
-  spdlog::log((spdlog::level::level_enum)level, "[{}]: {}", name, message);
+void log(LogLevel level, std::string_view tag, std::string_view message) {
+  spdlog::log((spdlog::level::level_enum)level, "[{}]: {}", tag, message);
 }
-void log_trace(std::string_view message, std::string_view name) {
-  log(LogLevel::Trace, message, name);
+void log_trace(std::string_view tag, std::string_view message) {
+  log(LogLevel::Trace, tag, message);
 }
-void log_debug(std::string_view message, std::string_view name) {
-  log(LogLevel::Debug, message, name);
+void log_debug(std::string_view tag, std::string_view message) {
+  log(LogLevel::Debug, tag, message);
 }
-void log_info(std::string_view message, std::string_view name) {
-  log(LogLevel::Info, message, name);
+void log_info(std::string_view tag, std::string_view message) {
+  log(LogLevel::Info, tag, message);
 }
-void log_warning(std::string_view message, std::string_view name) {
-  log(LogLevel::Warning, message, name);
+void log_warning(std::string_view tag, std::string_view message) {
+  log(LogLevel::Warning, tag, message);
 }
-void log_critical(std::string_view message, std::string_view name) {
-  log(LogLevel::Critical, message, name);
+void log_critical(std::string_view tag, std::string_view message) {
+  log(LogLevel::Critical, tag, message);
 }
 
 } // namespace buildcc::env
