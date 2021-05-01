@@ -36,6 +36,9 @@ public:
   const std::unordered_set<std::string> &GetLoadedIncludeDirs() const {
     return loaded_include_dirs_;
   }
+  const std::unordered_set<std::string> &GetLoadedLibDirs() const {
+    return loaded_lib_dirs_;
+  }
   const std::unordered_set<std::string> &GetLoadedPreprocessorFlags() const {
     return loaded_preprocessor_flags_;
   }

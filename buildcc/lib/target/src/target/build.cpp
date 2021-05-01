@@ -79,8 +79,8 @@ void Target::BuildRecompile() {
   // * Completely rebuild target / link if any of the following change
   // Target compiled source files either during Compile / Recompile
   // Target library dependencies
-  // TODO, Target library directories
   RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
+  RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
   RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
   if (dirty_) {
     BuildTarget();
