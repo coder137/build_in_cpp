@@ -36,13 +36,13 @@ namespace buildcc::base {
 
 SourceType Target::GetSourceType(const fs::path &source) const {
   SourceType type = SourceType::Invalid;
-  const auto ext = source.extension();
+  const auto ext = source.extension().string();
 
-  if (ext == ".c") {
+  if (valid_c_ext_.find(ext) != valid_c_ext_.end()) {
     type = SourceType::C;
-  } else if (ext == ".cpp" || ext == ".cxx" || ext == ".cc") {
+  } else if (valid_cpp_ext_.find(ext) != valid_cpp_ext_.end()) {
     type = SourceType::Cpp;
-  } else if (ext == ".s" || ext == ".S" || ext == ".asm") {
+  } else if (valid_asm_ext_.find(ext) != valid_asm_ext_.end()) {
     type = SourceType::Asm;
   }
 

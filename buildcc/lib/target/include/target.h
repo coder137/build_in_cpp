@@ -105,6 +105,9 @@ public:
 public:
   std::string prefix_include_dir_{"-I"};
   std::string prefix_lib_dir_{"-L"};
+  std::unordered_set<std::string> valid_c_ext_{".c"};
+  std::unordered_set<std::string> valid_cpp_ext_{".cpp", ".cxx", ".cc"};
+  std::unordered_set<std::string> valid_asm_ext_{".s", ".S", ".asm"};
 
 protected:
   // Getters
