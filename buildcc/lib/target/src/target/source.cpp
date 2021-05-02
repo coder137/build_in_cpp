@@ -28,6 +28,8 @@ void Target::AddSource(const std::string &relative_filename) {
 }
 
 void Target::GlobSources(const fs::path &relative_to_target_path) {
+  env::log_trace(name_, __FUNCTION__);
+
   fs::path absolute_filepath =
       target_root_source_dir_ / relative_to_target_path;
 
@@ -42,8 +44,8 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
     const bool c_match = valid_c_ext_.count(ext) == 1;
     const bool cpp_match = valid_cpp_ext_.count(ext) == 1;
 
-    // TODO, Add path
     if (asm_match || c_match || cpp_match) {
+      env::log_trace(name_, fmt::format("Added source {}", p.path().string()));
       AddSourceAbsolute(p.path());
     }
   }

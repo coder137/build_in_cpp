@@ -54,25 +54,36 @@ public:
   void Build();
 
   // Setters
+
+  // * Sources
   void AddSourceAbsolute(const fs::path &absolute_filepath);
+  // TODO, GlobSourceAbsolute
   void AddSource(const std::string &relative_filename);
   void AddSource(const std::string &relative_filename,
                  const fs::path &relative_to_target_path);
   void GlobSources(const fs::path &relative_to_target_path);
 
+  // * Headers
+  void AddHeaderAbsolute(const fs::path &absolute_filepath);
+  // TODO, GlobHeaderAbsolute
   void AddHeader(const std::string &relative_filename);
   void AddHeader(const std::string &relative_filename,
                  const fs::path &relative_to_target_path);
-  // void GlobHeaders(const fs::path &relative_to_target_path);
+  void GlobHeaders(const fs::path &relative_to_target_path);
 
-  void AddIncludeDir(const fs::path &relative_include_dir);
-  // void AddIncludeDir(const fs::path &relative_include_dir,
-  //                    bool glob_headers = false);
+  // * Include and Lib directory
+  // TODO, AddIncludeDirAbsolute
+  void AddIncludeDir(const fs::path &relative_include_dir,
+                     bool glob_header = false);
+
+  // TODO, Rename this API to AddLibDirAbsolute
   void AddLibDir(const fs::path &absolute_lib_dir);
 
+  // * Libraries
   void AddLibDep(const Target &lib_dep);
   void AddLibDep(const std::string &lib_dep);
 
+  // * Flags
   void AddPreprocessorFlag(const std::string &flag);
   void AddCCompileFlag(const std::string &flag);
   void AddCppCompileFlag(const std::string &flag);
@@ -113,6 +124,7 @@ public:
   std::unordered_set<std::string> valid_c_ext_{".c"};
   std::unordered_set<std::string> valid_cpp_ext_{".cpp", ".cxx", ".cc"};
   std::unordered_set<std::string> valid_asm_ext_{".s", ".S", ".asm"};
+  std::unordered_set<std::string> valid_header_ext_{".h", ".hpp"};
 
 protected:
   // Getters
