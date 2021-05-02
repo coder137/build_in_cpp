@@ -71,6 +71,22 @@ bool Target::IsValidSource(const fs::path &sourcepath) const {
   return valid;
 }
 
+bool Target::IsValidHeader(const fs::path &headerpath) const {
+  bool valid = false;
+  switch (GetFileExtType(headerpath)) {
+  case FileExtType::Header:
+    valid = true;
+    break;
+  case FileExtType::Asm:
+  case FileExtType::C:
+  case FileExtType::Cpp:
+  default:
+    valid = false;
+    break;
+  }
+  return valid;
+}
+
 // TODO, Since we are sanitizing the input source files when adding we might
 // only need to check for valid sources (ASM, C, CPP)
 const std::string &Target::GetCompiler(const fs::path &source) const {

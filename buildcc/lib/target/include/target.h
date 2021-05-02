@@ -134,6 +134,7 @@ protected:
   // Getters
   FileExtType GetFileExtType(const fs::path &filepath) const;
   bool IsValidSource(const fs::path &sourcepath) const;
+  bool IsValidHeader(const fs::path &headerpath) const;
 
   const std::string &GetCompiler(const fs::path &source) const;
 

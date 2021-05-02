@@ -11,7 +11,7 @@ namespace buildcc::base {
 // Public
 void Target::AddSourceAbsolute(const fs::path &absolute_filepath) {
   env::assert_fatal(IsValidSource(absolute_filepath),
-                    fmt::format("{} does not have a valid extension",
+                    fmt::format("{} does not have a valid source extension",
                                 absolute_filepath.string()));
 
   internal::add_path(absolute_filepath, current_source_files_);
