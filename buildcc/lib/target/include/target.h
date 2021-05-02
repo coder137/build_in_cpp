@@ -21,10 +21,11 @@ namespace buildcc::base {
 
 namespace fs = std::filesystem;
 
-enum class SourceType {
+enum class FileExtType {
   Asm,
   C,
   Cpp,
+  Header,
   Invalid,
 };
 
@@ -131,7 +132,9 @@ public:
 
 protected:
   // Getters
-  SourceType GetSourceType(const fs::path &source) const;
+  FileExtType GetFileExtType(const fs::path &filepath) const;
+  bool IsValidSource(const fs::path &sourcepath);
+
   const std::string &GetCompiler(const fs::path &source) const;
 
   fs::path GetCompiledSourcePath(const fs::path &source) const;

@@ -10,6 +10,10 @@ namespace buildcc::base {
 
 // Public
 void Target::AddSourceAbsolute(const fs::path &absolute_filepath) {
+  env::assert_fatal(IsValidSource(absolute_filepath),
+                    fmt::format("{} does not have a valid extension",
+                                absolute_filepath.string()));
+
   internal::add_path(absolute_filepath, current_source_files_);
   fs::create_directories(
       GetCompiledSourcePath(absolute_filepath).parent_path());
@@ -34,17 +38,7 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
       target_root_source_dir_ / relative_to_target_path;
 
   for (const auto &p : fs::directory_iterator(absolute_filepath)) {
-    const bool regular_file = p.is_regular_file();
-    if (!regular_file) {
-      continue;
-    }
-
-    const std::string ext = p.path().extension().string();
-    const bool asm_match = valid_asm_ext_.count(ext) == 1;
-    const bool c_match = valid_c_ext_.count(ext) == 1;
-    const bool cpp_match = valid_cpp_ext_.count(ext) == 1;
-
-    if (asm_match || c_match || cpp_match) {
+    if (IsValidSource(p.path())) {
       env::log_trace(name_, fmt::format("Added source {}", p.path().string()));
       AddSourceAbsolute(p.path());
     }
@@ -112,13 +106,13 @@ Target::CompileCommand(const fs::path &current_source) const {
       internal::quote(GetCompiledSourcePath(current_source).string());
   const std::string compiler = GetCompiler(current_source);
 
-  const auto type = GetSourceType(current_source);
+  const auto type = GetFileExtType(current_source);
 
   // TODO, This doesn't look clean
   const std::string &aggregated_compile_flags =
-      type == SourceType::C     ? aggregated_c_compile_flags_
-      : type == SourceType::Cpp ? aggregated_cpp_compile_flags_
-                                : "";
+      type == FileExtType::C     ? aggregated_c_compile_flags_
+      : type == FileExtType::Cpp ? aggregated_cpp_compile_flags_
+                                 : "";
 
   const std::string input_source = internal::quote(current_source.string());
   return CompileCommand(input_source, output_source, compiler,

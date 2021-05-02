@@ -34,32 +34,52 @@ namespace buildcc::base {
 
 // Getters
 
-SourceType Target::GetSourceType(const fs::path &source) const {
-  SourceType type = SourceType::Invalid;
-  const auto ext = source.extension().string();
+FileExtType Target::GetFileExtType(const fs::path &filepath) const {
+  if (!filepath.has_extension()) {
+    return FileExtType::Invalid;
+  }
 
-  if (valid_c_ext_.find(ext) != valid_c_ext_.end()) {
-    type = SourceType::C;
-  } else if (valid_cpp_ext_.find(ext) != valid_cpp_ext_.end()) {
-    type = SourceType::Cpp;
-  } else if (valid_asm_ext_.find(ext) != valid_asm_ext_.end()) {
-    type = SourceType::Asm;
+  FileExtType type = FileExtType::Invalid;
+  const std::string ext = filepath.extension().string();
+
+  if (valid_c_ext_.count(ext) == 1) {
+    type = FileExtType::C;
+  } else if (valid_cpp_ext_.count(ext) == 1) {
+    type = FileExtType::Cpp;
+  } else if (valid_asm_ext_.count(ext) == 1) {
+    type = FileExtType::Asm;
+  } else if (valid_header_ext_.count(ext) == 1) {
+    type = FileExtType::Header;
   }
 
   return type;
 }
 
+bool Target::IsValidSource(const fs::path &sourcepath) {
+  bool valid = false;
+  switch (GetFileExtType(sourcepath)) {
+  case FileExtType::Asm:
+  case FileExtType::C:
+  case FileExtType::Cpp:
+    valid = true;
+    break;
+  case FileExtType::Header:
+  default:
+    valid = false;
+    break;
+  }
+  return valid;
+}
+
 const std::string &Target::GetCompiler(const fs::path &source) const {
-  // .cpp -> GetCppCompiler
-  // .c / .asm -> GetCCompiler
-  switch (GetSourceType(source)) {
-  case SourceType::Asm:
+  switch (GetFileExtType(source)) {
+  case FileExtType::Asm:
     return toolchain_.GetAsmCompiler();
     break;
-  case SourceType::C:
+  case FileExtType::C:
     return toolchain_.GetCCompiler();
     break;
-  case SourceType::Cpp:
+  case FileExtType::Cpp:
     break;
   default:
     buildcc::env::assert_fatal(
