@@ -9,22 +9,44 @@
 namespace buildcc::base {
 
 // Public
+void Target::AddSourceAbsolute(const fs::path &absolute_filepath) {
+  internal::add_path(absolute_filepath, current_source_files_);
+  fs::create_directories(
+      GetCompiledSourcePath(absolute_filepath).parent_path());
+}
+
 void Target::AddSource(const std::string &relative_filename,
                        const std::filesystem::path &relative_to_target_path) {
   env::log_trace(name_, __FUNCTION__);
-
-  // Check Source
   fs::path absolute_filepath =
       target_root_source_dir_ / relative_to_target_path / relative_filename;
-  internal::add_path(absolute_filepath, current_source_files_);
-
-  const fs::path compiled_source_parent_path =
-      GetCompiledSourcePath(absolute_filepath).parent_path();
-  fs::create_directories(compiled_source_parent_path);
+  AddSourceAbsolute(absolute_filepath);
 }
 
 void Target::AddSource(const std::string &relative_filename) {
   AddSource(relative_filename, "");
+}
+
+void Target::GlobSources(const fs::path &relative_to_target_path) {
+  fs::path absolute_filepath =
+      target_root_source_dir_ / relative_to_target_path;
+
+  for (const auto &p : fs::directory_iterator(absolute_filepath)) {
+    const bool regular_file = p.is_regular_file();
+    if (!regular_file) {
+      continue;
+    }
+
+    const std::string ext = p.path().extension().string();
+    const bool asm_match = valid_asm_ext_.count(ext) == 1;
+    const bool c_match = valid_c_ext_.count(ext) == 1;
+    const bool cpp_match = valid_cpp_ext_.count(ext) == 1;
+
+    // TODO, Add path
+    if (asm_match || c_match || cpp_match) {
+      AddSourceAbsolute(p.path());
+    }
+  }
 }
 
 // Private
@@ -89,6 +111,8 @@ Target::CompileCommand(const fs::path &current_source) const {
   const std::string compiler = GetCompiler(current_source);
 
   const auto type = GetSourceType(current_source);
+
+  // TODO, This doesn't look clean
   const std::string &aggregated_compile_flags =
       type == SourceType::C     ? aggregated_c_compile_flags_
       : type == SourceType::Cpp ? aggregated_cpp_compile_flags_
