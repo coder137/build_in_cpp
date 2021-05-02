@@ -30,7 +30,7 @@ static const fs::path target_source_intermediate_path =
     fs::path(BUILD_TARGET_SOURCE_INTERMEDIATE_DIR) / gcc.GetName();
 
 TEST(TargetTestSourceGroup, Target_SourceTypes) {
-  constexpr const char *const NAME = "AddSource.exe";
+  constexpr const char *const NAME = "SourceTypes.exe";
   auto intermediate_path = target_source_intermediate_path / NAME;
   buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
                                "data");
