@@ -7,6 +7,9 @@
 
 #include "flatbuffers/util.h"
 
+//
+#include "internal/fbs_loader.h"
+
 #include <iostream>
 #include <unistd.h>
 
@@ -20,6 +23,9 @@
 // clang-format off
 TEST_GROUP(TargetTestLibDep)
 {
+    void teardown() {
+      mock().clear();
+    }
 };
 // clang-format on
 
@@ -44,7 +50,14 @@ TEST(TargetTestLibDep, StaticLibrary_SimpleBuildTest) {
 
   mock().checkExpectations();
 
-  // TODO, Verify .binary file
+  // Verify binary
+  buildcc::internal::FbsLoader loader(STATIC_NAME,
+                                      foolib.GetTargetIntermediateDir());
+  bool loaded = loader.Load();
+  CHECK_TRUE(loaded);
+
+  CHECK_EQUAL(loader.GetLoadedSources().size(), 1);
+  CHECK_EQUAL(loader.GetLoadedIncludeDirs().size(), 1);
 }
 
 TEST(TargetTestLibDep, TargetDep_RebuildTest) {
@@ -225,9 +238,7 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
 }
 
 int main(int ac, char **av) {
-  MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
   buildcc::env::init(BUILD_SCRIPT_SOURCE,
                      BUILD_TARGET_LIB_DEP_INTERMEDIATE_DIR);
-  buildcc::env::set_log_level(buildcc::env::LogLevel::Trace);
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

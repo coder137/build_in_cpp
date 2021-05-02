@@ -16,5 +16,6 @@ void Target::PathUpdated() {}
 
 void Target::DirChanged() {}
 void Target::FlagChanged() {}
+void Target::ExternalLibChanged() {}
 
 } // namespace buildcc::base

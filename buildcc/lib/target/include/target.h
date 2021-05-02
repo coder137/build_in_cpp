@@ -2,6 +2,7 @@
 #define TARGET_INCLUDE_BASE_TARGET_H_
 
 #include <filesystem>
+#include <functional>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -62,9 +63,10 @@ public:
                  const fs::path &relative_to_target_path);
 
   void AddIncludeDir(const fs::path &relative_include_dir);
+  void AddLibDir(const fs::path &absolute_lib_dir);
 
-  // TODO, Add fs::path version of the same, can be found using lib_dirs
   void AddLibDep(const Target &lib_dep);
+  void AddLibDep(const std::string &lib_dep);
 
   void AddPreprocessorFlag(const std::string &flag);
   void AddCCompileFlag(const std::string &flag);
@@ -102,6 +104,7 @@ public:
 
 public:
   std::string prefix_include_dir_{"-I"};
+  std::string prefix_lib_dir_{"-L"};
 
 protected:
   // Getters
@@ -138,10 +141,19 @@ private:
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
                     const internal::path_unordered_set &current_path);
+
   void RecheckDirs(const std::unordered_set<std::string> &previous_dirs,
                    const std::unordered_set<std::string> &current_dirs);
   void RecheckFlags(const std::unordered_set<std::string> &previous_flags,
                     const std::unordered_set<std::string> &current_flags);
+  void RecheckExternalLib(
+      const std::unordered_set<std::string> &previous_external_libs,
+      const std::unordered_set<std::string> &current_external_libs);
+
+  // Helper function
+  void RecheckChanged(const std::unordered_set<std::string> &previous,
+                      const std::unordered_set<std::string> &current,
+                      std::function<void(void)> callback);
 
   // Linking
   void BuildTarget();
@@ -156,6 +168,7 @@ private:
   Link(const std::string &output_target,
        const std::string &aggregated_link_flags,
        const std::string &aggregated_compiled_sources,
+       const std::string &aggregated_lib_dirs,
        const std::string &aggregated_lib_deps) const;
 
   // Fbs
@@ -168,8 +181,10 @@ private:
   void PathRemoved();
   void PathAdded();
   void PathUpdated();
+
   void DirChanged();
   void FlagChanged();
+  void ExternalLibChanged();
 
 private:
   // Constructor defined
@@ -184,8 +199,10 @@ private:
   internal::path_unordered_set current_header_files_;
   internal::path_unordered_set current_lib_deps_;
 
+  std::unordered_set<std::string> current_external_lib_deps_;
+
   std::unordered_set<std::string> current_include_dirs_;
-  // TODO, Add lib dirs similar to include_dirs
+  std::unordered_set<std::string> current_lib_dirs_;
 
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;
@@ -195,7 +212,10 @@ private:
   // TODO, Make appending to this more efficient
   // TODO, Might not need to be persistent
   std::string aggregated_include_dirs_;
+  std::string aggregated_lib_dirs_;
+  // NOTE, This contains current_external_lib_deps_ + current_lib_deps_
   std::string aggregated_lib_deps_;
+
   std::string aggregated_preprocessor_flags_;
   std::string aggregated_c_compile_flags_;
   std::string aggregated_cpp_compile_flags_;

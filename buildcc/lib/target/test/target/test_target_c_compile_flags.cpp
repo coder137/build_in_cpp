@@ -5,6 +5,9 @@
 
 #include "env.h"
 
+//
+#include "internal/fbs_loader.h"
+
 // Third Party
 #include "flatbuffers/util.h"
 
@@ -18,6 +21,9 @@
 // clang-format off
 TEST_GROUP(TargetTestCCompileFlagsGroup)
 {
+    void teardown() {
+      mock().clear();
+    }
 };
 // clang-format on
 
@@ -40,6 +46,19 @@ TEST(TargetTestCCompileFlagsGroup, Target_AddCompileFlag) {
                                "data");
   simple.AddSource(DUMMY_MAIN);
   simple.AddCCompileFlag("-std=c11");
+
+  buildcc::internal::m::Expect_command(1, true);
+  buildcc::internal::m::Expect_command(1, true);
+  simple.Build();
+
+  mock().checkExpectations();
+
+  // Verify binary
+  buildcc::internal::FbsLoader loader(NAME, simple.GetTargetIntermediateDir());
+  bool loaded = loader.Load();
+  CHECK_TRUE(loaded);
+
+  CHECK_EQUAL(loader.GetLoadedCCompileFlags().size(), 1);
 }
 
 TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
@@ -89,7 +108,6 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
 }
 
 int main(int ac, char **av) {
-  MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
   buildcc::env::init(BUILD_SCRIPT_SOURCE,
                      BUILD_TARGET_C_COMPILE_INTERMEDIATE_DIR);
   return CommandLineTestRunner::RunAllTests(ac, av);

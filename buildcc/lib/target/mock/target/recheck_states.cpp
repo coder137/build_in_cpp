@@ -22,6 +22,8 @@ static constexpr const char *const PATH_UPDATED_FUNCTION =
 static constexpr const char *const DIR_CHANGED_FUNCTION = "Target::DirChanged";
 static constexpr const char *const FLAG_CHANGED_FUNCTION =
     "Target::FlagChanged";
+static constexpr const char *const EXTERNAL_LIB_CHANGED_FUNCTION =
+    "Target::ExternalLibChanged";
 
 // Source rechecks
 void Target::SourceRemoved() {
@@ -53,6 +55,10 @@ void Target::FlagChanged() {
   mock().actualCall(FLAG_CHANGED_FUNCTION).onObject(this);
 }
 
+void Target::ExternalLibChanged() {
+  mock().actualCall(EXTERNAL_LIB_CHANGED_FUNCTION).onObject(this);
+}
+
 namespace m {
 
 void TargetExpect_SourceRemoved(unsigned int calls, Target *target) {
@@ -81,6 +87,10 @@ void TargetExpect_DirChanged(unsigned int calls, Target *target) {
 
 void TargetExpect_FlagChanged(unsigned int calls, Target *target) {
   mock().expectNCalls(calls, FLAG_CHANGED_FUNCTION).onObject(target);
+}
+
+void TargetExpect_ExternalLibChanged(unsigned int calls, Target *target) {
+  mock().expectNCalls(calls, EXTERNAL_LIB_CHANGED_FUNCTION).onObject(target);
 }
 
 } // namespace m

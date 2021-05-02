@@ -25,9 +25,14 @@ void Target::Build() {
       internal::aggregate(current_cpp_compile_flags_);
   aggregated_link_flags_ = internal::aggregate(current_link_flags_);
 
-  aggregated_lib_deps_ = internal::aggregate(current_lib_deps_);
-  aggregated_include_dirs_ = internal::aggregate_include_dirs(
+  aggregated_lib_deps_ =
+      fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
+                  internal::aggregate(current_lib_deps_));
+
+  aggregated_include_dirs_ = internal::aggregate_with_prefix(
       prefix_include_dir_, current_include_dirs_);
+  aggregated_lib_dirs_ =
+      internal::aggregate_with_prefix(prefix_lib_dir_, current_lib_dirs_);
 
   const bool is_loaded = loader_.Load();
   if (!is_loaded) {
@@ -76,9 +81,11 @@ void Target::BuildRecompile() {
   // * Completely rebuild target / link if any of the following change
   // Target compiled source files either during Compile / Recompile
   // Target library dependencies
-  // TODO, Target library directories
   RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
+  RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
   RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
+  RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
+                     current_external_lib_deps_);
   if (dirty_) {
     BuildTarget();
     Store();
@@ -94,9 +101,9 @@ void Target::BuildTarget() {
       internal::aggregate(GetCompiledSources());
 
   const std::string output_target = internal::quote(GetTargetPath().string());
-  bool success = internal::command(Link(output_target, aggregated_link_flags_,
-                                        aggregated_compiled_sources,
-                                        aggregated_lib_deps_));
+  bool success = internal::command(
+      Link(output_target, aggregated_link_flags_, aggregated_compiled_sources,
+           aggregated_lib_dirs_, aggregated_lib_deps_));
 
   env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
 }
@@ -105,6 +112,7 @@ std::vector<std::string>
 Target::Link(const std::string &output_target,
              const std::string &aggregated_link_flags,
              const std::string &aggregated_compiled_sources,
+             const std::string &aggregated_lib_dirs,
              const std::string &aggregated_lib_deps) const {
   return {
       // TODO, Let user decide this during Linking phase
@@ -113,6 +121,7 @@ Target::Link(const std::string &output_target,
       aggregated_compiled_sources,
       "-o",
       output_target,
+      aggregated_lib_dirs,
       aggregated_lib_deps,
   };
 }

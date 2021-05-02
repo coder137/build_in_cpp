@@ -60,8 +60,10 @@ bool FbsLoader::Load() {
   Extract(target->header_files(), loaded_headers_);
   Extract(target->lib_deps(), loaded_lib_deps_);
 
+  Extract(target->external_lib_deps(), loaded_external_lib_dirs_);
+
   Extract(target->include_dirs(), loaded_include_dirs_);
-  // target->lib_dirs();
+  Extract(target->lib_dirs(), loaded_lib_dirs_);
 
   Extract(target->preprocessor_flags(), loaded_preprocessor_flags_);
   Extract(target->c_compile_flags(), loaded_c_compile_flags_);

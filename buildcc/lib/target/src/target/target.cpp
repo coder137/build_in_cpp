@@ -137,25 +137,33 @@ void Target::RecheckPaths(const internal::path_unordered_set &previous_path,
 
 void Target::RecheckDirs(const std::unordered_set<std::string> &previous_dirs,
                          const std::unordered_set<std::string> &current_dirs) {
-  if (dirty_) {
-    return;
-  }
-
-  if (previous_dirs != current_dirs) {
-    DirChanged();
-    dirty_ = true;
-  }
+  RecheckChanged(previous_dirs, current_dirs,
+                 std::bind(&Target::DirChanged, this));
 }
 
 void Target::RecheckFlags(
     const std::unordered_set<std::string> &previous_flags,
     const std::unordered_set<std::string> &current_flags) {
+  RecheckChanged(previous_flags, current_flags,
+                 std::bind(&Target::FlagChanged, this));
+}
+
+void Target::RecheckExternalLib(
+    const std::unordered_set<std::string> &previous_external_libs,
+    const std::unordered_set<std::string> &current_external_libs) {
+  RecheckChanged(previous_external_libs, current_external_libs,
+                 std::bind(&Target::ExternalLibChanged, this));
+}
+
+void Target::RecheckChanged(const std::unordered_set<std::string> &previous,
+                            const std::unordered_set<std::string> &current,
+                            std::function<void(void)> callback) {
   if (dirty_) {
     return;
   }
 
-  if (previous_flags != current_flags) {
-    FlagChanged();
+  if (previous != current) {
+    callback();
     dirty_ = true;
   }
 }

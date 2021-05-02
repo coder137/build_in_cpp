@@ -20,7 +20,6 @@ std::vector<std::string> DynamicTarget_gcc::CompileCommand(
       aggregated_include_dirs,
       aggregated_compile_flags,
       "-fpic",
-      // TODO, Add C/Cpp Compile Flags
       "-o",
       output_source,
       "-c",
@@ -33,7 +32,9 @@ std::vector<std::string>
 DynamicTarget_gcc::Link(const std::string &output_target,
                         const std::string &aggregated_link_flags,
                         const std::string &aggregated_compiled_sources,
+                        const std::string &aggregated_lib_dirs,
                         const std::string &aggregated_lib_deps) const {
+  (void)aggregated_lib_dirs;
   (void)aggregated_lib_deps;
   // clang-format off
   return {

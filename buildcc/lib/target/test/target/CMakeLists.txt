@@ -27,11 +27,18 @@ add_executable(test_target_include_dir
 )
 target_link_libraries(test_target_include_dir PRIVATE target_interface)
 
-# Test target static lib
+# Test target lib dep (buildcc built)
+# NOTE, Tested behaviour via static library
 add_executable(test_target_lib_dep
     test_target_lib_dep.cpp
 )
 target_link_libraries(test_target_lib_dep PRIVATE target_interface)
+
+# Test target lib dep (external lib -L and -l flag for gcc)
+add_executable(test_target_external_lib
+    test_target_external_lib.cpp
+)
+target_link_libraries(test_target_external_lib PRIVATE target_interface)
 
 # Test target preprocessor flags
 add_executable(test_target_preprocessor_flags
@@ -62,6 +69,8 @@ add_test(NAME test_base_target COMMAND test_base_target)
 add_test(NAME test_target_source COMMAND test_target_source)
 add_test(NAME test_target_include_dir COMMAND test_target_include_dir)
 add_test(NAME test_target_lib_dep COMMAND test_target_lib_dep)
+add_test(NAME test_target_external_lib COMMAND test_target_external_lib)
+
 add_test(NAME test_target_preprocessor_flags COMMAND test_target_preprocessor_flags)
 add_test(NAME test_target_c_compile_flags COMMAND test_target_c_compile_flags)
 add_test(NAME test_target_cpp_compile_flags COMMAND test_target_cpp_compile_flags)

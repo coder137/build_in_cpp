@@ -43,8 +43,9 @@ std::string aggregate(const std::vector<std::string> &list);
 std::string aggregate(const std::unordered_set<std::string> &list);
 std::string aggregate(const buildcc::internal::path_unordered_set &paths);
 
-std::string aggregate_include_dirs(const std::string &prefix,
-                                   const std::unordered_set<std::string> &dirs);
+std::string aggregate_with_prefix(const std::string &prefix,
+                                  const std::unordered_set<std::string> &dirs);
+
 } // namespace buildcc::internal
 
 #endif

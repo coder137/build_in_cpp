@@ -32,9 +32,15 @@ public:
   const path_unordered_set &GetLoadedLibDeps() const {
     return loaded_lib_deps_;
   }
+  const std::unordered_set<std::string> &GetLoadedExternalLibDeps() const {
+    return loaded_external_lib_dirs_;
+  }
 
   const std::unordered_set<std::string> &GetLoadedIncludeDirs() const {
     return loaded_include_dirs_;
+  }
+  const std::unordered_set<std::string> &GetLoadedLibDirs() const {
+    return loaded_lib_dirs_;
   }
   const std::unordered_set<std::string> &GetLoadedPreprocessorFlags() const {
     return loaded_preprocessor_flags_;
@@ -61,7 +67,10 @@ private:
   path_unordered_set loaded_headers_;
   path_unordered_set loaded_lib_deps_;
 
+  std::unordered_set<std::string> loaded_external_lib_dirs_;
+
   std::unordered_set<std::string> loaded_include_dirs_;
+  std::unordered_set<std::string> loaded_lib_dirs_;
 
   std::unordered_set<std::string> loaded_preprocessor_flags_;
   std::unordered_set<std::string> loaded_c_compile_flags_;
