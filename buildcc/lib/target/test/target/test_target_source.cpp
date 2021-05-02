@@ -29,6 +29,27 @@ static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
 static const fs::path target_source_intermediate_path =
     fs::path(BUILD_TARGET_SOURCE_INTERMEDIATE_DIR) / gcc.GetName();
 
+TEST(TargetTestSourceGroup, Target_SourceTypes) {
+  constexpr const char *const NAME = "AddSource.exe";
+  auto intermediate_path = target_source_intermediate_path / NAME;
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
+
+  simple.AddSource("fileext/c_file.c");
+  simple.AddSource("fileext/cpp_file1.cpp");
+  simple.AddSource("fileext/cpp_file2.cxx");
+  simple.AddSource("fileext/cpp_file3.cc");
+  simple.AddSource("fileext/asm_file1.s");
+  simple.AddSource("fileext/asm_file2.S");
+  simple.AddSource("fileext/asm_file3.asm");
+
+  CHECK_EQUAL(simple.GetCurrentSourceFiles().size(), 7);
+  CHECK_THROWS(std::exception, simple.AddSource("fileext/header_file1.h"));
+  CHECK_THROWS(std::exception, simple.AddSource("fileext/header_file2.hpp"));
+  CHECK_THROWS(std::exception,
+               simple.AddSource("fileext/invalid_file.invalid"));
+}
+
 TEST(TargetTestSourceGroup, Target_AddSource) {
   constexpr const char *const NAME = "AddSource.exe";
   constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
