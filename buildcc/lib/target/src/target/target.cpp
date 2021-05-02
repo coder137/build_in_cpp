@@ -55,7 +55,7 @@ FileExtType Target::GetFileExtType(const fs::path &filepath) const {
   return type;
 }
 
-bool Target::IsValidSource(const fs::path &sourcepath) {
+bool Target::IsValidSource(const fs::path &sourcepath) const {
   bool valid = false;
   switch (GetFileExtType(sourcepath)) {
   case FileExtType::Asm:
@@ -71,6 +71,8 @@ bool Target::IsValidSource(const fs::path &sourcepath) {
   return valid;
 }
 
+// TODO, Since we are sanitizing the input source files when adding we might
+// only need to check for valid sources (ASM, C, CPP)
 const std::string &Target::GetCompiler(const fs::path &source) const {
   switch (GetFileExtType(source)) {
   case FileExtType::Asm:

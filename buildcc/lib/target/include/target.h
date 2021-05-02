@@ -133,7 +133,7 @@ public:
 protected:
   // Getters
   FileExtType GetFileExtType(const fs::path &filepath) const;
-  bool IsValidSource(const fs::path &sourcepath);
+  bool IsValidSource(const fs::path &sourcepath) const;
 
   const std::string &GetCompiler(const fs::path &source) const;
 

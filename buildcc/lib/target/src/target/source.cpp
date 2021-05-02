@@ -104,11 +104,12 @@ std::vector<std::string>
 Target::CompileCommand(const fs::path &current_source) const {
   const std::string output_source =
       internal::quote(GetCompiledSourcePath(current_source).string());
+
+  // TODO, Check implementation for GetCompiler
   const std::string compiler = GetCompiler(current_source);
 
-  const auto type = GetFileExtType(current_source);
-
   // TODO, This doesn't look clean
+  const auto type = GetFileExtType(current_source);
   const std::string &aggregated_compile_flags =
       type == FileExtType::C     ? aggregated_c_compile_flags_
       : type == FileExtType::Cpp ? aggregated_cpp_compile_flags_
