@@ -49,6 +49,19 @@ TEST(TargetTestSourceGroup, Target_AddSource) {
   CHECK_THROWS(std::exception, simple.AddSource(DUMMY_MAIN));
 }
 
+TEST(TargetTestSourceGroup, Target_GlobSource) {
+  constexpr const char *const NAME = "GlobSource.exe";
+  auto intermediate_path = target_source_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
+  simple.GlobSources("");
+  CHECK_EQUAL(simple.GetCurrentSourceFiles().size(), 6);
+}
+
 TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
   constexpr const char *const NAME = "Compile.exe";
   constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";

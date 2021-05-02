@@ -112,6 +112,9 @@ public:
   const internal::path_unordered_set &GetCurrentSourceFiles() const {
     return current_source_files_;
   }
+  const internal::path_unordered_set &GetCurrentHeaderFiles() const {
+    return current_header_files_;
+  }
 
   bool FirstBuild() const { return first_build_; }
   bool Rebuild() const { return rebuild_; }
