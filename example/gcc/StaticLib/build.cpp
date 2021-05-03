@@ -34,7 +34,7 @@ int main(void) {
   // * Method 2
   // NOTE, This should be an absolute path since we could also be referencing
   // external libs that are not relative to this project
-  target.AddLibDir(randomLib.GetTargetPath().parent_path());
+  target.AddLibDirAbsolute(randomLib.GetTargetPath().parent_path());
   target.AddLibDep("-lran");
 
   target.Build();

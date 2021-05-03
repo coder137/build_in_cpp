@@ -77,8 +77,8 @@ public:
   void AddIncludeDir(const fs::path &relative_include_dir,
                      bool glob_header = false);
 
-  // TODO, Rename this API to AddLibDirAbsolute
-  void AddLibDir(const fs::path &absolute_lib_dir);
+  void AddLibDir(const fs::path &relative_lib_dir);
+  void AddLibDirAbsolute(const fs::path &absolute_lib_dir);
 
   // * Libraries
   void AddLibDep(const Target &lib_dep);
