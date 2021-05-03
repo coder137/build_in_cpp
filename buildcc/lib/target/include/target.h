@@ -63,7 +63,7 @@ public:
   void AddSourceAbsolute(const fs::path &absolute_filepath);
 
   void GlobSources(const fs::path &relative_to_target_path);
-  // TODO, GlobSourceAbsolute
+  void GlobSourcesAbsolute(const fs::path &absolute_path);
 
   // * Headers
   void AddHeader(const std::string &relative_filename);

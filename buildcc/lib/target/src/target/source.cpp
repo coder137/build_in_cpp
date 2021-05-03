@@ -34,10 +34,12 @@ void Target::AddSource(const std::string &relative_filename) {
 void Target::GlobSources(const fs::path &relative_to_target_path) {
   env::log_trace(name_, __FUNCTION__);
 
-  fs::path absolute_filepath =
-      target_root_source_dir_ / relative_to_target_path;
+  fs::path absolute_path = target_root_source_dir_ / relative_to_target_path;
+  GlobSourcesAbsolute(absolute_path);
+}
 
-  for (const auto &p : fs::directory_iterator(absolute_filepath)) {
+void Target::GlobSourcesAbsolute(const fs::path &absolute_path) {
+  for (const auto &p : fs::directory_iterator(absolute_path)) {
     if (IsValidSource(p.path())) {
       env::log_trace(name_, fmt::format("Added source {}", p.path().string()));
       AddSourceAbsolute(p.path());
