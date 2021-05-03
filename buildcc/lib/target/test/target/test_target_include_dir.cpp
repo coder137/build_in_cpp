@@ -29,6 +29,54 @@ static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
 static const fs::path target_include_dir_intermediate_path =
     fs::path(BUILD_TARGET_INCLUDE_DIR_INTERMEDIATE_DIR) / gcc.GetName();
 
+TEST(TargetTestIncludeDirGroup, Target_HeaderTypes) {
+  constexpr const char *const NAME = "HeaderTypes.exe";
+  auto intermediate_path = target_include_dir_intermediate_path / NAME;
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
+
+  simple.AddHeader("fileext/header_file1.h");
+  simple.AddHeader("fileext/header_file2.hpp");
+
+  CHECK_EQUAL(simple.GetCurrentHeaderFiles().size(), 2);
+
+  CHECK_THROWS(std::exception, simple.AddHeader("fileext/c_file.c"));
+  CHECK_THROWS(std::exception, simple.AddHeader("fileext/cpp_file1.cpp"));
+  CHECK_THROWS(std::exception, simple.AddHeader("fileext/cpp_file2.cxx"));
+  CHECK_THROWS(std::exception, simple.AddHeader("fileext/cpp_file3.cc"));
+  CHECK_THROWS(std::exception, simple.AddHeader("fileext/asm_file1.s"));
+  CHECK_THROWS(std::exception, simple.AddHeader("fileext/asm_file2.S"));
+  CHECK_THROWS(std::exception, simple.AddHeader("fileext/asm_file3.asm"));
+  CHECK_THROWS(std::exception,
+               simple.AddHeader("fileext/invalid_file.invalid"));
+}
+
+TEST(TargetTestIncludeDirGroup, TargetGlobHeader) {
+  constexpr const char *const NAME = "GlobHeader.exe";
+  auto intermediate_path = target_include_dir_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+  buildcc::base::Target globHeader(NAME, buildcc::base::TargetType::Executable,
+                                   gcc, "data");
+  globHeader.GlobHeaders("include");
+  globHeader.GlobHeaders("");
+  CHECK_EQUAL(globHeader.GetCurrentHeaderFiles().size(), 1);
+}
+
+TEST(TargetTestIncludeDirGroup, TargetGlobThroughIncludeDir) {
+  constexpr const char *const NAME = "GlobThroughIncludeDir.exe";
+  auto intermediate_path = target_include_dir_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+  buildcc::base::Target globIncludeDir(
+      NAME, buildcc::base::TargetType::Executable, gcc, "data");
+  globIncludeDir.AddIncludeDir("include", true);
+  globIncludeDir.AddIncludeDir("", true);
+  CHECK_EQUAL(globIncludeDir.GetCurrentHeaderFiles().size(), 1);
+}
+
 TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
   constexpr const char *const NAME = "IncludeDir.exe";
 

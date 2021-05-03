@@ -21,10 +21,11 @@ namespace buildcc::base {
 
 namespace fs = std::filesystem;
 
-enum class SourceType {
+enum class FileExtType {
   Asm,
   C,
   Cpp,
+  Header,
   Invalid,
 };
 
@@ -54,20 +55,39 @@ public:
   void Build();
 
   // Setters
+
+  // * Sources
   void AddSource(const std::string &relative_filename);
   void AddSource(const std::string &relative_filename,
                  const fs::path &relative_to_target_path);
+  void AddSourceAbsolute(const fs::path &absolute_filepath);
 
+  void GlobSources(const fs::path &relative_to_target_path);
+  void GlobSourcesAbsolute(const fs::path &absolute_path);
+
+  // * Headers
   void AddHeader(const std::string &relative_filename);
   void AddHeader(const std::string &relative_filename,
                  const fs::path &relative_to_target_path);
+  void AddHeaderAbsolute(const fs::path &absolute_filepath);
 
-  void AddIncludeDir(const fs::path &relative_include_dir);
-  void AddLibDir(const fs::path &absolute_lib_dir);
+  void GlobHeaders(const fs::path &relative_to_target_path);
+  void GlobHeadersAbsolute(const fs::path &absolute_path);
 
+  // * Include and Lib directory
+  void AddIncludeDir(const fs::path &relative_include_dir,
+                     bool glob_headers = false);
+  void AddIncludeDirAbsolute(const fs::path &absolute_include_dir,
+                             bool glob_headers = false);
+
+  void AddLibDir(const fs::path &relative_lib_dir);
+  void AddLibDirAbsolute(const fs::path &absolute_lib_dir);
+
+  // * Libraries
   void AddLibDep(const Target &lib_dep);
   void AddLibDep(const std::string &lib_dep);
 
+  // * Flags
   void AddPreprocessorFlag(const std::string &flag);
   void AddCCompileFlag(const std::string &flag);
   void AddCppCompileFlag(const std::string &flag);
@@ -96,6 +116,9 @@ public:
   const internal::path_unordered_set &GetCurrentSourceFiles() const {
     return current_source_files_;
   }
+  const internal::path_unordered_set &GetCurrentHeaderFiles() const {
+    return current_header_files_;
+  }
 
   bool FirstBuild() const { return first_build_; }
   bool Rebuild() const { return rebuild_; }
@@ -105,10 +128,17 @@ public:
 public:
   std::string prefix_include_dir_{"-I"};
   std::string prefix_lib_dir_{"-L"};
+  std::unordered_set<std::string> valid_c_ext_{".c"};
+  std::unordered_set<std::string> valid_cpp_ext_{".cpp", ".cxx", ".cc"};
+  std::unordered_set<std::string> valid_asm_ext_{".s", ".S", ".asm"};
+  std::unordered_set<std::string> valid_header_ext_{".h", ".hpp"};
 
 protected:
   // Getters
-  SourceType GetSourceType(const fs::path &source) const;
+  FileExtType GetFileExtType(const fs::path &filepath) const;
+  bool IsValidSource(const fs::path &sourcepath) const;
+  bool IsValidHeader(const fs::path &headerpath) const;
+
   const std::string &GetCompiler(const fs::path &source) const;
 
   fs::path GetCompiledSourcePath(const fs::path &source) const;

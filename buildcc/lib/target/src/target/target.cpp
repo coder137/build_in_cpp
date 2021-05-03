@@ -34,32 +34,70 @@ namespace buildcc::base {
 
 // Getters
 
-SourceType Target::GetSourceType(const fs::path &source) const {
-  SourceType type = SourceType::Invalid;
-  const auto ext = source.extension();
+FileExtType Target::GetFileExtType(const fs::path &filepath) const {
+  if (!filepath.has_extension()) {
+    return FileExtType::Invalid;
+  }
 
-  if (ext == ".c") {
-    type = SourceType::C;
-  } else if (ext == ".cpp" || ext == ".cxx" || ext == ".cc") {
-    type = SourceType::Cpp;
-  } else if (ext == ".s" || ext == ".S" || ext == ".asm") {
-    type = SourceType::Asm;
+  FileExtType type = FileExtType::Invalid;
+  const std::string ext = filepath.extension().string();
+
+  if (valid_c_ext_.count(ext) == 1) {
+    type = FileExtType::C;
+  } else if (valid_cpp_ext_.count(ext) == 1) {
+    type = FileExtType::Cpp;
+  } else if (valid_asm_ext_.count(ext) == 1) {
+    type = FileExtType::Asm;
+  } else if (valid_header_ext_.count(ext) == 1) {
+    type = FileExtType::Header;
   }
 
   return type;
 }
 
+bool Target::IsValidSource(const fs::path &sourcepath) const {
+  bool valid = false;
+  switch (GetFileExtType(sourcepath)) {
+  case FileExtType::Asm:
+  case FileExtType::C:
+  case FileExtType::Cpp:
+    valid = true;
+    break;
+  case FileExtType::Header:
+  default:
+    valid = false;
+    break;
+  }
+  return valid;
+}
+
+bool Target::IsValidHeader(const fs::path &headerpath) const {
+  bool valid = false;
+  switch (GetFileExtType(headerpath)) {
+  case FileExtType::Header:
+    valid = true;
+    break;
+  case FileExtType::Asm:
+  case FileExtType::C:
+  case FileExtType::Cpp:
+  default:
+    valid = false;
+    break;
+  }
+  return valid;
+}
+
+// TODO, Since we are sanitizing the input source files when adding we might
+// only need to check for valid sources (ASM, C, CPP)
 const std::string &Target::GetCompiler(const fs::path &source) const {
-  // .cpp -> GetCppCompiler
-  // .c / .asm -> GetCCompiler
-  switch (GetSourceType(source)) {
-  case SourceType::Asm:
+  switch (GetFileExtType(source)) {
+  case FileExtType::Asm:
     return toolchain_.GetAsmCompiler();
     break;
-  case SourceType::C:
+  case FileExtType::C:
     return toolchain_.GetCCompiler();
     break;
-  case SourceType::Cpp:
+  case FileExtType::Cpp:
     break;
   default:
     buildcc::env::assert_fatal(

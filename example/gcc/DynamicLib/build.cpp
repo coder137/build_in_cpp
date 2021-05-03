@@ -38,7 +38,7 @@ int main(void) {
     // target.AddLibDep(randomDynLib);
 
     // * Method 2, External lib
-    target.AddLibDir(randomDynLib.GetTargetIntermediateDir());
+    target.AddLibDirAbsolute(randomDynLib.GetTargetIntermediateDir());
     target.AddLibDep("-lrandyn");
     target.AddLinkFlag("-Wl,-rpath=" +
                        randomDynLib.GetTargetIntermediateDir().string());
@@ -63,7 +63,7 @@ int main(void) {
     // target.AddLibDep(randomDynLib);
 
     // * Method 2, External lib
-    target.AddLibDir(randomDynLib.GetTargetIntermediateDir());
+    target.AddLibDirAbsolute(randomDynLib.GetTargetIntermediateDir());
     target.AddLibDep("-lrandyn");
 
     target.Build();
