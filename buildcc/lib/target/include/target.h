@@ -63,13 +63,15 @@ public:
                  const fs::path &relative_to_target_path);
   void AddSourceAbsolute(const fs::path &absolute_filepath);
 
-  // Use this API for out of project root builds
+  void GlobSources(const fs::path &relative_to_target_path);
+  void GlobSourcesAbsolute(const fs::path &absolute_path);
+
+  // Use these APIs for out of project root builds
   // Manually specify input and output
   void AddSourceAbsolute(const fs::path &absolute_input_filepath,
                          const fs::path &absolute_output_filepath);
-
-  void GlobSources(const fs::path &relative_to_target_path);
-  void GlobSourcesAbsolute(const fs::path &absolute_path);
+  void GlobSourcesAbsolute(const fs::path &absolute_input_path,
+                           const fs::path &absolute_output_path);
 
   // * Headers
   void AddHeader(const std::string &relative_filename);
