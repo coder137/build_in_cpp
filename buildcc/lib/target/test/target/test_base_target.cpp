@@ -42,26 +42,6 @@ TEST(TargetBaseTestGroup, NoEnvInit) {
                    NAME, buildcc::base::TargetType::Executable, gcc, "data"));
 }
 
-TEST(TargetBaseTestGroup, OutofRootSource) {
-  constexpr const char *const OUTOFROOT = "OutOfRootSource.random";
-
-  buildcc::env::init(fs::path(BUILD_SCRIPT_SOURCE) / "data" / "foo",
-                     BUILD_TARGET_BASE_INTERMEDIATE_DIR);
-  auto intermediate_path =
-      fs::path(BUILD_TARGET_BASE_INTERMEDIATE_DIR) / gcc.GetName();
-
-  fs::remove_all(intermediate_path / OUTOFROOT);
-
-  buildcc::base::Target simple(OUTOFROOT, buildcc::base::TargetType::Executable,
-                               gcc, "");
-  //  Out of source paths not allowed
-  // NOTE, Everything is evaluated relative to the
-  // buildcc::env::get_project_root
-  CHECK_THROWS(std::exception, simple.AddSource("../dummy_main.cpp"));
-
-  buildcc::env::deinit();
-}
-
 // TODO, Check toolchain change
 // There are few parameters that must NOT be changed after the initial buildcc
 // project is generated

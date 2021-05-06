@@ -21,6 +21,12 @@ add_executable(test_target_source
 )
 target_link_libraries(test_target_source PRIVATE target_interface)
 
+# Test target out of root sources
+add_executable(test_target_source_out_of_root
+    test_target_source_out_of_root.cpp
+)
+target_link_libraries(test_target_source_out_of_root PRIVATE target_interface)
+
 # Test target include dir
 add_executable(test_target_include_dir
     test_target_include_dir.cpp
@@ -67,6 +73,7 @@ target_link_libraries(test_target_link_flags PRIVATE target_interface)
 # Tests
 add_test(NAME test_base_target COMMAND test_base_target)
 add_test(NAME test_target_source COMMAND test_target_source)
+add_test(NAME test_target_source_out_of_root COMMAND test_target_source_out_of_root)
 add_test(NAME test_target_include_dir COMMAND test_target_include_dir)
 add_test(NAME test_target_lib_dep COMMAND test_target_lib_dep)
 add_test(NAME test_target_external_lib COMMAND test_target_external_lib)
