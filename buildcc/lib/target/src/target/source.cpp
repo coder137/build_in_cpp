@@ -74,12 +74,7 @@ void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
 }
 
 void Target::GlobSourcesAbsolute(const fs::path &absolute_path) {
-  for (const auto &p : fs::directory_iterator(absolute_path)) {
-    if (IsValidSource(p.path())) {
-      env::log_trace(name_, fmt::format("Added source {}", p.path().string()));
-      AddSourceAbsolute(p.path());
-    }
-  }
+  GlobSourcesAbsolute(absolute_path, target_intermediate_dir_);
 }
 
 // Private
