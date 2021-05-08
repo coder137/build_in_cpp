@@ -150,8 +150,8 @@ protected:
   const std::string &GetCompiler(const fs::path &source) const;
 
   // This API should never throw
-  std::string GetCompiledSourcePath(const fs::path &source) const;
-  std::vector<std::string> GetCompiledSources() const;
+  const fs::path &GetCompiledSourcePath(const fs::path &source) const;
+  internal::path_unordered_set GetCompiledSources() const;
 
 private:
   void Initialize();
@@ -235,7 +235,7 @@ private:
 
   // Internal
   internal::path_unordered_set current_source_files_;
-  std::unordered_map<std::string, std::string> current_object_files_;
+  std::unordered_map<std::string, fs::path> current_object_files_;
 
   internal::path_unordered_set current_header_files_;
   internal::path_unordered_set current_lib_deps_;

@@ -111,14 +111,15 @@ const std::string &Target::GetCompiler(const fs::path &source) const {
 // NOTE, This should never throw even if the `.at` API can throw
 // TODO, Find situations where GetCompiledSourcePath is not generated for a
 // particular input source
-std::string Target::GetCompiledSourcePath(const fs::path &source) const {
+const fs::path &Target::GetCompiledSourcePath(const fs::path &source) const {
   return current_object_files_.at(source.string());
 }
 
-std::vector<std::string> Target::GetCompiledSources() const {
-  std::vector<std::string> compiled_sources;
+internal::path_unordered_set Target::GetCompiledSources() const {
+  internal::path_unordered_set compiled_sources;
   for (const auto &p : current_object_files_) {
-    compiled_sources.push_back(p.second);
+    const auto new_path = internal::Path::CreateNewPath(p.second);
+    compiled_sources.insert(new_path);
   }
   return compiled_sources;
 }

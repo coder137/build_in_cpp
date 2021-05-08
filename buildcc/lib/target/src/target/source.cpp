@@ -140,7 +140,7 @@ void Target::CompileSource(const fs::path &current_source) {
 std::vector<std::string>
 Target::CompileCommand(const fs::path &current_source) const {
   const std::string output_source =
-      internal::quote(GetCompiledSourcePath(current_source));
+      internal::quote(GetCompiledSourcePath(current_source).string());
 
   // TODO, Check implementation for GetCompiler
   const std::string compiler = GetCompiler(current_source);
