@@ -10,11 +10,12 @@ target_include_directories(env PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
 )
-target_link_libraries(env PUBLIC
-    spdlog::spdlog
-)
+target_link_libraries(env PUBLIC fmt::fmt)
 target_compile_options(env PRIVATE ${BUILD_COMPILE_FLAGS})
 target_link_options(env PRIVATE ${BUILD_LINK_FLAGS})
+target_link_libraries(env PRIVATE
+    spdlog::spdlog
+)
 
 # Env test
 if (${TESTING})
@@ -27,7 +28,7 @@ if (${TESTING})
         ${CMAKE_CURRENT_SOURCE_DIR}/include
     )
     target_link_libraries(mock_env PUBLIC
-        spdlog::spdlog
+        fmt::fmt
     )
 endif()
 
