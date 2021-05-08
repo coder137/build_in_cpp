@@ -18,20 +18,20 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
   fs::path absolute_source = fs::path(absolute_input_filepath).make_preferred();
   fs::path absolute_compiled_source =
       fs::path(absolute_output_filepath).make_preferred();
+  fs::create_directories(absolute_compiled_source.parent_path());
 
   internal::add_path(absolute_source, current_source_files_);
-  current_object_files_[absolute_source.native()] =
-      absolute_compiled_source.string();
-  fs::create_directories(absolute_compiled_source.parent_path());
+  current_object_files_.insert(
+      {absolute_source.native(), absolute_compiled_source});
 }
 
 void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
                                  const fs::path &absolute_output_path) {
   for (const auto &p : fs::directory_iterator(absolute_input_path)) {
     if (IsValidSource(p.path())) {
-      fs::path output_p =
+      fs::path absolute_output_source =
           absolute_output_path / (p.path().filename().string() + ".o");
-      AddSourceAbsolute(p.path(), output_p);
+      AddSourceAbsolute(p.path(), absolute_output_source);
     }
   }
 }
