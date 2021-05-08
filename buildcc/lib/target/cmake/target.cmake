@@ -6,6 +6,7 @@ target_include_directories(target PUBLIC
 target_link_libraries(target PUBLIC 
     env
     toolchain
+    flatbuffers
 )
 
 target_sources(target PRIVATE
@@ -33,8 +34,4 @@ target_include_directories(target PRIVATE
 )
 target_compile_options(target PRIVATE ${BUILD_COMPILE_FLAGS})
 target_link_options(target PRIVATE ${BUILD_LINK_FLAGS})
-target_link_libraries(target PRIVATE 
-    flatbuffers
-    fmt::fmt
-)
 add_dependencies(target fbs_to_header)
