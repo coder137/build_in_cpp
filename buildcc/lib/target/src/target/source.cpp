@@ -15,14 +15,14 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
                     fmt::format("{} does not have a valid source extension",
                                 absolute_input_filepath.string()));
 
-  fs::path final_input_path =
-      fs::path(absolute_input_filepath).make_preferred();
-  fs::path final_output_path =
+  fs::path absolute_source = fs::path(absolute_input_filepath).make_preferred();
+  fs::path absolute_compiled_source =
       fs::path(absolute_output_filepath).make_preferred();
 
-  internal::add_path(final_input_path, current_source_files_);
-  current_object_files_[final_input_path.string()] = final_output_path.string();
-  fs::create_directories(final_output_path.parent_path());
+  internal::add_path(absolute_source, current_source_files_);
+  current_object_files_[absolute_source.string()] =
+      absolute_compiled_source.string();
+  fs::create_directories(absolute_compiled_source.parent_path());
 }
 
 void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
@@ -31,8 +31,6 @@ void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
     if (IsValidSource(p.path())) {
       fs::path output_p =
           absolute_output_path / (p.path().filename().string() + ".o");
-      env::log_trace(name_, fmt::format("Added source {} -> {}",
-                                        p.path().string(), output_p.string()));
       AddSourceAbsolute(p.path(), output_p);
     }
   }
@@ -42,13 +40,13 @@ void Target::AddSource(const fs::path &relative_filename,
                        const std::filesystem::path &relative_to_target_path) {
   env::log_trace(name_, __FUNCTION__);
 
-  // Compute the absolute input path
-  fs::path absolute_filepath =
+  // Compute the absolute source path
+  fs::path absolute_source =
       target_root_source_dir_ / relative_to_target_path / relative_filename;
 
-  // Compute the absolute output path
+  // Compute the relative compiled source path
   const fs::path relative =
-      absolute_filepath.lexically_relative(env::get_project_root());
+      absolute_source.lexically_relative(env::get_project_root());
 
   // Check if out of root
   env::assert_fatal(
@@ -56,14 +54,14 @@ void Target::AddSource(const fs::path &relative_filename,
       fmt::format("Out of project root path detected for {} -> {}. Use the "
                   "AddSourceAbsolute(abs_input, abs_output) or "
                   "GlobSourceAbsolute(abs_input, abs_output) API",
-                  absolute_filepath.string(), relative.string()));
+                  absolute_source.string(), relative.string()));
 
   // Compute relative object path
   fs::path absolute_compiled_source = target_intermediate_dir_ / relative;
   absolute_compiled_source.replace_filename(
-      absolute_filepath.filename().string() + ".o");
+      absolute_source.filename().string() + ".o");
 
-  AddSourceAbsolute(absolute_filepath, absolute_compiled_source);
+  AddSourceAbsolute(absolute_source, absolute_compiled_source);
 }
 
 void Target::AddSource(const fs::path &relative_filename) {
