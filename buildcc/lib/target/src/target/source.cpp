@@ -20,7 +20,7 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
       fs::path(absolute_output_filepath).make_preferred();
 
   internal::add_path(absolute_source, current_source_files_);
-  current_object_files_[absolute_source.string()] =
+  current_object_files_[absolute_source.native()] =
       absolute_compiled_source.string();
   fs::create_directories(absolute_compiled_source.parent_path());
 }

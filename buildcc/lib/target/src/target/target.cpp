@@ -112,7 +112,7 @@ const std::string &Target::GetCompiler(const fs::path &source) const {
 // TODO, Find situations where GetCompiledSourcePath is not generated for a
 // particular input source
 const fs::path &Target::GetCompiledSourcePath(const fs::path &source) const {
-  return current_object_files_.at(source.string());
+  return current_object_files_.at(source.native());
 }
 
 internal::path_unordered_set Target::GetCompiledSources() const {

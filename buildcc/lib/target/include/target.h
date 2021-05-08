@@ -234,7 +234,7 @@ private:
   internal::path_unordered_set current_source_files_;
   // NOTE, Always store the absolute source path -> absolute compiled source
   // path here
-  std::unordered_map<std::string, fs::path> current_object_files_;
+  std::unordered_map<fs::path::string_type, fs::path> current_object_files_;
 
   internal::path_unordered_set current_header_files_;
   internal::path_unordered_set current_lib_deps_;
