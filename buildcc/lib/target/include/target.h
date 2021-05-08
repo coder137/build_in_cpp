@@ -58,13 +58,10 @@ public:
   // Setters
 
   // * Sources
-  void AddSource(const std::string &relative_filename);
-  void AddSource(const std::string &relative_filename,
+  void AddSource(const fs::path &relative_filename);
+  void AddSource(const fs::path &relative_filename,
                  const fs::path &relative_to_target_path);
-  void AddSourceAbsolute(const fs::path &absolute_filepath);
-
   void GlobSources(const fs::path &relative_to_target_path);
-  void GlobSourcesAbsolute(const fs::path &absolute_path);
 
   // Use these APIs for out of project root builds
   // Manually specify input and output
@@ -150,8 +147,8 @@ protected:
   const std::string &GetCompiler(const fs::path &source) const;
 
   // This API should never throw
-  std::string GetCompiledSourcePath(const fs::path &source) const;
-  std::vector<std::string> GetCompiledSources() const;
+  const fs::path &GetCompiledSourcePath(const fs::path &source) const;
+  internal::path_unordered_set GetCompiledSources() const;
 
 private:
   void Initialize();
@@ -235,7 +232,9 @@ private:
 
   // Internal
   internal::path_unordered_set current_source_files_;
-  std::unordered_map<std::string, std::string> current_object_files_;
+  // NOTE, Always store the absolute source path -> absolute compiled source
+  // path here
+  std::unordered_map<fs::path::string_type, fs::path> current_object_files_;
 
   internal::path_unordered_set current_header_files_;
   internal::path_unordered_set current_lib_deps_;

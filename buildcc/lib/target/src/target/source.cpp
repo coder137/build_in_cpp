@@ -15,69 +15,68 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
                     fmt::format("{} does not have a valid source extension",
                                 absolute_input_filepath.string()));
 
-  fs::path final_input_path =
-      fs::path(absolute_input_filepath).make_preferred();
-  fs::path final_output_path =
+  fs::path absolute_source = fs::path(absolute_input_filepath).make_preferred();
+  fs::path absolute_compiled_source =
       fs::path(absolute_output_filepath).make_preferred();
+  fs::create_directories(absolute_compiled_source.parent_path());
 
-  internal::add_path(final_input_path, current_source_files_);
-  current_object_files_[final_input_path.string()] = final_output_path.string();
-  fs::create_directories(final_output_path.parent_path());
-}
-
-void Target::AddSourceAbsolute(const fs::path &absolute_filepath) {
-  const fs::path relative =
-      absolute_filepath.lexically_relative(env::get_project_root());
-  env::assert_fatal(
-      relative.string().find("..") == std::string::npos,
-      fmt::format("Out of project root path detected for {} -> {}. Use the "
-                  "AddSourceAbsolute(abs_input, abs_output) or "
-                  "GlobSourceAbsolute(abs_input, abs_output) API",
-                  absolute_filepath.string(), relative.string()));
-
-  fs::path absolute_compiled_source = target_intermediate_dir_ / relative;
-  absolute_compiled_source.replace_filename(
-      absolute_filepath.filename().string() + ".o");
-  AddSourceAbsolute(absolute_filepath, absolute_compiled_source);
-}
-
-void Target::AddSource(const std::string &relative_filename,
-                       const std::filesystem::path &relative_to_target_path) {
-  env::log_trace(name_, __FUNCTION__);
-  fs::path absolute_filepath =
-      target_root_source_dir_ / relative_to_target_path / relative_filename;
-  AddSourceAbsolute(absolute_filepath);
-}
-
-void Target::AddSource(const std::string &relative_filename) {
-  AddSource(relative_filename, "");
-}
-
-void Target::GlobSources(const fs::path &relative_to_target_path) {
-  env::log_trace(name_, __FUNCTION__);
-
-  fs::path absolute_path = target_root_source_dir_ / relative_to_target_path;
-  GlobSourcesAbsolute(absolute_path);
+  internal::add_path(absolute_source, current_source_files_);
+  current_object_files_.insert(
+      {absolute_source.native(), absolute_compiled_source});
 }
 
 void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
                                  const fs::path &absolute_output_path) {
   for (const auto &p : fs::directory_iterator(absolute_input_path)) {
     if (IsValidSource(p.path())) {
-      fs::path output_p =
+      fs::path absolute_output_source =
           absolute_output_path / (p.path().filename().string() + ".o");
-      env::log_trace(name_, fmt::format("Added source {} -> {}",
-                                        p.path().string(), output_p.string()));
-      AddSourceAbsolute(p.path(), output_p);
+      AddSourceAbsolute(p.path(), absolute_output_source);
     }
   }
 }
 
-void Target::GlobSourcesAbsolute(const fs::path &absolute_path) {
-  for (const auto &p : fs::directory_iterator(absolute_path)) {
+void Target::AddSource(const fs::path &relative_filename,
+                       const std::filesystem::path &relative_to_target_path) {
+  env::log_trace(name_, __FUNCTION__);
+
+  // Compute the absolute source path
+  fs::path absolute_source =
+      target_root_source_dir_ / relative_to_target_path / relative_filename;
+
+  // Compute the relative compiled source path
+  const fs::path relative =
+      absolute_source.lexically_relative(env::get_project_root());
+
+  // Check if out of root
+  env::assert_fatal(
+      relative.string().find("..") == std::string::npos,
+      fmt::format("Out of project root path detected for {} -> {}. Use the "
+                  "AddSourceAbsolute(abs_input, abs_output) or "
+                  "GlobSourceAbsolute(abs_input, abs_output) API",
+                  absolute_source.string(), relative.string()));
+
+  // Compute relative object path
+  fs::path absolute_compiled_source = target_intermediate_dir_ / relative;
+  absolute_compiled_source.replace_filename(
+      absolute_source.filename().string() + ".o");
+
+  AddSourceAbsolute(absolute_source, absolute_compiled_source);
+}
+
+void Target::AddSource(const fs::path &relative_filename) {
+  AddSource(relative_filename, "");
+}
+
+void Target::GlobSources(const fs::path &relative_to_target_path) {
+  env::log_trace(name_, __FUNCTION__);
+
+  fs::path absolute_input_path =
+      target_root_source_dir_ / relative_to_target_path;
+
+  for (const auto &p : fs::directory_iterator(absolute_input_path)) {
     if (IsValidSource(p.path())) {
-      env::log_trace(name_, fmt::format("Added source {}", p.path().string()));
-      AddSourceAbsolute(p.path());
+      AddSource(p.path().lexically_relative(target_root_source_dir_));
     }
   }
 }
@@ -140,7 +139,7 @@ void Target::CompileSource(const fs::path &current_source) {
 std::vector<std::string>
 Target::CompileCommand(const fs::path &current_source) const {
   const std::string output_source =
-      internal::quote(GetCompiledSourcePath(current_source));
+      internal::quote(GetCompiledSourcePath(current_source).string());
 
   // TODO, Check implementation for GetCompiler
   const std::string compiler = GetCompiler(current_source);
