@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <functional>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
@@ -64,6 +65,13 @@ public:
 
   void GlobSources(const fs::path &relative_to_target_path);
   void GlobSourcesAbsolute(const fs::path &absolute_path);
+
+  // Use these APIs for out of project root builds
+  // Manually specify input and output
+  void AddSourceAbsolute(const fs::path &absolute_input_filepath,
+                         const fs::path &absolute_output_filepath);
+  void GlobSourcesAbsolute(const fs::path &absolute_input_path,
+                           const fs::path &absolute_output_path);
 
   // * Headers
   void AddHeader(const std::string &relative_filename);
@@ -141,7 +149,8 @@ protected:
 
   const std::string &GetCompiler(const fs::path &source) const;
 
-  fs::path GetCompiledSourcePath(const fs::path &source) const;
+  // This API should never throw
+  std::string GetCompiledSourcePath(const fs::path &source) const;
   std::vector<std::string> GetCompiledSources() const;
 
 private:
@@ -226,6 +235,8 @@ private:
 
   // Internal
   internal::path_unordered_set current_source_files_;
+  std::unordered_map<std::string, std::string> current_object_files_;
+
   internal::path_unordered_set current_header_files_;
   internal::path_unordered_set current_lib_deps_;
 

@@ -89,6 +89,7 @@ bool Target::IsValidHeader(const fs::path &headerpath) const {
 
 // TODO, Since we are sanitizing the input source files when adding we might
 // only need to check for valid sources (ASM, C, CPP)
+// i.e we can eliminate the default case
 const std::string &Target::GetCompiler(const fs::path &source) const {
   switch (GetFileExtType(source)) {
   case FileExtType::Asm:
@@ -107,20 +108,17 @@ const std::string &Target::GetCompiler(const fs::path &source) const {
   return toolchain_.GetCppCompiler();
 }
 
-fs::path Target::GetCompiledSourcePath(const fs::path &source) const {
-  fs::path absolute_compiled_source =
-      target_intermediate_dir_ /
-      source.lexically_relative(env::get_project_root());
-  absolute_compiled_source.replace_filename(source.filename().string() + ".o");
-  absolute_compiled_source.make_preferred();
-  return absolute_compiled_source;
+// NOTE, This should never throw even if the `.at` API can throw
+// TODO, Find situations where GetCompiledSourcePath is not generated for a
+// particular input source
+std::string Target::GetCompiledSourcePath(const fs::path &source) const {
+  return current_object_files_.at(source.string());
 }
 
 std::vector<std::string> Target::GetCompiledSources() const {
   std::vector<std::string> compiled_sources;
-  for (const auto &current_source : current_source_files_) {
-    compiled_sources.push_back(internal::quote(
-        GetCompiledSourcePath(current_source.GetPathname()).string()));
+  for (const auto &p : current_object_files_) {
+    compiled_sources.push_back(p.second);
   }
   return compiled_sources;
 }

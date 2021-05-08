@@ -9,14 +9,36 @@
 namespace buildcc::base {
 
 // Public
-void Target::AddSourceAbsolute(const fs::path &absolute_filepath) {
-  env::assert_fatal(IsValidSource(absolute_filepath),
+void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
+                               const fs::path &absolute_output_filepath) {
+  env::assert_fatal(IsValidSource(absolute_input_filepath),
                     fmt::format("{} does not have a valid source extension",
-                                absolute_filepath.string()));
+                                absolute_input_filepath.string()));
 
-  internal::add_path(absolute_filepath, current_source_files_);
-  fs::create_directories(
-      GetCompiledSourcePath(absolute_filepath).parent_path());
+  fs::path final_input_path =
+      fs::path(absolute_input_filepath).make_preferred();
+  fs::path final_output_path =
+      fs::path(absolute_output_filepath).make_preferred();
+
+  internal::add_path(final_input_path, current_source_files_);
+  current_object_files_[final_input_path.string()] = final_output_path.string();
+  fs::create_directories(final_output_path.parent_path());
+}
+
+void Target::AddSourceAbsolute(const fs::path &absolute_filepath) {
+  const fs::path relative =
+      absolute_filepath.lexically_relative(env::get_project_root());
+  env::assert_fatal(
+      relative.string().find("..") == std::string::npos,
+      fmt::format("Out of project root path detected for {} -> {}. Use the "
+                  "AddSourceAbsolute(abs_input, abs_output) or "
+                  "GlobSourceAbsolute(abs_input, abs_output) API",
+                  absolute_filepath.string(), relative.string()));
+
+  fs::path absolute_compiled_source = target_intermediate_dir_ / relative;
+  absolute_compiled_source.replace_filename(
+      absolute_filepath.filename().string() + ".o");
+  AddSourceAbsolute(absolute_filepath, absolute_compiled_source);
 }
 
 void Target::AddSource(const std::string &relative_filename,
@@ -36,6 +58,19 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
 
   fs::path absolute_path = target_root_source_dir_ / relative_to_target_path;
   GlobSourcesAbsolute(absolute_path);
+}
+
+void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
+                                 const fs::path &absolute_output_path) {
+  for (const auto &p : fs::directory_iterator(absolute_input_path)) {
+    if (IsValidSource(p.path())) {
+      fs::path output_p =
+          absolute_output_path / (p.path().filename().string() + ".o");
+      env::log_trace(name_, fmt::format("Added source {} -> {}",
+                                        p.path().string(), output_p.string()));
+      AddSourceAbsolute(p.path(), output_p);
+    }
+  }
 }
 
 void Target::GlobSourcesAbsolute(const fs::path &absolute_path) {
@@ -105,7 +140,7 @@ void Target::CompileSource(const fs::path &current_source) {
 std::vector<std::string>
 Target::CompileCommand(const fs::path &current_source) const {
   const std::string output_source =
-      internal::quote(GetCompiledSourcePath(current_source).string());
+      internal::quote(GetCompiledSourcePath(current_source));
 
   // TODO, Check implementation for GetCompiler
   const std::string compiler = GetCompiler(current_source);
