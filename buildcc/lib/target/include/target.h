@@ -58,13 +58,10 @@ public:
   // Setters
 
   // * Sources
-  void AddSource(const std::string &relative_filename);
-  void AddSource(const std::string &relative_filename,
+  void AddSource(const fs::path &relative_filename);
+  void AddSource(const fs::path &relative_filename,
                  const fs::path &relative_to_target_path);
-  void AddSourceAbsolute(const fs::path &absolute_filepath);
-
   void GlobSources(const fs::path &relative_to_target_path);
-  void GlobSourcesAbsolute(const fs::path &absolute_path);
 
   // Use these APIs for out of project root builds
   // Manually specify input and output
@@ -235,6 +232,8 @@ private:
 
   // Internal
   internal::path_unordered_set current_source_files_;
+  // NOTE, Always store the absolute source path -> absolute compiled source
+  // path here
   std::unordered_map<std::string, fs::path> current_object_files_;
 
   internal::path_unordered_set current_header_files_;
