@@ -13,6 +13,7 @@ public:
       : Target(name, base::TargetType::Executable, toolchain,
                target_path_relative_to_root) {
     prefix_include_dir_ = "/I";
+    prefix_lib_dir_ = "/LIBPATH:";
   }
 
 private:
