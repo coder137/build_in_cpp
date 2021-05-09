@@ -1,7 +1,7 @@
 #ifndef TARGETS_MSVC_STATIC_TARGET_MSVC_H_
 #define TARGETS_MSVC_STATIC_TARGET_MSVC_H_
 
-#include "executable_target_msvc.h"
+#include "target.h"
 
 namespace buildcc {
 
