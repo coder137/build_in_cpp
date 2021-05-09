@@ -2,9 +2,11 @@
 add_library(target_msvc
     executable_target_msvc.cpp
     static_target_msvc.cpp
+    dynamic_target_msvc.cpp
 
     executable_target_msvc.h
     static_target_msvc.h
+    dynamic_target_msvc.h
 )
 target_include_directories(target_msvc PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> 
@@ -24,6 +26,7 @@ if (${BUILDCC_INSTALL})
     install(FILES  
         ${CMAKE_CURRENT_SOURCE_DIR}/executable_target_msvc.h
         ${CMAKE_CURRENT_SOURCE_DIR}/static_target_msvc.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/dynamic_target_msvc.h
         DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}"
     )
     install(EXPORT target_msvcConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/target_msvc")
