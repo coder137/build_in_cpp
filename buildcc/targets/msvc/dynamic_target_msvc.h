@@ -1,19 +1,17 @@
-#ifndef TARGETS_MSVC_EXECUTABLE_TARGET_MSVC_H_
-#define TARGETS_MSVC_EXECUTABLE_TARGET_MSVC_H_
+#ifndef TARGETS_MSVC_DYNAMIC_TARGET_MSVC_H_
+#define TARGETS_MSVC_DYNAMIC_TARGET_MSVC_H_
 
 #include "target.h"
 
 namespace buildcc {
 
-class ExecutableTarget_msvc : public base::Target {
+class DynamicTarget_msvc : public base::Target {
 public:
-  ExecutableTarget_msvc(
-      const std::string &name, const base::Toolchain &toolchain,
-      const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::TargetType::Executable, toolchain,
+  DynamicTarget_msvc(const std::string &name, const base::Toolchain &toolchain,
+                     const std::filesystem::path &target_path_relative_to_root)
+      : Target(name, base::TargetType::DynamicLibrary, toolchain,
                target_path_relative_to_root) {
     prefix_include_dir_ = "/I";
-    prefix_lib_dir_ = "/LIBPATH:";
   }
 
 private:

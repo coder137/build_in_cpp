@@ -1,0 +1,8 @@
+# Folder
+generated
+buildcc
+
+# Files
+*.exe
+*.o
+*.bin

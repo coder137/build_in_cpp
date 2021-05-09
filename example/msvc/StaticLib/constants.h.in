@@ -1,0 +1,7 @@
+#pragma once
+
+// clang-format off
+inline constexpr char const *BUILD_SCRIPT_SOURCE = "@CMAKE_SOURCE_DIR@";
+inline constexpr char const *BUILD_SCRIPT_EXE = "@CMAKE_BINARY_DIR@";
+inline constexpr char const *BUILD_SCRIPT_FOLDER = "@CMAKE_SOURCE_DIR@/buildcc";
+
