@@ -5,6 +5,8 @@
 // Env
 #include "assert_fatal.h"
 
+#include "fmt/format.h"
+
 namespace buildcc {
 
 // Compiling
@@ -19,7 +21,7 @@ std::vector<std::string> ExecutableTarget_msvc::CompileCommand(
       aggregated_preprocessor_flags,
       aggregated_include_dirs,
       aggregated_compile_flags,
-      "/Fo" + output_source,
+      fmt::format("/Fo{}", output_source),
       "/c",
       input_source,
   };
@@ -37,7 +39,7 @@ ExecutableTarget_msvc::Link(const std::string &output_target,
       GetToolchain().GetLinker(),
       aggregated_link_flags,
       aggregated_lib_dirs,
-      "/OUT:" + output_target,
+      fmt::format("/OUT:{}", output_target),
       aggregated_lib_deps,
       aggregated_compiled_sources,
   };
