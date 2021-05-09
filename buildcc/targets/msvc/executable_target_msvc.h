@@ -11,7 +11,9 @@ public:
       const std::string &name, const base::Toolchain &toolchain,
       const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::Executable, toolchain,
-               target_path_relative_to_root) {}
+               target_path_relative_to_root) {
+    prefix_include_dir_ = "/I";
+  }
 
 private:
   // Compiling
