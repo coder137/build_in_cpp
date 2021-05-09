@@ -26,6 +26,7 @@
 
 // MSVC
 #include "executable_target_msvc.h"
+#include "static_target_msvc.h"
 
 // TODO, Add more specialized targets here
 
