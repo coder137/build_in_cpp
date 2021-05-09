@@ -1,3 +1,6 @@
+#ifndef TOOLCHAINS_TOOLCHAIN_GCC_H_
+#define TOOLCHAINS_TOOLCHAIN_GCC_H_
+
 #include "toolchain.h"
 
 namespace buildcc {
@@ -9,3 +12,5 @@ public:
 };
 
 } // namespace buildcc
+
+#endif

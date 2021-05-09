@@ -11,15 +11,21 @@
 #include "toolchain.h"
 #include "target.h"
 
-// Toolchain
+// Specialized Toolchain
 #include "toolchain_gcc.h"
+#include "toolchain_msvc.h"
 
 // TODO, Add more specialized toolchains here
 
 // Target
+
+// GCC
 #include "executable_target_gcc.h"
 #include "static_target_gcc.h"
 #include "dynamic_target_gcc.h"
+
+// MSVC
+#include "executable_target_msvc.h"
 
 // TODO, Add more specialized targets here
 
