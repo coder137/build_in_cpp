@@ -45,6 +45,8 @@ set(SPDLOG_INSTALL ON CACHE BOOL "Spdlog install")
 set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "Spdlog FMT external lib")
 add_subdirectory(spdlog)
 
+include(cmake/target/cli11.cmake)
+
 if (${TESTING})
     set(C++11 ON CACHE BOOL "CppUTests C++11 support")
     set(CPPUTEST_FLAGS OFF CACHE BOOL "CppUTests Flags off")
