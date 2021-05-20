@@ -5,8 +5,7 @@ namespace buildcc {
 void Args::AddCustomToolchain(const std::string &name,
                               const std::string &description,
                               Toolchain &custom_toolchain_arg) {
-  CLI::App *custom_arg = toolchain_->add_subcommand(name, description);
-  AddToolchain(custom_arg, custom_toolchain_arg);
+  AddToolchain(name, description, "Custom", custom_toolchain_arg);
 }
 
 void Args::Parse(int argc, char **argv) {
@@ -25,25 +24,31 @@ void Args::Initialize() {
 }
 
 void Args::RootArgs() {
-  app_.set_help_all_flag("--help-all", "");
-  app_.add_flag("-c,--clean", clean_, "");
-  app_.set_config("--config", "", "")->expected(1, 3);
+  app_.set_help_all_flag("--help-all", "Expand individual options");
+
+  // TODO, Currently only expects 1
+  // From CLI11 2.0 onwards multiple configuration files can be added, increase
+  // this limit
+  app_.set_config("--config", "", "Read a <config>.toml file")->expected(1);
+
+  // Root flags
+  app_.add_flag("-c,--clean", clean_, "Clean artifacts")->group("Root");
 }
 
 void Args::ToolchainArgs() {
   toolchain_ = app_.add_subcommand("toolchain", "Select Toolchain")
                    ->required()
                    ->require_subcommand();
-  CLI::App *gcc_arg = toolchain_->add_subcommand("gcc", "GNU GCC Toolchain");
-  CLI::App *msvc_arg = toolchain_->add_subcommand("msvc", "MSVC Toolchain");
-
-  AddToolchain(gcc_arg, gcc_toolchain_);
-  AddToolchain(msvc_arg, msvc_toolchain_);
+  AddToolchain("gcc", "GNU GCC Toolchain", "Supported", gcc_toolchain_);
+  AddToolchain("msvc", "MSVC Toolchain", "Supported", msvc_toolchain_);
 }
 
-void Args::AddToolchain(CLI::App *toolchain, Toolchain &toolchain_arg) {
-  toolchain->add_flag("-b,--build", toolchain_arg.build);
-  toolchain->add_flag("-t,--test", toolchain_arg.test);
+void Args::AddToolchain(const std::string &name, const std::string &description,
+                        const std::string &group, Toolchain &toolchain_arg) {
+  CLI::App *toolchain_spec =
+      toolchain_->add_subcommand(name, description)->group(group);
+  toolchain_spec->add_flag("-b,--build", toolchain_arg.build);
+  toolchain_spec->add_flag("-t,--test", toolchain_arg.test);
 }
 
 } // namespace buildcc

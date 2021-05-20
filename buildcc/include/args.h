@@ -17,6 +17,8 @@ public:
   Args(const Args &) = delete;
 
   void Parse(int argc, char **argv);
+
+  // TODO, Check if these are necessary
   CLI::App &Ref() { return app_; }
   const CLI::App &ConstRef() const { return app_; }
 
@@ -36,7 +38,8 @@ private:
 
   void RootArgs();
   void ToolchainArgs();
-  void AddToolchain(CLI::App *toolchain, Toolchain &arg_toolchain);
+  void AddToolchain(const std::string &name, const std::string &description,
+                    const std::string &group, Toolchain &toolchain_arg);
 
 private:
   CLI::App app_{"BuildCC buildsystem"};
