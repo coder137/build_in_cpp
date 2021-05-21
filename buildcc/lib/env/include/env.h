@@ -10,13 +10,13 @@ namespace fs = std::filesystem;
 namespace buildcc::env {
 
 // Basic Initialization
-void init(const fs::path &project_root, const fs::path &intermediate_build_dir);
+void init(const fs::path &project_root_dir, const fs::path &project_build_dir);
 void deinit();
 
 // Getters
 bool is_init();
-const fs::path &get_project_root();
-const fs::path &get_intermediate_build_dir();
+const fs::path &get_project_root_dir();
+const fs::path &get_project_build_dir();
 
 } // namespace buildcc::env
 

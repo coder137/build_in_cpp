@@ -42,9 +42,9 @@ public:
                   const Toolchain &toolchain,
                   const fs::path &target_path_relative_to_root)
       : name_(name), type_(type), toolchain_(toolchain),
-        target_root_source_dir_(env::get_project_root() /
+        target_root_source_dir_(env::get_project_root_dir() /
                                 target_path_relative_to_root),
-        target_intermediate_dir_(fs::path(env::get_intermediate_build_dir()) /
+        target_intermediate_dir_(fs::path(env::get_project_build_dir()) /
                                  toolchain.GetName() / name),
         loader_(name, target_intermediate_dir_) {
     Initialize();
