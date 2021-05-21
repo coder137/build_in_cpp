@@ -37,8 +37,8 @@ public:
   bool Clean() { return clean_; }
   env::LogLevel GetLogLevel() { return loglevel_; }
 
-  const fs::path &GetSourceRoot() { return source_root_; }
-  const fs::path &GetSourceIntermediate() { return source_intermediate_; }
+  const fs::path &GetProjectRootDir() { return project_root_dir_; }
+  const fs::path &GetProjectBuildDir() { return project_build_dir_; }
   const Toolchain &GetGccToolchain() { return gcc_toolchain_; }
   const Toolchain &GetMsvcToolchain() { return msvc_toolchain_; }
 
@@ -64,8 +64,8 @@ private:
   };
 
   // directory
-  fs::path source_root_{""};
-  fs::path source_intermediate_{"_internal"};
+  fs::path project_root_dir_{""};
+  fs::path project_build_dir_{"_internal"};
 
   // toolchain
   Toolchain gcc_toolchain_{false, false};

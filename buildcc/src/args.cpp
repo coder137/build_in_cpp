@@ -39,12 +39,12 @@ void Args::RootArgs() {
       ->group("Root");
 
   // Dir flags
-  app_.add_option("--root", source_root_,
-                  "Source root directory (relative to current directory)")
+  app_.add_option("--root_dir", project_root_dir_,
+                  "Project root directory (relative to current directory)")
       ->required()
       ->group("Root");
-  app_.add_option("--intermediate", source_intermediate_,
-                  "Source intermediate dir (relative to current directory)")
+  app_.add_option("--build_dir", project_build_dir_,
+                  "Project build dir (relative to current directory)")
       ->required()
       ->group("Root");
 }
