@@ -12,9 +12,9 @@ bool init_ = false;
 
 namespace buildcc::env {
 
-void init(const fs::path &project_root, const fs::path &project_build_dir) {
+void init(const fs::path &project_root_dir, const fs::path &project_build_dir) {
   // State
-  root_dir_ = project_root;
+  root_dir_ = project_root_dir;
   build_dir_ = project_build_dir;
   root_dir_.make_preferred();
   build_dir_.make_preferred();
