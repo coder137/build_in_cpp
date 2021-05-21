@@ -1,7 +1,13 @@
 #ifndef BUILDCC_INCLUDE_ARGS_H_
 #define BUILDCC_INCLUDE_ARGS_H_
 
+#include <filesystem>
+
+#include "logging.h"
+
 #include "CLI/CLI.hpp"
+
+namespace fs = std::filesystem;
 
 namespace buildcc {
 
@@ -29,9 +35,12 @@ public:
 
   // Getters
   bool Clean() { return clean_; }
+  env::LogLevel GetLogLevel() { return loglevel_; }
 
-  const Toolchain &GccToolchain() { return gcc_toolchain_; }
-  const Toolchain &MsvcToolchain() { return msvc_toolchain_; }
+  const fs::path &GetSourceRoot() { return source_root_; }
+  const fs::path &GetSourceIntermediate() { return source_intermediate_; }
+  const Toolchain &GetGccToolchain() { return gcc_toolchain_; }
+  const Toolchain &GetMsvcToolchain() { return msvc_toolchain_; }
 
 private:
   void Initialize();
@@ -45,10 +54,25 @@ private:
   CLI::App app_{"BuildCC buildsystem"};
 
   bool clean_{false};
+  env::LogLevel loglevel_{env::LogLevel::Info};
+  const std::map<std::string, env::LogLevel> loglevel_map_{
+      {"Trace", env::LogLevel::Trace},
+      {"Debug", env::LogLevel::Debug},
+      {"Info", env::LogLevel::Info},
+      {"Warning", env::LogLevel::Warning},
+      {"Critical", env::LogLevel::Critical},
+  };
 
-  CLI::App *toolchain_{nullptr};
+  // directory
+  fs::path source_root_{""};
+  fs::path source_intermediate_{"_internal"};
+
+  // toolchain
   Toolchain gcc_toolchain_{false, false};
   Toolchain msvc_toolchain_{false, false};
+
+  // Internal
+  CLI::App *toolchain_{nullptr};
 };
 
 } // namespace buildcc

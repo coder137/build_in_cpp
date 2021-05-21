@@ -12,6 +12,7 @@ void Args::Parse(int argc, char **argv) {
   try {
     app_.parse(argc, argv);
   } catch (const CLI::ParseError &e) {
+    env::log_critical("Args::Parse", e.what());
     exit(app_.exit(e));
   }
 }
@@ -33,6 +34,19 @@ void Args::RootArgs() {
 
   // Root flags
   app_.add_flag("-c,--clean", clean_, "Clean artifacts")->group("Root");
+  app_.add_option("-l,--loglevel", loglevel_, "LogLevel settings")
+      ->transform(CLI::CheckedTransformer(loglevel_map_, CLI::ignore_case))
+      ->group("Root");
+
+  // Dir flags
+  app_.add_option("--root", source_root_,
+                  "Source root directory (relative to current directory)")
+      ->required()
+      ->group("Root");
+  app_.add_option("--intermediate", source_intermediate_,
+                  "Source intermediate dir (relative to current directory)")
+      ->required()
+      ->group("Root");
 }
 
 void Args::ToolchainArgs() {
