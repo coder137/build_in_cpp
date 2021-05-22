@@ -5,6 +5,8 @@
 
 using namespace buildcc;
 
+constexpr const char *const EXE = "build";
+
 int main(int argc, char **argv) {
   // 1. Get arguments
   Args args;
@@ -18,8 +20,7 @@ int main(int argc, char **argv) {
   // 3. Pre-build steps
   if (args.Clean()) {
     env::log_info(
-        "build.exe",
-        fmt::format("Cleaning {}", env::get_project_build_dir().string()));
+        EXE, fmt::format("Cleaning {}", env::get_project_build_dir().string()));
     fs::remove_all(env::get_project_build_dir());
   }
 
@@ -80,7 +81,26 @@ int main(int argc, char **argv) {
   }
 
   // 5. Test Steps
-  // TODO,
+  if (args.GetGccToolchain().build && args.GetGccToolchain().test) {
+    std::string cppflags_loc = g_cppflags.GetTargetPath().string();
+    env::log_info(EXE, fmt::format("Testing {}", cppflags_loc.c_str()));
+
+    // system ...
+
+    std::string cflags_loc = g_cflags.GetTargetPath().string();
+    env::log_info(EXE, fmt::format("Testing {}", cflags_loc.c_str()));
+    // system ...
+  }
+
+  if (args.GetMsvcToolchain().build && args.GetMsvcToolchain().test) {
+    std::string cppflags_loc = m_cppflags.GetTargetPath().string();
+    env::log_info(EXE, fmt::format("Testing {}", cppflags_loc.c_str()));
+    // system ...
+
+    std::string cflags_loc = m_cflags.GetTargetPath().string();
+    env::log_info(EXE, fmt::format("Testing {}", cflags_loc.c_str()));
+    // system ...
+  }
 
   // 6. Post Build Tools
   plugin::ClangCompileCommands({&g_cflags, &g_cppflags, &m_cflags, &m_cppflags})

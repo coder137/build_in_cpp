@@ -9,8 +9,8 @@ clean = false
 # Toolchain
 [toolchain.gcc]
 build = true
-test = false
+test = true
 
 [toolchain.msvc]
 build = true
-test = false
+test = true
