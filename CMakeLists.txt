@@ -34,6 +34,7 @@ set(FLATBUFFERS_BUILD_CPP17 ON CACHE BOOL "Flatbuffers C++17 support")
 set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "Flatbuffers build tests")
 set(FLATBUFFERS_BUILD_FLATHASH OFF CACHE BOOL "Flatbuffers build flathash")
 set(FLATBUFFERS_BUILD_FLATLIB ON CACHE BOOL "Flatbuffers build flatlib")
+set(FLATBUFFERS_LIBCXX_WITH_CLANG OFF CACHE BOOL "Flatbuffers LIBCXX")
 # set(FLATBUFFERS_BUILD_SHAREDLIB ON CACHE BOOL "Flatbuffers built as dynamic library")
 add_subdirectory(flatbuffers)
 
@@ -44,6 +45,8 @@ add_subdirectory(fmt)
 set(SPDLOG_INSTALL ON CACHE BOOL "Spdlog install")
 set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "Spdlog FMT external lib")
 add_subdirectory(spdlog)
+
+include(cmake/target/cli11.cmake)
 
 if (${TESTING})
     set(C++11 ON CACHE BOOL "CppUTests C++11 support")

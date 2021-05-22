@@ -4,21 +4,20 @@
 
 namespace {
 
-fs::path project_root_{""};
-fs::path intermediate_build_dir_{""};
+fs::path root_dir_{""};
+fs::path build_dir_{""};
 bool init_ = false;
 
 } // namespace
 
 namespace buildcc::env {
 
-void init(const fs::path &project_root,
-          const fs::path &intermediate_build_dir) {
+void init(const fs::path &project_root_dir, const fs::path &project_build_dir) {
   // State
-  project_root_ = project_root;
-  intermediate_build_dir_ = intermediate_build_dir;
-  project_root_.make_preferred();
-  intermediate_build_dir_.make_preferred();
+  root_dir_ = project_root_dir;
+  build_dir_ = project_build_dir;
+  root_dir_.make_preferred();
+  build_dir_.make_preferred();
 
   init_ = true;
 
@@ -28,13 +27,13 @@ void init(const fs::path &project_root,
 }
 
 void deinit() {
-  project_root_ = "";
-  intermediate_build_dir_ = "";
+  root_dir_ = "";
+  build_dir_ = "";
   init_ = false;
 }
 
 bool is_init(void) { return init_; }
-const fs::path &get_project_root() { return project_root_; }
-const fs::path &get_intermediate_build_dir() { return intermediate_build_dir_; }
+const fs::path &get_project_root_dir() { return root_dir_; }
+const fs::path &get_project_build_dir() { return build_dir_; }
 
 } // namespace buildcc::env

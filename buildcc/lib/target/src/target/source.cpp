@@ -46,7 +46,7 @@ void Target::AddSource(const fs::path &relative_filename,
 
   // Compute the relative compiled source path
   const fs::path relative =
-      absolute_source.lexically_relative(env::get_project_root());
+      absolute_source.lexically_relative(env::get_project_root_dir());
 
   // Check if out of root
   env::assert_fatal(

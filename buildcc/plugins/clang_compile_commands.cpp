@@ -45,7 +45,7 @@ void ClangCompileCommands::Generate() {
       // DONE, Get intermediate directory from env
       const auto input_file = f.GetPathname();
       const auto command = t->CompileCommand(input_file);
-      const auto directory = env::get_intermediate_build_dir();
+      const auto directory = env::get_project_build_dir();
 
       // DONE, Use flatbuffers::Flexbuffer to create binary format
       fbb.Map([&]() {
@@ -65,7 +65,7 @@ void ClangCompileCommands::Generate() {
 
   // DONE, Save file using the flatbuffers::SaveFile utility function
   std::filesystem::path file =
-      std::filesystem::path(buildcc::env::get_intermediate_build_dir()) /
+      std::filesystem::path(buildcc::env::get_project_build_dir()) /
       "compile_commands.json";
   bool saved =
       flatbuffers::SaveFile(file.string().c_str(), compile_commands, false);

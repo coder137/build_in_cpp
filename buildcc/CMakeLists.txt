@@ -17,12 +17,19 @@ add_subdirectory(targets/msvc)
 # First party plugins
 add_subdirectory(plugins)
 
-add_library(buildcc INTERFACE)
-target_include_directories(buildcc INTERFACE 
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
+add_library(buildcc STATIC)
+target_sources(buildcc PRIVATE 
+    src/args.cpp
+)
+target_include_directories(buildcc PUBLIC 
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
 )
-target_link_libraries(buildcc INTERFACE 
+target_link_libraries(buildcc PUBLIC 
+    # 
+    CLI11::CLI11
+
+    # 
     target
     
     toolchain_specialized
@@ -39,6 +46,7 @@ if (${BUILDCC_INSTALL})
     install(TARGETS buildcc DESTINATION lib EXPORT buildccConfig)
     install(FILES  
         ${CMAKE_CURRENT_SOURCE_DIR}/include/buildcc.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/args.h
         DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
     install(EXPORT buildccConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/buildcc")
 endif()
