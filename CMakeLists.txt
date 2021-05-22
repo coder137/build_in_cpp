@@ -13,7 +13,7 @@ project(BuildCC
 option(BUILDCC_TESTING "Enable BuildCC Testing" ON)
 option(BUILDCC_GCC_TESTING "Enable Buildcc GCC Testing" OFF)
 option(BUILDCC_INSTALL "Enable Buildcc Installation" ON)
-option(BUILDCC_EXAMPLES "Enable Buildcc Examples" ON)
+option(BUILDCC_EXAMPLES "Enable Buildcc Examples" OFF)
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND ${BUILDCC_TESTING})
     set(TESTING ON)
