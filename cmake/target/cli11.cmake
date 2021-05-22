@@ -5,6 +5,6 @@ if (${BUILDCC_INSTALL})
     install(TARGETS CLI11 DESTINATION lib EXPORT CLI11Config)
     install(FILES  
         ${CLI_INCLUDE_HEADERS}
-        DESTINATION "include/CLI11")
+        DESTINATION "include/CLI")
     install(EXPORT CLI11Config DESTINATION "lib/cmake/CLI11")
 endif()

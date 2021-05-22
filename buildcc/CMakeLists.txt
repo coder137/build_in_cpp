@@ -46,6 +46,7 @@ if (${BUILDCC_INSTALL})
     install(TARGETS buildcc DESTINATION lib EXPORT buildccConfig)
     install(FILES  
         ${CMAKE_CURRENT_SOURCE_DIR}/include/buildcc.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/args.h
         DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
     install(EXPORT buildccConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/buildcc")
 endif()
