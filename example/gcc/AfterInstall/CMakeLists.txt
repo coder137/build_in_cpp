@@ -19,6 +19,8 @@ find_package(target_package NAMES "target" REQUIRED)
 find_package(target_gcc_package NAMES "target_gcc" REQUIRED)
 find_package(target_msvc_package NAMES "target_msvc" REQUIRED)
 find_package(plugins NAMES "plugins" REQUIRED)
+
+find_package(CLI11_package NAMES "CLI11" REQUIRED)
 find_package(buildcc_package NAMES "buildcc" REQUIRED)
 
 message("Find package: ${spdlog_package_DIR}")
@@ -30,6 +32,7 @@ message("Find package: ${target_package_DIR}")
 message("Find package: ${target_gcc_package_DIR}")
 message("Find package: ${target_msvc_package_DIR}")
 message("Find package: ${plugins_DIR}")
+message("Find package: ${CLI11_package_DIR}")
 message("Find package: ${buildcc_package_DIR}")
 
 # build executable
