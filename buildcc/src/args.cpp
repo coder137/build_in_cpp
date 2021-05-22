@@ -50,9 +50,7 @@ void Args::RootArgs() {
 }
 
 void Args::ToolchainArgs() {
-  toolchain_ = app_.add_subcommand("toolchain", "Select Toolchain")
-                   ->required()
-                   ->require_subcommand();
+  toolchain_ = app_.add_subcommand("toolchain", "Select Toolchain");
   AddToolchain("gcc", "GNU GCC Toolchain", "Supported", gcc_toolchain_);
   AddToolchain("msvc", "MSVC Toolchain", "Supported", msvc_toolchain_);
 }
