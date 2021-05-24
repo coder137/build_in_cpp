@@ -7,6 +7,7 @@ target_link_libraries(target PUBLIC
     env
     toolchain
     flatbuffers
+    Taskflow
 )
 
 target_sources(target PRIVATE

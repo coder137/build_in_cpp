@@ -10,7 +10,10 @@ target_include_directories(hybrid_simple_example PRIVATE ${CMAKE_BINARY_DIR}/gen
 target_link_libraries(hybrid_simple_example PRIVATE buildcc)
 
 # TODO, Add this only if MINGW is used
+# https://github.com/msys2/MINGW-packages/issues/2303
+# Similar issue when adding the Taskflow library
 if (${MINGW})
+    message(WARNING "-Wl,--allow-multiple-definition for MINGW")
     target_link_options(hybrid_simple_example PRIVATE -Wl,--allow-multiple-definition)
 endif()
 
