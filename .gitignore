@@ -12,6 +12,7 @@ _deps
 
 # Folder
 *build/
+*_build_*/
 .vscode/
 
 # Files
