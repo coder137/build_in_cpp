@@ -13,6 +13,7 @@ target_sources(mock_target PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/target/build.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/target/flags.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/mock/target/recheck_states.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/mock/target/tasks.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/src/fbs/fbs_loader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/fbs/fbs_storer.cpp

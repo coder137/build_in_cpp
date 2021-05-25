@@ -7,11 +7,17 @@ namespace buildcc {
 
 namespace internal::m {
 
+// NOTE, No longer required
 void Expect_command(unsigned int calls, bool expectation);
 
 } // namespace internal::m
 
 namespace base::m {
+
+void TargetExpect_CompileTargetTask(unsigned int calls, Target *target,
+                                    int compile_sources,
+                                    int dummy_compile_sources);
+void TargetExpect_LinkTargetTask(unsigned int calls, Target *target);
 
 void TargetExpect_SourceRemoved(unsigned int calls, Target *target);
 void TargetExpect_SourceAdded(unsigned int calls, Target *target);
