@@ -18,6 +18,9 @@
 // Env
 #include "env.h"
 
+// Third Party
+#include "taskflow/taskflow.hpp"
+
 namespace buildcc::base {
 
 namespace fs = std::filesystem;
@@ -103,6 +106,11 @@ public:
   // Getters
   std::vector<std::string> CompileCommand(const fs::path &current_source) const;
 
+  // TODO, Check if these need to be made const
+  tf::Taskflow &GetTaskflow() { return tf_; }
+  tf::Task &GetCompileTask() { return compile_task_; }
+  tf::Task &GetLinkTask() { return link_task_; }
+
   fs::path GetTargetPath() const {
     return (GetTargetIntermediateDir() / GetName()).make_preferred();
   }
@@ -173,6 +181,14 @@ private:
                  const std::string &aggregated_preprocessor_flags,
                  const std::string &aggregated_compile_flags,
                  const std::string &aggregated_include_dirs) const;
+
+  // NOTE, compile_sources and dummy_compile_sources need to be through MOVE not
+  // REFERENCE
+  // This is because the Task needs to persist through the entire lifetime
+  // Local variable will not persist once the function returns
+  void CompileTaskflow(tf::Subflow &subflow,
+                       const std::vector<fs::path> &&compile_sources,
+                       const std::vector<fs::path> &&dummy_compile_sources);
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
@@ -269,6 +285,13 @@ private:
   // Build states
   bool first_build_ = false;
   bool rebuild_ = false;
+
+  static constexpr const char *const kCompileTaskName = "Compile";
+  static constexpr const char *const kLinkTaskName = "Link";
+
+  tf::Taskflow tf_;
+  tf::Task compile_task_;
+  tf::Task link_task_;
 };
 
 } // namespace buildcc::base

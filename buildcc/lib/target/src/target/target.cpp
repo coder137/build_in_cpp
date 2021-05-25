@@ -127,11 +127,15 @@ internal::path_unordered_set Target::GetCompiledSources() const {
 // PRIVATE
 
 void Target::Initialize() {
+  // Checks
   env::assert_fatal(
       env::is_init(),
       "Environment is not initialized. Use the buildcc::env::init API");
   env::assert_fatal(IsValidTargetType(type_), "Invalid Target Type");
   fs::create_directories(target_intermediate_dir_);
+
+  // Taskflow parameters
+  tf_.name(name_);
 }
 
 // Rechecks
