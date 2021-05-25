@@ -85,19 +85,13 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
 
 void Target::CompileSources() {
   env::log_trace(name_, __FUNCTION__);
-  compile_task_ =
-      tf_.emplace([this](tf::Subflow &subflow) {
-           std::vector<fs::path> compile_sources;
-           std::transform(current_source_files_.begin(),
-                          current_source_files_.end(),
-                          std::back_inserter(compile_sources),
-                          [](const buildcc::internal::Path &p) -> fs::path {
-                            return p.GetPathname();
-                          });
-           CompileTaskflow(subflow, std::move(compile_sources),
-                           std::vector<fs::path>());
-         })
-          .name(kCompileTaskName);
+  std::vector<fs::path> compile_sources;
+  std::transform(current_source_files_.begin(), current_source_files_.end(),
+                 std::back_inserter(compile_sources),
+                 [](const buildcc::internal::Path &p) -> fs::path {
+                   return p.GetPathname();
+                 });
+  CompileTargetTask(std::move(compile_sources), std::vector<fs::path>());
 }
 
 void Target::RecompileSources() {
@@ -140,30 +134,8 @@ void Target::RecompileSources() {
     }
   }
 
-  //
-  compile_task_ = tf_.emplace([this, compile_sources,
-                               dummy_compile_sources](tf::Subflow &subflow) {
-                       CompileTaskflow(subflow, std::move(compile_sources),
-                                       std::move(dummy_compile_sources));
-                     })
-                      .name(kCompileTaskName);
-}
-
-void Target::CompileTaskflow(
-    tf::Subflow &subflow, const std::vector<fs::path> &&compile_sources,
-    const std::vector<fs::path> &&dummy_compile_sources) {
-  for (const auto &cs : compile_sources) {
-    std::string name =
-        cs.lexically_relative(env::get_project_root_dir()).string();
-    (void)subflow.emplace([this, cs]() { CompileSource(cs); }).name(name);
-  }
-
-  // NOTE, This has just been added for graph generation
-  for (const auto &dcs : dummy_compile_sources) {
-    std::string name =
-        dcs.lexically_relative(env::get_project_root_dir()).string();
-    (void)subflow.emplace([]() {}).name(name);
-  }
+  CompileTargetTask(std::move(compile_sources),
+                    std::move(dummy_compile_sources));
 }
 
 void Target::CompileSource(const fs::path &current_source) {

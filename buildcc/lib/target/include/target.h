@@ -182,14 +182,6 @@ private:
                  const std::string &aggregated_compile_flags,
                  const std::string &aggregated_include_dirs) const;
 
-  // NOTE, compile_sources and dummy_compile_sources need to be through MOVE not
-  // REFERENCE
-  // This is because the Task needs to persist through the entire lifetime
-  // Local variable will not persist once the function returns
-  void CompileTaskflow(tf::Subflow &subflow,
-                       const std::vector<fs::path> &&compile_sources,
-                       const std::vector<fs::path> &&dummy_compile_sources);
-
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
                     const internal::path_unordered_set &current_path);
@@ -207,8 +199,10 @@ private:
                       const std::unordered_set<std::string> &current,
                       std::function<void(void)> callback);
 
-  // Linking
-  void BuildTarget();
+  // Tasks
+  void CompileTargetTask(const std::vector<fs::path> &&compile_sources,
+                         const std::vector<fs::path> &&dummy_compile_sources);
+  void LinkTargetTask();
 
   // * Virtual
   // PreLink();

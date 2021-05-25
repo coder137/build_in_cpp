@@ -46,7 +46,7 @@ void Target::Build() {
 
 void Target::BuildCompile() {
   CompileSources();
-  BuildTarget();
+  LinkTargetTask();
   Store();
   first_build_ = true;
 }
@@ -87,32 +87,10 @@ void Target::BuildRecompile() {
   RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
                      current_external_lib_deps_);
   if (dirty_) {
-    BuildTarget();
+    LinkTargetTask();
     Store();
     rebuild_ = true;
   }
-}
-
-void Target::BuildTarget() {
-  env::log_trace(name_, __FUNCTION__);
-  link_task_ =
-      tf_.emplace([this]() {
-           // Add compiled sources
-           const std::string aggregated_compiled_sources =
-               internal::aggregate(GetCompiledSources());
-
-           const std::string output_target =
-               internal::quote(GetTargetPath().string());
-
-           bool success = internal::command(
-               Link(output_target, aggregated_link_flags_,
-                    aggregated_compiled_sources, aggregated_lib_dirs_,
-                    aggregated_lib_deps_));
-           env::assert_fatal(success,
-                             fmt::format("Compilation failed for: {}", name_));
-         })
-          .name(kLinkTaskName);
-  link_task_.succeed(compile_task_);
 }
 
 std::vector<std::string>

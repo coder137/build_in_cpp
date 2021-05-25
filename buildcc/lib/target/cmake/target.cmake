@@ -17,7 +17,9 @@ target_sources(target PRIVATE
     src/target/lib.cpp
     src/target/build.cpp
     src/target/flags.cpp
+
     src/target/recheck_states.cpp
+    src/target/tasks.cpp
 
     src/fbs/fbs_loader.cpp
     src/fbs/fbs_storer.cpp
