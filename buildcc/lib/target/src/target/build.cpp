@@ -93,6 +93,19 @@ void Target::BuildRecompile() {
   }
 }
 
+void Target::LinkTarget() {
+  // Add compiled sources
+  const std::string aggregated_compiled_sources =
+      internal::aggregate(GetCompiledSources());
+
+  const std::string output_target = internal::quote(GetTargetPath().string());
+
+  bool success = internal::command(
+      Link(output_target, aggregated_link_flags_, aggregated_compiled_sources,
+           aggregated_lib_dirs_, aggregated_lib_deps_));
+  env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
+}
+
 std::vector<std::string>
 Target::Link(const std::string &output_target,
              const std::string &aggregated_link_flags,

@@ -209,6 +209,8 @@ private:
   // Link();
   // PostLink();
 
+  void LinkTarget();
+
   // TODO, Add Link library paths
   virtual std::vector<std::string>
   Link(const std::string &output_target,
