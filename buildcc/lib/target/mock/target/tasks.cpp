@@ -13,6 +13,10 @@ void Target::CompileTargetTask(
   }
 }
 
-void Target::LinkTargetTask() { LinkTarget(); }
+void Target::LinkTargetTask(const bool link) {
+  if (link) {
+    LinkTarget();
+  }
+}
 
 } // namespace buildcc::base

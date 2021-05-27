@@ -32,9 +32,16 @@ void Target::CompileTargetTask(
           .name(kCompileTaskName);
 }
 
-void Target::LinkTargetTask() {
+void Target::LinkTargetTask(const bool link) {
   env::log_trace(name_, __FUNCTION__);
-  link_task_ = tf_.emplace([this]() { LinkTarget(); }).name(kLinkTaskName);
+
+  if (link) {
+    link_task_ = tf_.emplace([this]() { LinkTarget(); });
+  } else {
+    link_task_ = tf_.emplace([]() {});
+  }
+
+  link_task_.name(kLinkTaskName);
   link_task_.succeed(compile_task_);
 }
 

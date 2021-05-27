@@ -35,6 +35,8 @@ void Target::Build() {
       internal::aggregate_with_prefix(prefix_lib_dir_, current_lib_dirs_);
 
   const bool is_loaded = loader_.Load();
+  // TODO, Add more checks for build files physically present
+  // NOTE, This can go into the recompile logic
   if (!is_loaded) {
     BuildCompile();
   } else {
@@ -46,7 +48,7 @@ void Target::Build() {
 
 void Target::BuildCompile() {
   CompileSources();
-  LinkTargetTask();
+  LinkTargetTask(true);
   Store();
   first_build_ = true;
 }
@@ -87,9 +89,11 @@ void Target::BuildRecompile() {
   RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
                      current_external_lib_deps_);
   if (dirty_) {
-    LinkTargetTask();
+    LinkTargetTask(true);
     Store();
     rebuild_ = true;
+  } else {
+    LinkTargetTask(false);
   }
 }
 

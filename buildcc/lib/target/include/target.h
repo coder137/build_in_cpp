@@ -202,7 +202,8 @@ private:
   // Tasks
   void CompileTargetTask(const std::vector<fs::path> &&compile_sources,
                          const std::vector<fs::path> &&dummy_compile_sources);
-  void LinkTargetTask();
+
+  void LinkTargetTask(const bool link);
 
   // * Virtual
   // PreLink();
