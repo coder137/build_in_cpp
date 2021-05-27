@@ -86,8 +86,9 @@ void Target::BuildRecompile() {
   RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
   RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
                      current_external_lib_deps_);
+
+  LinkTargetTask();
   if (dirty_) {
-    LinkTargetTask();
     Store();
     rebuild_ = true;
   }
