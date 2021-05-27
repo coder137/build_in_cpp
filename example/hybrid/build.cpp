@@ -13,25 +13,23 @@ using namespace buildcc;
 
 constexpr const char *const EXE = "build";
 
+static void clean_cb() {
+  env::log_info(
+      EXE, fmt::format("Cleaning {}", env::get_project_build_dir().string()));
+  fs::remove_all(env::get_project_build_dir());
+}
+
 int main(int argc, char **argv) {
   // 1. Get arguments
   Args args;
   args.Parse(argc, argv);
 
   // 2. Initialize your environment
-  // TODO, Register.Env(args)
-  env::init(fs::current_path() / args.GetProjectRootDir(),
-            fs::current_path() / args.GetProjectBuildDir());
-  env::set_log_level(args.GetLogLevel());
+  Register reg(args);
+  reg.Env();
 
   // 3. Pre-build steps
-  // TODO, Register.Clean
-  // TODO, Register.CustomCallback ??
-  if (args.Clean()) {
-    env::log_info(
-        EXE, fmt::format("Cleaning {}", env::get_project_build_dir().string()));
-    fs::remove_all(env::get_project_build_dir());
-  }
+  reg.Clean(clean_cb);
 
   // 4. Build steps
   Toolchain_gcc gcc;

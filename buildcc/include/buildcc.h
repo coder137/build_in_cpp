@@ -33,5 +33,6 @@
 
 // BuildCC Modules
 #include "args.h"
+#include "register.h"
 
 #endif
