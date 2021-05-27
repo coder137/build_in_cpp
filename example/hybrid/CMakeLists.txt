@@ -21,6 +21,7 @@ endif()
 add_custom_target(run_hybrid_simple_example
     COMMAND hybrid_simple_example --help-all
     COMMAND hybrid_simple_example --config ${CMAKE_CURRENT_SOURCE_DIR}/build.toml
+    COMMAND dot -Tpng graph.dot -o graph.PNG
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS build buildcc
     VERBATIM USES_TERMINAL
