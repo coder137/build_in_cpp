@@ -42,26 +42,32 @@ int main(int argc, char **argv) {
   ExecutableTarget_msvc m_cppflags("MCppFlags.exe", msvc, "files");
   ExecutableTarget_msvc m_cflags("MCFlags.exe", msvc, "files");
 
-  reg.BuildTarget(args.GetGccToolchain().build, g_cppflags, gcppflags_build_cb);
-  reg.BuildTarget(args.GetGccToolchain().build, g_cflags, gcflags_build_cb);
+  reg.Build(args.GetGccToolchain(), g_cppflags, gcppflags_build_cb);
+  reg.Build(args.GetGccToolchain(), g_cflags, gcflags_build_cb);
+  reg.Build(args.GetMsvcToolchain(), m_cppflags, mcppflags_build_cb);
+  reg.Build(args.GetMsvcToolchain(), m_cflags, mcflags_build_cb);
 
-  reg.BuildTarget(args.GetMsvcToolchain().build, m_cppflags,
-                  mcppflags_build_cb);
-  reg.BuildTarget(args.GetMsvcToolchain().build, m_cflags, mcflags_build_cb);
+  // 5. Test steps
 
-  // TODO, 5. Test steps
+  // NOTE, For now they are just dummy callbacks
+  reg.Test(args.GetGccToolchain(), g_cppflags, [](base::Target &target) {});
+  reg.Test(args.GetGccToolchain(), g_cflags, [](base::Target &target) {});
+  reg.Test(args.GetMsvcToolchain(), m_cppflags, [](base::Target &target) {});
+  reg.Test(args.GetMsvcToolchain(), m_cflags, [](base::Target &target) {});
 
   // 6. Build Target
-  reg.BuildAll();
+  reg.RunBuild();
 
-  // TODO, 7. Register.RunTests()
-  // reg.TestAll();
+  // 7. Test Target
+  reg.RunTest();
 
-  // 6. Post Build Tools
+  // 8. Post Build steps
+
+  // - Clang Compile Commands
   plugin::ClangCompileCommands({&g_cflags, &g_cppflags, &m_cflags, &m_cppflags})
       .Generate();
 
-  // 7 Plugin Graph
+  // - Plugin Graph
   std::string output = reg.GetTaskflow().dump();
   const bool saved = flatbuffers::SaveFile("graph.dot", output, false);
   env::assert_fatal(saved, "Could not save graph.dot file");

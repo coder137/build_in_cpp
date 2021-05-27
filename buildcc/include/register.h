@@ -27,13 +27,13 @@ public:
   void Env();
   void Clean(std::function<void(void)> clean_cb);
 
-  void BuildTarget(bool build, base::Target &target,
-                   std::function<void(base::Target &)> build_cb);
-  void TestTarget(bool test, base::Target &target,
-                  std::function<void(base::Target &)> test_cb);
+  void Build(const Args::Toolchain &args_toolchain, base::Target &target,
+             std::function<void(base::Target &)> build_cb);
+  void Test(const Args::Toolchain &args_toolchain, base::Target &target,
+            std::function<void(base::Target &)> test_cb);
 
-  void BuildAll();
-  void TestAll();
+  void RunBuild();
+  void RunTest();
 
   // Getters
   const tf::Taskflow &GetTaskflow() const { return taskflow_; }

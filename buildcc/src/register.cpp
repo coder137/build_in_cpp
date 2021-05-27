@@ -23,16 +23,17 @@ void Register::Clean(std::function<void(void)> clean_cb) {
   }
 }
 
-void Register::BuildTarget(bool build, base::Target &target,
-                           std::function<void(base::Target &)> build_cb) {
-  if (build) {
+void Register::Build(const Args::Toolchain &args_toolchain,
+                     base::Target &target,
+                     std::function<void(base::Target &)> build_cb) {
+  if (args_toolchain.build) {
     taskflow_.composed_of(target.GetTaskflow()).name("Task");
     build_cb(target);
   }
 }
-void Register::TestTarget(bool test, base::Target &target,
-                          std::function<void(base::Target &)> test_cb) {
-  if (!test) {
+void Register::Test(const Args::Toolchain &args_toolchain, base::Target &target,
+                    std::function<void(base::Target &)> test_cb) {
+  if (!(args_toolchain.build && args_toolchain.test)) {
     return;
   }
 
@@ -42,12 +43,12 @@ void Register::TestTarget(bool test, base::Target &target,
       added, fmt::format("Could not register test {}", target.GetName()));
 }
 
-void Register::BuildAll() {
+void Register::RunBuild() {
   executor_.run(taskflow_);
   executor_.wait_for_all();
 }
 
-void Register::TestAll() {
+void Register::RunTest() {
   for (const auto &t : tests_) {
     env::log_info(__FUNCTION__, fmt::format("Testing \'{}\'", t.first));
     t.second.cb_(t.second.target_);
