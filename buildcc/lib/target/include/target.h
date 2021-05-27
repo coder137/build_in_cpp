@@ -18,6 +18,9 @@
 // Env
 #include "env.h"
 
+// Third Party
+#include "taskflow/taskflow.hpp"
+
 namespace buildcc::base {
 
 namespace fs = std::filesystem;
@@ -102,6 +105,11 @@ public:
 
   // Getters
   std::vector<std::string> CompileCommand(const fs::path &current_source) const;
+
+  // TODO, Check if these need to be made const
+  tf::Taskflow &GetTaskflow() { return tf_; }
+  tf::Task &GetCompileTask() { return compile_task_; }
+  tf::Task &GetLinkTask() { return link_task_; }
 
   fs::path GetTargetPath() const {
     return (GetTargetIntermediateDir() / GetName()).make_preferred();
@@ -191,13 +199,18 @@ private:
                       const std::unordered_set<std::string> &current,
                       std::function<void(void)> callback);
 
-  // Linking
-  void BuildTarget();
+  // Tasks
+  void CompileTargetTask(const std::vector<fs::path> &&compile_sources,
+                         const std::vector<fs::path> &&dummy_compile_sources);
+
+  void LinkTargetTask(const bool link);
 
   // * Virtual
   // PreLink();
   // Link();
   // PostLink();
+
+  void LinkTarget();
 
   // TODO, Add Link library paths
   virtual std::vector<std::string>
@@ -269,6 +282,13 @@ private:
   // Build states
   bool first_build_ = false;
   bool rebuild_ = false;
+
+  static constexpr const char *const kCompileTaskName = "Compile";
+  static constexpr const char *const kLinkTaskName = "Link";
+
+  tf::Taskflow tf_;
+  tf::Task compile_task_;
+  tf::Task link_task_;
 };
 
 } // namespace buildcc::base

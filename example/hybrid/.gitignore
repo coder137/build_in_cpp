@@ -7,3 +7,4 @@ _internal
 *.exe
 *.o
 *.bin
+*.dot

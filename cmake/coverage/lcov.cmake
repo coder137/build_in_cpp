@@ -21,6 +21,9 @@ else()
         "*/flatbuffers*"
         "*/CppUTest*"
         "*/test*"
+        "*/fmt*"
+        "*/taskflow*"
+        "*/mock*"
     )
     add_custom_target(lcov_coverage
         COMMAND ${lcov_program} --zerocounters --directory ${CMAKE_SOURCE_DIR} ${LCOV_RC_OPTIONS}

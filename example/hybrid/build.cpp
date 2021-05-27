@@ -3,6 +3,12 @@
 
 #include "fmt/format.h"
 
+#include "taskflow/taskflow.hpp"
+
+#include "flatbuffers/util.h"
+
+#include "assert_fatal.h"
+
 using namespace buildcc;
 
 constexpr const char *const EXE = "build";
@@ -13,11 +19,14 @@ int main(int argc, char **argv) {
   args.Parse(argc, argv);
 
   // 2. Initialize your environment
+  // TODO, Register.Env(args)
   env::init(fs::current_path() / args.GetProjectRootDir(),
             fs::current_path() / args.GetProjectBuildDir());
   env::set_log_level(args.GetLogLevel());
 
   // 3. Pre-build steps
+  // TODO, Register.Clean
+  // TODO, Register.CustomCallback ??
   if (args.Clean()) {
     env::log_info(
         EXE, fmt::format("Cleaning {}", env::get_project_build_dir().string()));
@@ -30,6 +39,8 @@ int main(int argc, char **argv) {
 
   ExecutableTarget_gcc g_cppflags("GCppFlags.exe", gcc, "files");
   ExecutableTarget_gcc g_cflags("GCFlags.exe", gcc, "files");
+
+  // TODO, Register.Toolchain
   if (args.GetGccToolchain().build) {
     // GCC CppFlags
     g_cppflags.AddSource("main.cpp", "src");
@@ -56,6 +67,7 @@ int main(int argc, char **argv) {
   ExecutableTarget_msvc m_cppflags("MCppFlags.exe", msvc, "files");
   ExecutableTarget_msvc m_cflags("MCFlags.exe", msvc, "files");
 
+  // TODO, Register.Toolchain
   if (args.GetMsvcToolchain().build) {
     // GCC CppFlags
     m_cppflags.AddSource("main.cpp", "src");
@@ -81,6 +93,7 @@ int main(int argc, char **argv) {
   }
 
   // 5. Test Steps
+  // TODO, Register.Test();
   if (args.GetGccToolchain().build && args.GetGccToolchain().test) {
     std::string cppflags_loc = g_cppflags.GetTargetPath().string();
     env::log_info(EXE, fmt::format("Testing {}", cppflags_loc.c_str()));
@@ -92,6 +105,7 @@ int main(int argc, char **argv) {
     // system ...
   }
 
+  // TODO, Register.Test();
   if (args.GetMsvcToolchain().build && args.GetMsvcToolchain().test) {
     std::string cppflags_loc = m_cppflags.GetTargetPath().string();
     env::log_info(EXE, fmt::format("Testing {}", cppflags_loc.c_str()));
@@ -105,6 +119,23 @@ int main(int argc, char **argv) {
   // 6. Post Build Tools
   plugin::ClangCompileCommands({&g_cflags, &g_cppflags, &m_cflags, &m_cppflags})
       .Generate();
+
+  // TODO, Register.BuildTargets()
+  tf::Executor executor;
+  tf::Taskflow maintf;
+  maintf.name("Targets");
+  maintf.composed_of(g_cppflags.GetTaskflow()).name("Task");
+  maintf.composed_of(g_cflags.GetTaskflow()).name("Task");
+  maintf.composed_of(m_cppflags.GetTaskflow()).name("Task");
+  maintf.composed_of(m_cflags.GetTaskflow()).name("Task");
+  executor.run(maintf).get();
+
+  // TODO, Register.RunTests()
+
+  // TODO, Plugin Graph
+  std::string output = maintf.dump();
+  const bool saved = flatbuffers::SaveFile("graph.dot", output, false);
+  env::assert_fatal(saved, "Could not save graph.dot file");
 
   return 0;
 }

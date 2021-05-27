@@ -13,3 +13,6 @@
 [submodule "CLI11"]
 	path = CLI11
 	url = https://github.com/CLIUtils/CLI11.git
+[submodule "taskflow"]
+	path = taskflow
+	url = https://github.com/taskflow/taskflow.git

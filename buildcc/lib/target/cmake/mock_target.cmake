@@ -13,6 +13,7 @@ target_sources(mock_target PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/target/build.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/target/flags.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/mock/target/recheck_states.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/mock/target/tasks.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/src/fbs/fbs_loader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/fbs/fbs_storer.cpp
@@ -25,6 +26,7 @@ target_compile_options(mock_target PUBLIC ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_
 target_link_options(mock_target PUBLIC ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS})
 target_link_libraries(mock_target PUBLIC 
     flatbuffers
+    Taskflow
 
     mock_env
     toolchain
@@ -33,4 +35,12 @@ target_link_libraries(mock_target PUBLIC
     CppUTestExt
     gcov
 )
+
+# https://github.com/msys2/MINGW-packages/issues/2303
+# Similar issue when adding the Taskflow library
+if (${MINGW})
+    message(WARNING "-Wl,--allow-multiple-definition for MINGW")
+    target_link_options(mock_target PUBLIC -Wl,--allow-multiple-definition)
+endif()
+
 add_dependencies(mock_target fbs_to_header)

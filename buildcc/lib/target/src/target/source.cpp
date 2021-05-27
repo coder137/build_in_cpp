@@ -85,11 +85,13 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
 
 void Target::CompileSources() {
   env::log_trace(name_, __FUNCTION__);
-
-  for (const auto &file : current_source_files_) {
-    const auto &current_source = file.GetPathname();
-    CompileSource(current_source);
-  }
+  std::vector<fs::path> compile_sources;
+  std::transform(current_source_files_.begin(), current_source_files_.end(),
+                 std::back_inserter(compile_sources),
+                 [](const buildcc::internal::Path &p) -> fs::path {
+                   return p.GetPathname();
+                 });
+  CompileTargetTask(std::move(compile_sources), std::vector<fs::path>());
 }
 
 void Target::RecompileSources() {
@@ -105,6 +107,8 @@ void Target::RecompileSources() {
     SourceRemoved();
   }
 
+  std::vector<fs::path> compile_sources;
+  std::vector<fs::path> dummy_compile_sources;
   for (const auto &current_file : current_source_files_) {
     const auto &current_source = current_file.GetPathname();
 
@@ -113,21 +117,25 @@ void Target::RecompileSources() {
 
     if (iter == previous_source_files.end()) {
       // *1 New source file added to build
-      CompileSource(current_source);
+      compile_sources.push_back(current_source);
       dirty_ = true;
       SourceAdded();
     } else {
       // *2 Current file is updated
       if (current_file.GetLastWriteTimestamp() >
           iter->GetLastWriteTimestamp()) {
-        CompileSource(current_source);
+        compile_sources.push_back(current_source);
         dirty_ = true;
         SourceUpdated();
       } else {
         // *3 Do nothing
+        dummy_compile_sources.push_back(current_source);
       }
     }
   }
+
+  CompileTargetTask(std::move(compile_sources),
+                    std::move(dummy_compile_sources));
 }
 
 void Target::CompileSource(const fs::path &current_source) {

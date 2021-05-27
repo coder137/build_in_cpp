@@ -49,6 +49,10 @@ add_subdirectory(spdlog)
 
 include(cmake/target/cli11.cmake)
 
+set(TF_BUILD_TESTS OFF CACHE BOOL "TF Tests")
+set(TF_BUILD_EXAMPLES OFF CACHE BOOL "TF Examples")
+add_subdirectory(taskflow)
+
 if (${TESTING})
     set(C++11 ON CACHE BOOL "CppUTests C++11 support")
     set(CPPUTEST_FLAGS OFF CACHE BOOL "CppUTests Flags off")

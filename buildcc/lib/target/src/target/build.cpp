@@ -35,6 +35,8 @@ void Target::Build() {
       internal::aggregate_with_prefix(prefix_lib_dir_, current_lib_dirs_);
 
   const bool is_loaded = loader_.Load();
+  // TODO, Add more checks for build files physically present
+  // NOTE, This can go into the recompile logic
   if (!is_loaded) {
     BuildCompile();
   } else {
@@ -46,7 +48,7 @@ void Target::Build() {
 
 void Target::BuildCompile() {
   CompileSources();
-  BuildTarget();
+  LinkTargetTask(true);
   Store();
   first_build_ = true;
 }
@@ -87,24 +89,24 @@ void Target::BuildRecompile() {
   RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
                      current_external_lib_deps_);
   if (dirty_) {
-    BuildTarget();
+    LinkTargetTask(true);
     Store();
     rebuild_ = true;
+  } else {
+    LinkTargetTask(false);
   }
 }
 
-void Target::BuildTarget() {
-  env::log_trace(name_, __FUNCTION__);
-
+void Target::LinkTarget() {
   // Add compiled sources
   const std::string aggregated_compiled_sources =
       internal::aggregate(GetCompiledSources());
 
   const std::string output_target = internal::quote(GetTargetPath().string());
+
   bool success = internal::command(
       Link(output_target, aggregated_link_flags_, aggregated_compiled_sources,
            aggregated_lib_dirs_, aggregated_lib_deps_));
-
   env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
 }
 
