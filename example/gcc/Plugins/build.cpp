@@ -40,9 +40,20 @@ int main(void) {
   cflags.AddLinkFlag("-lm");
   cflags.Build();
 
+  tf::Executor executor;
+  tf::Taskflow taskflow;
+  taskflow.composed_of(cflags.GetTaskflow());
+  taskflow.composed_of(cppflags.GetTaskflow());
+  executor.run(taskflow);
+  executor.wait_for_all();
+
   // Clang compile command db test
   plugin::ClangCompileCommands compile_commands({&cppflags, &cflags});
   compile_commands.Generate();
+
+  // Dot Dump
+  // TODO, Make this into a plugin
+  taskflow.dump(std::cout);
 
   return 0;
 }
