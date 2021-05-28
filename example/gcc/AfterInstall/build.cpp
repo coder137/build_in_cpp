@@ -18,30 +18,36 @@ int main(void) {
   // Stored as a const & in target
   base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
 
-  {
-    // CppTarget
-    ExecutableTarget_gcc target("CppFlags.exe", gcc, "files");
-    target.AddSource("main.cpp", "src");
-    target.AddSource("src/random.cpp");
-    target.AddHeader("include/random.h");
-    target.AddIncludeDir("include");
-    target.AddPreprocessorFlag("-DRANDOM=1");
-    target.AddCppCompileFlag("-Wall");
-    target.AddCppCompileFlag("-Werror");
-    target.AddLinkFlag("-lm");
-    target.Build();
-  }
+  // CppTarget
+  ExecutableTarget_gcc cpptarget("CppFlags.exe", gcc, "files");
+  cpptarget.AddSource("main.cpp", "src");
+  cpptarget.AddSource("src/random.cpp");
+  cpptarget.AddHeader("include/random.h");
+  cpptarget.AddIncludeDir("include");
+  cpptarget.AddPreprocessorFlag("-DRANDOM=1");
+  cpptarget.AddCppCompileFlag("-Wall");
+  cpptarget.AddCppCompileFlag("-Werror");
+  cpptarget.AddLinkFlag("-lm");
+  cpptarget.Build();
 
-  {
-    // CTarget
-    ExecutableTarget_gcc target("CFlags.exe", gcc, "files");
-    target.AddSource("main.c", "src");
-    target.AddPreprocessorFlag("-DRANDOM=1");
-    target.AddCCompileFlag("-Wall");
-    target.AddCCompileFlag("-Werror");
-    target.AddLinkFlag("-lm");
-    target.Build();
-  }
+  // CTarget
+  ExecutableTarget_gcc ctarget("CFlags.exe", gcc, "files");
+  ctarget.AddSource("main.c", "src");
+  ctarget.AddPreprocessorFlag("-DRANDOM=1");
+  ctarget.AddCCompileFlag("-Wall");
+  ctarget.AddCCompileFlag("-Werror");
+  ctarget.AddLinkFlag("-lm");
+  ctarget.Build();
+
+  tf::Executor executor;
+  tf::Taskflow taskflow;
+
+  taskflow.composed_of(cpptarget.GetTaskflow());
+  taskflow.composed_of(ctarget.GetTaskflow());
+  executor.run(taskflow);
+  executor.wait_for_all();
+
+  taskflow.dump(std::cout);
 
   return 0;
 }
