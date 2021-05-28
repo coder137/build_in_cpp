@@ -24,5 +24,14 @@ int main(void) {
   target.AddHeader("include/random.h");
   target.AddIncludeDir("include");
   target.Build();
+
+  // Run
+  tf::Executor executor;
+  executor.run(target.GetTaskflow());
+  executor.wait_for_all();
+
+  // .dot output
+  target.GetTaskflow().dump(std::cout);
+
   return 0;
 }
