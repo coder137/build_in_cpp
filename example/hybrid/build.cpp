@@ -3,8 +3,6 @@
 
 #include "fmt/format.h"
 
-#include "taskflow/taskflow.hpp"
-
 #include "flatbuffers/util.h"
 
 #include "assert_fatal.h"
