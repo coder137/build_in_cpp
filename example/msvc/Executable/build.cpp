@@ -31,5 +31,11 @@ int main(void) {
 
   plugin::ClangCompileCommands({&target_msvc}).Generate();
 
+  tf::Executor executor;
+  executor.run(target_msvc.GetTaskflow());
+  executor.wait_for_all();
+
+  target_msvc.GetTaskflow().dump(std::cout);
+
   return 0;
 }
