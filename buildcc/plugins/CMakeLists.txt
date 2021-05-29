@@ -1,3 +1,4 @@
+m_clangtidy("plugins")
 add_library(plugins
     clang_compile_commands.cpp
     clang_compile_commands.h
