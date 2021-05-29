@@ -20,6 +20,7 @@ add_subdirectory(plugins)
 add_library(buildcc STATIC)
 target_sources(buildcc PRIVATE 
     src/args.cpp
+    src/register.cpp
 )
 target_include_directories(buildcc PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -47,6 +48,7 @@ if (${BUILDCC_INSTALL})
     install(FILES  
         ${CMAKE_CURRENT_SOURCE_DIR}/include/buildcc.h
         ${CMAKE_CURRENT_SOURCE_DIR}/include/args.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/register.h
         DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
     install(EXPORT buildccConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/buildcc")
 endif()

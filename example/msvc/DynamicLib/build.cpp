@@ -44,12 +44,24 @@ int main(void) {
   target_msvc.AddLinkFlag("/nologo");
   target_msvc.Build();
 
+  tf::Executor executor;
+  tf::Taskflow taskflow;
+
+  auto dynamictargetTask = taskflow.composed_of(dynamictarget.GetTaskflow());
+  auto target_msvcTask = taskflow.composed_of(target_msvc.GetTaskflow());
+  target_msvcTask.succeed(dynamictargetTask);
+
+  executor.run(taskflow);
+  executor.wait_for_all();
+
   if (target_msvc.FirstBuild() || target_msvc.Rebuild()) {
     fs::copy(dynamictarget.GetTargetPath().string() + ".dll",
              target_msvc.GetTargetPath().parent_path() / "librandom.lib.dll");
   }
 
-  plugin::ClangCompileCommands({&target_msvc}).Generate();
+  plugin::ClangCompileCommands({&dynamictarget, &target_msvc}).Generate();
+
+  taskflow.dump(std::cout);
 
   return 0;
 }

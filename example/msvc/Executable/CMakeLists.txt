@@ -13,6 +13,10 @@ add_subdirectory(../../../ BuildCC)
 add_executable(build build.cpp)
 target_include_directories(build PRIVATE ${CMAKE_BINARY_DIR}/generated)
 target_link_libraries(build PRIVATE buildcc)
+if (${MINGW})
+    message(WARNING "-Wl,--allow-multiple-definition for MINGW")
+    target_link_options(build PRIVATE -Wl,--allow-multiple-definition)
+endif()
 
 # Add your constants file for the environment
 configure_file(constants.h.in ${CMAKE_BINARY_DIR}/generated/constants.h @ONLY)

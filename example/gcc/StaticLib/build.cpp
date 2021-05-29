@@ -39,5 +39,22 @@ int main(void) {
 
   target.Build();
 
+  // Run
+  tf::Executor executor;
+  tf::Taskflow taskflow;
+
+  tf::Task randomLibTask = taskflow.composed_of(randomLib.GetTaskflow());
+  tf::Task targetTask = taskflow.composed_of(target.GetTaskflow());
+
+  // Set dependency
+  targetTask.succeed(randomLibTask);
+
+  // Run
+  executor.run(taskflow);
+  executor.wait_for_all();
+
+  // Dump .dot out
+  taskflow.dump(std::cout);
+
   return 0;
 }

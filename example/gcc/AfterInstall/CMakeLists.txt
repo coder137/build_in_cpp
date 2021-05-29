@@ -15,6 +15,7 @@ find_package(flatbuffers_package NAMES "flatbuffers" REQUIRED)
 find_package(env_package NAMES "env" REQUIRED)
 find_package(toolchain_package NAMES "toolchain" REQUIRED)
 find_package(toolchain_specialized_package NAMES "toolchain_specialized" REQUIRED)
+find_package(taskflow_package NAMES "taskflow" REQUIRED)
 find_package(target_package NAMES "target" REQUIRED)
 find_package(target_gcc_package NAMES "target_gcc" REQUIRED)
 find_package(target_msvc_package NAMES "target_msvc" REQUIRED)
@@ -28,6 +29,7 @@ message("Find package: ${flatbuffers_package_DIR}")
 message("Find package: ${env_package_DIR}")
 message("Find package: ${toolchain_specialized_package_DIR}")
 message("Find package: ${toolchain_package_DIR}")
+message("Find package: ${taskflow_package_DIR}")
 message("Find package: ${target_package_DIR}")
 message("Find package: ${target_gcc_package_DIR}")
 message("Find package: ${target_msvc_package_DIR}")
@@ -41,6 +43,11 @@ target_include_directories(build PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated)
 target_link_libraries(build PRIVATE 
     buildcc
 )
+if (${MINGW})
+    message(WARNING "-Wl,--allow-multiple-definition for MINGW")
+    target_link_options(build PRIVATE -Wl,--allow-multiple-definition)
+endif()
+
 
 # Add your constants file for the environment
 configure_file(constants.h.in ${CMAKE_BINARY_DIR}/generated/constants.h @ONLY)

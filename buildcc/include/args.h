@@ -34,13 +34,13 @@ public:
                           Toolchain &custom_toolchain_arg);
 
   // Getters
-  bool Clean() { return clean_; }
-  env::LogLevel GetLogLevel() { return loglevel_; }
+  bool Clean() const { return clean_; }
+  env::LogLevel GetLogLevel() const { return loglevel_; }
 
-  const fs::path &GetProjectRootDir() { return project_root_dir_; }
-  const fs::path &GetProjectBuildDir() { return project_build_dir_; }
-  const Toolchain &GetGccToolchain() { return gcc_toolchain_; }
-  const Toolchain &GetMsvcToolchain() { return msvc_toolchain_; }
+  const fs::path &GetProjectRootDir() const { return project_root_dir_; }
+  const fs::path &GetProjectBuildDir() const { return project_build_dir_; }
+  const Toolchain &GetGccToolchain() const { return gcc_toolchain_; }
+  const Toolchain &GetMsvcToolchain() const { return msvc_toolchain_; }
 
 private:
   void Initialize();

@@ -21,5 +21,14 @@ int main(void) {
   ExecutableTarget_gcc target("Simple.exe", gcc, "");
   target.AddSource("main.cpp");
   target.Build();
+
+  // Run
+  tf::Executor executor;
+  executor.run(target.GetTaskflow());
+  executor.wait_for_all();
+
+  // Dump .dot out
+  target.GetTaskflow().dump(std::cout);
+
   return 0;
 }
