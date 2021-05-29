@@ -1,0 +1,8 @@
+macro(m_clangtidy)
+    if (${CLANGTIDY})
+        message("Setting ClangTidy: ON -> ${ARGV0}")
+        set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-* --format-style=file)
+    else()
+        message("Setting ClangTidy: OFF -> ${ARGV0}")
+    endif()
+endmacro()
