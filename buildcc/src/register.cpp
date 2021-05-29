@@ -51,11 +51,11 @@ void Register::Dep(const base::Target &target, const base::Target &dependency) {
   try {
     target_task = deps_.at(target.GetName());
     dep_task = deps_.at(dependency.GetName());
+    target_task.succeed(dep_task);
   } catch (const std::out_of_range &e) {
-    env::assert_fatal(false, e.what());
+    env::assert_fatal(false, "Call Register::Build API on target and "
+                             "dependency before Register::Dep API");
   }
-
-  target_task.succeed(dep_task);
 }
 
 void Register::RunBuild() {
