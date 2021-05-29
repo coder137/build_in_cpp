@@ -169,7 +169,7 @@ private:
   void CompileSources();
   void RecompileSources();
 
-  void CompileSource(const fs::path &current_source);
+  void CompileSource(const fs::path &current_source) const;
 
   // * Virtual
   // PreCompile();

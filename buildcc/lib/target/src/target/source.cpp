@@ -138,7 +138,7 @@ void Target::RecompileSources() {
                     std::move(dummy_compile_sources));
 }
 
-void Target::CompileSource(const fs::path &current_source) {
+void Target::CompileSource(const fs::path &current_source) const {
   const bool success = internal::command(CompileCommand(current_source));
   env::assert_fatal(success, fmt::format("Compilation failed for: {}",
                                          current_source.string()));

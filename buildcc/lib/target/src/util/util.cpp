@@ -10,13 +10,10 @@ namespace buildcc::internal {
 // rechecks
 bool is_previous_paths_different(const path_unordered_set &previous_paths,
                                  const path_unordered_set &current_paths) {
-  for (const auto &file : previous_paths) {
-    if (current_paths.find(file) == current_paths.end()) {
-      return true;
-    }
-  }
-
-  return false;
+  return std::any_of(previous_paths.begin(), previous_paths.end(),
+                     [&](const internal::Path &p) {
+                       return current_paths.find(p) == current_paths.end();
+                     });
 }
 
 // Additions
