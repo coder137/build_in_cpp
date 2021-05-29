@@ -1,4 +1,5 @@
 # Toolchain lib
+m_clangtidy("toolchain")
 add_library(toolchain
     toolchain.cpp
     toolchain.h
