@@ -27,10 +27,12 @@ void Register::Build(const Args::Toolchain &args_toolchain,
                      base::Target &target,
                      std::function<void(base::Target &)> build_cb) {
   if (args_toolchain.build) {
-    taskflow_.composed_of(target.GetTaskflow()).name("Task");
+    tf::Task task = taskflow_.composed_of(target.GetTaskflow()).name("Task");
+    deps_.insert({target.GetName(), task});
     build_cb(target);
   }
 }
+
 void Register::Test(const Args::Toolchain &args_toolchain, base::Target &target,
                     std::function<void(base::Target &)> test_cb) {
   if (!(args_toolchain.build && args_toolchain.test)) {
@@ -41,6 +43,19 @@ void Register::Test(const Args::Toolchain &args_toolchain, base::Target &target,
       tests_.emplace(target.GetName(), TestInfo(target, test_cb)).second;
   env::assert_fatal(
       added, fmt::format("Could not register test {}", target.GetName()));
+}
+
+void Register::Dep(const base::Target &target, const base::Target &dependency) {
+  tf::Task target_task;
+  tf::Task dep_task;
+  try {
+    target_task = deps_.at(target.GetName());
+    dep_task = deps_.at(dependency.GetName());
+  } catch (const std::out_of_range &e) {
+    env::assert_fatal(false, e.what());
+  }
+
+  target_task.succeed(dep_task);
 }
 
 void Register::RunBuild() {

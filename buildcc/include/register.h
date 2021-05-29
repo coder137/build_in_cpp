@@ -32,6 +32,8 @@ public:
   void Test(const Args::Toolchain &args_toolchain, base::Target &target,
             std::function<void(base::Target &)> test_cb);
 
+  void Dep(const base::Target &target, const base::Target &dependency);
+
   void RunBuild();
   void RunTest();
 
@@ -44,6 +46,7 @@ private:
   tf::Taskflow taskflow_{"Targets"};
 
   std::unordered_map<std::string, TestInfo> tests_;
+  std::unordered_map<std::string, tf::Task> deps_;
 };
 
 } // namespace buildcc
