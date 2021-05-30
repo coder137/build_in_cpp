@@ -18,6 +18,7 @@ add_subdirectory(targets/msvc)
 add_subdirectory(plugins)
 
 m_clangtidy("buildcc")
+m_cppcheck("buildcc")
 add_library(buildcc STATIC)
 target_sources(buildcc PRIVATE 
     src/args.cpp

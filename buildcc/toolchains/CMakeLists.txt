@@ -1,4 +1,5 @@
 m_clangtidy("toolchain_specialized")
+m_cppcheck("toolchain_specialized")
 add_library(toolchain_specialized INTERFACE)
 target_include_directories(toolchain_specialized INTERFACE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> 
