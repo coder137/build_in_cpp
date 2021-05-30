@@ -1,5 +1,6 @@
 # Target
 m_clangtidy("target")
+m_cppcheck("target")
 add_library(target)
 target_include_directories(target PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
