@@ -1,4 +1,5 @@
 # Env lib
+m_clangtidy("env")
 add_library(env
     src/env.cpp
     src/logging.cpp

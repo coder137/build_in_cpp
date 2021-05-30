@@ -51,7 +51,7 @@ bool FbsLoader::Load() {
   if (!is_loaded) {
     return false;
   }
-  auto target = fbs::GetTarget((const void *)buffer.c_str());
+  const auto *target = fbs::GetTarget((const void *)buffer.c_str());
   // target->name()->c_str();
   // target->relative_path()->c_str();
   // target->type();

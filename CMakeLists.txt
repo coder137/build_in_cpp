@@ -15,6 +15,8 @@ option(BUILDCC_GCC_TESTING "Enable Buildcc GCC Testing" OFF)
 option(BUILDCC_INSTALL "Enable Buildcc Installation" ON)
 option(BUILDCC_EXAMPLES "Enable Buildcc Examples" OFF)
 
+option(BUILDCC_CLANGTIDY "Enable ClangTidy" ON)
+
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND ${BUILDCC_TESTING})
     set(TESTING ON)
     message("Enabling unit-testing")
@@ -27,6 +29,17 @@ else()
     message("Unit-Tests only supported on GNU compiler")
     message("Compiler identification: ${CMAKE_CXX_COMPILER_ID}")
 endif()
+
+# https://gitlab.kitware.com/cmake/cmake/-/issues/20512
+# Issue with MSVC CL Compilers
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND ${BUILDCC_CLANGTIDY})
+    set(CLANGTIDY ON)
+    message("Enabling clang-tidy")
+else()
+    set(CLANGTIDY OFF)
+    message("ClangTidy only supported on GNU compiler")
+endif()
+include(cmake/tool/clangtidy.cmake)
 
 # TODO, Update FLATBUFFERS option to conditionally compile FLATC
 

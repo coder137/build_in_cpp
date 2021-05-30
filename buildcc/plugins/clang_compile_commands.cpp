@@ -19,7 +19,7 @@ void ClangCompileCommands::AddTarget(const base::Target *target) {
 void ClangCompileCommands::Generate() {
   // Early terminate if rebuild is not required
   bool regenerate = false;
-  for (const auto t : targets_) {
+  for (const auto *t : targets_) {
     if (t->FirstBuild() || t->Rebuild()) {
       regenerate = true;
       break;
@@ -36,7 +36,7 @@ void ClangCompileCommands::Generate() {
   flexbuffers::Builder fbb;
   size_t start = fbb.StartVector();
 
-  for (const auto t : targets_) {
+  for (const auto *t : targets_) {
     const auto &source_files = t->GetCurrentSourceFiles();
 
     for (const auto &f : source_files) {

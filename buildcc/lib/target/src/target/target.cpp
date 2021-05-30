@@ -155,23 +155,25 @@ void Target::RecheckPaths(const internal::path_unordered_set &previous_path,
     return;
   }
 
-  for (auto &path : current_path) {
+  for (const auto &path : current_path) {
     auto iter = previous_path.find(path);
 
     if (iter == previous_path.end()) {
       // * New path added
       PathAdded();
       dirty_ = true;
-      break;
     } else {
       // * Path is updated
       if (path.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
         PathUpdated();
         dirty_ = true;
-        break;
       } else {
         // * Do nothing
       }
+    }
+
+    if (dirty_) {
+      break;
     }
   }
 }
