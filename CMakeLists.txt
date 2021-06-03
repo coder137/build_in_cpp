@@ -16,7 +16,7 @@ option(BUILDCC_INSTALL "Enable Buildcc Installation" ON)
 option(BUILDCC_EXAMPLES "Enable Buildcc Examples" OFF)
 
 option(BUILDCC_CLANGTIDY "Enable ClangTidy" ON)
-option(BUILDCC_CPPCHECK "Enable CppCheck" ON)
+option(BUILDCC_CPPCHECK "Enable CppCheck" OFF)
 
 # Testing
 
