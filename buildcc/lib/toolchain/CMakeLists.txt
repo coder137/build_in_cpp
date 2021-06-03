@@ -1,6 +1,5 @@
 # Toolchain lib
 m_clangtidy("toolchain")
-m_cppcheck("toolchain")
 add_library(toolchain
     toolchain.cpp
     toolchain.h
