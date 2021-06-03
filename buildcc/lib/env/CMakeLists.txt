@@ -15,7 +15,6 @@ endif()
 
 # Env lib
 m_clangtidy("env")
-m_cppcheck("env")
 add_library(env
     src/env.cpp
     src/logging.cpp
