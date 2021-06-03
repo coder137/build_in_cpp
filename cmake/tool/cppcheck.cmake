@@ -1,29 +1,31 @@
-macro(m_cppcheck)
-    if (${BUILDCC_CPPCHECK})
-        message("Setting CppCheck: ON -> ${ARGV0}")
-        set(SUPPRESS_LIBS 
-            --suppress=*:*flatbuffers/* 
-            --suppress=*:*fmt/* 
-            --suppress=*:*CLI11/* 
-            --suppress=*:*cpputest/* 
-            --suppress=*:*spdlog/* 
-            --suppress=*:*taskflow/*
-        )
-        set(SUPPRESS_GLOBAL --suppress=unmatchedSuppression 
-            --suppress=missingIncludeSystem 
-            --suppress=unusedFunction 
-        )
-        set(CMAKE_CXX_CPPCHECK cppcheck --enable=all 
-            --cppcheck-build-dir=${CMAKE_CURRENT_BINARY_DIR}/cppcheck_intermediate 
-            --std=c++17
-            ${SUPPRESS_LIBS} 
-            ${SUPPRESS_GLOBAL} 
-            --error-exitcode=1 
-            --force 
-            -q
-            -D__GNUC__=10
-        )
-    else()
-        message("Setting CppCheck: OFF -> ${ARGV0}")
-    endif()
-endmacro()
+if(${BUILDCC_CPPCHECK})
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/cppcheck_output)
+    set(CPPCHECK_ENABLE --enable=all)
+    set(CPPCHECK_PATH_SUPPRESS 
+        --suppress=*:*test/* 
+        --suppress=*:*mock/*
+    )
+    set(CPPCHECK_TAG_SUPPRESS 
+        --suppress=missingInclude
+        --suppress=unusedFunction
+        --suppress=unmatchedSuppression
+    )
+    set(CPPCHECK_ADDITIONAL_OPTIONS 
+        --std=c++17
+        -q 
+        --error-exitcode=1
+        --cppcheck-build-dir=${CMAKE_CURRENT_BINARY_DIR}/cppcheck_output
+    )
+    set(CPPCHECK_CHECK_DIR 
+        ${CMAKE_CURRENT_SOURCE_DIR}/buildcc
+    )
+    add_custom_target(cppcheck_static_analysis
+        COMMAND cppcheck 
+        ${CPPCHECK_ENABLE}
+        ${CPPCHECK_PATH_SUPPRESS}
+        ${CPPCHECK_TAG_SUPPRESS}
+        ${CPPCHECK_ADDITIONAL_OPTIONS}
+        ${CPPCHECK_CHECK_DIR}
+        VERBATIM USES_TERMINAL
+    )
+endif()
