@@ -16,6 +16,9 @@ option(BUILDCC_INSTALL "Enable Buildcc Installation" ON)
 option(BUILDCC_EXAMPLES "Enable Buildcc Examples" OFF)
 
 option(BUILDCC_CLANGTIDY "Enable ClangTidy" ON)
+option(BUILDCC_CPPCHECK "Enable CppCheck" OFF)
+
+# Testing
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND ${BUILDCC_TESTING})
     set(TESTING ON)
@@ -30,6 +33,8 @@ else()
     message("Compiler identification: ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
+# Tools
+
 # https://gitlab.kitware.com/cmake/cmake/-/issues/20512
 # Issue with MSVC CL Compilers
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND ${BUILDCC_CLANGTIDY})
@@ -40,6 +45,9 @@ else()
     message("ClangTidy only supported on GNU compiler")
 endif()
 include(cmake/tool/clangtidy.cmake)
+include(cmake/tool/cppcheck.cmake)
+
+# Libraries
 
 # TODO, Update FLATBUFFERS option to conditionally compile FLATC
 
@@ -77,14 +85,19 @@ if (${TESTING})
     add_subdirectory(cpputest)
 endif()
 
-include(cmake/flags/build_flags.cmake)
-add_subdirectory(buildcc)
+# Coverage
 
-# Custom Targets
 if (${TESTING})
     include(cmake/coverage/lcov.cmake)
     include(cmake/coverage/gcovr.cmake)
 endif()
+
+# Main Project
+
+include(cmake/flags/build_flags.cmake)
+add_subdirectory(buildcc)
+
+# Installation
 
 if (${BUILDCC_INSTALL})
     message("Project Version: ${PROJECT_VERSION}")

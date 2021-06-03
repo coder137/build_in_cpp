@@ -1,3 +1,18 @@
+# Env test
+if (${TESTING})
+    add_library(mock_env STATIC)
+    target_sources(mock_env PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/mock/logging.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/env.cpp
+    )
+    target_include_directories(mock_env PUBLIC 
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+    )
+    target_link_libraries(mock_env PUBLIC
+        fmt::fmt
+    )
+endif()
+
 # Env lib
 m_clangtidy("env")
 add_library(env
@@ -17,21 +32,6 @@ target_link_options(env PRIVATE ${BUILD_LINK_FLAGS})
 target_link_libraries(env PRIVATE
     spdlog::spdlog
 )
-
-# Env test
-if (${TESTING})
-    add_library(mock_env STATIC)
-    target_sources(mock_env PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/mock/logging.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/env.cpp
-    )
-    target_include_directories(mock_env PUBLIC 
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-    )
-    target_link_libraries(mock_env PUBLIC
-        fmt::fmt
-    )
-endif()
 
 # Env install
 if (${BUILDCC_INSTALL})

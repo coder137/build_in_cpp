@@ -1,5 +1,6 @@
 #include "target.h"
 
+#include <algorithm>
 #include <filesystem>
 
 #include "logging.h"
@@ -52,9 +53,11 @@ std::vector<flatbuffers::Offset<flatbuffers::String>>
 get_fbs_vector_string(flatbuffers::FlatBufferBuilder &builder,
                       const std::unordered_set<std::string> &strlist) {
   std::vector<flatbuffers::Offset<flatbuffers::String>> strs;
-  for (const auto &s : strlist) {
-    strs.push_back(builder.CreateString(s));
-  }
+  std::transform(
+      strlist.begin(), strlist.end(), std::back_inserter(strs),
+      [&](const std::string &str) -> flatbuffers::Offset<flatbuffers::String> {
+        return builder.CreateString(str);
+      });
   return strs;
 }
 
