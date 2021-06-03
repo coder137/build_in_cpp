@@ -1,6 +1,5 @@
 # Target_gcc lib
 m_clangtidy("target_gcc")
-m_cppcheck("target_gcc")
 add_library(target_gcc
     static_target_gcc.cpp
     dynamic_target_gcc.cpp

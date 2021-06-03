@@ -1,6 +1,5 @@
 # Target_msvc lib
 m_clangtidy("target_msvc")
-m_cppcheck("target_msvc")
 add_library(target_msvc
     executable_target_msvc.cpp
     static_target_msvc.cpp
