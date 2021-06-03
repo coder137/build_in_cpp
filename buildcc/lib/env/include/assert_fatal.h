@@ -9,7 +9,7 @@ namespace buildcc::env {
 
 class assert_exception : public std::exception {
 public:
-  explicit assert_exception(std::string_view message) : message_(message) {}
+  assert_exception(std::string_view message) : message_(message) {}
 
 private:
   virtual const char *what() const throw() { return message_.data(); }
