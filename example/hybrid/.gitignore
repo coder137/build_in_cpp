@@ -1,7 +1,7 @@
 # Folder
 generated
 buildcc
-_internal
+_internal*
 
 # Files
 *.exe
