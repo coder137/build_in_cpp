@@ -1,0 +1,44 @@
+{
+    "version": 2,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 20,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "gcc_dev_all",
+            "displayName": "GCC all options",
+            "description": "GCC build with all developer options",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/_build_gcc_dev_all",
+            "cacheVariables": {
+                "BUILDCC_TESTING": true,
+                "BUILDCC_EXAMPLES": true,
+                "BUILDCC_CPPCHECK": true,
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "gcc_dev_all",
+            "configurePreset": "gcc_dev_all"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "gcc_dev_all",
+            "configurePreset": "gcc_dev_all",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": true
+            }
+        }
+    ]
+}
