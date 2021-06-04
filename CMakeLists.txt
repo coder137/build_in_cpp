@@ -11,7 +11,6 @@ project(BuildCC
 )
 
 option(BUILDCC_TESTING "Enable BuildCC Testing" OFF)
-option(BUILDCC_GCC_TESTING "Enable Buildcc GCC Testing" OFF)
 option(BUILDCC_INSTALL "Enable Buildcc Installation" ON)
 option(BUILDCC_EXAMPLES "Enable Buildcc Examples" OFF)
 
