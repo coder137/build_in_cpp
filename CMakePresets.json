@@ -49,8 +49,12 @@
             "generator": "Visual Studio 16 2019",
             "binaryDir": "${sourceDir}/_build_msvc_dev_all",
             "cacheVariables": {
+                "BUILDCC_TESTING": false,
                 "BUILDCC_EXAMPLES": true,
                 "BUILDCC_CPPCHECK": true,
+                "BUILDCC_CLANGTIDY": true,
+                "BUILDCC_INSTALL": true,
+                "BUILDCC_NO_DEPRECATED": false,
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         }
