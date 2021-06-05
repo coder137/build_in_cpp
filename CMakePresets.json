@@ -35,6 +35,18 @@
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_COMPILER": "clang++"
             }
+        },
+        {
+            "name": "msvc_dev_all",
+            "displayName": "MSVC all options",
+            "description": "MSVC build with all developer options",
+            "generator": "Visual Studio 16 2019",
+            "binaryDir": "${sourceDir}/_build_msvc_dev_all",
+            "cacheVariables": {
+                "BUILDCC_EXAMPLES": true,
+                "BUILDCC_CPPCHECK": true,
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
         }
     ],
     "buildPresets": [
@@ -45,6 +57,10 @@
         {
             "name": "clang_dev_all",
             "configurePreset": "clang_dev_all"
+        },
+        {
+            "name": "msvc_dev_all",
+            "configurePreset": "msvc_dev_all"
         }
     ],
     "testPresets": [
