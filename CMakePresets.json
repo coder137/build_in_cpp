@@ -16,6 +16,9 @@
                 "BUILDCC_TESTING": true,
                 "BUILDCC_EXAMPLES": true,
                 "BUILDCC_CPPCHECK": true,
+                "BUILDCC_CLANGTIDY": true,
+                "BUILDCC_INSTALL": true,
+                "BUILDCC_NO_DEPRECATED": false,
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_C_COMPILER": "gcc",
                 "CMAKE_CXX_COMPILER": "g++"
