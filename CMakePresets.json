@@ -23,8 +23,8 @@
         },
         {
             "name": "clang_dev_all",
-            "displayName": "GCC all options",
-            "description": "GCC build with all developer options",
+            "displayName": "Clang all options",
+            "description": "Clang build with all developer options",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/_build_clang_dev_all",
             "cacheVariables": {
