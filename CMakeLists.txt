@@ -17,6 +17,12 @@ option(BUILDCC_EXAMPLES "Enable Buildcc Examples" OFF)
 option(BUILDCC_CLANGTIDY "Enable ClangTidy" ON)
 option(BUILDCC_CPPCHECK "Enable CppCheck" OFF)
 
+option(BUILDCC_NO_DEPRECATED "Disable Deprecated" OFF)
+
+if (${BUILDCC_NO_DEPRECATED})
+    add_compile_options("-Wno-deprecated")
+endif()
+
 # Testing
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND ${BUILDCC_TESTING})

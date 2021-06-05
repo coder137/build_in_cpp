@@ -20,12 +20,31 @@
                 "CMAKE_C_COMPILER": "gcc",
                 "CMAKE_CXX_COMPILER": "g++"
             }
+        },
+        {
+            "name": "clang_dev_all",
+            "displayName": "GCC all options",
+            "description": "GCC build with all developer options",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/_build_clang_dev_all",
+            "cacheVariables": {
+                "BUILDCC_EXAMPLES": true,
+                "BUILDCC_CPPCHECK": true,
+                "BUILDCC_NO_DEPRECATED": true,
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
         }
     ],
     "buildPresets": [
         {
             "name": "gcc_dev_all",
             "configurePreset": "gcc_dev_all"
+        },
+        {
+            "name": "clang_dev_all",
+            "configurePreset": "clang_dev_all"
         }
     ],
     "testPresets": [
