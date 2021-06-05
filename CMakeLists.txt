@@ -17,8 +17,9 @@ option(BUILDCC_EXAMPLES "Enable Buildcc Examples" OFF)
 option(BUILDCC_CLANGTIDY "Enable ClangTidy" ON)
 option(BUILDCC_CPPCHECK "Enable CppCheck" OFF)
 
+# NOTE, This option is required for clang compilers, architecture x86_64-pc-windows-msvc
+# Flatbuffers library uses `std::system` internally which causes a deprecated error
 option(BUILDCC_NO_DEPRECATED "Disable Deprecated" OFF)
-
 if (${BUILDCC_NO_DEPRECATED})
     add_compile_options("-Wno-deprecated")
 endif()
