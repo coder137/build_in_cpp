@@ -1,4 +1,4 @@
-# Build in CPP
+# Build in CPP _[BuildCC]_
 
 Build C, C++ and ASM files in C++
 
