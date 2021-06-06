@@ -1,5 +1,5 @@
-#ifndef TARGET_INCLUDE_TOOLCHAIN_H_
-#define TARGET_INCLUDE_TOOLCHAIN_H_
+#ifndef TOOLCHAIN_TOOLCHAIN_H_
+#define TOOLCHAIN_TOOLCHAIN_H_
 
 #include <string>
 #include <unordered_map>
