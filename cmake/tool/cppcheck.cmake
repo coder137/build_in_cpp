@@ -26,6 +26,7 @@ if(${BUILDCC_CPPCHECK})
         ${CPPCHECK_TAG_SUPPRESS}
         ${CPPCHECK_ADDITIONAL_OPTIONS}
         ${CPPCHECK_CHECK_DIR}
+        COMMENT "Cppcheck Static Analysis"
         VERBATIM USES_TERMINAL
     )
 endif()
