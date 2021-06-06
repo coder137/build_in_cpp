@@ -1,10 +1,10 @@
 # Root
 root_dir = ""
-build_dir = "_internal"
+build_dir = "_internal_win"
 loglevel = "trace"
 
 # Project
-clean = false
+clean = true
 
 # Toolchain
 [toolchain.gcc]

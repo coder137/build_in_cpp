@@ -1,0 +1,89 @@
+{
+    "version": 2,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 20,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "gcc_dev_all",
+            "displayName": "GCC all options",
+            "description": "GCC build with all developer options",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/_build_gcc_dev_all",
+            "cacheVariables": {
+                "BUILDCC_TESTING": true,
+                "BUILDCC_EXAMPLES": true,
+                "BUILDCC_CPPCHECK": true,
+                "BUILDCC_CLANGTIDY": true,
+                "BUILDCC_INSTALL": true,
+                "BUILDCC_NO_DEPRECATED": false,
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        },
+        {
+            "name": "clang_dev_all",
+            "displayName": "Clang all options",
+            "description": "Clang build with all developer options",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/_build_clang_dev_all",
+            "cacheVariables": {
+                "BUILDCC_TESTING": false,
+                "BUILDCC_EXAMPLES": true,
+                "BUILDCC_CPPCHECK": true,
+                "BUILDCC_CLANGTIDY": true,
+                "BUILDCC_INSTALL": true,
+                "BUILDCC_NO_DEPRECATED": true,
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "msvc_dev_all",
+            "displayName": "MSVC all options",
+            "description": "MSVC build with all developer options",
+            "generator": "Visual Studio 16 2019",
+            "binaryDir": "${sourceDir}/_build_msvc_dev_all",
+            "cacheVariables": {
+                "BUILDCC_TESTING": false,
+                "BUILDCC_EXAMPLES": true,
+                "BUILDCC_CPPCHECK": true,
+                "BUILDCC_CLANGTIDY": true,
+                "BUILDCC_INSTALL": true,
+                "BUILDCC_NO_DEPRECATED": false,
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "gcc_dev_all",
+            "configurePreset": "gcc_dev_all"
+        },
+        {
+            "name": "clang_dev_all",
+            "configurePreset": "clang_dev_all"
+        },
+        {
+            "name": "msvc_dev_all",
+            "configurePreset": "msvc_dev_all"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "gcc_dev_all",
+            "configurePreset": "gcc_dev_all",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": true
+            }
+        }
+    ]
+}
