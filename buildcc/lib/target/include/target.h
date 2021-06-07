@@ -112,7 +112,9 @@ public:
   tf::Task &GetLinkTask() { return link_task_; }
 
   fs::path GetTargetPath() const {
-    return (GetTargetIntermediateDir() / GetName()).make_preferred();
+    fs::path path = GetTargetIntermediateDir() / GetName();
+    path.make_preferred();
+    return path;
   }
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
 
