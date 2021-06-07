@@ -22,7 +22,8 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
 
   internal::add_path(absolute_source, current_source_files_);
   current_object_files_.insert(
-      {absolute_source.native(), absolute_compiled_source});
+      {absolute_source.native(),
+       internal::Path::CreateNewPath(absolute_compiled_source)});
 }
 
 void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
@@ -146,8 +147,8 @@ void Target::CompileSource(const fs::path &current_source) const {
 
 std::vector<std::string>
 Target::CompileCommand(const fs::path &current_source) const {
-  const std::string output_source =
-      internal::quote(GetCompiledSourcePath(current_source).string());
+  const std::string output_source = internal::quote(
+      GetCompiledSourcePath(current_source).GetPathname().string());
 
   // TODO, Check implementation for GetCompiler
   const std::string compiler = GetCompiler(current_source);
