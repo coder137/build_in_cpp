@@ -59,7 +59,8 @@ void Target::AddIncludeDir(const fs::path &relative_include_dir,
 void Target::AddIncludeDirAbsolute(const fs::path &absolute_include_dir,
                                    bool glob_headers) {
   const auto include_path = internal::Path::CreateNewPath(absolute_include_dir);
-  current_include_dirs_.insert(include_path.GetPathname().string());
+  current_include_dirs_.insert(
+      internal::quote(include_path.GetPathname().string()));
 
   if (glob_headers) {
     GlobHeadersAbsolute(include_path.GetPathname());
