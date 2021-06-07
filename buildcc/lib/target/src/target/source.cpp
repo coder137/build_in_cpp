@@ -15,15 +15,15 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
                     fmt::format("{} does not have a valid source extension",
                                 absolute_input_filepath.string()));
 
-  fs::path absolute_source = fs::path(absolute_input_filepath).make_preferred();
-  fs::path absolute_compiled_source =
-      fs::path(absolute_output_filepath).make_preferred();
-  fs::create_directories(absolute_compiled_source.parent_path());
+  const fs::path absolute_source =
+      fs::path(absolute_input_filepath).make_preferred();
+  const auto absolute_compiled_source =
+      internal::Path::CreateNewPath(absolute_output_filepath);
+  fs::create_directories(absolute_compiled_source.GetPathname().parent_path());
 
   internal::add_path(absolute_source, current_source_files_);
   current_object_files_.insert(
-      {absolute_source.native(),
-       internal::Path::CreateNewPath(absolute_compiled_source)});
+      {absolute_source.native(), absolute_compiled_source});
 }
 
 void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
@@ -65,10 +65,6 @@ void Target::AddSource(const fs::path &relative_filename,
   AddSourceAbsolute(absolute_source, absolute_compiled_source);
 }
 
-void Target::AddSource(const fs::path &relative_filename) {
-  AddSource(relative_filename, "");
-}
-
 void Target::GlobSources(const fs::path &relative_to_target_path) {
   env::log_trace(name_, __FUNCTION__);
 
@@ -80,6 +76,11 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
       AddSource(p.path().lexically_relative(target_root_source_dir_));
     }
   }
+}
+
+// Aliases
+void Target::AddSource(const fs::path &relative_filename) {
+  AddSource(relative_filename, "");
 }
 
 // Private
