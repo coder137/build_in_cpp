@@ -7,6 +7,9 @@
 // The Path class defined below is meant to be used with Sets
 #include <unordered_set>
 
+#include "assert_fatal.h"
+#include "fmt/format.h"
+
 namespace fs = std::filesystem;
 
 namespace buildcc::internal {
@@ -22,8 +25,14 @@ public:
    * @return Path
    */
   static Path CreateExistingPath(const fs::path &pathname) {
+    std::error_code errcode;
     uint64_t last_write_timestamp =
-        std::filesystem::last_write_time(pathname).time_since_epoch().count();
+        std::filesystem::last_write_time(pathname, errcode)
+            .time_since_epoch()
+            .count();
+    env::assert_fatal(errcode.value() == 0,
+                      fmt::format("{} not found", pathname.string()));
+
     return Path(pathname, last_write_timestamp);
   }
 

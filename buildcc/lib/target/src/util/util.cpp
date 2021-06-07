@@ -18,8 +18,6 @@ bool is_previous_paths_different(const path_unordered_set &previous_paths,
 
 // Additions
 bool add_path(const fs::path &path, path_unordered_set &stored_paths) {
-  env::assert_fatal(fs::exists(path),
-                    fmt::format("{} not found", path.string()));
   auto current_file = buildcc::internal::Path::CreateExistingPath(path);
 
   // TODO, Note, we might not require this check
