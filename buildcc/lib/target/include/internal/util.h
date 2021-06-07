@@ -27,7 +27,6 @@ bool add_path(const fs::path &path, path_unordered_set &stored_paths);
 /**
  * @brief Attach quotes to filesystem::path::string if space detected
  * Returns same string if no space detected.
- * Meant to be called after filesystem::path::make_preferred
  *
  * @param str
  * @return std::string
