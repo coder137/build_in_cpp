@@ -17,13 +17,12 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
 
   const fs::path absolute_source =
       fs::path(absolute_input_filepath).make_preferred();
-  const auto absolute_compiled_source =
-      internal::Path::CreateNewPath(absolute_output_filepath);
-  fs::create_directories(absolute_compiled_source.GetPathname().parent_path());
-
   internal::add_path(absolute_source, current_source_files_);
 
   // Relate input source files with output object files
+  const auto absolute_compiled_source =
+      internal::Path::CreateNewPath(absolute_output_filepath);
+  fs::create_directories(absolute_compiled_source.GetPathname().parent_path());
   current_object_files_.insert(
       {absolute_source.native(), absolute_compiled_source});
 }
