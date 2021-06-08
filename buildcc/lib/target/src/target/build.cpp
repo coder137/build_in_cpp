@@ -100,7 +100,8 @@ void Target::LinkTarget() {
   const std::string aggregated_compiled_sources =
       internal::aggregate(GetCompiledSources());
 
-  const std::string output_target = internal::quote(GetTargetPath().string());
+  const std::string output_target =
+      internal::Path::CreateNewPath(GetTargetPath()).GetPathAsString();
 
   bool success = internal::command(
       Link(output_target, aggregated_link_flags_, aggregated_compiled_sources,

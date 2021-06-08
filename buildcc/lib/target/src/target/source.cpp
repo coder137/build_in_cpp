@@ -161,7 +161,8 @@ Target::CompileCommand(const fs::path &current_source) const {
       : type == FileExtType::Cpp ? aggregated_cpp_compile_flags_
                                  : "";
 
-  const std::string input_source = internal::quote(current_source.string());
+  const std::string input_source =
+      internal::Path::CreateExistingPath(current_source).GetPathAsString();
   return CompileCommand(input_source, output_source, compiler,
                         aggregated_preprocessor_flags_,
                         aggregated_compile_flags, aggregated_include_dirs_);
