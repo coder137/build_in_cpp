@@ -7,12 +7,22 @@
 // The Path class defined below is meant to be used with Sets
 #include <unordered_set>
 
+// Env
 #include "assert_fatal.h"
+
+// Third party
 #include "fmt/format.h"
 
 namespace fs = std::filesystem;
 
 namespace buildcc::internal {
+
+inline std::string quote(const std::string &str) {
+  if (str.find(" ") == std::string::npos) {
+    return str;
+  }
+  return fmt::format("\"{}\"", str);
+}
 
 class Path {
 public:
@@ -59,6 +69,7 @@ public:
   // Getters
   std::uint64_t GetLastWriteTimestamp() const { return last_write_timestamp_; }
   const fs::path &GetPathname() const { return pathname_; }
+  std::string GetPathAsString() const { return quote(GetPathname().string()); }
 
   // Used during find operation
   bool operator==(const Path &p) const {

@@ -28,13 +28,6 @@ bool add_path(const fs::path &path, path_unordered_set &stored_paths) {
   return added;
 }
 
-std::string quote(const std::string &str) {
-  if (str.find(" ") == std::string::npos) {
-    return str;
-  }
-  return fmt::format("\"{}\"", str);
-}
-
 // Aggregates
 
 std::string aggregate(const std::vector<std::string> &list) {
@@ -49,7 +42,7 @@ std::string aggregate(const buildcc::internal::path_unordered_set &paths) {
   std::vector<std::string> agg;
   std::transform(paths.begin(), paths.end(), std::back_inserter(agg),
                  [](const buildcc::internal::Path &p) -> std::string {
-                   return quote(p.GetPathname().string());
+                   return p.GetPathAsString();
                  });
   return aggregate(agg);
 }
