@@ -156,7 +156,6 @@ protected:
 
   const std::string &GetCompiler(const fs::path &source) const;
 
-  // This API should never throw
   const internal::Path &GetCompiledSourcePath(const fs::path &source) const;
   internal::path_unordered_set GetCompiledSources() const;
 
