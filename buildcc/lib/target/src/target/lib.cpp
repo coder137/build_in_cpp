@@ -16,8 +16,8 @@ void Target::AddLibDir(const fs::path &relative_lib_dir) {
 void Target::AddLibDirAbsolute(const fs::path &absolute_lib_dir) {
   env::log_trace(name_, __FUNCTION__);
 
-  current_lib_dirs_.insert(internal::quote(
-      internal::Path::CreateNewPath(absolute_lib_dir).GetPathname().string()));
+  current_lib_dirs_.insert(
+      internal::Path::CreateNewPath(absolute_lib_dir).GetPathAsString());
 }
 
 void Target::AddLibDep(const Target &lib_dep) {

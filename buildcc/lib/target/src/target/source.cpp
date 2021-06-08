@@ -148,8 +148,8 @@ void Target::CompileSource(const fs::path &current_source) const {
 
 std::vector<std::string>
 Target::CompileCommand(const fs::path &current_source) const {
-  const std::string output_source = internal::quote(
-      GetCompiledSourcePath(current_source).GetPathname().string());
+  const std::string output_source =
+      GetCompiledSourcePath(current_source).GetPathAsString();
 
   // TODO, Check implementation for GetCompiler
   const std::string compiler = GetCompiler(current_source);
