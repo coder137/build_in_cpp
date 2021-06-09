@@ -10,6 +10,8 @@ static void mfoolib_build_cb(base::Target &target);
 static void cfoolib_build_cb(base::Target &target);
 
 // * NOTE, This is how we add our custom target
+// Support for any custom toolchain can be added like this
+// base::Target provides `CompileCommand` and `Link` overrides
 class ExecutableTarget_clang : public base::Target {
 public:
   ExecutableTarget_clang(
