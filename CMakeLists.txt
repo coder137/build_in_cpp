@@ -114,5 +114,5 @@ if (${BUILDCC_INSTALL})
 endif()
 
 if (${BUILDCC_EXAMPLES})
-    add_subdirectory(example/hybrid)
+    add_subdirectory(example/hybrid/simple)
 endif()
