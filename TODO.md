@@ -19,7 +19,6 @@
 
 - [ ] Getter APIs for Target
 - [ ] Append Setter APIs for Target
-- [ ] Getter APIs for Toolchain
 - [ ] `find_program` option in Toolchain
 - [ ] Custom executables stored in Toolchain 
 
@@ -32,10 +31,10 @@
 
 # Optimization
 
-- [ ] Aggregated strings stored in Target
+- [ ] Aggregated strings stored in Target vs `std::insert` on `std::vector` and `std::unordered_set`
 - [ ] `std::string` vs `std::string_view` usage
 - [ ] Static library vs Shared Library when linking
-  - Static library linking is extremely slow 
+  - Static library linking is extremely slow on certain compilers
 - [ ] Third party library optimization
   - spdlog
   - flatbuffers
@@ -50,6 +49,5 @@
 # Examples and Demos
 
 - [ ] Cross compiling
-- [ ] Custom user target
 - [ ] Debugging using VSCode
 - [ ] Debugging using GDB
