@@ -7,6 +7,12 @@
 // The Path class defined below is meant to be used with Sets
 #include <unordered_set>
 
+// Env
+#include "assert_fatal.h"
+
+// Third party
+#include "fmt/format.h"
+
 namespace fs = std::filesystem;
 
 namespace buildcc::internal {
@@ -22,8 +28,14 @@ public:
    * @return Path
    */
   static Path CreateExistingPath(const fs::path &pathname) {
+    std::error_code errcode;
     uint64_t last_write_timestamp =
-        std::filesystem::last_write_time(pathname).time_since_epoch().count();
+        std::filesystem::last_write_time(pathname, errcode)
+            .time_since_epoch()
+            .count();
+    env::assert_fatal(errcode.value() == 0,
+                      fmt::format("{} not found", pathname.string()));
+
     return Path(pathname, last_write_timestamp);
   }
 
@@ -50,6 +62,7 @@ public:
   // Getters
   std::uint64_t GetLastWriteTimestamp() const { return last_write_timestamp_; }
   const fs::path &GetPathname() const { return pathname_; }
+  std::string GetPathAsString() const { return quote(GetPathname().string()); }
 
   // Used during find operation
   bool operator==(const Path &p) const {
@@ -62,8 +75,16 @@ public:
 
 private:
   explicit Path(const fs::path &pathname, std::uint64_t last_write_timestamp)
-      : pathname_(fs::path(pathname).make_preferred()),
-        last_write_timestamp_(last_write_timestamp) {}
+      : pathname_(pathname), last_write_timestamp_(last_write_timestamp) {
+    pathname_.make_preferred();
+  }
+
+  std::string quote(const std::string &str) const {
+    if (str.find(" ") == std::string::npos) {
+      return str;
+    }
+    return fmt::format("\"{}\"", str);
+  }
 
 private:
   fs::path pathname_;

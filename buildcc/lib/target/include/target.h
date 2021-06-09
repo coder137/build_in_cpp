@@ -1,5 +1,5 @@
-#ifndef TARGET_INCLUDE_BASE_TARGET_H_
-#define TARGET_INCLUDE_BASE_TARGET_H_
+#ifndef TARGET_INCLUDE_TARGET_H_
+#define TARGET_INCLUDE_TARGET_H_
 
 #include <filesystem>
 #include <functional>
@@ -112,7 +112,9 @@ public:
   tf::Task &GetLinkTask() { return link_task_; }
 
   fs::path GetTargetPath() const {
-    return (GetTargetIntermediateDir() / GetName()).make_preferred();
+    fs::path path = GetTargetIntermediateDir() / GetName();
+    path.make_preferred();
+    return path;
   }
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
 
@@ -154,8 +156,7 @@ protected:
 
   const std::string &GetCompiler(const fs::path &source) const;
 
-  // This API should never throw
-  const fs::path &GetCompiledSourcePath(const fs::path &source) const;
+  const internal::Path &GetCompiledSourcePath(const fs::path &source) const;
   internal::path_unordered_set GetCompiledSources() const;
 
 private:
@@ -247,15 +248,17 @@ private:
   internal::path_unordered_set current_source_files_;
   // NOTE, Always store the absolute source path -> absolute compiled source
   // path here
-  std::unordered_map<fs::path::string_type, fs::path> current_object_files_;
+  std::unordered_map<fs::path::string_type, internal::Path>
+      current_object_files_;
 
   internal::path_unordered_set current_header_files_;
   internal::path_unordered_set current_lib_deps_;
 
-  std::unordered_set<std::string> current_external_lib_deps_;
-
+  // TODO, Change these to PATHS
   std::unordered_set<std::string> current_include_dirs_;
   std::unordered_set<std::string> current_lib_dirs_;
+
+  std::unordered_set<std::string> current_external_lib_deps_;
 
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;

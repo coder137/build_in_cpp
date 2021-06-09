@@ -18,8 +18,6 @@ bool is_previous_paths_different(const path_unordered_set &previous_paths,
 
 // Additions
 bool add_path(const fs::path &path, path_unordered_set &stored_paths) {
-  env::assert_fatal(fs::exists(path),
-                    fmt::format("{} not found", path.string()));
   auto current_file = buildcc::internal::Path::CreateExistingPath(path);
 
   // TODO, Note, we might not require this check
@@ -28,13 +26,6 @@ bool add_path(const fs::path &path, path_unordered_set &stored_paths) {
 
   auto [_, added] = stored_paths.insert(current_file);
   return added;
-}
-
-std::string quote(const std::string &str) {
-  if (str.find(" ") == std::string::npos) {
-    return str;
-  }
-  return fmt::format("\"{}\"", str);
 }
 
 // Aggregates
@@ -51,7 +42,7 @@ std::string aggregate(const buildcc::internal::path_unordered_set &paths) {
   std::vector<std::string> agg;
   std::transform(paths.begin(), paths.end(), std::back_inserter(agg),
                  [](const buildcc::internal::Path &p) -> std::string {
-                   return quote(p.GetPathname().string());
+                   return p.GetPathAsString();
                  });
   return aggregate(agg);
 }
@@ -61,7 +52,7 @@ std::string aggregate_with_prefix(const std::string &prefix,
   std::vector<std::string> agg;
   std::transform(dirs.begin(), dirs.end(), std::back_inserter(agg),
                  [&](const std::string &dir) -> std::string {
-                   return fmt::format("{}{}", prefix, quote(dir));
+                   return fmt::format("{}{}", prefix, dir);
                  });
   return aggregate(agg);
 }

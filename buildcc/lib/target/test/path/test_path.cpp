@@ -1,6 +1,8 @@
 // Internal
 #include "internal/path.h"
 
+#include "assert_fatal.h"
+
 #include "constants.h"
 
 #include <cstdint>
@@ -34,13 +36,13 @@ TEST(PathTestGroup, Path_ExistingPathStaticConstructor) {
 
 TEST(PathTestGroup, Path_ExistingPathStaticConstructor_ThrowFileException) {
   CHECK_THROWS(
-      std::filesystem::filesystem_error,
+      buildcc::env::assert_exception,
       buildcc::internal::Path::CreateExistingPath("random_path_main.cpp"));
 
   try {
     auto existing_filename =
         buildcc::internal::Path::CreateExistingPath("random_path_main.cpp");
-  } catch (const std::filesystem::filesystem_error &e) {
+  } catch (const buildcc::env::assert_exception &e) {
     // * NOTE, We cannot check this since different compilers might
     // have different error messages
     // STRCMP_EQUAL(

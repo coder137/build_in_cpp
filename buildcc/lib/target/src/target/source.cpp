@@ -15,12 +15,14 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
                     fmt::format("{} does not have a valid source extension",
                                 absolute_input_filepath.string()));
 
-  fs::path absolute_source = fs::path(absolute_input_filepath).make_preferred();
-  fs::path absolute_compiled_source =
-      fs::path(absolute_output_filepath).make_preferred();
-  fs::create_directories(absolute_compiled_source.parent_path());
-
+  const fs::path absolute_source =
+      fs::path(absolute_input_filepath).make_preferred();
   internal::add_path(absolute_source, current_source_files_);
+
+  // Relate input source files with output object files
+  const auto absolute_compiled_source =
+      internal::Path::CreateNewPath(absolute_output_filepath);
+  fs::create_directories(absolute_compiled_source.GetPathname().parent_path());
   current_object_files_.insert(
       {absolute_source.native(), absolute_compiled_source});
 }
@@ -64,10 +66,6 @@ void Target::AddSource(const fs::path &relative_filename,
   AddSourceAbsolute(absolute_source, absolute_compiled_source);
 }
 
-void Target::AddSource(const fs::path &relative_filename) {
-  AddSource(relative_filename, "");
-}
-
 void Target::GlobSources(const fs::path &relative_to_target_path) {
   env::log_trace(name_, __FUNCTION__);
 
@@ -79,6 +77,11 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
       AddSource(p.path().lexically_relative(target_root_source_dir_));
     }
   }
+}
+
+// Aliases
+void Target::AddSource(const fs::path &relative_filename) {
+  AddSource(relative_filename, "");
 }
 
 // Private
@@ -147,7 +150,7 @@ void Target::CompileSource(const fs::path &current_source) const {
 std::vector<std::string>
 Target::CompileCommand(const fs::path &current_source) const {
   const std::string output_source =
-      internal::quote(GetCompiledSourcePath(current_source).string());
+      GetCompiledSourcePath(current_source).GetPathAsString();
 
   // TODO, Check implementation for GetCompiler
   const std::string compiler = GetCompiler(current_source);
@@ -159,7 +162,8 @@ Target::CompileCommand(const fs::path &current_source) const {
       : type == FileExtType::Cpp ? aggregated_cpp_compile_flags_
                                  : "";
 
-  const std::string input_source = internal::quote(current_source.string());
+  const std::string input_source =
+      internal::Path::CreateExistingPath(current_source).GetPathAsString();
   return CompileCommand(input_source, output_source, compiler,
                         aggregated_preprocessor_flags_,
                         aggregated_compile_flags, aggregated_include_dirs_);
