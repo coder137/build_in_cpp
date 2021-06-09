@@ -12,7 +12,9 @@ Build C, C++ and ASM files in C++
 
 ## Usage
 
-## Examples
+## [Examples](example/README.md)
+
+Contains **proof of concept** and **real world** examples.
 
 # Developer
 
