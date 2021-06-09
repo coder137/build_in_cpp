@@ -6,7 +6,6 @@ project(hybrid_simple_example)
 
 # Bootstrap your build file using CMake
 add_executable(hybrid_simple_example build.cpp)
-target_include_directories(hybrid_simple_example PRIVATE ${CMAKE_BINARY_DIR}/generated)
 target_link_libraries(hybrid_simple_example PRIVATE buildcc)
 
 # TODO, Add this only if MINGW is used
