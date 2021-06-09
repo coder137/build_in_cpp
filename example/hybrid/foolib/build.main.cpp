@@ -1,3 +1,5 @@
+#include "buildcc.h"
+
 #include "build.foo.h"
 
 #include "clang_compile_commands.h"
@@ -24,8 +26,8 @@ int main(int argc, char **argv) {
   Toolchain_gcc gcc;
   Toolchain_msvc msvc;
 
-  ExecutableTarget_gcc g_foolib("GCppFlags.exe", gcc, "");
-  ExecutableTarget_msvc m_foolib("MCppFlags.exe", msvc, "");
+  ExecutableTarget_gcc g_foolib("GFoolib.exe", gcc, "");
+  ExecutableTarget_msvc m_foolib("MFoolib.exe", msvc, "");
 
   reg.Build(args.GetGccToolchain(), g_foolib, gfoolib_build_cb);
   reg.Build(args.GetMsvcToolchain(), m_foolib, mfoolib_build_cb);
