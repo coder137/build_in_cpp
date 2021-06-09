@@ -42,15 +42,19 @@ cmake --build build
   - [x] Clang (x86_64-pc-linux-gnu) 10.0.0
 - [ ] Mac
 
-> TODO, Test compilers on various operating systems
+> TODO, Test buildcc on more operating systems and compilers
+
+## Basic Steps
 
 - Write your `build.cpp` 'script'
-- CMake is used to bootstrap and compile the executable, ex `build.cpp` -> `./build.exe`
+- CMake is used to bootstrap and compile the executable, ex. `build.cpp` -> `./build.exe`
 - Run the **build executable** to generate your targets (executable, static/dynamic libs)
 - Every **target** should use a compatible **toolchain**
   - gcc targets should supply appropriate gcc toolchain
   - custom targets should supply appropriate custom toolchain
   - NOTE: Make sure that these toolchains are added to system PATH
+
+> For MSVC, Make sure you use `vcvarsall.bat` to initialize your environment
 
 # Proof of Concept Tests
 
@@ -77,6 +81,8 @@ Multi hosts but only one target compiler used
 - [x] Plugins
   - Community based plugin support poc 
   - [x] ClangCompileCommands 
+  - [ ] ClangFormat
+  - [ ] Taskflow graph visualizer
 
 ## [host] MSVC -> [target] MSVC
 
