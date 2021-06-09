@@ -1,5 +1,9 @@
+
 # Feature
 
+- [ ] Bootstrapping
+  - [x] Via CMake
+  - [ ] Via buildcc
 - [ ] Subprocess
   - Reproc
   - Subprocess.h
