@@ -22,7 +22,7 @@ add_custom_target(run_hybrid_simple_example_win
     COMMAND hybrid_simple_example --config ${CMAKE_CURRENT_SOURCE_DIR}/build_win.toml
     COMMAND dot -Tpng graph.dot -o graph.PNG
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DEPENDS build buildcc
+    DEPENDS hybrid_simple_example buildcc
     VERBATIM USES_TERMINAL
 )
 
@@ -31,6 +31,6 @@ add_custom_target(run_hybrid_simple_example_linux
     COMMAND hybrid_simple_example --config ${CMAKE_CURRENT_SOURCE_DIR}/build_linux.toml
     # COMMAND dot -Tpng graph.dot -o graph.PNG
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DEPENDS build buildcc
+    DEPENDS hybrid_simple_example buildcc
     VERBATIM USES_TERMINAL
 )
