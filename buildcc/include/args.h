@@ -14,8 +14,8 @@ namespace buildcc {
 class Args {
 public:
   struct Toolchain {
-    bool build;
-    bool test;
+    bool build = false;
+    bool test = false;
   };
 
 public:
