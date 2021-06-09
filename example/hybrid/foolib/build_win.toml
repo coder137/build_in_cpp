@@ -1,0 +1,16 @@
+# Root
+root_dir = ""
+build_dir = "_internal_win"
+loglevel = "trace"
+
+# Project
+clean = true
+
+# Toolchain
+[toolchain.gcc]
+build = true
+test = true
+
+[toolchain.msvc]
+build = true
+test = true

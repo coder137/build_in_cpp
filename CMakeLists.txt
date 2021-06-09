@@ -115,4 +115,5 @@ endif()
 
 if (${BUILDCC_EXAMPLES})
     add_subdirectory(example/hybrid/simple)
+    add_subdirectory(example/hybrid/foolib)
 endif()
