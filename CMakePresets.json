@@ -19,6 +19,7 @@
                 "BUILDCC_CLANGTIDY": true,
                 "BUILDCC_INSTALL": true,
                 "BUILDCC_NO_DEPRECATED": false,
+                "BUILDCC_DOCUMENTATION": true,
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_C_COMPILER": "gcc",
                 "CMAKE_CXX_COMPILER": "g++"
@@ -37,6 +38,7 @@
                 "BUILDCC_CLANGTIDY": true,
                 "BUILDCC_INSTALL": true,
                 "BUILDCC_NO_DEPRECATED": true,
+                "BUILDCC_DOCUMENTATION": true,
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_COMPILER": "clang++"
@@ -55,6 +57,7 @@
                 "BUILDCC_CLANGTIDY": true,
                 "BUILDCC_INSTALL": true,
                 "BUILDCC_NO_DEPRECATED": false,
+                "BUILDCC_DOCUMENTATION": true,
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         }
