@@ -4,9 +4,11 @@ Build C, C++ and ASM files in C++
 
 # Aim
 
+> TODO,
+
 # General
 
-- A `compile` and `link` procedure is called a **Target**
+- A `compile` + `link` procedure is called a **Target**
   - This means that Executables, StaticLibraries and DynamicLibraries are all categorized as Targets
   - In the future C++20 modules can also be its own target dependending on compiler implementations
 - Every Target requires a complementary (and compatible) **Toolchain**
@@ -31,6 +33,7 @@ See also [Software Architecture](#software-architecture)
 - C++ language feature benefits and **debuggable build binaries**
 - Optimized rebuilds through serialization. See [target.fbs schema](buildcc/lib/target/fbs/target.fbs)
   - Can optimize for rebuilds by comparing the previous stored build with current build.
+  - See also [FAQ](#faq)
 - Customizable for community plugins. More details provided in the `Community Plugin` section.
 
 ## Software Architecture
@@ -40,6 +43,12 @@ See also [Software Architecture](#software-architecture)
 - See also [how to generate graphs using CMake](doc/software_architecture/generate_cmake_graphviz.md)
 
 ## Community Plugin
+
+- [ ] ClangCompileCommands
+- [ ] ClangFormat
+- [ ] Target graph visualizer (through Taskflow)
+
+> TODO,
 
 # User Guide
 
@@ -79,8 +88,8 @@ cpack -G NSIS
 > NOTE: On windows [NSIS](https://nsis.sourceforge.io/Main_Page) needs to be installed
 
 - Install the package and add to environment PATH
-- See the `gcc/AfterInstall` example find packages and link with buildcc
-- Check the `examples` section below to use buildcc in different situations
+- As a starting point, go through the **gcc/AfterInstall** example and **Hybrid** examples
+- For more details read the `examples` README to use buildcc in different situations
 
 ## Examples
 
@@ -131,7 +140,6 @@ cmake --build . --target [custom_target]
 - run_hybrid_externallib_example_win
 - run_hybrid_customtarget_example_linux
 - run_hybrid_customtarget_example_win
-
 
 ## Install
 
