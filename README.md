@@ -81,7 +81,7 @@ ctest --preset=gcc_dev_all
 ```bash
 # Run custom target using
 cd [folder]
-cmake --build . --build [custom_target]
+cmake --build . --target [custom_target]
 ```
 
 **Tools**
