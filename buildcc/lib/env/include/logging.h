@@ -16,11 +16,6 @@ enum class LogLevel {
   Fatal = Critical,
 };
 
-/**
- * @brief Set the log pattern object
- *
- * @param pattern Uses spdlog pattern
- */
 void set_log_pattern(std::string_view pattern);
 void set_log_level(LogLevel level);
 
