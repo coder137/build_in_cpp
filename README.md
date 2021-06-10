@@ -48,13 +48,34 @@ Contains **proof of concept** and **real world** [examples](example/README.md).
 
 # General
 
+- A `compile` and `link` procedure is called a **Target**
+  - This means that Executables, StaticLibraries and DynamicLibraries are all categorized as Targets
+  - In the future C++20 modules can also be its own target dependending on compiler implementations
+- Every Target requires a complementary (and compatible) **Toolchain**
+  - This ensures that cross compiling is very easy and explicit in nature.
+  - Multiple toolchains can be _mixed_ in a single build file i.e we can generate targets using the GCC, Clang, MSVC and many other compilers **simultaneously**.
+- The `compile_command` and `link_command` is fed to the `process/system` call to generate files.
+- Each **Target** can depend on other targets efficiently through Parallel Programming using **Taskflow**.
+  - Dependency between targets is explicitly mentioned through the Taskflow APIs
+  - This has been made easier for the user through the `buildcc::Register` module.
+- Build files can be customized through command line arguments
+  - Command line arguments can be stored in configurable `.toml` files and passed using the `--config` flag.
+  - Users can define their own custom arguments.
+  - Argument passing has been made easy using the `buildcc::Args` module.
+
+## Features
+
+- Complete flexibility for custom / brand new toolchains
+- C++ language feature benefits and **debuggable build binaries**
+- Optimized rebuilds through serialization. See [target.fbs schema](buildcc/lib/target/fbs/target.fbs)
+  - Can optimize for rebuilds by comparing the previous stored build with current build.
+- Customizable for community plugins. More details provided in the `Community Plugin` section.
+
 ## Software Architecture
 
 ![Library dependency](doc/software_architecture/buildcc_core_dep.PNG)
 
 - See also [how to generate graphs using CMake](doc/software_architecture/generate_cmake_graphviz.md)
-
-## Features
 
 ## Community Plugin
 
