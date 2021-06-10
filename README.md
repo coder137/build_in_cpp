@@ -145,11 +145,19 @@ cmake --build . --target [custom_target]
 
 - See the **user installation** section above
 
-> TODO, Detailed explanation of how installation has been setup
+- Read [Install target](buildcc/lib/target/cmake/target_install.cmake)
+
+Basic Installation steps
+- Install `TARGETS`
+- Install `HEADER FILES`
+- Export `CONFIG`
 
 ## Test
 
-> TODO, Detailed explanation of how tests have been setup
+- Read [Mock env](buildcc/lib/env/CMakeLists.txt)
+- Read [Mock target](buildcc/lib/target/cmake/mock_target.cmake)
+- Read [Test path](buildcc/lib/target/test/path/CMakeLists.txt)
+- Read [Test target](buildcc/lib/target/test/target/CMakeLists.txt)
 
 # FAQ
 
@@ -166,6 +174,12 @@ cmake --build . --target [custom_target]
 # TODO
 
 [List of features](TODO.md) to be implemented before buildcc can be considered production ready.
+
+I would also like to request help from the Community for:
+- Code review
+- Design pattern
+- Optimization
+- Other discussions
 
 # License Dependencies
 
