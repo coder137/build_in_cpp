@@ -155,6 +155,14 @@ cmake --build . --target [custom_target]
 
 - [Why has _this_ third-party library been chosen?](doc/faq/why_this_lib.md)
 
+## Design
+
+- [Why do you track _include directories_ and _header files_?](doc/faq/include_dir_vs_header_files.md)
+
+## Miscellaneous
+
+- [Why `-Wl,--allow-multiple-definition` for MINGW?](doc/faq/mingw_taskflow_linker_option.md)
+
 # TODO
 
 [List of features](TODO.md) to be implemented before buildcc can be considered production ready.
