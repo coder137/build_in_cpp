@@ -12,9 +12,9 @@ Build C, C++ and ASM files in C++
 
 ## Usage
 
-## [Examples](example/README.md)
+## Examples
 
-Contains **proof of concept** and **real world** examples.
+Contains **proof of concept** and **real world** [examples](example/README.md).
 
 # Developer
 
@@ -36,9 +36,9 @@ Contains **proof of concept** and **real world** examples.
 
 # FAQ
 
-# [TODO](TODO.md)
+# TODO
 
-List of features to be implemented before buildcc can be considered production ready.
+[List of features](TODO.md) to be implemented before buildcc can be considered production ready.
 
 # License Dependencies
 
