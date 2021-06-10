@@ -42,6 +42,7 @@ Also see [Target::BuildRecompile() in build.cpp](../../buildcc/lib/target/src/ta
 - Easy to setup dependencies between two or more `Tasks` or `Taskflows`
   - This ensures that parts of the build that need to be independent can be built in parallel.
   - Automatically uses the C++ Thread library for speedup.
+- Provides Graph generation for visualization
 
 # CLI11
 
