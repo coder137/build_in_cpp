@@ -16,11 +16,21 @@ Build C, C++ and ASM files in C++
 
 Contains **proof of concept** and **real world** [examples](example/README.md).
 
+# General
+
+## Software Architecture
+
+## Features
+
+## Community Plugin
+
 # Developer
+
+Developers interested in contributing to the BuildCC project
 
 ## Build
 
-### CMakePresets Version 3.20
+### CMakePresets (from Version 3.20)
 
 - See `CMakePresets.json` for GCC, MSVC and Clang configurations
 ```bash
@@ -63,17 +73,28 @@ cmake --build . --build [custom_target]
 
 ## Install
 
+- Uses CPack to generate ZIP or executable files
+```bash
+# See all generators
+cpack --help
+
+# Using a generator
+cd [build folder]
+
+# Generate ZIP
+cpack -G ZIP
+
+# Generate executable
+cpack -G NSIS
+```
+
+> NOTE: On windows [NSIS](https://nsis.sourceforge.io/Main_Page) needs to be installed
+
+> TODO, Detailed explanation of how installation has been setup
+
 ## Test
 
-> TODO, Add more fields for developers
-
-# General
-
-## Software Architecture
-
-## Features
-
-## Community Plugin
+> TODO, Detailed explanation of how tests have been setup
 
 # FAQ
 
