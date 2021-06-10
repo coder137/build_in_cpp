@@ -36,6 +36,8 @@
 
 # Optimization
 
+- [ ] `fs::path::string_type` conversion to `std::string`
+  - In windows `fs::path::string_type` is `std::wstring`, discuss potential pitfalls for conversion and storing as `std::string` 
 - [ ] Aggregated strings stored in Target vs `std::insert` on `std::vector` and `std::unordered_set`
 - [ ] Handling exceptions and generating fatal exceptions
   - Discuss different strategies for exceptions i.e throw, std::error_code etc 
