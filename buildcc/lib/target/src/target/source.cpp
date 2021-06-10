@@ -142,7 +142,7 @@ void Target::RecompileSources() {
         dirty_ = true;
         SourceUpdated();
       } else {
-        // TODO, Physically verify the presence of object file
+        // TODO, Verify the `physical` presence of object file
 
         // ELSE
         // *3 Do nothing
