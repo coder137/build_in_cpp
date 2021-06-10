@@ -63,6 +63,9 @@ Contains **proof of concept** and **real world** [examples](example/README.md).
   - Users can define their own custom arguments.
   - Argument passing has been made easy using the `buildcc::Args` module.
 
+**Taskflow dependency for hybrid/simple example**
+![Taskflow dependency](example/hybrid/simple/graph.PNG)
+
 ## Features
 
 - Complete flexibility for custom / brand new toolchains
