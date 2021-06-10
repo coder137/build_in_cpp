@@ -50,6 +50,10 @@ Contains **proof of concept** and **real world** [examples](example/README.md).
 
 ## Software Architecture
 
+![Library dependency](doc/software_architecture/buildcc_core_dep.PNG)
+
+- See also [how to generate graphs using CMake](doc/software_architecture/generate_cmake_graphviz.md)
+
 ## Features
 
 ## Community Plugin
