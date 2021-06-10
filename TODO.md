@@ -8,6 +8,9 @@
   - Reproc
   - Subprocess.h
   - Ninja Subprocess 
+- [ ] Command/Subprocess class to construct a specialized query
+  - Currently, `internal::command` uses `std::system` and command tokens are passed in through `std::vector` (no sanitization or security)
+  - This class must also be easy enough to be used by users to construct external commands.
 - [ ] Plugin - ClangFormat
 - [ ] Plugin - Graph Visualizer
 - [ ] PrecompileHeader support
@@ -34,8 +37,10 @@
 # Optimization
 
 - [ ] Aggregated strings stored in Target vs `std::insert` on `std::vector` and `std::unordered_set`
+- [ ] Handling exceptions and generating fatal exceptions
+  - Discuss different strategies for exceptions i.e throw, std::error_code etc 
 - [ ] `std::string` vs `std::string_view` usage
-- [ ] Static library vs Shared Library when linking
+- [ ] Static library vs Shared Library when linking buildcc (See **Software Architecture** section)
   - Static library linking is extremely slow on certain compilers
 - [ ] Third party library optimization
   - spdlog
@@ -45,8 +50,11 @@
 # Tests
 
 - [ ] 100% Line Coverage
+- [ ] Improve Branch Coverage
 - [ ] Benchmark example CMake vs BuildCC
-- [ ] Speed profiling `subprocess` vs `std::command` with gprof and qcachegrind
+- [ ] Speed profiling `subprocess` vs `std::system` with gprof and qcachegrind
+  - NOTE, Since we have Taskflow for parallel programming, we do not need to construct a multi-threaded subprocess.
+  - Subprocess should typically replicate `std::system` functionality while offering better security.
 
 # Examples and Demos
 
