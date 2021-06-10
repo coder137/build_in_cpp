@@ -142,6 +142,9 @@ void Target::RecompileSources() {
         dirty_ = true;
         SourceUpdated();
       } else {
+        // TODO, Physically verify the presence of object file
+
+        // ELSE
         // *3 Do nothing
         dummy_compile_sources.push_back(current_source);
       }
