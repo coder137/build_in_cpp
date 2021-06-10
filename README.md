@@ -20,6 +20,47 @@ Contains **proof of concept** and **real world** [examples](example/README.md).
 
 ## Build
 
+### CMakePresets Version 3.20
+
+- See `CMakePresets.json` for GCC, MSVC and Clang configurations
+```bash
+# Generating
+cmake --list-presets
+cmake --preset=[your_preset]
+
+# Building
+cmake --build --list-presets
+cmake --build --preset=[your_preset]
+
+# Testing (ONLY supported on gcc)
+ctest --preset=gcc_dev_all
+```
+
+### Custom Targets
+
+```bash
+# Run custom target using
+cd [folder]
+cmake --build . --build [custom_target]
+```
+
+**Tools**
+- cppcheck_static_analysis
+- doxygen_documentation
+- gcovr_coverage
+- lcov_coverage
+
+**Examples**
+- run_hybrid_simple_example_linux
+- run_hybrid_simple_example_win
+- run_hybrid_foolib_example_linux
+- run_hybrid_foolib_example_win
+- run_hybrid_externallib_example_linux
+- run_hybrid_externallib_example_win
+- run_hybrid_customtarget_example_linux
+- run_hybrid_customtarget_example_win
+
+
 ## Install
 
 ## Test

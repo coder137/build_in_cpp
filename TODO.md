@@ -25,6 +25,8 @@
 # Developer Tools
 
 - [ ] Doxygen
+  - Online documentation (read the docs)
+  - Github pages
 - [ ] CI/CD
 - [ ] Codecov
 - [ ] Codacy
