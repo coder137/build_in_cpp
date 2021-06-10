@@ -128,6 +128,9 @@ public:
     return target_intermediate_dir_;
   }
 
+  // TODO, Consider returning `std::vector<std::string>` OR
+  // `std::vector<fs::path>` for these getters
+  // These APIs are meant to be consumed by users
   const internal::path_unordered_set &GetCurrentSourceFiles() const {
     return current_source_files_;
   }
@@ -267,6 +270,8 @@ private:
 
   // TODO, Make appending to this more efficient
   // TODO, Might not need to be persistent
+  // TODO, aggregates might not need to exist, check `std::insert` APIs over
+  // vector and unordered_set
   std::string aggregated_include_dirs_;
   std::string aggregated_lib_dirs_;
   // NOTE, This contains current_external_lib_deps_ + current_lib_deps_

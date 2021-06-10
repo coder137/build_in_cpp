@@ -37,10 +37,11 @@ TEST(TargetTestSourceOutOfRootGroup, Add_OutOfRootSource) {
 
   buildcc::base::Target simple(OUTOFROOT, buildcc::base::TargetType::Executable,
                                gcc, "");
-  //  Out of source paths not allowed
-  // NOTE, Everything is evaluated relative to the
-  // buildcc::env::get_project_root
-  CHECK_THROWS(std::exception, simple.AddSource("../dummy_main.cpp"));
+  simple.AddSource("../dummy_main.cpp");
+
+  buildcc::internal::m::Expect_command(1, true);
+  buildcc::internal::m::Expect_command(1, true);
+  simple.Build();
 }
 
 TEST(TargetTestSourceOutOfRootGroup, Glob_OutOfRootSource) {
@@ -50,17 +51,15 @@ TEST(TargetTestSourceOutOfRootGroup, Glob_OutOfRootSource) {
 
   buildcc::base::Target simple(OUTOFROOT, buildcc::base::TargetType::Executable,
                                gcc, "");
-  //  Out of source paths not allowed
-  // NOTE, Everything is evaluated relative to the
-  // buildcc::env::get_project_root
-  CHECK_THROWS(std::exception, simple.GlobSources(".."));
+  simple.GlobSources(".."); // 6 files detected
   simple.GlobSourcesAbsolute(fs::path(BUILD_SCRIPT_SOURCE) / "data",
                              target_source_intermediate_path /
-                                 simple.GetName() / "OUT_OF_SOURCE");
+                                 simple.GetName() /
+                                 "OUT_OF_SOURCE"); // 6 files detected
 
-  CHECK_EQUAL(6, simple.GetCurrentSourceFiles().size());
+  CHECK_EQUAL(12, simple.GetCurrentSourceFiles().size());
 
-  buildcc::internal::m::Expect_command(6, true);
+  buildcc::internal::m::Expect_command(12, true);
   buildcc::internal::m::Expect_command(1, true);
   simple.Build();
 
@@ -68,6 +67,8 @@ TEST(TargetTestSourceOutOfRootGroup, Glob_OutOfRootSource) {
 }
 
 int main(int ac, char **av) {
+  std::filesystem::create_directories(fs::path(BUILD_SCRIPT_SOURCE) / "data" /
+                                      "random dir");
   buildcc::env::init(fs::path(BUILD_SCRIPT_SOURCE) / "data" / "random dir",
                      BUILD_TARGET_SOURCE_OUT_OF_ROOT_INTERMEDIATE_DIR);
   return CommandLineTestRunner::RunAllTests(ac, av);

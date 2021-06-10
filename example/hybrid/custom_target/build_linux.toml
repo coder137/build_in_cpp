@@ -1,0 +1,21 @@
+# Root
+root_dir = ""
+build_dir = "_internal_linux"
+loglevel = "trace"
+
+# Project
+clean = true
+
+# Toolchain
+[toolchain.gcc]
+build = true
+test = true
+
+[toolchain.msvc]
+build = false
+test = false
+
+# Custom toolchain added here
+[toolchain.clang_w64_windows_gnu]
+build = true
+test = true

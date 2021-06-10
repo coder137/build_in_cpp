@@ -6,7 +6,6 @@ project(hybrid_simple_example)
 
 # Bootstrap your build file using CMake
 add_executable(hybrid_simple_example build.cpp)
-target_include_directories(hybrid_simple_example PRIVATE ${CMAKE_BINARY_DIR}/generated)
 target_link_libraries(hybrid_simple_example PRIVATE buildcc)
 
 # TODO, Add this only if MINGW is used
@@ -21,9 +20,9 @@ endif()
 add_custom_target(run_hybrid_simple_example_win
     COMMAND hybrid_simple_example --help-all
     COMMAND hybrid_simple_example --config ${CMAKE_CURRENT_SOURCE_DIR}/build_win.toml
-    COMMAND dot -Tpng graph.dot -o graph.PNG
+    # COMMAND dot -Tpng graph.dot -o graph.PNG
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DEPENDS build buildcc
+    DEPENDS hybrid_simple_example buildcc
     VERBATIM USES_TERMINAL
 )
 
@@ -32,6 +31,6 @@ add_custom_target(run_hybrid_simple_example_linux
     COMMAND hybrid_simple_example --config ${CMAKE_CURRENT_SOURCE_DIR}/build_linux.toml
     # COMMAND dot -Tpng graph.dot -o graph.PNG
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DEPENDS build buildcc
+    DEPENDS hybrid_simple_example buildcc
     VERBATIM USES_TERMINAL
 )
