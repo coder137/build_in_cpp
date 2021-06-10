@@ -9,19 +9,19 @@ namespace buildcc::env {
 
 class assert_exception : public std::exception {
 public:
-  assert_exception(std::string_view message) : message_(message) {}
+  assert_exception(const char *const message) : message_(message) {}
 
 private:
-  virtual const char *what() const throw() { return message_.data(); }
+  virtual const char *what() const throw() { return message_; }
 
 private:
-  std::string_view message_;
+  const char *const message_;
 };
 
-inline void assert_fatal(bool expression, std::string_view message) {
+inline void assert_fatal(bool expression, const std::string &message) {
   if (!expression) {
     buildcc::env::log_critical("assert", message);
-    throw assert_exception(message);
+    throw assert_exception(message.c_str());
   }
 }
 
