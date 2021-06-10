@@ -6,11 +6,41 @@ Build C, C++ and ASM files in C++
 
 # User Guide
 
+Developers interested in using **_BuildCC_**
+
 ## Build
+
+> NOTE: Currently, BuildCC needs to be built from source and bootstrapped using CMake.
+
+> I aim to bootstrap BuildCC into an executable to remove the dependency on CMake.
+
+- By default all the developer options are turned OFF.
+- Only the `BUILDCC_INSTALL` option is turned on.
+
+```bash
+# Generate your project
+cmake -B [Build folder] -G [Generator]
+cmake -B build -G Ninja
+
+# Build your project
+cmake --build build
+```
 
 ## Install
 
-## Usage
+```bash
+# Generators
+cpack --help
+
+# ZIP
+cpack -G ZIP
+
+# Executable
+cpack -G NSIS
+```
+- Install the package and add to environment PATH
+- See the `gcc/AfterInstall` example find packages and link with buildcc
+- Check the `examples` section below to use buildcc in different situations
 
 ## Examples
 
@@ -26,7 +56,7 @@ Contains **proof of concept** and **real world** [examples](example/README.md).
 
 # Developer
 
-Developers interested in contributing to the BuildCC project
+Developers interested in contributing to **_BuildCC_**
 
 ## Build
 
