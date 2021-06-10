@@ -75,6 +75,9 @@ cpack -G ZIP
 # Executable
 cpack -G NSIS
 ```
+
+> NOTE: On windows [NSIS](https://nsis.sourceforge.io/Main_Page) needs to be installed
+
 - Install the package and add to environment PATH
 - See the `gcc/AfterInstall` example find packages and link with buildcc
 - Check the `examples` section below to use buildcc in different situations
@@ -132,22 +135,7 @@ cmake --build . --target [custom_target]
 
 ## Install
 
-- Uses CPack to generate ZIP or executable files
-```bash
-# See all generators
-cpack --help
-
-# Using a generator
-cd [build folder]
-
-# Generate ZIP
-cpack -G ZIP
-
-# Generate executable
-cpack -G NSIS
-```
-
-> NOTE: On windows [NSIS](https://nsis.sourceforge.io/Main_Page) needs to be installed
+- See the **user installation** section above
 
 > TODO, Detailed explanation of how installation has been setup
 
@@ -157,6 +145,8 @@ cpack -G NSIS
 
 # FAQ
 
+- [Why has _this_ third-party library been chosen?](doc/faq/why_this_lib.md)
+
 # TODO
 
 [List of features](TODO.md) to be implemented before buildcc can be considered production ready.
@@ -165,7 +155,7 @@ cpack -G NSIS
 
 _BuildCC_ is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full license text. _BuildCC_ aims to use open-source libraries containing permissive licenses. 
 
-> Users who would like to suggest an alternative library, raise an issue with the **license** and **advantages** clearly outlined.
+> Developers who would like to suggest an alternative library, raise an issue with the **license** and **advantages** clearly outlined.
 
 - [Fmtlib](https://github.com/fmtlib/fmt) (Formatting) [MIT License]
 - [Spdlog](https://github.com/gabime/spdlog) (Logging) [MIT License]
