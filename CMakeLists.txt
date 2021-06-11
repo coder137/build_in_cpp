@@ -14,8 +14,9 @@ option(BUILDCC_TESTING "Enable BuildCC Testing" OFF)
 option(BUILDCC_INSTALL "Enable Buildcc Installation" ON)
 option(BUILDCC_EXAMPLES "Enable Buildcc Examples" OFF)
 
-option(BUILDCC_CLANGTIDY "Enable ClangTidy" ON)
+option(BUILDCC_CLANGTIDY "Enable ClangTidy" OFF)
 option(BUILDCC_CPPCHECK "Enable CppCheck" OFF)
+option(BUILDCC_DOCUMENTATION "Enable Documentation" OFF)
 
 # NOTE, This option is required for clang compilers, architecture x86_64-pc-windows-msvc
 # Flatbuffers library uses `std::system` internally which causes a deprecated error
@@ -52,6 +53,7 @@ else()
 endif()
 include(cmake/tool/clangtidy.cmake)
 include(cmake/tool/cppcheck.cmake)
+include(cmake/tool/doxygen.cmake)
 
 # Libraries
 

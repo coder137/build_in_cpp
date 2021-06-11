@@ -9,13 +9,22 @@
 namespace buildcc::internal {
 
 // System
+/**
+ * @brief Executes an external command
+ * Internally command uses `std::system`
+ * TODO, Replace with `subprocess`
+ *
+ * @param command_tokens
+ * @return true
+ * @return false
+ */
 bool command(const std::vector<std::string> &command_tokens);
 
 // Additions
 /**
  * @brief Existing path is stored inside stored_paths
  * Returns false if path is stored
- * Throws exception if path does not exist
+ * Throws buildcc::env::assert_exception if path does not exist
  *
  * @param path
  * @param stored_paths
@@ -25,6 +34,14 @@ bool command(const std::vector<std::string> &command_tokens);
 bool add_path(const fs::path &path, path_unordered_set &stored_paths);
 
 // Checks
+/**
+ * @brief Perform check to see if previous path is present in current path
+ *
+ * @param previous_paths
+ * @param current_paths
+ * @return true
+ * @return false
+ */
 bool is_previous_paths_different(const path_unordered_set &previous_paths,
                                  const path_unordered_set &current_paths);
 

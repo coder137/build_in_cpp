@@ -41,12 +41,6 @@ However when just adding `-I.` to our build we cannot accurately track header fi
 
 > Recursively parsing the tree and tracking header files over `-I.` (in this case) would be computationally expensive.
 
-> We might potentially track header files that are not explicitly required by our project.
+> We might potentially track header files that are not explicitly required by our project if recursive parsing is used.
 
 This can be solved by tracking individual header files per target for rebuilds.
-
-# Future work
-
-- Add header file globbing APIs to avoid manually adding each individual header file.
-- Add globbing over `Add/Append IncludeDir` API to glob header files pertaining to the directory added.
-- Recursive globbing should not be allowed

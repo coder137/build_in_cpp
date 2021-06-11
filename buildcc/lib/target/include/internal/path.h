@@ -22,7 +22,7 @@ public:
   /**
    * @brief Create a Existing Path object and sets last_write_timstamp to file
    * timestamp
-   * NOTE, Throws filesystem exception if file not found
+   * NOTE, Throws buildcc::env::assert_exception if file not found
    *
    * @param pathname
    * @return Path
