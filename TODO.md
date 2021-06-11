@@ -45,8 +45,8 @@
 - [ ] Static library vs Shared Library when linking buildcc (See **Software Architecture** section)
   - Static library linking is extremely slow on certain compilers
 - [ ] Third party library optimization
-  - spdlog
   - flatbuffers
+  - Do not create static/dynamic **fmt** or **spdlog** library, use INTERFACE header only library. We might need to write our own cmake script for INTERFACE and INSTALL.
 - [ ] C++20 constexpr `std::string` and `std::vector` usage
 
 # Tests
