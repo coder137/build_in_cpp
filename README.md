@@ -4,9 +4,9 @@ Build C, C++ and ASM files in C++
 
 # Aim
 
-> TODO,
+**_BuildCC_** aims to be an alternative to **Makefiles** while using the feature rich C++ language. 
 
-# General
+# General Information
 
 - A `compile` + `link` procedure is called a **Target**
   - This means that Executables, StaticLibraries and DynamicLibraries are all categorized as Targets
