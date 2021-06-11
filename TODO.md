@@ -46,7 +46,7 @@
   - Static library linking is extremely slow on certain compilers
 - [ ] Third party library optimization
   - flatbuffers
-  - Removed generated spdlog.a/.lib and fmt.a/.lib i.e (might need to write your own cmake INTERFACE and INSTALL script)
+  - Do not create static/dynamic **fmt** or **spdlog** library, use INTERFACE header only library. We might need to write our own cmake script for INTERFACE and INSTALL.
 - [ ] C++20 constexpr `std::string` and `std::vector` usage
 
 # Tests
