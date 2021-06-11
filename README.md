@@ -44,11 +44,13 @@ See also [Software Architecture](#software-architecture)
 
 ## Community Plugin
 
-- [ ] ClangCompileCommands
+- [x] [ClangCompileCommands](buildcc/plugins/clang_compile_commands.h)
 - [ ] ClangFormat
 - [ ] Target graph visualizer (through Taskflow)
 
-> TODO,
+- `buildcc::base::Target` contains public getters that can be used to construct unique community plugins.
+- Common tools and plugins would have first-party support in buildcc.
+- All other tools and plugins can be maintained through individual developers.
 
 # User Guide
 
@@ -175,11 +177,11 @@ Basic Installation steps
 
 [List of features](TODO.md) to be implemented before buildcc can be considered production ready.
 
-I would also like to request help from the Community for:
-- Code review
-- Design pattern
-- Optimization
-- Other discussions
+I would also like to request help from the Community for the following:
+- Code reviews
+- Design patterns
+- Optimization strategies
+- TODO discussions
 
 # License Dependencies
 
