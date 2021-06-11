@@ -45,8 +45,8 @@
 - [ ] Static library vs Shared Library when linking buildcc (See **Software Architecture** section)
   - Static library linking is extremely slow on certain compilers
 - [ ] Third party library optimization
-  - spdlog
   - flatbuffers
+  - Removed generated spdlog.a/.lib and fmt.a/.lib i.e (might need to write your own cmake INTERFACE and INSTALL script)
 - [ ] C++20 constexpr `std::string` and `std::vector` usage
 
 # Tests
