@@ -11,10 +11,12 @@ Build C, C++ and ASM files in C++
 - C++17 Compiler with
   - `C++17 filesystem` library support
   - `C++11 thread` library support
-- Flatbuffers
-- Taskflow
-- CLI11
-- fmt and spdlog
+- Third Party Libraries (See License below)
+  - Flatbuffers
+  - Taskflow
+  - CLI11
+  - fmt
+  - spdlog
 
 # General Information
 
@@ -39,7 +41,7 @@ See also [Software Architecture](#software-architecture)
 
 ## Features
 
-- Complete flexibility for custom / brand new toolchains
+- Complete flexibility for custom workflows and toolchains
 - C++ language feature benefits and **debuggable build binaries**
 - Optimized rebuilds through serialization. See [target.fbs schema](buildcc/lib/target/fbs/target.fbs)
   - Can optimize for rebuilds by comparing the previous stored build with current build.

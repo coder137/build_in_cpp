@@ -73,14 +73,11 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
         run: |
           cmake --build . --target run_hybrid_foolib_example_linux
-          cmake --build . --target run_hybrid_externallib_example_linux
-          cmake --build . --target run_hybrid_customtarget_example_linux
 
       - name: Hybrid External Lib Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
         run: |
           cmake --build . --target run_hybrid_externallib_example_linux
-          cmake --build . --target run_hybrid_customtarget_example_linux
 
       - name: Hybrid Custom Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
