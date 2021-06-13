@@ -9,6 +9,7 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
+  BUILD_FOLDER: _build_gcc_dev_all
 
 jobs:
   build:
@@ -39,6 +40,10 @@ jobs:
           cppcheck --version
           clang-tidy --version
 
+      - name: Static Analysis
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
+        run: cmake --build . --target cppcheck_static_analysis
+
       - name: Configure CMake
         # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
         # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
@@ -63,12 +68,12 @@ jobs:
         run: echo TODO, Install
 
       - name: Hybrid Examples
-        run: echo TODO, Hybrid Examples
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
+        run: |
+          cmake --build . --target run_hybrid_simple_example_linux
+          cmake --build . --target run_hybrid_foolib_example_linux
+          cmake --build . --target run_hybrid_externallib_example_linux
+          cmake --build . --target run_hybrid_customtarget_example_linux
 
       - name: Low level Examples
-        run: echo TODO, Low level Examples (integrate with BuildCC examples)
-
-      - name: Static Analysis
-        run: echo Cppcheck
-        # TODO, Documentation
-        # TODO, Coverage
+        run: echo TODO, Low level Examples
