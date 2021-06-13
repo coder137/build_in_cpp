@@ -40,10 +40,6 @@ jobs:
           cppcheck --version
           clang-tidy --version
 
-      - name: Static Analysis
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
-        run: cmake --build . --target cppcheck_static_analysis
-
       - name: Configure CMake
         # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
         # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
@@ -51,6 +47,10 @@ jobs:
         run: |
           cmake --list-presets
           cmake --preset=gcc_dev_all
+
+      - name: Static Analysis
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
+        run: cmake --build . --target cppcheck_static_analysis
 
       - name: Build
         # Build your program with the given configuration
