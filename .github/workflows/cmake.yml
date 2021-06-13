@@ -25,7 +25,7 @@ jobs:
 
       - name: System Packages
         run: |
-          sudo apt-get install ninja-build doxygen gcovr lcov cppcheck
+          sudo apt-get install ninja-build doxygen gcovr lcov cppcheck clang-tidy
 
       - name: Check environment
         run: |
