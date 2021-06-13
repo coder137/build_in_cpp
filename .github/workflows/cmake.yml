@@ -25,7 +25,7 @@ jobs:
 
       - name: System Packages
         run: |
-          sudo apt-get install ninja-build
+          sudo apt-get install ninja-build doxygen gcovr lcov cppcheck
 
       - name: Check environment
         run: |
@@ -33,6 +33,11 @@ jobs:
           gcc --version
           clang --version
           ninja --version
+          doxygen --version
+          gcovr --version
+          lcov --version
+          cppcheck --version
+          clang-tidy --version
 
       - name: Configure CMake
         # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
@@ -53,3 +58,11 @@ jobs:
       - name: Test
         run: |
           ctest --preset=gcc_dev_all --parallel 2
+
+      - name: Install
+        run: echo Install
+
+      - name: Static Analysis
+        run: echo Cppcheck
+        # TODO, Documentation
+        # TODO, Coverage
