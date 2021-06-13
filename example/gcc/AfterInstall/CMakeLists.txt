@@ -10,6 +10,7 @@ project(simple)
 
 # Package dependencies
 # fmt is imported by spdlog by default
+find_package(fmt_package NAMES "fmt" REQUIRED)
 find_package(spdlog_package NAMES "spdlog" REQUIRED)
 find_package(flatbuffers_package NAMES "flatbuffers" REQUIRED)
 find_package(env_package NAMES "env" REQUIRED)
