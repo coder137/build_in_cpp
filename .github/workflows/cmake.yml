@@ -65,7 +65,9 @@ jobs:
           ctest --preset=gcc_dev_all --parallel 2
 
       - name: Install
-        run: echo TODO, Install
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
+        run: |
+          sudo cmake --install .
 
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
@@ -90,5 +92,10 @@ jobs:
         run: |
           cmake --build . --target run_hybrid_customtarget_example_linux
 
-      - name: Low level Examples
-        run: echo TODO, Low level Examples
+      - name: AfterInstall Example
+        working-directory: ${{github.workspace}}/example/gcc/AfterInstall
+        run: |
+          cmake -B build -G Ninja
+          cmake --build build --parallel 2
+          cd build
+          ./build
