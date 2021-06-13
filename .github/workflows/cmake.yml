@@ -23,6 +23,10 @@ jobs:
         with:
           submodules: true
 
+      - name: System Packages
+        run: |
+          sudo apt-get install ninja-build
+
       - name: Check environment
         run: |
           cmake --version
