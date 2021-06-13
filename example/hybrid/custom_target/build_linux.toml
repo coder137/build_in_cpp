@@ -16,6 +16,6 @@ build = false
 test = false
 
 # Custom toolchain added here
-[toolchain.clang_w64_windows_gnu]
+[toolchain.clang_gnu]
 build = true
 test = true
