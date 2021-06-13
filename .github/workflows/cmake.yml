@@ -67,12 +67,27 @@ jobs:
       - name: Install
         run: echo TODO, Install
 
-      - name: Hybrid Examples
+      - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
         run: |
           cmake --build . --target run_hybrid_simple_example_linux
+
+      - name: Hybrid Foolib Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
+        run: |
           cmake --build . --target run_hybrid_foolib_example_linux
           cmake --build . --target run_hybrid_externallib_example_linux
+          cmake --build . --target run_hybrid_customtarget_example_linux
+
+      - name: Hybrid External Lib Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
+        run: |
+          cmake --build . --target run_hybrid_externallib_example_linux
+          cmake --build . --target run_hybrid_customtarget_example_linux
+
+      - name: Hybrid Custom Target Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
+        run: |
           cmake --build . --target run_hybrid_customtarget_example_linux
 
       - name: Low level Examples
