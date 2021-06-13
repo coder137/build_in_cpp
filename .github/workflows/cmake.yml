@@ -60,7 +60,13 @@ jobs:
           ctest --preset=gcc_dev_all --parallel 2
 
       - name: Install
-        run: echo Install
+        run: echo TODO, Install
+
+      - name: Hybrid Examples
+        run: echo TODO, Hybrid Examples
+
+      - name: Low level Examples
+        run: echo TODO, Low level Examples (integrate with BuildCC examples)
 
       - name: Static Analysis
         run: echo Cppcheck
