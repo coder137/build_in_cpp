@@ -6,6 +6,16 @@ Build C, C++ and ASM files in C++
 
 **_BuildCC_** aims to be an alternative to **Makefiles** while using the feature rich C++ language. 
 
+## Pre-requisites
+
+- C++17 Compiler with
+  - `C++17 filesystem` library support
+  - `C++11 thread` library support
+- Flatbuffers
+- Taskflow
+- CLI11
+- fmt and spdlog
+
 # General Information
 
 - A `compile` + `link` procedure is called a **Target**
