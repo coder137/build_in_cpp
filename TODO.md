@@ -4,9 +4,9 @@
 - [ ] Bootstrapping
   - [x] Via CMake
   - [ ] Via buildcc
-- [ ] Subprocess
+- [x] Subprocess/Process
+  - Tiny Process Library
   - Reproc
-  - Subprocess.h
   - Ninja Subprocess 
 - [ ] Command/Subprocess class to construct a specialized query
   - Currently, `internal::command` uses `std::system` and command tokens are passed in through `std::vector` (no sanitization or security)
