@@ -90,7 +90,11 @@ cmake --build build
 ## Install
 
 ```bash
-# Generators
+# Manually
+cd [build_folder]
+sudo cmake --install .
+
+# Cpack generators
 cpack --help
 
 # ZIP
