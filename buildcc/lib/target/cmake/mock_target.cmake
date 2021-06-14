@@ -5,7 +5,7 @@ target_include_directories(mock_target PUBLIC
     ${CMAKE_CURRENT_BINARY_DIR}/generated
 )
 
-target_sources(mock_target PUBLIC
+target_sources(mock_target PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/target/target.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/target/source.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/target/include_dir.cpp

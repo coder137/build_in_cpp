@@ -63,9 +63,8 @@ private:
 int main(int argc, char **argv) {
   // 1. Get arguments
   Args args;
-  Args::Toolchain clang_w64_windows_gnu;
-  args.AddCustomToolchain("clang_w64_windows_gnu", "MSYS MINGW clang compiler",
-                          clang_w64_windows_gnu);
+  Args::Toolchain clang_gnu;
+  args.AddCustomToolchain("clang_gnu", "Clang GNU compiler", clang_gnu);
   args.Parse(argc, argv);
 
   // 2. Initialize your environment
@@ -86,11 +85,11 @@ int main(int argc, char **argv) {
   reg.Build(args.GetMsvcToolchain(), m_foolib, mfoolib_build_cb);
 
   // * NOTE, This is how we add our custom toolchain
-  base::Toolchain clang("clang_w64_windows_gnu", "llvm-as", "clang", "clang++",
-                        "llvm-ar", "ld");
+  base::Toolchain clang("clang_gnu", "llvm-as", "clang", "clang++", "llvm-ar",
+                        "ld");
   // * NOTE, Custom clang target added above
   ExecutableTarget_clang c_foolib("CFoolib.exe", clang, "");
-  reg.Build(clang_w64_windows_gnu, c_foolib, cfoolib_build_cb);
+  reg.Build(clang_gnu, c_foolib, cfoolib_build_cb);
 
   // 5.
   reg.RunBuild();
