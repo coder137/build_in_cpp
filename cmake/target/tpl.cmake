@@ -11,5 +11,5 @@ if (${BUILDCC_INSTALL})
         DESTINATION lib/cmake/tiny-process-library
         )
 
-    install(FILES process.hpp DESTINATION include)
+    install(FILES tiny-process-library/process.hpp DESTINATION include)
 endif()
