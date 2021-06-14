@@ -16,7 +16,13 @@
 
 #include "internal/util.h"
 
+#include <iostream>
+
 #include "logging.h"
+
+#include "process.hpp"
+
+namespace tpl = TinyProcessLib;
 
 namespace buildcc::internal {
 
@@ -24,7 +30,20 @@ namespace buildcc::internal {
 bool command(const std::vector<std::string> &command_tokens) {
   std::string command = aggregate(command_tokens);
   buildcc::env::log_debug("system", command);
-  return system(command.c_str()) == 0;
+  // return system(command.c_str()) == 0;
+
+  tpl::Process process(
+      command_tokens, "",
+      [](const char *bytes, size_t n) {
+        // env::log_info("STDOUT", std::string(bytes, n));
+        std::cout << "STDOUT " << std::string(bytes, n) << std::endl;
+      },
+      [](const char *bytes, size_t n) {
+        // env::log_warning("STDERR", std::string(bytes, n));
+        std::cerr << "STDERR " << std::string(bytes, n) << std::endl;
+      });
+
+  return process.get_exit_status() == 0;
 }
 
 } // namespace buildcc::internal
