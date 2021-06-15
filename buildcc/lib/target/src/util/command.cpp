@@ -18,13 +18,19 @@
 
 #include "logging.h"
 
+#include "process.hpp"
+
+namespace tpl = TinyProcessLib;
+
 namespace buildcc::internal {
 
 // command
 bool command(const std::vector<std::string> &command_tokens) {
   std::string command = aggregate(command_tokens);
   buildcc::env::log_debug("system", command);
-  return system(command.c_str()) == 0;
+
+  tpl::Process process(command);
+  return process.get_exit_status() == 0;
 }
 
 } // namespace buildcc::internal

@@ -11,6 +11,9 @@ target_link_libraries(target PUBLIC
     flatbuffers
     Taskflow
 )
+target_link_libraries(target PRIVATE
+    tiny-process-library::tiny-process-library
+)
 
 target_sources(target PRIVATE
     src/target/target.cpp

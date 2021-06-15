@@ -26,7 +26,7 @@ if (${BUILDCC_NO_DEPRECATED})
 endif()
 
 # Testing
-
+set(BUILD_TESTING OFF CACHE BOOL "Third Party modules use these options")
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND ${BUILDCC_TESTING})
     set(TESTING ON)
     message("Enabling unit-testing")
@@ -82,6 +82,9 @@ include(cmake/target/cli11.cmake)
 set(TF_BUILD_TESTS OFF CACHE BOOL "TF Tests")
 set(TF_BUILD_EXAMPLES OFF CACHE BOOL "TF Examples")
 add_subdirectory(taskflow)
+
+add_subdirectory(tiny-process-library)
+include(cmake/target/tpl.cmake)
 
 if (${TESTING})
     set(C++11 ON CACHE BOOL "CppUTests C++11 support")
