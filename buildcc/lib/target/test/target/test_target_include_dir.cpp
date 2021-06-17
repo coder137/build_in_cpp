@@ -24,8 +24,10 @@ TEST_GROUP(TargetTestIncludeDirGroup)
 };
 // clang-format on
 
-static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
+static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
+                                          "gcc", "as", "gcc", "g++", "ar",
                                           "ld");
+
 static const fs::path target_include_dir_intermediate_path =
     fs::path(BUILD_TARGET_INCLUDE_DIR_INTERMEDIATE_DIR) / gcc.GetName();
 

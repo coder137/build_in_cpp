@@ -25,8 +25,10 @@ TEST_GROUP(TargetTestSourceOutOfRootGroup)
 };
 // clang-format on
 
-static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
+static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
+                                          "gcc", "as", "gcc", "g++", "ar",
                                           "ld");
+
 static const fs::path target_source_intermediate_path =
     fs::path(BUILD_TARGET_SOURCE_OUT_OF_ROOT_INTERMEDIATE_DIR) / gcc.GetName();
 

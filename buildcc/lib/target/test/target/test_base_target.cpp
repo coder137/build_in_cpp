@@ -15,7 +15,8 @@ TEST_GROUP(TargetBaseTestGroup)
 {
 };
 // clang-format on
-static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
+static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
+                                          "gcc", "as", "gcc", "g++", "ar",
                                           "ld");
 
 TEST(TargetBaseTestGroup, InvalidTargetType) {
