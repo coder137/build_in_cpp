@@ -27,8 +27,10 @@ TEST_GROUP(TargetTestLinkFlagsGroup)
 };
 // clang-format on
 
-static const buildcc::base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar",
+static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
+                                          "gcc", "as", "gcc", "g++", "ar",
                                           "ld");
+
 static const fs::path target_source_intermediate_path =
     fs::path(BUILD_TARGET_LINK_INTERMEDIATE_DIR) / gcc.GetName();
 

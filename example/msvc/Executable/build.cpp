@@ -17,7 +17,6 @@ int main(void) {
   env::init(BUILD_SCRIPT_SOURCE, BUILD_SCRIPT_FOLDER);
   env::set_log_level(env::LogLevel::Trace);
 
-  // base::Toolchain msvc("msvc", "cl", "cl", "cl", "lib", "link");
   Toolchain_msvc msvc;
 
   ExecutableTarget_msvc target_msvc("Simple.exe", msvc, "");

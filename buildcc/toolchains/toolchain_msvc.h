@@ -23,7 +23,9 @@ namespace buildcc {
 
 class Toolchain_msvc : public base::Toolchain {
 public:
-  Toolchain_msvc() : Toolchain("msvc", "cl", "cl", "cl", "lib", "link") {}
+  Toolchain_msvc()
+      : Toolchain(Toolchain::Id::Msvc, "msvc", "cl", "cl", "cl", "lib",
+                  "link") {}
   Toolchain_msvc(const Toolchain_msvc &gcc) = delete;
 };
 
