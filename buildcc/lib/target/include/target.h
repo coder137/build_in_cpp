@@ -188,11 +188,12 @@ private:
   // Compile
   void CompileSources();
   void RecompileSources();
-
   void CompileSource(const fs::path &current_source) const;
-
-  // * Virtual
   virtual std::string_view CompileCommand() const;
+
+  // Link
+  void LinkTarget();
+  virtual std::string_view Link() const;
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
@@ -216,21 +217,6 @@ private:
                          const std::vector<fs::path> &&dummy_compile_sources);
 
   void LinkTargetTask(const bool link);
-
-  // * Virtual
-  // PreLink();
-  // Link();
-  // PostLink();
-
-  void LinkTarget();
-
-  // TODO, Add Link library paths
-  virtual std::vector<std::string>
-  Link(const std::string &output_target,
-       const std::string &aggregated_link_flags,
-       const std::string &aggregated_compiled_sources,
-       const std::string &aggregated_lib_dirs,
-       const std::string &aggregated_lib_deps) const;
 
   // Fbs
   bool Store();

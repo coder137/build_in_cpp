@@ -120,28 +120,28 @@ void Target::LinkTarget() {
   const std::string output_target =
       internal::Path::CreateNewPath(GetTargetPath()).GetPathAsString();
 
-  bool success = internal::command(
-      Link(output_target, aggregated_link_flags_, aggregated_compiled_sources,
-           aggregated_lib_dirs_, aggregated_lib_deps_));
+  std::string link_command =
+      fmt::format(Link(), fmt::arg("output", output_target),
+                  fmt::arg("link_flags", aggregated_link_flags_),
+                  fmt::arg("compiled_sources", aggregated_compiled_sources),
+                  fmt::arg("lib_dirs", aggregated_lib_dirs_),
+                  fmt::arg("lib_deps", aggregated_lib_deps_),
+                  // Toolchain executables here
+                  fmt::arg("asm_compiler", toolchain_.GetAsmCompiler()),
+                  fmt::arg("c_compiler", toolchain_.GetCCompiler()),
+                  fmt::arg("cpp_compiler", toolchain_.GetCppCompiler()),
+                  fmt::arg("archiver", toolchain_.GetArchiver()),
+                  fmt::arg("linker", toolchain_.GetLinker()));
+  bool success = internal::command(link_command);
   env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
 }
 
-std::vector<std::string>
-Target::Link(const std::string &output_target,
-             const std::string &aggregated_link_flags,
-             const std::string &aggregated_compiled_sources,
-             const std::string &aggregated_lib_dirs,
-             const std::string &aggregated_lib_deps) const {
-  return {
-      // TODO, Let user decide this during Linking phase
-      toolchain_.GetCppCompiler(),
-      aggregated_link_flags,
-      aggregated_compiled_sources,
-      "-o",
-      output_target,
-      aggregated_lib_dirs,
-      aggregated_lib_deps,
-  };
+// TODO, Segregated lib_deps and lib_links
+// lib_deps are absolute paths to libraries
+// lib_links are ones pointed to by lib_dirs and -l parameters
+std::string_view Target::Link() const {
+  return "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
+         "{lib_dirs} {lib_deps}";
 }
 
 } // namespace buildcc::base
