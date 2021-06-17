@@ -21,6 +21,13 @@
 
 namespace buildcc {
 
+// TODO, Later shift this into a constants file
+constexpr const char *const kMsvcPrefixIncludeDir = "/I";
+constexpr const char *const kMsvcPrefixLibDir = "/LIBPATH:";
+constexpr const char *const kMsvcCompileCommand =
+    "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} "
+    "/Fo{output} /c {input}";
+
 class ExecutableTarget_msvc : public base::Target {
 public:
   ExecutableTarget_msvc(
@@ -28,14 +35,13 @@ public:
       const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::Executable, toolchain,
                target_path_relative_to_root) {
-    prefix_include_dir_ = "/I";
-    prefix_lib_dir_ = "/LIBPATH:";
+    prefix_include_dir_ = kMsvcPrefixIncludeDir;
+    prefix_lib_dir_ = kMsvcPrefixLibDir;
   }
 
 private:
   virtual std::string_view CompileCommand() const {
-    return "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} "
-           "/Fo{output} /c {input}";
+    return kMsvcCompileCommand;
   }
   virtual std::string_view Link() const {
     return "{linker} {link_flags} {lib_dirs} /OUT:{output} {lib_deps} "
@@ -49,13 +55,13 @@ public:
                     const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::StaticLibrary, toolchain,
                target_path_relative_to_root) {
-    prefix_include_dir_ = "/I";
+    prefix_include_dir_ = kMsvcPrefixIncludeDir;
+    prefix_lib_dir_ = kMsvcPrefixLibDir;
   }
 
 private:
   virtual std::string_view CompileCommand() const {
-    return "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} "
-           "/Fo{output} /c {input}";
+    return kMsvcCompileCommand;
   }
   virtual std::string_view Link() const {
     return "{archiver} {link_flags} /OUT:{output} {compiled_sources}";
@@ -68,13 +74,13 @@ public:
                      const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::DynamicLibrary, toolchain,
                target_path_relative_to_root) {
-    prefix_include_dir_ = "/I";
+    prefix_include_dir_ = kMsvcPrefixIncludeDir;
+    prefix_lib_dir_ = kMsvcPrefixLibDir;
   }
 
 private:
   virtual std::string_view CompileCommand() const {
-    return "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} "
-           "/Fo{output} /c {input}";
+    return kMsvcCompileCommand;
   }
   virtual std::string_view Link() const {
     return "{linker} /DLL {link_flags} /OUT:{output}.dll /IMPLIB:{output} "
