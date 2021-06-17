@@ -85,8 +85,8 @@ int main(int argc, char **argv) {
   reg.Build(args.GetMsvcToolchain(), m_foolib, mfoolib_build_cb);
 
   // * NOTE, This is how we add our custom toolchain
-  base::Toolchain clang("clang_gnu", "llvm-as", "clang", "clang++", "llvm-ar",
-                        "ld");
+  base::Toolchain clang(base::Toolchain::Id::Clang, "clang_gnu", "llvm-as",
+                        "clang", "clang++", "llvm-ar", "ld");
   // * NOTE, Custom clang target added above
   ExecutableTarget_clang c_foolib("CFoolib.exe", clang, "");
   reg.Build(clang_gnu, c_foolib, cfoolib_build_cb);
