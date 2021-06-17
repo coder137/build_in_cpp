@@ -36,9 +36,7 @@
 // Target
 
 // GCC
-#include "executable_target_gcc.h"
-#include "static_target_gcc.h"
-#include "dynamic_target_gcc.h"
+#include "target_gcc.h"
 
 // MSVC
 #include "executable_target_msvc.h"
