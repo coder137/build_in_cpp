@@ -14,16 +14,6 @@
 
 namespace schema.internal;
 
-// TODO, Custom executables
-table Toolchain {
-    name:string (key);
-    asm_compiler:string;
-    c_compiler:string;
-    cpp_compiler:string;
-    archiver:string;
-    linker:string;
-}
-
 table Path {
     pathname:string (key);
     last_write_timestamp:uint64;
@@ -35,11 +25,10 @@ enum TargetType : byte {
     DynamicLibrary
 }
 
+// TODO, Check if Toolchain needs to be added to Target
 table Target {
     name:string (key);
-    relative_path:string;
     type:TargetType;
-    toolchain:Toolchain;
 
     // Files
     source_files:[Path];
