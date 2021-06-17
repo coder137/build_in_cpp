@@ -26,11 +26,20 @@ namespace buildcc::base {
 // Base toolchain class
 class Toolchain {
 public:
-  explicit Toolchain(std::string_view name, std::string_view asm_compiler,
-                     std::string_view c_compiler, std::string_view cpp_compiler,
-                     std::string_view archiver, std::string_view linker)
-      : name_(name), asm_compiler_(asm_compiler), c_compiler_(c_compiler),
-        cpp_compiler_(cpp_compiler), archiver_(archiver), linker_(linker) {}
+  enum class Id {
+    Gcc = 0,
+    Msvc,
+    Clang,
+  };
+
+public:
+  explicit Toolchain(Id id, std::string_view name,
+                     std::string_view asm_compiler, std::string_view c_compiler,
+                     std::string_view cpp_compiler, std::string_view archiver,
+                     std::string_view linker)
+      : id_(id), name_(name), asm_compiler_(asm_compiler),
+        c_compiler_(c_compiler), cpp_compiler_(cpp_compiler),
+        archiver_(archiver), linker_(linker) {}
 
   Toolchain(const Toolchain &toolchain) = delete;
 
@@ -43,6 +52,7 @@ public:
   const std::string &GetLinker() const { return linker_; }
 
 private:
+  Id id_;
   std::string name_;
   std::string asm_compiler_;
   std::string c_compiler_;
