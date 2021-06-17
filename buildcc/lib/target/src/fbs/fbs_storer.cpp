@@ -43,16 +43,6 @@ fbs::TargetType get_fbs_target_type(buildcc::base::TargetType type) {
   return target_type;
 }
 
-// TODO, Complete this with additional flags
-flatbuffers::Offset<fbs::Toolchain>
-get_fbs_toolchain(flatbuffers::FlatBufferBuilder &builder,
-                  const buildcc::base::Toolchain &toolchain) {
-  return fbs::CreateToolchainDirect(
-      builder, toolchain.GetName().c_str(), toolchain.GetAsmCompiler().c_str(),
-      toolchain.GetCCompiler().c_str(), toolchain.GetCppCompiler().c_str(),
-      toolchain.GetArchiver().c_str(), toolchain.GetLinker().c_str());
-}
-
 std::vector<flatbuffers::Offset<fbs::Path>>
 get_fbs_vector_path(flatbuffers::FlatBufferBuilder &builder,
                     const buildcc::internal::path_unordered_set &pathlist) {
@@ -87,7 +77,6 @@ bool Target::Store() {
   flatbuffers::FlatBufferBuilder builder;
 
   auto fbs_target_type = get_fbs_target_type(type_);
-  auto fbs_toolchain = get_fbs_toolchain(builder, toolchain_);
 
   auto fbs_source_files = get_fbs_vector_path(builder, current_source_files_);
   auto fbs_header_files = get_fbs_vector_path(builder, current_header_files_);
@@ -108,11 +97,10 @@ bool Target::Store() {
   auto fbs_link_flags = get_fbs_vector_string(builder, current_link_flags_);
 
   auto fbs_target = fbs::CreateTargetDirect(
-      builder, name_.c_str(), target_intermediate_dir_.string().c_str(),
-      fbs_target_type, fbs_toolchain, &fbs_source_files, &fbs_header_files,
-      &fbs_lib_deps, &fbs_external_lib_deps, &fbs_include_dirs, &fbs_lib_dirs,
-      &fbs_preprocessor_flags, &fbs_c_compiler_flags, &fbs_cpp_compiler_flags,
-      &fbs_link_flags);
+      builder, name_.c_str(), fbs_target_type, &fbs_source_files,
+      &fbs_header_files, &fbs_lib_deps, &fbs_external_lib_deps,
+      &fbs_include_dirs, &fbs_lib_dirs, &fbs_preprocessor_flags,
+      &fbs_c_compiler_flags, &fbs_cpp_compiler_flags, &fbs_link_flags);
   fbs::FinishTargetBuffer(builder, fbs_target);
 
   auto file_path = GetBinaryPath();
