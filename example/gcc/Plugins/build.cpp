@@ -18,7 +18,8 @@ int main(void) {
   env::set_log_level(env::LogLevel::Trace);
 
   // CppTarget
-  base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
+  base::Toolchain gcc(base::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++", "ar",
+                      "ld");
   ExecutableTarget_gcc cppflags("CppFlags.exe", gcc, "files");
 
   cppflags.AddSource("main.cpp", "src");

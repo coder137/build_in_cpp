@@ -16,7 +16,8 @@ int main(void) {
   env::set_log_level(env::LogLevel::Trace);
 
   // Stored as const & in target
-  base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
+  base::Toolchain gcc(base::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++", "ar",
+                      "ld");
 
   ExecutableTarget_gcc target("Simple.exe", gcc, "");
   target.AddSource("main.cpp");

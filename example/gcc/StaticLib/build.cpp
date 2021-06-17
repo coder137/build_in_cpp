@@ -15,7 +15,8 @@ int main(void) {
   env::init(BUILD_ROOT, BUILD_INTERMEDIATE_DIR);
   env::set_log_level(env::LogLevel::Trace);
 
-  base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
+  base::Toolchain gcc(base::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++", "ar",
+                      "ld");
 
   StaticTarget_gcc randomLib("libran.a", gcc, "files");
   randomLib.AddSource("src/random.cpp");
