@@ -67,6 +67,14 @@ bool FbsLoader::Load() {
   if (!is_loaded) {
     return false;
   }
+
+  flatbuffers::Verifier verifier((const uint8_t *)buffer.c_str(),
+                                 buffer.length());
+  const bool is_verified = fbs::VerifyTargetBuffer(verifier);
+  if (!is_verified) {
+    return false;
+  }
+
   const auto *target = fbs::GetTarget((const void *)buffer.c_str());
   // target->name()->c_str();
   // target->relative_path()->c_str();
