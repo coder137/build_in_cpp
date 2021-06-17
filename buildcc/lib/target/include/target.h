@@ -120,7 +120,7 @@ public:
   // TODO, Add more setters
 
   // Getters
-  std::vector<std::string> CompileCommand(const fs::path &current_source) const;
+  std::string CompileCommand(const fs::path &current_source) const;
 
   // TODO, Check if these need to be made const
   tf::Taskflow &GetTaskflow() { return tf_; }
@@ -192,15 +192,7 @@ private:
   void CompileSource(const fs::path &current_source) const;
 
   // * Virtual
-  // PreCompile();
-  // Compile();
-  // PostCompile();
-  virtual std::vector<std::string>
-  CompileCommand(const std::string &input_source,
-                 const std::string &output_source, const std::string &compiler,
-                 const std::string &aggregated_preprocessor_flags,
-                 const std::string &aggregated_compile_flags,
-                 const std::string &aggregated_include_dirs) const;
+  virtual std::string_view CompileCommand() const;
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
