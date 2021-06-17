@@ -34,7 +34,7 @@ namespace buildcc::internal {
  * @return true
  * @return false
  */
-bool command(const std::vector<std::string> &command_tokens);
+bool command(const std::string &command_tokens);
 
 // Additions
 /**
