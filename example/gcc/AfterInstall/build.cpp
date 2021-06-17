@@ -16,7 +16,8 @@ int main(void) {
   env::set_log_level(env::LogLevel::Trace);
 
   // Stored as a const & in target
-  base::Toolchain gcc("gcc", "as", "gcc", "g++", "ar", "ld");
+  base::Toolchain gcc(base::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++", "ar",
+                      "ld");
 
   // CppTarget
   ExecutableTarget_gcc cpptarget("CppFlags.exe", gcc, "files");
