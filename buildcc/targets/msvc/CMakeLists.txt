@@ -1,23 +1,17 @@
 # Target_msvc lib
 m_clangtidy("target_msvc")
-add_library(target_msvc
-    executable_target_msvc.cpp
-    static_target_msvc.cpp
-    dynamic_target_msvc.cpp
-
+add_library(target_msvc INTERFACE
     executable_target_msvc.h
     static_target_msvc.h
     dynamic_target_msvc.h
 )
-target_include_directories(target_msvc PUBLIC
+target_include_directories(target_msvc INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> 
     $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
 )
-target_link_libraries(target_msvc PRIVATE
+target_link_libraries(target_msvc INTERFACE
     target
 )
-target_compile_options(target_msvc PRIVATE ${BUILD_COMPILE_FLAGS})
-target_link_options(target_msvc PRIVATE ${BUILD_LINK_FLAGS})
 
 # TODO, Add Target_msvc tests
 
