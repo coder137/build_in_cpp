@@ -29,18 +29,7 @@ namespace fbs = schema::internal;
 namespace {
 
 fbs::TargetType get_fbs_target_type(buildcc::base::TargetType type) {
-  fbs::TargetType target_type = fbs::TargetType_Executable;
-  switch (type) {
-  case buildcc::base::TargetType::Executable:
-    break;
-  case buildcc::base::TargetType::StaticLibrary:
-    target_type = fbs::TargetType::TargetType_StaticLibrary;
-    break;
-  case buildcc::base::TargetType::DynamicLibrary:
-    target_type = fbs::TargetType_DynamicLibrary;
-    break;
-  }
-  return target_type;
+  return (fbs::TargetType)type;
 }
 
 std::vector<flatbuffers::Offset<fbs::Path>>
