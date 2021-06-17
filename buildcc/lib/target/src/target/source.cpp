@@ -177,10 +177,11 @@ void Target::CompileSource(const fs::path &current_source) const {
                                          current_source.string()));
 }
 
-std::vector<std::string>
-Target::CompileCommand(const fs::path &current_source) const {
-  const std::string output_source =
+std::string Target::CompileCommand(const fs::path &current_source) const {
+  const std::string output =
       GetCompiledSourcePath(current_source).GetPathAsString();
+  const std::string input =
+      internal::Path::CreateExistingPath(current_source).GetPathAsString();
 
   // TODO, Check implementation for GetCompiler
   const std::string compiler = GetCompiler(current_source);
@@ -192,30 +193,18 @@ Target::CompileCommand(const fs::path &current_source) const {
       : type == FileExtType::Cpp ? aggregated_cpp_compile_flags_
                                  : "";
 
-  const std::string input_source =
-      internal::Path::CreateExistingPath(current_source).GetPathAsString();
-  return CompileCommand(input_source, output_source, compiler,
-                        aggregated_preprocessor_flags_,
-                        aggregated_compile_flags, aggregated_include_dirs_);
+  // Construct the Compile Command
+  return fmt::format(
+      CompileCommand(), fmt::arg("compiler", compiler),
+      fmt::arg("preprocessor_flags", aggregated_preprocessor_flags_),
+      fmt::arg("compile_flags", aggregated_compile_flags),
+      fmt::arg("include_dirs", aggregated_include_dirs_),
+      fmt::arg("output", output), fmt::arg("input", input));
 }
 
-std::vector<std::string>
-Target::CompileCommand(const std::string &input_source,
-                       const std::string &output_source,
-                       const std::string &compiler,
-                       const std::string &aggregated_preprocessor_flags,
-                       const std::string &aggregated_compile_flags,
-                       const std::string &aggregated_include_dirs) const {
-  return {
-      compiler,
-      aggregated_preprocessor_flags,
-      aggregated_include_dirs,
-      aggregated_compile_flags,
-      "-o",
-      output_source,
-      "-c",
-      input_source,
-  };
+std::string_view Target::CompileCommand() const {
+  return "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o "
+         "{output} -c {input}";
 }
 
 } // namespace buildcc::base

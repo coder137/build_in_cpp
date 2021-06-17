@@ -11,8 +11,7 @@ add_subdirectory(toolchains)
 
 # Targets
 add_subdirectory(lib/target)
-add_subdirectory(targets/gcc)
-add_subdirectory(targets/msvc)
+add_subdirectory(targets)
 
 # First party plugins
 add_subdirectory(plugins)
@@ -35,11 +34,7 @@ target_link_libraries(buildcc PUBLIC
     target
     
     toolchain_specialized
-
-    # TODO, Add specialized targets
-    # GCC, Clang, MSVC
-    target_gcc
-    target_msvc
+    target_specialized
 
     plugins
 )

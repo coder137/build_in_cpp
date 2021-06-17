@@ -24,9 +24,7 @@ namespace tpl = TinyProcessLib;
 
 namespace buildcc::internal {
 
-// command
-bool command(const std::vector<std::string> &command_tokens) {
-  std::string command = aggregate(command_tokens);
+bool command(const std::string &command) {
   buildcc::env::log_debug("system", command);
 
   tpl::Process process(command);

@@ -120,7 +120,7 @@ public:
   // TODO, Add more setters
 
   // Getters
-  std::vector<std::string> CompileCommand(const fs::path &current_source) const;
+  std::string CompileCommand(const fs::path &current_source) const;
 
   // TODO, Check if these need to be made const
   tf::Taskflow &GetTaskflow() { return tf_; }
@@ -188,19 +188,12 @@ private:
   // Compile
   void CompileSources();
   void RecompileSources();
-
   void CompileSource(const fs::path &current_source) const;
+  virtual std::string_view CompileCommand() const;
 
-  // * Virtual
-  // PreCompile();
-  // Compile();
-  // PostCompile();
-  virtual std::vector<std::string>
-  CompileCommand(const std::string &input_source,
-                 const std::string &output_source, const std::string &compiler,
-                 const std::string &aggregated_preprocessor_flags,
-                 const std::string &aggregated_compile_flags,
-                 const std::string &aggregated_include_dirs) const;
+  // Link
+  void LinkTarget();
+  virtual std::string_view Link() const;
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
@@ -224,21 +217,6 @@ private:
                          const std::vector<fs::path> &&dummy_compile_sources);
 
   void LinkTargetTask(const bool link);
-
-  // * Virtual
-  // PreLink();
-  // Link();
-  // PostLink();
-
-  void LinkTarget();
-
-  // TODO, Add Link library paths
-  virtual std::vector<std::string>
-  Link(const std::string &output_target,
-       const std::string &aggregated_link_flags,
-       const std::string &aggregated_compiled_sources,
-       const std::string &aggregated_lib_dirs,
-       const std::string &aggregated_lib_deps) const;
 
   // Fbs
   bool Store();

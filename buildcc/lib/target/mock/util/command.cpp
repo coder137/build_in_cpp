@@ -7,8 +7,8 @@ namespace buildcc::internal {
 static constexpr const char *const COMMAND_FUNCTION = "command";
 
 // command
-bool command(const std::vector<std::string> &command_tokens) {
-  (void)command_tokens;
+bool command(const std::string &command) {
+  (void)command;
   return mock().actualCall(COMMAND_FUNCTION).returnBoolValue();
 }
 
