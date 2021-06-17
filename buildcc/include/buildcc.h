@@ -33,15 +33,9 @@
 
 // TODO, Add more specialized toolchains here
 
-// Target
-
-// GCC
+// Specialized Targets
 #include "target_gcc.h"
-
-// MSVC
-#include "executable_target_msvc.h"
-#include "static_target_msvc.h"
-#include "dynamic_target_msvc.h"
+#include "target_msvc.h"
 
 // TODO, Add more specialized targets here
 
