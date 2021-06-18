@@ -63,8 +63,6 @@ void ExtractFs(
   }
 }
 
-// TODO, ExtractLibs
-
 } // namespace
 
 namespace buildcc::internal {
