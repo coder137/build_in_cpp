@@ -33,6 +33,13 @@ namespace fs = std::filesystem;
 
 namespace buildcc::internal {
 
+inline std::string quote(const std::string &str) {
+  if (str.find(" ") == std::string::npos) {
+    return str;
+  }
+  return fmt::format("\"{}\"", str);
+}
+
 class Path {
 public:
   /**
@@ -93,13 +100,6 @@ private:
   explicit Path(const fs::path &pathname, std::uint64_t last_write_timestamp)
       : pathname_(pathname), last_write_timestamp_(last_write_timestamp) {
     pathname_.make_preferred();
-  }
-
-  std::string quote(const std::string &str) const {
-    if (str.find(" ") == std::string::npos) {
-      return str;
-    }
-    return fmt::format("\"{}\"", str);
   }
 
 private:
