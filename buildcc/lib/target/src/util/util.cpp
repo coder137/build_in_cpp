@@ -68,7 +68,7 @@ std::string aggregate_with_prefix(const std::string &prefix,
   std::vector<std::string> agg;
   std::transform(dirs.begin(), dirs.end(), std::back_inserter(agg),
                  [&](const fs::path &dir) -> std::string {
-                   return fmt::format("{}{}", prefix, dir.string());
+                   return fmt::format("{}{}", prefix, quote(dir.string()));
                  });
   return aggregate(agg);
 }
