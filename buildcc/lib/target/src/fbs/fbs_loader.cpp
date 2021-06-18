@@ -24,7 +24,7 @@
 namespace fbs = schema::internal;
 
 namespace {
-void Extract(
+void ExtractPath(
     const flatbuffers::Vector<flatbuffers::Offset<schema::internal::Path>>
         *fbs_paths,
     buildcc::internal::path_unordered_set &out) {
@@ -41,6 +41,19 @@ void Extract(
 void Extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
                  *fbs_paths,
              std::unordered_set<std::string> &out) {
+  if (fbs_paths == nullptr) {
+    return;
+  }
+
+  for (auto iter = fbs_paths->begin(); iter != fbs_paths->end(); iter++) {
+    out.insert(iter->str());
+  }
+}
+
+void ExtractFs(
+    const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
+        *fbs_paths,
+    buildcc::internal::fs_unordered_set &out) {
   if (fbs_paths == nullptr) {
     return;
   }
@@ -79,14 +92,14 @@ bool FbsLoader::Load() {
   // target->name()->c_str();
   // target->type();
 
-  Extract(target->source_files(), loaded_sources_);
-  Extract(target->header_files(), loaded_headers_);
-  Extract(target->lib_deps(), loaded_lib_deps_);
+  ExtractPath(target->source_files(), loaded_sources_);
+  ExtractPath(target->header_files(), loaded_headers_);
+  ExtractPath(target->lib_deps(), loaded_lib_deps_);
 
   Extract(target->external_lib_deps(), loaded_external_lib_dirs_);
 
-  Extract(target->include_dirs(), loaded_include_dirs_);
-  Extract(target->lib_dirs(), loaded_lib_dirs_);
+  ExtractFs(target->include_dirs(), loaded_include_dirs_);
+  ExtractFs(target->lib_dirs(), loaded_lib_dirs_);
 
   Extract(target->preprocessor_flags(), loaded_preprocessor_flags_);
   Extract(target->c_compile_flags(), loaded_c_compile_flags_);

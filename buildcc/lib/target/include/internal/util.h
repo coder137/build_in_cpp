@@ -67,7 +67,7 @@ std::string aggregate(const std::unordered_set<std::string> &list);
 std::string aggregate(const buildcc::internal::path_unordered_set &paths);
 
 std::string aggregate_with_prefix(const std::string &prefix,
-                                  const std::unordered_set<std::string> &dirs);
+                                  const fs_unordered_set &dirs);
 
 } // namespace buildcc::internal
 

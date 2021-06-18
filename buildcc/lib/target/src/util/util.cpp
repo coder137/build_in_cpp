@@ -64,11 +64,11 @@ std::string aggregate(const buildcc::internal::path_unordered_set &paths) {
 }
 
 std::string aggregate_with_prefix(const std::string &prefix,
-                                  const std::unordered_set<std::string> &dirs) {
+                                  const fs_unordered_set &dirs) {
   std::vector<std::string> agg;
   std::transform(dirs.begin(), dirs.end(), std::back_inserter(agg),
-                 [&](const std::string &dir) -> std::string {
-                   return fmt::format("{}{}", prefix, dir);
+                 [&](const fs::path &dir) -> std::string {
+                   return fmt::format("{}{}", prefix, dir.string());
                  });
   return aggregate(agg);
 }

@@ -198,9 +198,8 @@ private:
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
                     const internal::path_unordered_set &current_path);
-
-  void RecheckDirs(const std::unordered_set<std::string> &previous_dirs,
-                   const std::unordered_set<std::string> &current_dirs);
+  void RecheckDirs(const internal::fs_unordered_set &previous_dirs,
+                   const internal::fs_unordered_set &current_dirs);
   void RecheckFlags(const std::unordered_set<std::string> &previous_flags,
                     const std::unordered_set<std::string> &current_flags);
   void RecheckExternalLib(
@@ -251,9 +250,8 @@ private:
   internal::path_unordered_set current_header_files_;
   internal::path_unordered_set current_lib_deps_;
 
-  // TODO, Change these to PATHS
-  std::unordered_set<std::string> current_include_dirs_;
-  std::unordered_set<std::string> current_lib_dirs_;
+  internal::fs_unordered_set current_include_dirs_;
+  internal::fs_unordered_set current_lib_dirs_;
 
   std::unordered_set<std::string> current_external_lib_deps_;
 
