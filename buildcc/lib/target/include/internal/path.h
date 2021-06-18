@@ -111,11 +111,14 @@ private:
 class PathHash {
 public:
   size_t operator()(const Path &p) const {
-    return std::hash<std::string>()(p.GetPathname().string());
+    return fs::hash_value(p.GetPathname());
   }
+
+  size_t operator()(const fs::path &p) const { return fs::hash_value(p); }
 };
 
 typedef std::unordered_set<Path, PathHash> path_unordered_set;
+typedef std::unordered_set<fs::path, PathHash> fs_unordered_set;
 
 } // namespace buildcc::internal
 
