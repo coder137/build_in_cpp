@@ -33,6 +33,13 @@ namespace fs = std::filesystem;
 
 namespace buildcc::internal {
 
+inline std::string quote(const std::string &str) {
+  if (str.find(" ") == std::string::npos) {
+    return str;
+  }
+  return fmt::format("\"{}\"", str);
+}
+
 class Path {
 public:
   /**
@@ -95,13 +102,6 @@ private:
     pathname_.make_preferred();
   }
 
-  std::string quote(const std::string &str) const {
-    if (str.find(" ") == std::string::npos) {
-      return str;
-    }
-    return fmt::format("\"{}\"", str);
-  }
-
 private:
   fs::path pathname_;
   std::uint64_t last_write_timestamp_;
@@ -111,11 +111,14 @@ private:
 class PathHash {
 public:
   size_t operator()(const Path &p) const {
-    return std::hash<std::string>()(p.GetPathname().string());
+    return fs::hash_value(p.GetPathname());
   }
+
+  size_t operator()(const fs::path &p) const { return fs::hash_value(p); }
 };
 
 typedef std::unordered_set<Path, PathHash> path_unordered_set;
+typedef std::unordered_set<fs::path, PathHash> fs_unordered_set;
 
 } // namespace buildcc::internal
 

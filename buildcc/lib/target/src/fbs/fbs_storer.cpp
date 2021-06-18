@@ -56,6 +56,18 @@ get_fbs_vector_string(flatbuffers::FlatBufferBuilder &builder,
   return strs;
 }
 
+std::vector<flatbuffers::Offset<flatbuffers::String>>
+get_fbs_vector_string(flatbuffers::FlatBufferBuilder &builder,
+                      const buildcc::internal::fs_unordered_set &fslist) {
+  std::vector<flatbuffers::Offset<flatbuffers::String>> strs;
+  std::transform(
+      fslist.begin(), fslist.end(), std::back_inserter(strs),
+      [&](const fs::path &p) -> flatbuffers::Offset<flatbuffers::String> {
+        return builder.CreateString(p.string());
+      });
+  return strs;
+}
+
 } // namespace
 
 namespace buildcc::base {

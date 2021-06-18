@@ -21,7 +21,7 @@
 #include <string>
 #include <unordered_set>
 
-#include "path.h"
+#include "internal/path.h"
 
 namespace fs = std::filesystem;
 
@@ -52,12 +52,10 @@ public:
     return loaded_external_lib_dirs_;
   }
 
-  const std::unordered_set<std::string> &GetLoadedIncludeDirs() const {
+  const fs_unordered_set &GetLoadedIncludeDirs() const {
     return loaded_include_dirs_;
   }
-  const std::unordered_set<std::string> &GetLoadedLibDirs() const {
-    return loaded_lib_dirs_;
-  }
+  const fs_unordered_set &GetLoadedLibDirs() const { return loaded_lib_dirs_; }
   const std::unordered_set<std::string> &GetLoadedPreprocessorFlags() const {
     return loaded_preprocessor_flags_;
   }
@@ -85,8 +83,8 @@ private:
 
   std::unordered_set<std::string> loaded_external_lib_dirs_;
 
-  std::unordered_set<std::string> loaded_include_dirs_;
-  std::unordered_set<std::string> loaded_lib_dirs_;
+  fs_unordered_set loaded_include_dirs_;
+  fs_unordered_set loaded_lib_dirs_;
 
   std::unordered_set<std::string> loaded_preprocessor_flags_;
   std::unordered_set<std::string> loaded_c_compile_flags_;
