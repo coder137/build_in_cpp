@@ -40,6 +40,11 @@ public:
                 arguments = {}) const;
   bool Execute(const std::string &command) const;
 
+  bool ConstructAndExecute(
+      std::string_view format,
+      std::initializer_list<fmt::detail::named_arg<char, std::string>>
+          arguments = {}) const;
+
 private:
   std::vector<fmt::detail::named_arg<char, std::string>> default_values_;
 };

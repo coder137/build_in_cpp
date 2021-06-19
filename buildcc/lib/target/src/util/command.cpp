@@ -63,4 +63,12 @@ bool Command::Execute(const std::string &command) const {
   return process.get_exit_status() == 0;
 }
 
+bool Command::ConstructAndExecute(
+    std::string_view format,
+    std::initializer_list<fmt::detail::named_arg<char, std::string>> arguments)
+    const {
+  const std::string constructed_command = Construct(format, arguments);
+  return Execute(constructed_command);
+}
+
 } // namespace buildcc::internal

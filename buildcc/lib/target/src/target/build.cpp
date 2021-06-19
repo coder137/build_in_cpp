@@ -120,7 +120,7 @@ void Target::LinkTarget() {
   const std::string output_target =
       internal::Path::CreateNewPath(GetTargetPath()).GetPathAsString();
 
-  const std::string link_command = command_.Construct(
+  const bool success = command_.ConstructAndExecute(
       Link(), {
                   fmt::arg("output", output_target),
                   fmt::arg("link_flags", aggregated_link_flags_),
@@ -134,8 +134,6 @@ void Target::LinkTarget() {
                   fmt::arg("archiver", toolchain_.GetArchiver()),
                   fmt::arg("linker", toolchain_.GetLinker()),
               });
-
-  const bool success = command_.Execute(link_command);
   env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
 }
 
