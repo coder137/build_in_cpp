@@ -120,8 +120,9 @@ void Target::LinkTarget() {
   const std::string output_target =
       internal::Path::CreateNewPath(GetTargetPath()).GetPathAsString();
 
-  std::string link_command =
-      fmt::format(Link(), fmt::arg("output", output_target),
+  const std::string link_command = command_.Construct(
+      Link(), {
+                  fmt::arg("output", output_target),
                   fmt::arg("link_flags", aggregated_link_flags_),
                   fmt::arg("compiled_sources", aggregated_compiled_sources),
                   fmt::arg("lib_dirs", aggregated_lib_dirs_),
@@ -131,8 +132,10 @@ void Target::LinkTarget() {
                   fmt::arg("c_compiler", toolchain_.GetCCompiler()),
                   fmt::arg("cpp_compiler", toolchain_.GetCppCompiler()),
                   fmt::arg("archiver", toolchain_.GetArchiver()),
-                  fmt::arg("linker", toolchain_.GetLinker()));
-  bool success = internal::command(link_command);
+                  fmt::arg("linker", toolchain_.GetLinker()),
+              });
+
+  const bool success = command_.Execute(link_command);
   env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
 }
 

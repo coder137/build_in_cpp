@@ -25,6 +25,7 @@
 #include <vector>
 
 // Internal
+#include "internal/command.h"
 #include "internal/fbs_loader.h"
 #include "internal/path.h"
 
@@ -277,12 +278,14 @@ private:
   // TODO, Add more internal variables
 
   internal::FbsLoader loader_;
-  bool dirty_ = false;
+  internal::Command command_;
 
   // Build states
+  bool dirty_ = false;
   bool first_build_ = false;
   bool rebuild_ = false;
 
+  // Dependency
   static constexpr const char *const kCompileTaskName = "Compile";
   static constexpr const char *const kLinkTaskName = "Link";
 

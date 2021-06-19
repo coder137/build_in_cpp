@@ -172,7 +172,7 @@ void Target::RecompileSources() {
 }
 
 void Target::CompileSource(const fs::path &current_source) const {
-  const bool success = internal::command(CompileCommand(current_source));
+  const bool success = command_.Execute(CompileCommand(current_source));
   env::assert_fatal(success, fmt::format("Compilation failed for: {}",
                                          current_source.string()));
 }
@@ -193,13 +193,17 @@ std::string Target::CompileCommand(const fs::path &current_source) const {
       : type == FileExtType::Cpp ? aggregated_cpp_compile_flags_
                                  : "";
 
-  // Construct the Compile Command
-  return fmt::format(
-      CompileCommand(), fmt::arg("compiler", compiler),
-      fmt::arg("preprocessor_flags", aggregated_preprocessor_flags_),
-      fmt::arg("compile_flags", aggregated_compile_flags),
-      fmt::arg("include_dirs", aggregated_include_dirs_),
-      fmt::arg("output", output), fmt::arg("input", input));
+  return command_.Construct(
+      CompileCommand(),
+      {
+          fmt::arg("compiler", compiler),
+          fmt::arg("compile_flags", aggregated_compile_flags),
+          fmt::arg("output", output),
+          fmt::arg("input", input),
+
+          fmt::arg("preprocessor_flags", aggregated_preprocessor_flags_),
+          fmt::arg("include_dirs", aggregated_include_dirs_),
+      });
 }
 
 std::string_view Target::CompileCommand() const {
