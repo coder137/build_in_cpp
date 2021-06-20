@@ -194,17 +194,13 @@ std::string Target::CompileCommand(const fs::path &current_source) const {
       : type == FileExtType::Cpp ? aggregated_cpp_compile_flags_
                                  : "";
 
-  return command_.Construct(
-      CompileCommand(),
-      {
-          fmt::arg("compiler", compiler),
-          fmt::arg("compile_flags", aggregated_compile_flags),
-          fmt::arg("output", output),
-          fmt::arg("input", input),
-
-          fmt::arg("preprocessor_flags", aggregated_preprocessor_flags_),
-          fmt::arg("include_dirs", aggregated_include_dirs_),
-      });
+  return command_.Construct(CompileCommand(),
+                            {
+                                {"compiler", compiler},
+                                {"compile_flags", aggregated_compile_flags},
+                                {"output", output},
+                                {"input", input},
+                            });
 }
 
 std::string_view Target::CompileCommand() const {

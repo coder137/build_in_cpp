@@ -34,21 +34,31 @@ void Target::Build() {
   env::log_trace(name_, __FUNCTION__);
 
   // TODO, Optimize these
-  aggregated_preprocessor_flags_ =
-      internal::aggregate(current_preprocessor_flags_);
   aggregated_c_compile_flags_ = internal::aggregate(current_c_compile_flags_);
   aggregated_cpp_compile_flags_ =
       internal::aggregate(current_cpp_compile_flags_);
-  aggregated_link_flags_ = internal::aggregate(current_link_flags_);
 
-  aggregated_lib_deps_ =
-      fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
-                  internal::aggregate(current_lib_deps_));
+  command_.AddDefaultArguments({
+      {"include_dirs", internal::aggregate_with_prefix(prefix_include_dir_,
+                                                       current_include_dirs_)},
+      {"lib_dirs",
+       internal::aggregate_with_prefix(prefix_lib_dir_, current_lib_dirs_)},
 
-  aggregated_include_dirs_ = internal::aggregate_with_prefix(
-      prefix_include_dir_, current_include_dirs_);
-  aggregated_lib_dirs_ =
-      internal::aggregate_with_prefix(prefix_lib_dir_, current_lib_dirs_);
+      // TODO, Segregate this if needed
+      {"lib_deps",
+       fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
+                   internal::aggregate(current_lib_deps_))},
+
+      {"preprocessor_flags", internal::aggregate(current_preprocessor_flags_)},
+      {"link_flags", internal::aggregate(current_link_flags_)},
+
+      // Toolchain executables here
+      {"asm_compiler", toolchain_.GetAsmCompiler()},
+      {"c_compiler", toolchain_.GetCCompiler()},
+      {"cpp_compiler", toolchain_.GetCppCompiler()},
+      {"archiver", toolchain_.GetArchiver()},
+      {"linker", toolchain_.GetLinker()},
+  });
 
   const bool is_loaded = loader_.Load();
   // TODO, Add more checks for build files physically present
@@ -122,17 +132,8 @@ void Target::LinkTarget() {
 
   const bool success = command_.ConstructAndExecute(
       Link(), {
-                  fmt::arg("output", output_target),
-                  fmt::arg("link_flags", aggregated_link_flags_),
-                  fmt::arg("compiled_sources", aggregated_compiled_sources),
-                  fmt::arg("lib_dirs", aggregated_lib_dirs_),
-                  fmt::arg("lib_deps", aggregated_lib_deps_),
-                  // Toolchain executables here
-                  fmt::arg("asm_compiler", toolchain_.GetAsmCompiler()),
-                  fmt::arg("c_compiler", toolchain_.GetCCompiler()),
-                  fmt::arg("cpp_compiler", toolchain_.GetCppCompiler()),
-                  fmt::arg("archiver", toolchain_.GetArchiver()),
-                  fmt::arg("linker", toolchain_.GetLinker()),
+                  {"output", output_target},
+                  {"compiled_sources", aggregated_compiled_sources},
               });
   env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
 }
