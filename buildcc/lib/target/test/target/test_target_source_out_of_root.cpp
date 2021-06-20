@@ -41,8 +41,8 @@ TEST(TargetTestSourceOutOfRootGroup, Add_OutOfRootSource) {
                                gcc, "");
   simple.AddSource("../dummy_main.cpp");
 
-  buildcc::internal::m::Expect_command(1, true);
-  buildcc::internal::m::Expect_command(1, true);
+  buildcc::internal::m::CommandExpect_Execute(1, true);
+  buildcc::internal::m::CommandExpect_Execute(1, true);
   simple.Build();
 }
 
@@ -61,8 +61,8 @@ TEST(TargetTestSourceOutOfRootGroup, Glob_OutOfRootSource) {
 
   CHECK_EQUAL(12, simple.GetCurrentSourceFiles().size());
 
-  buildcc::internal::m::Expect_command(12, true);
-  buildcc::internal::m::Expect_command(1, true);
+  buildcc::internal::m::CommandExpect_Execute(12, true);
+  buildcc::internal::m::CommandExpect_Execute(1, true);
   simple.Build();
 
   mock().checkExpectations();

@@ -181,6 +181,7 @@ Basic Installation steps
 # FAQ
 
 - [Why has _this_ third-party library been chosen?](doc/faq/why_this_lib.md)
+- [How do I create my own custom target commands?](doc/custom_target/commands.md)
 
 ## Design
 

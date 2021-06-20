@@ -24,18 +24,6 @@
 
 namespace buildcc::internal {
 
-// System
-/**
- * @brief Executes an external command
- * Internally command uses `std::system`
- * TODO, Replace with `subprocess`
- *
- * @param command
- * @return true
- * @return false
- */
-bool command(const std::string &command);
-
 // Additions
 /**
  * @brief Existing path is stored inside stored_paths

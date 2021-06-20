@@ -19,7 +19,8 @@ target_sources(mock_target PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/fbs/fbs_storer.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/src/util/util.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/mock/util/command.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/util/command.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/mock/util/execute.cpp
 )
 
 target_compile_options(mock_target PUBLIC ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_FLAGS})

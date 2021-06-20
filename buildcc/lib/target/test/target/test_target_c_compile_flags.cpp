@@ -49,8 +49,8 @@ TEST(TargetTestCCompileFlagsGroup, Target_AddCompileFlag) {
   simple.AddSource(DUMMY_MAIN);
   simple.AddCCompileFlag("-std=c11");
 
-  buildcc::internal::m::Expect_command(1, true);
-  buildcc::internal::m::Expect_command(1, true);
+  buildcc::internal::m::CommandExpect_Execute(1, true);
+  buildcc::internal::m::CommandExpect_Execute(1, true);
   simple.Build();
 
   mock().checkExpectations();
@@ -79,8 +79,8 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
     simple.AddSource(DUMMY_MAIN);
     simple.AddCCompileFlag("-std=c11");
 
-    buildcc::internal::m::Expect_command(1, true);
-    buildcc::internal::m::Expect_command(1, true);
+    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::internal::m::CommandExpect_Execute(1, true);
     simple.Build();
   }
   {
@@ -89,8 +89,8 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
-    buildcc::internal::m::Expect_command(1, true);
-    buildcc::internal::m::Expect_command(1, true);
+    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::internal::m::CommandExpect_Execute(1, true);
     simple.Build();
   }
 
@@ -101,8 +101,8 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
     simple.AddSource(DUMMY_MAIN);
     simple.AddCCompileFlag("-std=c11");
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
-    buildcc::internal::m::Expect_command(1, true);
-    buildcc::internal::m::Expect_command(1, true);
+    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::internal::m::CommandExpect_Execute(1, true);
     simple.Build();
   }
 

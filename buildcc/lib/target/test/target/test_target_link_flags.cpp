@@ -49,8 +49,8 @@ TEST(TargetTestLinkFlagsGroup, Target_AddLinkFlag) {
   simple.AddSource(DUMMY_MAIN);
   simple.AddLinkFlag("-lm");
 
-  buildcc::internal::m::Expect_command(1, true);
-  buildcc::internal::m::Expect_command(1, true);
+  buildcc::internal::m::CommandExpect_Execute(1, true);
+  buildcc::internal::m::CommandExpect_Execute(1, true);
   simple.Build();
 
   mock().checkExpectations();
@@ -79,8 +79,8 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
     simple.AddSource(DUMMY_MAIN);
     simple.AddLinkFlag("-lm");
 
-    buildcc::internal::m::Expect_command(1, true);
-    buildcc::internal::m::Expect_command(1, true);
+    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::internal::m::CommandExpect_Execute(1, true);
     simple.Build();
   }
   {
@@ -89,7 +89,7 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
-    buildcc::internal::m::Expect_command(1, true);
+    buildcc::internal::m::CommandExpect_Execute(1, true);
     simple.Build();
   }
 
@@ -100,7 +100,7 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
     simple.AddSource(DUMMY_MAIN);
     simple.AddLinkFlag("-lm");
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
-    buildcc::internal::m::Expect_command(1, true);
+    buildcc::internal::m::CommandExpect_Execute(1, true);
     simple.Build();
   }
 

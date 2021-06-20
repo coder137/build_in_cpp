@@ -14,21 +14,51 @@
  * limitations under the License.
  */
 
-#include "internal/util.h"
+#include "internal/command.h"
 
+#include <algorithm>
+
+#include "fmt/format.h"
 #include "logging.h"
-
-#include "process.hpp"
-
-namespace tpl = TinyProcessLib;
 
 namespace buildcc::internal {
 
-bool command(const std::string &command) {
-  buildcc::env::log_debug("system", command);
+void Command::AddDefaultArguments(
+    const std::unordered_map<const char *, std::string> &arguments) {
+  default_values_.insert(arguments.begin(), arguments.end());
+}
 
-  tpl::Process process(command);
-  return process.get_exit_status() == 0;
+std::string Command::Construct(
+    std::string_view format,
+    const std::unordered_map<const char *, std::string> &arguments) const {
+  // Construct your arguments
+  fmt::dynamic_format_arg_store<fmt::format_context> store;
+  std::string constructed_string;
+  try {
+
+    std::for_each(default_values_.cbegin(), default_values_.cend(),
+                  [&store](const std::pair<const char *, std::string> &p) {
+                    store.push_back(fmt::arg(p.first, p.second));
+                  });
+
+    std::for_each(arguments.cbegin(), arguments.cend(),
+                  [&store](const std::pair<const char *, std::string> &p) {
+                    store.push_back(fmt::arg(p.first, p.second));
+                  });
+
+    // Construct your command
+    constructed_string = fmt::vformat(format, store);
+  } catch (const std::exception &e) {
+    env::assert_fatal(false, e.what());
+  }
+  return constructed_string;
+}
+
+bool Command::ConstructAndExecute(
+    std::string_view format,
+    const std::unordered_map<const char *, std::string> &arguments) const {
+  const std::string constructed_command = Construct(format, arguments);
+  return Execute(constructed_command);
 }
 
 } // namespace buildcc::internal
