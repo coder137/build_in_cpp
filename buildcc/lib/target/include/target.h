@@ -261,19 +261,9 @@ private:
   std::unordered_set<std::string> current_cpp_compile_flags_;
   std::unordered_set<std::string> current_link_flags_;
 
-  // TODO, Make appending to this more efficient
   // TODO, Might not need to be persistent
-  // TODO, aggregates might not need to exist, check `std::insert` APIs over
-  // vector and unordered_set
-  std::string aggregated_include_dirs_;
-  std::string aggregated_lib_dirs_;
-  // NOTE, This contains current_external_lib_deps_ + current_lib_deps_
-  std::string aggregated_lib_deps_;
-
-  std::string aggregated_preprocessor_flags_;
   std::string aggregated_c_compile_flags_;
   std::string aggregated_cpp_compile_flags_;
-  std::string aggregated_link_flags_;
 
   // TODO, Add more internal variables
 
