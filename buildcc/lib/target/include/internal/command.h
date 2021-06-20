@@ -17,8 +17,7 @@
 #ifndef TARGET_INCLUDE_INTERNAL_COMMAND_H_
 #define TARGET_INCLUDE_INTERNAL_COMMAND_H_
 
-#include <unordered_set>
-#include <vector>
+#include <unordered_map>
 
 #include "internal/path.h"
 
@@ -31,22 +30,19 @@ public:
   explicit Command() = default;
 
   void AddDefaultArguments(
-      std::initializer_list<fmt::detail::named_arg<char, std::string>>
-          arguments);
+      const std::unordered_map<const char *, std::string> &arguments);
 
-  std::string
-  Construct(std::string_view format,
-            std::initializer_list<fmt::detail::named_arg<char, std::string>>
-                arguments = {}) const;
-  bool ConstructAndExecute(
-      std::string_view format,
-      std::initializer_list<fmt::detail::named_arg<char, std::string>>
-          arguments = {}) const;
+  std::string Construct(std::string_view format,
+                        const std::unordered_map<const char *, std::string>
+                            &arguments = {}) const;
+  bool ConstructAndExecute(std::string_view format,
+                           const std::unordered_map<const char *, std::string>
+                               &arguments = {}) const;
 
   static bool Execute(const std::string &command);
 
 private:
-  std::vector<fmt::detail::named_arg<char, std::string>> default_values_;
+  std::unordered_map<const char *, std::string> default_values_;
 };
 
 } // namespace buildcc::internal

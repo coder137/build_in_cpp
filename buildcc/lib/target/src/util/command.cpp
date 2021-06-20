@@ -16,34 +16,32 @@
 
 #include "internal/command.h"
 
+#include "fmt/format.h"
+
 #include "logging.h"
 
 namespace buildcc::internal {
 
 void Command::AddDefaultArguments(
-    std::initializer_list<fmt::detail::named_arg<char, std::string>>
-        arguments) {
-  for (const auto &a : arguments) {
-    default_values_.push_back(a);
-  }
+    const std::unordered_map<const char *, std::string> &arguments) {
+  default_values_.insert(arguments.begin(), arguments.end());
 }
 
 std::string Command::Construct(
     std::string_view format,
-    std::initializer_list<fmt::detail::named_arg<char, std::string>> arguments)
-    const {
+    const std::unordered_map<const char *, std::string> &arguments) const {
   // Construct your arguments
   fmt::dynamic_format_arg_store<fmt::format_context> store;
-  for (const auto &v : default_values_) {
-    store.push_back(v);
-  }
-  for (const auto &a : arguments) {
-    store.push_back(a);
-  }
-
-  // Construct your command
   std::string constructed_string;
   try {
+    for (const auto &v : default_values_) {
+      store.push_back(fmt::arg(v.first, v.second));
+    }
+    for (const auto &a : arguments) {
+      store.push_back(fmt::arg(a.first, a.second));
+    }
+
+    // Construct your command
     constructed_string = fmt::vformat(format, store);
   } catch (const std::exception &e) {
     env::assert_fatal(false, e.what());
@@ -53,8 +51,7 @@ std::string Command::Construct(
 
 bool Command::ConstructAndExecute(
     std::string_view format,
-    std::initializer_list<fmt::detail::named_arg<char, std::string>> arguments)
-    const {
+    const std::unordered_map<const char *, std::string> &arguments) const {
   const std::string constructed_command = Construct(format, arguments);
   return Execute(constructed_command);
 }
