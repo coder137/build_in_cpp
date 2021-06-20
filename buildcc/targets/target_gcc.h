@@ -38,7 +38,7 @@ public:
                target_path_relative_to_root) {}
 
 private:
-  virtual std::string_view Link() const {
+  std::string_view Link() const override {
     return "{archiver} rcs {output} {compiled_sources}";
   }
 };
@@ -51,11 +51,11 @@ public:
                target_path_relative_to_root) {}
 
 private:
-  virtual std::string_view CompileCommand() const {
+  std::string_view CompileCommand() const override {
     return "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} "
            "-fpic -o {output} -c {input}";
   }
-  virtual std::string_view Link() const {
+  std::string_view Link() const override {
     return "{cpp_compiler} -shared {link_flags} {compiled_sources} -o {output}";
   }
 };

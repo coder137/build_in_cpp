@@ -40,10 +40,10 @@ public:
   }
 
 private:
-  virtual std::string_view CompileCommand() const {
+  std::string_view CompileCommand() const override {
     return kMsvcCompileCommand;
   }
-  virtual std::string_view Link() const {
+  std::string_view Link() const override {
     return "{linker} {link_flags} {lib_dirs} /OUT:{output} {lib_deps} "
            "{compiled_sources}";
   }
@@ -60,10 +60,10 @@ public:
   }
 
 private:
-  virtual std::string_view CompileCommand() const {
+  std::string_view CompileCommand() const override {
     return kMsvcCompileCommand;
   }
-  virtual std::string_view Link() const {
+  std::string_view Link() const override {
     return "{archiver} {link_flags} /OUT:{output} {compiled_sources}";
   }
 };
@@ -79,10 +79,10 @@ public:
   }
 
 private:
-  virtual std::string_view CompileCommand() const {
+  std::string_view CompileCommand() const override {
     return kMsvcCompileCommand;
   }
-  virtual std::string_view Link() const {
+  std::string_view Link() const override {
     return "{linker} /DLL {link_flags} /OUT:{output}.dll /IMPLIB:{output} "
            "{compiled_sources}";
   }
