@@ -195,12 +195,16 @@ std::string Target::CompileCommand(const fs::path &current_source) const {
                                  : "";
 
   return command_.Construct(
-      CompileCommand(), {
-                            fmt::arg("compiler", compiler),
-                            fmt::arg("compile_flags", aggregated_compile_flags),
-                            fmt::arg("output", output),
-                            fmt::arg("input", input),
-                        });
+      CompileCommand(),
+      {
+          fmt::arg("compiler", compiler),
+          fmt::arg("compile_flags", aggregated_compile_flags),
+          fmt::arg("output", output),
+          fmt::arg("input", input),
+
+          fmt::arg("preprocessor_flags", aggregated_preprocessor_flags_),
+          fmt::arg("include_dirs", aggregated_include_dirs_),
+      });
 }
 
 std::string_view Target::CompileCommand() const {
