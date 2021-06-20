@@ -7,7 +7,7 @@ namespace buildcc {
 
 namespace internal::m {
 
-void Expect_command(unsigned int calls, bool expectation);
+void CommandExpect_Execute(unsigned int calls, bool expectation);
 
 } // namespace internal::m
 
