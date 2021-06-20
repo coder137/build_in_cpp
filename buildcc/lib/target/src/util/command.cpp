@@ -15,13 +15,8 @@
  */
 
 #include "internal/command.h"
-#include "internal/util.h"
 
 #include "logging.h"
-
-#include "process.hpp"
-
-namespace tpl = TinyProcessLib;
 
 namespace buildcc::internal {
 
@@ -54,13 +49,6 @@ std::string Command::Construct(
     env::assert_fatal(false, e.what());
   }
   return constructed_string;
-}
-
-bool Command::Execute(const std::string &command) {
-  // Run the process
-  buildcc::env::log_debug("system", command);
-  tpl::Process process(command);
-  return process.get_exit_status() == 0;
 }
 
 bool Command::ConstructAndExecute(

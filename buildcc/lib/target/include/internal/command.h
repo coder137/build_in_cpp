@@ -38,12 +38,12 @@ public:
   Construct(std::string_view format,
             std::initializer_list<fmt::detail::named_arg<char, std::string>>
                 arguments = {}) const;
-  static bool Execute(const std::string &command);
-
   bool ConstructAndExecute(
       std::string_view format,
       std::initializer_list<fmt::detail::named_arg<char, std::string>>
           arguments = {}) const;
+
+  static bool Execute(const std::string &command);
 
 private:
   std::vector<fmt::detail::named_arg<char, std::string>> default_values_;

@@ -31,6 +31,7 @@ target_sources(target PRIVATE
 
     src/util/util.cpp
     src/util/command.cpp
+    src/util/execute.cpp
 
     include/target.h
     include/internal/fbs_loader.h
