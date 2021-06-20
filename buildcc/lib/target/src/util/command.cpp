@@ -16,8 +16,9 @@
 
 #include "internal/command.h"
 
-#include "fmt/format.h"
+#include <algorithm>
 
+#include "fmt/format.h"
 #include "logging.h"
 
 namespace buildcc::internal {
@@ -34,12 +35,16 @@ std::string Command::Construct(
   fmt::dynamic_format_arg_store<fmt::format_context> store;
   std::string constructed_string;
   try {
-    for (const auto &v : default_values_) {
-      store.push_back(fmt::arg(v.first, v.second));
-    }
-    for (const auto &a : arguments) {
-      store.push_back(fmt::arg(a.first, a.second));
-    }
+
+    std::for_each(default_values_.cbegin(), default_values_.cend(),
+                  [&store](const std::pair<const char *, std::string> &p) {
+                    store.push_back(fmt::arg(p.first, p.second));
+                  });
+
+    std::for_each(arguments.cbegin(), arguments.cend(),
+                  [&store](const std::pair<const char *, std::string> &p) {
+                    store.push_back(fmt::arg(p.first, p.second));
+                  });
 
     // Construct your command
     constructed_string = fmt::vformat(format, store);
