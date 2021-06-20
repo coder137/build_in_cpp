@@ -7,6 +7,7 @@ install(FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/include/internal/fbs_loader.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/internal/path.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/internal/util.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/internal/command.h
     DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}/internal"
 )
 install(EXPORT targetConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/target")
