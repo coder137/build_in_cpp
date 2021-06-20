@@ -47,7 +47,7 @@ std::string Command::Construct(
   }
 
   // Construct your command
-  std::string constructed_string{""};
+  std::string constructed_string;
   try {
     constructed_string = fmt::vformat(format, store);
   } catch (const std::exception &e) {
@@ -56,7 +56,7 @@ std::string Command::Construct(
   return constructed_string;
 }
 
-bool Command::Execute(const std::string &command) const {
+bool Command::Execute(const std::string &command) {
   // Run the process
   buildcc::env::log_debug("system", command);
   tpl::Process process(command);

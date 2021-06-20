@@ -38,7 +38,7 @@ public:
   Construct(std::string_view format,
             std::initializer_list<fmt::detail::named_arg<char, std::string>>
                 arguments = {}) const;
-  bool Execute(const std::string &command) const;
+  static bool Execute(const std::string &command);
 
   bool ConstructAndExecute(
       std::string_view format,
