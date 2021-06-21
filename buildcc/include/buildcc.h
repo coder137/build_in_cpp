@@ -36,6 +36,7 @@
 // Specialized Targets
 #include "target_gcc.h"
 #include "target_msvc.h"
+#include "target_generic.h"
 
 // TODO, Add more specialized targets here
 
