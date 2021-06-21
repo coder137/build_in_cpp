@@ -44,6 +44,7 @@ public:
   Toolchain(const Toolchain &toolchain) = delete;
 
   // Getters
+  Id GetId() const { return id_; }
   const std::string &GetName() const { return name_; }
   const std::string &GetAsmCompiler() const { return asm_compiler_; }
   const std::string &GetCCompiler() const { return c_compiler_; }
