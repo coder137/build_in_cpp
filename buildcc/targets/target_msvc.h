@@ -19,14 +19,10 @@
 
 #include "target.h"
 
-namespace buildcc {
+#include "target_constants.h"
 
-// TODO, Later shift this into a constants file
-constexpr const char *const kMsvcPrefixIncludeDir = "/I";
-constexpr const char *const kMsvcPrefixLibDir = "/LIBPATH:";
-constexpr const char *const kMsvcCompileCommand =
-    "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} "
-    "/Fo{output} /c {input}";
+// TODO, Combine all of these into Target_msvc
+namespace buildcc {
 
 class ExecutableTarget_msvc : public base::Target {
 public:
@@ -43,10 +39,7 @@ private:
   std::string_view CompileCommand() const override {
     return kMsvcCompileCommand;
   }
-  std::string_view Link() const override {
-    return "{linker} {link_flags} {lib_dirs} /OUT:{output} {lib_deps} "
-           "{compiled_sources}";
-  }
+  std::string_view Link() const override { return kMsvcExecutableLinkCommand; }
 };
 
 class StaticTarget_msvc : public base::Target {
@@ -63,9 +56,7 @@ private:
   std::string_view CompileCommand() const override {
     return kMsvcCompileCommand;
   }
-  std::string_view Link() const override {
-    return "{archiver} {link_flags} /OUT:{output} {compiled_sources}";
-  }
+  std::string_view Link() const override { return kMsvcStaticLibLinkCommand; }
 };
 
 class DynamicTarget_msvc : public base::Target {
@@ -82,10 +73,7 @@ private:
   std::string_view CompileCommand() const override {
     return kMsvcCompileCommand;
   }
-  std::string_view Link() const override {
-    return "{linker} /DLL {link_flags} /OUT:{output}.dll /IMPLIB:{output} "
-           "{compiled_sources}";
-  }
+  std::string_view Link() const override { return kMsvcDynamicLibLinkCommand; }
 };
 
 } // namespace buildcc
