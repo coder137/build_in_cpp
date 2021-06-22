@@ -16,6 +16,8 @@
 
 #include "target.h"
 
+#include <algorithm>
+
 #include "assert_fatal.h"
 #include "logging.h"
 
