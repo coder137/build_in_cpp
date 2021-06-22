@@ -19,6 +19,9 @@
 
 #include "target.h"
 
+#include "target_constants.h"
+
+// TODO, Combine all of these into Target_gcc
 namespace buildcc {
 
 class ExecutableTarget_gcc : public base::Target {
@@ -38,9 +41,7 @@ public:
                target_path_relative_to_root) {}
 
 private:
-  std::string_view Link() const override {
-    return "{archiver} rcs {output} {compiled_sources}";
-  }
+  std::string_view Link() const override { return kGccStaticLibLinkCommand; }
 };
 
 class DynamicTarget_gcc : public base::Target {
@@ -52,12 +53,9 @@ public:
 
 private:
   std::string_view CompileCommand() const override {
-    return "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} "
-           "-fpic -o {output} -c {input}";
+    return kGccDynamicLibCompileCommand;
   }
-  std::string_view Link() const override {
-    return "{cpp_compiler} -shared {link_flags} {compiled_sources} -o {output}";
-  }
+  std::string_view Link() const override { return kGccDynamicLibLinkCommand; }
 };
 
 } // namespace buildcc

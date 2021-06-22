@@ -1,0 +1,27 @@
+# Root
+root_dir = ""
+build_dir = "_internal_linux"
+loglevel = "trace"
+
+# Project
+clean = true
+
+[toolchain.user]
+build = true
+test = true
+
+id = "Gcc"
+name = "gcc"
+asm_compiler = "as"
+c_compiler = "gcc"
+cpp_compiler = "g++"
+archiver = "ar"
+linker = "ld"
+
+# id = "Msvc"
+# name = "msvc"
+# asm_compiler = "cl"
+# c_compiler = "cl"
+# cpp_compiler = "cl"
+# archiver = "lib"
+# linker = "link"

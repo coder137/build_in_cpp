@@ -25,8 +25,10 @@ namespace tpl = TinyProcessLib;
 namespace buildcc::internal {
 
 bool Command::Execute(const std::string &command) {
-  // Run the process
+  env::assert_fatal(!command.empty(),
+                    fmt::format("Invalid command -> \"{}\"", command));
   buildcc::env::log_debug("system", command);
+
   tpl::Process process(command);
   return process.get_exit_status() == 0;
 }
