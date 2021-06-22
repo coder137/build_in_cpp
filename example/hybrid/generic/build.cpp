@@ -1,7 +1,9 @@
+#include <algorithm>
+
+// Core build lib
 #include "buildcc.h"
 
-#include "clang_compile_commands.h"
-
+// Third party-libs
 #include "flatbuffers/util.h"
 #include "fmt/format.h"
 
@@ -14,7 +16,8 @@ constexpr std::string_view EXE = "build";
 
 // Function Prototypes
 static void clean_cb();
-static void generic_build_cb(base::Target &generic_cppflags);
+static void foolib_build_cb(base::Target &foolib_target);
+static void generic_build_cb(base::Target &generic_target);
 
 int main(int argc, char **argv) {
   // 1. Get arguments
@@ -66,10 +69,35 @@ int main(int argc, char **argv) {
                             toolchain_cpp_compiler, toolchain_archiver,
                             toolchain_linker);
 
+  // TODO, Make this a part of generic target
+  std::string staticlib_ext;
+  switch (toolchain_id) {
+  case base::Toolchain::Id::Gcc:
+    staticlib_ext = ".a";
+    break;
+  case base::Toolchain::Id::Msvc:
+    staticlib_ext = ".lib";
+    break;
+  default:
+    env::assert_fatal(false, "Invalid Toolchain Id");
+    break;
+  }
+
+  Target_generic foolib_target(fmt::format("libfoo{}", staticlib_ext),
+                               base::TargetType::StaticLibrary, toolchain,
+                               "src");
+  reg.Build(custom_toolchain, foolib_target, foolib_build_cb);
+
   // Target specific settings
   Target_generic generic_target("GenericTarget.exe",
                                 base::TargetType::Executable, toolchain, "src");
+  const auto &foolib_include_dirs = foolib_target.GetCurrentIncludeDirs();
+  std::for_each(
+      foolib_include_dirs.cbegin(), foolib_include_dirs.cend(),
+      [&](const fs::path &p) { generic_target.AddIncludeDir(p, true); });
+  generic_target.AddLibDep(foolib_target);
   reg.Build(custom_toolchain, generic_target, generic_build_cb);
+  reg.Dep(generic_target, foolib_target);
 
   // 5. Test steps
   reg.Test(custom_toolchain, generic_target, [](base::Target &target) {
@@ -86,7 +114,7 @@ int main(int argc, char **argv) {
   // 8. Post Build steps
 
   // - Clang Compile Commands
-  plugin::ClangCompileCommands({&generic_target}).Generate();
+  plugin::ClangCompileCommands({&foolib_target, &generic_target}).Generate();
 
   // - Plugin Graph
   std::string output = reg.GetTaskflow().dump();
@@ -102,8 +130,12 @@ static void clean_cb() {
   fs::remove_all(env::get_project_build_dir());
 }
 
-static void generic_build_cb(base::Target &generic_cppflags) {
-  fooTarget(generic_cppflags, env::get_project_root_dir() / ".." / "foolib");
-  generic_cppflags.AddSource("main.cpp");
-  generic_cppflags.Build();
+static void foolib_build_cb(base::Target &foolib_target) {
+  fooTarget(foolib_target, env::get_project_root_dir() / ".." / "foolib");
+  foolib_target.Build();
+}
+
+static void generic_build_cb(base::Target &generic_target) {
+  generic_target.AddSource("main.cpp");
+  generic_target.Build();
 }
