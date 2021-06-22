@@ -1,0 +1,6 @@
+# File
+*.dot
+*.PNG
+
+# Folder
+*_internal_*
