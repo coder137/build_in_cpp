@@ -257,7 +257,7 @@ private:
   internal::path_unordered_set current_header_files_;
 
   internal::path_unordered_set current_lib_deps_;
-  std::unordered_set<const base::Target *> target_lib_deps_;
+  std::unordered_set<const Target *> target_lib_deps_;
 
   internal::fs_unordered_set current_include_dirs_;
   internal::fs_unordered_set current_lib_dirs_;
