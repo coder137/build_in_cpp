@@ -38,8 +38,7 @@ void Target::AddLibDirAbsolute(const fs::path &absolute_lib_dir) {
 void Target::AddLibDep(const Target &lib_dep) {
   env::log_trace(name_, __FUNCTION__);
 
-  const fs::path lib_dep_path = lib_dep.GetTargetPath();
-  internal::add_path(lib_dep_path, current_lib_deps_);
+  target_lib_deps_.insert(&lib_dep);
 }
 
 void Target::AddLibDep(const std::string &lib_dep) {
