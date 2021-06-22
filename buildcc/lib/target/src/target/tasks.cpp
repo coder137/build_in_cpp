@@ -51,11 +51,22 @@ void Target::CompileTargetTask(
 void Target::LinkTargetTask(const bool link) {
   env::log_trace(name_, __FUNCTION__);
 
-  if (link) {
-    link_task_ = tf_.emplace([this]() { LinkTarget(); });
-  } else {
-    link_task_ = tf_.emplace([]() {});
-  }
+  link_task_ = tf_.emplace([this, link]() {
+    if (link) {
+      dirty_ = true;
+    }
+
+    std::for_each(target_lib_deps_.cbegin(), target_lib_deps_.cend(),
+                  [this](const Target *target) {
+                    current_lib_deps_.insert(internal::Path::CreateExistingPath(
+                        target->GetTargetPath()));
+                  });
+    RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
+    if (dirty_ || link) {
+      LinkTarget();
+      Store();
+    }
+  });
 
   link_task_.name(kLinkTaskName);
   link_task_.succeed(compile_task_);
