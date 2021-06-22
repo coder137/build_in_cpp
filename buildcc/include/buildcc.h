@@ -40,6 +40,9 @@
 
 // TODO, Add more specialized targets here
 
+// Plugins
+#include "clang_compile_commands.h"
+
 // BuildCC Modules
 #include "args.h"
 #include "register.h"
