@@ -26,7 +26,6 @@ See [build.cpp Target::Build API](../../buildcc/lib/target/src/target/build.cpp)
 
 - `include_dirs`: Aggregated include directories for header files
 - `lib_dirs`: Aggregated lib directories for external libraries
-- `lib_deps`: External libraries and full path libraries
 - `preprocessor_flags`: Preprocessor definitions
 - `link_flags`: Flags supplied during linking
 - `asm_compiler`: Assembly compiler
@@ -50,3 +49,4 @@ See [build.cpp Target::Target API](../../buildcc/lib/target/src/target/build.cpp
 
 - `output`: Generated target as `Target::GetName()`
 - `compiled_sources`: Aggregated object files
+- `lib_deps`: External libraries and full path libraries
