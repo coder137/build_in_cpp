@@ -17,7 +17,8 @@ constexpr std::string_view EXE = "build";
 // Function Prototypes
 static void clean_cb();
 static void foolib_build_cb(base::Target &foolib_target);
-static void generic_build_cb(base::Target &generic_target);
+static void generic_build_cb(base::Target &generic_target,
+                             base::Target &foolib_target);
 
 int main(int argc, char **argv) {
   // 1. Get arguments
@@ -69,34 +70,16 @@ int main(int argc, char **argv) {
                             toolchain_cpp_compiler, toolchain_archiver,
                             toolchain_linker);
 
-  // TODO, Make this a part of generic target
-  std::string staticlib_ext;
-  switch (toolchain_id) {
-  case base::Toolchain::Id::Gcc:
-    staticlib_ext = ".a";
-    break;
-  case base::Toolchain::Id::Msvc:
-    staticlib_ext = ".lib";
-    break;
-  default:
-    env::assert_fatal(false, "Invalid Toolchain Id");
-    break;
-  }
-
-  Target_generic foolib_target(fmt::format("libfoo{}", staticlib_ext),
-                               base::TargetType::StaticLibrary, toolchain,
-                               "src");
+  Target_generic foolib_target("libfoo", base::TargetType::StaticLibrary,
+                               toolchain, "");
   reg.Build(custom_toolchain, foolib_target, foolib_build_cb);
 
   // Target specific settings
-  Target_generic generic_target("GenericTarget.exe",
-                                base::TargetType::Executable, toolchain, "src");
-  const auto &foolib_include_dirs = foolib_target.GetCurrentIncludeDirs();
-  std::for_each(
-      foolib_include_dirs.cbegin(), foolib_include_dirs.cend(),
-      [&](const fs::path &p) { generic_target.AddIncludeDir(p, true); });
-  generic_target.AddLibDep(foolib_target);
-  reg.Build(custom_toolchain, generic_target, generic_build_cb);
+  Target_generic generic_target("generic", base::TargetType::Executable,
+                                toolchain, "src");
+  auto g_cb = std::bind(generic_build_cb, std::placeholders::_1,
+                        std::ref(foolib_target));
+  reg.Build(custom_toolchain, generic_target, g_cb);
   reg.Dep(generic_target, foolib_target);
 
   // 5. Test steps
@@ -135,7 +118,13 @@ static void foolib_build_cb(base::Target &foolib_target) {
   foolib_target.Build();
 }
 
-static void generic_build_cb(base::Target &generic_target) {
+static void generic_build_cb(base::Target &generic_target,
+                             base::Target &foolib_target) {
+  const auto &foolib_include_dirs = foolib_target.GetCurrentIncludeDirs();
+  std::for_each(
+      foolib_include_dirs.cbegin(), foolib_include_dirs.cend(),
+      [&](const fs::path &p) { generic_target.AddIncludeDir(p, true); });
+  generic_target.AddLibDep(foolib_target);
   generic_target.AddSource("main.cpp");
   generic_target.Build();
 }
