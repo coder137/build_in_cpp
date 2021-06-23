@@ -46,11 +46,7 @@ public:
       case base::TargetType::StaticLibrary:
         return kGccStaticLibExt;
       case base::TargetType::DynamicLibrary:
-        if constexpr (env::is_win()) {
-          return kWinDynamicLibExt;
-        } else {
-          return kUnixDynamicLibExt;
-        }
+        return kGccDynamicLibExt;
       case base::TargetType::Executable:
         if constexpr (env::is_win()) {
           return kWinExecutableExt;

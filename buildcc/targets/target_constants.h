@@ -23,7 +23,7 @@ namespace buildcc {
 
 // Extensions
 constexpr std::string_view kGccStaticLibExt = ".a";
-constexpr std::string_view kUnixDynamicLibExt = ".so";
+constexpr std::string_view kGccDynamicLibExt = ".so";
 constexpr std::string_view kWinExecutableExt = ".exe";
 constexpr std::string_view kWinStaticLibExt = ".lib";
 // Why is `kWinDynamicLibExt != .dll` but `.lib` instead?
