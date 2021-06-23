@@ -154,6 +154,12 @@ public:
   const internal::path_unordered_set &GetCurrentHeaderFiles() const {
     return current_header_files_;
   }
+  const std::unordered_set<const Target *> &GetTargetLibDeps() const {
+    return target_lib_deps_;
+  }
+  const internal::fs_unordered_set &GetCurrentIncludeDirs() const {
+    return current_include_dirs_;
+  }
 
   bool FirstBuild() const { return first_build_; }
   bool Rebuild() const { return rebuild_; }
@@ -249,7 +255,9 @@ private:
       current_object_files_;
 
   internal::path_unordered_set current_header_files_;
+
   internal::path_unordered_set current_lib_deps_;
+  std::unordered_set<const Target *> target_lib_deps_;
 
   internal::fs_unordered_set current_include_dirs_;
   internal::fs_unordered_set current_lib_dirs_;

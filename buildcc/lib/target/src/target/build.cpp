@@ -44,11 +44,6 @@ void Target::Build() {
       {"lib_dirs",
        internal::aggregate_with_prefix(prefix_lib_dir_, current_lib_dirs_)},
 
-      // TODO, Segregate this if needed
-      {"lib_deps",
-       fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
-                   internal::aggregate(current_lib_deps_))},
-
       {"preprocessor_flags", internal::aggregate(current_preprocessor_flags_)},
       {"link_flags", internal::aggregate(current_link_flags_)},
 
@@ -68,14 +63,12 @@ void Target::Build() {
   } else {
     BuildRecompile();
   }
-
-  dirty_ = false;
 }
 
 void Target::BuildCompile() {
   CompileSources();
   LinkTargetTask(true);
-  Store();
+  dirty_ = true;
   first_build_ = true;
 }
 
@@ -111,15 +104,12 @@ void Target::BuildRecompile() {
   // Target library dependencies
   RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
   RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
-  RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
   RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
                      current_external_lib_deps_);
   // TODO, Verify the `physical` presence of the target if dirty_ == false
+
   LinkTargetTask(dirty_);
-  if (dirty_) {
-    Store();
-    rebuild_ = true;
-  }
+  rebuild_ = dirty_;
 }
 
 void Target::LinkTarget() {
@@ -131,10 +121,14 @@ void Target::LinkTarget() {
       internal::Path::CreateNewPath(GetTargetPath()).GetPathAsString();
 
   const bool success = command_.ConstructAndExecute(
-      Link(), {
-                  {"output", output_target},
-                  {"compiled_sources", aggregated_compiled_sources},
-              });
+      Link(),
+      {
+          {"output", output_target},
+          {"compiled_sources", aggregated_compiled_sources},
+          {"lib_deps",
+           fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
+                       internal::aggregate(current_lib_deps_))},
+      });
   env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
 }
 
