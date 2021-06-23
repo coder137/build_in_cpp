@@ -6,11 +6,6 @@
 
 using namespace buildcc;
 
-#define LINUX 1
-#define WINDOWS 0
-
-#define OS WINDOWS
-
 // This example contains both OS Hosts
 // - Windows MSYS GCC 10.2.0
 // - Linux GCC 9.3.0
@@ -27,35 +22,15 @@ int main(void) {
   base::Toolchain gcc(base::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++", "ar",
                       "ld");
 
-// Linux GCC
-#if OS == LINUX
-  DynamicTarget_gcc randomDynLib("librandyn.so", gcc, "files");
-  ExecutableTarget_gcc target("dynamictest.exe", gcc, "files");
-  randomDynLib.AddSource("src/random.cpp");
-  randomDynLib.AddHeader("include/random.h");
-  randomDynLib.AddIncludeDir("include");
-  randomDynLib.Build();
+  const std::string_view dynl_ext =
+      Target_generic::Extension(base::TargetType::DynamicLibrary, gcc.GetId());
+  DynamicTarget_gcc randomDynLib(fmt::format("librandyn{}", dynl_ext), gcc,
+                                 "files");
 
-  target.AddSource("main.cpp", "src");
-  target.AddIncludeDir("include");
-
-  // * Method 1
-  // NOTE, Use buildcc built targets
-  // target.AddLibDep(randomDynLib);
-
-  // * Method 2, External lib
-  target.AddLibDirAbsolute(randomDynLib.GetTargetIntermediateDir());
-  target.AddLibDep("-lrandyn");
-  target.AddLinkFlag("-Wl,-rpath=" +
-                     randomDynLib.GetTargetIntermediateDir().string());
-
-  target.Build();
-#endif
-
-// MingW GCC
-#if OS == WINDOWS
-  DynamicTarget_gcc randomDynLib("librandyn.dll", gcc, "files");
-  ExecutableTarget_gcc target("dynamictest.exe", gcc, "files");
+  const std::string_view ex_ext =
+      Target_generic::Extension(base::TargetType::Executable, gcc.GetId());
+  ExecutableTarget_gcc target(fmt::format("dynamictest{}", ex_ext), gcc,
+                              "files");
 
   randomDynLib.AddSource("src/random.cpp");
   randomDynLib.AddHeader("include/random.h");
@@ -67,15 +42,18 @@ int main(void) {
 
   // * Method 1
   // NOTE, Use buildcc built targets
-  // target.AddLibDep(randomDynLib);
+  target.AddLibDep(randomDynLib);
 
   // * Method 2, External lib
-  target.AddLibDirAbsolute(randomDynLib.GetTargetIntermediateDir());
-  target.AddLibDep("-lrandyn");
+  // target.AddLibDirAbsolute(randomDynLib.GetTargetIntermediateDir());
+  // target.AddLibDep("-lrandyn");
 
+  // OS Specific
+  if constexpr (env::is_linux()) {
+    target.AddLinkFlag("-Wl,-rpath=" +
+                       randomDynLib.GetTargetIntermediateDir().string());
+  }
   target.Build();
-
-#endif
 
   tf::Executor executor;
   tf::Taskflow taskflow;
@@ -87,15 +65,15 @@ int main(void) {
   executor.run(taskflow);
   executor.wait_for_all();
 
-// Post Build step
-#if OS == WINDOWS
-  if (target.FirstBuild() || target.Rebuild()) {
-    fs::path copy_to_path =
-        target.GetTargetIntermediateDir() / randomDynLib.GetName();
-    fs::remove(copy_to_path);
-    fs::copy(randomDynLib.GetTargetPath(), copy_to_path);
+  // Post Build step
+  if constexpr (env::is_win()) {
+    if (target.FirstBuild() || target.Rebuild()) {
+      fs::path copy_to_path =
+          target.GetTargetIntermediateDir() / randomDynLib.GetName();
+      fs::remove(copy_to_path);
+      fs::copy(randomDynLib.GetTargetPath(), copy_to_path);
+    }
   }
-#endif
 
   // Dump .dot output
   taskflow.dump(std::cout);
