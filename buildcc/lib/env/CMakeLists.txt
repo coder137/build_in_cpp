@@ -21,6 +21,7 @@ add_library(env
     include/env.h
     include/assert_fatal.h
     include/logging.h
+    include/host_os.h
 )
 target_include_directories(env PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -40,6 +41,7 @@ if (${BUILDCC_INSTALL})
         ${CMAKE_CURRENT_SOURCE_DIR}/include/assert_fatal.h
         ${CMAKE_CURRENT_SOURCE_DIR}/include/env.h
         ${CMAKE_CURRENT_SOURCE_DIR}/include/logging.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/host_os.h
         DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}"
     )
     install(EXPORT envConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/env")

@@ -21,7 +21,9 @@
 
 // Core persistent environment
 #include "env.h"
+#include "assert_fatal.h"
 #include "logging.h"
+#include "host_os.h"
 
 // Base
 #include "toolchain.h"
