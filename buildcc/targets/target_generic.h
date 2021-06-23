@@ -21,6 +21,8 @@
 
 #include "target_constants.h"
 
+#include "host_os.h"
+
 namespace buildcc {
 
 class Target_generic : public base::Target {
@@ -28,8 +30,54 @@ public:
   Target_generic(const std::string &name, base::TargetType type,
                  const base::Toolchain &toolchain,
                  const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, type, toolchain, target_path_relative_to_root) {
+      : Target(Name(name, type, toolchain), type, toolchain,
+               target_path_relative_to_root) {
     Initialize();
+  }
+
+  static std::string_view Extension(base::TargetType type,
+                                    base::Toolchain::Id id) {
+    switch (id) {
+    // Toolchain ID: GCC
+    // Target Type: Executable, StaticLib, DynamicLib
+    // OS: Linux == Macos, Windows
+    case base::Toolchain::Id::Gcc: {
+      switch (type) {
+      case base::TargetType::StaticLibrary:
+        return kGccStaticLibExt;
+      case base::TargetType::DynamicLibrary:
+        if constexpr (env::is_win()) {
+          return kWinDynamicLibExt;
+        } else {
+          return kUnixDynamicLibExt;
+        }
+      case base::TargetType::Executable:
+        if constexpr (env::is_win()) {
+          return kWinExecutableExt;
+        }
+      default:
+        break;
+      }
+    } break;
+    // Toolchain ID: MSVC
+    // Target Type: Executable, StaticLib, DynamicLib
+    // OS: Windows
+    case base::Toolchain::Id::Msvc:
+      switch (type) {
+      case base::TargetType::StaticLibrary:
+        return kWinStaticLibExt;
+      case base::TargetType::DynamicLibrary:
+        return kWinDynamicLibExt;
+      case base::TargetType::Executable:
+        return kWinExecutableExt;
+      default:
+        break;
+      }
+      break;
+    default:
+      break;
+    }
+    return "";
   }
 
 private:
@@ -60,9 +108,6 @@ private:
     return "";
   }
 
-  /**
-   * @brief Add Toolchain-Target specific global initialization parameters here
-   */
   void Initialize() {
     switch (GetToolchain().GetId()) {
     case base::Toolchain::Id::Gcc:
@@ -76,6 +121,7 @@ private:
     }
   }
 
+  // GCC
   void GccInitialize() {
     prefix_include_dir_ = kGccPrefixIncludeDir;
     prefix_lib_dir_ = kGccPrefixLibDir;
@@ -106,6 +152,7 @@ private:
     return "";
   }
 
+  // MSVC
   void MsvcInitialize() {
     prefix_include_dir_ = kMsvcPrefixIncludeDir;
     prefix_lib_dir_ = kMsvcPrefixLibDir;
@@ -137,6 +184,12 @@ private:
       break;
     }
     return "";
+  }
+
+  // OTHER
+  std::string Name(const std::string &name, base::TargetType type,
+                   const base::Toolchain &toolchain) const {
+    return fmt::format("{}{}", name, Extension(type, toolchain.GetId()));
   }
 };
 

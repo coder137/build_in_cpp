@@ -21,6 +21,17 @@
 
 namespace buildcc {
 
+// Extensions
+constexpr std::string_view kGccStaticLibExt = ".a";
+constexpr std::string_view kUnixDynamicLibExt = ".so";
+constexpr std::string_view kWinExecutableExt = ".exe";
+constexpr std::string_view kWinStaticLibExt = ".lib";
+// Why is `kWinDynamicLibExt != .dll` but `.lib` instead?
+// See `kMsvcDynamicLibLinkCommand` in `target_command.h`
+// IMPLIB .lib stubs are what is linked during link time
+// OUT .dll needs to be present in the executable folder during runtime
+constexpr std::string_view kWinDynamicLibExt = ".lib";
+
 // GCC
 constexpr std::string_view kGccPrefixIncludeDir = "-I";
 constexpr std::string_view kGccPrefixLibDir = "-L";
