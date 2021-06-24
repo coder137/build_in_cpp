@@ -43,9 +43,9 @@ public:
   void Env();
   void Clean(std::function<void(void)> clean_cb);
 
-  void Build(const Args::Toolchain &args_toolchain, base::Target &target,
+  void Build(const Args::ToolchainState &toolchain_state, base::Target &target,
              std::function<void(base::Target &)> build_cb);
-  void Test(const Args::Toolchain &args_toolchain, base::Target &target,
+  void Test(const Args::ToolchainState &toolchain_state, base::Target &target,
             std::function<void(base::Target &)> test_cb);
 
   void Dep(const base::Target &target, const base::Target &dependency);
