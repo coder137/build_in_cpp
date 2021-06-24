@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
   std::string toolchain_cpp_compiler;
   std::string toolchain_archiver;
   std::string toolchain_linker;
-  Args::Toolchain custom_toolchain;
+  Args::ToolchainState custom_toolchain_state;
 
   base::TargetType default_lib_type{base::TargetType::StaticLibrary};
   Args args;
@@ -45,7 +45,8 @@ int main(int argc, char **argv) {
         ->transform(CLI::CheckedTransformer(lib_type_map_, CLI::ignore_case))
         ->group("Custom");
 
-    args.AddCustomToolchain("user", "User defined toolchain", custom_toolchain);
+    args.AddCustomToolchain("user", "User defined toolchain",
+                            custom_toolchain_state);
     auto *user_toolchain = args.Ref()
                                .get_subcommand("toolchain")
                                ->get_subcommand("user")
@@ -88,18 +89,18 @@ int main(int argc, char **argv) {
                             toolchain_linker);
 
   Target_generic foolib_target("libfoo", default_lib_type, toolchain, "");
-  reg.Build(custom_toolchain, foolib_target, foolib_build_cb);
+  reg.Build(custom_toolchain_state, foolib_target, foolib_build_cb);
 
   // Target specific settings
   Target_generic generic_target("generic", base::TargetType::Executable,
                                 toolchain, "src");
   auto g_cb = std::bind(generic_build_cb, std::placeholders::_1,
                         std::ref(foolib_target));
-  reg.Build(custom_toolchain, generic_target, g_cb);
+  reg.Build(custom_toolchain_state, generic_target, g_cb);
   reg.Dep(generic_target, foolib_target);
 
   // 5. Test steps
-  reg.Test(custom_toolchain, generic_target, [](base::Target &target) {
+  reg.Test(custom_toolchain_state, generic_target, [](base::Target &target) {
     const bool execute = internal::Command::Execute(
         fmt::format("{}", target.GetTargetPath().string()));
     env::assert_fatal(execute, "Test failed");
@@ -130,7 +131,6 @@ int main(int argc, char **argv) {
 
     // Copy case
     if (generic_target.FirstBuild() || generic_target.Rebuild()) {
-      env::log_info(EXE, "COPY");
       fs::remove(copy_to_path);
       fs::copy(copy_from_path, copy_to_path);
     }

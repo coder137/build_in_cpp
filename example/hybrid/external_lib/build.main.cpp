@@ -29,8 +29,8 @@ int main(int argc, char **argv) {
   ExecutableTarget_gcc g_foolib("GCppFlags.exe", gcc, "");
   ExecutableTarget_msvc m_foolib("MCppFlags.exe", msvc, "");
 
-  reg.Build(args.GetGccToolchain(), g_foolib, gfoolib_build_cb);
-  reg.Build(args.GetMsvcToolchain(), m_foolib, mfoolib_build_cb);
+  reg.Build(args.GetGccState(), g_foolib, gfoolib_build_cb);
+  reg.Build(args.GetMsvcState(), m_foolib, mfoolib_build_cb);
 
   // 5.
   reg.RunBuild();

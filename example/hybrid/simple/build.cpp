@@ -40,18 +40,18 @@ int main(int argc, char **argv) {
   ExecutableTarget_msvc m_cppflags("MCppFlags.exe", msvc, "files");
   ExecutableTarget_msvc m_cflags("MCFlags.exe", msvc, "files");
 
-  reg.Build(args.GetGccToolchain(), g_cppflags, gcppflags_build_cb);
-  reg.Build(args.GetGccToolchain(), g_cflags, gcflags_build_cb);
-  reg.Build(args.GetMsvcToolchain(), m_cppflags, mcppflags_build_cb);
-  reg.Build(args.GetMsvcToolchain(), m_cflags, mcflags_build_cb);
+  reg.Build(args.GetGccState(), g_cppflags, gcppflags_build_cb);
+  reg.Build(args.GetGccState(), g_cflags, gcflags_build_cb);
+  reg.Build(args.GetMsvcState(), m_cppflags, mcppflags_build_cb);
+  reg.Build(args.GetMsvcState(), m_cflags, mcflags_build_cb);
 
   // 5. Test steps
 
   // NOTE, For now they are just dummy callbacks
-  reg.Test(args.GetGccToolchain(), g_cppflags, [](base::Target &target) {});
-  reg.Test(args.GetGccToolchain(), g_cflags, [](base::Target &target) {});
-  reg.Test(args.GetMsvcToolchain(), m_cppflags, [](base::Target &target) {});
-  reg.Test(args.GetMsvcToolchain(), m_cflags, [](base::Target &target) {});
+  reg.Test(args.GetGccState(), g_cppflags, [](base::Target &target) {});
+  reg.Test(args.GetGccState(), g_cflags, [](base::Target &target) {});
+  reg.Test(args.GetMsvcState(), m_cppflags, [](base::Target &target) {});
+  reg.Test(args.GetMsvcState(), m_cflags, [](base::Target &target) {});
 
   // 6. Build Target
   reg.RunBuild();
