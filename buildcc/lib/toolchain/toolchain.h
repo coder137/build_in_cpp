@@ -30,6 +30,8 @@ public:
     Gcc = 0,
     Msvc,
     Clang,
+    Custom,
+    Undefined,
   };
 
 public:
@@ -41,6 +43,7 @@ public:
         c_compiler_(c_compiler), cpp_compiler_(cpp_compiler),
         archiver_(archiver), linker_(linker) {}
 
+  Toolchain(Toolchain &&toolchain) = default;
   Toolchain(const Toolchain &toolchain) = delete;
 
   // Getters
@@ -52,7 +55,7 @@ public:
   const std::string &GetArchiver() const { return archiver_; }
   const std::string &GetLinker() const { return linker_; }
 
-private:
+protected:
   Id id_;
   std::string name_;
   std::string asm_compiler_;
