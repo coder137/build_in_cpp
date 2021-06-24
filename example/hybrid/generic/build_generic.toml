@@ -1,10 +1,13 @@
 # Root
 root_dir = ""
-build_dir = "_internal_linux"
-loglevel = "trace"
+build_dir = "_internal_generic"
+loglevel = "debug"
 
 # Project
 clean = true
+
+# Custom
+default_lib_type = "DynamicLib"
 
 [toolchain.user]
 build = true
