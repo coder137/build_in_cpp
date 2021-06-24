@@ -19,9 +19,11 @@
 
 #include <filesystem>
 
-#include "logging.h"
-
+// Third Party
 #include "CLI/CLI.hpp"
+
+// BuildCC
+#include "logging.h"
 
 namespace fs = std::filesystem;
 
@@ -29,9 +31,9 @@ namespace buildcc {
 
 class Args {
 public:
-  struct Toolchain {
-    bool build = false;
-    bool test = false;
+  struct ToolchainState {
+    bool build{false};
+    bool test{false};
   };
 
 public:
@@ -47,7 +49,7 @@ public:
   // Setters
   void AddCustomToolchain(const std::string &name,
                           const std::string &description,
-                          Toolchain &custom_toolchain_arg);
+                          ToolchainState &toolchain_state);
 
   // Getters
   bool Clean() const { return clean_; }
@@ -55,16 +57,19 @@ public:
 
   const fs::path &GetProjectRootDir() const { return project_root_dir_; }
   const fs::path &GetProjectBuildDir() const { return project_build_dir_; }
-  const Toolchain &GetGccToolchain() const { return gcc_toolchain_; }
-  const Toolchain &GetMsvcToolchain() const { return msvc_toolchain_; }
+
+  // Arg supported toolchain
+  const ToolchainState &GetGccState() const { return gcc_state_; }
+  const ToolchainState &GetMsvcState() const { return msvc_state_; }
 
 private:
   void Initialize();
 
   void RootArgs();
   void ToolchainArgs();
+
   void AddToolchain(const std::string &name, const std::string &description,
-                    const std::string &group, Toolchain &toolchain_arg);
+                    const std::string &group, ToolchainState &toolchain_state);
 
 private:
   CLI::App app_{"BuildCC buildsystem"};
@@ -83,9 +88,8 @@ private:
   fs::path project_root_dir_{""};
   fs::path project_build_dir_{"_internal"};
 
-  // toolchain
-  Toolchain gcc_toolchain_{false, false};
-  Toolchain msvc_toolchain_{false, false};
+  ToolchainState gcc_state_{false, false};
+  ToolchainState msvc_state_{false, false};
 
   // Internal
   CLI::App *toolchain_{nullptr};

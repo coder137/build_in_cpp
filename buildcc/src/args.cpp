@@ -20,8 +20,8 @@ namespace buildcc {
 
 void Args::AddCustomToolchain(const std::string &name,
                               const std::string &description,
-                              Toolchain &custom_toolchain_arg) {
-  AddToolchain(name, description, "Custom", custom_toolchain_arg);
+                              ToolchainState &toolchain_state) {
+  AddToolchain(name, description, "Custom", toolchain_state);
 }
 
 void Args::Parse(int argc, char **argv) {
@@ -67,16 +67,17 @@ void Args::RootArgs() {
 
 void Args::ToolchainArgs() {
   toolchain_ = app_.add_subcommand("toolchain", "Select Toolchain");
-  AddToolchain("gcc", "GNU GCC Toolchain", "Supported", gcc_toolchain_);
-  AddToolchain("msvc", "MSVC Toolchain", "Supported", msvc_toolchain_);
+  AddToolchain("gcc", "GNU GCC Toolchain", "Supported", gcc_state_);
+  AddToolchain("msvc", "MSVC Toolchain", "Supported", msvc_state_);
 }
 
 void Args::AddToolchain(const std::string &name, const std::string &description,
-                        const std::string &group, Toolchain &toolchain_arg) {
-  CLI::App *toolchain_spec =
+                        const std::string &group,
+                        ToolchainState &toolchain_state) {
+  CLI::App *t_user =
       toolchain_->add_subcommand(name, description)->group(group);
-  toolchain_spec->add_flag("-b,--build", toolchain_arg.build);
-  toolchain_spec->add_flag("-t,--test", toolchain_arg.test);
+  t_user->add_flag("-b,--build", toolchain_state.build);
+  t_user->add_flag("-t,--test", toolchain_state.test);
 }
 
 } // namespace buildcc
