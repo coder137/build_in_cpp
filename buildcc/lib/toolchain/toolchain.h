@@ -55,7 +55,7 @@ public:
   const std::string &GetArchiver() const { return archiver_; }
   const std::string &GetLinker() const { return linker_; }
 
-protected:
+private:
   Id id_;
   std::string name_;
   std::string asm_compiler_;
