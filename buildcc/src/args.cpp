@@ -20,8 +20,17 @@ namespace buildcc {
 
 void Args::AddCustomToolchain(const std::string &name,
                               const std::string &description,
-                              ToolchainState &toolchain_state) {
-  AddToolchain(name, description, "Custom", toolchain_state);
+                              ToolchainArg &toolchain) {
+  CLI::App *t_user = AddToolchain(name, description, "Custom", toolchain.state);
+
+  t_user->add_option("--id", toolchain.id, "Toolchain ID settings")
+      ->transform(CLI::CheckedTransformer(toolchain_id_map_, CLI::ignore_case));
+  t_user->add_option("--name", toolchain.name);
+  t_user->add_option("--asm_compiler", toolchain.asm_compiler);
+  t_user->add_option("--c_compiler", toolchain.c_compiler);
+  t_user->add_option("--cpp_compiler", toolchain.cpp_compiler);
+  t_user->add_option("--archiver", toolchain.archiver);
+  t_user->add_option("--linker", toolchain.linker);
 }
 
 void Args::Parse(int argc, char **argv) {
@@ -37,7 +46,7 @@ void Args::Parse(int argc, char **argv) {
 
 void Args::Initialize() {
   RootArgs();
-  ToolchainArgs();
+  CommonToolchainArgs();
 }
 
 void Args::RootArgs() {
@@ -65,19 +74,21 @@ void Args::RootArgs() {
       ->group("Root");
 }
 
-void Args::ToolchainArgs() {
+void Args::CommonToolchainArgs() {
   toolchain_ = app_.add_subcommand("toolchain", "Select Toolchain");
-  AddToolchain("gcc", "GNU GCC Toolchain", "Supported", gcc_state_);
-  AddToolchain("msvc", "MSVC Toolchain", "Supported", msvc_state_);
+  (void)AddToolchain("gcc", "GNU GCC Toolchain", "Supported", gcc_state_);
+  (void)AddToolchain("msvc", "MSVC Toolchain", "Supported", msvc_state_);
 }
 
-void Args::AddToolchain(const std::string &name, const std::string &description,
-                        const std::string &group,
-                        ToolchainState &toolchain_state) {
+CLI::App *Args::AddToolchain(const std::string &name,
+                             const std::string &description,
+                             const std::string &group,
+                             ToolchainState &toolchain_state) {
   CLI::App *t_user =
       toolchain_->add_subcommand(name, description)->group(group);
   t_user->add_flag("-b,--build", toolchain_state.build);
   t_user->add_flag("-t,--test", toolchain_state.test);
+  return t_user;
 }
 
 } // namespace buildcc

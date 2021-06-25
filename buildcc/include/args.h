@@ -24,6 +24,7 @@
 
 // BuildCC
 #include "logging.h"
+#include "toolchain.h"
 
 namespace fs = std::filesystem;
 
@@ -34,6 +35,24 @@ public:
   struct ToolchainState {
     bool build{false};
     bool test{false};
+  };
+
+  struct ToolchainArg {
+    ToolchainState state;
+
+    base::Toolchain::Id id{base::Toolchain::Id::Undefined};
+    std::string name{""};
+    std::string asm_compiler{""};
+    std::string c_compiler{""};
+    std::string cpp_compiler{""};
+    std::string archiver{""};
+    std::string linker{""};
+
+    base::Toolchain ConstructToolchainFromArg() {
+      base::Toolchain toolchain(id, name, asm_compiler, c_compiler,
+                                cpp_compiler, archiver, linker);
+      return toolchain;
+    }
   };
 
 public:
@@ -49,7 +68,7 @@ public:
   // Setters
   void AddCustomToolchain(const std::string &name,
                           const std::string &description,
-                          ToolchainState &toolchain_state);
+                          ToolchainArg &toolchain);
 
   // Getters
   bool Clean() const { return clean_; }
@@ -58,7 +77,8 @@ public:
   const fs::path &GetProjectRootDir() const { return project_root_dir_; }
   const fs::path &GetProjectBuildDir() const { return project_build_dir_; }
 
-  // Arg supported toolchain
+  // Arg supported toolchains
+  // TODO, Add more as needed
   const ToolchainState &GetGccState() const { return gcc_state_; }
   const ToolchainState &GetMsvcState() const { return msvc_state_; }
 
@@ -66,10 +86,12 @@ private:
   void Initialize();
 
   void RootArgs();
-  void ToolchainArgs();
+  void CommonToolchainArgs();
 
-  void AddToolchain(const std::string &name, const std::string &description,
-                    const std::string &group, ToolchainState &toolchain_state);
+  CLI::App *AddToolchain(const std::string &name,
+                         const std::string &description,
+                         const std::string &group,
+                         ToolchainState &toolchain_state);
 
 private:
   CLI::App app_{"BuildCC buildsystem"};
@@ -82,6 +104,13 @@ private:
       {"Info", env::LogLevel::Info},
       {"Warning", env::LogLevel::Warning},
       {"Critical", env::LogLevel::Critical},
+  };
+
+  const std::map<std::string, base::Toolchain::Id> toolchain_id_map_{
+      {"Gcc", base::Toolchain::Id::Gcc},
+      {"Msvc", base::Toolchain::Id::Msvc},
+      {"Clang", base::Toolchain::Id::Clang},
+      {"Custom", base::Toolchain::Id::Custom},
   };
 
   // directory
