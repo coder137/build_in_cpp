@@ -35,7 +35,7 @@ private:
 int main(int argc, char **argv) {
   // 1. Get arguments
   Args args;
-  Args::ToolchainState clang_gnu;
+  Args::ToolchainArg clang_gnu;
   args.AddCustomToolchain("clang_gnu", "Clang GNU compiler", clang_gnu);
   args.Parse(argc, argv);
 
@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
                         "clang", "clang++", "llvm-ar", "ld");
   // * NOTE, Custom clang target added above
   ExecutableTarget_clang c_foolib("CFoolib.exe", clang, "");
-  reg.Build(clang_gnu, c_foolib, cfoolib_build_cb);
+  reg.Build(clang_gnu.state, c_foolib, cfoolib_build_cb);
 
   // 5.
   reg.RunBuild();

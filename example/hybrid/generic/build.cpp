@@ -22,15 +22,7 @@ static void generic_build_cb(base::Target &generic_target,
 
 int main(int argc, char **argv) {
   // 1. Get arguments
-  base::Toolchain::Id toolchain_id;
-  std::string toolchain_name;
-  std::string toolchain_asm_compiler;
-  std::string toolchain_c_compiler;
-  std::string toolchain_cpp_compiler;
-  std::string toolchain_archiver;
-  std::string toolchain_linker;
-  Args::ToolchainState custom_toolchain_state;
-
+  Args::ToolchainArg custom_toolchain;
   base::TargetType default_lib_type{base::TargetType::StaticLibrary};
   Args args;
 
@@ -45,29 +37,7 @@ int main(int argc, char **argv) {
         ->transform(CLI::CheckedTransformer(lib_type_map_, CLI::ignore_case))
         ->group("Custom");
 
-    args.AddCustomToolchain("user", "User defined toolchain",
-                            custom_toolchain_state);
-    auto *user_toolchain = args.Ref()
-                               .get_subcommand("toolchain")
-                               ->get_subcommand("user")
-                               ->group("Custom");
-
-    // clang-format off
-    const std::map<std::string, base::Toolchain::Id> toolchain_id_map_{
-        {"Gcc", base::Toolchain::Id::Gcc},
-        {"Msvc", base::Toolchain::Id::Msvc},
-        // {"Clang", base::Toolchain::Id::Clang}, // Currently not supported
-    };
-    // clang-format on
-    user_toolchain->add_option("--id", toolchain_id, "Toolchain ID settings")
-        ->transform(
-            CLI::CheckedTransformer(toolchain_id_map_, CLI::ignore_case));
-    user_toolchain->add_option("--name", toolchain_name);
-    user_toolchain->add_option("--asm_compiler", toolchain_asm_compiler);
-    user_toolchain->add_option("--c_compiler", toolchain_c_compiler);
-    user_toolchain->add_option("--cpp_compiler", toolchain_cpp_compiler);
-    user_toolchain->add_option("--archiver", toolchain_archiver);
-    user_toolchain->add_option("--linker", toolchain_linker);
+    args.AddCustomToolchain("user", "User defined toolchain", custom_toolchain);
   } catch (const std::exception &e) {
     std::cout << "EXCEPTION " << e.what() << std::endl;
   }
@@ -83,24 +53,20 @@ int main(int argc, char **argv) {
 
   // 4. Build steps
   // Toolchain + Generic Target
-  base::Toolchain toolchain(toolchain_id, toolchain_name,
-                            toolchain_asm_compiler, toolchain_c_compiler,
-                            toolchain_cpp_compiler, toolchain_archiver,
-                            toolchain_linker);
-
+  base::Toolchain toolchain = custom_toolchain.ConstructToolchainFromArg();
   Target_generic foolib_target("libfoo", default_lib_type, toolchain, "");
-  reg.Build(custom_toolchain_state, foolib_target, foolib_build_cb);
+  reg.Build(custom_toolchain.state, foolib_target, foolib_build_cb);
 
   // Target specific settings
   Target_generic generic_target("generic", base::TargetType::Executable,
                                 toolchain, "src");
   auto g_cb = std::bind(generic_build_cb, std::placeholders::_1,
                         std::ref(foolib_target));
-  reg.Build(custom_toolchain_state, generic_target, g_cb);
+  reg.Build(custom_toolchain.state, generic_target, g_cb);
   reg.Dep(generic_target, foolib_target);
 
   // 5. Test steps
-  reg.Test(custom_toolchain_state, generic_target, [](base::Target &target) {
+  reg.Test(custom_toolchain.state, generic_target, [](base::Target &target) {
     const bool execute = internal::Command::Execute(
         fmt::format("{}", target.GetTargetPath().string()));
     env::assert_fatal(execute, "Test failed");
