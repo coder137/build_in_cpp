@@ -17,7 +17,7 @@ Build C, C++ and ASM files in C++
   - CLI11 v1.9.1
   - Tiny Process Library v2.0.4
   - fmt v7.1.3
-  - spdlog v1.8.2
+  - spdlog v1.8.5
 
 # General Information
 
