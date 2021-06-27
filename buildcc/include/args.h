@@ -67,8 +67,8 @@ public:
 
   // Setters
   void AddCustomToolchain(const std::string &name,
-                          const std::string &description,
-                          ToolchainArg &toolchain);
+                          const std::string &description, ToolchainArg &out,
+                          const ToolchainArg &initial = {});
 
   // Getters
   bool Clean() const { return clean_; }
@@ -111,6 +111,7 @@ private:
       {"Msvc", base::Toolchain::Id::Msvc},
       {"Clang", base::Toolchain::Id::Clang},
       {"Custom", base::Toolchain::Id::Custom},
+      {"Undefined", base::Toolchain::Id::Undefined},
   };
 
   // directory

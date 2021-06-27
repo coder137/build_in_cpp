@@ -19,18 +19,22 @@
 namespace buildcc {
 
 void Args::AddCustomToolchain(const std::string &name,
-                              const std::string &description,
-                              ToolchainArg &toolchain) {
-  CLI::App *t_user = AddToolchain(name, description, "Custom", toolchain.state);
+                              const std::string &description, ToolchainArg &out,
+                              const ToolchainArg &initial) {
+  CLI::App *t_user = AddToolchain(name, description, "Custom", out.state);
 
-  t_user->add_option("--id", toolchain.id, "Toolchain ID settings")
-      ->transform(CLI::CheckedTransformer(toolchain_id_map_, CLI::ignore_case));
-  t_user->add_option("--name", toolchain.name);
-  t_user->add_option("--asm_compiler", toolchain.asm_compiler);
-  t_user->add_option("--c_compiler", toolchain.c_compiler);
-  t_user->add_option("--cpp_compiler", toolchain.cpp_compiler);
-  t_user->add_option("--archiver", toolchain.archiver);
-  t_user->add_option("--linker", toolchain.linker);
+  t_user->add_option("--id", out.id, "Toolchain ID settings")
+      ->transform(CLI::CheckedTransformer(toolchain_id_map_, CLI::ignore_case))
+      ->default_val(initial.id);
+  t_user->add_option("--name", out.name)->default_val(initial.name);
+  t_user->add_option("--asm_compiler", out.asm_compiler)
+      ->default_val(initial.asm_compiler);
+  t_user->add_option("--c_compiler", out.c_compiler)
+      ->default_val(initial.c_compiler);
+  t_user->add_option("--cpp_compiler", out.cpp_compiler)
+      ->default_val(initial.cpp_compiler);
+  t_user->add_option("--archiver", out.archiver)->default_val(initial.archiver);
+  t_user->add_option("--linker", out.linker)->default_val(initial.linker);
 }
 
 void Args::Parse(int argc, char **argv) {
