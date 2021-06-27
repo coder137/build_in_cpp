@@ -68,7 +68,10 @@ public:
   // Setters
   void AddCustomToolchain(const std::string &name,
                           const std::string &description, ToolchainArg &out,
-                          const ToolchainArg &initial = {});
+                          const ToolchainArg &initial = {
+                              ToolchainState{false, false},
+                              base::Toolchain::Id::Undefined, "", "", "", "",
+                              "", ""});
 
   // Getters
   bool Clean() const { return clean_; }
