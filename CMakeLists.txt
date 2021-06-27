@@ -70,12 +70,14 @@ add_subdirectory(flatbuffers)
 
 set(FMT_INSTALL ON CACHE BOOL "Fmt install")
 add_subdirectory(fmt)
+set_target_properties(fmt PROPERTIES EXCLUDE_FROM_ALL ON)
 
 # set(SPDLOG_BUILD_SHARED ON CACHE BOOL "Spdlog built as dynamic library")
 set(SPDLOG_INSTALL ON CACHE BOOL "Spdlog install")
 set(SPDLOG_FMT_EXTERNAL OFF CACHE BOOL "Spdlog FMT external lib")
 set(SPDLOG_FMT_EXTERNAL_HO ON CACHE BOOL "Spdlog FMT header only external lib")
 add_subdirectory(spdlog)
+set_target_properties(spdlog PROPERTIES EXCLUDE_FROM_ALL ON)
 
 include(cmake/target/cli11.cmake)
 
