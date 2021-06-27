@@ -37,6 +37,7 @@ int main(int argc, char **argv) {
         ->transform(CLI::CheckedTransformer(lib_type_map_, CLI::ignore_case))
         ->group("Custom");
 
+    // NOTE, You can add more custom toolchains as per your requirement
     args.AddCustomToolchain("user", "User defined toolchain", custom_toolchain);
   } catch (const std::exception &e) {
     std::cout << "EXCEPTION " << e.what() << std::endl;
