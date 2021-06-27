@@ -113,7 +113,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
   const auto &loaded_sources = loader.GetLoadedSources();
   CHECK_EQUAL(loaded_sources.size(), 1);
   auto dummy_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / DUMMY_MAIN).string());
+      (source_path / DUMMY_MAIN).make_preferred().string());
   CHECK_FALSE(loaded_sources.find(dummy_file) == loaded_sources.end());
 }
 
@@ -161,12 +161,12 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
 
   // Delete
   fs::remove_all(intermediate_path);
-  auto dummy_c_file =
-      buildcc::internal::Path::CreateExistingPath((source_path / DUMMY_MAIN_C));
+  auto dummy_c_file = buildcc::internal::Path::CreateExistingPath(
+      (source_path / DUMMY_MAIN_C).make_preferred().string());
   auto dummy_cpp_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / DUMMY_MAIN_CPP));
-  auto new_source_file =
-      buildcc::internal::Path::CreateExistingPath((source_path / NEW_SOURCE));
+      (source_path / DUMMY_MAIN_CPP).make_preferred().string());
+  auto new_source_file = buildcc::internal::Path::CreateExistingPath(
+      (source_path / NEW_SOURCE).make_preferred().string());
 
   {
     buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,

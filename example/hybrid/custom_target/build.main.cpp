@@ -35,7 +35,7 @@ private:
 int main(int argc, char **argv) {
   // 1. Get arguments
   Args args;
-  Args::Toolchain clang_gnu;
+  Args::ToolchainArg clang_gnu;
   args.AddCustomToolchain("clang_gnu", "Clang GNU compiler", clang_gnu);
   args.Parse(argc, argv);
 
@@ -53,15 +53,15 @@ int main(int argc, char **argv) {
   ExecutableTarget_gcc g_foolib("GFoolib.exe", gcc, "");
   ExecutableTarget_msvc m_foolib("MFoolib.exe", msvc, "");
 
-  reg.Build(args.GetGccToolchain(), g_foolib, gfoolib_build_cb);
-  reg.Build(args.GetMsvcToolchain(), m_foolib, mfoolib_build_cb);
+  reg.Build(args.GetGccState(), g_foolib, gfoolib_build_cb);
+  reg.Build(args.GetMsvcState(), m_foolib, mfoolib_build_cb);
 
   // * NOTE, This is how we add our custom toolchain
   base::Toolchain clang(base::Toolchain::Id::Clang, "clang_gnu", "llvm-as",
                         "clang", "clang++", "llvm-ar", "ld");
   // * NOTE, Custom clang target added above
   ExecutableTarget_clang c_foolib("CFoolib.exe", clang, "");
-  reg.Build(clang_gnu, c_foolib, cfoolib_build_cb);
+  reg.Build(clang_gnu.state, c_foolib, cfoolib_build_cb);
 
   // 5.
   reg.RunBuild();

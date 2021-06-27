@@ -19,9 +19,12 @@
 
 #include <filesystem>
 
-#include "logging.h"
-
+// Third Party
 #include "CLI/CLI.hpp"
+
+// BuildCC
+#include "logging.h"
+#include "toolchain.h"
 
 namespace fs = std::filesystem;
 
@@ -29,9 +32,27 @@ namespace buildcc {
 
 class Args {
 public:
-  struct Toolchain {
-    bool build = false;
-    bool test = false;
+  struct ToolchainState {
+    bool build{false};
+    bool test{false};
+  };
+
+  struct ToolchainArg {
+    ToolchainArg() {};
+    base::Toolchain ConstructToolchainFromArg() {
+      base::Toolchain toolchain(id, name, asm_compiler, c_compiler,
+                                cpp_compiler, archiver, linker);
+      return toolchain;
+    }
+
+    ToolchainState state;
+    base::Toolchain::Id id{base::Toolchain::Id::Undefined};
+    std::string name{""};
+    std::string asm_compiler{""};
+    std::string c_compiler{""};
+    std::string cpp_compiler{""};
+    std::string archiver{""};
+    std::string linker{""};
   };
 
 public:
@@ -46,8 +67,8 @@ public:
 
   // Setters
   void AddCustomToolchain(const std::string &name,
-                          const std::string &description,
-                          Toolchain &custom_toolchain_arg);
+                          const std::string &description, ToolchainArg &out,
+                          const ToolchainArg &initial = ToolchainArg());
 
   // Getters
   bool Clean() const { return clean_; }
@@ -55,16 +76,22 @@ public:
 
   const fs::path &GetProjectRootDir() const { return project_root_dir_; }
   const fs::path &GetProjectBuildDir() const { return project_build_dir_; }
-  const Toolchain &GetGccToolchain() const { return gcc_toolchain_; }
-  const Toolchain &GetMsvcToolchain() const { return msvc_toolchain_; }
+
+  // Arg supported toolchains
+  // TODO, Add more as needed
+  const ToolchainState &GetGccState() const { return gcc_state_; }
+  const ToolchainState &GetMsvcState() const { return msvc_state_; }
 
 private:
   void Initialize();
 
   void RootArgs();
-  void ToolchainArgs();
-  void AddToolchain(const std::string &name, const std::string &description,
-                    const std::string &group, Toolchain &toolchain_arg);
+  void CommonToolchainArgs();
+
+  CLI::App *AddToolchain(const std::string &name,
+                         const std::string &description,
+                         const std::string &group,
+                         ToolchainState &toolchain_state);
 
 private:
   CLI::App app_{"BuildCC buildsystem"};
@@ -79,13 +106,20 @@ private:
       {"Critical", env::LogLevel::Critical},
   };
 
+  const std::map<std::string, base::Toolchain::Id> toolchain_id_map_{
+      {"Gcc", base::Toolchain::Id::Gcc},
+      {"Msvc", base::Toolchain::Id::Msvc},
+      {"Clang", base::Toolchain::Id::Clang},
+      {"Custom", base::Toolchain::Id::Custom},
+      {"Undefined", base::Toolchain::Id::Undefined},
+  };
+
   // directory
   fs::path project_root_dir_{""};
   fs::path project_build_dir_{"_internal"};
 
-  // toolchain
-  Toolchain gcc_toolchain_{false, false};
-  Toolchain msvc_toolchain_{false, false};
+  ToolchainState gcc_state_{false, false};
+  ToolchainState msvc_state_{false, false};
 
   // Internal
   CLI::App *toolchain_{nullptr};

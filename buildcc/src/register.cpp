@@ -39,19 +39,20 @@ void Register::Clean(std::function<void(void)> clean_cb) {
   }
 }
 
-void Register::Build(const Args::Toolchain &args_toolchain,
+void Register::Build(const Args::ToolchainState &toolchain_state,
                      base::Target &target,
                      std::function<void(base::Target &)> build_cb) {
-  if (args_toolchain.build) {
+  if (toolchain_state.build) {
     tf::Task task = taskflow_.composed_of(target.GetTaskflow()).name("Task");
     deps_.insert({target.GetName(), task});
     build_cb(target);
   }
 }
 
-void Register::Test(const Args::Toolchain &args_toolchain, base::Target &target,
+void Register::Test(const Args::ToolchainState &toolchain_state,
+                    base::Target &target,
                     std::function<void(base::Target &)> test_cb) {
-  if (!(args_toolchain.build && args_toolchain.test)) {
+  if (!(toolchain_state.build && toolchain_state.test)) {
     return;
   }
 
