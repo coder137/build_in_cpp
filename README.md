@@ -12,7 +12,7 @@ Build C, C++ and ASM files in C++
   - `C++17 filesystem` library support
   - `C++11 thread` library support
 - Third Party Libraries (See License below)
-  - Flatbuffers v1.12.0
+  - Flatbuffers v2.0.0
   - Taskflow v3.1.0
   - CLI11 v1.9.1
   - Tiny Process Library v2.0.4
