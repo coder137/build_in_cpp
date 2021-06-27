@@ -38,8 +38,14 @@ public:
   };
 
   struct ToolchainArg {
-    ToolchainState state;
+    ToolchainArg() {};
+    base::Toolchain ConstructToolchainFromArg() {
+      base::Toolchain toolchain(id, name, asm_compiler, c_compiler,
+                                cpp_compiler, archiver, linker);
+      return toolchain;
+    }
 
+    ToolchainState state;
     base::Toolchain::Id id{base::Toolchain::Id::Undefined};
     std::string name{""};
     std::string asm_compiler{""};
@@ -47,12 +53,6 @@ public:
     std::string cpp_compiler{""};
     std::string archiver{""};
     std::string linker{""};
-
-    base::Toolchain ConstructToolchainFromArg() {
-      base::Toolchain toolchain(id, name, asm_compiler, c_compiler,
-                                cpp_compiler, archiver, linker);
-      return toolchain;
-    }
   };
 
 public:
@@ -68,10 +68,7 @@ public:
   // Setters
   void AddCustomToolchain(const std::string &name,
                           const std::string &description, ToolchainArg &out,
-                          const ToolchainArg &initial = {
-                              ToolchainState{false, false},
-                              base::Toolchain::Id::Undefined, "", "", "", "",
-                              "", ""});
+                          const ToolchainArg &initial = ToolchainArg());
 
   // Getters
   bool Clean() const { return clean_; }
