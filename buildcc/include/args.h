@@ -38,8 +38,9 @@ public:
   };
 
   struct ToolchainArg {
-    ToolchainArg() {};
-    base::Toolchain ConstructToolchainFromArg() {
+    ToolchainArg(){};
+
+    base::Toolchain ConstructToolchain() {
       base::Toolchain toolchain(id, name, asm_compiler, c_compiler,
                                 cpp_compiler, archiver, linker);
       return toolchain;
@@ -53,6 +54,13 @@ public:
     std::string cpp_compiler{""};
     std::string archiver{""};
     std::string linker{""};
+  };
+
+  struct TargetArg {
+    TargetArg(){};
+
+    std::string compile_command{""};
+    std::string link_command{""};
   };
 
 public:
@@ -69,6 +77,8 @@ public:
   void AddCustomToolchain(const std::string &name,
                           const std::string &description, ToolchainArg &out,
                           const ToolchainArg &initial = ToolchainArg());
+  void AddCustomTarget(const std::string &name, const std::string &description,
+                       TargetArg &out, const TargetArg &initial = TargetArg());
 
   // Getters
   bool Clean() const { return clean_; }
@@ -87,6 +97,7 @@ private:
 
   void RootArgs();
   void CommonToolchainArgs();
+  void CommonTargetArgs();
 
   CLI::App *AddToolchain(const std::string &name,
                          const std::string &description,
@@ -123,6 +134,7 @@ private:
 
   // Internal
   CLI::App *toolchain_{nullptr};
+  CLI::App *target_{nullptr};
 };
 
 } // namespace buildcc
