@@ -12,8 +12,11 @@ static void cfoolib_build_cb(base::Target &target);
 int main(int argc, char **argv) {
   // 1. Get arguments
   Args args;
-  Args::ToolchainArg clang_gnu;
-  args.AddCustomToolchain("clang_gnu", "Clang GNU compiler", clang_gnu);
+  Args::ToolchainArg toolchain_clang_gnu;
+  Args::TargetArg target_clang_gnu;
+  args.AddCustomToolchain("clang_gnu", "Clang GNU toolchain",
+                          toolchain_clang_gnu);
+  args.AddCustomTarget("clang_gnu", "Clang GNU target", target_clang_gnu);
   args.Parse(argc, argv);
 
   // 2. Initialize your environment
@@ -37,16 +40,19 @@ int main(int argc, char **argv) {
   base::Toolchain clang(base::Toolchain::Id::Clang, "clang_gnu", "llvm-as",
                         "clang", "clang++", "llvm-ar", "ld");
 
-  // * NOTE, Custom clang target added above
-  constexpr std::string_view clang_compile_command =
-      "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o "
-      "{output} -c {input}";
-  constexpr std::string_view clang_link =
-      "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
-      "{lib_dirs} {lib_deps}";
+  // * M1, Hardcode it
+  // constexpr std::string_view clang_compile_command =
+  //     "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o "
+  //     "{output} -c {input}";
+  // constexpr std::string_view clang_link =
+  //     "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
+  //     "{lib_dirs} {lib_deps}";
+
+  // * M2, Get from Args (see build_linux.toml or build_win.toml files)
   Target_custom c_foolib("CFoolib.exe", base::TargetType::Executable, clang, "",
-                         clang_compile_command, clang_link);
-  reg.Build(clang_gnu.state, c_foolib, cfoolib_build_cb);
+                         target_clang_gnu.compile_command,
+                         target_clang_gnu.link_command);
+  reg.Build(toolchain_clang_gnu.state, c_foolib, cfoolib_build_cb);
 
   // 5.
   reg.RunBuild();

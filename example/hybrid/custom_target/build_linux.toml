@@ -19,3 +19,7 @@ test = false
 [toolchain.clang_gnu]
 build = true
 test = true
+
+[target.clang_gnu]
+compile_command = "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o {output} -c {input}"
+link_command = "{cpp_compiler} {link_flags} {compiled_sources} -o {output} {lib_dirs} {lib_deps}"
