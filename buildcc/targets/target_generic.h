@@ -17,13 +17,8 @@
 #ifndef TARGETS_TARGET_GENERIC_H_
 #define TARGETS_TARGET_GENERIC_H_
 
-#include "target.h"
-
 #include "target_constants.h"
 #include "target_utils.h"
-
-// env
-#include "host_os.h"
 
 namespace buildcc {
 
