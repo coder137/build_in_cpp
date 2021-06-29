@@ -37,8 +37,7 @@ int main(int argc, char **argv) {
   reg.Build(args.GetMsvcState(), m_foolib, mfoolib_build_cb);
 
   // * NOTE, This is how we add our custom toolchain
-  base::Toolchain clang(base::Toolchain::Id::Clang, "clang_gnu", "llvm-as",
-                        "clang", "clang++", "llvm-ar", "ld");
+  base::Toolchain clang = toolchain_clang_gnu.ConstructToolchain();
 
   // * M1, Hardcode it
   // constexpr std::string_view clang_compile_command =

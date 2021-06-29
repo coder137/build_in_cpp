@@ -20,6 +20,15 @@ test = true
 build = true
 test = true
 
+id = "Clang"
+name = "clang_gnu"
+asm_compiler = "llvm-as"
+c_compiler = "clang"
+cpp_compiler = "clang++"
+archiver = "llvm-ar"
+linker = "ld"
+
+# Custom target added here
 [target.clang_gnu]
 compile_command = "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o {output} -c {input}"
 link_command = "{cpp_compiler} {link_flags} {compiled_sources} -o {output} {lib_dirs} {lib_deps}"
