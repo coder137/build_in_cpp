@@ -39,8 +39,8 @@ public:
 
   struct ToolchainArg {
     ToolchainArg(){};
-    // TODO, Update naming here
-    base::Toolchain ConstructToolchainFromArg() {
+
+    base::Toolchain ConstructToolchain() {
       base::Toolchain toolchain(id, name, asm_compiler, c_compiler,
                                 cpp_compiler, archiver, linker);
       return toolchain;

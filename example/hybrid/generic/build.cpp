@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
 
   // 4. Build steps
   // Toolchain + Generic Target
-  base::Toolchain toolchain = custom_toolchain.ConstructToolchainFromArg();
+  base::Toolchain toolchain = custom_toolchain.ConstructToolchain();
   Target_generic foolib_target("libfoo", default_lib_type, toolchain, "");
   reg.Build(custom_toolchain.state, foolib_target, foolib_build_cb);
 
