@@ -37,6 +37,17 @@ void Args::AddCustomToolchain(const std::string &name,
   t_user->add_option("--linker", out.linker)->default_val(initial.linker);
 }
 
+void Args::AddCustomTarget(const std::string &name,
+                           const std::string &description, TargetArg &out,
+                           const TargetArg &initial) {
+  CLI::App *target_user =
+      target_->add_subcommand(name, description)->group("Custom");
+  target_user->add_option("--compile_command", out.compile_command)
+      ->default_val(initial.compile_command);
+  target_user->add_option("--link_command", out.link_command)
+      ->default_val(initial.link_command);
+}
+
 void Args::Parse(int argc, char **argv) {
   try {
     app_.parse(argc, argv);
@@ -51,6 +62,7 @@ void Args::Parse(int argc, char **argv) {
 void Args::Initialize() {
   RootArgs();
   CommonToolchainArgs();
+  CommonTargetArgs();
 }
 
 void Args::RootArgs() {
@@ -82,6 +94,10 @@ void Args::CommonToolchainArgs() {
   toolchain_ = app_.add_subcommand("toolchain", "Select Toolchain");
   (void)AddToolchain("gcc", "GNU GCC Toolchain", "Supported", gcc_state_);
   (void)AddToolchain("msvc", "MSVC Toolchain", "Supported", msvc_state_);
+}
+
+void Args::CommonTargetArgs() {
+  target_ = app_.add_subcommand("target", "Select target");
 }
 
 CLI::App *Args::AddToolchain(const std::string &name,
