@@ -5,9 +5,9 @@
 using namespace buildcc;
 
 static void clean_cb();
-static void gfoolib_build_cb(base::Target &target);
-static void mfoolib_build_cb(base::Target &target);
-static void cfoolib_build_cb(base::Target &target);
+static void foolib_build_cb(base::Target &target);
+
+static constexpr std::string_view EXE = "build";
 
 int main(int argc, char **argv) {
   // 1. Get arguments
@@ -32,9 +32,12 @@ int main(int argc, char **argv) {
 
   ExecutableTarget_gcc g_foolib("GFoolib.exe", gcc, "");
   ExecutableTarget_msvc m_foolib("MFoolib.exe", msvc, "");
+  m_foolib.AddCppCompileFlag("/nologo");
+  m_foolib.AddCppCompileFlag("/EHsc");
+  m_foolib.AddLinkFlag("/nologo");
 
-  reg.Build(args.GetGccState(), g_foolib, gfoolib_build_cb);
-  reg.Build(args.GetMsvcState(), m_foolib, mfoolib_build_cb);
+  reg.Build(args.GetGccState(), g_foolib, foolib_build_cb);
+  reg.Build(args.GetMsvcState(), m_foolib, foolib_build_cb);
 
   // * NOTE, This is how we add our custom toolchain
   base::Toolchain clang = toolchain_clang_gnu.ConstructToolchain();
@@ -51,7 +54,7 @@ int main(int argc, char **argv) {
   Target_custom c_foolib("CFoolib.exe", base::TargetType::Executable, clang, "",
                          target_clang_gnu.compile_command,
                          target_clang_gnu.link_command);
-  reg.Build(toolchain_clang_gnu.state, c_foolib, cfoolib_build_cb);
+  reg.Build(toolchain_clang_gnu.state, c_foolib, foolib_build_cb);
 
   // 5.
   reg.RunBuild();
@@ -63,27 +66,12 @@ int main(int argc, char **argv) {
 }
 
 static void clean_cb() {
-  // TODO,
+  env::log_info(
+      EXE, fmt::format("Cleaning {}", env::get_project_build_dir().string()));
+  fs::remove_all(env::get_project_build_dir());
 }
 
-static void gfoolib_build_cb(base::Target &target) {
-  target.AddSource("src/foo.cpp");
-  target.AddIncludeDir("src", true);
-  target.AddSource("main.cpp");
-  target.Build();
-}
-
-static void mfoolib_build_cb(base::Target &target) {
-  target.AddCppCompileFlag("/nologo");
-  target.AddCppCompileFlag("/EHsc");
-  target.AddLinkFlag("/nologo");
-  target.AddSource("src/foo.cpp");
-  target.AddIncludeDir("src", true);
-  target.AddSource("main.cpp");
-  target.Build();
-}
-
-static void cfoolib_build_cb(base::Target &target) {
+static void foolib_build_cb(base::Target &target) {
   target.AddSource("src/foo.cpp");
   target.AddIncludeDir("src", true);
   target.AddSource("main.cpp");
