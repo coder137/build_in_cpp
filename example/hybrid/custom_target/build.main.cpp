@@ -9,29 +9,6 @@ static void gfoolib_build_cb(base::Target &target);
 static void mfoolib_build_cb(base::Target &target);
 static void cfoolib_build_cb(base::Target &target);
 
-// * NOTE, This is how we add our custom target
-// Support for any custom toolchain can be added like this
-// base::Target provides `CompileCommand` and `Link` overrides
-class ExecutableTarget_clang : public base::Target {
-public:
-  ExecutableTarget_clang(
-      const std::string &name, const base::Toolchain &toolchain,
-      const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::TargetType::Executable, toolchain,
-               target_path_relative_to_root) {}
-
-private:
-private:
-  virtual std::string_view CompileCommand() const {
-    return "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o "
-           "{output} -c {input}";
-  }
-  virtual std::string_view Link() const {
-    return "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
-           "{lib_dirs} {lib_deps}";
-  }
-};
-
 int main(int argc, char **argv) {
   // 1. Get arguments
   Args args;
@@ -59,8 +36,16 @@ int main(int argc, char **argv) {
   // * NOTE, This is how we add our custom toolchain
   base::Toolchain clang(base::Toolchain::Id::Clang, "clang_gnu", "llvm-as",
                         "clang", "clang++", "llvm-ar", "ld");
+
   // * NOTE, Custom clang target added above
-  ExecutableTarget_clang c_foolib("CFoolib.exe", clang, "");
+  constexpr std::string_view clang_compile_command =
+      "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o "
+      "{output} -c {input}";
+  constexpr std::string_view clang_link =
+      "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
+      "{lib_dirs} {lib_deps}";
+  Target_custom c_foolib("CFoolib.exe", base::TargetType::Executable, clang, "",
+                         clang_compile_command, clang_link);
   reg.Build(clang_gnu.state, c_foolib, cfoolib_build_cb);
 
   // 5.
