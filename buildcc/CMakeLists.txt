@@ -38,6 +38,7 @@ target_link_libraries(buildcc PUBLIC
 
     plugins
 )
+target_precompile_headers(buildcc PUBLIC include/buildcc.h)
 
 if (${BUILDCC_INSTALL})
     install(TARGETS buildcc DESTINATION lib EXPORT buildccConfig)
