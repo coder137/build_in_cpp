@@ -10,10 +10,13 @@ project(BuildCC
     LANGUAGES CXX
 )
 
-option(BUILDCC_TESTING "Enable BuildCC Testing" OFF)
 option(BUILDCC_INSTALL "Enable Buildcc Installation" ON)
 option(BUILDCC_EXAMPLES "Enable Buildcc Examples" OFF)
 
+# Dev
+option(BUILDCC_TESTING "Enable BuildCC Testing" OFF)
+
+# Dev Tools
 option(BUILDCC_CLANGTIDY "Enable ClangTidy" OFF)
 option(BUILDCC_CPPCHECK "Enable CppCheck" OFF)
 option(BUILDCC_DOCUMENTATION "Enable Documentation" OFF)
@@ -44,7 +47,8 @@ endif()
 
 # https://gitlab.kitware.com/cmake/cmake/-/issues/20512
 # Issue with MSVC CL Compilers
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND ${BUILDCC_CLANGTIDY})
+if (${BUILDCC_CLANGTIDY})
+message("USER CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
     set(CLANGTIDY ON)
     message("Enabling clang-tidy")
 else()
