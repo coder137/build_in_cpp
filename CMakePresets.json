@@ -13,16 +13,17 @@
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/_build_gcc_dev_all",
             "cacheVariables": {
-                "BUILDCC_TESTING": true,
-                "BUILDCC_EXAMPLES": true,
-                "BUILDCC_CPPCHECK": true,
-                "BUILDCC_CLANGTIDY": true,
-                "BUILDCC_INSTALL": true,
-                "BUILDCC_NO_DEPRECATED": false,
-                "BUILDCC_DOCUMENTATION": true,
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_C_COMPILER": "gcc",
-                "CMAKE_CXX_COMPILER": "g++"
+                "CMAKE_CXX_COMPILER": "g++",
+                "BUILDCC_INSTALL": true,
+                "BUILDCC_PRECOMPILE_HEADERS": false,
+                "BUILDCC_EXAMPLES": true,
+                "BUILDCC_TESTING": true,
+                "BUILDCC_CLANGTIDY": true,
+                "BUILDCC_CPPCHECK": true,
+                "BUILDCC_DOCUMENTATION": true,
+                "BUILDCC_NO_DEPRECATED": false
             }
         },
         {
@@ -32,16 +33,17 @@
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/_build_clang_dev_all",
             "cacheVariables": {
-                "BUILDCC_TESTING": false,
-                "BUILDCC_EXAMPLES": true,
-                "BUILDCC_CPPCHECK": true,
-                "BUILDCC_CLANGTIDY": true,
-                "BUILDCC_INSTALL": true,
-                "BUILDCC_NO_DEPRECATED": true,
-                "BUILDCC_DOCUMENTATION": true,
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++"
+                "CMAKE_CXX_COMPILER": "clang++",
+                "BUILDCC_INSTALL": true,
+                "BUILDCC_PRECOMPILE_HEADERS": true,
+                "BUILDCC_EXAMPLES": true,
+                "BUILDCC_TESTING": false,
+                "BUILDCC_CLANGTIDY": true,
+                "BUILDCC_CPPCHECK": true,
+                "BUILDCC_DOCUMENTATION": true,
+                "BUILDCC_NO_DEPRECATED": true
             }
         },
         {
@@ -51,14 +53,15 @@
             "generator": "Visual Studio 16 2019",
             "binaryDir": "${sourceDir}/_build_msvc_dev_all",
             "cacheVariables": {
-                "BUILDCC_TESTING": false,
-                "BUILDCC_EXAMPLES": true,
-                "BUILDCC_CPPCHECK": true,
-                "BUILDCC_CLANGTIDY": true,
+                "CMAKE_BUILD_TYPE": "Debug",
                 "BUILDCC_INSTALL": true,
-                "BUILDCC_NO_DEPRECATED": false,
+                "BUILDCC_PRECOMPILE_HEADERS": true,
+                "BUILDCC_EXAMPLES": true,
+                "BUILDCC_TESTING": false,
+                "BUILDCC_CLANGTIDY": false,
+                "BUILDCC_CPPCHECK": true,
                 "BUILDCC_DOCUMENTATION": true,
-                "CMAKE_BUILD_TYPE": "Debug"
+                "BUILDCC_NO_DEPRECATED": false
             }
         }
     ],

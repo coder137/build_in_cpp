@@ -10,17 +10,21 @@ project(BuildCC
     LANGUAGES CXX
 )
 
+# User options
 option(BUILDCC_INSTALL "Enable Buildcc Installation" ON)
+# NOTE, Conflict with Clang-Tidy on certain compilers
+option(BUILDCC_PRECOMPILE_HEADERS "Enable Buildcc precompile headers" OFF)
 option(BUILDCC_EXAMPLES "Enable Buildcc Examples" OFF)
 
-# Dev
+# Dev options
 option(BUILDCC_TESTING "Enable BuildCC Testing" OFF)
 
-# Dev Tools
+# Dev Tool options
 option(BUILDCC_CLANGTIDY "Enable ClangTidy" OFF)
 option(BUILDCC_CPPCHECK "Enable CppCheck" OFF)
 option(BUILDCC_DOCUMENTATION "Enable Documentation" OFF)
 
+# Compiler options
 # NOTE, This option is required for clang compilers, architecture x86_64-pc-windows-msvc
 # Flatbuffers library uses `std::system` internally which causes a deprecated error
 option(BUILDCC_NO_DEPRECATED "Disable Deprecated" OFF)
