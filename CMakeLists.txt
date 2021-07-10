@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10.0)
+cmake_minimum_required(VERSION 3.16)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -10,14 +10,21 @@ project(BuildCC
     LANGUAGES CXX
 )
 
-option(BUILDCC_TESTING "Enable BuildCC Testing" OFF)
+# User options
 option(BUILDCC_INSTALL "Enable Buildcc Installation" ON)
+# NOTE, Conflict with Clang-Tidy on certain compilers
+option(BUILDCC_PRECOMPILE_HEADERS "Enable Buildcc precompile headers" OFF)
 option(BUILDCC_EXAMPLES "Enable Buildcc Examples" OFF)
 
+# Dev options
+option(BUILDCC_TESTING "Enable BuildCC Testing" OFF)
+
+# Dev Tool options
 option(BUILDCC_CLANGTIDY "Enable ClangTidy" OFF)
 option(BUILDCC_CPPCHECK "Enable CppCheck" OFF)
 option(BUILDCC_DOCUMENTATION "Enable Documentation" OFF)
 
+# Compiler options
 # NOTE, This option is required for clang compilers, architecture x86_64-pc-windows-msvc
 # Flatbuffers library uses `std::system` internally which causes a deprecated error
 option(BUILDCC_NO_DEPRECATED "Disable Deprecated" OFF)
@@ -44,7 +51,8 @@ endif()
 
 # https://gitlab.kitware.com/cmake/cmake/-/issues/20512
 # Issue with MSVC CL Compilers
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND ${BUILDCC_CLANGTIDY})
+if (${BUILDCC_CLANGTIDY})
+message("USER CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
     set(CLANGTIDY ON)
     message("Enabling clang-tidy")
 else()
@@ -65,7 +73,7 @@ set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "Flatbuffers build tests")
 set(FLATBUFFERS_BUILD_FLATHASH OFF CACHE BOOL "Flatbuffers build flathash")
 set(FLATBUFFERS_BUILD_FLATLIB ON CACHE BOOL "Flatbuffers build flatlib")
 set(FLATBUFFERS_LIBCXX_WITH_CLANG OFF CACHE BOOL "Flatbuffers LIBCXX")
-set(FLATBUFFERS_ENABLE_PCH ON CACHE BOOL "Flatbuffers PCH")
+set(FLATBUFFERS_ENABLE_PCH ${BUILDCC_PRECOMPILE_HEADERS} CACHE BOOL "Flatbuffers PCH")
 # set(FLATBUFFERS_BUILD_SHAREDLIB ON CACHE BOOL "Flatbuffers built as dynamic library")
 add_subdirectory(flatbuffers)
 
