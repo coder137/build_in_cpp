@@ -16,6 +16,7 @@ add_subdirectory(targets)
 # First party plugins
 add_subdirectory(plugins)
 
+# TODO, Shift args and register to modules
 m_clangtidy("buildcc")
 add_library(buildcc STATIC)
 target_sources(buildcc PRIVATE 
@@ -38,7 +39,9 @@ target_link_libraries(buildcc PUBLIC
 
     plugins
 )
-target_precompile_headers(buildcc PUBLIC include/buildcc.h)
+if(${BUILDCC_PRECOMPILE_HEADERS})
+    target_precompile_headers(buildcc PUBLIC include/buildcc.h)    
+endif()
 
 if (${BUILDCC_INSTALL})
     install(TARGETS buildcc DESTINATION lib EXPORT buildccConfig)
