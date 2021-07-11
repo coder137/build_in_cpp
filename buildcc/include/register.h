@@ -33,7 +33,8 @@ public:
     base::Target &target_;
     std::function<void(base::Target &target)> cb_;
 
-    TestInfo(base::Target &target, std::function<void(base::Target &target)> cb)
+    TestInfo(base::Target &target,
+             const std::function<void(base::Target &target)> &cb)
         : target_(target), cb_(cb) {}
   };
 
@@ -41,12 +42,12 @@ public:
   Register(const Args &args) : args_(args) {}
 
   void Env();
-  void Clean(std::function<void(void)> clean_cb);
+  void Clean(const std::function<void(void)> &clean_cb);
 
   void Build(const Args::ToolchainState &toolchain_state, base::Target &target,
-             std::function<void(base::Target &)> build_cb);
+             const std::function<void(base::Target &)> &build_cb);
   void Test(const Args::ToolchainState &toolchain_state, base::Target &target,
-            std::function<void(base::Target &)> test_cb);
+            const std::function<void(base::Target &)> &test_cb);
 
   void Dep(const base::Target &target, const base::Target &dependency);
 

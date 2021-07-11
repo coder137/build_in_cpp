@@ -57,9 +57,9 @@ void ClangCompileCommands::Generate() {
       // DONE, Get source list name
       // DONE, Get std::vector<std::string> CompileCommand
       // DONE, Get intermediate directory from env
-      const auto input_file = f.GetPathname();
+      const auto &input_file = f.GetPathname();
       const auto command = t->CompileCommand(input_file);
-      const auto directory = env::get_project_build_dir();
+      const auto &directory = env::get_project_build_dir();
 
       // DONE, Use flatbuffers::Flexbuffer to create binary format
       fbb.Map([&]() {
