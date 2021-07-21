@@ -1,5 +1,8 @@
 m_clangtidy("toolchain_specialized")
-add_library(toolchain_specialized INTERFACE)
+add_library(toolchain_specialized INTERFACE
+    toolchain_gcc.h
+    toolchain_msvc.h
+)
 target_include_directories(toolchain_specialized INTERFACE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> 
     $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
