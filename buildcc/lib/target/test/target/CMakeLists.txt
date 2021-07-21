@@ -1,10 +1,10 @@
 configure_file(constants.h.in ${CMAKE_CURRENT_BINARY_DIR}/generated/constants.h @ONLY)
 
-add_library(target_interface STATIC)
-target_include_directories(target_interface PUBLIC
+add_library(target_interface INTERFACE)
+target_include_directories(target_interface INTERFACE
     ${CMAKE_CURRENT_BINARY_DIR}/generated
 )
-target_link_libraries(target_interface PUBLIC
+target_link_libraries(target_interface INTERFACE
     mock_target
 )
 
