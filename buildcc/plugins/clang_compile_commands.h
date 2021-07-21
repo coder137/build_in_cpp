@@ -23,8 +23,8 @@ namespace buildcc::plugin {
 
 class ClangCompileCommands {
 public:
-  explicit ClangCompileCommands(std::vector<const base::Target *> targets)
-      : targets_(std::move(targets)) {}
+  explicit ClangCompileCommands(std::vector<const base::Target *> &&targets)
+      : targets_(targets) {}
   ClangCompileCommands(const ClangCompileCommands &compile_commands) = delete;
 
   void AddTarget(const base::Target *target);

@@ -222,7 +222,7 @@ void Target::RecheckExternalLib(
 
 void Target::RecheckChanged(const std::unordered_set<std::string> &previous,
                             const std::unordered_set<std::string> &current,
-                            std::function<void(void)> callback) {
+                            const std::function<void(void)> &callback) {
   if (dirty_) {
     return;
   }

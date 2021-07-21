@@ -216,11 +216,11 @@ private:
   // Helper function
   void RecheckChanged(const std::unordered_set<std::string> &previous,
                       const std::unordered_set<std::string> &current,
-                      std::function<void(void)> callback);
+                      const std::function<void(void)> &callback);
 
   // Tasks
-  void CompileTargetTask(const std::vector<fs::path> &&compile_sources,
-                         const std::vector<fs::path> &&dummy_compile_sources);
+  void CompileTargetTask(std::vector<fs::path> &&compile_sources,
+                         std::vector<fs::path> &&dummy_compile_sources);
 
   void LinkTargetTask(const bool link);
 

@@ -33,7 +33,7 @@ void Register::Env() {
   env::set_log_level(args_.GetLogLevel());
 }
 
-void Register::Clean(std::function<void(void)> clean_cb) {
+void Register::Clean(const std::function<void(void)> &clean_cb) {
   if (args_.Clean()) {
     clean_cb();
   }
@@ -41,7 +41,7 @@ void Register::Clean(std::function<void(void)> clean_cb) {
 
 void Register::Build(const Args::ToolchainState &toolchain_state,
                      base::Target &target,
-                     std::function<void(base::Target &)> build_cb) {
+                     const std::function<void(base::Target &)> &build_cb) {
   if (toolchain_state.build) {
     tf::Task task = taskflow_.composed_of(target.GetTaskflow()).name("Task");
     deps_.insert({target.GetName(), task});
@@ -51,7 +51,7 @@ void Register::Build(const Args::ToolchainState &toolchain_state,
 
 void Register::Test(const Args::ToolchainState &toolchain_state,
                     base::Target &target,
-                    std::function<void(base::Target &)> test_cb) {
+                    const std::function<void(base::Target &)> &test_cb) {
   if (!(toolchain_state.build && toolchain_state.test)) {
     return;
   }
