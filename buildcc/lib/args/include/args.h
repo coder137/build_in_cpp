@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef BUILDCC_INCLUDE_ARGS_H_
-#define BUILDCC_INCLUDE_ARGS_H_
+#ifndef ARGS_INCLUDE_ARGS_H_
+#define ARGS_INCLUDE_ARGS_H_
 
 #include <filesystem>
 

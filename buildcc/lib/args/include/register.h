@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef BUILDCC_INCLUDE_REGISTER_H_
-#define BUILDCC_INCLUDE_REGISTER_H_
+#ifndef ARGS_INCLUDE_REGISTER_H_
+#define ARGS_INCLUDE_REGISTER_H_
 
 #include <functional>
 #include <unordered_map>
