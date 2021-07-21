@@ -22,7 +22,8 @@ find_package(toolchain_package NAMES "toolchain" REQUIRED)
 find_package(toolchain_specialized_package NAMES "toolchain_specialized" REQUIRED)
 find_package(target_package NAMES "target" REQUIRED)
 find_package(target_specialized_package NAMES "target_specialized" REQUIRED)
-find_package(plugins NAMES "plugins" REQUIRED)
+find_package(plugins_package NAMES "plugins" REQUIRED)
+find_package(args_package NAMES "args" REQUIRED)
 
 find_package(buildcc_package NAMES "buildcc" REQUIRED)
 
@@ -39,7 +40,9 @@ message("Find package: ${toolchain_specialized_package_DIR}")
 message("Find package: ${target_package_DIR}")
 message("Find package: ${target_specialized_package_DIR}")
 
-message("Find package: ${plugins_DIR}")
+message("Find package: ${plugins_package_DIR}")
+message("Find package: ${args_package_DIR}")
+
 message("Find package: ${buildcc_package_DIR}")
 
 # build executable
