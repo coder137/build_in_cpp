@@ -19,8 +19,6 @@ add_subdirectory(lib/args)
 # First party plugins
 add_subdirectory(plugins)
 
-# TODO, Shift args and register to modules
-m_clangtidy("buildcc")
 add_library(buildcc INTERFACE)
 target_include_directories(buildcc INTERFACE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
