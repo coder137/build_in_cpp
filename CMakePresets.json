@@ -17,7 +17,7 @@
                 "CMAKE_C_COMPILER": "gcc",
                 "CMAKE_CXX_COMPILER": "g++",
                 "BUILDCC_INSTALL": true,
-                "BUILDCC_PRECOMPILE_HEADERS": false,
+                "BUILDCC_PRECOMPILE_HEADERS": true,
                 "BUILDCC_EXAMPLES": true,
                 "BUILDCC_TESTING": true,
                 "BUILDCC_CLANGTIDY": true,

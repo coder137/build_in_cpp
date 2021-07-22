@@ -1,9 +1,8 @@
 # Env test
 if (${TESTING})
-    add_library(mock_env STATIC)
-    target_sources(mock_env PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/mock/logging.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/env.cpp
+    add_library(mock_env STATIC
+        mock/logging.cpp
+        src/env.cpp
     )
     target_include_directories(mock_env PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR}/include

@@ -13,42 +13,33 @@ add_subdirectory(toolchains)
 add_subdirectory(lib/target)
 add_subdirectory(targets)
 
+# Buildcc libs
+add_subdirectory(lib/args)
+
 # First party plugins
 add_subdirectory(plugins)
 
-# TODO, Shift args and register to modules
-m_clangtidy("buildcc")
-add_library(buildcc STATIC)
-target_sources(buildcc PRIVATE 
-    src/args.cpp
-    src/register.cpp
-)
-target_include_directories(buildcc PUBLIC 
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+add_library(buildcc INTERFACE)
+target_include_directories(buildcc INTERFACE 
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
 )
-target_link_libraries(buildcc PUBLIC 
-    # 
-    CLI11::CLI11
-
-    # 
+target_link_libraries(buildcc INTERFACE
     target
-    
+    args
+    plugins
     toolchain_specialized
     target_specialized
-
-    plugins
 )
 if(${BUILDCC_PRECOMPILE_HEADERS})
-    target_precompile_headers(buildcc PUBLIC include/buildcc.h)    
+    target_precompile_headers(buildcc INTERFACE buildcc.h)    
 endif()
 
 if (${BUILDCC_INSTALL})
     install(TARGETS buildcc DESTINATION lib EXPORT buildccConfig)
     install(FILES  
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/buildcc.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/args.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/register.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/buildcc.h
+
         DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
     install(EXPORT buildccConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/buildcc")
 endif()
