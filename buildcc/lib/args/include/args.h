@@ -23,7 +23,8 @@
 #include "CLI/CLI.hpp"
 
 // BuildCC
-#include "logging.h"
+#include "env/logging.h"
+
 #include "toolchain.h"
 
 namespace fs = std::filesystem;

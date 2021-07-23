@@ -19,7 +19,7 @@
 #include "flatbuffers/util.h"
 #include "target_generated.h"
 
-#include "logging.h"
+#include "env/logging.h"
 
 namespace fbs = schema::internal;
 
