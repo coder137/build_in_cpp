@@ -16,7 +16,7 @@
 
 #include "target.h"
 
-#include "assert_fatal.h"
+#include "env/assert_fatal.h"
 
 #include "internal/util.h"
 

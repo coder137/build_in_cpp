@@ -18,8 +18,8 @@
 
 #include <algorithm>
 
+#include "env/logging.h"
 #include "fmt/format.h"
-#include "logging.h"
 
 namespace buildcc::internal {
 

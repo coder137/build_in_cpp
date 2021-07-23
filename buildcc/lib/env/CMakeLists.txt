@@ -13,18 +13,22 @@ if (${TESTING})
 endif()
 
 # Env lib
+set(ENV_HEADER_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/env/assert_fatal.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/env/env.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/env/logging.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/env/host_os.h
+)
+
 m_clangtidy("env")
 add_library(env
     src/env.cpp
     src/logging.cpp
-    include/env.h
-    include/assert_fatal.h
-    include/logging.h
-    include/host_os.h
+    ${ENV_HEADER_FILES}
 )
 target_include_directories(env PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
+    $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}/env>
 )
 target_link_libraries(env PUBLIC fmt::fmt-header-only)
 target_compile_options(env PRIVATE ${BUILD_COMPILE_FLAGS})
@@ -37,11 +41,8 @@ target_link_libraries(env PRIVATE
 if (${BUILDCC_INSTALL})
     install(TARGETS env DESTINATION lib EXPORT envConfig)
     install(FILES         
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/assert_fatal.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/env.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/logging.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/host_os.h
-        DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}"
+        ${ENV_HEADER_FILES}
+        DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}/env"
     )
     install(EXPORT envConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/env")
 endif()

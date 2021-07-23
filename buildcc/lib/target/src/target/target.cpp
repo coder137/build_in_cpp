@@ -20,7 +20,7 @@
 #include "internal/util.h"
 
 // Env
-#include "assert_fatal.h"
+#include "env/assert_fatal.h"
 
 // Fmt
 #include "fmt/format.h"

@@ -21,7 +21,7 @@
 
 #include "target.h"
 
-#include "host_os.h"
+#include "env/host_os.h"
 
 namespace buildcc {
 

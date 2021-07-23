@@ -24,7 +24,7 @@
 #include <unordered_set>
 
 // Env
-#include "assert_fatal.h"
+#include "env/assert_fatal.h"
 
 // Third party
 #include "fmt/format.h"

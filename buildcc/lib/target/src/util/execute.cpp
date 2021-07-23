@@ -16,7 +16,7 @@
 
 #include "internal/command.h"
 
-#include "logging.h"
+#include "env/logging.h"
 
 #include "process.hpp"
 

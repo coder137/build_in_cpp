@@ -5,8 +5,6 @@
 
 #include "flatbuffers/util.h"
 
-#include "assert_fatal.h"
-
 using namespace buildcc;
 
 constexpr const char *const EXE = "build";
