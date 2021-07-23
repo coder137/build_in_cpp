@@ -28,7 +28,7 @@ add_library(env
 )
 target_include_directories(env PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}/env>
+    $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
 )
 target_link_libraries(env PUBLIC fmt::fmt-header-only)
 target_compile_options(env PRIVATE ${BUILD_COMPILE_FLAGS})
