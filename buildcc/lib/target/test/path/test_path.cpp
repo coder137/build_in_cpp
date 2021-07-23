@@ -1,7 +1,7 @@
 // Internal
 #include "internal/path.h"
 
-#include "assert_fatal.h"
+#include "env/assert_fatal.h"
 
 #include "constants.h"
 

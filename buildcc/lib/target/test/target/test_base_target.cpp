@@ -2,7 +2,7 @@
 
 #include "target.h"
 
-#include "env.h"
+#include "env/env.h"
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"

@@ -3,8 +3,8 @@
 #include "expect_target.h"
 #include "target.h"
 
-#include "env.h"
-#include "logging.h"
+#include "env/env.h"
+#include "env/logging.h"
 
 // Third Party
 #include "flatbuffers/util.h"
