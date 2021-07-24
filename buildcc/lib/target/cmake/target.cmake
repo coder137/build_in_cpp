@@ -1,21 +1,6 @@
 # Target
 m_clangtidy("target")
-add_library(target)
-target_include_directories(target PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
-)
-target_link_libraries(target PUBLIC 
-    env
-    toolchain
-    flatbuffers
-    Taskflow
-)
-target_link_libraries(target PRIVATE
-    tiny-process-library::tiny-process-library
-)
-
-target_sources(target PRIVATE
+add_library(target
     src/target/target.cpp
     src/target/source.cpp
     src/target/include_dir.cpp
@@ -34,10 +19,25 @@ target_sources(target PRIVATE
     src/util/execute.cpp
 
     include/target.h
-    include/internal/fbs_loader.h
-    include/internal/path.h
-    include/internal/util.h
+    include/target/fbs_loader.h
+    include/target/path.h
+    include/target/util.h
+    include/target/command.h
 )
+target_include_directories(target PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
+)
+target_link_libraries(target PUBLIC 
+    env
+    toolchain
+    flatbuffers
+    Taskflow
+)
+target_link_libraries(target PRIVATE
+    tiny-process-library::tiny-process-library
+)
+
 target_include_directories(target PRIVATE
    ${CMAKE_CURRENT_BINARY_DIR}/generated
 )
