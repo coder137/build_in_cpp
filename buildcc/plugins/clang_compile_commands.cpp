@@ -22,7 +22,7 @@
 #include "env/assert_fatal.h"
 
 // target
-#include "internal/util.h"
+#include "target/util.h"
 
 // flatbuffers
 #include "flatbuffers/flexbuffers.h"

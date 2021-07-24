@@ -21,7 +21,7 @@
 #include <string>
 #include <unordered_set>
 
-#include "internal/path.h"
+#include "target/path.h"
 
 namespace fs = std::filesystem;
 

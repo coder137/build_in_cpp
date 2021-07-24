@@ -18,7 +18,7 @@
 
 #include "env/assert_fatal.h"
 
-#include "internal/util.h"
+#include "target/util.h"
 
 namespace buildcc::base {
 

@@ -1,4 +1,4 @@
-#include "internal/command.h"
+#include "target/command.h"
 
 #include "CppUTestExt/MockSupport.h"
 

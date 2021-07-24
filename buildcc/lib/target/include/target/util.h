@@ -20,7 +20,7 @@
 #include <string>
 #include <vector>
 
-#include "internal/path.h"
+#include "target/path.h"
 
 namespace buildcc::internal {
 

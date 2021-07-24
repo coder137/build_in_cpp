@@ -25,9 +25,9 @@
 #include <vector>
 
 // Internal
-#include "internal/command.h"
-#include "internal/fbs_loader.h"
-#include "internal/path.h"
+#include "target/command.h"
+#include "target/fbs_loader.h"
+#include "target/path.h"
 
 // Buildcc
 #include "toolchain.h"

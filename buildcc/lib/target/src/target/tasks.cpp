@@ -21,7 +21,7 @@
 #include "env/assert_fatal.h"
 #include "env/logging.h"
 
-#include "internal/util.h"
+#include "target/util.h"
 
 #include "fmt/format.h"
 

@@ -5,7 +5,7 @@
 #include "expect_target.h"
 #include "target.h"
 
-#include "internal/fbs_loader.h"
+#include "target/fbs_loader.h"
 
 #include "flatbuffers/util.h"
 

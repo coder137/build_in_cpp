@@ -19,7 +19,7 @@
 
 #include <unordered_map>
 
-#include "internal/path.h"
+#include "target/path.h"
 
 #include "toolchain.h"
 

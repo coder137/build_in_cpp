@@ -8,7 +8,7 @@
 #include "flatbuffers/util.h"
 
 //
-#include "internal/fbs_loader.h"
+#include "target/fbs_loader.h"
 
 #include <iostream>
 #include <unistd.h>
