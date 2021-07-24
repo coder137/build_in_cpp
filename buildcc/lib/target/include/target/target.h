@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_INCLUDE_TARGET_H_
-#define TARGET_INCLUDE_TARGET_H_
+#ifndef TARGET_TARGET_H_
+#define TARGET_TARGET_H_
 
 #include <filesystem>
 #include <functional>

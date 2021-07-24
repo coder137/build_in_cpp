@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_INCLUDE_INTERNAL_FBS_LOADER_H_
-#define TARGET_INCLUDE_INTERNAL_FBS_LOADER_H_
+#ifndef TARGET_FBS_LOADER_H_
+#define TARGET_FBS_LOADER_H_
 
 #include <filesystem>
 #include <string>

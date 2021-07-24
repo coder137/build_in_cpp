@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_INCLUDE_INTERNAL_PATH_H_
-#define TARGET_INCLUDE_INTERNAL_PATH_H_
+#ifndef TARGET_PATH_H_
+#define TARGET_PATH_H_
 
 #include <filesystem>
 #include <string>
