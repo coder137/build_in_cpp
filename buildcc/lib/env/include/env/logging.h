@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef ENV_INCLUDE_LOGGING_H_
-#define ENV_INCLUDE_LOGGING_H_
+#ifndef ENV_LOGGING_H_
+#define ENV_LOGGING_H_
 
 #include <string>
 

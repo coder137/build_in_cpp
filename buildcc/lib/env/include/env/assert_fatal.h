@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef ENV_INCLUDE_ASSERT_FATAL_H_
-#define ENV_INCLUDE_ASSERT_FATAL_H_
+#ifndef ENV_ASSERT_FATAL_H_
+#define ENV_ASSERT_FATAL_H_
 
 #include <string>
 
