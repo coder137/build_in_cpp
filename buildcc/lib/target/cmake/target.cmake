@@ -18,7 +18,7 @@ add_library(target
     src/util/command.cpp
     src/util/execute.cpp
 
-    include/target.h
+    include/target/target.h
     include/target/fbs_loader.h
     include/target/path.h
     include/target/util.h
