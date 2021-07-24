@@ -17,7 +17,7 @@
 #ifndef TARGETS_TARGET_MSVC_H_
 #define TARGETS_TARGET_MSVC_H_
 
-#include "target.h"
+#include "target/target.h"
 
 #include "target_constants.h"
 

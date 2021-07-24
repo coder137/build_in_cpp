@@ -3,7 +3,7 @@
 #include "env/logging.h"
 
 #include "expect_target.h"
-#include "target.h"
+#include "target/target.h"
 
 #include "flatbuffers/util.h"
 

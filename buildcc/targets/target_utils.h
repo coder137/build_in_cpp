@@ -19,7 +19,7 @@
 
 #include <string>
 
-#include "target.h"
+#include "target/target.h"
 
 #include "env/host_os.h"
 

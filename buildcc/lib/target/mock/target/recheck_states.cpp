@@ -1,4 +1,4 @@
-#include "target.h"
+#include "target/target.h"
 
 #include "expect_target.h"
 

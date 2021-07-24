@@ -27,7 +27,7 @@
 
 // Base
 #include "toolchain.h"
-#include "target.h"
+#include "target/target.h"
 
 // Specialized Toolchain
 #include "toolchain_gcc.h"

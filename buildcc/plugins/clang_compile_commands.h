@@ -17,7 +17,7 @@
 #ifndef PLUGINS_CLANG_COMPILE_COMMANDS_H_
 #define PLUGINS_CLANG_COMPILE_COMMANDS_H_
 
-#include "target.h"
+#include "target/target.h"
 
 namespace buildcc::plugin {
 

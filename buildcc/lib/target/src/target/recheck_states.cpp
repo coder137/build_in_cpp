@@ -16,7 +16,7 @@
 
 // NOTE, This source file is only present so that `mock/recheck_states.cpp` can
 // be used accurately
-#include "target.h"
+#include "target/target.h"
 
 namespace buildcc::base {
 

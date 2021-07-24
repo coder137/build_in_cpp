@@ -1,7 +1,7 @@
 #ifndef TARGET_MOCK_EXPECT_TARGET_H_
 #define TARGET_MOCK_EXPECT_TARGET_H_
 
-#include "target.h"
+#include "target/target.h"
 
 namespace buildcc {
 
