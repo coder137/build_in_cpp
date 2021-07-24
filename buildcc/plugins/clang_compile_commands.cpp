@@ -21,9 +21,6 @@
 // env
 #include "env/assert_fatal.h"
 
-// target
-#include "target/util.h"
-
 // flatbuffers
 #include "flatbuffers/flexbuffers.h"
 
