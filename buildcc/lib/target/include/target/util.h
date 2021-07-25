@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_INCLUDE_INTERNAL_UTIL_H_
-#define TARGET_INCLUDE_INTERNAL_UTIL_H_
+#ifndef TARGET_UTIL_H_
+#define TARGET_UTIL_H_
 
 #include <string>
 #include <vector>
 
-#include "internal/path.h"
+#include "target/path.h"
 
 namespace buildcc::internal {
 

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_INCLUDE_INTERNAL_COMMAND_H_
-#define TARGET_INCLUDE_INTERNAL_COMMAND_H_
+#ifndef TARGET_COMMAND_H_
+#define TARGET_COMMAND_H_
 
 #include <unordered_map>
 
-#include "internal/path.h"
+#include "target/path.h"
 
 #include "toolchain.h"
 

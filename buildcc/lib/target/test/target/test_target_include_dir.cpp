@@ -1,7 +1,7 @@
 #include "constants.h"
 
 #include "expect_target.h"
-#include "target.h"
+#include "target/target.h"
 
 #include "env/env.h"
 

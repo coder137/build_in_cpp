@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "internal/command.h"
+#include "target/command.h"
 
 #include <algorithm>
 

@@ -1,12 +1,12 @@
 #include "constants.h"
 
 #include "expect_target.h"
-#include "target.h"
+#include "target/target.h"
 
 #include "env/env.h"
 
 //
-#include "internal/fbs_loader.h"
+#include "target/fbs_loader.h"
 
 // Third Party
 #include "flatbuffers/util.h"

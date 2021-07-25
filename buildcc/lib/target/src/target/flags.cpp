@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "target.h"
+#include "target/target.h"
 
 namespace buildcc::base {
 

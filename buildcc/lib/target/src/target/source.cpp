@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-#include "target.h"
+#include "target/target.h"
 
-#include "internal/util.h"
+#include "target/util.h"
 
 #include "env/assert_fatal.h"
 

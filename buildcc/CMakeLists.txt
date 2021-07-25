@@ -19,7 +19,9 @@ add_subdirectory(lib/args)
 # First party plugins
 add_subdirectory(plugins)
 
-add_library(buildcc INTERFACE)
+add_library(buildcc INTERFACE
+    buildcc.h
+)
 target_include_directories(buildcc INTERFACE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "internal/fbs_loader.h"
+#include "target/fbs_loader.h"
 
 #include "flatbuffers/util.h"
 #include "target_generated.h"
