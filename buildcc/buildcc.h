@@ -47,7 +47,7 @@
 #include "clang_compile_commands.h"
 
 // BuildCC Modules
-#include "args.h"
-#include "register.h"
+#include "args/args.h"
+#include "args/register.h"
 
 #endif

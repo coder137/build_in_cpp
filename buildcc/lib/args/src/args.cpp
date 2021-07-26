@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "args.h"
+#include "args/args.h"
 
 namespace buildcc {
 
