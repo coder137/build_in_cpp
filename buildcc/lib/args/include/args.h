@@ -25,7 +25,7 @@
 // BuildCC
 #include "env/logging.h"
 
-#include "toolchain.h"
+#include "toolchain/toolchain.h"
 
 namespace fs = std::filesystem;
 

@@ -17,7 +17,7 @@
 #ifndef TOOLCHAINS_TOOLCHAIN_MSVC_H_
 #define TOOLCHAINS_TOOLCHAIN_MSVC_H_
 
-#include "toolchain.h"
+#include "toolchain/toolchain.h"
 
 namespace buildcc {
 
