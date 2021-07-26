@@ -29,8 +29,7 @@
 #include "target/fbs_loader.h"
 #include "target/path.h"
 
-// Buildcc
-#include "toolchain.h"
+#include "toolchain/toolchain.h"
 
 // Env
 #include "env/env.h"

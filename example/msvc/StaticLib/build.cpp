@@ -4,8 +4,6 @@
 #include "buildcc.h"
 #include "constants.h"
 
-#include "clang_compile_commands.h"
-
 using namespace buildcc;
 
 int main(void) {

@@ -2,8 +2,6 @@
 
 #include "build.foo.h"
 
-#include "clang_compile_commands.h"
-
 using namespace buildcc;
 
 static void clean_cb();

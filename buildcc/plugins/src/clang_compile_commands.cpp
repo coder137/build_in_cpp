@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "clang_compile_commands.h"
+#include "plugins/clang_compile_commands.h"
 
 #include <algorithm>
 

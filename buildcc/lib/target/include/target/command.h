@@ -21,7 +21,7 @@
 
 #include "target/path.h"
 
-#include "toolchain.h"
+#include "toolchain/toolchain.h"
 
 namespace buildcc::internal {
 

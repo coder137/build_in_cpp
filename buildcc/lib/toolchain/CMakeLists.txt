@@ -1,10 +1,10 @@
 # Toolchain lib
 m_clangtidy("toolchain")
 add_library(toolchain INTERFACE
-    toolchain.h
+    include/toolchain/toolchain.h
 )
 target_include_directories(toolchain INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>  
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
     $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
 )
 
@@ -13,6 +13,6 @@ target_include_directories(toolchain INTERFACE
 # Toolchain install
 if (${BUILDCC_INSTALL})
     install(TARGETS toolchain DESTINATION lib EXPORT toolchainConfig)
-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/toolchain.h DESTINATION include/buildcc)
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
     install(EXPORT toolchainConfig DESTINATION lib/cmake/toolchain)
 endif()

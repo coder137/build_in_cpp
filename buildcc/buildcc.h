@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef BUILDCC_INCLUDE_BUILDCC_H_
-#define BUILDCC_INCLUDE_BUILDCC_H_
+#ifndef BUILDCC_BUILDCC_H_
+#define BUILDCC_BUILDCC_H_
 
 // clang-format off
 
@@ -26,28 +26,28 @@
 #include "env/host_os.h"
 
 // Base
-#include "toolchain.h"
+#include "toolchain/toolchain.h"
 #include "target/target.h"
 
 // Specialized Toolchain
-#include "toolchain_gcc.h"
-#include "toolchain_msvc.h"
+#include "toolchains/toolchain_gcc.h"
+#include "toolchains/toolchain_msvc.h"
 
 // TODO, Add more specialized toolchains here
 
 // Specialized Targets
-#include "target_gcc.h"
-#include "target_msvc.h"
-#include "target_generic.h"
-#include "target_custom.h"
+#include "targets/target_gcc.h"
+#include "targets/target_msvc.h"
+#include "targets/target_generic.h"
+#include "targets/target_custom.h"
 
 // TODO, Add more specialized targets here
 
 // Plugins
-#include "clang_compile_commands.h"
+#include "plugins/clang_compile_commands.h"
 
 // BuildCC Modules
-#include "args.h"
-#include "register.h"
+#include "args/args.h"
+#include "args/register.h"
 
 #endif

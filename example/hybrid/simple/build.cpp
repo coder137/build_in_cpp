@@ -1,5 +1,4 @@
 #include "buildcc.h"
-#include "clang_compile_commands.h"
 
 #include "fmt/format.h"
 
