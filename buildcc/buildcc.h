@@ -30,8 +30,8 @@
 #include "target/target.h"
 
 // Specialized Toolchain
-#include "toolchain_gcc.h"
-#include "toolchain_msvc.h"
+#include "toolchains/toolchain_gcc.h"
+#include "toolchains/toolchain_msvc.h"
 
 // TODO, Add more specialized toolchains here
 
