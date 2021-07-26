@@ -44,7 +44,7 @@
 // TODO, Add more specialized targets here
 
 // Plugins
-#include "clang_compile_commands.h"
+#include "plugins/clang_compile_commands.h"
 
 // BuildCC Modules
 #include "args/args.h"
