@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef BUILDCC_INCLUDE_BUILDCC_H_
-#define BUILDCC_INCLUDE_BUILDCC_H_
+#ifndef BUILDCC_BUILDCC_H_
+#define BUILDCC_BUILDCC_H_
 
 // clang-format off
 

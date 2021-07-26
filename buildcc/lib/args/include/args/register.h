@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef ARGS_INCLUDE_REGISTER_H_
-#define ARGS_INCLUDE_REGISTER_H_
+#ifndef ARGS_REGISTER_H_
+#define ARGS_REGISTER_H_
 
 #include <functional>
 #include <unordered_map>
