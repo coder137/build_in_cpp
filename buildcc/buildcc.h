@@ -36,10 +36,10 @@
 // TODO, Add more specialized toolchains here
 
 // Specialized Targets
-#include "target_gcc.h"
-#include "target_msvc.h"
-#include "target_generic.h"
-#include "target_custom.h"
+#include "targets/target_gcc.h"
+#include "targets/target_msvc.h"
+#include "targets/target_generic.h"
+#include "targets/target_custom.h"
 
 // TODO, Add more specialized targets here
 

@@ -1,15 +1,15 @@
 # Target_specialized lib
 m_clangtidy("target_specialized")
 add_library(target_specialized INTERFACE
-    target_constants.h
-    target_gcc.h
-    target_msvc.h
-    target_generic.h
-    target_custom.h
-    target_utils.h
+    include/targets/target_constants.h
+    include/targets/target_gcc.h
+    include/targets/target_msvc.h
+    include/targets/target_generic.h
+    include/targets/target_custom.h
+    include/targets/target_utils.h
 )
 target_include_directories(target_specialized INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> 
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> 
     $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
 )
 target_link_libraries(target_specialized INTERFACE
@@ -21,14 +21,6 @@ target_link_libraries(target_specialized INTERFACE
 # target_specialized Install
 if (${BUILDCC_INSTALL})
     install(TARGETS target_specialized DESTINATION lib EXPORT target_specializedConfig)
-    install(FILES  
-        ${CMAKE_CURRENT_SOURCE_DIR}/target_gcc.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/target_msvc.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/target_generic.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/target_custom.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/target_constants.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/target_utils.h
-        DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}"
-    )
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
     install(EXPORT target_specializedConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/target_specialized")
 endif()
