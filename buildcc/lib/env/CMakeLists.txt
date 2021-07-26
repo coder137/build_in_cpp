@@ -13,18 +13,15 @@ if (${TESTING})
 endif()
 
 # Env lib
-set(ENV_HEADER_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/env/assert_fatal.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/env/env.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/env/logging.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/env/host_os.h
-)
 
 m_clangtidy("env")
 add_library(env
     src/env.cpp
     src/logging.cpp
-    ${ENV_HEADER_FILES}
+    include/env/assert_fatal.h
+    include/env/env.h
+    include/env/logging.h
+    include/env/host_os.h
 )
 target_include_directories(env PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -40,9 +37,6 @@ target_link_libraries(env PRIVATE
 # Env install
 if (${BUILDCC_INSTALL})
     install(TARGETS env DESTINATION lib EXPORT envConfig)
-    install(FILES         
-        ${ENV_HEADER_FILES}
-        DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}/env"
-    )
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
     install(EXPORT envConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/env")
 endif()
