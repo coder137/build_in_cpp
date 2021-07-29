@@ -65,10 +65,9 @@ inline bool LoadFile(const char *name, bool binary, std::string *buf) {
   }
   if (binary) {
     // The fastest way to read a file into a string.
-    ifs.seekg(0, std::ios::end);
-    auto size = ifs.tellg();
-    (*buf).resize(static_cast<size_t>(size));
-    ifs.seekg(0, std::ios::beg);
+    auto size = static_cast<size_t>(fs::file_size(name));
+    buf->resize(size);
+    // flawfinder: ignore
     ifs.read(buf->data(), buf->size());
   } else {
     // This is slower, but works correctly on all platforms for text files.
