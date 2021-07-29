@@ -69,7 +69,7 @@ inline bool LoadFile(const char *name, bool binary, std::string *buf) {
     auto size = ifs.tellg();
     (*buf).resize(static_cast<size_t>(size));
     ifs.seekg(0, std::ios::beg);
-    ifs.read(&(*buf)[0], (*buf).size());
+    ifs.read(buf->data(), buf->size());
   } else {
     // This is slower, but works correctly on all platforms for text files.
     std::ostringstream oss;
