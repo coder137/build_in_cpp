@@ -2,8 +2,6 @@
 
 #include "fmt/format.h"
 
-#include "flatbuffers/util.h"
-
 using namespace buildcc;
 
 constexpr const char *const EXE = "build";
@@ -64,7 +62,7 @@ int main(int argc, char **argv) {
 
   // - Plugin Graph
   std::string output = reg.GetTaskflow().dump();
-  const bool saved = flatbuffers::SaveFile("graph.dot", output, false);
+  const bool saved = env::SaveFile("graph.dot", output, false);
   env::assert_fatal(saved, "Could not save graph.dot file");
 
   return 0;

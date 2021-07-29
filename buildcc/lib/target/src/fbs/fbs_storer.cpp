@@ -20,8 +20,8 @@
 #include <filesystem>
 
 #include "env/logging.h"
+#include "env/util.h"
 
-#include "flatbuffers/util.h"
 #include "target_generated.h"
 
 namespace fbs = schema::internal;
@@ -105,9 +105,9 @@ bool Target::Store() {
   fbs::FinishTargetBuffer(builder, fbs_target);
 
   auto file_path = GetBinaryPath();
-  return flatbuffers::SaveFile(file_path.string().c_str(),
-                               (const char *)builder.GetBufferPointer(),
-                               builder.GetSize(), true);
+  return env::SaveFile(file_path.string().c_str(),
+                       (const char *)builder.GetBufferPointer(),
+                       builder.GetSize(), true);
 }
 
 } // namespace buildcc::base

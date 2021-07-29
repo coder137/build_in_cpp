@@ -4,9 +4,9 @@
 #include "target/target.h"
 
 #include "env/env.h"
+#include "env/util.h"
 
 // Third Party
-#include "flatbuffers/util.h"
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
@@ -224,7 +224,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     // * Force copy to trigger recompile for NEW_SOURCE
     // *2 Current file is updated
     auto file_path = source_path / NEW_SOURCE;
-    flatbuffers::SaveFile(file_path.string().c_str(), std::string{""}, false);
+    buildcc::env::SaveFile(file_path.string().c_str(), std::string{""}, false);
 
     buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
                                  gcc, "data");

@@ -22,6 +22,7 @@ add_library(env
     include/env/env.h
     include/env/logging.h
     include/env/host_os.h
+    include/env/util.h
 )
 target_include_directories(env PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
