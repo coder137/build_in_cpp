@@ -16,10 +16,10 @@
 
 #include "target/fbs_loader.h"
 
-#include "flatbuffers/util.h"
 #include "target_generated.h"
 
 #include "env/logging.h"
+#include "env/util.h"
 
 namespace fbs = schema::internal;
 
@@ -61,8 +61,7 @@ bool FbsLoader::Load() {
 
   auto file_path = GetBinaryPath();
   std::string buffer;
-  bool is_loaded =
-      flatbuffers::LoadFile(file_path.string().c_str(), true, &buffer);
+  bool is_loaded = env::LoadFile(file_path.string().c_str(), true, &buffer);
   if (!is_loaded) {
     return false;
   }

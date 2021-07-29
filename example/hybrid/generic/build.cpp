@@ -4,7 +4,6 @@
 #include "buildcc.h"
 
 // Third party-libs
-#include "flatbuffers/util.h"
 #include "fmt/format.h"
 
 // Libraries
@@ -111,7 +110,7 @@ int main(int argc, char **argv) {
 
   // - Plugin Graph
   std::string output = reg.GetTaskflow().dump();
-  const bool saved = flatbuffers::SaveFile("graph.dot", output, false);
+  const bool saved = env::SaveFile("graph.dot", output, false);
   env::assert_fatal(saved, "Could not save graph.dot file");
 
   return 0;

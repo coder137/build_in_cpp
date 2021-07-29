@@ -20,6 +20,7 @@
 
 // env
 #include "env/assert_fatal.h"
+#include "env/util.h"
 
 // flatbuffers
 #include "flatbuffers/flexbuffers.h"
@@ -78,8 +79,7 @@ void ClangCompileCommands::Generate() {
   std::filesystem::path file =
       std::filesystem::path(buildcc::env::get_project_build_dir()) /
       "compile_commands.json";
-  bool saved =
-      flatbuffers::SaveFile(file.string().c_str(), compile_commands, false);
+  bool saved = env::SaveFile(file.string().c_str(), compile_commands, false);
   env::assert_fatal(saved, "Could not save compile_commands.json");
 }
 

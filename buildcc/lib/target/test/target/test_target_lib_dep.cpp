@@ -1,11 +1,10 @@
 #include "constants.h"
 
 #include "env/logging.h"
+#include "env/util.h"
 
 #include "expect_target.h"
 #include "target/target.h"
-
-#include "flatbuffers/util.h"
 
 //
 #include "target/fbs_loader.h"
@@ -78,8 +77,8 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     buildcc::internal::m::CommandExpect_Execute(1, true);
     buildcc::internal::m::CommandExpect_Execute(1, true);
     foolib.Build();
-    flatbuffers::SaveFile(foolib.GetTargetPath().string().c_str(),
-                          std::string{""}, false);
+    buildcc::env::SaveFile(foolib.GetTargetPath().string().c_str(),
+                           std::string{""}, false);
 
     // Executable for static
     buildcc::base::Target exe_target(
@@ -128,8 +127,8 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
   buildcc::internal::m::CommandExpect_Execute(1, true);
   foolib.Build();
 
-  flatbuffers::SaveFile(foolib.GetTargetPath().string().c_str(),
-                        std::string{""}, false);
+  buildcc::env::SaveFile(foolib.GetTargetPath().string().c_str(),
+                         std::string{""}, false);
 
   // * Initial executable
   // Executable for static
@@ -191,8 +190,8 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     buildcc::internal::m::CommandExpect_Execute(1, true);
     foolib.Build();
 
-    bool saved = flatbuffers::SaveFile(foolib.GetTargetPath().string().c_str(),
-                                       std::string{""}, false);
+    bool saved = buildcc::env::SaveFile(foolib.GetTargetPath().string().c_str(),
+                                        std::string{""}, false);
     CHECK_TRUE(saved);
 
     buildcc::base::Target exe_target(
@@ -221,8 +220,8 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
 
     // * To make sure that SaveFile is newer
     sleep(1);
-    bool saved = flatbuffers::SaveFile(foolib.GetTargetPath().string().c_str(),
-                                       std::string{""}, false);
+    bool saved = buildcc::env::SaveFile(foolib.GetTargetPath().string().c_str(),
+                                        std::string{""}, false);
     CHECK_TRUE(saved);
 
     buildcc::base::Target exe_target(

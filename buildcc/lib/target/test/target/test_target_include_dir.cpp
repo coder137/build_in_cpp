@@ -4,9 +4,9 @@
 #include "target/target.h"
 
 #include "env/env.h"
+#include "env/util.h"
 
 // Third Party
-#include "flatbuffers/util.h"
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
@@ -258,8 +258,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
   {
     const fs::path absolute_header_path =
         fs::path(BUILD_SCRIPT_SOURCE) / "data" / RELATIVE_HEADER_FILE;
-    flatbuffers::SaveFile(absolute_header_path.string().c_str(),
-                          std::string{""}, false);
+    buildcc::env::SaveFile(absolute_header_path.string().c_str(),
+                           std::string{""}, false);
 
     buildcc::base::Target add_header(
         NAME, buildcc::base::TargetType::Executable, gcc, "data");
