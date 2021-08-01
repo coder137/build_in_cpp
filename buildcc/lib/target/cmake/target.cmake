@@ -31,7 +31,7 @@ target_include_directories(target PUBLIC
 target_link_libraries(target PUBLIC 
     env
     toolchain
-    flatbuffers
+    flatbuffers_header_only
     Taskflow
 )
 target_link_libraries(target PRIVATE
