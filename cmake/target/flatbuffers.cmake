@@ -9,7 +9,7 @@ add_library(flatbuffers_header_only INTERFACE
 )
 target_include_directories(flatbuffers_header_only INTERFACE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/flatbuffers/include>
-    $<INSTALL_INTERFACE:"include/flatbuffers">
+    $<INSTALL_INTERFACE:include/flatbuffers>
 )
 
 if (${BUILDCC_INSTALL})
