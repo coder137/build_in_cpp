@@ -35,6 +35,7 @@ target_link_libraries(buildcc INTERFACE
 )
 if(${BUILDCC_PRECOMPILE_HEADERS})
     target_precompile_headers(buildcc INTERFACE buildcc.h)    
+    target_precompile_headers(buildcc INTERFACE ${FBS_DIR}/pch/pch.h)
 endif()
 
 if (${BUILDCC_INSTALL})
