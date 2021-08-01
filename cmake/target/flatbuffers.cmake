@@ -1,5 +1,5 @@
-set(FBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/flatbuffers")
-file(GLOB FLATBUFFERS_INCLUDE_HEADERS "${FBS_DIR}/include/flatbuffers/*.h")
+set(FBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/flatbuffers/include/flatbuffers")
+file(GLOB FLATBUFFERS_INCLUDE_HEADERS "${FBS_DIR}/*.h")
 if(${BUILDCC_PRECOMPILE_HEADERS})
     list(APPEND FLATBUFFERS_INCLUDE_HEADERS ${FBS_DIR}/pch/pch.h)
 endif()
