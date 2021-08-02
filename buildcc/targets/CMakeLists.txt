@@ -17,19 +17,19 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
     )
 endif()
 
-if (${BUILDCC_BUILD_AS_INTERFACE})
-    m_clangtidy("target_specialized")
-    add_library(target_specialized INTERFACE
-        ${TARGET_SPECIALIZED_SRCS}
-    )
-    target_include_directories(target_specialized INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> 
-        $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
-    )
-    target_link_libraries(target_specialized INTERFACE
-        target
-    )
+m_clangtidy("target_specialized")
+add_library(target_specialized INTERFACE
+    ${TARGET_SPECIALIZED_SRCS}
+)
+target_include_directories(target_specialized INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> 
+    $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
+)
+target_link_libraries(target_specialized INTERFACE
+    target
+)
 
+if (${BUILDCC_BUILD_AS_INTERFACE})
     # target_specialized Install
     if (${BUILDCC_INSTALL})
         install(TARGETS target_specialized DESTINATION lib EXPORT target_specializedConfig)
