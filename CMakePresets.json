@@ -17,6 +17,7 @@
                 "CMAKE_C_COMPILER": "gcc",
                 "CMAKE_CXX_COMPILER": "g++",
                 "BUILDCC_INSTALL": true,
+                "BUILDCC_FLATBUFFERS_FLATC": true,
                 "BUILDCC_PRECOMPILE_HEADERS": true,
                 "BUILDCC_EXAMPLES": true,
                 "BUILDCC_TESTING": true,
@@ -37,6 +38,7 @@
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_COMPILER": "clang++",
                 "BUILDCC_INSTALL": true,
+                "BUILDCC_FLATBUFFERS_FLATC": true,
                 "BUILDCC_PRECOMPILE_HEADERS": true,
                 "BUILDCC_EXAMPLES": true,
                 "BUILDCC_TESTING": false,
@@ -55,6 +57,7 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "BUILDCC_INSTALL": true,
+                "BUILDCC_FLATBUFFERS_FLATC": true,
                 "BUILDCC_PRECOMPILE_HEADERS": true,
                 "BUILDCC_EXAMPLES": true,
                 "BUILDCC_TESTING": false,

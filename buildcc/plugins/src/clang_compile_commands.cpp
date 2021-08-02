@@ -22,8 +22,8 @@
 #include "env/assert_fatal.h"
 #include "env/util.h"
 
-// flatbuffers
-#include "flatbuffers/flexbuffers.h"
+// third party
+#include "fmt/format.h"
 
 namespace buildcc::plugin {
 
@@ -44,38 +44,42 @@ void ClangCompileCommands::Generate() {
   }
   env::log_trace("ClangCompileCommands", "Generate -> true");
 
-  // DONE, Create custom flexbuffer binary compile_commands interface
-  flexbuffers::Builder fbb;
-  size_t start = fbb.StartVector();
+  // clang-format off
+  constexpr const char *const clang_compile_command_format = 
+R"({{
+    "directory": "{directory}",
+    "command": "{command}",
+    "file": "{file}"
+  }})";
+ //clang-format on
+
+  std::vector<std::string> compile_command_list;
 
   for (const auto *t : targets_) {
     const auto &source_files = t->GetCurrentSourceFiles();
-
     for (const auto &f : source_files) {
       // DONE, Get source list name
       // DONE, Get std::vector<std::string> CompileCommand
       // DONE, Get intermediate directory from env
-      const auto &input_file = f.GetPathname();
-      const auto command = t->CompileCommand(input_file);
-      const auto &directory = env::get_project_build_dir();
+      std::string file = f.GetPathname().string();
+      std::string command = t->CompileCommand(file);
+      std::string directory = env::get_project_build_dir().string();
 
-      // DONE, Use flatbuffers::Flexbuffer to create binary format
-      fbb.Map([&]() {
-        fbb.String("directory", directory.string());
-        fbb.String("command", command);
-        fbb.String("file", input_file.string());
-      });
+      std::replace(file.begin(), file.end(), '\\', '/');
+      std::replace(command.begin(), command.end(), '\\', '/');
+      std::replace(directory.begin(), directory.end(), '\\', '/');
+
+      std::string temp = fmt::format(
+          clang_compile_command_format, fmt::arg("directory", directory),
+          fmt::arg("command", command), fmt::arg("file", file));
+      compile_command_list.push_back(temp);
     }
   }
 
-  fbb.EndVector(start, false, false);
-  fbb.Finish();
+  std::string compile_commands = fmt::format("[\n{}\n]", fmt::join(compile_command_list, ",\n"));
 
   // DONE, Convert to json
-  std::string compile_commands;
-  flexbuffers::GetRoot(fbb.GetBuffer()).ToString(true, true, compile_commands);
-
-  // DONE, Save file using the flatbuffers::SaveFile utility function
+  // DONE, Save file
   std::filesystem::path file =
       std::filesystem::path(buildcc::env::get_project_build_dir()) /
       "compile_commands.json";
