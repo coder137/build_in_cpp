@@ -25,11 +25,11 @@ target_link_libraries(toolchain_specialized INTERFACE
     toolchain
 )
 
-if (${BUILDCC_BUILD_AS_INTERFACE})
-    # toolchain_specialized Install
-    if (${BUILDCC_INSTALL})
+if (${BUILDCC_INSTALL})
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
+    if (${BUILDCC_BUILD_AS_INTERFACE})
+        # toolchain_specialized Install
         install(TARGETS toolchain_specialized DESTINATION lib EXPORT toolchain_specializedConfig)
-        install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
         install(EXPORT toolchain_specializedConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/toolchain_specialized")
     endif()
 endif()

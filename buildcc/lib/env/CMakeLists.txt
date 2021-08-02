@@ -51,7 +51,10 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     # Env install
     if (${BUILDCC_INSTALL})
         install(TARGETS env DESTINATION lib EXPORT envConfig)
-        install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
         install(EXPORT envConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/env")
     endif()
+endif()
+
+if (${BUILDCC_INSTALL})
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
 endif()

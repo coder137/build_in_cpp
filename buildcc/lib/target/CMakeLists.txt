@@ -13,6 +13,4 @@ include(cmake/fbs_gen.cmake)
 include(cmake/target.cmake)
 
 # Target install
-if (${BUILDCC_INSTALL} AND ${BUILDCC_BUILD_AS_INTERFACE})
-    include(cmake/target_install.cmake)
-endif()
+include(cmake/target_install.cmake)

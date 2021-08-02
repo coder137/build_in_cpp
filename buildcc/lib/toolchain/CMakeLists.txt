@@ -20,11 +20,11 @@ target_include_directories(toolchain INTERFACE
     $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
 )
 
-if (${BUILDCC_BUILD_AS_INTERFACE})
+if (${BUILDCC_INSTALL})
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
+    if (${BUILDCC_BUILD_AS_INTERFACE})
     # Toolchain install
-    if (${BUILDCC_INSTALL})
         install(TARGETS toolchain DESTINATION lib EXPORT toolchainConfig)
-        install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
         install(EXPORT toolchainConfig DESTINATION lib/cmake/toolchain)
     endif()
 endif()

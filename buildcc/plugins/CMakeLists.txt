@@ -31,3 +31,7 @@ if (${BUILDCC_BUILD_AS_INTERFACE})
         install(EXPORT pluginsConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/plugins")
     endif()
 endif()
+
+if (${BUILDCC_INSTALL})
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
+endif()

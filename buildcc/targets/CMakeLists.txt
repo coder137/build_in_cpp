@@ -28,12 +28,11 @@ target_include_directories(target_specialized INTERFACE
 target_link_libraries(target_specialized INTERFACE
     target
 )
-
-if (${BUILDCC_BUILD_AS_INTERFACE})
-    # target_specialized Install
-    if (${BUILDCC_INSTALL})
+if (${BUILDCC_INSTALL})
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
+    if (${BUILDCC_BUILD_AS_INTERFACE})
+        # target_specialized Install
         install(TARGETS target_specialized DESTINATION lib EXPORT target_specializedConfig)
-        install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
         install(EXPORT target_specializedConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/target_specialized")
     endif()
 endif()
