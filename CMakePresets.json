@@ -67,7 +67,7 @@
                 "BUILDCC_BUILD_AS_SINGLE_LIB": false,
                 "BUILDCC_BUILD_AS_INTERFACE": true,
                 "BUILDCC_PRECOMPILE_HEADERS": true,
-                "BUILDCC_EXAMPLES": true,
+                "BUILDCC_EXAMPLES": false,
                 "BUILDCC_TESTING": true,
                 "BUILDCC_CLANGTIDY": true,
                 "BUILDCC_CPPCHECK": true,
