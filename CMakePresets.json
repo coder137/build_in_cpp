@@ -54,8 +54,8 @@
         },
         {
             "name": "gcc_dev_interface",
-            "displayName": "GCC single lib build",
-            "description": "GCC build for single lib buildcc",
+            "displayName": "GCC interface lib build",
+            "description": "GCC build for interface lib buildcc",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/_build_gcc_dev_interface",
             "cacheVariables": {
