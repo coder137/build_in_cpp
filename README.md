@@ -51,7 +51,13 @@ See also [Software Architecture](#software-architecture)
 
 ## Software Architecture
 
-![Library dependency](doc/software_architecture/buildcc_core_dep.PNG)
+### Interface lib dependencies
+
+![BuildCC Interface library](doc/software_architecture/buildcc_interface_lib.PNG)
+
+### Single lib dependencies
+
+![BuildCC Single library](doc/software_architecture/buildcc_single_lib.PNG)
 
 - See also [how to generate graphs using CMake](doc/software_architecture/generate_cmake_graphviz.md)
 
