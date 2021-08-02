@@ -17,14 +17,6 @@ find_package(taskflow_package NAMES "Taskflow" "taskflow" REQUIRED)
 find_package(CLI11_package NAMES "CLI11" REQUIRED)
 find_package(tiny_process_library_package NAMES "tiny-process-library" REQUIRED)
 
-find_package(env_package NAMES "env" REQUIRED)
-find_package(toolchain_package NAMES "toolchain" REQUIRED)
-find_package(toolchain_specialized_package NAMES "toolchain_specialized" REQUIRED)
-find_package(target_package NAMES "target" REQUIRED)
-find_package(target_specialized_package NAMES "target_specialized" REQUIRED)
-find_package(plugins_package NAMES "plugins" REQUIRED)
-find_package(args_package NAMES "args" REQUIRED)
-
 find_package(buildcc_package NAMES "buildcc" REQUIRED)
 
 message("Find package: ${fmt_package_DIR}")
@@ -33,15 +25,6 @@ message("Find package: ${flatbuffers_header_only_package_DIR}")
 message("Find package: ${taskflow_package_DIR}")
 message("Find package: ${CLI11_package_DIR}")
 message("Find package: ${tiny_process_library_package_DIR}") #
-
-message("Find package: ${env_package_DIR}") #
-message("Find package: ${toolchain_package_DIR}")
-message("Find package: ${toolchain_specialized_package_DIR}")
-message("Find package: ${target_package_DIR}") #
-message("Find package: ${target_specialized_package_DIR}")
-
-message("Find package: ${plugins_package_DIR}") #
-message("Find package: ${args_package_DIR}") # 
 
 message("Find package: ${buildcc_package_DIR}")
 

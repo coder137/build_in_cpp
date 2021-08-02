@@ -8,7 +8,7 @@
     "configurePresets": [
         {
             "name": "gcc_dev_all",
-            "displayName": "GCC all options",
+            "displayName": "GCC full build",
             "description": "GCC build with all developer options",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/_build_gcc_dev_all",
@@ -18,8 +18,56 @@
                 "CMAKE_CXX_COMPILER": "g++",
                 "BUILDCC_INSTALL": true,
                 "BUILDCC_FLATBUFFERS_FLATC": true,
+                "BUILDCC_BUILD_AS_SINGLE_LIB": true,
+                "BUILDCC_BUILD_AS_INTERFACE": true,
                 "BUILDCC_PRECOMPILE_HEADERS": true,
                 "BUILDCC_EXAMPLES": true,
+                "BUILDCC_TESTING": true,
+                "BUILDCC_CLANGTIDY": true,
+                "BUILDCC_CPPCHECK": true,
+                "BUILDCC_DOCUMENTATION": true,
+                "BUILDCC_NO_DEPRECATED": false
+            }
+        },
+        {
+            "name": "gcc_dev_single",
+            "displayName": "GCC single lib build",
+            "description": "GCC build for single lib buildcc",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/_build_gcc_dev_single",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++",
+                "BUILDCC_INSTALL": true,
+                "BUILDCC_FLATBUFFERS_FLATC": true,
+                "BUILDCC_BUILD_AS_SINGLE_LIB": true,
+                "BUILDCC_BUILD_AS_INTERFACE": false,
+                "BUILDCC_PRECOMPILE_HEADERS": true,
+                "BUILDCC_EXAMPLES": true,
+                "BUILDCC_TESTING": true,
+                "BUILDCC_CLANGTIDY": true,
+                "BUILDCC_CPPCHECK": true,
+                "BUILDCC_DOCUMENTATION": true,
+                "BUILDCC_NO_DEPRECATED": false
+            }
+        },
+        {
+            "name": "gcc_dev_interface",
+            "displayName": "GCC interface lib build",
+            "description": "GCC build for interface lib buildcc",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/_build_gcc_dev_interface",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++",
+                "BUILDCC_INSTALL": true,
+                "BUILDCC_FLATBUFFERS_FLATC": true,
+                "BUILDCC_BUILD_AS_SINGLE_LIB": false,
+                "BUILDCC_BUILD_AS_INTERFACE": true,
+                "BUILDCC_PRECOMPILE_HEADERS": true,
+                "BUILDCC_EXAMPLES": false,
                 "BUILDCC_TESTING": true,
                 "BUILDCC_CLANGTIDY": true,
                 "BUILDCC_CPPCHECK": true,
@@ -39,6 +87,8 @@
                 "CMAKE_CXX_COMPILER": "clang++",
                 "BUILDCC_INSTALL": true,
                 "BUILDCC_FLATBUFFERS_FLATC": true,
+                "BUILDCC_BUILD_AS_SINGLE_LIB": true,
+                "BUILDCC_BUILD_AS_INTERFACE": true,
                 "BUILDCC_PRECOMPILE_HEADERS": true,
                 "BUILDCC_EXAMPLES": true,
                 "BUILDCC_TESTING": false,
@@ -58,6 +108,8 @@
                 "CMAKE_BUILD_TYPE": "Debug",
                 "BUILDCC_INSTALL": true,
                 "BUILDCC_FLATBUFFERS_FLATC": true,
+                "BUILDCC_BUILD_AS_SINGLE_LIB": true,
+                "BUILDCC_BUILD_AS_INTERFACE": true,
                 "BUILDCC_PRECOMPILE_HEADERS": true,
                 "BUILDCC_EXAMPLES": true,
                 "BUILDCC_TESTING": false,
@@ -74,6 +126,14 @@
             "configurePreset": "gcc_dev_all"
         },
         {
+            "name": "gcc_dev_single",
+            "configurePreset": "gcc_dev_single"
+        },
+        {
+            "name": "gcc_dev_interface",
+            "configurePreset": "gcc_dev_interface"
+        },
+        {
             "name": "clang_dev_all",
             "configurePreset": "clang_dev_all"
         },
@@ -86,6 +146,28 @@
         {
             "name": "gcc_dev_all",
             "configurePreset": "gcc_dev_all",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": true
+            }
+        },
+        {
+            "name": "gcc_dev_single",
+            "configurePreset": "gcc_dev_single",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": true
+            }
+        },
+        {
+            "name": "gcc_dev_interface",
+            "configurePreset": "gcc_dev_interface",
             "output": {
                 "outputOnFailure": true
             },

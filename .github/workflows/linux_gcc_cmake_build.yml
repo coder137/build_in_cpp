@@ -9,10 +9,13 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
-  BUILD_FOLDER: _build_gcc_dev_all
+  BUILD_FOLDER_DEV_ALL: _build_gcc_dev_all
+  BUILD_FOLDER_DEV_SINGLE: _build_gcc_dev_single
+  BUILD_FOLDER_DEV_INTERFACE: _build_gcc_dev_interface
 
 jobs:
-  build:
+  build_all:
+    name: BuildCC single and interface Lib
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
@@ -46,7 +49,7 @@ jobs:
           cmake --preset=gcc_dev_all
 
       - name: Static Analysis
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: cmake --build . --target cppcheck_static_analysis
 
       - name: Build
@@ -60,7 +63,7 @@ jobs:
           ctest --preset=gcc_dev_all --parallel 2
 
       - name: Install
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
           sudo cmake --install .
 
@@ -73,26 +76,152 @@ jobs:
           ./build
 
       - name: Hybrid Simple Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
           cmake --build . --target run_hybrid_simple_example_linux
 
       - name: Hybrid Foolib Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
           cmake --build . --target run_hybrid_foolib_example_linux
 
       - name: Hybrid External Lib Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
           cmake --build . --target run_hybrid_externallib_example_linux
 
       - name: Hybrid Custom Target Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
           cmake --build . --target run_hybrid_customtarget_example_linux
 
       - name: Hybrid Generic Target Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER}}
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
           cmake --build . --target run_hybrid_generic_example
+
+  build_single:
+    name: BuildCC single lib
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: System Packages
+        run: |
+          sudo apt-get install ninja-build doxygen graphviz gcovr lcov cppcheck clang-tidy
+
+      - name: Check environment
+        run: |
+          cmake --version
+          gcc --version
+          clang --version
+          ninja --version
+          doxygen --version
+          gcovr --version
+          lcov --version
+          cppcheck --version
+          clang-tidy --version
+
+      - name: Configure CMake
+        run: |
+          cmake --list-presets
+          cmake --preset=gcc_dev_single
+
+      - name: Static Analysis
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
+        run: cmake --build . --target cppcheck_static_analysis
+
+      - name: Build
+        # Linux has 2 cores
+        run: |
+          cmake --build --list-presets
+          cmake --build --preset=gcc_dev_single --parallel 2
+
+      - name: Test
+        run: |
+          ctest --preset=gcc_dev_single --parallel 2
+
+      - name: Install
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
+        run: |
+          sudo cmake --install .
+
+      - name: AfterInstall Example
+        working-directory: ${{github.workspace}}/example/gcc/AfterInstall
+        run: |
+          cmake -B build -G Ninja
+          cmake --build build --parallel 2
+          cd build
+          ./build
+
+      - name: Hybrid Simple Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
+        run: |
+          cmake --build . --target run_hybrid_simple_example_linux
+
+      - name: Hybrid Foolib Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
+        run: |
+          cmake --build . --target run_hybrid_foolib_example_linux
+
+      - name: Hybrid External Lib Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
+        run: |
+          cmake --build . --target run_hybrid_externallib_example_linux
+
+      - name: Hybrid Custom Target Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
+        run: |
+          cmake --build . --target run_hybrid_customtarget_example_linux
+
+      - name: Hybrid Generic Target Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
+        run: |
+          cmake --build . --target run_hybrid_generic_example
+
+  build_interface:
+    name: BuildCC interface lib
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: System Packages
+        run: |
+          sudo apt-get install ninja-build doxygen graphviz gcovr lcov cppcheck clang-tidy
+
+      - name: Check environment
+        run: |
+          cmake --version
+          gcc --version
+          clang --version
+          ninja --version
+          doxygen --version
+          gcovr --version
+          lcov --version
+          cppcheck --version
+          clang-tidy --version
+
+      - name: Configure CMake
+        run: |
+          cmake --list-presets
+          cmake --preset=gcc_dev_interface
+
+      - name: Static Analysis
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_INTERFACE}}
+        run: cmake --build . --target cppcheck_static_analysis
+
+      - name: Build
+        # Linux has 2 cores
+        run: |
+          cmake --build --list-presets
+          cmake --build --preset=gcc_dev_interface --parallel 2
+
+      - name: Test
+        run: |
+          ctest --preset=gcc_dev_interface --parallel 2
