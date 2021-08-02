@@ -20,6 +20,8 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
         spdlog::spdlog_header_only
         tiny-process-library::tiny-process-library
     )
+    target_compile_options(buildcc PRIVATE ${BUILD_COMPILE_FLAGS})
+    target_link_options(buildcc PRIVATE ${BUILD_LINK_FLAGS})
     if(${BUILDCC_PRECOMPILE_HEADERS})
         target_precompile_headers(buildcc INTERFACE buildcc.h)    
         target_precompile_headers(buildcc INTERFACE ${FBS_DIR}/pch/pch.h)
