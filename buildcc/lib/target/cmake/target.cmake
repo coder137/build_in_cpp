@@ -37,28 +37,29 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
     add_dependencies(buildcc fbs_to_header)
 endif()
 
-# Target
-m_clangtidy("target")
-add_library(target
-    ${TARGET_SRCS}
-)
-target_include_directories(target PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
-)
-target_link_libraries(target PUBLIC 
-    env
-    toolchain
-    flatbuffers_header_only
-    Taskflow
-)
-target_link_libraries(target PRIVATE
-    tiny-process-library::tiny-process-library
-)
+if(${BUILDCC_BUILD_AS_INTERFACE})
+    m_clangtidy("target")
+    add_library(target
+        ${TARGET_SRCS}
+    )
+    target_include_directories(target PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
+    )
+    target_link_libraries(target PUBLIC 
+        env
+        toolchain
+        flatbuffers_header_only
+        Taskflow
+    )
+    target_link_libraries(target PRIVATE
+        tiny-process-library::tiny-process-library
+    )
 
-target_include_directories(target PRIVATE
-   ${CMAKE_CURRENT_BINARY_DIR}/generated
-)
-target_compile_options(target PRIVATE ${BUILD_COMPILE_FLAGS})
-target_link_options(target PRIVATE ${BUILD_LINK_FLAGS})
-add_dependencies(target fbs_to_header)
+    target_include_directories(target PRIVATE
+    ${CMAKE_CURRENT_BINARY_DIR}/generated
+    )
+    target_compile_options(target PRIVATE ${BUILD_COMPILE_FLAGS})
+    target_link_options(target PRIVATE ${BUILD_LINK_FLAGS})
+    add_dependencies(target fbs_to_header)
+endif()

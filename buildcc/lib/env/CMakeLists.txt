@@ -32,25 +32,26 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
     )
 endif()
 
-# Env lib
-m_clangtidy("env")
-add_library(env
-    ${ENV_SRCS}
-)
-target_include_directories(env PUBLIC 
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
-)
-target_link_libraries(env PUBLIC fmt::fmt-header-only)
-target_compile_options(env PRIVATE ${BUILD_COMPILE_FLAGS})
-target_link_options(env PRIVATE ${BUILD_LINK_FLAGS})
-target_link_libraries(env PRIVATE
-    spdlog::spdlog_header_only
-)
+if(${BUILDCC_BUILD_AS_INTERFACE})
+    m_clangtidy("env")
+    add_library(env
+        ${ENV_SRCS}
+    )
+    target_include_directories(env PUBLIC 
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
+    )
+    target_link_libraries(env PUBLIC fmt::fmt-header-only)
+    target_compile_options(env PRIVATE ${BUILD_COMPILE_FLAGS})
+    target_link_options(env PRIVATE ${BUILD_LINK_FLAGS})
+    target_link_libraries(env PRIVATE
+        spdlog::spdlog_header_only
+    )
 
-# Env install
-if (${BUILDCC_INSTALL})
-    install(TARGETS env DESTINATION lib EXPORT envConfig)
-    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
-    install(EXPORT envConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/env")
+    # Env install
+    if (${BUILDCC_INSTALL})
+        install(TARGETS env DESTINATION lib EXPORT envConfig)
+        install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
+        install(EXPORT envConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/env")
+    endif()
 endif()
