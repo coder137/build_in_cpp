@@ -6,21 +6,21 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
         ${TOOLCHAIN_SRCS}
     )
     target_include_directories(buildcc PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
-        $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>    
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
     )
 endif()
 
-if (${BUILDCC_BUILD_AS_INTERFACE})
-    m_clangtidy("toolchain")
-    add_library(toolchain INTERFACE
-        ${TOOLCHAIN_SRCS}
-    )
-    target_include_directories(toolchain INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
-        $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
-    )
+m_clangtidy("toolchain")
+add_library(toolchain INTERFACE
+    ${TOOLCHAIN_SRCS}
+)
+target_include_directories(toolchain INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
+    $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
+)
 
+if (${BUILDCC_BUILD_AS_INTERFACE})
     # Toolchain install
     if (${BUILDCC_INSTALL})
         install(TARGETS toolchain DESTINATION lib EXPORT toolchainConfig)
