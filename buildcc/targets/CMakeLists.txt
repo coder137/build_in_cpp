@@ -1,12 +1,25 @@
-# Target_specialized lib
-m_clangtidy("target_specialized")
-add_library(target_specialized INTERFACE
+set(TARGET_SPECIALIZED_SRCS
     include/targets/target_constants.h
     include/targets/target_gcc.h
     include/targets/target_msvc.h
     include/targets/target_generic.h
     include/targets/target_custom.h
     include/targets/target_utils.h
+)
+if(${BUILDCC_BUILD_AS_SINGLE_LIB})
+    target_sources(buildcc PRIVATE
+        ${TARGET_SPECIALIZED_SRCS}
+    )
+    target_include_directories(buildcc PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> 
+        $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
+    )
+endif()
+
+# Target_specialized lib
+m_clangtidy("target_specialized")
+add_library(target_specialized INTERFACE
+    ${TARGET_SPECIALIZED_SRCS}
 )
 target_include_directories(target_specialized INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> 

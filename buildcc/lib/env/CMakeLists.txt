@@ -12,10 +12,7 @@ if (${TESTING})
     )
 endif()
 
-# Env lib
-
-m_clangtidy("env")
-add_library(env
+set(ENV_SRCS
     src/env.cpp
     src/logging.cpp
     include/env/assert_fatal.h
@@ -23,6 +20,22 @@ add_library(env
     include/env/logging.h
     include/env/host_os.h
     include/env/util.h
+)
+
+if(${BUILDCC_BUILD_AS_SINGLE_LIB})
+    target_sources(buildcc PRIVATE
+        ${ENV_SRCS}
+    )
+    target_include_directories(buildcc PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
+    )
+endif()
+
+# Env lib
+m_clangtidy("env")
+add_library(env
+    ${ENV_SRCS}
 )
 target_include_directories(env PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

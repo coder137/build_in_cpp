@@ -1,6 +1,4 @@
-# Target
-m_clangtidy("target")
-add_library(target
+set(TARGET_SRCS 
     src/target/target.cpp
     src/target/source.cpp
     src/target/include_dir.cpp
@@ -23,6 +21,26 @@ add_library(target
     include/target/path.h
     include/target/util.h
     include/target/command.h
+)
+
+if(${BUILDCC_BUILD_AS_SINGLE_LIB})
+    target_sources(buildcc PRIVATE
+        ${TARGET_SRCS}
+    )
+    target_include_directories(buildcc PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
+    )
+    target_include_directories(buildcc PRIVATE
+        ${CMAKE_CURRENT_BINARY_DIR}/generated
+    )
+    add_dependencies(buildcc fbs_to_header)
+endif()
+
+# Target
+m_clangtidy("target")
+add_library(target
+    ${TARGET_SRCS}
 )
 target_include_directories(target PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

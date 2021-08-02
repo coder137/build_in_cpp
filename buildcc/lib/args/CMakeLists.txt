@@ -3,13 +3,27 @@ if (${TESTING})
 # TODO, Add for unit testing and mocking
 endif()
 
-# Args lib
-m_clangtidy("args")
-add_library(args
+set(ARGS_SRCS
     src/args.cpp
     src/register.cpp
     include/args/args.h
     include/args/register.h
+)
+
+if(${BUILDCC_BUILD_AS_SINGLE_LIB})
+    target_sources(buildcc PRIVATE
+        ${ARGS_SRCS}
+    )
+    target_include_directories(buildcc PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
+    )
+endif()
+
+# Args lib
+m_clangtidy("args")
+add_library(args
+    ${ARGS_SRCS}
 )
 target_include_directories(args PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

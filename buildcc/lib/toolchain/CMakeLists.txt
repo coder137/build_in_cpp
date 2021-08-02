@@ -1,3 +1,13 @@
+if(${BUILDCC_BUILD_AS_SINGLE_LIB})
+    target_sources(buildcc PRIVATE
+        include/toolchain/toolchain.h
+    )
+    target_include_directories(buildcc PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
+        $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>    
+    )
+endif()
+
 # Toolchain lib
 m_clangtidy("toolchain")
 add_library(toolchain INTERFACE

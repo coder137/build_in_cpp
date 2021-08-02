@@ -1,7 +1,21 @@
-m_clangtidy("plugins")
-add_library(plugins
+set(PLUGINS_SRCS
     src/clang_compile_commands.cpp
     include/plugins/clang_compile_commands.h
+)
+
+if(${BUILDCC_BUILD_AS_SINGLE_LIB})
+    target_sources(buildcc PRIVATE
+        ${PLUGINS_SRCS}
+    )
+    target_include_directories(buildcc PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
+    )
+endif()
+
+m_clangtidy("plugins")
+add_library(plugins
+    ${PLUGINS_SRCS}
 )
 target_include_directories(plugins PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
