@@ -69,6 +69,18 @@ See also [Software Architecture](#software-architecture)
 
 Developers interested in using **_BuildCC_**
 
+## BuildCC User options
+
+- BUILDCC_INSTALL: ON
+- BUILDCC_FLATBUFFERS_FLATC: ON
+- BUILDCC_BUILD_AS_SINGLE_LIB: ON
+  - Generates `libbuildcc`
+- BUILDCC_BUILD_AS_INTERFACE_LIB: OFF
+  - Generates `libbuildcc_i` with other `lib`s linked during compilation 
+- BUILDCC_PRECOMPILE_HEADERS: OFF
+- BUILDCC_EXAMPLES: OFF
+  - Uses SINGLE_LIB for its examples
+
 ## Build
 
 > NOTE: Currently, BuildCC needs to be built from source and bootstrapped using CMake.
@@ -212,6 +224,6 @@ _BuildCC_ is licensed under the Apache License, Version 2.0. See [LICENSE](LICEN
 - [Tiny Process Library](https://gitlab.com/eidheim/tiny-process-library) (Process handling) [MIT License]
 - [Taskflow](https://github.com/taskflow/taskflow) (Parallel Programming) [MIT License] [Header Only]
   - See also [3rd-Party](https://github.com/taskflow/taskflow/tree/master/3rd-party) used by Taskflow
-- [Flatbuffers](https://github.com/google/flatbuffers) (Serialization) [Apache-2.0 License]
+- [Flatbuffers](https://github.com/google/flatbuffers) (Serialization) [Apache-2.0 License] [Header Only]
 - [CLI11](https://github.com/CLIUtils/CLI11) (Argument Parsing) [BSD-3-Clause License] [Header Only]
 - [CppUTest](https://github.com/cpputest/cpputest) (Unit Testing/Mocking) [BSD-3-Clause License]
