@@ -20,14 +20,14 @@ add_subdirectory(lib/args)
 add_subdirectory(plugins)
 
 if (${BUILDCC_BUILD_AS_INTERFACE})
-    add_library(buildcc INTERFACE
+    add_library(buildcc_i INTERFACE
         buildcc.h
     )
-    target_include_directories(buildcc INTERFACE 
+    target_include_directories(buildcc_i INTERFACE 
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
     )
-    target_link_libraries(buildcc INTERFACE
+    target_link_libraries(buildcc_i INTERFACE
         target
         args
         plugins
@@ -35,15 +35,15 @@ if (${BUILDCC_BUILD_AS_INTERFACE})
         target_specialized
     )
     if(${BUILDCC_PRECOMPILE_HEADERS})
-        target_precompile_headers(buildcc INTERFACE buildcc.h)    
-        target_precompile_headers(buildcc INTERFACE ${FBS_DIR}/pch/pch.h)
+        target_precompile_headers(buildcc_i INTERFACE buildcc.h)    
+        target_precompile_headers(buildcc_i INTERFACE ${FBS_DIR}/pch/pch.h)
     endif()
 endif()
 
 if (${BUILDCC_INSTALL})
     if(${BUILDCC_BUILD_AS_INTERFACE})
-        install(TARGETS buildcc DESTINATION lib EXPORT buildccConfig)
-        install(EXPORT buildccConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/buildcc")
+        install(TARGETS buildcc_i DESTINATION lib EXPORT buildcc_iConfig)
+        install(EXPORT buildcc_iConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/buildcc_i")
     endif()
 
     install(FILES  
