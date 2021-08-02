@@ -14,6 +14,7 @@ env:
 
 jobs:
   build_all:
+    name: BuildCC single and interface Lib
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
@@ -99,6 +100,7 @@ jobs:
           cmake --build . --target run_hybrid_generic_example
 
   build_single:
+    name: BuildCC single lib
     runs-on: ubuntu-latest
 
     steps:
