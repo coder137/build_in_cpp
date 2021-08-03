@@ -19,21 +19,8 @@
 
 // https://sourceforge.net/p/predef/wiki/OperatingSystems/
 // https://web.archive.org/web/20191012035921/http://nadeausoftware.com/articles/2012/01/c_c_tip_how_use_compiler_predefined_macros_detect_operating_system
+// https://abseil.io/docs/cpp/platforms/macros
 namespace buildcc::env {
-
-// TODO, Add as required
-// enum class OsType {
-//   UNIX,
-//   LINUX,
-//   WIN,
-//   MACOS,
-// };
-
-// TODO, Add as required
-// enum class StandardType {
-//   POSIX,
-//   UNIX,
-// };
 
 inline constexpr bool is_linux() {
 #if defined(__linux__)
