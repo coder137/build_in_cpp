@@ -14,40 +14,39 @@
  * limitations under the License.
  */
 
-#ifndef ENV_HOST_OS_H_
-#define ENV_HOST_OS_H_
+#ifndef ENV_HOST_COMPILER_H_
+#define ENV_HOST_COMPILER_H_
 
 // https://sourceforge.net/p/predef/wiki/OperatingSystems/
-// https://web.archive.org/web/20191012035921/http://nadeausoftware.com/articles/2012/01/c_c_tip_how_use_compiler_predefined_macros_detect_operating_system
 // https://abseil.io/docs/cpp/platforms/macros
 namespace buildcc::env {
 
-inline constexpr bool is_linux() {
-#if defined(__linux__)
+inline constexpr bool is_gcc() {
+#if defined(__GNUC__)
   return true;
 #else
   return false;
 #endif
 }
 
-inline constexpr bool is_win() {
-#if defined(_WIN32)
+inline constexpr bool is_mingw() {
+#if defined(__MINGW32__) || defined(__MINGW64__)
   return true;
 #else
   return false;
 #endif
 }
 
-inline constexpr bool is_mac() {
-#if defined(__APPLE__) || defined(__MACH__)
+inline constexpr bool is_clang() {
+#if defined(__clang__)
   return true;
 #else
   return false;
 #endif
 }
 
-inline constexpr bool is_unix() {
-#if defined(__unix__)
+inline constexpr bool is_msvc() {
+#if defined(_MSC_VER)
   return true;
 #else
   return false;
