@@ -77,9 +77,8 @@ public:
   // Setters
 
   // * Sources
-  void AddSource(const fs::path &relative_filename);
   void AddSource(const fs::path &relative_filename,
-                 const fs::path &relative_to_target_path);
+                 const fs::path &relative_to_target_path = "");
   void GlobSources(const fs::path &relative_to_target_path);
 
   // Use these APIs for out of project root builds
@@ -166,6 +165,7 @@ public:
   // TODO, Add more getters
 
 public:
+  std::string ext_{""};
   std::string prefix_include_dir_{"-I"};
   std::string prefix_lib_dir_{"-L"};
   std::unordered_set<std::string> valid_c_ext_{".c"};
@@ -186,6 +186,7 @@ protected:
 
 private:
   void Initialize();
+  void UpdateName() { name_ = name_ + ext_; }
 
   // Build
   void BuildCompile();
