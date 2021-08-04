@@ -106,11 +106,6 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
   }
 }
 
-// Aliases
-void Target::AddSource(const fs::path &relative_filename) {
-  AddSource(relative_filename, "");
-}
-
 // Private
 
 void Target::CompileSources() {
