@@ -128,7 +128,7 @@ public:
 
   fs::path GetTargetPath() const {
     fs::path path =
-        GetTargetIntermediateDir() / fmt::format("{}{}", (name_, target_ext_));
+        GetTargetIntermediateDir() / fmt::format("{}{}", name_, target_ext_);
     path.make_preferred();
     return path;
   }
@@ -167,6 +167,7 @@ public:
 
 public:
   std::string target_ext_{""};
+  std::string obj_ext_{".o"};
   std::string prefix_include_dir_{"-I"};
   std::string prefix_lib_dir_{"-L"};
   std::unordered_set<std::string> valid_c_ext_{".c"};

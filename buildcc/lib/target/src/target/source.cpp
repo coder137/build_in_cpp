@@ -48,7 +48,8 @@ void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
   for (const auto &p : fs::directory_iterator(absolute_input_path)) {
     if (IsValidSource(p.path())) {
       fs::path absolute_output_source =
-          absolute_output_path / (p.path().filename().string() + ".o");
+          absolute_output_path /
+          fmt::format("{}{}", p.path().filename().string(), obj_ext_);
       AddSourceAbsolute(p.path(), absolute_output_source);
     }
   }
@@ -88,7 +89,7 @@ void Target::AddSource(const fs::path &relative_filename,
   // Compute relative object path
   fs::path absolute_compiled_source = target_intermediate_dir_ / relative;
   absolute_compiled_source.replace_filename(
-      absolute_source.filename().string() + ".o");
+      fmt::format("{}{}", absolute_source.filename().string(), obj_ext_));
 
   AddSourceAbsolute(absolute_source, absolute_compiled_source);
 }
