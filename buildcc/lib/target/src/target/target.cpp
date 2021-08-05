@@ -149,6 +149,9 @@ void Target::Initialize() {
       "Environment is not initialized. Use the buildcc::env::init API");
   env::assert_fatal(IsValidTargetType(type_), "Invalid Target Type");
   fs::create_directories(target_intermediate_dir_);
+
+  // Taskflow parameters
+  tf_.name(name_);
 }
 
 // Rechecks
