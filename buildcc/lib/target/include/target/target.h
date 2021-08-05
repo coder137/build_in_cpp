@@ -127,7 +127,7 @@ public:
   tf::Task &GetLinkTask() { return link_task_; }
 
   fs::path GetTargetPath() const {
-    fs::path path = GetTargetIntermediateDir() / GetName();
+    fs::path path = GetTargetIntermediateDir() / (GetName() + ext_);
     path.make_preferred();
     return path;
   }
@@ -186,7 +186,6 @@ protected:
 
 private:
   void Initialize();
-  void UpdateName() { name_ = name_ + ext_; }
 
   // Build
   void BuildCompile();
