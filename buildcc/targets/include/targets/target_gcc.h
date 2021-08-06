@@ -38,10 +38,9 @@ public:
   StaticTarget_gcc(const std::string &name, const base::Toolchain &toolchain,
                    const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::StaticLibrary, toolchain,
-               target_path_relative_to_root) {}
-
-private:
-  std::string_view Link() const override { return kGccStaticLibLinkCommand; }
+               target_path_relative_to_root) {
+    link_command_ = kGccStaticLibLinkCommand;
+  }
 };
 
 class DynamicTarget_gcc : public base::Target {
@@ -49,13 +48,10 @@ public:
   DynamicTarget_gcc(const std::string &name, const base::Toolchain &toolchain,
                     const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::DynamicLibrary, toolchain,
-               target_path_relative_to_root) {}
-
-private:
-  std::string_view CompileCommand() const override {
-    return kGccDynamicLibCompileCommand;
+               target_path_relative_to_root) {
+    compile_command_ = kGccDynamicLibCompileCommand;
+    link_command_ = kGccDynamicLibLinkCommand;
   }
-  std::string_view Link() const override { return kGccDynamicLibLinkCommand; }
 };
 
 } // namespace buildcc

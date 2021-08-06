@@ -33,13 +33,9 @@ public:
                target_path_relative_to_root) {
     prefix_include_dir_ = kMsvcPrefixIncludeDir;
     prefix_lib_dir_ = kMsvcPrefixLibDir;
+    compile_command_ = kMsvcCompileCommand;
+    link_command_ = kMsvcExecutableLinkCommand;
   }
-
-private:
-  std::string_view CompileCommand() const override {
-    return kMsvcCompileCommand;
-  }
-  std::string_view Link() const override { return kMsvcExecutableLinkCommand; }
 };
 
 class StaticTarget_msvc : public base::Target {
@@ -50,13 +46,9 @@ public:
                target_path_relative_to_root) {
     prefix_include_dir_ = kMsvcPrefixIncludeDir;
     prefix_lib_dir_ = kMsvcPrefixLibDir;
+    compile_command_ = kMsvcCompileCommand;
+    link_command_ = kMsvcStaticLibLinkCommand;
   }
-
-private:
-  std::string_view CompileCommand() const override {
-    return kMsvcCompileCommand;
-  }
-  std::string_view Link() const override { return kMsvcStaticLibLinkCommand; }
 };
 
 class DynamicTarget_msvc : public base::Target {
@@ -67,13 +59,9 @@ public:
                target_path_relative_to_root) {
     prefix_include_dir_ = kMsvcPrefixIncludeDir;
     prefix_lib_dir_ = kMsvcPrefixLibDir;
+    compile_command_ = kMsvcCompileCommand;
+    link_command_ = kMsvcDynamicLibLinkCommand;
   }
-
-private:
-  std::string_view CompileCommand() const override {
-    return kMsvcCompileCommand;
-  }
-  std::string_view Link() const override { return kMsvcDynamicLibLinkCommand; }
 };
 
 } // namespace buildcc
