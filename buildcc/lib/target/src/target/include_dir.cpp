@@ -42,10 +42,6 @@ void Target::AddHeader(const std::string &relative_filename,
   AddHeaderAbsolute(absolute_filepath);
 }
 
-void Target::AddHeader(const std::string &relative_filename) {
-  AddHeader(relative_filename, "");
-}
-
 void Target::GlobHeaders(const fs::path &relative_to_target_path) {
   env::log_trace(name_, __FUNCTION__);
 

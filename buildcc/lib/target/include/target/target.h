@@ -77,9 +77,8 @@ public:
   // Setters
 
   // * Sources
-  void AddSource(const fs::path &relative_filename);
   void AddSource(const fs::path &relative_filename,
-                 const fs::path &relative_to_target_path);
+                 const fs::path &relative_to_target_path = "");
   void GlobSources(const fs::path &relative_to_target_path);
 
   // Use these APIs for out of project root builds
@@ -90,9 +89,8 @@ public:
                            const fs::path &absolute_output_path);
 
   // * Headers
-  void AddHeader(const std::string &relative_filename);
   void AddHeader(const std::string &relative_filename,
-                 const fs::path &relative_to_target_path);
+                 const fs::path &relative_to_target_path = "");
   void AddHeaderAbsolute(const fs::path &absolute_filepath);
 
   void GlobHeaders(const fs::path &relative_to_target_path);
@@ -128,7 +126,8 @@ public:
   tf::Task &GetLinkTask() { return link_task_; }
 
   fs::path GetTargetPath() const {
-    fs::path path = GetTargetIntermediateDir() / GetName();
+    fs::path path =
+        GetTargetIntermediateDir() / fmt::format("{}{}", name_, target_ext_);
     path.make_preferred();
     return path;
   }
@@ -166,6 +165,9 @@ public:
   // TODO, Add more getters
 
 public:
+  // TODO, Consider making these std::string_view for string literals
+  std::string target_ext_{""};
+  std::string obj_ext_{".o"};
   std::string prefix_include_dir_{"-I"};
   std::string prefix_lib_dir_{"-L"};
   std::unordered_set<std::string> valid_c_ext_{".c"};
