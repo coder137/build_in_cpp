@@ -20,6 +20,7 @@
 #include <filesystem>
 #include <functional>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -68,6 +69,7 @@ public:
         loader_(name, target_intermediate_dir_) {
     Initialize();
   }
+  virtual ~Target() {}
 
   Target(const Target &target) = delete;
 
@@ -175,6 +177,13 @@ public:
   std::unordered_set<std::string> valid_asm_ext_{".s", ".S", ".asm"};
   std::unordered_set<std::string> valid_header_ext_{".h", ".hpp"};
 
+  std::string_view compile_command_{
+      "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o "
+      "{output} -c {input}"};
+  std::string_view link_command_{
+      "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
+      "{lib_dirs} {lib_deps}"};
+
 protected:
   // Getters
   FileExtType GetFileExtType(const fs::path &filepath) const;
@@ -197,11 +206,9 @@ private:
   void CompileSources();
   void RecompileSources();
   void CompileSource(const fs::path &current_source) const;
-  virtual std::string_view CompileCommand() const;
 
   // Link
   void LinkTarget();
-  virtual std::string_view Link() const;
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
