@@ -17,18 +17,25 @@
 #ifndef TARGETS_TARGET_GENERIC_H_
 #define TARGETS_TARGET_GENERIC_H_
 
+#include <algorithm>
+
 #include "target_gcc.h"
 #include "target_msvc.h"
 
 #include "target_constants.h"
 #include "target_utils.h"
 
-// #include "env/host_compiler.h"
-// #include "env/host_os.h"
-
 namespace buildcc {
 
-inline void SyncTargets(base::Target &dest, const base::Target &source) {
+struct SyncTargetOptions {
+  bool preprocessor_flags_{false};
+  bool c_compile_flags_{false};
+  bool cpp_compile_flags_{false};
+  bool link_flags_{false};
+};
+
+inline void SyncTargets(base::Target &dest, const base::Target &source,
+                        const SyncTargetOptions &options = {}) {
   dest.target_ext_ = source.target_ext_;
   dest.obj_ext_ = source.obj_ext_;
   dest.prefix_include_dir_ = source.prefix_include_dir_;
@@ -36,7 +43,29 @@ inline void SyncTargets(base::Target &dest, const base::Target &source) {
   dest.compile_command_ = source.compile_command_;
   dest.link_command_ = source.link_command_;
 
-  // TODO, Check if other target definitions need to be synced
+  if (options.preprocessor_flags_) {
+    for (const auto &flag : source.GetCurrentPreprocessorFlags()) {
+      dest.AddPreprocessorFlag(flag);
+    }
+  }
+
+  if (options.c_compile_flags_) {
+    for (const auto &flag : source.GetCurrentCCompileFlags()) {
+      dest.AddCCompileFlag(flag);
+    }
+  }
+
+  if (options.cpp_compile_flags_) {
+    for (const auto &flag : source.GetCurrentCppCompileFlags()) {
+      dest.AddCppCompileFlag(flag);
+    }
+  }
+
+  if (options.link_flags_) {
+    for (const auto &flag : source.GetCurrentLinkFlags()) {
+      dest.AddLinkFlag(flag);
+    }
+  }
 }
 
 class ExecutableTarget_generic : public base::Target {
