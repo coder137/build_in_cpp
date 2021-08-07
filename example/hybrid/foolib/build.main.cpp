@@ -5,8 +5,7 @@
 using namespace buildcc;
 
 static void clean_cb();
-static void gfoolib_build_cb(base::Target &target);
-static void mfoolib_build_cb(base::Target &target);
+static void foolib_build_cb(base::Target &target);
 
 int main(int argc, char **argv) {
   // 1. Get arguments
@@ -24,11 +23,11 @@ int main(int argc, char **argv) {
   Toolchain_gcc gcc;
   Toolchain_msvc msvc;
 
-  ExecutableTarget_gcc g_foolib("GFoolib.exe", gcc, "");
-  ExecutableTarget_msvc m_foolib("MFoolib.exe", msvc, "");
+  ExecutableTarget_gcc g_foolib("GFoolib", gcc, "");
+  ExecutableTarget_msvc m_foolib("MFoolib", msvc, "");
 
-  reg.Build(args.GetGccState(), g_foolib, gfoolib_build_cb);
-  reg.Build(args.GetMsvcState(), m_foolib, mfoolib_build_cb);
+  reg.Build(args.GetGccState(), g_foolib, foolib_build_cb);
+  reg.Build(args.GetMsvcState(), m_foolib, foolib_build_cb);
 
   // 5.
   reg.RunBuild();
@@ -43,16 +42,7 @@ static void clean_cb() {
   // TODO,
 }
 
-static void gfoolib_build_cb(base::Target &target) {
-  fooTarget(target, "");
-  target.AddSource("main.cpp");
-  target.Build();
-}
-
-static void mfoolib_build_cb(base::Target &target) {
-  target.AddCppCompileFlag("/nologo");
-  target.AddCppCompileFlag("/EHsc");
-  target.AddLinkFlag("/nologo");
+static void foolib_build_cb(base::Target &target) {
   fooTarget(target, "");
   target.AddSource("main.cpp");
   target.Build();
