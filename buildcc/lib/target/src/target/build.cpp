@@ -121,7 +121,7 @@ void Target::LinkTarget() {
       internal::Path::CreateNewPath(GetTargetPath()).GetPathAsString();
 
   const bool success = command_.ConstructAndExecute(
-      Link(),
+      link_command_,
       {
           {"output", output_target},
           {"compiled_sources", aggregated_compiled_sources},
@@ -130,14 +130,6 @@ void Target::LinkTarget() {
                        internal::aggregate(current_lib_deps_))},
       });
   env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
-}
-
-// TODO, Segregated lib_deps and lib_links
-// lib_deps are absolute paths to libraries
-// lib_links are ones pointed to by lib_dirs and -l parameters
-std::string_view Target::Link() const {
-  return "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
-         "{lib_dirs} {lib_deps}";
 }
 
 } // namespace buildcc::base

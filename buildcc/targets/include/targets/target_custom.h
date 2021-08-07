@@ -27,18 +27,12 @@ public:
   Target_custom(const std::string &name, base::TargetType type,
                 const base::Toolchain &toolchain,
                 const std::filesystem::path &target_path_relative_to_root,
-                std::string_view compile_command, std::string_view link)
+                std::string_view compile_command, std::string_view link_command)
       : Target(Name(name, type, toolchain), type, toolchain,
-               target_path_relative_to_root),
-        compile_command_(compile_command), link_(link) {}
-
-private:
-  std::string_view CompileCommand() const override { return compile_command_; }
-  std::string_view Link() const override { return link_; }
-
-private:
-  std::string_view compile_command_;
-  std::string_view link_;
+               target_path_relative_to_root) {
+    compile_command_ = compile_command;
+    link_command_ = link_command;
+  }
 };
 
 } // namespace buildcc

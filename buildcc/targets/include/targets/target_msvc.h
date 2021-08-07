@@ -24,6 +24,13 @@
 // TODO, Combine all of these into Target_msvc
 namespace buildcc {
 
+inline void DefaultMsvcFlags(base::Target &target) {
+  target.AddCCompileFlag("/nologo");
+  target.AddCppCompileFlag("/nologo");
+  target.AddCppCompileFlag("/EHsc"); // TODO, Might need to remove this
+  target.AddLinkFlag("/nologo");
+}
+
 class ExecutableTarget_msvc : public base::Target {
 public:
   ExecutableTarget_msvc(
@@ -33,13 +40,10 @@ public:
                target_path_relative_to_root) {
     prefix_include_dir_ = kMsvcPrefixIncludeDir;
     prefix_lib_dir_ = kMsvcPrefixLibDir;
+    compile_command_ = kMsvcCompileCommand;
+    link_command_ = kMsvcExecutableLinkCommand;
+    DefaultMsvcFlags(*this);
   }
-
-private:
-  std::string_view CompileCommand() const override {
-    return kMsvcCompileCommand;
-  }
-  std::string_view Link() const override { return kMsvcExecutableLinkCommand; }
 };
 
 class StaticTarget_msvc : public base::Target {
@@ -50,13 +54,10 @@ public:
                target_path_relative_to_root) {
     prefix_include_dir_ = kMsvcPrefixIncludeDir;
     prefix_lib_dir_ = kMsvcPrefixLibDir;
+    compile_command_ = kMsvcCompileCommand;
+    link_command_ = kMsvcStaticLibLinkCommand;
+    DefaultMsvcFlags(*this);
   }
-
-private:
-  std::string_view CompileCommand() const override {
-    return kMsvcCompileCommand;
-  }
-  std::string_view Link() const override { return kMsvcStaticLibLinkCommand; }
 };
 
 class DynamicTarget_msvc : public base::Target {
@@ -67,13 +68,10 @@ public:
                target_path_relative_to_root) {
     prefix_include_dir_ = kMsvcPrefixIncludeDir;
     prefix_lib_dir_ = kMsvcPrefixLibDir;
+    compile_command_ = kMsvcCompileCommand;
+    link_command_ = kMsvcDynamicLibLinkCommand;
+    DefaultMsvcFlags(*this);
   }
-
-private:
-  std::string_view CompileCommand() const override {
-    return kMsvcCompileCommand;
-  }
-  std::string_view Link() const override { return kMsvcDynamicLibLinkCommand; }
 };
 
 } // namespace buildcc

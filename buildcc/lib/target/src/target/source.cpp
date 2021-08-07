@@ -190,18 +190,13 @@ std::string Target::CompileCommand(const fs::path &current_source) const {
       : type == FileExtType::Cpp ? aggregated_cpp_compile_flags_
                                  : "";
 
-  return command_.Construct(CompileCommand(),
+  return command_.Construct(compile_command_,
                             {
                                 {"compiler", compiler},
                                 {"compile_flags", aggregated_compile_flags},
                                 {"output", output},
                                 {"input", input},
                             });
-}
-
-std::string_view Target::CompileCommand() const {
-  return "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o "
-         "{output} -c {input}";
 }
 
 } // namespace buildcc::base

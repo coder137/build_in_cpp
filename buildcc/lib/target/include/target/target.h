@@ -20,6 +20,7 @@
 #include <filesystem>
 #include <functional>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -68,6 +69,7 @@ public:
         loader_(name, target_intermediate_dir_) {
     Initialize();
   }
+  virtual ~Target() {}
 
   Target(const Target &target) = delete;
 
@@ -158,6 +160,18 @@ public:
   const internal::fs_unordered_set &GetCurrentIncludeDirs() const {
     return current_include_dirs_;
   }
+  const std::unordered_set<std::string> &GetCurrentPreprocessorFlags() const {
+    return current_preprocessor_flags_;
+  }
+  const std::unordered_set<std::string> &GetCurrentCCompileFlags() const {
+    return current_c_compile_flags_;
+  }
+  const std::unordered_set<std::string> &GetCurrentCppCompileFlags() const {
+    return current_cpp_compile_flags_;
+  }
+  const std::unordered_set<std::string> &GetCurrentLinkFlags() const {
+    return current_link_flags_;
+  }
 
   bool FirstBuild() const { return first_build_; }
   bool Rebuild() const { return rebuild_; }
@@ -174,6 +188,13 @@ public:
   std::unordered_set<std::string> valid_cpp_ext_{".cpp", ".cxx", ".cc"};
   std::unordered_set<std::string> valid_asm_ext_{".s", ".S", ".asm"};
   std::unordered_set<std::string> valid_header_ext_{".h", ".hpp"};
+
+  std::string_view compile_command_{
+      "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o "
+      "{output} -c {input}"};
+  std::string_view link_command_{
+      "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
+      "{lib_dirs} {lib_deps}"};
 
 protected:
   // Getters
@@ -197,11 +218,9 @@ private:
   void CompileSources();
   void RecompileSources();
   void CompileSource(const fs::path &current_source) const;
-  virtual std::string_view CompileCommand() const;
 
   // Link
   void LinkTarget();
-  virtual std::string_view Link() const;
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
@@ -265,6 +284,7 @@ private:
 
   std::unordered_set<std::string> current_external_lib_deps_;
 
+  // TODO, Common flags for asm, c and cpp files
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;
   std::unordered_set<std::string> current_cpp_compile_flags_;
