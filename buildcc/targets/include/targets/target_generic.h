@@ -23,7 +23,6 @@
 #include "target_msvc.h"
 
 #include "target_constants.h"
-#include "target_utils.h"
 
 namespace buildcc {
 
