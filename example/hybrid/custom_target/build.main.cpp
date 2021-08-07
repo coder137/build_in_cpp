@@ -28,25 +28,14 @@ int main(int argc, char **argv) {
   Toolchain_gcc gcc;
   Toolchain_msvc msvc;
 
-  ExecutableTarget_gcc g_foolib("GFoolib.exe", gcc, "");
-  ExecutableTarget_msvc m_foolib("MFoolib.exe", msvc, "");
-  m_foolib.AddCppCompileFlag("/nologo");
-  m_foolib.AddCppCompileFlag("/EHsc");
-  m_foolib.AddLinkFlag("/nologo");
+  ExecutableTarget_gcc g_foolib("GFoolib", gcc, "");
+  ExecutableTarget_msvc m_foolib("MFoolib", msvc, "");
 
   reg.Build(args.GetGccState(), g_foolib, foolib_build_cb);
   reg.Build(args.GetMsvcState(), m_foolib, foolib_build_cb);
 
   // * NOTE, This is how we add our custom toolchain
   base::Toolchain clang = toolchain_clang_gnu.ConstructToolchain();
-
-  // * M1, Hardcode it
-  // constexpr std::string_view clang_compile_command =
-  //     "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o "
-  //     "{output} -c {input}";
-  // constexpr std::string_view clang_link =
-  //     "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
-  //     "{lib_dirs} {lib_deps}";
 
   // * M2, Get from Args (see build_linux.toml or build_win.toml files)
   Target_custom c_foolib("CFoolib.exe", base::TargetType::Executable, clang, "",
