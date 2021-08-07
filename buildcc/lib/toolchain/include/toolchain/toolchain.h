@@ -30,6 +30,7 @@ public:
     Gcc = 0,
     Msvc,
     Clang,
+    MinGW,
     Custom,
     Undefined,
   };
