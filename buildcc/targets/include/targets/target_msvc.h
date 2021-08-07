@@ -19,8 +19,6 @@
 
 #include "target/target.h"
 
-#include "target_constants.h"
-
 // TODO, Combine all of these into Target_msvc
 namespace buildcc {
 

@@ -1,5 +1,4 @@
 set(TARGET_SPECIALIZED_SRCS
-    include/targets/target_constants.h
     include/targets/target_gcc.h
     include/targets/target_msvc.h
     include/targets/target_generic.h

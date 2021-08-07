@@ -17,8 +17,6 @@
 #ifndef TARGETS_TARGET_CUSTOM_H_
 #define TARGETS_TARGET_CUSTOM_H_
 
-#include "target_constants.h"
-
 namespace buildcc {
 
 class Target_custom : public base::Target {

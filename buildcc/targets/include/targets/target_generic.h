@@ -22,8 +22,6 @@
 #include "target_gcc.h"
 #include "target_msvc.h"
 
-#include "target_constants.h"
-
 namespace buildcc {
 
 struct SyncTargetOptions {
