@@ -28,7 +28,7 @@
 
 namespace buildcc {
 
-inline void SyncTargetDefaults(base::Target &dest, const base::Target &source) {
+inline void SyncTargets(base::Target &dest, const base::Target &source) {
   dest.target_ext_ = source.target_ext_;
   dest.obj_ext_ = source.obj_ext_;
   dest.prefix_include_dir_ = source.prefix_include_dir_;
@@ -62,7 +62,7 @@ public:
       env::assert_fatal(false, "Compiler ID not supported");
       break;
     }
-    SyncTargetDefaults(*this, *target);
+    SyncTargets(*this, *target);
   }
   ~ExecutableTarget_generic() {}
 };
@@ -90,7 +90,7 @@ public:
       env::assert_fatal(false, "Compiler ID not supported");
       break;
     }
-    SyncTargetDefaults(*this, *target);
+    SyncTargets(*this, *target);
   }
 };
 
@@ -117,7 +117,7 @@ public:
       env::assert_fatal(false, "Compiler ID not supported");
       break;
     }
-    SyncTargetDefaults(*this, *target);
+    SyncTargets(*this, *target);
   }
 };
 
@@ -145,7 +145,7 @@ public:
       env::assert_fatal(false, "Compiler ID not supported");
       break;
     }
-    SyncTargetDefaults(*this, *target);
+    SyncTargets(*this, *target);
   }
 
   // MSVC
