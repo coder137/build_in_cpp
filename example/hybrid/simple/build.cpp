@@ -89,9 +89,6 @@ static void cppflags_build_cb(base::Target &cppflags) {
   case base::Toolchain::Id::Msvc: {
     cppflags.AddPreprocessorFlag("/DRANDOM=1");
     cppflags.AddCppCompileFlag("/W4");
-    cppflags.AddCppCompileFlag("/nologo");
-    cppflags.AddCppCompileFlag("/EHsc");
-    cppflags.AddLinkFlag("/nologo");
     break;
   }
   default:
@@ -116,8 +113,6 @@ static void cflags_build_cb(base::Target &cflags) {
   case base::Toolchain::Id::Msvc: {
     cflags.AddPreprocessorFlag("/DRANDOM=1");
     cflags.AddCCompileFlag("/W4");
-    cflags.AddCCompileFlag("/nologo");
-    cflags.AddLinkFlag("/nologo");
     break;
   }
   default:
