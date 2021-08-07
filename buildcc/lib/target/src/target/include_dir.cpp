@@ -32,7 +32,7 @@ void Target::AddHeaderAbsolute(const fs::path &absolute_filepath) {
   internal::add_path(absolute_filepath, current_header_files_);
 }
 
-void Target::AddHeader(const std::string &relative_filename,
+void Target::AddHeader(const fs::path &relative_filename,
                        const fs::path &relative_to_target_path) {
   env::log_trace(name_, __FUNCTION__);
 

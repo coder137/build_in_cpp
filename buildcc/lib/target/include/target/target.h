@@ -91,7 +91,7 @@ public:
                            const fs::path &absolute_output_path);
 
   // * Headers
-  void AddHeader(const std::string &relative_filename,
+  void AddHeader(const fs::path &relative_filename,
                  const fs::path &relative_to_target_path = "");
   void AddHeaderAbsolute(const fs::path &absolute_filepath);
 

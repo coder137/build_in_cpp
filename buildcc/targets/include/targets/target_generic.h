@@ -22,9 +22,6 @@
 #include "target_gcc.h"
 #include "target_msvc.h"
 
-#include "target_constants.h"
-#include "target_utils.h"
-
 namespace buildcc {
 
 struct SyncTargetOptions {
@@ -189,7 +186,8 @@ public:
       env::assert_fatal(false, "Compiler ID not supported");
       break;
     }
-    SyncTargets(*this, *target, {
+    SyncTargets(*this, *target,
+                {
                     .c_compile_flags_ = true,
                     .cpp_compile_flags_ = true,
                     .link_flags_ = true,

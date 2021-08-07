@@ -1,10 +1,8 @@
 set(TARGET_SPECIALIZED_SRCS
-    include/targets/target_constants.h
     include/targets/target_gcc.h
     include/targets/target_msvc.h
     include/targets/target_generic.h
     include/targets/target_custom.h
-    include/targets/target_utils.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})

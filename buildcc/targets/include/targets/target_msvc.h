@@ -19,12 +19,39 @@
 
 #include "target/target.h"
 
-#include "target_constants.h"
-
 // TODO, Combine all of these into Target_msvc
 namespace buildcc {
 
-inline void DefaultMsvcFlags(base::Target &target) {
+// MSVC Constants
+constexpr std::string_view kMsvcExecutableExt = ".exe";
+constexpr std::string_view kMsvcStaticLibExt = ".lib";
+// Why is `kWinDynamicLibExt != .dll` but `.lib` instead?
+// See `kMsvcDynamicLibLinkCommand`
+// IMPLIB .lib stubs are what is linked during link time
+// OUT .dll needs to be present in the executable folder during runtime
+constexpr std::string_view kMsvcDynamicLibExt = ".lib";
+
+constexpr std::string_view kMsvcObjExt = ".obj";
+constexpr std::string_view kMsvcPrefixIncludeDir = "/I";
+constexpr std::string_view kMsvcPrefixLibDir = "/LIBPATH:";
+// TODO, Split this into individual CompileCommands if any differences occur
+constexpr std::string_view kMsvcCompileCommand =
+    "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} "
+    "/Fo{output} /c {input}";
+constexpr std::string_view kMsvcExecutableLinkCommand =
+    "{linker} {link_flags} {lib_dirs} /OUT:{output} {lib_deps} "
+    "{compiled_sources}";
+constexpr std::string_view kMsvcStaticLibLinkCommand =
+    "{archiver} {link_flags} /OUT:{output} {compiled_sources}";
+constexpr std::string_view kMsvcDynamicLibLinkCommand =
+    "{linker} /DLL {link_flags} /OUT:{output}.dll /IMPLIB:{output} "
+    "{compiled_sources}";
+
+inline void DefaultMsvcOptions(base::Target &target) {
+  target.obj_ext_ = kMsvcObjExt;
+  target.prefix_include_dir_ = kMsvcPrefixIncludeDir;
+  target.prefix_lib_dir_ = kMsvcPrefixLibDir;
+
   target.AddCCompileFlag("/nologo");
   target.AddCppCompileFlag("/nologo");
   target.AddCppCompileFlag("/EHsc"); // TODO, Might need to remove this
@@ -38,11 +65,10 @@ public:
       const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::Executable, toolchain,
                target_path_relative_to_root) {
-    prefix_include_dir_ = kMsvcPrefixIncludeDir;
-    prefix_lib_dir_ = kMsvcPrefixLibDir;
+    target_ext_ = kMsvcExecutableExt;
     compile_command_ = kMsvcCompileCommand;
     link_command_ = kMsvcExecutableLinkCommand;
-    DefaultMsvcFlags(*this);
+    DefaultMsvcOptions(*this);
   }
 };
 
@@ -52,11 +78,10 @@ public:
                     const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::StaticLibrary, toolchain,
                target_path_relative_to_root) {
-    prefix_include_dir_ = kMsvcPrefixIncludeDir;
-    prefix_lib_dir_ = kMsvcPrefixLibDir;
+    target_ext_ = kMsvcStaticLibExt;
     compile_command_ = kMsvcCompileCommand;
     link_command_ = kMsvcStaticLibLinkCommand;
-    DefaultMsvcFlags(*this);
+    DefaultMsvcOptions(*this);
   }
 };
 
@@ -66,11 +91,10 @@ public:
                      const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::DynamicLibrary, toolchain,
                target_path_relative_to_root) {
-    prefix_include_dir_ = kMsvcPrefixIncludeDir;
-    prefix_lib_dir_ = kMsvcPrefixLibDir;
+    target_ext_ = kMsvcDynamicLibExt;
     compile_command_ = kMsvcCompileCommand;
     link_command_ = kMsvcDynamicLibLinkCommand;
-    DefaultMsvcFlags(*this);
+    DefaultMsvcOptions(*this);
   }
 };
 
