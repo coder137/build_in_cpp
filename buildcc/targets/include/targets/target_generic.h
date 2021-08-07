@@ -17,94 +17,135 @@
 #ifndef TARGETS_TARGET_GENERIC_H_
 #define TARGETS_TARGET_GENERIC_H_
 
+#include "target_gcc.h"
+#include "target_msvc.h"
+
 #include "target_constants.h"
 #include "target_utils.h"
 
+// #include "env/host_compiler.h"
+// #include "env/host_os.h"
+
 namespace buildcc {
 
-// DONE GCC
-// DONE MSVC
-// TODO CLANG
+inline void SyncTargetDefaults(base::Target &dest, const base::Target &source) {
+  dest.target_ext_ = source.target_ext_;
+  dest.obj_ext_ = source.obj_ext_;
+  dest.prefix_include_dir_ = source.prefix_include_dir_;
+  dest.prefix_lib_dir_ = source.prefix_lib_dir_;
+  dest.compile_command_ = source.compile_command_;
+  dest.link_command_ = source.link_command_;
+
+  // TODO, Check if other target definitions need to be synced
+}
+
+class ExecutableTarget_generic : public base::Target {
+public:
+  ExecutableTarget_generic(
+      const std::string &name, const base::Toolchain &toolchain,
+      const std::filesystem::path &target_path_relative_to_root)
+      : Target(name, base::TargetType::Executable, toolchain,
+               target_path_relative_to_root) {
+    std::unique_ptr<base::Target> target;
+    switch (toolchain.GetId()) {
+    case base::Toolchain::Id::Gcc:
+      target = std::make_unique<ExecutableTarget_gcc>(
+          name, toolchain, target_path_relative_to_root);
+      break;
+    case base::Toolchain::Id::Msvc:
+      target = std::make_unique<ExecutableTarget_msvc>(
+          name, toolchain, target_path_relative_to_root);
+      break;
+    case base::Toolchain::Id::Clang:
+    case base::Toolchain::Id::MinGW:
+    default:
+      env::assert_fatal(false, "Compiler ID not supported");
+      break;
+    }
+    SyncTargetDefaults(*this, *target);
+  }
+  ~ExecutableTarget_generic() {}
+};
+
+class StaticTarget_generic : public base::Target {
+public:
+  StaticTarget_generic(
+      const std::string &name, const base::Toolchain &toolchain,
+      const std::filesystem::path &target_path_relative_to_root)
+      : Target(name, base::TargetType::StaticLibrary, toolchain,
+               target_path_relative_to_root) {
+    std::unique_ptr<base::Target> target;
+    switch (toolchain.GetId()) {
+    case base::Toolchain::Id::Gcc:
+      target = std::make_unique<StaticTarget_gcc>(name, toolchain,
+                                                  target_path_relative_to_root);
+      break;
+    case base::Toolchain::Id::Msvc:
+      target = std::make_unique<StaticTarget_msvc>(
+          name, toolchain, target_path_relative_to_root);
+      break;
+    case base::Toolchain::Id::Clang:
+    case base::Toolchain::Id::MinGW:
+    default:
+      env::assert_fatal(false, "Compiler ID not supported");
+      break;
+    }
+    SyncTargetDefaults(*this, *target);
+  }
+};
+
+class DynamicTarget_generic : public base::Target {
+public:
+  DynamicTarget_generic(
+      const std::string &name, const base::Toolchain &toolchain,
+      const std::filesystem::path &target_path_relative_to_root)
+      : Target(name, base::TargetType::DynamicLibrary, toolchain,
+               target_path_relative_to_root) {
+    std::unique_ptr<base::Target> target;
+    switch (toolchain.GetId()) {
+    case base::Toolchain::Id::Gcc:
+      target = std::make_unique<DynamicTarget_gcc>(
+          name, toolchain, target_path_relative_to_root);
+      break;
+    case base::Toolchain::Id::Msvc:
+      target = std::make_unique<DynamicTarget_msvc>(
+          name, toolchain, target_path_relative_to_root);
+      break;
+    case base::Toolchain::Id::Clang:
+    case base::Toolchain::Id::MinGW:
+    default:
+      env::assert_fatal(false, "Compiler ID not supported");
+      break;
+    }
+    SyncTargetDefaults(*this, *target);
+  }
+};
+
 class Target_generic : public base::Target {
 public:
   Target_generic(const std::string &name, base::TargetType type,
                  const base::Toolchain &toolchain,
                  const std::filesystem::path &target_path_relative_to_root)
-      : Target(Name(name, type, toolchain), type, toolchain,
-               target_path_relative_to_root) {
-    Initialize();
-  }
-
-private:
-  std::string_view CompileCommand() const override {
-    switch (GetToolchain().GetId()) {
-    case base::Toolchain::Id::Gcc:
-      return GccCompileCommand();
-      break;
-    case base::Toolchain::Id::Msvc:
-      return MsvcCompileCommand();
-      break;
-    default:
-      break;
-    }
-    return "";
-  }
-  std::string_view Link() const override {
-    switch (GetToolchain().GetId()) {
-    case base::Toolchain::Id::Gcc:
-      return GccLink();
-      break;
-    case base::Toolchain::Id::Msvc:
-      return MsvcLink();
-      break;
-    default:
-      break;
-    }
-    return "";
-  }
-
-  void Initialize() {
-    switch (GetToolchain().GetId()) {
-    case base::Toolchain::Id::Gcc:
-      GccInitialize();
-      break;
-    case base::Toolchain::Id::Msvc:
-      MsvcInitialize();
-      break;
-    default:
-      break;
-    }
-  }
-
-  // GCC
-  void GccInitialize() {
-    prefix_include_dir_ = kGccPrefixIncludeDir;
-    prefix_lib_dir_ = kGccPrefixLibDir;
-  }
-  std::string_view GccCompileCommand() const {
-    switch (GetTargetType()) {
+      : Target(name, type, toolchain, target_path_relative_to_root) {
+    std::unique_ptr<base::Target> target;
+    switch (type) {
     case base::TargetType::Executable:
+      target = std::make_unique<ExecutableTarget_generic>(
+          name, toolchain, target_path_relative_to_root);
+      break;
     case base::TargetType::StaticLibrary:
-      return kGccGenericCompileCommand;
+      target = std::make_unique<StaticTarget_generic>(
+          name, toolchain, target_path_relative_to_root);
+      break;
     case base::TargetType::DynamicLibrary:
-      return kGccDynamicLibCompileCommand;
+      target = std::make_unique<DynamicTarget_generic>(
+          name, toolchain, target_path_relative_to_root);
+      break;
     default:
+      env::assert_fatal(false, "Compiler ID not supported");
       break;
     }
-    return "";
-  }
-  std::string_view GccLink() const {
-    switch (GetTargetType()) {
-    case base::TargetType::Executable:
-      return kGccExecutableLinkCommand;
-    case base::TargetType::StaticLibrary:
-      return kGccStaticLibLinkCommand;
-    case base::TargetType::DynamicLibrary:
-      return kGccDynamicLibLinkCommand;
-    default:
-      break;
-    }
-    return "";
+    SyncTargetDefaults(*this, *target);
   }
 
   // MSVC
@@ -115,30 +156,6 @@ private:
     AddCppCompileFlag("/nologo");
     AddCppCompileFlag("/EHsc");
     AddLinkFlag("/nologo");
-  }
-  std::string_view MsvcCompileCommand() const {
-    switch (GetTargetType()) {
-    case base::TargetType::Executable:
-    case base::TargetType::StaticLibrary:
-    case base::TargetType::DynamicLibrary:
-      return kMsvcCompileCommand;
-    default:
-      break;
-    }
-    return "";
-  }
-  std::string_view MsvcLink() const {
-    switch (GetTargetType()) {
-    case base::TargetType::Executable:
-      return kMsvcExecutableLinkCommand;
-    case base::TargetType::StaticLibrary:
-      return kMsvcStaticLibLinkCommand;
-    case base::TargetType::DynamicLibrary:
-      return kMsvcDynamicLibLinkCommand;
-    default:
-      break;
-    }
-    return "";
   }
 };
 
