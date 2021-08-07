@@ -91,7 +91,12 @@ public:
       env::assert_fatal(false, "Compiler ID not supported");
       break;
     }
-    SyncTargets(*this, *target);
+    SyncTargets(*this, *target,
+                {
+                    .c_compile_flags_ = true,
+                    .cpp_compile_flags_ = true,
+                    .link_flags_ = true,
+                });
   }
   ~ExecutableTarget_generic() {}
 };
@@ -119,7 +124,12 @@ public:
       env::assert_fatal(false, "Compiler ID not supported");
       break;
     }
-    SyncTargets(*this, *target);
+    SyncTargets(*this, *target,
+                {
+                    .c_compile_flags_ = true,
+                    .cpp_compile_flags_ = true,
+                    .link_flags_ = true,
+                });
   }
 };
 
@@ -146,7 +156,12 @@ public:
       env::assert_fatal(false, "Compiler ID not supported");
       break;
     }
-    SyncTargets(*this, *target);
+    SyncTargets(*this, *target,
+                {
+                    .c_compile_flags_ = true,
+                    .cpp_compile_flags_ = true,
+                    .link_flags_ = true,
+                });
   }
 };
 
@@ -174,17 +189,11 @@ public:
       env::assert_fatal(false, "Compiler ID not supported");
       break;
     }
-    SyncTargets(*this, *target);
-  }
-
-  // MSVC
-  void MsvcInitialize() {
-    prefix_include_dir_ = kMsvcPrefixIncludeDir;
-    prefix_lib_dir_ = kMsvcPrefixLibDir;
-    AddCCompileFlag("/nologo");
-    AddCppCompileFlag("/nologo");
-    AddCppCompileFlag("/EHsc");
-    AddLinkFlag("/nologo");
+    SyncTargets(*this, *target, {
+                    .c_compile_flags_ = true,
+                    .cpp_compile_flags_ = true,
+                    .link_flags_ = true,
+                });
   }
 };
 
