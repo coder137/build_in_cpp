@@ -24,13 +24,6 @@ namespace buildcc {
 // Extensions
 constexpr std::string_view kGccStaticLibExt = ".a";
 constexpr std::string_view kGccDynamicLibExt = ".so";
-constexpr std::string_view kWinExecutableExt = ".exe";
-constexpr std::string_view kWinStaticLibExt = ".lib";
-// Why is `kWinDynamicLibExt != .dll` but `.lib` instead?
-// See `kMsvcDynamicLibLinkCommand` in `target_command.h`
-// IMPLIB .lib stubs are what is linked during link time
-// OUT .dll needs to be present in the executable folder during runtime
-constexpr std::string_view kWinDynamicLibExt = ".lib";
 
 // GCC
 constexpr std::string_view kGccPrefixIncludeDir = "-I";
@@ -48,22 +41,6 @@ constexpr std::string_view kGccDynamicLibCompileCommand =
     "-fpic -o {output} -c {input}";
 constexpr std::string_view kGccDynamicLibLinkCommand =
     "{cpp_compiler} -shared {link_flags} {compiled_sources} -o {output}";
-
-// MSVC
-constexpr std::string_view kMsvcPrefixIncludeDir = "/I";
-constexpr std::string_view kMsvcPrefixLibDir = "/LIBPATH:";
-// TODO, Split this into individual CompileCommands if any differences occur
-constexpr std::string_view kMsvcCompileCommand =
-    "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} "
-    "/Fo{output} /c {input}";
-constexpr std::string_view kMsvcExecutableLinkCommand =
-    "{linker} {link_flags} {lib_dirs} /OUT:{output} {lib_deps} "
-    "{compiled_sources}";
-constexpr std::string_view kMsvcStaticLibLinkCommand =
-    "{archiver} {link_flags} /OUT:{output} {compiled_sources}";
-constexpr std::string_view kMsvcDynamicLibLinkCommand =
-    "{linker} /DLL {link_flags} /OUT:{output}.dll /IMPLIB:{output} "
-    "{compiled_sources}";
 
 } // namespace buildcc
 
