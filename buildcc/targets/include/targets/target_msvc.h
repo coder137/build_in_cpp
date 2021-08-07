@@ -24,6 +24,13 @@
 // TODO, Combine all of these into Target_msvc
 namespace buildcc {
 
+inline void DefaultMsvcFlags(base::Target &target) {
+  target.AddCCompileFlag("/nologo");
+  target.AddCppCompileFlag("/nologo");
+  target.AddCppCompileFlag("/EHsc"); // TODO, Might need to remove this
+  target.AddLinkFlag("/nologo");
+}
+
 class ExecutableTarget_msvc : public base::Target {
 public:
   ExecutableTarget_msvc(
@@ -35,6 +42,7 @@ public:
     prefix_lib_dir_ = kMsvcPrefixLibDir;
     compile_command_ = kMsvcCompileCommand;
     link_command_ = kMsvcExecutableLinkCommand;
+    DefaultMsvcFlags(*this);
   }
 };
 
@@ -48,6 +56,7 @@ public:
     prefix_lib_dir_ = kMsvcPrefixLibDir;
     compile_command_ = kMsvcCompileCommand;
     link_command_ = kMsvcStaticLibLinkCommand;
+    DefaultMsvcFlags(*this);
   }
 };
 
@@ -61,6 +70,7 @@ public:
     prefix_lib_dir_ = kMsvcPrefixLibDir;
     compile_command_ = kMsvcCompileCommand;
     link_command_ = kMsvcDynamicLibLinkCommand;
+    DefaultMsvcFlags(*this);
   }
 };
 
