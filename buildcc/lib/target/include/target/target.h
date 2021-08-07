@@ -160,6 +160,18 @@ public:
   const internal::fs_unordered_set &GetCurrentIncludeDirs() const {
     return current_include_dirs_;
   }
+  const std::unordered_set<std::string> &GetCurrentPreprocessorFlags() const {
+    return current_preprocessor_flags_;
+  }
+  const std::unordered_set<std::string> &GetCurrentCCompileFlags() const {
+    return current_c_compile_flags_;
+  }
+  const std::unordered_set<std::string> &GetCurrentCppCompileFlags() const {
+    return current_cpp_compile_flags_;
+  }
+  const std::unordered_set<std::string> &GetCurrentLinkFlags() const {
+    return current_link_flags_;
+  }
 
   bool FirstBuild() const { return first_build_; }
   bool Rebuild() const { return rebuild_; }
@@ -272,6 +284,7 @@ private:
 
   std::unordered_set<std::string> current_external_lib_deps_;
 
+  // TODO, Common flags for asm, c and cpp files
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;
   std::unordered_set<std::string> current_cpp_compile_flags_;
