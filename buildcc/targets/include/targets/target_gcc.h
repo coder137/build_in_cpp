@@ -58,6 +58,7 @@ public:
                    const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::StaticLibrary, toolchain,
                target_path_relative_to_root) {
+    target_ext_ = kGccStaticLibExt;
     link_command_ = kGccStaticLibLinkCommand;
   }
 };
@@ -68,6 +69,7 @@ public:
                     const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::DynamicLibrary, toolchain,
                target_path_relative_to_root) {
+    target_ext_ = kGccDynamicLibExt;
     compile_command_ = kGccDynamicLibCompileCommand;
     link_command_ = kGccDynamicLibLinkCommand;
   }
