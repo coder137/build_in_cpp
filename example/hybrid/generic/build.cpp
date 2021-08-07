@@ -91,8 +91,8 @@ int main(int argc, char **argv) {
                      (foolib_target.GetName() + ".dll");
     } else {
       copy_from_path = foolib_target.GetTargetPath();
-      copy_to_path =
-          generic_target.GetTargetIntermediateDir() / foolib_target.GetName();
+      copy_to_path = generic_target.GetTargetIntermediateDir() /
+                     (foolib_target.GetName() + foolib_target.target_ext_);
     }
 
     // Copy case
