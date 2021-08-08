@@ -30,16 +30,16 @@ constexpr std::string_view kGccDynamicLibExt = ".so";
 constexpr std::string_view kGccPrefixIncludeDir = "-I";
 constexpr std::string_view kGccPrefixLibDir = "-L";
 constexpr std::string_view kGccGenericCompileCommand =
-    "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o "
-    "{output} -c {input}";
+    "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
+    "{compile_flags} -o {output} -c {input}";
 constexpr std::string_view kGccExecutableLinkCommand =
     "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
     "{lib_dirs} {lib_deps}";
 constexpr std::string_view kGccStaticLibLinkCommand =
     "{archiver} rcs {output} {compiled_sources}";
 constexpr std::string_view kGccDynamicLibCompileCommand =
-    "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} "
-    "-fpic -o {output} -c {input}";
+    "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
+    "{compile_flags} -fpic -o {output} -c {input}";
 constexpr std::string_view kGccDynamicLibLinkCommand =
     "{cpp_compiler} -shared {link_flags} {compiled_sources} -o {output}";
 
