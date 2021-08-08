@@ -19,6 +19,7 @@
 
 #include <filesystem>
 #include <functional>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -210,6 +211,7 @@ protected:
 
   const internal::Path &GetCompiledSourcePath(const fs::path &source) const;
   internal::path_unordered_set GetCompiledSources() const;
+  std::optional<std::string> GetCompiledFlags(FileExtType type) const;
 
 private:
   void Initialize();
