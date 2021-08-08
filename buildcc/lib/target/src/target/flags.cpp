@@ -21,6 +21,9 @@ namespace buildcc::base {
 void Target::AddPreprocessorFlag(const std::string &flag) {
   current_preprocessor_flags_.insert(flag);
 }
+void Target::AddCommonCompileFlag(const std::string &flag) {
+  current_common_compile_flags_.insert(flag);
+}
 void Target::AddCCompileFlag(const std::string &flag) {
   current_c_compile_flags_.insert(flag);
 }

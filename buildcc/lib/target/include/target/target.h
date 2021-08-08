@@ -113,7 +113,7 @@ public:
 
   // * Flags
   void AddPreprocessorFlag(const std::string &flag);
-  void AddCommonFlag(const std::string &flag);
+  void AddCommonCompileFlag(const std::string &flag);
   void AddCCompileFlag(const std::string &flag);
   void AddCppCompileFlag(const std::string &flag);
   void AddLinkFlag(const std::string &flag);
