@@ -45,6 +45,8 @@ void Target::Build() {
        internal::aggregate_with_prefix(prefix_lib_dir_, current_lib_dirs_)},
 
       {"preprocessor_flags", internal::aggregate(current_preprocessor_flags_)},
+      {"common_compile_flags",
+       internal::aggregate(current_common_compile_flags_)},
       {"link_flags", internal::aggregate(current_link_flags_)},
 
       // Toolchain executables here

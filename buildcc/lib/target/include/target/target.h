@@ -191,8 +191,8 @@ public:
   std::unordered_set<std::string> valid_header_ext_{".h", ".hpp"};
 
   std::string_view compile_command_{
-      "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o "
-      "{output} -c {input}"};
+      "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
+      "{compile_flags} -o {output} -c {input}"};
   std::string_view link_command_{
       "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
       "{lib_dirs} {lib_deps}"};
