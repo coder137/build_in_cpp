@@ -113,6 +113,7 @@ public:
 
   // * Flags
   void AddPreprocessorFlag(const std::string &flag);
+  void AddCommonFlag(const std::string &flag);
   void AddCCompileFlag(const std::string &flag);
   void AddCppCompileFlag(const std::string &flag);
   void AddLinkFlag(const std::string &flag);
@@ -286,6 +287,7 @@ private:
 
   // TODO, Common flags for asm, c and cpp files
   std::unordered_set<std::string> current_preprocessor_flags_;
+  std::unordered_set<std::string> current_common_compile_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;
   std::unordered_set<std::string> current_cpp_compile_flags_;
   std::unordered_set<std::string> current_link_flags_;
