@@ -37,9 +37,6 @@ constexpr std::string_view kGccExecutableLinkCommand =
     "{lib_dirs} {lib_deps}";
 constexpr std::string_view kGccStaticLibLinkCommand =
     "{archiver} rcs {output} {compiled_sources}";
-constexpr std::string_view kGccDynamicLibCompileCommand =
-    "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
-    "{compile_flags} -fpic -o {output} -c {input}";
 constexpr std::string_view kGccDynamicLibLinkCommand =
     "{cpp_compiler} -shared {link_flags} {compiled_sources} -o {output}";
 
@@ -70,8 +67,8 @@ public:
       : Target(name, base::TargetType::DynamicLibrary, toolchain,
                target_path_relative_to_root) {
     target_ext_ = kGccDynamicLibExt;
-    compile_command_ = kGccDynamicLibCompileCommand;
     link_command_ = kGccDynamicLibLinkCommand;
+    AddCommonCompileFlag("-fpic");
   }
 };
 
