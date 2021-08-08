@@ -63,11 +63,12 @@ void Target::Build() {
   } else {
     BuildRecompile();
   }
+
+  LinkTargetTask(dirty_);
 }
 
 void Target::BuildCompile() {
   CompileSources();
-  LinkTargetTask(true);
   dirty_ = true;
   first_build_ = true;
 }
@@ -108,7 +109,6 @@ void Target::BuildRecompile() {
                      current_external_lib_deps_);
   // TODO, Verify the `physical` presence of the target if dirty_ == false
 
-  LinkTargetTask(dirty_);
   rebuild_ = dirty_;
 }
 
