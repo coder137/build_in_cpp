@@ -164,6 +164,9 @@ public:
   const std::unordered_set<std::string> &GetCurrentPreprocessorFlags() const {
     return current_preprocessor_flags_;
   }
+  const std::unordered_set<std::string> &GetCurrentCommonCompileFlags() const {
+    return current_common_compile_flags_;
+  }
   const std::unordered_set<std::string> &GetCurrentCCompileFlags() const {
     return current_c_compile_flags_;
   }
