@@ -59,6 +59,9 @@ public:
   const std::unordered_set<std::string> &GetLoadedPreprocessorFlags() const {
     return loaded_preprocessor_flags_;
   }
+  const std::unordered_set<std::string> &GetLoadedCommonCompileFlags() const {
+    return loaded_common_compile_flags_;
+  }
   const std::unordered_set<std::string> &GetLoadedCCompileFlags() const {
     return loaded_c_compile_flags_;
   }
@@ -87,6 +90,7 @@ private:
   fs_unordered_set loaded_lib_dirs_;
 
   std::unordered_set<std::string> loaded_preprocessor_flags_;
+  std::unordered_set<std::string> loaded_common_compile_flags_;
   std::unordered_set<std::string> loaded_c_compile_flags_;
   std::unordered_set<std::string> loaded_cpp_compile_flags_;
   std::unordered_set<std::string> loaded_link_flags_;
