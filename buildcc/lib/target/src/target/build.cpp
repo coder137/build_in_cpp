@@ -88,6 +88,8 @@ void Target::BuildRecompile() {
   // TODO, Toolchain, ASM, C, C++ compiler related to a particular name
   RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
                current_preprocessor_flags_);
+  RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
+               current_common_compile_flags_);
   RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
   RecheckFlags(loader_.GetLoadedCppCompileFlags(), current_cpp_compile_flags_);
   RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
