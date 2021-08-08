@@ -29,6 +29,8 @@ namespace buildcc::base {
 
 void Target::CompileTargetTask(std::vector<fs::path> &&compile_sources,
                                std::vector<fs::path> &&dummy_compile_sources) {
+  env::log_trace(name_, __FUNCTION__);
+
   compile_task_ =
       tf_.emplace([this, compile_sources,
                    dummy_compile_sources](tf::Subflow &subflow) {

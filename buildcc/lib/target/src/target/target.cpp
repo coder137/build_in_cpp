@@ -71,6 +71,20 @@ FileExtType Target::GetFileExtType(const fs::path &filepath) const {
   return type;
 }
 
+std::optional<std::string> Target::GetCompiledFlags(FileExtType type) const {
+  switch (type) {
+  case FileExtType::C:
+    return aggregated_c_compile_flags_;
+    break;
+  case FileExtType::Cpp:
+    return aggregated_cpp_compile_flags_;
+    break;
+  default:
+    break;
+  }
+  return {};
+}
+
 bool Target::IsValidSource(const fs::path &sourcepath) const {
   bool valid = false;
   switch (GetFileExtType(sourcepath)) {

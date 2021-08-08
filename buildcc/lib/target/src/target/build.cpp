@@ -45,6 +45,8 @@ void Target::Build() {
        internal::aggregate_with_prefix(prefix_lib_dir_, current_lib_dirs_)},
 
       {"preprocessor_flags", internal::aggregate(current_preprocessor_flags_)},
+      {"common_compile_flags",
+       internal::aggregate(current_common_compile_flags_)},
       {"link_flags", internal::aggregate(current_link_flags_)},
 
       // Toolchain executables here
@@ -63,11 +65,12 @@ void Target::Build() {
   } else {
     BuildRecompile();
   }
+
+  LinkTargetTask(dirty_);
 }
 
 void Target::BuildCompile() {
   CompileSources();
-  LinkTargetTask(true);
   dirty_ = true;
   first_build_ = true;
 }
@@ -87,6 +90,8 @@ void Target::BuildRecompile() {
   // TODO, Toolchain, ASM, C, C++ compiler related to a particular name
   RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
                current_preprocessor_flags_);
+  RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
+               current_common_compile_flags_);
   RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
   RecheckFlags(loader_.GetLoadedCppCompileFlags(), current_cpp_compile_flags_);
   RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
@@ -108,7 +113,6 @@ void Target::BuildRecompile() {
                      current_external_lib_deps_);
   // TODO, Verify the `physical` presence of the target if dirty_ == false
 
-  LinkTargetTask(dirty_);
   rebuild_ = dirty_;
 }
 

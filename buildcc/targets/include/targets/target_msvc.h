@@ -36,8 +36,8 @@ constexpr std::string_view kMsvcPrefixIncludeDir = "/I";
 constexpr std::string_view kMsvcPrefixLibDir = "/LIBPATH:";
 // TODO, Split this into individual CompileCommands if any differences occur
 constexpr std::string_view kMsvcCompileCommand =
-    "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} "
-    "/Fo{output} /c {input}";
+    "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
+    "{compile_flags} /Fo{output} /c {input}";
 constexpr std::string_view kMsvcExecutableLinkCommand =
     "{linker} {link_flags} {lib_dirs} /OUT:{output} {lib_deps} "
     "{compiled_sources}";

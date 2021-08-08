@@ -186,9 +186,7 @@ std::string Target::CompileCommand(const fs::path &current_source) const {
   // TODO, This doesn't look clean
   const auto type = GetFileExtType(current_source);
   const std::string &aggregated_compile_flags =
-      type == FileExtType::C     ? aggregated_c_compile_flags_
-      : type == FileExtType::Cpp ? aggregated_cpp_compile_flags_
-                                 : "";
+      GetCompiledFlags(type).value_or("");
 
   return command_.Construct(compile_command_,
                             {

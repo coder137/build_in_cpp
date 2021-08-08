@@ -19,6 +19,7 @@
 
 #include <filesystem>
 #include <functional>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -113,6 +114,7 @@ public:
 
   // * Flags
   void AddPreprocessorFlag(const std::string &flag);
+  void AddCommonCompileFlag(const std::string &flag);
   void AddCCompileFlag(const std::string &flag);
   void AddCppCompileFlag(const std::string &flag);
   void AddLinkFlag(const std::string &flag);
@@ -163,6 +165,9 @@ public:
   const std::unordered_set<std::string> &GetCurrentPreprocessorFlags() const {
     return current_preprocessor_flags_;
   }
+  const std::unordered_set<std::string> &GetCurrentCommonCompileFlags() const {
+    return current_common_compile_flags_;
+  }
   const std::unordered_set<std::string> &GetCurrentCCompileFlags() const {
     return current_c_compile_flags_;
   }
@@ -190,8 +195,8 @@ public:
   std::unordered_set<std::string> valid_header_ext_{".h", ".hpp"};
 
   std::string_view compile_command_{
-      "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o "
-      "{output} -c {input}"};
+      "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
+      "{compile_flags} -o {output} -c {input}"};
   std::string_view link_command_{
       "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
       "{lib_dirs} {lib_deps}"};
@@ -206,6 +211,7 @@ protected:
 
   const internal::Path &GetCompiledSourcePath(const fs::path &source) const;
   internal::path_unordered_set GetCompiledSources() const;
+  std::optional<std::string> GetCompiledFlags(FileExtType type) const;
 
 private:
   void Initialize();
@@ -286,6 +292,7 @@ private:
 
   // TODO, Common flags for asm, c and cpp files
   std::unordered_set<std::string> current_preprocessor_flags_;
+  std::unordered_set<std::string> current_common_compile_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;
   std::unordered_set<std::string> current_cpp_compile_flags_;
   std::unordered_set<std::string> current_link_flags_;

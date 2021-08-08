@@ -26,6 +26,7 @@ namespace buildcc {
 
 struct SyncTargetOptions {
   bool preprocessor_flags_{false};
+  bool common_compile_flags_{false};
   bool c_compile_flags_{false};
   bool cpp_compile_flags_{false};
   bool link_flags_{false};
@@ -43,6 +44,12 @@ inline void SyncTargets(base::Target &dest, const base::Target &source,
   if (options.preprocessor_flags_) {
     for (const auto &flag : source.GetCurrentPreprocessorFlags()) {
       dest.AddPreprocessorFlag(flag);
+    }
+  }
+
+  if (options.common_compile_flags_) {
+    for (const auto &flag : source.GetCurrentCommonCompileFlags()) {
+      dest.AddCommonCompileFlag(flag);
     }
   }
 
@@ -90,6 +97,7 @@ public:
     }
     SyncTargets(*this, *target,
                 {
+                    .common_compile_flags_ = true,
                     .c_compile_flags_ = true,
                     .cpp_compile_flags_ = true,
                     .link_flags_ = true,
@@ -123,6 +131,7 @@ public:
     }
     SyncTargets(*this, *target,
                 {
+                    .common_compile_flags_ = true,
                     .c_compile_flags_ = true,
                     .cpp_compile_flags_ = true,
                     .link_flags_ = true,
@@ -155,6 +164,7 @@ public:
     }
     SyncTargets(*this, *target,
                 {
+                    .common_compile_flags_ = true,
                     .c_compile_flags_ = true,
                     .cpp_compile_flags_ = true,
                     .link_flags_ = true,
@@ -188,6 +198,7 @@ public:
     }
     SyncTargets(*this, *target,
                 {
+                    .common_compile_flags_ = true,
                     .c_compile_flags_ = true,
                     .cpp_compile_flags_ = true,
                     .link_flags_ = true,
