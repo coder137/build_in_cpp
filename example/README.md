@@ -114,5 +114,7 @@ Multi hosts and multi targets
   - For end users consuming third party libraries 
 - [x] Custom Target
   - For super customized targets and toolchains 
+- [x] Generic
+  - Select library type and target-toolchain type at runtime
 - [ ] Debugging
 - [ ] Cross Compilation with Unit Testing
