@@ -28,10 +28,10 @@ int main(int argc, char **argv) {
   Toolchain_gcc gcc;
   Toolchain_msvc msvc;
 
-  ExecutableTarget_gcc g_cppflags("GCppFlags", gcc, "files");
-  ExecutableTarget_msvc m_cppflags("MCppFlags", msvc, "files");
-  ExecutableTarget_gcc g_cflags("GCFlags", gcc, "files");
-  ExecutableTarget_msvc m_cflags("MCFlags", msvc, "files");
+  ExecutableTarget_gcc g_cppflags("cppflags", gcc, "files");
+  ExecutableTarget_msvc m_cppflags("cppflags", msvc, "files");
+  ExecutableTarget_gcc g_cflags("cflags", gcc, "files");
+  ExecutableTarget_msvc m_cflags("cflags", msvc, "files");
 
   // Select your builds and tests using the .toml files
   reg.Build(args.GetGccState(), g_cppflags, cppflags_build_cb);
