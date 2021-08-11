@@ -43,6 +43,7 @@ void Target::CompileTargetTask(std::vector<fs::path> &&compile_sources,
         for (const auto &cs : compile_sources) {
           std::string name =
               cs.lexically_relative(env::get_project_root_dir()).string();
+          std::replace(name.begin(), name.end(), '\\', '/');
           (void)subflow.emplace([this, cs]() { CompileSource(cs); }).name(name);
         }
 
@@ -50,6 +51,7 @@ void Target::CompileTargetTask(std::vector<fs::path> &&compile_sources,
         for (const auto &dcs : dummy_compile_sources) {
           std::string name =
               dcs.lexically_relative(env::get_project_root_dir()).string();
+          std::replace(name.begin(), name.end(), '\\', '/');
           (void)subflow.emplace([]() {}).name(name);
         }
       });
