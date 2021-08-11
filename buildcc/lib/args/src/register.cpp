@@ -58,7 +58,7 @@ void Register::Test(const Args::ToolchainState &toolchain_state,
   }
 
   const bool added =
-      tests_.emplace(target.GetName(), TestInfo(target, test_cb)).second;
+      tests_.emplace(target.GetTargetPath(), TestInfo(target, test_cb)).second;
   env::assert_fatal(
       added, fmt::format("Could not register test {}", target.GetName()));
 }
@@ -87,7 +87,8 @@ void Register::RunBuild() {
 
 void Register::RunTest() {
   for (const auto &t : tests_) {
-    env::log_info(__FUNCTION__, fmt::format("Testing \'{}\'", t.first));
+    env::log_info(__FUNCTION__,
+                  fmt::format("Testing \'{}\'", t.first.string()));
     t.second.cb_(t.second.target_);
   }
 }
