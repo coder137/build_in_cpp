@@ -25,30 +25,37 @@
 
 #include "fmt/format.h"
 
+namespace {
+
+constexpr const char *const kCompileTaskName = "Compile";
+constexpr const char *const kLinkTaskName = "Link";
+
+} // namespace
+
 namespace buildcc::base {
 
 void Target::CompileTargetTask(std::vector<fs::path> &&compile_sources,
                                std::vector<fs::path> &&dummy_compile_sources) {
   env::log_trace(name_, __FUNCTION__);
 
-  compile_task_ =
-      tf_.emplace([this, compile_sources,
-                   dummy_compile_sources](tf::Subflow &subflow) {
-           for (const auto &cs : compile_sources) {
-             std::string name =
-                 cs.lexically_relative(env::get_project_root_dir()).string();
-             (void)subflow.emplace([this, cs]() { CompileSource(cs); })
-                 .name(name);
-           }
+  compile_task_ = tf_.emplace(
+      [this, compile_sources, dummy_compile_sources](tf::Subflow &subflow) {
+        for (const auto &cs : compile_sources) {
+          std::string name =
+              cs.lexically_relative(env::get_project_root_dir()).string();
+          std::replace(name.begin(), name.end(), '\\', '/');
+          (void)subflow.emplace([this, cs]() { CompileSource(cs); }).name(name);
+        }
 
-           // NOTE, This has just been added for graph generation
-           for (const auto &dcs : dummy_compile_sources) {
-             std::string name =
-                 dcs.lexically_relative(env::get_project_root_dir()).string();
-             (void)subflow.emplace([]() {}).name(name);
-           }
-         })
-          .name(kCompileTaskName);
+        // NOTE, This has just been added for graph generation
+        for (const auto &dcs : dummy_compile_sources) {
+          std::string name =
+              dcs.lexically_relative(env::get_project_root_dir()).string();
+          std::replace(name.begin(), name.end(), '\\', '/');
+          (void)subflow.emplace([]() {}).name(name);
+        }
+      });
+  compile_task_.name(kCompileTaskName);
 }
 
 void Target::LinkTargetTask(const bool link) {

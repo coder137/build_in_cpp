@@ -23,8 +23,8 @@ int main(int argc, char **argv) {
   Toolchain_gcc gcc;
   Toolchain_msvc msvc;
 
-  ExecutableTarget_gcc g_foolib("GFoolib", gcc, "");
-  ExecutableTarget_msvc m_foolib("MFoolib", msvc, "");
+  ExecutableTarget_gcc g_foolib("foolib", gcc, "");
+  ExecutableTarget_msvc m_foolib("foolib", msvc, "");
 
   reg.Build(args.GetGccState(), g_foolib, foolib_build_cb);
   reg.Build(args.GetMsvcState(), m_foolib, foolib_build_cb);

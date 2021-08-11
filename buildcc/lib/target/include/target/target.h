@@ -311,10 +311,6 @@ private:
   bool first_build_ = false;
   bool rebuild_ = false;
 
-  // Dependency
-  static constexpr const char *const kCompileTaskName = "Compile";
-  static constexpr const char *const kLinkTaskName = "Link";
-
   tf::Taskflow tf_;
   tf::Task compile_task_;
   tf::Task link_task_;

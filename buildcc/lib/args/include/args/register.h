@@ -62,8 +62,8 @@ private:
   tf::Executor executor_;
   tf::Taskflow taskflow_{"Targets"};
 
-  std::unordered_map<std::string, TestInfo> tests_;
-  std::unordered_map<std::string, tf::Task> deps_;
+  std::unordered_map<fs::path, TestInfo, internal::PathHash> tests_;
+  std::unordered_map<fs::path, tf::Task, internal::PathHash> deps_;
 };
 
 } // namespace buildcc

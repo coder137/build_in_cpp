@@ -33,6 +33,9 @@ namespace buildcc::base {
 void Target::Build() {
   env::log_trace(name_, __FUNCTION__);
 
+  // Taskflow updates
+  tf_.name(fmt::format("[{}] {}", toolchain_.GetName(), name_));
+
   // TODO, Optimize these
   aggregated_c_compile_flags_ = internal::aggregate(current_c_compile_flags_);
   aggregated_cpp_compile_flags_ =
