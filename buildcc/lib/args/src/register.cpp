@@ -42,11 +42,12 @@ void Register::Clean(const std::function<void(void)> &clean_cb) {
 void Register::Build(const Args::ToolchainState &toolchain_state,
                      base::Target &target,
                      const std::function<void(base::Target &)> &build_cb) {
+  tf::Task task;
   if (toolchain_state.build) {
-    tf::Task task = taskflow_.composed_of(target.GetTaskflow()).name("Task");
-    deps_.insert({target.GetName(), task});
+    task = taskflow_.composed_of(target.GetTaskflow()).name("Task");
     build_cb(target);
   }
+  deps_.insert({target.GetTargetPath(), task});
 }
 
 void Register::Test(const Args::ToolchainState &toolchain_state,
@@ -66,8 +67,11 @@ void Register::Dep(const base::Target &target, const base::Target &dependency) {
   tf::Task target_task;
   tf::Task dep_task;
   try {
-    target_task = deps_.at(target.GetName());
-    dep_task = deps_.at(dependency.GetName());
+    target_task = deps_.at(target.GetTargetPath());
+    dep_task = deps_.at(dependency.GetTargetPath());
+    if (target_task.empty() || dep_task.empty()) {
+      return;
+    }
     target_task.succeed(dep_task);
   } catch (const std::out_of_range &e) {
     (void)e;
