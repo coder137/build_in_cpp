@@ -248,7 +248,7 @@ private:
   void CompileTargetTask(std::vector<fs::path> &&compile_sources,
                          std::vector<fs::path> &&dummy_compile_sources);
 
-  void LinkTargetTask(const bool link);
+  void LinkTask();
 
   // Fbs
   bool Store();

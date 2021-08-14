@@ -69,7 +69,7 @@ void Target::Build() {
     BuildRecompile();
   }
 
-  LinkTargetTask(dirty_);
+  LinkTask();
 }
 
 void Target::BuildCompile() {

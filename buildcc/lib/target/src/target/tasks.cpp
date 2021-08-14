@@ -58,15 +58,11 @@ void Target::CompileTargetTask(std::vector<fs::path> &&compile_sources,
   compile_task_.name(kCompileTaskName);
 }
 
-void Target::LinkTargetTask(const bool link) {
+void Target::LinkTask() {
   env::log_trace(name_, __FUNCTION__);
 
   // TODO, Make the inner class a function
-  link_task_ = tf_.emplace([this, link]() {
-    if (link) {
-      dirty_ = true;
-    }
-
+  link_task_ = tf_.emplace([this]() {
     // * Completely rebuild target / link if any of the following change
     // Target compiled source files either during Compile / Recompile
     // Target library dependencies
