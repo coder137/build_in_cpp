@@ -107,15 +107,6 @@ void Target::BuildRecompile() {
     RecompileSources();
   }
 
-  // * Completely rebuild target / link if any of the following change
-  // Target compiled source files either during Compile / Recompile
-  // Target library dependencies
-  RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
-  RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
-  RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
-                     current_external_lib_deps_);
-  // TODO, Verify the `physical` presence of the target if dirty_ == false
-
   rebuild_ = dirty_;
 }
 
