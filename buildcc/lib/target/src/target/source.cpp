@@ -109,18 +109,17 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
 
 // Private
 
-void Target::CompileSources() {
+void Target::CompileSources(std::vector<fs::path> &compile_sources) {
   env::log_trace(name_, __FUNCTION__);
-  std::vector<fs::path> compile_sources;
   std::transform(current_source_files_.begin(), current_source_files_.end(),
                  std::back_inserter(compile_sources),
                  [](const buildcc::internal::Path &p) -> fs::path {
                    return p.GetPathname();
                  });
-  CompileTargetTask(std::move(compile_sources), std::vector<fs::path>());
 }
 
-void Target::RecompileSources() {
+void Target::RecompileSources(std::vector<fs::path> &compile_sources,
+                              std::vector<fs::path> &dummy_sources) {
   env::log_trace(name_, __FUNCTION__);
 
   const auto &previous_source_files = loader_.GetLoadedSources();
@@ -133,8 +132,6 @@ void Target::RecompileSources() {
     SourceRemoved();
   }
 
-  std::vector<fs::path> compile_sources;
-  std::vector<fs::path> dummy_compile_sources;
   for (const auto &current_file : current_source_files_) {
     const auto &current_source = current_file.GetPathname();
 
@@ -158,13 +155,10 @@ void Target::RecompileSources() {
 
         // ELSE
         // *3 Do nothing
-        dummy_compile_sources.push_back(current_source);
+        dummy_sources.push_back(current_source);
       }
     }
   }
-
-  CompileTargetTask(std::move(compile_sources),
-                    std::move(dummy_compile_sources));
 }
 
 void Target::CompileSource(const fs::path &current_source) const {

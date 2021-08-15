@@ -217,13 +217,14 @@ private:
   void Initialize();
 
   // Build
-  void BuildCompile();
-  void BuildRecompile();
+  void BuildCompile(std::vector<fs::path> &compile_sources,
+                    std::vector<fs::path> &dummy_sources);
   void BuildLink();
 
   // Compile
-  void CompileSources();
-  void RecompileSources();
+  void CompileSources(std::vector<fs::path> &compile_sources);
+  void RecompileSources(std::vector<fs::path> &compile_sources,
+                        std::vector<fs::path> &dummy_sources);
   void CompileSource(const fs::path &current_source) const;
 
   // Link
@@ -246,9 +247,7 @@ private:
                       const std::function<void(void)> &callback);
 
   // Tasks
-  void CompileTargetTask(std::vector<fs::path> &&compile_sources,
-                         std::vector<fs::path> &&dummy_compile_sources);
-
+  void CompileTask();
   void LinkTask();
 
   // Fbs

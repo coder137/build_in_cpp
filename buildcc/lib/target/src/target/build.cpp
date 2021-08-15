@@ -60,54 +60,38 @@ void Target::Build() {
       {"linker", toolchain_.GetLinker()},
   });
 
-  const bool is_loaded = loader_.Load();
-  // TODO, Add more checks for build files physically present
-  // NOTE, This can go into the recompile logic
-  if (!is_loaded) {
-    BuildCompile();
-  } else {
-    BuildRecompile();
-  }
-
+  CompileTask();
   LinkTask();
 }
 
-void Target::BuildCompile() {
-  CompileSources();
-  dirty_ = true;
-  first_build_ = true;
-}
-
-// * Target rebuild depends on
-// TODO, Toolchain name
-// DONE, Target preprocessor flags
-// DONE, Target compile flags
-// DONE, Target link flags
-// DONE, Target source files
-// DONE, Target include dirs
-// DONE, Target library dependencies
-// TODO, Target library directories
-void Target::BuildRecompile() {
-
-  // * Completely compile sources if any of the following change
-  // TODO, Toolchain, ASM, C, C++ compiler related to a particular name
-  RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
-               current_preprocessor_flags_);
-  RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
-               current_common_compile_flags_);
-  RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
-  RecheckFlags(loader_.GetLoadedCppCompileFlags(), current_cpp_compile_flags_);
-  RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
-  RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_);
-
-  // * Compile sources
-  if (dirty_) {
-    CompileSources();
+void Target::BuildCompile(std::vector<fs::path> &compile_sources,
+                          std::vector<fs::path> &dummy_sources) {
+  const bool is_loaded = loader_.Load();
+  if (!is_loaded) {
+    CompileSources(compile_sources);
+    dirty_ = true;
+    first_build_ = true;
   } else {
-    RecompileSources();
-  }
+    // * Completely compile sources if any of the following change
+    // TODO, Toolchain, ASM, C, C++ compiler related to a particular name
+    RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
+                 current_preprocessor_flags_);
+    RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
+                 current_common_compile_flags_);
+    RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
+    RecheckFlags(loader_.GetLoadedCppCompileFlags(),
+                 current_cpp_compile_flags_);
+    RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
+    RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_);
 
-  rebuild_ = dirty_;
+    // * Compile sources
+    if (dirty_) {
+      CompileSources(compile_sources);
+    } else {
+      RecompileSources(compile_sources, dummy_sources);
+    }
+    rebuild_ = dirty_;
+  }
 }
 
 void Target::BuildLink() {
