@@ -110,6 +110,30 @@ void Target::BuildRecompile() {
   rebuild_ = dirty_;
 }
 
+void Target::BuildLink() {
+  // * Completely rebuild target / link if any of the following change
+  // Target compiled source files either during Compile / Recompile
+  // Target library dependencies
+  RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
+  RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
+  RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
+                     current_external_lib_deps_);
+  // TODO, Verify the `physical` presence of the target if dirty_ == false
+
+  // TODO, Replace this with RecheckPathForLink
+  std::for_each(target_lib_deps_.cbegin(), target_lib_deps_.cend(),
+                [this](const Target *target) {
+                  current_lib_deps_.insert(internal::Path::CreateExistingPath(
+                      target->GetTargetPath()));
+                });
+  RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
+
+  if (dirty_) {
+    LinkTarget();
+    Store();
+  }
+}
+
 void Target::LinkTarget() {
   // Add compiled sources
   const std::string aggregated_compiled_sources =

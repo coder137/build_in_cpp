@@ -219,6 +219,7 @@ private:
   // Build
   void BuildCompile();
   void BuildRecompile();
+  void BuildLink();
 
   // Compile
   void CompileSources();

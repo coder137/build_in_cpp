@@ -60,32 +60,7 @@ void Target::CompileTargetTask(std::vector<fs::path> &&compile_sources,
 
 void Target::LinkTask() {
   env::log_trace(name_, __FUNCTION__);
-
-  // TODO, Make the inner class a function
-  link_task_ = tf_.emplace([this]() {
-    // * Completely rebuild target / link if any of the following change
-    // Target compiled source files either during Compile / Recompile
-    // Target library dependencies
-    RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
-    RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
-    RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
-                       current_external_lib_deps_);
-    // TODO, Verify the `physical` presence of the target if dirty_ == false
-
-    // TODO, Replace this with RecheckPathForLink
-    std::for_each(target_lib_deps_.cbegin(), target_lib_deps_.cend(),
-                  [this](const Target *target) {
-                    current_lib_deps_.insert(internal::Path::CreateExistingPath(
-                        target->GetTargetPath()));
-                  });
-    RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
-
-    if (dirty_) {
-      LinkTarget();
-      Store();
-    }
-  });
-
+  link_task_ = tf_.emplace([this]() { BuildLink(); });
   link_task_.name(kLinkTaskName);
   link_task_.succeed(compile_task_);
 }
