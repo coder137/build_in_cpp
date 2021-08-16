@@ -72,6 +72,13 @@ public:
     return loaded_link_flags_;
   }
 
+  const path_unordered_set &GetLoadedCompileDependencies() const {
+    return loaded_compile_dependencies_;
+  }
+  const path_unordered_set &GetLoadedLinkDependencies() const {
+    return loaded_link_dependencies_;
+  }
+
 private:
   void Initialize();
 
@@ -94,6 +101,9 @@ private:
   std::unordered_set<std::string> loaded_c_compile_flags_;
   std::unordered_set<std::string> loaded_cpp_compile_flags_;
   std::unordered_set<std::string> loaded_link_flags_;
+
+  path_unordered_set loaded_compile_dependencies_;
+  path_unordered_set loaded_link_dependencies_;
 };
 
 } // namespace buildcc::internal

@@ -138,6 +138,10 @@ public:
   void AddCppCompileFlag(const std::string &flag);
   void AddLinkFlag(const std::string &flag);
 
+  // * Rebuild
+  void AddCompileDependency(const fs::path &path);
+  void AddLinkDependency(const fs::path &path);
+
   // TODO, Add more setters
 
   // Getters
@@ -291,12 +295,14 @@ private:
 
   std::unordered_set<std::string> current_external_lib_deps_;
 
-  // TODO, Common flags for asm, c and cpp files
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_common_compile_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;
   std::unordered_set<std::string> current_cpp_compile_flags_;
   std::unordered_set<std::string> current_link_flags_;
+
+  internal::path_unordered_set current_compile_dependencies_;
+  internal::path_unordered_set current_link_dependencies_;
 
   // TODO, Might not need to be persistent
   std::string aggregated_c_compile_flags_;
