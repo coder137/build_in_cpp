@@ -66,7 +66,7 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
           cmake --build . --target lcov_coverage
-          bash <(curl -s https://codecov.io/bash) -f coverage.info || echo "Codecov did not collect coverage reports"
+          bash <(curl -s https://codecov.io/bash) -f coverage_truncated.info || echo "Codecov did not collect coverage reports"
 
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
