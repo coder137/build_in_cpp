@@ -60,7 +60,7 @@ void Target::AddCompileDependency(const fs::path &relative_path) {
 }
 void Target::AddLinkDependency(const fs::path &relative_path) {
   fs::path absolute_path = GetTargetRootDir() / relative_path;
-  AddLinkDependency(absolute_path);
+  AddLinkDependencyAbsolute(absolute_path);
 }
 
 // PROTECTED
