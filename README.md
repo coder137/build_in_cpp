@@ -1,5 +1,9 @@
 # Build in CPP _[BuildCC]_
 
+[![Linux GCC build](https://github.com/coder137/build_in_cpp/actions/workflows/linux_gcc_cmake_build.yml/badge.svg)](https://github.com/coder137/build_in_cpp/actions/workflows/linux_gcc_cmake_build.yml)
+
+[![codecov](https://codecov.io/gh/coder137/build_in_cpp/branch/main/graph/badge.svg?token=M71H05PIDW)](https://codecov.io/gh/coder137/build_in_cpp)
+
 Build C, C++ and ASM files in C++
 
 # Aim
