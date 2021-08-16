@@ -4,28 +4,16 @@
 
 namespace buildcc::base {
 
-void Target::CompileTargetTask(std::vector<fs::path> &&compile_sources,
-                               std::vector<fs::path> &&dummy_compile_sources) {
-  (void)dummy_compile_sources;
+void Target::CompileTask() {
+  std::vector<fs::path> compile_sources;
+  std::vector<fs::path> dummy_sources;
+  BuildCompile(compile_sources, dummy_sources);
+  (void)dummy_sources;
   for (const auto &cs : compile_sources) {
     CompileSource(cs);
   }
 }
 
-void Target::LinkTargetTask(const bool link) {
-  if (link) {
-    dirty_ = true;
-  }
-  std::for_each(target_lib_deps_.cbegin(), target_lib_deps_.cend(),
-                [this](const Target *target) {
-                  current_lib_deps_.insert(internal::Path::CreateExistingPath(
-                      target->GetTargetPath()));
-                });
-  RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
-  if (dirty_) {
-    LinkTarget();
-    Store();
-  }
-}
+void Target::LinkTask() { BuildLink(); }
 
 } // namespace buildcc::base

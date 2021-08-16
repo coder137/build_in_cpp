@@ -60,53 +60,41 @@ void Target::Build() {
       {"linker", toolchain_.GetLinker()},
   });
 
+  CompileTask();
+  LinkTask();
+}
+
+void Target::BuildCompile(std::vector<fs::path> &compile_sources,
+                          std::vector<fs::path> &dummy_sources) {
   const bool is_loaded = loader_.Load();
-  // TODO, Add more checks for build files physically present
-  // NOTE, This can go into the recompile logic
   if (!is_loaded) {
-    BuildCompile();
+    CompileSources(compile_sources);
+    dirty_ = true;
+    first_build_ = true;
   } else {
-    BuildRecompile();
-  }
+    // * Completely compile sources if any of the following change
+    // TODO, Toolchain, ASM, C, C++ compiler related to a particular name
+    RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
+                 current_preprocessor_flags_);
+    RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
+                 current_common_compile_flags_);
+    RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
+    RecheckFlags(loader_.GetLoadedCppCompileFlags(),
+                 current_cpp_compile_flags_);
+    RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
+    RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_);
 
-  LinkTargetTask(dirty_);
+    // * Compile sources
+    if (dirty_) {
+      CompileSources(compile_sources);
+    } else {
+      RecompileSources(compile_sources, dummy_sources);
+    }
+    rebuild_ = dirty_;
+  }
 }
 
-void Target::BuildCompile() {
-  CompileSources();
-  dirty_ = true;
-  first_build_ = true;
-}
-
-// * Target rebuild depends on
-// TODO, Toolchain name
-// DONE, Target preprocessor flags
-// DONE, Target compile flags
-// DONE, Target link flags
-// DONE, Target source files
-// DONE, Target include dirs
-// DONE, Target library dependencies
-// TODO, Target library directories
-void Target::BuildRecompile() {
-
-  // * Completely compile sources if any of the following change
-  // TODO, Toolchain, ASM, C, C++ compiler related to a particular name
-  RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
-               current_preprocessor_flags_);
-  RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
-               current_common_compile_flags_);
-  RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
-  RecheckFlags(loader_.GetLoadedCppCompileFlags(), current_cpp_compile_flags_);
-  RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
-  RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_);
-
-  // * Compile sources
-  if (dirty_) {
-    CompileSources();
-  } else {
-    RecompileSources();
-  }
-
+void Target::BuildLink() {
   // * Completely rebuild target / link if any of the following change
   // Target compiled source files either during Compile / Recompile
   // Target library dependencies
@@ -116,7 +104,18 @@ void Target::BuildRecompile() {
                      current_external_lib_deps_);
   // TODO, Verify the `physical` presence of the target if dirty_ == false
 
-  rebuild_ = dirty_;
+  // TODO, Replace this with RecheckPathForLink
+  std::for_each(target_lib_deps_.cbegin(), target_lib_deps_.cend(),
+                [this](const Target *target) {
+                  current_lib_deps_.insert(internal::Path::CreateExistingPath(
+                      target->GetTargetPath()));
+                });
+  RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
+
+  if (dirty_) {
+    LinkTarget();
+    Store();
+  }
 }
 
 void Target::LinkTarget() {

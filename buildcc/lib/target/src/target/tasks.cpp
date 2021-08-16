@@ -34,50 +34,35 @@ constexpr const char *const kLinkTaskName = "Link";
 
 namespace buildcc::base {
 
-void Target::CompileTargetTask(std::vector<fs::path> &&compile_sources,
-                               std::vector<fs::path> &&dummy_compile_sources) {
+void Target::CompileTask() {
   env::log_trace(name_, __FUNCTION__);
 
-  compile_task_ = tf_.emplace(
-      [this, compile_sources, dummy_compile_sources](tf::Subflow &subflow) {
-        for (const auto &cs : compile_sources) {
-          std::string name =
-              cs.lexically_relative(env::get_project_root_dir()).string();
-          std::replace(name.begin(), name.end(), '\\', '/');
-          (void)subflow.emplace([this, cs]() { CompileSource(cs); }).name(name);
-        }
+  compile_task_ = tf_.emplace([this](tf::Subflow &subflow) {
+    std::vector<fs::path> compile_sources;
+    std::vector<fs::path> dummy_sources;
+    BuildCompile(compile_sources, dummy_sources);
 
-        // NOTE, This has just been added for graph generation
-        for (const auto &dcs : dummy_compile_sources) {
-          std::string name =
-              dcs.lexically_relative(env::get_project_root_dir()).string();
-          std::replace(name.begin(), name.end(), '\\', '/');
-          (void)subflow.emplace([]() {}).name(name);
-        }
-      });
+    for (const auto &cs : compile_sources) {
+      std::string name =
+          cs.lexically_relative(env::get_project_root_dir()).string();
+      std::replace(name.begin(), name.end(), '\\', '/');
+      (void)subflow.emplace([this, cs]() { CompileSource(cs); }).name(name);
+    }
+
+    // NOTE, This has just been added for graph generation
+    for (const auto &dcs : dummy_sources) {
+      std::string name =
+          dcs.lexically_relative(env::get_project_root_dir()).string();
+      std::replace(name.begin(), name.end(), '\\', '/');
+      (void)subflow.emplace([]() {}).name(name);
+    }
+  });
   compile_task_.name(kCompileTaskName);
 }
 
-void Target::LinkTargetTask(const bool link) {
+void Target::LinkTask() {
   env::log_trace(name_, __FUNCTION__);
-
-  link_task_ = tf_.emplace([this, link]() {
-    if (link) {
-      dirty_ = true;
-    }
-
-    std::for_each(target_lib_deps_.cbegin(), target_lib_deps_.cend(),
-                  [this](const Target *target) {
-                    current_lib_deps_.insert(internal::Path::CreateExistingPath(
-                        target->GetTargetPath()));
-                  });
-    RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
-    if (dirty_ || link) {
-      LinkTarget();
-      Store();
-    }
-  });
-
+  link_task_ = tf_.emplace([this]() { BuildLink(); });
   link_task_.name(kLinkTaskName);
   link_task_.succeed(compile_task_);
 }
