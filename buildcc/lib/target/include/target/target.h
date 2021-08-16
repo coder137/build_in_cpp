@@ -58,6 +58,25 @@ enum class TargetType {
 };
 
 class Target {
+
+public:
+  // TODO, Consider making these std::string_view for string literals
+  std::string target_ext_{""};
+  std::string obj_ext_{".o"};
+  std::string prefix_include_dir_{"-I"};
+  std::string prefix_lib_dir_{"-L"};
+  std::unordered_set<std::string> valid_c_ext_{".c"};
+  std::unordered_set<std::string> valid_cpp_ext_{".cpp", ".cxx", ".cc"};
+  std::unordered_set<std::string> valid_asm_ext_{".s", ".S", ".asm"};
+  std::unordered_set<std::string> valid_header_ext_{".h", ".hpp"};
+
+  std::string_view compile_command_{
+      "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
+      "{compile_flags} -o {output} -c {input}"};
+  std::string_view link_command_{
+      "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
+      "{lib_dirs} {lib_deps}"};
+
 public:
   explicit Target(const std::string &name, TargetType type,
                   const Toolchain &toolchain,
@@ -182,24 +201,6 @@ public:
   bool Rebuild() const { return rebuild_; }
 
   // TODO, Add more getters
-
-public:
-  // TODO, Consider making these std::string_view for string literals
-  std::string target_ext_{""};
-  std::string obj_ext_{".o"};
-  std::string prefix_include_dir_{"-I"};
-  std::string prefix_lib_dir_{"-L"};
-  std::unordered_set<std::string> valid_c_ext_{".c"};
-  std::unordered_set<std::string> valid_cpp_ext_{".cpp", ".cxx", ".cc"};
-  std::unordered_set<std::string> valid_asm_ext_{".s", ".S", ".asm"};
-  std::unordered_set<std::string> valid_header_ext_{".h", ".hpp"};
-
-  std::string_view compile_command_{
-      "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
-      "{compile_flags} -o {output} -c {input}"};
-  std::string_view link_command_{
-      "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
-      "{lib_dirs} {lib_deps}"};
 
 protected:
   // Getters
