@@ -46,6 +46,23 @@ bool IsValidTargetType(buildcc::base::TargetType type) {
 
 namespace buildcc::base {
 
+// PUBLIC
+void Target::AddCompileDependencyAbsolute(const fs::path &absolute_path) {
+  internal::add_path(absolute_path, current_compile_dependencies_);
+}
+void Target::AddLinkDependencyAbsolute(const fs::path &absolute_path) {
+  internal::add_path(absolute_path, current_link_dependencies_);
+}
+
+void Target::AddCompileDependency(const fs::path &relative_path) {
+  fs::path absolute_path = GetTargetRootDir() / relative_path;
+  AddCompileDependencyAbsolute(absolute_path);
+}
+void Target::AddLinkDependency(const fs::path &relative_path) {
+  fs::path absolute_path = GetTargetRootDir() / relative_path;
+  AddLinkDependency(absolute_path);
+}
+
 // PROTECTED
 
 // Getters

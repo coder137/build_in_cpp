@@ -139,8 +139,10 @@ public:
   void AddLinkFlag(const std::string &flag);
 
   // * Rebuild
-  void AddCompileDependency(const fs::path &path);
-  void AddLinkDependency(const fs::path &path);
+  void AddCompileDependency(const fs::path &relative_path);
+  void AddCompileDependencyAbsolute(const fs::path &absolute_path);
+  void AddLinkDependency(const fs::path &relative_path);
+  void AddLinkDependencyAbsolute(const fs::path &absolute_path);
 
   // TODO, Add more setters
 
