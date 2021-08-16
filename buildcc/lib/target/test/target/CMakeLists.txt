@@ -70,6 +70,12 @@ add_executable(test_target_link_flags
 )
 target_link_libraries(test_target_link_flags PRIVATE target_interface)
 
+# Test target user deps
+add_executable(test_target_user_deps
+    test_target_user_deps.cpp
+)
+target_link_libraries(test_target_user_deps PRIVATE target_interface)
+
 # Tests
 add_test(NAME test_base_target COMMAND test_base_target)
 add_test(NAME test_target_source COMMAND test_target_source)
@@ -82,3 +88,4 @@ add_test(NAME test_target_preprocessor_flags COMMAND test_target_preprocessor_fl
 add_test(NAME test_target_c_compile_flags COMMAND test_target_c_compile_flags)
 add_test(NAME test_target_cpp_compile_flags COMMAND test_target_cpp_compile_flags)
 add_test(NAME test_target_link_flags COMMAND test_target_link_flags)
+add_test(NAME test_target_user_deps COMMAND test_target_user_deps)
