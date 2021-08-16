@@ -176,8 +176,6 @@ std::string Target::CompileCommand(const fs::path &current_source) const {
 
   // TODO, Check implementation for GetCompiler
   const std::string compiler = GetCompiler(current_source);
-
-  // TODO, This doesn't look clean
   const auto type = GetFileExtType(current_source);
   const std::string &aggregated_compile_flags =
       GetCompiledFlags(type).value_or("");

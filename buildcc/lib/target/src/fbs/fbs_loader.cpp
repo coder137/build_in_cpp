@@ -92,6 +92,9 @@ bool FbsLoader::Load() {
   Extract(target->cpp_compile_flags(), loaded_cpp_compile_flags_);
   Extract(target->link_flags(), loaded_link_flags_);
 
+  ExtractPath(target->compile_dependencies(), loaded_compile_dependencies_);
+  ExtractPath(target->link_dependencies(), loaded_link_dependencies_);
+
   loaded_ = true;
   return true;
 }

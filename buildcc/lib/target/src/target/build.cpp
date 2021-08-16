@@ -83,6 +83,8 @@ void Target::BuildCompile(std::vector<fs::path> &compile_sources,
                  current_cpp_compile_flags_);
     RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
     RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_);
+    RecheckPaths(loader_.GetLoadedCompileDependencies(),
+                 current_compile_dependencies_);
 
     // * Compile sources
     if (dirty_) {
@@ -102,6 +104,7 @@ void Target::BuildLink() {
   RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
   RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
                      current_external_lib_deps_);
+  RecheckPaths(loader_.GetLoadedLinkDependencies(), current_link_dependencies_);
   // TODO, Verify the `physical` presence of the target if dirty_ == false
 
   // TODO, Replace this with RecheckPathForLink

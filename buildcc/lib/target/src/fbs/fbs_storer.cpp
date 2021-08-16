@@ -99,12 +99,17 @@ bool Target::Store() {
       get_fbs_vector_string(builder, current_cpp_compile_flags_);
   auto fbs_link_flags = get_fbs_vector_string(builder, current_link_flags_);
 
+  auto fbs_compile_dependencies =
+      get_fbs_vector_path(builder, current_compile_dependencies_);
+  auto fbs_link_dependencies =
+      get_fbs_vector_path(builder, current_link_dependencies_);
+
   auto fbs_target = fbs::CreateTargetDirect(
       builder, name_.c_str(), fbs_target_type, &fbs_source_files,
       &fbs_header_files, &fbs_lib_deps, &fbs_external_lib_deps,
       &fbs_include_dirs, &fbs_lib_dirs, &fbs_preprocessor_flags,
       &fbs_common_compile_flags, &fbs_c_compile_flags, &fbs_cpp_compile_flags,
-      &fbs_link_flags);
+      &fbs_link_flags, &fbs_compile_dependencies, &fbs_link_dependencies);
   fbs::FinishTargetBuffer(builder, fbs_target);
 
   auto file_path = GetBinaryPath();
