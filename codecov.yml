@@ -12,6 +12,6 @@ parsers:
   gcov:
     branch_detection:
       conditional: yes
-      loop: yes
+      loop: no
       method: no
       macro: no
