@@ -18,7 +18,7 @@ add_library(mock_target STATIC
 target_include_directories(mock_target PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/mock
-    ${CMAKE_CURRENT_BINARY_DIR}/generated
+    ${SCHEMA_BUILD_DIR}
 )
 
 target_compile_options(mock_target PUBLIC ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_FLAGS})

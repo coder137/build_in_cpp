@@ -32,7 +32,7 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
         $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
     )
     target_include_directories(buildcc PRIVATE
-        ${CMAKE_CURRENT_BINARY_DIR}/generated
+        ${SCHEMA_BUILD_DIR}
     )
     add_dependencies(buildcc fbs_to_header)
 endif()
@@ -57,7 +57,7 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     )
 
     target_include_directories(target PRIVATE
-        ${CMAKE_CURRENT_BINARY_DIR}/generated
+        ${SCHEMA_BUILD_DIR}
     )
     target_compile_options(target PRIVATE ${BUILD_COMPILE_FLAGS})
     target_link_options(target PRIVATE ${BUILD_LINK_FLAGS})
