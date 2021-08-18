@@ -6,8 +6,6 @@ if (${TESTING})
     add_subdirectory(test/target)
 endif()
 
-# Target flatc generator
-include(cmake/fbs_gen.cmake)
 
 # Target lib
 include(cmake/target.cmake)
