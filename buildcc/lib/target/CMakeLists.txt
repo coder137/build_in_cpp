@@ -6,7 +6,6 @@ if (${TESTING})
     add_subdirectory(test/target)
 endif()
 
-
 # Target lib
 include(cmake/target.cmake)
 

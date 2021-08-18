@@ -1,6 +1,6 @@
 # Generate files
 set(FBS_FILES 
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbs/target.fbs
+    ${CMAKE_CURRENT_SOURCE_DIR}/target.fbs
 )
 set(FBS_GEN_FILES
     ${CMAKE_CURRENT_BINARY_DIR}/generated/target_generated.h
