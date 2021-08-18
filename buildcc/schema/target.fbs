@@ -1,0 +1,54 @@
+// Copyright 2021 Niket Naidu. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+include "path.fbs";
+
+namespace schema.internal;
+
+enum TargetType : byte {
+    Executable,
+    StaticLibrary,
+    DynamicLibrary
+}
+
+// TODO, Check if Toolchain needs to be added to Target
+table Target {
+    name:string (key);
+    type:TargetType;
+
+    // Files
+    source_files:[Path];
+    header_files:[Path];
+    lib_deps:[Path];
+
+    // Links
+    external_lib_deps:[string];
+
+    // Directories
+    include_dirs:[string];
+    lib_dirs:[string];
+
+    // Flags
+    preprocessor_flags:[string];
+    common_compile_flags:[string];
+    c_compile_flags:[string];
+    cpp_compile_flags:[string];
+    link_flags:[string];
+
+    // Additional dependencies
+    compile_dependencies:[Path];
+    link_dependencies:[Path];
+}
+
+root_type Target;
