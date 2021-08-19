@@ -34,6 +34,9 @@ endif()
 # Environment
 add_subdirectory(lib/env)
 
+# 
+add_subdirectory(lib/command)
+
 # Toolchain
 add_subdirectory(lib/toolchain)
 add_subdirectory(toolchains)
