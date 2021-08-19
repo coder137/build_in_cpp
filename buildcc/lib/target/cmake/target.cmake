@@ -13,14 +13,11 @@ set(TARGET_SRCS
     src/fbs/fbs_storer.cpp
 
     src/util/util.cpp
-    src/util/command.cpp
-    src/util/execute.cpp
 
     include/target/target.h
     include/target/fbs_loader.h
     include/target/path.h
     include/target/util.h
-    include/target/command.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})
@@ -48,12 +45,10 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     )
     target_link_libraries(target PUBLIC 
         env
+        command
         toolchain
         flatbuffers_header_only
         Taskflow
-    )
-    target_link_libraries(target PRIVATE
-        tiny-process-library::tiny-process-library
     )
 
     target_include_directories(target PRIVATE

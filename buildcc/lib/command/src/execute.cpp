@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-#include "target/command.h"
+#include "command/command.h"
 
+#include "fmt/format.h"
+
+#include "env/assert_fatal.h"
 #include "env/logging.h"
 
 #include "process.hpp"

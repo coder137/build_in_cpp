@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-#include "target/command.h"
+#include "command/command.h"
 
 #include <algorithm>
 
-#include "env/logging.h"
 #include "fmt/format.h"
+
+#include "env/assert_fatal.h"
+#include "env/logging.h"
 
 namespace buildcc::internal {
 

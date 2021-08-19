@@ -27,7 +27,7 @@
 #include <vector>
 
 // Internal
-#include "target/command.h"
+#include "command/command.h"
 #include "target/fbs_loader.h"
 #include "target/path.h"
 
