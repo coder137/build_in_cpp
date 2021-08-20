@@ -13,6 +13,8 @@ if (${TESTING})
         CppUTestExt
         gcov
     )
+    target_compile_options(mock_command PUBLIC ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_FLAGS})
+    target_link_options(mock_command PUBLIC ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS})
 endif()
 
 set(COMMAND_SRCS
