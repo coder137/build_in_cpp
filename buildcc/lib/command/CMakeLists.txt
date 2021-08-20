@@ -5,6 +5,7 @@ if (${TESTING})
     )
     target_include_directories(mock_command PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/mock
     )
     target_link_libraries(mock_command PUBLIC
         fmt::fmt-header-only
