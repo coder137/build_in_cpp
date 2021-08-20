@@ -27,14 +27,12 @@
 #include <vector>
 
 // Internal
-#include "target/command.h"
 #include "target/fbs_loader.h"
 #include "target/path.h"
 
-#include "toolchain/toolchain.h"
-
-// Env
+#include "command/command.h"
 #include "env/env.h"
+#include "toolchain/toolchain.h"
 
 // Third Party
 #include "taskflow/taskflow.hpp"
@@ -313,7 +311,7 @@ private:
   // TODO, Add more internal variables
 
   internal::FbsLoader loader_;
-  internal::Command command_;
+  Command command_;
 
   // Build states
   bool dirty_ = false;

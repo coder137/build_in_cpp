@@ -1,6 +1,8 @@
 #include "constants.h"
 
+#include "expect_command.h"
 #include "expect_target.h"
+
 #include "target/target.h"
 
 #include "env/env.h"
@@ -48,8 +50,8 @@ TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
   simple.AddSource(DUMMY_MAIN);
   simple.AddPreprocessorFlag("-DCOMPILE=1");
 
-  buildcc::internal::m::CommandExpect_Execute(1, true);
-  buildcc::internal::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
   simple.Build();
 
   mock().checkExpectations();
@@ -78,8 +80,8 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
     simple.AddSource(DUMMY_MAIN);
     simple.AddPreprocessorFlag("-DCOMPILE=1");
 
-    buildcc::internal::m::CommandExpect_Execute(1, true);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
   }
   {
@@ -88,8 +90,8 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
   }
 
@@ -100,8 +102,8 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
     simple.AddSource(DUMMY_MAIN);
     simple.AddPreprocessorFlag("-DRANDOM=1");
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
   }
 

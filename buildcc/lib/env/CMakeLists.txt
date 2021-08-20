@@ -10,6 +10,8 @@ if (${TESTING})
     target_link_libraries(mock_env PUBLIC
         fmt::fmt-header-only
     )
+    target_compile_options(mock_env PUBLIC ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_FLAGS})
+    target_link_options(mock_env PUBLIC ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS})
 endif()
 
 set(ENV_SRCS

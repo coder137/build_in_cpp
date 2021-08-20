@@ -12,8 +12,6 @@ add_library(mock_target STATIC
     src/fbs/fbs_storer.cpp
 
     src/util/util.cpp
-    src/util/command.cpp
-    mock/util/execute.cpp
 )
 target_include_directories(mock_target PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -28,6 +26,7 @@ target_link_libraries(mock_target PUBLIC
     Taskflow
 
     mock_env
+    mock_command
     toolchain
 
     CppUTest

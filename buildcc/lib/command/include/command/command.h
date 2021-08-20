@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_COMMAND_H_
-#define TARGET_COMMAND_H_
+#ifndef COMMAND_COMMAND_H_
+#define COMMAND_COMMAND_H_
 
+#include <string>
+#include <string_view>
 #include <unordered_map>
 
-#include "target/path.h"
-
-#include "toolchain/toolchain.h"
-
-namespace buildcc::internal {
+namespace buildcc {
 
 class Command {
 public:
@@ -45,6 +43,6 @@ private:
   std::unordered_map<const char *, std::string> default_values_;
 };
 
-} // namespace buildcc::internal
+} // namespace buildcc
 
 #endif

@@ -5,12 +5,6 @@
 
 namespace buildcc {
 
-namespace internal::m {
-
-void CommandExpect_Execute(unsigned int calls, bool expectation);
-
-} // namespace internal::m
-
 namespace base::m {
 
 void TargetExpect_SourceRemoved(unsigned int calls, Target *target);

@@ -3,7 +3,9 @@
 #include "env/logging.h"
 #include "env/util.h"
 
+#include "expect_command.h"
 #include "expect_target.h"
+
 #include "target/target.h"
 
 //
@@ -45,8 +47,8 @@ TEST(TargetTestLibDep, StaticLibrary_SimpleBuildTest) {
   foolib.AddSource("foo.cpp", "foo");
   foolib.AddIncludeDir("foo");
 
-  buildcc::internal::m::CommandExpect_Execute(1, true);
-  buildcc::internal::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
   foolib.Build();
 
   mock().checkExpectations();
@@ -74,8 +76,8 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
 
-    buildcc::internal::m::CommandExpect_Execute(1, true);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     foolib.Build();
     buildcc::env::SaveFile(foolib.GetTargetPath().string().c_str(),
                            std::string{""}, false);
@@ -87,8 +89,8 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
 
-    buildcc::internal::m::CommandExpect_Execute(1, true);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     exe_target.Build();
   }
 
@@ -123,8 +125,8 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
   foolib.AddSource("foo/foo.cpp");
   foolib.AddIncludeDir("foo");
 
-  buildcc::internal::m::CommandExpect_Execute(1, true);
-  buildcc::internal::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
   foolib.Build();
 
   buildcc::env::SaveFile(foolib.GetTargetPath().string().c_str(),
@@ -138,8 +140,8 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
     exe_target.AddSource("empty_main.cpp");
     exe_target.AddIncludeDir("foo");
 
-    buildcc::internal::m::CommandExpect_Execute(1, true);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     exe_target.Build();
   }
 
@@ -153,7 +155,7 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
     exe_target.AddLibDep(foolib);
 
     buildcc::base::m::TargetExpect_PathAdded(1, &exe_target);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     exe_target.Build();
   }
 
@@ -165,7 +167,7 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
     exe_target.AddIncludeDir("foo");
 
     buildcc::base::m::TargetExpect_PathRemoved(1, &exe_target);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     exe_target.Build();
   }
 
@@ -186,8 +188,8 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
 
-    buildcc::internal::m::CommandExpect_Execute(1, true);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     foolib.Build();
 
     bool saved = buildcc::env::SaveFile(foolib.GetTargetPath().string().c_str(),
@@ -200,8 +202,8 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
 
-    buildcc::internal::m::CommandExpect_Execute(1, true);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     exe_target.Build();
   }
 
@@ -214,8 +216,8 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     foolib.AddIncludeDir("");
 
     buildcc::base::m::TargetExpect_DirChanged(1, &foolib);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     foolib.Build();
 
     // * To make sure that SaveFile is newer
@@ -231,7 +233,7 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     exe_target.AddLibDep(foolib);
 
     buildcc::base::m::TargetExpect_PathUpdated(1, &exe_target);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     exe_target.Build();
   }
 

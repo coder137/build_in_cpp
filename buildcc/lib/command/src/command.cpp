@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-#include "target/command.h"
+#include "command/command.h"
 
 #include <algorithm>
 
-#include "env/logging.h"
 #include "fmt/format.h"
 
-namespace buildcc::internal {
+#include "env/assert_fatal.h"
+#include "env/logging.h"
+
+namespace buildcc {
 
 void Command::AddDefaultArguments(
     const std::unordered_map<const char *, std::string> &arguments) {
@@ -61,4 +63,4 @@ bool Command::ConstructAndExecute(
   return Execute(constructed_command);
 }
 
-} // namespace buildcc::internal
+} // namespace buildcc

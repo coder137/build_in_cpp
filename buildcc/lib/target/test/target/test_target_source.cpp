@@ -1,6 +1,8 @@
 #include "constants.h"
 
+#include "expect_command.h"
 #include "expect_target.h"
+
 #include "target/target.h"
 
 #include "env/env.h"
@@ -98,8 +100,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
   buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
                                "data");
 
-  buildcc::internal::m::CommandExpect_Execute(1, true); // compile
-  buildcc::internal::m::CommandExpect_Execute(1, true); // link
+  buildcc::m::CommandExpect_Execute(1, true); // compile
+  buildcc::m::CommandExpect_Execute(1, true); // link
 
   simple.AddSource(DUMMY_MAIN);
   simple.Build();
@@ -132,7 +134,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompileError) {
                                  gcc, "data");
 
     simple.AddSource(DUMMY_MAIN);
-    buildcc::internal::m::CommandExpect_Execute(1, false); // compile
+    buildcc::m::CommandExpect_Execute(1, false); // compile
     CHECK_THROWS(std::exception, simple.Build());
   }
 
@@ -142,8 +144,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompileError) {
                                  gcc, "data");
 
     simple.AddSource(DUMMY_MAIN);
-    buildcc::internal::m::CommandExpect_Execute(1, true);  // compile
-    buildcc::internal::m::CommandExpect_Execute(1, false); // compile
+    buildcc::m::CommandExpect_Execute(1, true);  // compile
+    buildcc::m::CommandExpect_Execute(1, false); // compile
     CHECK_THROWS(std::exception, simple.Build());
   }
 
@@ -176,9 +178,9 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     simple.AddSource(DUMMY_MAIN_C);
     simple.AddSource(NEW_SOURCE);
 
-    buildcc::internal::m::CommandExpect_Execute(1, true); // compile
-    buildcc::internal::m::CommandExpect_Execute(1, true); // compile
-    buildcc::internal::m::CommandExpect_Execute(1, true); // link
+    buildcc::m::CommandExpect_Execute(1, true); // compile
+    buildcc::m::CommandExpect_Execute(1, true); // compile
+    buildcc::m::CommandExpect_Execute(1, true); // link
     simple.Build();
 
     buildcc::internal::FbsLoader loader(NAME, intermediate_path);
@@ -202,11 +204,11 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     buildcc::base::m::TargetExpect_SourceRemoved(1, &simple);
 
     // Added and compiled
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     buildcc::base::m::TargetExpect_SourceAdded(1, &simple);
 
     // Rebuild target
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
 
     // Run the second Build to test Recompile
     simple.Build();
@@ -232,10 +234,10 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     simple.AddSource(NEW_SOURCE);
     // Run the second Build to test Recompile
 
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     buildcc::base::m::TargetExpect_SourceUpdated(1, &simple);
 
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
 
     buildcc::internal::FbsLoader loader(NAME, intermediate_path);
