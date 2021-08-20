@@ -67,8 +67,8 @@ int main(int argc, char **argv) {
 
   // 5. Test steps
   reg.Test(custom_toolchain.state, generic_target, [](base::Target &target) {
-    const bool execute = internal::Command::Execute(
-        fmt::format("{}", target.GetTargetPath().string()));
+    const bool execute =
+        Command::Execute(fmt::format("{}", target.GetTargetPath().string()));
     env::assert_fatal(execute, "Test failed");
   });
 
