@@ -2,7 +2,9 @@
 
 #include "env/logging.h"
 
+#include "expect_command.h"
 #include "expect_target.h"
+
 #include "target/target.h"
 
 #include "target/fbs_loader.h"
@@ -43,8 +45,8 @@ TEST(TargetTestExternalLib, TestAddLibDir) {
   exe.AddSource("foo_main.cpp");
   exe.AddLibDir(exe.GetTargetPath().parent_path());
 
-  buildcc::internal::m::CommandExpect_Execute(1, true);
-  buildcc::internal::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
   exe.Build();
 
   mock().checkExpectations();
@@ -69,8 +71,8 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_Simple) {
   exe.AddLibDir(exe.GetTargetPath().parent_path());
   exe.AddLibDep("-lfoo");
 
-  buildcc::internal::m::CommandExpect_Execute(1, true);
-  buildcc::internal::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
   exe.Build();
 
   mock().checkExpectations();
@@ -96,8 +98,8 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_RebuildChanged) {
     exe.AddSource("foo_main.cpp");
     exe.AddLibDir(exe.GetTargetPath().parent_path());
 
-    buildcc::internal::m::CommandExpect_Execute(1, true);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     exe.Build();
   }
 
@@ -110,7 +112,7 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_RebuildChanged) {
     exe.AddLibDep("-lfoo");
 
     buildcc::base::m::TargetExpect_ExternalLibChanged(1, &exe);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     exe.Build();
   }
 
@@ -122,7 +124,7 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_RebuildChanged) {
     exe.AddLibDir(exe.GetTargetPath().parent_path());
 
     buildcc::base::m::TargetExpect_ExternalLibChanged(1, &exe);
-    buildcc::internal::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
     exe.Build();
   }
 

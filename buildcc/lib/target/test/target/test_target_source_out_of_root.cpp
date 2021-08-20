@@ -1,6 +1,8 @@
 #include "constants.h"
 
+#include "expect_command.h"
 #include "expect_target.h"
+
 #include "target/target.h"
 
 #include "env/env.h"
@@ -40,8 +42,8 @@ TEST(TargetTestSourceOutOfRootGroup, Add_OutOfRootSource) {
                                gcc, "");
   simple.AddSource("../dummy_main.cpp");
 
-  buildcc::internal::m::CommandExpect_Execute(1, true);
-  buildcc::internal::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
   simple.Build();
 }
 
@@ -60,8 +62,8 @@ TEST(TargetTestSourceOutOfRootGroup, Glob_OutOfRootSource) {
 
   CHECK_EQUAL(12, simple.GetCurrentSourceFiles().size());
 
-  buildcc::internal::m::CommandExpect_Execute(12, true);
-  buildcc::internal::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(12, true);
+  buildcc::m::CommandExpect_Execute(1, true);
   simple.Build();
 
   mock().checkExpectations();
