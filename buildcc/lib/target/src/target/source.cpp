@@ -162,8 +162,7 @@ void Target::RecompileSources(std::vector<fs::path> &compile_sources,
 }
 
 void Target::CompileSource(const fs::path &current_source) const {
-  const bool success =
-      internal::Command::Execute(CompileCommand(current_source));
+  const bool success = Command::Execute(CompileCommand(current_source));
   env::assert_fatal(success, fmt::format("Compilation failed for: {}",
                                          current_source.string()));
 }
