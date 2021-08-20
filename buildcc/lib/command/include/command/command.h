@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_COMMAND_H_
-#define TARGET_COMMAND_H_
+#ifndef COMMAND_COMMAND_H_
+#define COMMAND_COMMAND_H_
 
 #include <string>
 #include <string_view>
