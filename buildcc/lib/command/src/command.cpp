@@ -23,7 +23,7 @@
 #include "env/assert_fatal.h"
 #include "env/logging.h"
 
-namespace buildcc::internal {
+namespace buildcc {
 
 void Command::AddDefaultArguments(
     const std::unordered_map<const char *, std::string> &arguments) {
@@ -63,4 +63,4 @@ bool Command::ConstructAndExecute(
   return Execute(constructed_command);
 }
 
-} // namespace buildcc::internal
+} // namespace buildcc

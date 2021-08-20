@@ -2,7 +2,7 @@
 
 #include "CppUTestExt/MockSupport.h"
 
-namespace buildcc::internal {
+namespace buildcc {
 
 static constexpr const char *const EXECUTE_FUNCTION = "execute";
 
@@ -20,4 +20,4 @@ void CommandExpect_Execute(unsigned int calls, bool expectation) {
 
 } // namespace m
 
-} // namespace buildcc::internal
+} // namespace buildcc

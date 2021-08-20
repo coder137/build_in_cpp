@@ -25,7 +25,7 @@
 
 namespace tpl = TinyProcessLib;
 
-namespace buildcc::internal {
+namespace buildcc {
 
 bool Command::Execute(const std::string &command) {
   env::assert_fatal(!command.empty(),
@@ -36,4 +36,4 @@ bool Command::Execute(const std::string &command) {
   return process.get_exit_status() == 0;
 }
 
-} // namespace buildcc::internal
+} // namespace buildcc

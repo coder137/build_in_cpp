@@ -21,7 +21,7 @@
 #include <string_view>
 #include <unordered_map>
 
-namespace buildcc::internal {
+namespace buildcc {
 
 class Command {
 public:
@@ -43,6 +43,6 @@ private:
   std::unordered_map<const char *, std::string> default_values_;
 };
 
-} // namespace buildcc::internal
+} // namespace buildcc
 
 #endif
