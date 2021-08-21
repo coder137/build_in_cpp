@@ -24,7 +24,11 @@
 #include "env/assert_fatal.h"
 #include "env/logging.h"
 #include "env/host_os.h"
+#include "env/host_compiler.h"
 #include "env/util.h"
+
+// 
+#include "command/command.h"
 
 // Base
 #include "toolchain/toolchain.h"
