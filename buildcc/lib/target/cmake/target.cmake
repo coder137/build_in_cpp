@@ -17,6 +17,8 @@ set(TARGET_SRCS
 
     include/target/path.h
     include/target/util.h
+    include/target/loader_interface.h
+
     include/target/target_loader.h
     include/target/target.h
 )
