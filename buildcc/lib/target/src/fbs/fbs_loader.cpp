@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "target/fbs_loader.h"
+#include "target/target_loader.h"
 
 #include "target_generated.h"
 

@@ -1,4 +1,10 @@
 set(TARGET_SRCS 
+
+    src/util/util.cpp
+
+    src/fbs/fbs_loader.cpp
+    src/fbs/fbs_storer.cpp
+
     src/target/target.cpp
     src/target/source.cpp
     src/target/include_dir.cpp
@@ -9,15 +15,10 @@ set(TARGET_SRCS
     src/target/recheck_states.cpp
     src/target/tasks.cpp
 
-    src/fbs/fbs_loader.cpp
-    src/fbs/fbs_storer.cpp
-
-    src/util/util.cpp
-
-    include/target/target.h
-    include/target/fbs_loader.h
     include/target/path.h
     include/target/util.h
+    include/target/target_loader.h
+    include/target/target.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})
