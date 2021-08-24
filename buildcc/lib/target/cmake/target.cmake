@@ -1,4 +1,7 @@
 set(TARGET_SRCS 
+    src/generator/generator_loader.cpp
+
+    include/target/generator_loader.h
 
     src/util/util.cpp
 
