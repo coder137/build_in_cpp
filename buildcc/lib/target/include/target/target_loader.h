@@ -22,6 +22,8 @@
 #include <string>
 #include <unordered_set>
 
+#include "fmt/format.h"
+
 #include "target/path.h"
 
 namespace buildcc::internal {
@@ -41,7 +43,7 @@ public:
 
   // Getters
   fs::path GetBinaryPath() const override {
-    return relative_path_ / (name_ + ".bin");
+    return relative_path_ / fmt::format("{}.bin", name_);
   }
 
   const path_unordered_set &GetLoadedSources() const { return loaded_sources_; }
