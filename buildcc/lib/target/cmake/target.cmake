@@ -2,8 +2,8 @@ set(TARGET_SRCS
 
     src/util/util.cpp
 
-    src/fbs/fbs_loader.cpp
-    src/fbs/fbs_storer.cpp
+    src/target/target_loader.cpp
+    src/target/target_storer.cpp
 
     src/target/target.cpp
     src/target/source.cpp

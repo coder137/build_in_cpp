@@ -8,8 +8,8 @@ add_library(mock_target STATIC
     mock/target/recheck_states.cpp
     mock/target/tasks.cpp
 
-    src/fbs/fbs_loader.cpp
-    src/fbs/fbs_storer.cpp
+    src/target/target_loader.cpp
+    src/target/target_storer.cpp
 
     src/util/util.cpp
 )
