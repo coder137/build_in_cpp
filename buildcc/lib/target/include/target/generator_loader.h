@@ -25,8 +25,8 @@ namespace buildcc::internal {
 
 class GeneratorLoader : public LoaderInterface {
 public:
-  GeneratorLoader(const std::string &name, const fs::path &relative_path)
-      : name_(name), relative_path_(relative_path) {}
+  GeneratorLoader(const std::string &name, const fs::path &path)
+      : name_(name), path_(path) {}
 
   GeneratorLoader(const GeneratorLoader &loader) = delete;
 
@@ -34,12 +34,12 @@ public:
 
   // Getters
   fs::path GetBinaryPath() const override {
-    return relative_path_ / fmt::format("{}.bin", name_);
+    return path_ / fmt::format("{}.bin", name_);
   }
 
 private:
   std::string name_;
-  fs::path relative_path_;
+  fs::path path_;
 };
 
 } // namespace buildcc::internal
