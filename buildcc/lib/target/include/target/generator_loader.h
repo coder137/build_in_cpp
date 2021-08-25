@@ -21,6 +21,8 @@
 
 #include "fmt/format.h"
 
+#include "target/path.h"
+
 namespace buildcc::internal {
 
 class GeneratorLoader : public LoaderInterface {
@@ -40,6 +42,10 @@ public:
 private:
   std::string name_;
   fs::path path_;
+
+  path_unordered_set loaded_inputs_;
+  path_unordered_set loaded_outputs_;
+  std::vector<std::string> loaded_commands_;
 };
 
 } // namespace buildcc::internal

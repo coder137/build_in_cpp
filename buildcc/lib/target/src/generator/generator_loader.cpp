@@ -16,10 +16,39 @@
 
 #include "target/generator_loader.h"
 
+#include "env/logging.h"
+#include "env/util.h"
+
+// Private
+#include "target/private/schema_extract.h"
+
+#include "generator_generated.h"
+
 namespace buildcc::internal {
 
 bool GeneratorLoader::Load() {
-  // TODO,
+  env::log_trace(name_, __FUNCTION__);
+  auto file_path = GetBinaryPath();
+  std::string buffer;
+  bool is_loaded = env::LoadFile(file_path.string().c_str(), true, &buffer);
+  if (!is_loaded) {
+    return false;
+  }
+
+  flatbuffers::Verifier verifier((const uint8_t *)buffer.c_str(),
+                                 buffer.length());
+  const bool is_verified = fbs::VerifyGeneratorBuffer(verifier);
+  if (!is_verified) {
+    return false;
+  }
+
+  const auto *generator = fbs::GetGenerator((const void *)buffer.c_str());
+
+  ExtractPath(generator->inputs(), loaded_inputs_);
+  ExtractPath(generator->outputs(), loaded_outputs_);
+  Extract(generator->commands(), loaded_commands_);
+  loaded_ = true;
+
   return true;
 }
 
