@@ -248,17 +248,4 @@ void Target::RecheckExternalLib(
                  std::bind(&Target::ExternalLibChanged, this));
 }
 
-void Target::RecheckChanged(const std::unordered_set<std::string> &previous,
-                            const std::unordered_set<std::string> &current,
-                            const std::function<void(void)> &callback) {
-  if (dirty_) {
-    return;
-  }
-
-  if (previous != current) {
-    callback();
-    dirty_ = true;
-  }
-}
-
 } // namespace buildcc::base
