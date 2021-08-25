@@ -39,17 +39,44 @@ inline void ExtractPath(
   }
 }
 
-template <typename T>
 inline void
 Extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
             *fbs_paths,
-        T &out) {
+        fs_unordered_set &out) {
   if (fbs_paths == nullptr) {
     return;
   }
 
   for (auto iter = fbs_paths->begin(); iter != fbs_paths->end(); iter++) {
     out.insert(iter->str());
+  }
+}
+
+template <typename T>
+inline void
+Extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
+            *fbs_paths,
+        std::unordered_set<T> &out) {
+  if (fbs_paths == nullptr) {
+    return;
+  }
+
+  for (auto iter = fbs_paths->begin(); iter != fbs_paths->end(); iter++) {
+    out.insert(iter->str());
+  }
+}
+
+template <typename T>
+inline void
+Extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
+            *fbs_paths,
+        std::vector<T> &out) {
+  if (fbs_paths == nullptr) {
+    return;
+  }
+
+  for (auto iter = fbs_paths->begin(); iter != fbs_paths->end(); iter++) {
+    out.push_back(iter->str());
   }
 }
 
