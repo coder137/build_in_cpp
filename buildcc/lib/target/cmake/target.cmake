@@ -1,27 +1,23 @@
 set(TARGET_SRCS 
-    src/generator/generator_loader.cpp
+    include/target/loader_interface.h
+    include/target/builder_interface.h
 
+    src/generator/generator_loader.cpp
     include/target/generator_loader.h
 
     src/util/util.cpp
-
     src/target/target_loader.cpp
     src/target/target_storer.cpp
-
     src/target/target.cpp
     src/target/source.cpp
     src/target/include_dir.cpp
     src/target/lib.cpp
     src/target/build.cpp
     src/target/flags.cpp
-
     src/target/recheck_states.cpp
     src/target/tasks.cpp
-
     include/target/path.h
     include/target/util.h
-    include/target/loader_interface.h
-
     include/target/target_loader.h
     include/target/target.h
 )
