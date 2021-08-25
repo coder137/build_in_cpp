@@ -29,8 +29,8 @@ public:
   virtual void Build() = 0;
 
 protected:
-  void RecheckChanged(const std::unordered_set<std::string> &previous,
-                      const std::unordered_set<std::string> &current,
+  template <typename T>
+  void RecheckChanged(const T &previous, const T &current,
                       const std::function<void(void)> &callback) {
     if (dirty_) {
       return;

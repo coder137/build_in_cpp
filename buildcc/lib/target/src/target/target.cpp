@@ -224,14 +224,8 @@ void Target::RecheckPaths(const internal::path_unordered_set &previous_path,
 
 void Target::RecheckDirs(const internal::fs_unordered_set &previous_dirs,
                          const internal::fs_unordered_set &current_dirs) {
-  if (dirty_) {
-    return;
-  }
-
-  if (previous_dirs != current_dirs) {
-    DirChanged();
-    dirty_ = true;
-  }
+  RecheckChanged(previous_dirs, current_dirs,
+                 std::bind(&Target::DirChanged, this));
 }
 
 void Target::RecheckFlags(
