@@ -20,10 +20,10 @@ table Generator {
     name:string (key);
 
     // Input and output files are both tracked via timestamp
-    input:[Path];
-    output:[Path];
+    inputs:[Path];
+    outputs:[Path];
 
-    command:[string];
+    commands:[string];
 }
 
 root_type Generator;
