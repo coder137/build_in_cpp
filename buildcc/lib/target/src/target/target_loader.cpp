@@ -16,42 +16,12 @@
 
 #include "target/target_loader.h"
 
-#include "target_generated.h"
-
 #include "env/logging.h"
 #include "env/util.h"
 
-namespace fbs = schema::internal;
-
-namespace {
-void ExtractPath(
-    const flatbuffers::Vector<flatbuffers::Offset<schema::internal::Path>>
-        *fbs_paths,
-    buildcc::internal::path_unordered_set &out) {
-  if (fbs_paths == nullptr) {
-    return;
-  }
-
-  for (auto iter = fbs_paths->begin(); iter != fbs_paths->end(); iter++) {
-    out.insert(buildcc::internal::Path::CreateNewPath(
-        iter->pathname()->c_str(), iter->last_write_timestamp()));
-  }
-}
-
-template <typename T>
-void Extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
-                 *fbs_paths,
-             T &out) {
-  if (fbs_paths == nullptr) {
-    return;
-  }
-
-  for (auto iter = fbs_paths->begin(); iter != fbs_paths->end(); iter++) {
-    out.insert(iter->str());
-  }
-}
-
-} // namespace
+// Private
+#include "target/private/schema_extract.h"
+#include "target_generated.h"
 
 namespace buildcc::internal {
 
