@@ -157,10 +157,10 @@ const std::string &Target::GetCompiler(const fs::path &source) const {
 
 const internal::Path &
 Target::GetCompiledSourcePath(const fs::path &source) const {
-  const auto fiter = current_object_files_.find(source.native());
+  const auto fiter = current_object_files_.find(source);
   env::assert_fatal(fiter != current_object_files_.end(),
                     fmt::format("{} not found", source.string()));
-  return current_object_files_.at(source.native());
+  return current_object_files_.at(source);
 }
 
 internal::path_unordered_set Target::GetCompiledSources() const {
