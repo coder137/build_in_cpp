@@ -185,41 +185,9 @@ void Target::Initialize() {
 // Rechecks
 void Target::RecheckPaths(const internal::path_unordered_set &previous_path,
                           const internal::path_unordered_set &current_path) {
-  // * Compile sources / Target already requires rebuild
-  if (dirty_) {
-    return;
-  }
-
-  // * Old path is removed
-  const bool removed =
-      internal::is_previous_paths_different(previous_path, current_path);
-  if (removed) {
-    PathRemoved();
-    dirty_ = true;
-    return;
-  }
-
-  for (const auto &path : current_path) {
-    auto iter = previous_path.find(path);
-
-    if (iter == previous_path.end()) {
-      // * New path added
-      PathAdded();
-      dirty_ = true;
-    } else {
-      // * Path is updated
-      if (path.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
-        PathUpdated();
-        dirty_ = true;
-      } else {
-        // * Do nothing
-      }
-    }
-
-    if (dirty_) {
-      break;
-    }
-  }
+  BuilderInterface::RecheckPaths(
+      previous_path, current_path, [&]() { PathRemoved(); },
+      [&]() { PathAdded(); }, [&]() { PathUpdated(); });
 }
 
 void Target::RecheckDirs(const internal::fs_unordered_set &previous_dirs,
