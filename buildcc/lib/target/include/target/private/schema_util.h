@@ -84,10 +84,10 @@ Extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
   }
 }
 
-//
+// Create APIs for STORE
 
 inline std::vector<flatbuffers::Offset<fbs::Path>>
-get_fbs_vector_path(flatbuffers::FlatBufferBuilder &builder,
+CreateFbsVectorPath(flatbuffers::FlatBufferBuilder &builder,
                     const buildcc::internal::path_unordered_set &pathlist) {
   std::vector<flatbuffers::Offset<fbs::Path>> paths;
   for (const auto &p : pathlist) {
@@ -99,13 +99,25 @@ get_fbs_vector_path(flatbuffers::FlatBufferBuilder &builder,
 }
 
 inline std::vector<flatbuffers::Offset<flatbuffers::String>>
-get_fbs_vector_string(flatbuffers::FlatBufferBuilder &builder,
+CreateFbsVectorString(flatbuffers::FlatBufferBuilder &builder,
                       const std::unordered_set<std::string> &strlist) {
   std::vector<flatbuffers::Offset<flatbuffers::String>> strs;
   std::transform(
       strlist.begin(), strlist.end(), std::back_inserter(strs),
       [&](const std::string &str) -> flatbuffers::Offset<flatbuffers::String> {
         return builder.CreateString(str);
+      });
+  return strs;
+}
+
+inline std::vector<flatbuffers::Offset<flatbuffers::String>>
+CreateFbsVectorString(flatbuffers::FlatBufferBuilder &builder,
+                      const buildcc::internal::fs_unordered_set &fslist) {
+  std::vector<flatbuffers::Offset<flatbuffers::String>> strs;
+  std::transform(
+      fslist.begin(), fslist.end(), std::back_inserter(strs),
+      [&](const fs::path &p) -> flatbuffers::Offset<flatbuffers::String> {
+        return builder.CreateString(p.string());
       });
   return strs;
 }
