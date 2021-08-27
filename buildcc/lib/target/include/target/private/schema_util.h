@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_PRIVATE_SCHEMA_EXTRACT_H_
-#define TARGET_PRIVATE_SCHEMA_EXTRACT_H_
+#ifndef TARGET_PRIVATE_SCHEMA_UTIL_H_
+#define TARGET_PRIVATE_SCHEMA_UTIL_H_
 
 #include "path_generated.h"
 

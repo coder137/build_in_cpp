@@ -20,7 +20,7 @@
 #include "env/util.h"
 
 // Private
-#include "target/private/schema_extract.h"
+#include "target/private/schema_util.h"
 
 #include "generator_generated.h"
 
