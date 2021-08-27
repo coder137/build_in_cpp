@@ -41,8 +41,6 @@
 
 namespace buildcc::base {
 
-namespace fs = std::filesystem;
-
 enum class FileExtType {
   Asm,
   C,
