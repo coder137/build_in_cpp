@@ -17,13 +17,33 @@
 #ifndef TARGET_GENERATOR_LOADER_H_
 #define TARGET_GENERATOR_LOADER_H_
 
-#include "loader_interface.h"
+#include "target/loader_interface.h"
+
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
 
 #include "fmt/format.h"
 
 #include "target/path.h"
 
 namespace buildcc::internal {
+
+struct GenInfo {
+  std::string name;
+  path_unordered_set inputs;
+  std::unordered_set<std::string> outputs;
+  std::vector<std::string> commands;
+  bool parallel{false};
+
+  GenInfo() {}
+  GenInfo(const std::string &n, const path_unordered_set &i,
+          const std::unordered_set<std::string> &o,
+          const std::vector<std::string> &c, bool p)
+      : name(n), inputs(i), outputs(o), commands(c), parallel(p) {}
+};
+
+typedef std::unordered_map<std::string, GenInfo> geninfo_unordered_map;
 
 class GeneratorLoader : public LoaderInterface {
 public:
@@ -39,13 +59,13 @@ public:
     return path_ / fmt::format("{}.bin", name_);
   }
 
+  const geninfo_unordered_map &GetLoadedInfo() { return loaded_info_; }
+
 private:
   std::string name_;
   fs::path path_;
 
-  path_unordered_set loaded_inputs_;
-  path_unordered_set loaded_outputs_;
-  std::vector<std::string> loaded_commands_;
+  geninfo_unordered_map loaded_info_;
 };
 
 } // namespace buildcc::internal

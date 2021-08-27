@@ -28,6 +28,7 @@ namespace buildcc::internal {
 
 bool GeneratorLoader::Load() {
   env::log_trace(name_, __FUNCTION__);
+
   auto file_path = GetBinaryPath();
   std::string buffer;
   bool is_loaded = env::LoadFile(file_path.string().c_str(), true, &buffer);
@@ -44,11 +45,19 @@ bool GeneratorLoader::Load() {
 
   const auto *generator = fbs::GetGenerator((const void *)buffer.c_str());
 
-  ExtractPath(generator->inputs(), loaded_inputs_);
-  ExtractPath(generator->outputs(), loaded_outputs_);
-  Extract(generator->commands(), loaded_commands_);
-  loaded_ = true;
+  const auto *info = generator->info();
+  for (auto iter = info->cbegin(); iter != info->cend(); iter++) {
+    path_unordered_set i;
+    std::unordered_set<std::string> o;
+    std::vector<std::string> c;
+    ExtractPath(iter->inputs(), i);
+    Extract(iter->outputs(), o);
+    Extract(iter->commands(), c);
+    loaded_info_[iter->name()->c_str()] =
+        GenInfo(iter->name()->c_str(), i, o, c, iter->parallel());
+  }
 
+  loaded_ = true;
   return true;
 }
 
