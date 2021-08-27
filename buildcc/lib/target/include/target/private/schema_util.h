@@ -19,11 +19,15 @@
 
 #include "path_generated.h"
 
+#include <algorithm>
+
 #include "target/path.h"
 
 namespace fbs = schema::internal;
 
 namespace buildcc::internal {
+
+// Extract APIs for LOAD
 
 inline void ExtractPath(
     const flatbuffers::Vector<flatbuffers::Offset<schema::internal::Path>>
@@ -78,6 +82,32 @@ Extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
   for (auto iter = fbs_paths->begin(); iter != fbs_paths->end(); iter++) {
     out.push_back(iter->str());
   }
+}
+
+//
+
+inline std::vector<flatbuffers::Offset<fbs::Path>>
+get_fbs_vector_path(flatbuffers::FlatBufferBuilder &builder,
+                    const buildcc::internal::path_unordered_set &pathlist) {
+  std::vector<flatbuffers::Offset<fbs::Path>> paths;
+  for (const auto &p : pathlist) {
+    auto fbs_file = fbs::CreatePathDirect(
+        builder, p.GetPathname().string().c_str(), p.GetLastWriteTimestamp());
+    paths.push_back(fbs_file);
+  }
+  return paths;
+}
+
+inline std::vector<flatbuffers::Offset<flatbuffers::String>>
+get_fbs_vector_string(flatbuffers::FlatBufferBuilder &builder,
+                      const std::unordered_set<std::string> &strlist) {
+  std::vector<flatbuffers::Offset<flatbuffers::String>> strs;
+  std::transform(
+      strlist.begin(), strlist.end(), std::back_inserter(strs),
+      [&](const std::string &str) -> flatbuffers::Offset<flatbuffers::String> {
+        return builder.CreateString(str);
+      });
+  return strs;
 }
 
 } // namespace buildcc::internal

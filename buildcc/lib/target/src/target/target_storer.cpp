@@ -22,6 +22,7 @@
 #include "env/logging.h"
 #include "env/util.h"
 
+#include "target/private/schema_util.h"
 #include "target_generated.h"
 
 namespace fbs = schema::internal;
@@ -30,30 +31,6 @@ namespace {
 
 fbs::TargetType get_fbs_target_type(buildcc::base::TargetType type) {
   return (fbs::TargetType)type;
-}
-
-std::vector<flatbuffers::Offset<fbs::Path>>
-get_fbs_vector_path(flatbuffers::FlatBufferBuilder &builder,
-                    const buildcc::internal::path_unordered_set &pathlist) {
-  std::vector<flatbuffers::Offset<fbs::Path>> paths;
-  for (const auto &p : pathlist) {
-    auto fbs_file = fbs::CreatePathDirect(
-        builder, p.GetPathname().string().c_str(), p.GetLastWriteTimestamp());
-    paths.push_back(fbs_file);
-  }
-  return paths;
-}
-
-std::vector<flatbuffers::Offset<flatbuffers::String>>
-get_fbs_vector_string(flatbuffers::FlatBufferBuilder &builder,
-                      const std::unordered_set<std::string> &strlist) {
-  std::vector<flatbuffers::Offset<flatbuffers::String>> strs;
-  std::transform(
-      strlist.begin(), strlist.end(), std::back_inserter(strs),
-      [&](const std::string &str) -> flatbuffers::Offset<flatbuffers::String> {
-        return builder.CreateString(str);
-      });
-  return strs;
 }
 
 std::vector<flatbuffers::Offset<flatbuffers::String>>
@@ -84,20 +61,21 @@ bool Target::Store() {
   auto fbs_lib_deps = get_fbs_vector_path(builder, current_lib_deps_);
 
   auto fbs_external_lib_deps =
-      get_fbs_vector_string(builder, current_external_lib_deps_);
+      internal::get_fbs_vector_string(builder, current_external_lib_deps_);
 
   auto fbs_include_dirs = get_fbs_vector_string(builder, current_include_dirs_);
   auto fbs_lib_dirs = get_fbs_vector_string(builder, current_lib_dirs_);
 
   auto fbs_preprocessor_flags =
-      get_fbs_vector_string(builder, current_preprocessor_flags_);
+      internal::get_fbs_vector_string(builder, current_preprocessor_flags_);
   auto fbs_common_compile_flags =
-      get_fbs_vector_string(builder, current_common_compile_flags_);
+      internal::get_fbs_vector_string(builder, current_common_compile_flags_);
   auto fbs_c_compile_flags =
-      get_fbs_vector_string(builder, current_c_compile_flags_);
+      internal::get_fbs_vector_string(builder, current_c_compile_flags_);
   auto fbs_cpp_compile_flags =
-      get_fbs_vector_string(builder, current_cpp_compile_flags_);
-  auto fbs_link_flags = get_fbs_vector_string(builder, current_link_flags_);
+      internal::get_fbs_vector_string(builder, current_cpp_compile_flags_);
+  auto fbs_link_flags =
+      internal::get_fbs_vector_string(builder, current_link_flags_);
 
   auto fbs_compile_dependencies =
       get_fbs_vector_path(builder, current_compile_dependencies_);
