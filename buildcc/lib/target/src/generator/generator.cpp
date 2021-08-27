@@ -20,8 +20,6 @@
 
 #include "env/assert_fatal.h"
 
-#include "command/command.h"
-
 namespace buildcc::base {
 
 void Generator::AddGenInfo(const internal::GenInfo &info) {
@@ -31,39 +29,7 @@ void Generator::AddGenInfo(const internal::GenInfo &info) {
   current_info_[info.name] = info;
 }
 
-void Generator::Build() {
-  // TODO, Handle parallel case
-  build_task_ = tf_.emplace([&](tf::Subflow &subflow) {
-    const auto generated_files = BuildGenerate();
-    if (!dirty_) {
-      return;
-    }
-
-    for (const auto &info : generated_files) {
-      if (info->parallel) {
-        subflow
-            .for_each(info->commands.cbegin(), info->commands.cend(),
-                      [](const std::string &command) {
-                        bool success = Command::Execute(command);
-                        env::assert_fatal(success,
-                                          fmt::format("{} failed", command));
-                      })
-            .name(info->name);
-      } else {
-        subflow
-            .emplace([&]() {
-              for (const auto &command : info->commands) {
-                bool success = Command::Execute(command);
-                env::assert_fatal(success, fmt::format("{} failed", command));
-              }
-            })
-            .name(info->name);
-      }
-    }
-    Store();
-  });
-  build_task_.name(fmt::format("BuildTask:{}", name_));
-}
+void Generator::Build() { GenerateTask(); }
 
 // PRIVATE
 

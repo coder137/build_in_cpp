@@ -48,6 +48,7 @@ public:
 
 private:
   std::vector<const internal::GenInfo *> BuildGenerate();
+  void GenerateTask();
   bool Store() override;
 
 private:
