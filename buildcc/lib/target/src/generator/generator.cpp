@@ -34,7 +34,7 @@ void Generator::AddGenInfo(const internal::GenInfo &info) {
 void Generator::Build() {
   // TODO, Handle parallel case
   build_task_ = tf_.emplace([&](tf::Subflow &subflow) {
-    const auto &generated_files = BuildGenerate();
+    const auto generated_files = BuildGenerate();
     if (!dirty_) {
       return;
     }
