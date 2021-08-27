@@ -37,37 +37,38 @@ std::vector<const internal::GenInfo *> Generator::BuildGenerate() {
   const bool loaded = loader_.Load();
 
   std::vector<const internal::GenInfo *> generated_files;
+  bool build = false;
   if (!loaded) {
     std::for_each(current_info_.cbegin(), current_info_.cend(),
                   [&](const std::pair<std::string, internal::GenInfo> &p) {
                     generated_files.push_back(&(p.second));
                   });
+    build = true;
   } else {
+    const auto &previous_info = loader_.GetLoadedInfo();
     std::for_each(
         current_info_.cbegin(), current_info_.cend(),
         [&](const std::pair<std::string, internal::GenInfo> &p) {
-          // Recheck inputs for change in timestamp
-          RecheckPaths(
-              p.second.inputs, current_info_[p.first].inputs, []() {}, []() {},
-              []() {});
-
-          // Recheck presence of outputs
-          RecheckChanged(p.second.outputs, current_info_[p.first].outputs);
-
-          // Recheck change in commands
-          RecheckChanged(p.second.commands, current_info_[p.first].commands);
-
-          if (dirty_) {
-            generated_files.push_back(&(p.second));
+          try {
+            const internal::GenInfo &loaded_geninfo = previous_info.at(p.first);
+            RecheckPaths(
+                loaded_geninfo.inputs, p.second.inputs, []() {}, []() {},
+                []() {});
+            RecheckChanged(loaded_geninfo.outputs, p.second.outputs);
+            RecheckChanged(loaded_geninfo.commands, p.second.commands);
+            if (dirty_) {
+              generated_files.push_back(&(p.second));
+              build = true;
+            }
+            dirty_ = false;
+          } catch (const std::out_of_range &e) {
+            // This means that current_info has more items than previous_info
+            build = true;
           }
-          dirty_ = false;
         });
   }
 
-  if (!generated_files.empty()) {
-    dirty_ = true;
-  }
-
+  dirty_ = build;
   return generated_files;
 }
 
