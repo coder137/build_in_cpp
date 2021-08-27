@@ -43,6 +43,7 @@ public:
   void Build() override;
 
   // Getter
+  fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
   tf::Taskflow &GetTaskflow() { return tf_; }
 
 private:

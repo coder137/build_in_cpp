@@ -98,9 +98,10 @@ CreateFbsVectorPath(flatbuffers::FlatBufferBuilder &builder,
   return paths;
 }
 
+template <typename T>
 inline std::vector<flatbuffers::Offset<flatbuffers::String>>
 CreateFbsVectorString(flatbuffers::FlatBufferBuilder &builder,
-                      const std::unordered_set<std::string> &strlist) {
+                      const T &strlist) {
   std::vector<flatbuffers::Offset<flatbuffers::String>> strs;
   std::transform(
       strlist.begin(), strlist.end(), std::back_inserter(strs),
