@@ -10,7 +10,10 @@ set(TARGET_SRCS
 
     # Generator
     src/generator/generator_loader.cpp
+    src/generator/generator_storer.cpp
+    src/generator/generator.cpp
     include/target/generator_loader.h
+    include/target/generator.h
 
     # Target
     src/target/target_loader.cpp
