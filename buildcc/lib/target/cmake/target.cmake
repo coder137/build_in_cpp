@@ -13,6 +13,7 @@ set(TARGET_SRCS
     src/generator/generator_storer.cpp
     src/generator/generator.cpp
     src/generator/task.cpp
+    src/generator/recheck_states.cpp
     include/target/generator_loader.h
     include/target/generator.h
 

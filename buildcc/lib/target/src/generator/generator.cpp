@@ -45,31 +45,41 @@ std::vector<const internal::GenInfo *> Generator::BuildGenerate() {
                   });
     build = true;
   } else {
-    const auto &previous_info = loader_.GetLoadedInfo();
-    std::for_each(
-        current_info_.cbegin(), current_info_.cend(),
-        [&](const std::pair<std::string, internal::GenInfo> &p) {
-          try {
-            const internal::GenInfo &loaded_geninfo = previous_info.at(p.first);
-            RecheckPaths(
-                loaded_geninfo.inputs, p.second.inputs, []() {}, []() {},
-                []() {});
-            RecheckChanged(loaded_geninfo.outputs, p.second.outputs);
-            RecheckChanged(loaded_geninfo.commands, p.second.commands);
-            if (dirty_) {
-              generated_files.push_back(&(p.second));
-              build = true;
-            }
-            dirty_ = false;
-          } catch (const std::out_of_range &e) {
-            // This means that current_info has more items than previous_info
-            build = true;
-          }
-        });
+    build = Regenerate(generated_files);
   }
 
   dirty_ = build;
   return generated_files;
+}
+
+bool Generator::Regenerate(
+    std::vector<const internal::GenInfo *> &generated_files) {
+  bool build = false;
+  const auto &previous_info = loader_.GetLoadedInfo();
+
+  for (const auto &p : current_info_) {
+    try {
+      const internal::GenInfo &loaded_geninfo = previous_info.at(p.first);
+      RecheckPaths(
+          loaded_geninfo.inputs, p.second.inputs, [&]() { InputRemoved(); },
+          [&]() { InputAdded(); }, [&]() { InputUpdated(); });
+      RecheckChanged(loaded_geninfo.outputs, p.second.outputs,
+                     [&]() { OutputChanged(); });
+      RecheckChanged(loaded_geninfo.commands, p.second.commands,
+                     [&]() { CommandChanged(); });
+
+      if (dirty_) {
+        generated_files.push_back(&(p.second));
+        build = true;
+      }
+      dirty_ = false;
+    } catch (const std::out_of_range &e) {
+      // This means that current_info has more items than
+      // previous_info
+      build = true;
+    }
+  }
+  return build;
 }
 
 } // namespace buildcc::base

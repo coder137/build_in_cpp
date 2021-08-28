@@ -49,7 +49,16 @@ public:
 private:
   std::vector<const internal::GenInfo *> BuildGenerate();
   void GenerateTask();
+  bool Regenerate(std::vector<const internal::GenInfo *> &generated_files);
   bool Store() override;
+
+  // Recheck states
+  void InputRemoved();
+  void InputAdded();
+  void InputUpdated();
+
+  void OutputChanged();
+  void CommandChanged();
 
 private:
   std::string name_;
