@@ -48,13 +48,14 @@ bool GeneratorLoader::Load() {
   const auto *info = generator->info();
   for (auto iter = info->cbegin(); iter != info->cend(); iter++) {
     path_unordered_set i;
-    std::unordered_set<std::string> o;
+    fs_unordered_set o;
     std::vector<std::string> c;
     ExtractPath(iter->inputs(), i);
     Extract(iter->outputs(), o);
     Extract(iter->commands(), c);
-    loaded_info_[iter->name()->c_str()] =
-        GenInfo(iter->name()->c_str(), i, o, c, iter->parallel());
+    loaded_info_.insert(
+        std::make_pair(iter->name()->c_str(), GenInfo(iter->name()->c_str(), i,
+                                                      o, c, iter->parallel())));
   }
 
   loaded_ = true;

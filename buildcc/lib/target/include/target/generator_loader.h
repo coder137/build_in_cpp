@@ -32,14 +32,13 @@ namespace buildcc::internal {
 struct GenInfo {
   std::string name;
   path_unordered_set inputs;
-  std::unordered_set<std::string> outputs;
+  fs_unordered_set outputs;
   std::vector<std::string> commands;
   bool parallel{false};
 
-  GenInfo() {}
-  GenInfo(const std::string &n, const path_unordered_set &i,
-          const std::unordered_set<std::string> &o,
-          const std::vector<std::string> &c, bool p)
+  explicit GenInfo(const std::string &n, const path_unordered_set &i,
+                   const fs_unordered_set &o, const std::vector<std::string> &c,
+                   bool p)
       : name(n), inputs(i), outputs(o), commands(c), parallel(p) {}
 };
 
