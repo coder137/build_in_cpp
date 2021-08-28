@@ -22,6 +22,7 @@ namespace buildcc::base {
 
 void Generator::GenerateTask() {
   build_task_ = tf_.emplace([&](tf::Subflow &subflow) {
+    Convert();
     const auto generated_files = BuildGenerate();
     if (!dirty_) {
       return;

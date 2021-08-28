@@ -60,9 +60,12 @@ public:
   tf::Taskflow &GetTaskflow() { return tf_; }
 
 private:
-  std::vector<const internal::GenInfo *> BuildGenerate();
   void GenerateTask();
+  // Convert from UserGenInfo to internal::GenInfo
+  void Convert();
+  std::vector<const internal::GenInfo *> BuildGenerate();
   bool Regenerate(std::vector<const internal::GenInfo *> &generated_files);
+
   bool Store() override;
 
   // Recheck states
@@ -76,7 +79,7 @@ private:
 private:
   std::string name_;
   std::unordered_map<std::string, UserGenInfo> user_info_;
-  internal::geninfo_unordered_map current_info_;
+  std::unordered_map<std::string, internal::GenInfo> current_info_;
 
   internal::GeneratorLoader loader_;
 

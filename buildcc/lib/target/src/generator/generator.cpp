@@ -33,6 +33,21 @@ void Generator::Build() { GenerateTask(); }
 
 // PRIVATE
 
+void Generator::Convert() {
+  for (const auto &user_info : user_info_) {
+    internal::path_unordered_set current_inputs;
+    for (const auto &user_inputs : user_info.second.inputs) {
+      current_inputs.insert(internal::Path::CreateExistingPath(user_inputs));
+    }
+
+    current_info_.insert(std::make_pair(
+        user_info.first,
+        internal::GenInfo(user_info.second.name, current_inputs,
+                          user_info.second.outputs, user_info.second.commands,
+                          user_info.second.parallel)));
+  }
+}
+
 std::vector<const internal::GenInfo *> Generator::BuildGenerate() {
   const bool loaded = loader_.Load();
 
