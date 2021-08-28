@@ -22,11 +22,11 @@
 
 namespace buildcc::base {
 
-void Generator::AddGenInfo(const internal::GenInfo &info) {
+void Generator::AddGenInfo(const UserGenInfo &info) {
   env::assert_fatal(
-      current_info_.find(info.name) == current_info_.end(),
+      user_info_.find(info.name) == user_info_.end(),
       fmt::format("'{}' information already registered", info.name));
-  current_info_[info.name] = info;
+  user_info_.insert(std::make_pair(info.name, info));
 }
 
 void Generator::Build() { GenerateTask(); }

@@ -32,14 +32,27 @@
 
 namespace buildcc::base {
 
+struct UserGenInfo {
+  std::string name;
+  internal::fs_unordered_set inputs;
+  internal::fs_unordered_set outputs;
+  std::vector<std::string> commands;
+  bool parallel{false};
+
+  explicit UserGenInfo(const std::string &n,
+                       const internal::fs_unordered_set &i,
+                       const internal::fs_unordered_set &o,
+                       const std::vector<std::string> &c, bool p)
+      : name(n), inputs(i), outputs(o), commands(c), parallel(p) {}
+};
+
 class Generator : public BuilderInterface {
 public:
   Generator(const std::string &name, const fs::path &path)
       : loader_(name, path) {}
   Generator(const Generator &generator) = delete;
 
-  void AddGenInfo(const internal::GenInfo &info);
-
+  void AddGenInfo(const UserGenInfo &info);
   void Build() override;
 
   // Getter
@@ -62,6 +75,7 @@ private:
 
 private:
   std::string name_;
+  std::unordered_map<std::string, UserGenInfo> user_info_;
   internal::geninfo_unordered_map current_info_;
 
   internal::GeneratorLoader loader_;
