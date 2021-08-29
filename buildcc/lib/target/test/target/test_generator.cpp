@@ -248,7 +248,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
             TEST_BUILD_DIR / "dummy_main.o",
             TEST_BUILD_DIR / "dummy_main.exe",
         },
-        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+        {"gcc -o intermediate/generator/Rebuild_Outputs/dummy_main.exe "
          "data/dummy_main.c"},
         true));
 
@@ -264,7 +264,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
             "data/dummy_main.c",
         },
         {TEST_BUILD_DIR / "dummy_main.exe"},
-        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+        {"gcc -o intermediate/generator/Rebuild_Outputs/dummy_main.exe "
          "data/dummy_main.c"},
         true));
 
