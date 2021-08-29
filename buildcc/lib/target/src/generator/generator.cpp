@@ -26,7 +26,7 @@ void Generator::AddGenInfo(const UserGenInfo &info) {
   env::assert_fatal(
       user_info_.find(info.name) == user_info_.end(),
       fmt::format("'{}' information already registered", info.name));
-  user_info_.insert(std::make_pair(info.name, info));
+  user_info_.emplace(info.name, info);
 }
 
 void Generator::Build() { GenerateTask(); }
@@ -37,13 +37,13 @@ void Generator::Convert() {
   for (const auto &user_info : user_info_) {
     internal::path_unordered_set current_inputs;
     for (const auto &user_inputs : user_info.second.inputs) {
-      current_inputs.insert(internal::Path::CreateExistingPath(user_inputs));
+      current_inputs.emplace(internal::Path::CreateExistingPath(user_inputs));
     }
-    current_info_.insert(std::make_pair(
+    current_info_.emplace(
         user_info.first,
         internal::GenInfo(user_info.second.name, current_inputs,
                           user_info.second.outputs, user_info.second.commands,
-                          user_info.second.parallel)));
+                          user_info.second.parallel));
   }
 }
 
