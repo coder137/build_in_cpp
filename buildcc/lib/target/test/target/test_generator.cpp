@@ -166,7 +166,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
             "data/dummy_main.c",
         },
         {TEST_BUILD_DIR / "dummy_main.exe"},
-        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+        {"gcc -o intermediate/generator/Rebuild_Inputs/dummy_main.exe "
          "data/dummy_main.c"},
         true));
 
@@ -183,7 +183,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
             "data/new_source.cpp",
         },
         {TEST_BUILD_DIR / "dummy_main.exe"},
-        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+        {"gcc -o intermediate/generator/Rebuild_Inputs/dummy_main.exe "
          "data/dummy_main.c"},
         true));
 
@@ -200,7 +200,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
             "data/new_source.cpp",
         },
         {TEST_BUILD_DIR / "dummy_main.exe"},
-        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+        {"gcc -o intermediate/generator/Rebuild_Inputs/dummy_main.exe "
          "data/dummy_main.c"},
         true));
 
@@ -221,7 +221,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
             "data/new_source.cpp",
         },
         {TEST_BUILD_DIR / "dummy_main.exe"},
-        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+        {"gcc -o intermediate/generator/Rebuild_Inputs/dummy_main.exe "
          "data/dummy_main.c"},
         true));
 
