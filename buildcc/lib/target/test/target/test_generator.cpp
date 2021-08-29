@@ -328,7 +328,44 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
 }
 
 // Input for second generator is output of first generator
-TEST(GeneratorTestGroup, Generator_DoubleDependency) {}
+TEST(GeneratorTestGroup, Generator_DoubleDependency) {
+  fs::path TEST_BUILD_DIR = BUILD_DIR / "DoubleDependency";
+  fs::create_directories(TEST_BUILD_DIR);
+
+  buildcc::base::Generator ogen("custom_object_generator", TEST_BUILD_DIR);
+  ogen.AddGenInfo(buildcc::base::UserGenInfo(
+      "gcc_1",
+      {
+          "data/dummy_main.c",
+      },
+      {TEST_BUILD_DIR / "dummy_main.o"},
+      {"gcc -c -o intermediate/generator/DoubleDependency/dummy_main.o "
+       "data/dummy_main.c"},
+      true));
+
+  buildcc::m::CommandExpect_Execute(1, true);
+  ogen.Build();
+
+  // * NOTE, dummy_main.o is an input to `custom_exe_generator`
+  buildcc::env::SaveFile((TEST_BUILD_DIR / "dummy_main.o").string().c_str(), "",
+                         false);
+
+  buildcc::base::Generator egen("custom_exe_generator", TEST_BUILD_DIR);
+  egen.AddGenInfo(buildcc::base::UserGenInfo(
+      "gcc_1",
+      {
+          TEST_BUILD_DIR / "dummy_main.o",
+      },
+      {TEST_BUILD_DIR / "dummy_main.o"},
+      {"gcc -o intermediate/generator/DoubleDependency/dummy_main.exe "
+       "intermediate/generator/DoubleDependency/dummy_main.o"},
+      true));
+
+  buildcc::m::CommandExpect_Execute(1, true);
+  egen.Build();
+
+  mock().checkExpectations();
+}
 
 int main(int ac, char **av) {
   fs::remove_all(BUILD_DIR);
