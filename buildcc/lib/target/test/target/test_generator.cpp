@@ -116,7 +116,8 @@ TEST(GeneratorTestGroup, Generator_Rebuild_PreviousNotFound) {
             "data/dummy_main.c",
         },
         {TEST_BUILD_DIR / "dummy_main.exe"},
-        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+        {"gcc -o "
+         "intermediate/generator/Rebuild_PreviousNotFound/dummy_main.exe "
          "data/dummy_main.c"},
         true));
 
@@ -132,7 +133,8 @@ TEST(GeneratorTestGroup, Generator_Rebuild_PreviousNotFound) {
             "data/dummy_main.c",
         },
         {TEST_BUILD_DIR / "dummy_main.exe"},
-        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+        {"gcc -o "
+         "intermediate/generator/Rebuild_PreviousNotFound/dummy_main.exe "
          "data/dummy_main.c"},
         true));
 
@@ -143,7 +145,8 @@ TEST(GeneratorTestGroup, Generator_Rebuild_PreviousNotFound) {
             "data/dummy_main.c",
         },
         {TEST_BUILD_DIR / "dummy_main.exe"},
-        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+        {"gcc -o "
+         "intermediate/generator/Rebuild_PreviousNotFound/dummy_main.exe "
          "data/dummy_main.c"},
         true));
 
