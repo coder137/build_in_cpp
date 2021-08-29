@@ -1,7 +1,11 @@
 #include "target/generator.h"
 
+#include <unistd.h>
+
 #include "expect_command.h"
 #include "expect_generator.h"
+
+#include "env/util.h"
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
@@ -150,9 +154,87 @@ TEST(GeneratorTestGroup, Generator_Rebuild_PreviousNotFound) {
   mock().checkExpectations();
 }
 
-TEST(GeneratorTestGroup, Generator_Rebuild_Remove) {}
-TEST(GeneratorTestGroup, Generator_Rebuild_Add) {}
-TEST(GeneratorTestGroup, Generator_Rebuild_Update) {}
+TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
+  fs::path TEST_BUILD_DIR = BUILD_DIR / "Rebuild_Inputs";
+  fs::create_directories(TEST_BUILD_DIR);
+
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    generator.AddGenInfo(buildcc::base::UserGenInfo(
+        "gcc_1",
+        {
+            "data/dummy_main.c",
+        },
+        {TEST_BUILD_DIR / "dummy_main.exe"},
+        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+         "data/dummy_main.c"},
+        true));
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    generator.Build();
+  }
+
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    generator.AddGenInfo(buildcc::base::UserGenInfo(
+        "gcc_1",
+        {
+            "data/dummy_main.c",
+            "data/new_source.cpp",
+        },
+        {TEST_BUILD_DIR / "dummy_main.exe"},
+        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+         "data/dummy_main.c"},
+        true));
+
+    buildcc::base::m::GeneratorExpect_InputAdded(1, &generator);
+    buildcc::m::CommandExpect_Execute(1, true);
+    generator.Build();
+  }
+
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    generator.AddGenInfo(buildcc::base::UserGenInfo(
+        "gcc_1",
+        {
+            "data/new_source.cpp",
+        },
+        {TEST_BUILD_DIR / "dummy_main.exe"},
+        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+         "data/dummy_main.c"},
+        true));
+
+    buildcc::base::m::GeneratorExpect_InputRemoved(1, &generator);
+    buildcc::m::CommandExpect_Execute(1, true);
+    generator.Build();
+  }
+
+  sleep(1);
+  bool saved = buildcc::env::SaveFile("data/new_source.cpp", "", false);
+  CHECK_TRUE(saved);
+
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    generator.AddGenInfo(buildcc::base::UserGenInfo(
+        "gcc_1",
+        {
+            "data/new_source.cpp",
+        },
+        {TEST_BUILD_DIR / "dummy_main.exe"},
+        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+         "data/dummy_main.c"},
+        true));
+
+    buildcc::base::m::GeneratorExpect_InputUpdated(1, &generator);
+    buildcc::m::CommandExpect_Execute(1, true);
+    generator.Build();
+  }
+
+  mock().checkExpectations();
+}
+
+TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {}
+TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {}
 
 // Input for second generator is output of first generator
 TEST(GeneratorTestGroup, Generator_DoubleDependency) {}
