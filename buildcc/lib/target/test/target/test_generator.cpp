@@ -56,7 +56,7 @@ TEST(GeneratorTestGroup, Generator_Build) {
           "data/dummy_main.c",
       },
       {TEST_BUILD_DIR / "dummy_main.exe"},
-      {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+      {"gcc -o intermediate/generator/Build/dummy_main.exe "
        "data/dummy_main.c"},
       true));
 
