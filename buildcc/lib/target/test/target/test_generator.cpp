@@ -233,7 +233,49 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
   mock().checkExpectations();
 }
 
-TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {}
+TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
+  fs::path TEST_BUILD_DIR = BUILD_DIR / "Rebuild_Outputs";
+  fs::create_directories(TEST_BUILD_DIR);
+
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    generator.AddGenInfo(buildcc::base::UserGenInfo(
+        "gcc_1",
+        {
+            "data/dummy_main.c",
+        },
+        {
+            TEST_BUILD_DIR / "dummy_main.o",
+            TEST_BUILD_DIR / "dummy_main.exe",
+        },
+        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+         "data/dummy_main.c"},
+        true));
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    generator.Build();
+  }
+
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    generator.AddGenInfo(buildcc::base::UserGenInfo(
+        "gcc_1",
+        {
+            "data/dummy_main.c",
+        },
+        {TEST_BUILD_DIR / "dummy_main.exe"},
+        {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+         "data/dummy_main.c"},
+        true));
+
+    buildcc::base::m::GeneratorExpect_OutputChanged(1, &generator);
+    buildcc::m::CommandExpect_Execute(1, true);
+    generator.Build();
+  }
+
+  mock().checkExpectations();
+}
+
 TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {}
 
 // Input for second generator is output of first generator
