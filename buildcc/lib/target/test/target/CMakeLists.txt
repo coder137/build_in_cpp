@@ -8,6 +8,15 @@ target_link_libraries(target_interface INTERFACE
     mock_target
 )
 
+# Generator
+add_executable(test_generator
+    test_generator.cpp
+)
+target_link_libraries(test_generator PRIVATE target_interface)
+
+add_test(NAME test_generator COMMAND test_generator
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 # Test base target
 add_executable(test_base_target
