@@ -39,7 +39,6 @@ void Generator::Convert() {
     for (const auto &user_inputs : user_info.second.inputs) {
       current_inputs.insert(internal::Path::CreateExistingPath(user_inputs));
     }
-
     current_info_.insert(std::make_pair(
         user_info.first,
         internal::GenInfo(user_info.second.name, current_inputs,
@@ -54,10 +53,9 @@ std::vector<const internal::GenInfo *> Generator::BuildGenerate() {
   std::vector<const internal::GenInfo *> generated_files;
   bool build = false;
   if (!loaded) {
-    std::for_each(current_info_.cbegin(), current_info_.cend(),
-                  [&](const std::pair<std::string, internal::GenInfo> &p) {
-                    generated_files.push_back(&(p.second));
-                  });
+    for (const auto &ci : current_info_) {
+      generated_files.push_back(&(ci.second));
+    }
     build = true;
   } else {
     build = Regenerate(generated_files);
