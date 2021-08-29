@@ -89,6 +89,7 @@ bool Generator::Regenerate(
     } catch (const std::out_of_range &e) {
       // This means that current_info has more items than
       // previous_info
+      generated_files.push_back(&(p.second));
       build = true;
     }
   }
