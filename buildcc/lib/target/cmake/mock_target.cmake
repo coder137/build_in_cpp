@@ -1,17 +1,29 @@
 add_library(mock_target STATIC
+    # Utils
+    src/util/util.cpp
+
+    # Generator
+    src/generator/generator_loader.cpp
+    src/generator/generator_storer.cpp
+    src/generator/generator.cpp
+
+    # Generator mocks
+    mock/generator/task.cpp
+    mock/generator/recheck_states.cpp
+
+    # Target
+    src/target/target_loader.cpp
+    src/target/target_storer.cpp
     src/target/target.cpp
     src/target/source.cpp
     src/target/include_dir.cpp
     src/target/lib.cpp
     src/target/build.cpp
     src/target/flags.cpp
+
+    # Target mocks
     mock/target/recheck_states.cpp
     mock/target/tasks.cpp
-
-    src/target/target_loader.cpp
-    src/target/target_storer.cpp
-
-    src/util/util.cpp
 )
 target_include_directories(mock_target PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
