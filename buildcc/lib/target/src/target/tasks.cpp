@@ -38,7 +38,7 @@ void Target::CompileTask() {
   env::log_trace(name_, __FUNCTION__);
 
   compile_task_ = tf_.emplace([this](tf::Subflow &subflow) {
-    Convert();
+    ConvertForCompile();
 
     std::vector<fs::path> compile_sources;
     std::vector<fs::path> dummy_sources;
@@ -64,7 +64,10 @@ void Target::CompileTask() {
 
 void Target::LinkTask() {
   env::log_trace(name_, __FUNCTION__);
-  link_task_ = tf_.emplace([this]() { BuildLink(); });
+  link_task_ = tf_.emplace([this]() {
+    ConvertForLink();
+    BuildLink();
+  });
   link_task_.name(kLinkTaskName);
   link_task_.succeed(compile_task_);
 }

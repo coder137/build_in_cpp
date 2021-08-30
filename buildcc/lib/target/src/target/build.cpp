@@ -66,7 +66,7 @@ void Target::Build() {
 
 //
 
-void Target::Convert() {
+void Target::ConvertForCompile() {
   // Convert user_source_files to current_source_files
   for (const auto &user_sf : current_source_files_.user) {
     current_source_files_.internal.emplace(
@@ -82,6 +82,20 @@ void Target::Convert() {
   for (const auto &user_cd : current_compile_dependencies_.user) {
     current_compile_dependencies_.internal.emplace(
         internal::Path::CreateExistingPath(user_cd));
+  }
+}
+
+void Target::ConvertForLink() {
+  std::for_each(
+      current_lib_deps_.user.cbegin(), current_lib_deps_.user.cend(),
+      [this](const Target *target) {
+        current_lib_deps_.internal.emplace(
+            internal::Path::CreateExistingPath(target->GetTargetPath()));
+      });
+
+  for (const auto &user_ld : current_link_dependencies_.user) {
+    current_link_dependencies_.internal.emplace(
+        internal::Path::CreateExistingPath(user_ld));
   }
 }
 
@@ -118,19 +132,6 @@ void Target::BuildCompile(std::vector<fs::path> &compile_sources,
 }
 
 void Target::BuildLink() {
-  // Convert
-  std::for_each(
-      current_lib_deps_.user.cbegin(), current_lib_deps_.user.cend(),
-      [this](const Target *target) {
-        current_lib_deps_.internal.emplace(
-            internal::Path::CreateExistingPath(target->GetTargetPath()));
-      });
-
-  for (const auto &user_ld : current_link_dependencies_.user) {
-    current_link_dependencies_.internal.emplace(
-        internal::Path::CreateExistingPath(user_ld));
-  }
-
   // * Completely rebuild target / link if any of the following change
   // Target compiled source files either during Compile / Recompile
   // Target library dependencies

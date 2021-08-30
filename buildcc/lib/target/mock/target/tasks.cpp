@@ -5,7 +5,7 @@
 namespace buildcc::base {
 
 void Target::CompileTask() {
-  Convert();
+  ConvertForCompile();
 
   std::vector<fs::path> compile_sources;
   std::vector<fs::path> dummy_sources;
@@ -16,6 +16,9 @@ void Target::CompileTask() {
   }
 }
 
-void Target::LinkTask() { BuildLink(); }
+void Target::LinkTask() {
+  ConvertForLink();
+  BuildLink();
+}
 
 } // namespace buildcc::base

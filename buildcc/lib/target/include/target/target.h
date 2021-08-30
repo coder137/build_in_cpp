@@ -222,7 +222,8 @@ private:
   void Initialize();
 
   //
-  void Convert();
+  void ConvertForCompile();
+  void ConvertForLink();
 
   // Build
   void BuildCompile(std::vector<fs::path> &compile_sources,
