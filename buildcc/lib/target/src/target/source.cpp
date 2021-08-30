@@ -33,7 +33,7 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
 
   const fs::path absolute_source =
       fs::path(absolute_input_filepath).make_preferred();
-  user_source_files_.insert(absolute_source);
+  current_source_files_.user.insert(absolute_source);
 
   // Relate input source files with output object files
   const auto absolute_compiled_source =
@@ -110,7 +110,8 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
 
 void Target::CompileSources(std::vector<fs::path> &compile_sources) {
   env::log_trace(name_, __FUNCTION__);
-  std::transform(current_source_files_.begin(), current_source_files_.end(),
+  std::transform(current_source_files_.internal.begin(),
+                 current_source_files_.internal.end(),
                  std::back_inserter(compile_sources),
                  [](const buildcc::internal::Path &p) -> fs::path {
                    return p.GetPathname();
@@ -125,13 +126,13 @@ void Target::RecompileSources(std::vector<fs::path> &compile_sources,
 
   // * Cannot find previous source in current source files
   const bool is_source_removed = internal::is_previous_paths_different(
-      previous_source_files, current_source_files_);
+      previous_source_files, current_source_files_.internal);
   if (is_source_removed) {
     dirty_ = true;
     SourceRemoved();
   }
 
-  for (const auto &current_file : current_source_files_) {
+  for (const auto &current_file : current_source_files_.internal) {
     const auto &current_source = current_file.GetPathname();
 
     // Find current_file in the loaded sources

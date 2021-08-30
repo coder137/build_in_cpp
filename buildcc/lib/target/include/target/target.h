@@ -174,7 +174,7 @@ public:
   // `std::vector<fs::path>` for these getters
   // These APIs are meant to be consumed by users
   const internal::fs_unordered_set &GetCurrentSourceFiles() const {
-    return user_source_files_;
+    return current_source_files_.user;
   }
   const internal::path_unordered_set &GetCurrentHeaderFiles() const {
     return current_header_files_;
@@ -277,8 +277,7 @@ private:
   fs::path target_intermediate_dir_;
 
   // Internal
-  internal::fs_unordered_set user_source_files_;
-  internal::path_unordered_set current_source_files_;
+  internal::Files<internal::fs_unordered_set> current_source_files_;
   // NOTE, Always store the absolute source path -> absolute compiled source
   // path here
   std::unordered_map<fs::path, internal::Path, internal::PathHash>

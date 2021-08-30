@@ -68,8 +68,8 @@ void Target::Build() {
 
 void Target::Convert() {
   // Convert user_source_files to current_source_files
-  for (const auto &user_sf : user_source_files_) {
-    current_source_files_.emplace(
+  for (const auto &user_sf : current_source_files_.user) {
+    current_source_files_.internal.emplace(
         buildcc::internal::Path::CreateExistingPath(user_sf));
   }
 }
