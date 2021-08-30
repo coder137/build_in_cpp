@@ -64,6 +64,16 @@ void Target::Build() {
   LinkTask();
 }
 
+//
+
+void Target::Convert() {
+  // Convert user_source_files to current_source_files
+  for (const auto &user_sf : user_source_files_) {
+    current_source_files_.emplace(
+        buildcc::internal::Path::CreateExistingPath(user_sf));
+  }
+}
+
 void Target::BuildCompile(std::vector<fs::path> &compile_sources,
                           std::vector<fs::path> &dummy_sources) {
   const bool is_loaded = loader_.Load();

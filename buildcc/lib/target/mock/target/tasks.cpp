@@ -5,6 +5,8 @@
 namespace buildcc::base {
 
 void Target::CompileTask() {
+  Convert();
+
   std::vector<fs::path> compile_sources;
   std::vector<fs::path> dummy_sources;
   BuildCompile(compile_sources, dummy_sources);

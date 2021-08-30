@@ -68,10 +68,6 @@ TEST(TargetTestSourceGroup, Target_AddSource) {
   buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
                                "data");
   simple.AddSource(DUMMY_MAIN);
-  // File does not exist
-  CHECK_THROWS(std::exception, simple.AddSource(NO_FILE));
-  // Duplicate file added
-  CHECK_THROWS(std::exception, simple.AddSource(DUMMY_MAIN));
 }
 
 TEST(TargetTestSourceGroup, Target_GlobSource) {

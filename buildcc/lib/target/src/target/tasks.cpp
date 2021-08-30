@@ -38,6 +38,8 @@ void Target::CompileTask() {
   env::log_trace(name_, __FUNCTION__);
 
   compile_task_ = tf_.emplace([this](tf::Subflow &subflow) {
+    Convert();
+
     std::vector<fs::path> compile_sources;
     std::vector<fs::path> dummy_sources;
     BuildCompile(compile_sources, dummy_sources);

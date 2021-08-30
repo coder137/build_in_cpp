@@ -33,7 +33,7 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
 
   const fs::path absolute_source =
       fs::path(absolute_input_filepath).make_preferred();
-  internal::add_path(absolute_source, current_source_files_);
+  user_source_files_.insert(absolute_source);
 
   // Relate input source files with output object files
   const auto absolute_compiled_source =

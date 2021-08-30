@@ -29,7 +29,8 @@ void Target::AddHeaderAbsolute(const fs::path &absolute_filepath) {
   env::assert_fatal(IsValidHeader(absolute_filepath),
                     fmt::format("{} does not have a valid header extension",
                                 absolute_filepath.string()));
-  internal::add_path(absolute_filepath, current_header_files_);
+  current_header_files_.emplace(
+      internal::Path::CreateExistingPath(absolute_filepath));
 }
 
 void Target::AddHeader(const fs::path &relative_filename,
