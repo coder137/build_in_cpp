@@ -180,7 +180,7 @@ public:
     return current_header_files_.user;
   }
   const std::unordered_set<const Target *> &GetTargetLibDeps() const {
-    return target_lib_deps_;
+    return current_lib_deps_.user;
   }
   const internal::fs_unordered_set &GetCurrentIncludeDirs() const {
     return current_include_dirs_;
@@ -285,8 +285,7 @@ private:
 
   internal::Files<internal::fs_unordered_set> current_header_files_;
 
-  internal::path_unordered_set current_lib_deps_;
-  std::unordered_set<const Target *> target_lib_deps_;
+  internal::Files<std::unordered_set<const Target *>> current_lib_deps_;
 
   internal::fs_unordered_set current_include_dirs_;
   internal::fs_unordered_set current_lib_dirs_;

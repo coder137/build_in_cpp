@@ -38,7 +38,7 @@ void Target::AddLibDirAbsolute(const fs::path &absolute_lib_dir) {
 void Target::AddLibDep(const Target &lib_dep) {
   env::log_trace(name_, __FUNCTION__);
 
-  target_lib_deps_.insert(&lib_dep);
+  current_lib_deps_.user.insert(&lib_dep);
 }
 
 void Target::AddLibDep(const std::string &lib_dep) {

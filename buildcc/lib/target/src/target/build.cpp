@@ -113,6 +113,14 @@ void Target::BuildCompile(std::vector<fs::path> &compile_sources,
 }
 
 void Target::BuildLink() {
+  // Convert
+  std::for_each(
+      current_lib_deps_.user.cbegin(), current_lib_deps_.user.cend(),
+      [this](const Target *target) {
+        current_lib_deps_.internal.emplace(
+            internal::Path::CreateExistingPath(target->GetTargetPath()));
+      });
+
   // * Completely rebuild target / link if any of the following change
   // Target compiled source files either during Compile / Recompile
   // Target library dependencies
@@ -121,15 +129,7 @@ void Target::BuildLink() {
   RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
                      current_external_lib_deps_);
   RecheckPaths(loader_.GetLoadedLinkDependencies(), current_link_dependencies_);
-  // TODO, Verify the `physical` presence of the target if dirty_ == false
-
-  // TODO, Replace this with RecheckPathForLink
-  std::for_each(target_lib_deps_.cbegin(), target_lib_deps_.cend(),
-                [this](const Target *target) {
-                  current_lib_deps_.insert(internal::Path::CreateExistingPath(
-                      target->GetTargetPath()));
-                });
-  RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
+  RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_.internal);
 
   if (dirty_) {
     LinkTarget();
@@ -152,7 +152,7 @@ void Target::LinkTarget() {
           {"compiled_sources", aggregated_compiled_sources},
           {"lib_deps",
            fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
-                       internal::aggregate(current_lib_deps_))},
+                       internal::aggregate(current_lib_deps_.internal))},
       });
   env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
 }

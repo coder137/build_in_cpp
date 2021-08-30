@@ -48,7 +48,8 @@ bool Target::Store() {
       internal::CreateFbsVectorPath(builder, current_source_files_.internal);
   auto fbs_header_files =
       internal::CreateFbsVectorPath(builder, current_header_files_.internal);
-  auto fbs_lib_deps = internal::CreateFbsVectorPath(builder, current_lib_deps_);
+  auto fbs_lib_deps =
+      internal::CreateFbsVectorPath(builder, current_lib_deps_.internal);
 
   auto fbs_external_lib_deps =
       internal::CreateFbsVectorString(builder, current_external_lib_deps_);
