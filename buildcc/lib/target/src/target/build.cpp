@@ -72,6 +72,12 @@ void Target::Convert() {
     current_source_files_.internal.emplace(
         buildcc::internal::Path::CreateExistingPath(user_sf));
   }
+
+  // Convert user_header_files to current_header_files
+  for (const auto &user_hf : current_header_files_.user) {
+    current_header_files_.internal.emplace(
+        buildcc::internal::Path::CreateExistingPath(user_hf));
+  }
 }
 
 void Target::BuildCompile(std::vector<fs::path> &compile_sources,
@@ -92,7 +98,7 @@ void Target::BuildCompile(std::vector<fs::path> &compile_sources,
     RecheckFlags(loader_.GetLoadedCppCompileFlags(),
                  current_cpp_compile_flags_);
     RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
-    RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_);
+    RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
     RecheckPaths(loader_.GetLoadedCompileDependencies(),
                  current_compile_dependencies_);
 

@@ -176,8 +176,8 @@ public:
   const internal::fs_unordered_set &GetCurrentSourceFiles() const {
     return current_source_files_.user;
   }
-  const internal::path_unordered_set &GetCurrentHeaderFiles() const {
-    return current_header_files_;
+  const internal::fs_unordered_set &GetCurrentHeaderFiles() const {
+    return current_header_files_.user;
   }
   const std::unordered_set<const Target *> &GetTargetLibDeps() const {
     return target_lib_deps_;
@@ -283,7 +283,7 @@ private:
   std::unordered_map<fs::path, internal::Path, internal::PathHash>
       current_object_files_;
 
-  internal::path_unordered_set current_header_files_;
+  internal::Files<internal::fs_unordered_set> current_header_files_;
 
   internal::path_unordered_set current_lib_deps_;
   std::unordered_set<const Target *> target_lib_deps_;
