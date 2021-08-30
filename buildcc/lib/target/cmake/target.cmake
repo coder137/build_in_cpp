@@ -1,23 +1,35 @@
 set(TARGET_SRCS 
+    # Interfaces
+    include/target/loader_interface.h
+    include/target/builder_interface.h
+
+    # Utils
+    src/util/util.cpp
+    include/target/path.h
+    include/target/util.h
+
+    # Generator
+    src/generator/generator_loader.cpp
+    src/generator/generator_storer.cpp
+    src/generator/generator.cpp
+    src/generator/task.cpp
+    src/generator/recheck_states.cpp
+    include/target/generator_loader.h
+    include/target/generator.h
+
+    # Target
+    src/target/target_loader.cpp
+    src/target/target_storer.cpp
     src/target/target.cpp
     src/target/source.cpp
     src/target/include_dir.cpp
     src/target/lib.cpp
     src/target/build.cpp
     src/target/flags.cpp
-
     src/target/recheck_states.cpp
     src/target/tasks.cpp
-
-    src/fbs/fbs_loader.cpp
-    src/fbs/fbs_storer.cpp
-
-    src/util/util.cpp
-
+    include/target/target_loader.h
     include/target/target.h
-    include/target/fbs_loader.h
-    include/target/path.h
-    include/target/util.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})

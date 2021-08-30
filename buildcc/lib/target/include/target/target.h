@@ -26,9 +26,11 @@
 #include <unordered_set>
 #include <vector>
 
+#include "target/builder_interface.h"
+
 // Internal
-#include "target/fbs_loader.h"
 #include "target/path.h"
+#include "target/target_loader.h"
 
 #include "command/command.h"
 #include "env/env.h"
@@ -38,8 +40,6 @@
 #include "taskflow/taskflow.hpp"
 
 namespace buildcc::base {
-
-namespace fs = std::filesystem;
 
 enum class FileExtType {
   Asm,
@@ -55,7 +55,7 @@ enum class TargetType {
   DynamicLibrary,
 };
 
-class Target {
+class Target : public BuilderInterface {
 
 public:
   // TODO, Consider making these std::string_view for string literals
@@ -92,7 +92,7 @@ public:
   Target(const Target &target) = delete;
 
   // Builders
-  void Build();
+  void Build() override;
 
   // Setters
 
@@ -246,17 +246,12 @@ private:
       const std::unordered_set<std::string> &previous_external_libs,
       const std::unordered_set<std::string> &current_external_libs);
 
-  // Helper function
-  void RecheckChanged(const std::unordered_set<std::string> &previous,
-                      const std::unordered_set<std::string> &current,
-                      const std::function<void(void)> &callback);
-
   // Tasks
   void CompileTask();
   void LinkTask();
 
   // Fbs
-  bool Store();
+  bool Store() override;
 
   // Callbacks
   void SourceRemoved();
@@ -282,7 +277,7 @@ private:
   internal::path_unordered_set current_source_files_;
   // NOTE, Always store the absolute source path -> absolute compiled source
   // path here
-  std::unordered_map<fs::path::string_type, internal::Path>
+  std::unordered_map<fs::path, internal::Path, internal::PathHash>
       current_object_files_;
 
   internal::path_unordered_set current_header_files_;
@@ -314,7 +309,6 @@ private:
   Command command_;
 
   // Build states
-  bool dirty_ = false;
   bool first_build_ = false;
   bool rebuild_ = false;
 

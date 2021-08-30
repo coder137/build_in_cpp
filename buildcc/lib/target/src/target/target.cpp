@@ -157,10 +157,10 @@ const std::string &Target::GetCompiler(const fs::path &source) const {
 
 const internal::Path &
 Target::GetCompiledSourcePath(const fs::path &source) const {
-  const auto fiter = current_object_files_.find(source.native());
+  const auto fiter = current_object_files_.find(source);
   env::assert_fatal(fiter != current_object_files_.end(),
                     fmt::format("{} not found", source.string()));
-  return current_object_files_.at(source.native());
+  return current_object_files_.at(source);
 }
 
 internal::path_unordered_set Target::GetCompiledSources() const {
@@ -185,53 +185,15 @@ void Target::Initialize() {
 // Rechecks
 void Target::RecheckPaths(const internal::path_unordered_set &previous_path,
                           const internal::path_unordered_set &current_path) {
-  // * Compile sources / Target already requires rebuild
-  if (dirty_) {
-    return;
-  }
-
-  // * Old path is removed
-  const bool removed =
-      internal::is_previous_paths_different(previous_path, current_path);
-  if (removed) {
-    PathRemoved();
-    dirty_ = true;
-    return;
-  }
-
-  for (const auto &path : current_path) {
-    auto iter = previous_path.find(path);
-
-    if (iter == previous_path.end()) {
-      // * New path added
-      PathAdded();
-      dirty_ = true;
-    } else {
-      // * Path is updated
-      if (path.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
-        PathUpdated();
-        dirty_ = true;
-      } else {
-        // * Do nothing
-      }
-    }
-
-    if (dirty_) {
-      break;
-    }
-  }
+  BuilderInterface::RecheckPaths(
+      previous_path, current_path, [&]() { PathRemoved(); },
+      [&]() { PathAdded(); }, [&]() { PathUpdated(); });
 }
 
 void Target::RecheckDirs(const internal::fs_unordered_set &previous_dirs,
                          const internal::fs_unordered_set &current_dirs) {
-  if (dirty_) {
-    return;
-  }
-
-  if (previous_dirs != current_dirs) {
-    DirChanged();
-    dirty_ = true;
-  }
+  RecheckChanged(previous_dirs, current_dirs,
+                 std::bind(&Target::DirChanged, this));
 }
 
 void Target::RecheckFlags(
@@ -246,19 +208,6 @@ void Target::RecheckExternalLib(
     const std::unordered_set<std::string> &current_external_libs) {
   RecheckChanged(previous_external_libs, current_external_libs,
                  std::bind(&Target::ExternalLibChanged, this));
-}
-
-void Target::RecheckChanged(const std::unordered_set<std::string> &previous,
-                            const std::unordered_set<std::string> &current,
-                            const std::function<void(void)> &callback) {
-  if (dirty_) {
-    return;
-  }
-
-  if (previous != current) {
-    callback();
-    dirty_ = true;
-  }
 }
 
 } // namespace buildcc::base

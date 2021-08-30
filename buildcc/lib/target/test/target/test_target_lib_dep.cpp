@@ -9,7 +9,7 @@
 #include "target/target.h"
 
 //
-#include "target/fbs_loader.h"
+#include "target/target_loader.h"
 
 #include <iostream>
 #include <unistd.h>

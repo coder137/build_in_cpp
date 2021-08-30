@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_FBS_LOADER_H_
-#define TARGET_FBS_LOADER_H_
+#ifndef TARGET_TARGET_LOADER_H_
+#define TARGET_TARGET_LOADER_H_
 
-#include <filesystem>
+#include "target/loader_interface.h"
+
 #include <string>
 #include <unordered_set>
 
-#include "target/path.h"
+#include "fmt/format.h"
 
-namespace fs = std::filesystem;
+#include "target/path.h"
 
 namespace buildcc::internal {
 
-class FbsLoader {
+// TODO, Change name to TargetLoader
+class FbsLoader : public LoaderInterface {
 public:
   explicit FbsLoader(const std::string &name, const fs::path &relative_path)
       : name_(name), relative_path_(relative_path) {
@@ -37,11 +39,12 @@ public:
   FbsLoader(const FbsLoader &loader) = delete;
 
 public:
-  bool Load();
+  bool Load() override;
 
   // Getters
-  bool IsLoaded() const { return loaded_; }
-  fs::path GetBinaryPath() const { return relative_path_ / (name_ + ".bin"); }
+  fs::path GetBinaryPath() const override {
+    return relative_path_ / fmt::format("{}.bin", name_);
+  }
 
   const path_unordered_set &GetLoadedSources() const { return loaded_sources_; }
   const path_unordered_set &GetLoadedHeaders() const { return loaded_headers_; }
@@ -85,7 +88,6 @@ private:
 private:
   std::string name_;
   fs::path relative_path_;
-  bool loaded_ = false;
 
   path_unordered_set loaded_sources_;
   path_unordered_set loaded_headers_;
