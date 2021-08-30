@@ -53,9 +53,9 @@ std::vector<const internal::GenInfo *> Generator::BuildGenerate() {
   std::vector<const internal::GenInfo *> generated_files;
   bool build = false;
   if (!loaded) {
-    for (const auto &ci : current_info_) {
-      generated_files.push_back(&(ci.second));
-    }
+    std::for_each(
+        current_info_.cbegin(), current_info_.cend(),
+        [&](const auto &p) { generated_files.push_back(&(p.second)); });
     build = true;
   } else {
     build = Regenerate(generated_files);
