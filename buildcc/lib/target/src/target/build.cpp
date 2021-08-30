@@ -78,6 +78,11 @@ void Target::Convert() {
     current_header_files_.internal.emplace(
         buildcc::internal::Path::CreateExistingPath(user_hf));
   }
+
+  for (const auto &user_cd : current_compile_dependencies_.user) {
+    current_compile_dependencies_.internal.emplace(
+        internal::Path::CreateExistingPath(user_cd));
+  }
 }
 
 void Target::BuildCompile(std::vector<fs::path> &compile_sources,
@@ -100,7 +105,7 @@ void Target::BuildCompile(std::vector<fs::path> &compile_sources,
     RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
     RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
     RecheckPaths(loader_.GetLoadedCompileDependencies(),
-                 current_compile_dependencies_);
+                 current_compile_dependencies_.internal);
 
     // * Compile sources
     if (dirty_) {
@@ -121,6 +126,11 @@ void Target::BuildLink() {
             internal::Path::CreateExistingPath(target->GetTargetPath()));
       });
 
+  for (const auto &user_ld : current_link_dependencies_.user) {
+    current_link_dependencies_.internal.emplace(
+        internal::Path::CreateExistingPath(user_ld));
+  }
+
   // * Completely rebuild target / link if any of the following change
   // Target compiled source files either during Compile / Recompile
   // Target library dependencies
@@ -128,7 +138,8 @@ void Target::BuildLink() {
   RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
   RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
                      current_external_lib_deps_);
-  RecheckPaths(loader_.GetLoadedLinkDependencies(), current_link_dependencies_);
+  RecheckPaths(loader_.GetLoadedLinkDependencies(),
+               current_link_dependencies_.internal);
   RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_.internal);
 
   if (dirty_) {

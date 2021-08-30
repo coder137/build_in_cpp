@@ -70,10 +70,10 @@ bool Target::Store() {
   auto fbs_link_flags =
       internal::CreateFbsVectorString(builder, current_link_flags_);
 
-  auto fbs_compile_dependencies =
-      internal::CreateFbsVectorPath(builder, current_compile_dependencies_);
-  auto fbs_link_dependencies =
-      internal::CreateFbsVectorPath(builder, current_link_dependencies_);
+  auto fbs_compile_dependencies = internal::CreateFbsVectorPath(
+      builder, current_compile_dependencies_.internal);
+  auto fbs_link_dependencies = internal::CreateFbsVectorPath(
+      builder, current_link_dependencies_.internal);
 
   auto fbs_target = fbs::CreateTargetDirect(
       builder, name_.c_str(), fbs_target_type, &fbs_source_files,

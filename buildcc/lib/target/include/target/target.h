@@ -298,8 +298,8 @@ private:
   std::unordered_set<std::string> current_cpp_compile_flags_;
   std::unordered_set<std::string> current_link_flags_;
 
-  internal::path_unordered_set current_compile_dependencies_;
-  internal::path_unordered_set current_link_dependencies_;
+  internal::Files<internal::fs_unordered_set> current_compile_dependencies_;
+  internal::Files<internal::fs_unordered_set> current_link_dependencies_;
 
   // TODO, Might not need to be persistent
   std::string aggregated_c_compile_flags_;
