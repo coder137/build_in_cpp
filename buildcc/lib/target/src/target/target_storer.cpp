@@ -45,10 +45,11 @@ bool Target::Store() {
   auto fbs_target_type = CreateFbsTargetType(type_);
 
   auto fbs_source_files =
-      internal::CreateFbsVectorPath(builder, current_source_files_);
+      internal::CreateFbsVectorPath(builder, current_source_files_.internal);
   auto fbs_header_files =
-      internal::CreateFbsVectorPath(builder, current_header_files_);
-  auto fbs_lib_deps = internal::CreateFbsVectorPath(builder, current_lib_deps_);
+      internal::CreateFbsVectorPath(builder, current_header_files_.internal);
+  auto fbs_lib_deps =
+      internal::CreateFbsVectorPath(builder, current_lib_deps_.internal);
 
   auto fbs_external_lib_deps =
       internal::CreateFbsVectorString(builder, current_external_lib_deps_);
@@ -69,10 +70,10 @@ bool Target::Store() {
   auto fbs_link_flags =
       internal::CreateFbsVectorString(builder, current_link_flags_);
 
-  auto fbs_compile_dependencies =
-      internal::CreateFbsVectorPath(builder, current_compile_dependencies_);
-  auto fbs_link_dependencies =
-      internal::CreateFbsVectorPath(builder, current_link_dependencies_);
+  auto fbs_compile_dependencies = internal::CreateFbsVectorPath(
+      builder, current_compile_dependencies_.internal);
+  auto fbs_link_dependencies = internal::CreateFbsVectorPath(
+      builder, current_link_dependencies_.internal);
 
   auto fbs_target = fbs::CreateTargetDirect(
       builder, name_.c_str(), fbs_target_type, &fbs_source_files,

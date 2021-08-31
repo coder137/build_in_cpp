@@ -120,6 +120,23 @@ public:
 typedef std::unordered_set<Path, PathHash> path_unordered_set;
 typedef std::unordered_set<fs::path, PathHash> fs_unordered_set;
 
+// * Relation between
+// - internal timestamp verified files (Path + Timestamp)
+// - user facing file paths (Only Path)
+// ? Why has this been done?
+// We cannot guarantee that filepaths would be present
+// when the user is defining the build
+// The input to a Generator / Target might also be generated!
+// We must only verify the File timestamp AFTER dependent Generator(s) /
+// Target(s) have been built
+template <typename T> struct Files {
+  path_unordered_set internal;
+  T user;
+
+  Files() {}
+  Files(const path_unordered_set &i, const T &u) : internal(i), user(u) {}
+};
+
 } // namespace buildcc::internal
 
 #endif

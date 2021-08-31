@@ -35,7 +35,8 @@ bool Generator::Store() {
   std::vector<flatbuffers::Offset<fbs::GenInfo>> fbs_generator_list;
   for (const auto &info : current_info_) {
     const auto &geninfo = info.second;
-    auto fbs_inputs = internal::CreateFbsVectorPath(builder, geninfo.inputs);
+    auto fbs_inputs =
+        internal::CreateFbsVectorPath(builder, geninfo.inputs.internal);
     auto fbs_outputs =
         internal::CreateFbsVectorString(builder, geninfo.outputs);
     auto fbs_commands =

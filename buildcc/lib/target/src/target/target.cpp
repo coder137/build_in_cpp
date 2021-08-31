@@ -48,10 +48,10 @@ namespace buildcc::base {
 
 // PUBLIC
 void Target::AddCompileDependencyAbsolute(const fs::path &absolute_path) {
-  internal::add_path(absolute_path, current_compile_dependencies_);
+  current_compile_dependencies_.user.insert(absolute_path);
 }
 void Target::AddLinkDependencyAbsolute(const fs::path &absolute_path) {
-  internal::add_path(absolute_path, current_link_dependencies_);
+  current_link_dependencies_.user.insert(absolute_path);
 }
 
 void Target::AddCompileDependency(const fs::path &relative_path) {

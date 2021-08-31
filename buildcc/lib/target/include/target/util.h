@@ -24,19 +24,6 @@
 
 namespace buildcc::internal {
 
-// Additions
-/**
- * @brief Existing path is stored inside stored_paths
- * Returns false if path is stored
- * Throws buildcc::env::assert_exception if path does not exist
- *
- * @param path
- * @param stored_paths
- * @return true
- * @return false
- */
-bool add_path(const fs::path &path, path_unordered_set &stored_paths);
-
 // Checks
 /**
  * @brief Perform check to see if previous path is present in current path

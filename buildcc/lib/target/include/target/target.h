@@ -173,14 +173,14 @@ public:
   // TODO, Consider returning `std::vector<std::string>` OR
   // `std::vector<fs::path>` for these getters
   // These APIs are meant to be consumed by users
-  const internal::path_unordered_set &GetCurrentSourceFiles() const {
-    return current_source_files_;
+  const internal::fs_unordered_set &GetCurrentSourceFiles() const {
+    return current_source_files_.user;
   }
-  const internal::path_unordered_set &GetCurrentHeaderFiles() const {
-    return current_header_files_;
+  const internal::fs_unordered_set &GetCurrentHeaderFiles() const {
+    return current_header_files_.user;
   }
   const std::unordered_set<const Target *> &GetTargetLibDeps() const {
-    return target_lib_deps_;
+    return current_lib_deps_.user;
   }
   const internal::fs_unordered_set &GetCurrentIncludeDirs() const {
     return current_include_dirs_;
@@ -220,6 +220,10 @@ protected:
 
 private:
   void Initialize();
+
+  //
+  void ConvertForCompile();
+  void ConvertForLink();
 
   // Build
   void BuildCompile(std::vector<fs::path> &compile_sources,
@@ -274,16 +278,15 @@ private:
   fs::path target_intermediate_dir_;
 
   // Internal
-  internal::path_unordered_set current_source_files_;
+  internal::Files<internal::fs_unordered_set> current_source_files_;
   // NOTE, Always store the absolute source path -> absolute compiled source
   // path here
   std::unordered_map<fs::path, internal::Path, internal::PathHash>
       current_object_files_;
 
-  internal::path_unordered_set current_header_files_;
+  internal::Files<internal::fs_unordered_set> current_header_files_;
 
-  internal::path_unordered_set current_lib_deps_;
-  std::unordered_set<const Target *> target_lib_deps_;
+  internal::Files<std::unordered_set<const Target *>> current_lib_deps_;
 
   internal::fs_unordered_set current_include_dirs_;
   internal::fs_unordered_set current_lib_dirs_;
@@ -296,8 +299,8 @@ private:
   std::unordered_set<std::string> current_cpp_compile_flags_;
   std::unordered_set<std::string> current_link_flags_;
 
-  internal::path_unordered_set current_compile_dependencies_;
-  internal::path_unordered_set current_link_dependencies_;
+  internal::Files<internal::fs_unordered_set> current_compile_dependencies_;
+  internal::Files<internal::fs_unordered_set> current_link_dependencies_;
 
   // TODO, Might not need to be persistent
   std::string aggregated_c_compile_flags_;

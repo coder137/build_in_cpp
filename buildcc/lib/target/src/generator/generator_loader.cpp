@@ -53,9 +53,9 @@ bool GeneratorLoader::Load() {
     ExtractPath(iter->inputs(), i);
     Extract(iter->outputs(), o);
     Extract(iter->commands(), c);
-    loaded_info_.insert(
-        std::make_pair(iter->name()->c_str(), GenInfo(iter->name()->c_str(), i,
-                                                      o, c, iter->parallel())));
+    loaded_info_.emplace(iter->name()->c_str(),
+                         GenInfo::CreateInternalGenInfo(
+                             iter->name()->c_str(), i, o, c, iter->parallel()));
   }
 
   loaded_ = true;

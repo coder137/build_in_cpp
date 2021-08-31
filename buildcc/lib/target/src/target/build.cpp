@@ -64,6 +64,41 @@ void Target::Build() {
   LinkTask();
 }
 
+//
+
+void Target::ConvertForCompile() {
+  // Convert user_source_files to current_source_files
+  for (const auto &user_sf : current_source_files_.user) {
+    current_source_files_.internal.emplace(
+        buildcc::internal::Path::CreateExistingPath(user_sf));
+  }
+
+  // Convert user_header_files to current_header_files
+  for (const auto &user_hf : current_header_files_.user) {
+    current_header_files_.internal.emplace(
+        buildcc::internal::Path::CreateExistingPath(user_hf));
+  }
+
+  for (const auto &user_cd : current_compile_dependencies_.user) {
+    current_compile_dependencies_.internal.emplace(
+        internal::Path::CreateExistingPath(user_cd));
+  }
+}
+
+void Target::ConvertForLink() {
+  std::for_each(
+      current_lib_deps_.user.cbegin(), current_lib_deps_.user.cend(),
+      [this](const Target *target) {
+        current_lib_deps_.internal.emplace(
+            internal::Path::CreateExistingPath(target->GetTargetPath()));
+      });
+
+  for (const auto &user_ld : current_link_dependencies_.user) {
+    current_link_dependencies_.internal.emplace(
+        internal::Path::CreateExistingPath(user_ld));
+  }
+}
+
 void Target::BuildCompile(std::vector<fs::path> &compile_sources,
                           std::vector<fs::path> &dummy_sources) {
   const bool is_loaded = loader_.Load();
@@ -82,9 +117,9 @@ void Target::BuildCompile(std::vector<fs::path> &compile_sources,
     RecheckFlags(loader_.GetLoadedCppCompileFlags(),
                  current_cpp_compile_flags_);
     RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
-    RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_);
+    RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
     RecheckPaths(loader_.GetLoadedCompileDependencies(),
-                 current_compile_dependencies_);
+                 current_compile_dependencies_.internal);
 
     // * Compile sources
     if (dirty_) {
@@ -104,16 +139,9 @@ void Target::BuildLink() {
   RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
   RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
                      current_external_lib_deps_);
-  RecheckPaths(loader_.GetLoadedLinkDependencies(), current_link_dependencies_);
-  // TODO, Verify the `physical` presence of the target if dirty_ == false
-
-  // TODO, Replace this with RecheckPathForLink
-  std::for_each(target_lib_deps_.cbegin(), target_lib_deps_.cend(),
-                [this](const Target *target) {
-                  current_lib_deps_.insert(internal::Path::CreateExistingPath(
-                      target->GetTargetPath()));
-                });
-  RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_);
+  RecheckPaths(loader_.GetLoadedLinkDependencies(),
+               current_link_dependencies_.internal);
+  RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_.internal);
 
   if (dirty_) {
     LinkTarget();
@@ -136,7 +164,7 @@ void Target::LinkTarget() {
           {"compiled_sources", aggregated_compiled_sources},
           {"lib_deps",
            fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
-                       internal::aggregate(current_lib_deps_))},
+                       internal::aggregate(current_lib_deps_.internal))},
       });
   env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
 }
