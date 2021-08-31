@@ -276,6 +276,92 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
   mock().checkExpectations();
 }
 
+TEST(GeneratorTestGroup, Generator_AddCustomRegenerate) {
+  fs::path TEST_BUILD_DIR = BUILD_DIR / "AddCustomRegenerate";
+  fs::create_directories(TEST_BUILD_DIR);
+
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    generator.AddGenInfo(
+        "gcc_1",
+        {
+            "data/dummy_main.c",
+        },
+        {
+            TEST_BUILD_DIR / "dummy_main.o",
+            TEST_BUILD_DIR / "dummy_main.exe",
+        },
+        {"gcc -o intermediate/generator/AddCustomRegenerate/dummy_main.exe "
+         "data/dummy_main.c"},
+        true);
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    generator.Build();
+  }
+
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    generator.AddGenInfo(
+        "gcc_1",
+        {
+            "data/dummy_main.c",
+        },
+        {
+            TEST_BUILD_DIR / "dummy_main.o",
+            TEST_BUILD_DIR / "dummy_main.exe",
+        },
+        {"gcc -o intermediate/generator/AddCustomRegenerate/dummy_main.exe "
+         "data/dummy_main.c"},
+        true);
+
+    generator.AddRegenerateCb([]() { return true; });
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    generator.Build();
+  }
+
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    generator.AddGenInfo(
+        "gcc_1",
+        {
+            "data/dummy_main.c",
+        },
+        {
+            TEST_BUILD_DIR / "dummy_main.o",
+            TEST_BUILD_DIR / "dummy_main.exe",
+        },
+        {"gcc -o intermediate/generator/AddCustomRegenerate/dummy_main.exe "
+         "data/dummy_main.c"},
+        true);
+
+    generator.AddRegenerateCb([]() { return false; });
+
+    generator.Build();
+  }
+
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    generator.AddGenInfo(
+        "gcc_1",
+        {
+            "data/dummy_main.c",
+        },
+        {
+            TEST_BUILD_DIR / "dummy_main.o",
+            TEST_BUILD_DIR / "dummy_main.exe",
+        },
+        {"gcc -o intermediate/generator/AddCustomRegenerate/dummy_main.exe "
+         "data/dummy_main.c"},
+        true);
+
+    generator.AddRegenerateCb(std::function<bool(void)>());
+    CHECK_THROWS(buildcc::env::assert_exception, generator.Build());
+  }
+
+  mock().checkExpectations();
+}
+
 TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
   fs::path TEST_BUILD_DIR = BUILD_DIR / "Rebuild_Commands";
   fs::create_directories(TEST_BUILD_DIR);
