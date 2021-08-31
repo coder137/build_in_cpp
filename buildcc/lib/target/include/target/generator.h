@@ -42,6 +42,7 @@ public:
                   const internal::fs_unordered_set &inputs,
                   const internal::fs_unordered_set &outputs,
                   const std::vector<std::string> &commands, bool parallel);
+  void AddRegenerateCb(const std::function<bool(void)> &cb);
   void Build() override;
 
   // Getter
@@ -68,6 +69,7 @@ private:
 private:
   std::string name_;
   std::unordered_map<std::string, internal::GenInfo> current_info_;
+  std::vector<std::function<bool(void)>> regenerate_cbs_;
 
   internal::GeneratorLoader loader_;
 

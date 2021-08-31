@@ -33,6 +33,10 @@ void Generator::AddGenInfo(const std::string &name,
                                   name, inputs, outputs, commands, parallel));
 }
 
+void Generator::AddRegenerateCb(const std::function<bool(void)> &cb) {
+  regenerate_cbs_.push_back(cb);
+}
+
 void Generator::Build() { GenerateTask(); }
 
 // PRIVATE
@@ -80,6 +84,15 @@ bool Generator::Regenerate(
                      [&]() { OutputChanged(); });
       RecheckChanged(loaded_geninfo.commands, p.second.commands,
                      [&]() { CommandChanged(); });
+
+      if (!dirty_) {
+        for (const auto &cb : regenerate_cbs_) {
+          if (cb()) {
+            dirty_ = true;
+            break;
+          }
+        }
+      }
 
       if (dirty_) {
         generated_files.push_back(&(p.second));
