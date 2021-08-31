@@ -31,15 +31,35 @@ namespace buildcc::internal {
 
 struct GenInfo {
   std::string name;
-  path_unordered_set inputs;
+  Files<fs_unordered_set> inputs;
   fs_unordered_set outputs;
   std::vector<std::string> commands;
   bool parallel{false};
 
-  explicit GenInfo(const std::string &n, const path_unordered_set &i,
-                   const fs_unordered_set &o, const std::vector<std::string> &c,
-                   bool p)
-      : name(n), inputs(i), outputs(o), commands(c), parallel(p) {}
+  static GenInfo CreateInternalGenInfo(const std::string &n,
+                                       const path_unordered_set &internal_i,
+                                       const fs_unordered_set &o,
+                                       const std::vector<std::string> &c,
+                                       bool p) {
+    return GenInfo(n, internal_i, {}, o, c, p);
+  }
+
+  static GenInfo CreateUserGenInfo(const std::string &n,
+                                   const fs_unordered_set &user_i,
+                                   const fs_unordered_set &o,
+                                   const std::vector<std::string> &c, bool p) {
+    return GenInfo(n, {}, user_i, o, c, p);
+  }
+
+  GenInfo(GenInfo &&info) = default;
+  GenInfo(const GenInfo &info) = delete;
+
+private:
+  explicit GenInfo(const std::string &n, const path_unordered_set &internal_i,
+                   const fs_unordered_set &user_i, const fs_unordered_set &o,
+                   const std::vector<std::string> &c, bool p)
+      : name(n), inputs(internal_i, user_i), outputs(o), commands(c),
+        parallel(p) {}
 };
 
 typedef std::unordered_map<std::string, GenInfo> geninfo_unordered_map;

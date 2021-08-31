@@ -132,6 +132,9 @@ typedef std::unordered_set<fs::path, PathHash> fs_unordered_set;
 template <typename T> struct Files {
   path_unordered_set internal;
   T user;
+
+  Files() {}
+  Files(const path_unordered_set &i, const T &u) : internal(i), user(u) {}
 };
 
 } // namespace buildcc::internal

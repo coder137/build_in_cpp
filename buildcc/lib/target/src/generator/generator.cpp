@@ -22,11 +22,15 @@
 
 namespace buildcc::base {
 
-void Generator::AddGenInfo(const UserGenInfo &info) {
-  env::assert_fatal(
-      user_info_.find(info.name) == user_info_.end(),
-      fmt::format("'{}' information already registered", info.name));
-  user_info_.emplace(info.name, info);
+void Generator::AddGenInfo(const std::string &name,
+                           const internal::fs_unordered_set &inputs,
+                           const internal::fs_unordered_set &outputs,
+                           const std::vector<std::string> &commands,
+                           bool parallel) {
+  env::assert_fatal(current_info_.find(name) == current_info_.end(),
+                    fmt::format("'{}' information already registered", name));
+  current_info_.emplace(name, internal::GenInfo::CreateUserGenInfo(
+                                  name, inputs, outputs, commands, parallel));
 }
 
 void Generator::Build() { GenerateTask(); }
@@ -34,16 +38,11 @@ void Generator::Build() { GenerateTask(); }
 // PRIVATE
 
 void Generator::Convert() {
-  for (const auto &user_info : user_info_) {
-    internal::path_unordered_set current_inputs;
-    for (const auto &user_inputs : user_info.second.inputs) {
-      current_inputs.emplace(internal::Path::CreateExistingPath(user_inputs));
+  for (auto &ci : current_info_) {
+    for (const auto &user_i : ci.second.inputs.user) {
+      ci.second.inputs.internal.emplace(
+          internal::Path::CreateExistingPath(user_i));
     }
-    current_info_.emplace(
-        user_info.first,
-        internal::GenInfo(user_info.second.name, current_inputs,
-                          user_info.second.outputs, user_info.second.commands,
-                          user_info.second.parallel));
   }
 }
 
@@ -74,8 +73,9 @@ bool Generator::Regenerate(
     try {
       const internal::GenInfo &loaded_geninfo = previous_info.at(p.first);
       RecheckPaths(
-          loaded_geninfo.inputs, p.second.inputs, [&]() { InputRemoved(); },
-          [&]() { InputAdded(); }, [&]() { InputUpdated(); });
+          loaded_geninfo.inputs.internal, p.second.inputs.internal,
+          [&]() { InputRemoved(); }, [&]() { InputAdded(); },
+          [&]() { InputUpdated(); });
       RecheckChanged(loaded_geninfo.outputs, p.second.outputs,
                      [&]() { OutputChanged(); });
       RecheckChanged(loaded_geninfo.commands, p.second.commands,

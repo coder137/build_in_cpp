@@ -30,19 +30,17 @@ TEST(GeneratorTestGroup, Generator_AddInfo) {
   fs::create_directories(TEST_BUILD_DIR);
 
   buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-  generator.AddGenInfo(buildcc::base::UserGenInfo(
-      "gcc_1",
-      {
-          "data/dummy_main.c",
-      },
-      {TEST_BUILD_DIR / "dummy_main.exe"},
-      {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
-       "data/dummy_main.c"},
-      true));
+  generator.AddGenInfo("gcc_1",
+                       {
+                           "data/dummy_main.c",
+                       },
+                       {TEST_BUILD_DIR / "dummy_main.exe"},
+                       {"gcc -o intermediate/generator/AddInfo/dummy_main.exe "
+                        "data/dummy_main.c"},
+                       true);
 
   CHECK_THROWS(buildcc::env::assert_exception,
-               generator.AddGenInfo(
-                   buildcc::base::UserGenInfo("gcc_1", {}, {}, {}, true)));
+               generator.AddGenInfo("gcc_1", {}, {}, {}, true));
 }
 
 TEST(GeneratorTestGroup, Generator_Build) {
@@ -50,15 +48,14 @@ TEST(GeneratorTestGroup, Generator_Build) {
   fs::create_directories(TEST_BUILD_DIR);
 
   buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-  generator.AddGenInfo(buildcc::base::UserGenInfo(
-      "gcc_1",
-      {
-          "data/dummy_main.c",
-      },
-      {TEST_BUILD_DIR / "dummy_main.exe"},
-      {"gcc -o intermediate/generator/Build/dummy_main.exe "
-       "data/dummy_main.c"},
-      true));
+  generator.AddGenInfo("gcc_1",
+                       {
+                           "data/dummy_main.c",
+                       },
+                       {TEST_BUILD_DIR / "dummy_main.exe"},
+                       {"gcc -o intermediate/generator/Build/dummy_main.exe "
+                        "data/dummy_main.c"},
+                       true);
 
   buildcc::m::CommandExpect_Execute(1, true);
   generator.Build();
@@ -72,7 +69,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
 
   {
     buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-    generator.AddGenInfo(buildcc::base::UserGenInfo(
+    generator.AddGenInfo(
         "gcc_1",
         {
             "data/dummy_main.c",
@@ -80,7 +77,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
         {TEST_BUILD_DIR / "dummy_main.exe"},
         {"gcc -o intermediate/generator/Rebuild/dummy_main.exe "
          "data/dummy_main.c"},
-        true));
+        true);
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
@@ -88,7 +85,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
 
   {
     buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-    generator.AddGenInfo(buildcc::base::UserGenInfo(
+    generator.AddGenInfo(
         "gcc_1",
         {
             "data/dummy_main.c",
@@ -96,7 +93,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
         {TEST_BUILD_DIR / "dummy_main.exe"},
         {"gcc -o intermediate/generator/Rebuild/dummy_main.exe "
          "data/dummy_main.c"},
-        true));
+        true);
 
     generator.Build();
   }
@@ -110,7 +107,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_PreviousNotFound) {
 
   {
     buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-    generator.AddGenInfo(buildcc::base::UserGenInfo(
+    generator.AddGenInfo(
         "gcc_1",
         {
             "data/dummy_main.c",
@@ -119,7 +116,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_PreviousNotFound) {
         {"gcc -o "
          "intermediate/generator/Rebuild_PreviousNotFound/dummy_main.exe "
          "data/dummy_main.c"},
-        true));
+        true);
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
@@ -127,7 +124,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_PreviousNotFound) {
 
   {
     buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-    generator.AddGenInfo(buildcc::base::UserGenInfo(
+    generator.AddGenInfo(
         "gcc_1",
         {
             "data/dummy_main.c",
@@ -136,10 +133,10 @@ TEST(GeneratorTestGroup, Generator_Rebuild_PreviousNotFound) {
         {"gcc -o "
          "intermediate/generator/Rebuild_PreviousNotFound/dummy_main.exe "
          "data/dummy_main.c"},
-        true));
+        true);
 
     // Current Info is NEWER than old
-    generator.AddGenInfo(buildcc::base::UserGenInfo(
+    generator.AddGenInfo(
         "gcc_2",
         {
             "data/dummy_main.c",
@@ -148,7 +145,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_PreviousNotFound) {
         {"gcc -o "
          "intermediate/generator/Rebuild_PreviousNotFound/dummy_main.exe "
          "data/dummy_main.c"},
-        true));
+        true);
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
@@ -163,7 +160,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
 
   {
     buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-    generator.AddGenInfo(buildcc::base::UserGenInfo(
+    generator.AddGenInfo(
         "gcc_1",
         {
             "data/dummy_main.c",
@@ -171,7 +168,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
         {TEST_BUILD_DIR / "dummy_main.exe"},
         {"gcc -o intermediate/generator/Rebuild_Inputs/dummy_main.exe "
          "data/dummy_main.c"},
-        true));
+        true);
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
@@ -179,7 +176,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
 
   {
     buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-    generator.AddGenInfo(buildcc::base::UserGenInfo(
+    generator.AddGenInfo(
         "gcc_1",
         {
             "data/dummy_main.c",
@@ -188,7 +185,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
         {TEST_BUILD_DIR / "dummy_main.exe"},
         {"gcc -o intermediate/generator/Rebuild_Inputs/dummy_main.exe "
          "data/dummy_main.c"},
-        true));
+        true);
 
     buildcc::base::m::GeneratorExpect_InputAdded(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
@@ -197,7 +194,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
 
   {
     buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-    generator.AddGenInfo(buildcc::base::UserGenInfo(
+    generator.AddGenInfo(
         "gcc_1",
         {
             "data/new_source.cpp",
@@ -205,7 +202,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
         {TEST_BUILD_DIR / "dummy_main.exe"},
         {"gcc -o intermediate/generator/Rebuild_Inputs/dummy_main.exe "
          "data/dummy_main.c"},
-        true));
+        true);
 
     buildcc::base::m::GeneratorExpect_InputRemoved(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
@@ -218,7 +215,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
 
   {
     buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-    generator.AddGenInfo(buildcc::base::UserGenInfo(
+    generator.AddGenInfo(
         "gcc_1",
         {
             "data/new_source.cpp",
@@ -226,7 +223,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
         {TEST_BUILD_DIR / "dummy_main.exe"},
         {"gcc -o intermediate/generator/Rebuild_Inputs/dummy_main.exe "
          "data/dummy_main.c"},
-        true));
+        true);
 
     buildcc::base::m::GeneratorExpect_InputUpdated(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
@@ -242,7 +239,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
 
   {
     buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-    generator.AddGenInfo(buildcc::base::UserGenInfo(
+    generator.AddGenInfo(
         "gcc_1",
         {
             "data/dummy_main.c",
@@ -253,7 +250,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
         },
         {"gcc -o intermediate/generator/Rebuild_Outputs/dummy_main.exe "
          "data/dummy_main.c"},
-        true));
+        true);
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
@@ -261,7 +258,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
 
   {
     buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-    generator.AddGenInfo(buildcc::base::UserGenInfo(
+    generator.AddGenInfo(
         "gcc_1",
         {
             "data/dummy_main.c",
@@ -269,7 +266,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
         {TEST_BUILD_DIR / "dummy_main.exe"},
         {"gcc -o intermediate/generator/Rebuild_Outputs/dummy_main.exe "
          "data/dummy_main.c"},
-        true));
+        true);
 
     buildcc::base::m::GeneratorExpect_OutputChanged(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
@@ -285,7 +282,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
 
   {
     buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-    generator.AddGenInfo(buildcc::base::UserGenInfo(
+    generator.AddGenInfo(
         "gcc_1",
         {
             "data/dummy_main.c",
@@ -296,7 +293,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
         },
         {"gcc -o intermediate/generator/Rebuild_Commands/dummy_main.exe "
          "data/dummy_main.c"},
-        true));
+        true);
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
@@ -304,7 +301,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
 
   {
     buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-    generator.AddGenInfo(buildcc::base::UserGenInfo(
+    generator.AddGenInfo(
         "gcc_1",
         {
             "data/dummy_main.c",
@@ -319,7 +316,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
             "gcc -o intermediate/generator/Rebuild_Commands/dummy_main.exe "
             "intermediate/generator/Rebuild_Commands/dummy_main.o",
         },
-        true));
+        true);
 
     buildcc::base::m::GeneratorExpect_CommandChanged(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
@@ -336,7 +333,7 @@ TEST(GeneratorTestGroup, Generator_DoubleDependency) {
   fs::create_directories(TEST_BUILD_DIR);
 
   buildcc::base::Generator ogen("custom_object_generator", TEST_BUILD_DIR);
-  ogen.AddGenInfo(buildcc::base::UserGenInfo(
+  ogen.AddGenInfo(
       "gcc_1",
       {
           "data/dummy_main.c",
@@ -344,7 +341,7 @@ TEST(GeneratorTestGroup, Generator_DoubleDependency) {
       {TEST_BUILD_DIR / "dummy_main.o"},
       {"gcc -c -o intermediate/generator/DoubleDependency/dummy_main.o "
        "data/dummy_main.c"},
-      true));
+      true);
 
   buildcc::m::CommandExpect_Execute(1, true);
   ogen.Build();
@@ -354,7 +351,7 @@ TEST(GeneratorTestGroup, Generator_DoubleDependency) {
                          false);
 
   buildcc::base::Generator egen("custom_exe_generator", TEST_BUILD_DIR);
-  egen.AddGenInfo(buildcc::base::UserGenInfo(
+  egen.AddGenInfo(
       "gcc_1",
       {
           TEST_BUILD_DIR / "dummy_main.o",
@@ -362,7 +359,7 @@ TEST(GeneratorTestGroup, Generator_DoubleDependency) {
       {TEST_BUILD_DIR / "dummy_main.o"},
       {"gcc -o intermediate/generator/DoubleDependency/dummy_main.exe "
        "intermediate/generator/DoubleDependency/dummy_main.o"},
-      true));
+      true);
 
   buildcc::m::CommandExpect_Execute(1, true);
   egen.Build();
