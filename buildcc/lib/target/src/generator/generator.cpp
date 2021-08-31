@@ -104,6 +104,8 @@ bool Generator::Regenerate(
       // previous_info
       generated_files.push_back(&(p.second));
       build = true;
+    } catch (const std::exception &e) {
+      env::assert_fatal(false, e.what());
     }
   }
   return build;
