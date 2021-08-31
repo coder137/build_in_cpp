@@ -34,7 +34,15 @@ void Generator::AddGenInfo(const std::string &name,
 }
 
 void Generator::AddRegenerateCb(const std::function<bool(void)> &cb) {
-  regenerate_cbs_.push_back(cb);
+  regenerate_cb_ = cb;
+}
+
+void Generator::AddPregenerateCb(const std::function<void(void)> &cb) {
+  pregenerate_cb_ = cb;
+}
+
+void Generator::AddPostgenerateCb(const std::function<void(void)> &cb) {
+  postgenerate_cb_ = cb;
 }
 
 void Generator::Build() { GenerateTask(); }
@@ -52,7 +60,6 @@ void Generator::Convert() {
 
 std::vector<const internal::GenInfo *> Generator::BuildGenerate() {
   const bool loaded = loader_.Load();
-
   std::vector<const internal::GenInfo *> generated_files;
   bool build = false;
   if (!loaded) {
@@ -75,6 +82,9 @@ bool Generator::Regenerate(
 
   for (const auto &p : current_info_) {
     try {
+      if (regenerate_cb_()) {
+        dirty_ = true;
+      }
       const internal::GenInfo &loaded_geninfo = previous_info.at(p.first);
       RecheckPaths(
           loaded_geninfo.inputs.internal, p.second.inputs.internal,
@@ -84,16 +94,6 @@ bool Generator::Regenerate(
                      [&]() { OutputChanged(); });
       RecheckChanged(loaded_geninfo.commands, p.second.commands,
                      [&]() { CommandChanged(); });
-
-      if (!dirty_) {
-        for (const auto &cb : regenerate_cbs_) {
-          if (cb()) {
-            dirty_ = true;
-            break;
-          }
-        }
-      }
-
       if (dirty_) {
         generated_files.push_back(&(p.second));
         build = true;

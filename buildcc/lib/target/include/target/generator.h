@@ -38,11 +38,42 @@ public:
       : loader_(name, path) {}
   Generator(const Generator &generator) = delete;
 
+  /**
+   * @brief Define your input - output - command relation
+   *
+   * @param name GenInfo task name
+   * @param inputs Input files
+   * @param outputs Output files generated
+   * @param commands Commands for input files to generate output files
+   * @param parallel Run commands in parallel
+   */
   void AddGenInfo(const std::string &name,
                   const internal::fs_unordered_set &inputs,
                   const internal::fs_unordered_set &outputs,
                   const std::vector<std::string> &commands, bool parallel);
+
+  /**
+   * @brief Custom regenerate callback checked for every GenInfo
+   *
+   * @param cb
+   */
   void AddRegenerateCb(const std::function<bool(void)> &cb);
+
+  /**
+   * @brief Custom pre generate callback run before the core generate function
+   *
+   * @param cb
+   */
+  void AddPregenerateCb(const std::function<void(void)> &cb);
+
+  /**
+   * @brief Custom post generate callback run after the core generate function
+   * IF dirty_ == true
+   *
+   * @param cb
+   */
+  void AddPostgenerateCb(const std::function<void(void)> &cb);
+
   void Build() override;
 
   // Getter
@@ -69,7 +100,9 @@ private:
 private:
   std::string name_;
   std::unordered_map<std::string, internal::GenInfo> current_info_;
-  std::vector<std::function<bool(void)>> regenerate_cbs_;
+  std::function<bool(void)> regenerate_cb_{[]() { return false; }};
+  std::function<void(void)> pregenerate_cb_{[]() {}};
+  std::function<void(void)> postgenerate_cb_{[]() {}};
 
   internal::GeneratorLoader loader_;
 

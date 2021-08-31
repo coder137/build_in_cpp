@@ -22,6 +22,7 @@ namespace buildcc::base {
 
 void Generator::GenerateTask() {
   build_task_ = tf_.emplace([&](tf::Subflow &subflow) {
+    pregenerate_cb_();
     Convert();
     const auto generated_files = BuildGenerate();
     if (!dirty_) {
@@ -50,6 +51,7 @@ void Generator::GenerateTask() {
       }
     }
     Store();
+    postgenerate_cb_();
   });
   build_task_.name(fmt::format("BuildTask:{}", name_));
 }
