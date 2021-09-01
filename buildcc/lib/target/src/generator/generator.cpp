@@ -34,7 +34,9 @@ void Generator::AddGenInfo(const std::string &name,
 }
 
 void Generator::AddRegenerateCb(const std::function<bool(void)> &cb) {
-  regenerate_cb_ = cb;
+  if (cb) {
+    regenerate_cb_ = cb;
+  }
 }
 
 void Generator::AddPregenerateCb(const std::function<void(void)> &cb) {
@@ -80,33 +82,41 @@ bool Generator::Regenerate(
   bool build = false;
   const auto &previous_info = loader_.GetLoadedInfo();
 
-  for (const auto &p : current_info_) {
-    try {
-      if (regenerate_cb_()) {
-        dirty_ = true;
-      }
-      const internal::GenInfo &loaded_geninfo = previous_info.at(p.first);
-      RecheckPaths(
-          loaded_geninfo.inputs.internal, p.second.inputs.internal,
-          [&]() { InputRemoved(); }, [&]() { InputAdded(); },
-          [&]() { InputUpdated(); });
-      RecheckChanged(loaded_geninfo.outputs, p.second.outputs,
-                     [&]() { OutputChanged(); });
-      RecheckChanged(loaded_geninfo.commands, p.second.commands,
-                     [&]() { CommandChanged(); });
-      if (dirty_) {
-        generated_files.push_back(&(p.second));
-        build = true;
-      }
-      dirty_ = false;
-    } catch (const std::out_of_range &e) {
+  // Previous Info has more items than Current Info
+  for (const auto &pi : previous_info) {
+    if (current_info_.find(pi.first) == current_info_.end()) {
+      build = true;
+      break;
+    }
+  }
+
+  for (const auto &ci : current_info_) {
+    if (regenerate_cb_()) {
+      dirty_ = true;
+    }
+
+    if (previous_info.find(ci.first) == previous_info.end()) {
       // This means that current_info has more items than
       // previous_info
-      generated_files.push_back(&(p.second));
+      generated_files.push_back(&(ci.second));
       build = true;
-    } catch (const std::exception &e) {
-      env::assert_fatal(false, e.what());
+    } else {
+      const internal::GenInfo &loaded_geninfo = previous_info.at(ci.first);
+      RecheckPaths(
+          loaded_geninfo.inputs.internal, ci.second.inputs.internal,
+          [&]() { InputRemoved(); }, [&]() { InputAdded(); },
+          [&]() { InputUpdated(); });
+      RecheckChanged(loaded_geninfo.outputs, ci.second.outputs,
+                     [&]() { OutputChanged(); });
+      RecheckChanged(loaded_geninfo.commands, ci.second.commands,
+                     [&]() { CommandChanged(); });
     }
+
+    if (dirty_) {
+      generated_files.push_back(&(ci.second));
+      build = true;
+    }
+    dirty_ = false;
   }
   return build;
 }
