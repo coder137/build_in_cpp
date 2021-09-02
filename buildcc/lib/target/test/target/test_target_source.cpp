@@ -57,7 +57,6 @@ TEST(TargetTestSourceGroup, Target_SourceTypes) {
 TEST(TargetTestSourceGroup, Target_AddSource) {
   constexpr const char *const NAME = "AddSource.exe";
   constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
-  constexpr const char *const NO_FILE = "no_file.cpp";
 
   auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
   auto intermediate_path = target_source_intermediate_path / NAME;
