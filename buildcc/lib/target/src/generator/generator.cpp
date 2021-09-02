@@ -91,16 +91,14 @@ bool Generator::Regenerate(
   }
 
   for (const auto &ci : current_info_) {
-    if (regenerate_cb_()) {
-      dirty_ = true;
-    }
-
     if (previous_info.find(ci.first) == previous_info.end()) {
       // This means that current_info has more items than
       // previous_info
-      generated_files.push_back(&(ci.second));
-      build = true;
+      dirty_ = true;
     } else {
+      if (regenerate_cb_()) {
+        dirty_ = true;
+      }
       const internal::GenInfo &loaded_geninfo = previous_info.at(ci.first);
       RecheckPaths(
           loaded_geninfo.inputs.internal, ci.second.inputs.internal,
