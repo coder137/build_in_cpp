@@ -64,6 +64,38 @@ void Target::Build() {
   LinkTask();
 }
 
+std::string Target::LinkCommand() const {
+
+  // Add compiled sources
+  const std::string aggregated_compiled_sources =
+      internal::aggregate(GetCompiledSources());
+
+  const std::string output_target =
+      internal::Path::CreateNewPath(GetTargetPath()).GetPathAsString();
+
+  return command_.Construct(
+      link_command_,
+      {
+          {"output", output_target},
+          {"compiled_sources", aggregated_compiled_sources},
+          {"lib_deps",
+           fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
+                       internal::aggregate(current_lib_deps_.internal))},
+      });
+
+  const bool success = command_.ConstructAndExecute(
+      link_command_,
+      {
+          {"output", output_target},
+          {"compiled_sources", aggregated_compiled_sources},
+          {"lib_deps",
+           fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
+                       internal::aggregate(current_lib_deps_.internal))},
+      });
+  env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
+  return "";
+}
+
 //
 
 void Target::ConvertForCompile() {
@@ -150,22 +182,7 @@ void Target::BuildLink() {
 }
 
 void Target::LinkTarget() {
-  // Add compiled sources
-  const std::string aggregated_compiled_sources =
-      internal::aggregate(GetCompiledSources());
-
-  const std::string output_target =
-      internal::Path::CreateNewPath(GetTargetPath()).GetPathAsString();
-
-  const bool success = command_.ConstructAndExecute(
-      link_command_,
-      {
-          {"output", output_target},
-          {"compiled_sources", aggregated_compiled_sources},
-          {"lib_deps",
-           fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
-                       internal::aggregate(current_lib_deps_.internal))},
-      });
+  const bool success = Command::Execute(LinkCommand());
   env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
 }
 

@@ -145,12 +145,8 @@ public:
   // TODO, Add more setters
 
   // Getters
-  std::string CompileCommand(const fs::path &current_source) const;
 
-  // TODO, Check if these need to be made const
   tf::Taskflow &GetTaskflow() { return tf_; }
-  tf::Task &GetCompileTask() { return compile_task_; }
-  tf::Task &GetLinkTask() { return link_task_; }
 
   fs::path GetTargetPath() const {
     fs::path path =
@@ -200,6 +196,14 @@ public:
   const std::unordered_set<std::string> &GetCurrentLinkFlags() const {
     return current_link_flags_;
   }
+
+  // Getters to use after `build`
+
+  std::string CompileCommand(const fs::path &current_source) const;
+  std::string LinkCommand() const;
+
+  tf::Task &GetCompileTask() { return compile_task_; }
+  tf::Task &GetLinkTask() { return link_task_; }
 
   bool FirstBuild() const { return first_build_; }
   bool Rebuild() const { return rebuild_; }
