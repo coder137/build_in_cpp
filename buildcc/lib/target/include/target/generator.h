@@ -84,8 +84,12 @@ private:
   void GenerateTask();
   // Convert from UserGenInfo to internal::GenInfo
   void Convert();
-  std::vector<const internal::GenInfo *> BuildGenerate();
-  bool Regenerate(std::vector<const internal::GenInfo *> &generated_files);
+  void
+  BuildGenerate(std::vector<const internal::GenInfo *> &generated_files,
+                std::vector<const internal::GenInfo *> &dummy_generated_files);
+  bool
+  Regenerate(std::vector<const internal::GenInfo *> &generated_files,
+             std::vector<const internal::GenInfo *> &dummy_generated_files);
 
   bool Store() override;
 

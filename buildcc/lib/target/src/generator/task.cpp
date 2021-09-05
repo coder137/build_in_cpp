@@ -24,10 +24,10 @@ void Generator::GenerateTask() {
   build_task_ = tf_.emplace([&](tf::Subflow &subflow) {
     pregenerate_cb_();
     Convert();
-    const auto generated_files = BuildGenerate();
-    if (!dirty_) {
-      return;
-    }
+
+    std::vector<const internal::GenInfo *> generated_files;
+    std::vector<const internal::GenInfo *> dummy_generated_files;
+    BuildGenerate(generated_files, dummy_generated_files);
 
     for (const auto &info : generated_files) {
       if (info->parallel) {
@@ -50,8 +50,15 @@ void Generator::GenerateTask() {
             .name(info->name);
       }
     }
-    Store();
-    postgenerate_cb_();
+
+    for (const auto &info : dummy_generated_files) {
+      subflow.placeholder().name(info->name);
+    }
+
+    if (dirty_) {
+      Store();
+      postgenerate_cb_();
+    }
   });
   build_task_.name(fmt::format("BuildTask:{}", name_));
 }

@@ -60,9 +60,10 @@ void Generator::Convert() {
   }
 }
 
-std::vector<const internal::GenInfo *> Generator::BuildGenerate() {
+void Generator::BuildGenerate(
+    std::vector<const internal::GenInfo *> &generated_files,
+    std::vector<const internal::GenInfo *> &dummy_generated_files) {
   const bool loaded = loader_.Load();
-  std::vector<const internal::GenInfo *> generated_files;
   bool build = false;
   if (!loaded) {
     std::for_each(
@@ -70,15 +71,15 @@ std::vector<const internal::GenInfo *> Generator::BuildGenerate() {
         [&](const auto &p) { generated_files.push_back(&(p.second)); });
     build = true;
   } else {
-    build = Regenerate(generated_files);
+    build = Regenerate(generated_files, dummy_generated_files);
   }
 
   dirty_ = build;
-  return generated_files;
 }
 
 bool Generator::Regenerate(
-    std::vector<const internal::GenInfo *> &generated_files) {
+    std::vector<const internal::GenInfo *> &generated_files,
+    std::vector<const internal::GenInfo *> &dummy_generated_files) {
   bool build = false;
   const auto &previous_info = loader_.GetLoadedInfo();
 
@@ -113,6 +114,8 @@ bool Generator::Regenerate(
     if (dirty_) {
       generated_files.push_back(&(ci.second));
       build = true;
+    } else {
+      dummy_generated_files.push_back(&(ci.second));
     }
     dirty_ = false;
   }
