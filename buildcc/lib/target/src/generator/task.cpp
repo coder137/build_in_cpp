@@ -41,7 +41,7 @@ void Generator::GenerateTask() {
             .name(info->name);
       } else {
         subflow
-            .emplace([&]() {
+            .emplace([info]() {
               for (const auto &command : info->commands) {
                 bool success = Command::Execute(command);
                 env::assert_fatal(success, fmt::format("{} failed", command));
