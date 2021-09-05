@@ -24,6 +24,11 @@
 
 namespace buildcc::base {
 
+// TODO, 1. Consider updating Recheck* APIs - do not modify internal `dirty_`
+// flag
+// TODO, 2. Consider removing dependency on target/util.h
+// TODO, 3. Consider making Recheck* APIs free namespaced functions instead of
+// only within the scope of BuilderInterfaces (See TODO 1. and 2. first)
 class BuilderInterface {
 
 public:
