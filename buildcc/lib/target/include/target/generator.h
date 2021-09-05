@@ -32,6 +32,13 @@
 
 namespace buildcc::base {
 
+typedef std::function<bool(
+    const internal::geninfo_unordered_map &previous_info,
+    const internal::geninfo_unordered_map &current_info,
+    std::vector<const internal::GenInfo *> &output_generated_files,
+    std::vector<const internal::GenInfo *> &output_dummy_generated_files)>
+    custom_regenerate_cb_params;
+
 class Generator : public BuilderInterface {
 public:
   Generator(const std::string &name, const fs::path &path)
@@ -53,11 +60,20 @@ public:
                   const std::vector<std::string> &commands, bool parallel);
 
   /**
-   * @brief Custom regenerate callback checked for every GenInfo
+   * @brief Implement your own Regenerate callback.
+   * - See `Regenerate` function for generic implementation
+   * - See `Recheck*` APIs in BuilderInterface for custom checks
    *
-   * @param cb
+   * @param cb Gives 4 parameters
+   *
+   * const internal::geninfo_unordered_map &previous_info
+   * const internal::geninfo_unordered_map &current_info
+   * std::vector<const internal::GenInfo *> &output_generated_files
+   * std::vector<const internal::GenInfo *> &output_dummy_generated_files
+   *
+   * @return cb should return true or false which sets the dirty_ flag
    */
-  void AddRegenerateCb(const std::function<bool(void)> &cb);
+  void AddCustomRegenerateCb(const custom_regenerate_cb_params &cb);
 
   /**
    * @brief Custom pre generate callback run before the core generate function
@@ -104,7 +120,8 @@ private:
 private:
   std::string name_;
   std::unordered_map<std::string, internal::GenInfo> current_info_;
-  std::function<bool(void)> regenerate_cb_{[]() { return false; }};
+
+  custom_regenerate_cb_params custom_regenerate_cb_;
   std::function<void(void)> pregenerate_cb_{[]() {}};
   std::function<void(void)> postgenerate_cb_{[]() {}};
 

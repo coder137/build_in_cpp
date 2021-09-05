@@ -314,7 +314,22 @@ TEST(GeneratorTestGroup, Generator_AddCustomRegenerate) {
          "data/dummy_main.c"},
         true);
 
-    generator.AddRegenerateCb([]() { return true; });
+    // TODO, Improve
+    generator.AddCustomRegenerateCb(
+        [](const buildcc::internal::geninfo_unordered_map &previous_info,
+           const buildcc::internal::geninfo_unordered_map &current_info,
+           std::vector<const buildcc::internal::GenInfo *> &generated_files,
+           std::vector<const buildcc::internal::GenInfo *>
+               &dummy_generated_files) {
+          (void)previous_info;
+          (void)dummy_generated_files;
+
+          for (const auto &ci : current_info) {
+            generated_files.push_back(&(ci.second));
+          }
+
+          return true;
+        });
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
@@ -335,7 +350,19 @@ TEST(GeneratorTestGroup, Generator_AddCustomRegenerate) {
          "data/dummy_main.c"},
         true);
 
-    generator.AddRegenerateCb([]() { return false; });
+    // TODO, Improve
+    generator.AddCustomRegenerateCb(
+        [](const buildcc::internal::geninfo_unordered_map &previous_info,
+           const buildcc::internal::geninfo_unordered_map &current_info,
+           std::vector<const buildcc::internal::GenInfo *> &generated_files,
+           std::vector<const buildcc::internal::GenInfo *>
+               &dummy_generated_files) {
+          (void)previous_info;
+          (void)current_info;
+          (void)generated_files;
+          (void)dummy_generated_files;
+          return false;
+        });
 
     generator.Build();
   }
@@ -355,7 +382,8 @@ TEST(GeneratorTestGroup, Generator_AddCustomRegenerate) {
          "data/dummy_main.c"},
         true);
 
-    generator.AddRegenerateCb(std::function<bool(void)>());
+    generator.AddCustomRegenerateCb(
+        buildcc::base::custom_regenerate_cb_params());
     generator.Build();
   }
 

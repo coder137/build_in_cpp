@@ -33,9 +33,9 @@ void Generator::AddGenInfo(const std::string &name,
                                   name, inputs, outputs, commands, parallel));
 }
 
-void Generator::AddRegenerateCb(const std::function<bool(void)> &cb) {
+void Generator::AddCustomRegenerateCb(const custom_regenerate_cb_params &cb) {
   if (cb) {
-    regenerate_cb_ = cb;
+    custom_regenerate_cb_ = cb;
   }
 }
 
@@ -71,7 +71,12 @@ void Generator::BuildGenerate(
         [&](const auto &p) { generated_files.push_back(&(p.second)); });
     build = true;
   } else {
-    build = Regenerate(generated_files, dummy_generated_files);
+    if (custom_regenerate_cb_) {
+      build = custom_regenerate_cb_(loader_.GetLoadedInfo(), current_info_,
+                                    generated_files, dummy_generated_files);
+    } else {
+      build = Regenerate(generated_files, dummy_generated_files);
+    }
   }
 
   dirty_ = build;
@@ -91,15 +96,13 @@ bool Generator::Regenerate(
     }
   }
 
+  // Check all files individually
   for (const auto &ci : current_info_) {
     if (previous_info.find(ci.first) == previous_info.end()) {
       // This means that current_info has more items than
       // previous_info
       dirty_ = true;
     } else {
-      if (regenerate_cb_()) {
-        dirty_ = true;
-      }
       const internal::GenInfo &loaded_geninfo = previous_info.at(ci.first);
       RecheckPaths(
           loaded_geninfo.inputs.internal, ci.second.inputs.internal,
