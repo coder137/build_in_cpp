@@ -35,7 +35,7 @@ namespace buildcc::base {
 class Generator : public BuilderInterface {
 public:
   Generator(const std::string &name, const fs::path &path)
-      : loader_(name, path) {}
+      : name_(name), loader_(name, path) {}
   Generator(const Generator &generator) = delete;
 
   /**
