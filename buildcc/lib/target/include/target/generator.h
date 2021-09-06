@@ -97,7 +97,7 @@ public:
   tf::Taskflow &GetTaskflow() { return tf_; }
 
 private:
-  void GenerateTask();
+  void GenerateTask(tf::Taskflow &tf);
   // Convert from UserGenInfo to internal::GenInfo
   void Convert();
   void

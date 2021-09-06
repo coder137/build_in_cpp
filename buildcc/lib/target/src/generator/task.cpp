@@ -20,21 +20,21 @@
 
 namespace buildcc::base {
 
-void Generator::GenerateTask() {
+void Generator::GenerateTask(tf::Taskflow &tf) {
 
-  tf::Task pregenerate_task = tf_.emplace([this]() {
+  tf::Task pregenerate_task = tf.emplace([this]() {
     pregenerate_cb_();
     Convert();
   });
 
-  tf::Task postgenerate_task = tf_.emplace([this]() {
+  tf::Task postgenerate_task = tf.emplace([this]() {
     if (dirty_) {
       Store();
       postgenerate_cb_();
     }
   });
 
-  build_task_ = tf_.emplace([&](tf::Subflow &subflow) {
+  build_task_ = tf.emplace([&](tf::Subflow &subflow) {
     std::vector<const internal::GenInfo *> generated_files;
     std::vector<const internal::GenInfo *> dummy_generated_files;
     BuildGenerate(generated_files, dummy_generated_files);
@@ -72,7 +72,7 @@ void Generator::GenerateTask() {
   pregenerate_task.name("PreGenerate");
   postgenerate_task.name("PostGenerate");
   build_task_.name(name_);
-  tf_.name(name_);
+  tf.name(name_);
 }
 
 } // namespace buildcc::base

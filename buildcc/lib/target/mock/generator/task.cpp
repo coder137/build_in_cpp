@@ -4,7 +4,9 @@
 
 namespace buildcc::base {
 
-void Generator::GenerateTask() {
+void Generator::GenerateTask(tf::Taskflow &tf) {
+  (void)tf;
+
   pregenerate_cb_();
   Convert();
   std::vector<const internal::GenInfo *> generated_files;

@@ -47,7 +47,7 @@ void Generator::AddPostgenerateCb(const std::function<void(void)> &cb) {
   postgenerate_cb_ = cb;
 }
 
-void Generator::Build() { GenerateTask(); }
+void Generator::Build() { GenerateTask(tf_); }
 
 // PRIVATE
 
