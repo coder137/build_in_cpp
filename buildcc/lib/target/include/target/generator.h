@@ -91,6 +91,7 @@ public:
   void AddPostgenerateCb(const std::function<void(void)> &cb);
 
   void Build() override;
+  void Build(tf::Taskflow &tf);
 
   // Getter
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
