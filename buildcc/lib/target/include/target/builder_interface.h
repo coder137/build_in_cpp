@@ -44,16 +44,19 @@ protected:
     }
 
     if (previous != current) {
-      callback();
+      if (callback) {
+        callback();
+      }
       dirty_ = true;
     }
   }
 
-  void RecheckPaths(const internal::path_unordered_set &previous_path,
-                    const internal::path_unordered_set &current_path,
-                    const std::function<void(void)> &path_removed_cb,
-                    const std::function<void(void)> &path_added_cb,
-                    const std::function<void(void)> &path_updated_cb) {
+  void RecheckPaths(
+      const internal::path_unordered_set &previous_path,
+      const internal::path_unordered_set &current_path,
+      const std::function<void(void)> &path_removed_cb = []() {},
+      const std::function<void(void)> &path_added_cb = []() {},
+      const std::function<void(void)> &path_updated_cb = []() {}) {
     if (dirty_) {
       return;
     }
@@ -62,7 +65,9 @@ protected:
     const bool removed =
         internal::is_previous_paths_different(previous_path, current_path);
     if (removed) {
-      path_removed_cb();
+      if (path_removed_cb) {
+        path_removed_cb();
+      }
       dirty_ = true;
       return;
     }
@@ -72,12 +77,16 @@ protected:
 
       if (iter == previous_path.end()) {
         // * New path added
-        path_added_cb();
+        if (path_added_cb) {
+          path_added_cb();
+        }
         dirty_ = true;
       } else {
         // * Path is updated
         if (path.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
-          path_updated_cb();
+          if (path_updated_cb) {
+            path_updated_cb();
+          }
           dirty_ = true;
         } else {
           // * Do nothing
