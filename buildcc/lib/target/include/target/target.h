@@ -29,6 +29,7 @@
 #include "target/builder_interface.h"
 
 // Internal
+#include "target/generator.h"
 #include "target/path.h"
 #include "target/target_loader.h"
 
@@ -84,7 +85,9 @@ public:
                                 target_path_relative_to_root),
         target_intermediate_dir_(fs::path(env::get_project_build_dir()) /
                                  toolchain.GetName() / name),
-        loader_(name, target_intermediate_dir_) {
+        loader_(name, target_intermediate_dir_),
+        compile_generator_("Compile", target_intermediate_dir_),
+        link_generator_("Link", target_intermediate_dir_) {
     Initialize();
   }
   virtual ~Target() {}
@@ -205,8 +208,7 @@ public:
   tf::Task &GetCompileTask() { return compile_task_; }
   tf::Task &GetLinkTask() { return link_task_; }
 
-  bool FirstBuild() const { return first_build_; }
-  bool Rebuild() const { return rebuild_; }
+  bool GetBuildState() const { return build_; }
 
   // TODO, Add more getters
 
@@ -233,6 +235,9 @@ private:
   void BuildCompile(std::vector<fs::path> &compile_sources,
                     std::vector<fs::path> &dummy_sources);
   void BuildLink();
+
+  void BuildCompileGenerator();
+  void BuildLinkGenerator();
 
   // Compile
   void CompileSources(std::vector<fs::path> &compile_sources);
@@ -314,10 +319,11 @@ private:
 
   internal::FbsLoader loader_;
   Command command_;
+  Generator compile_generator_;
+  Generator link_generator_;
 
   // Build states
-  bool first_build_ = false;
-  bool rebuild_ = false;
+  bool build_ = false;
 
   tf::Taskflow tf_;
   tf::Task compile_task_;

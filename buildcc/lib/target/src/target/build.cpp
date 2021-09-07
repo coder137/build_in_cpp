@@ -137,7 +137,6 @@ void Target::BuildCompile(std::vector<fs::path> &compile_sources,
   if (!is_loaded) {
     CompileSources(compile_sources);
     dirty_ = true;
-    first_build_ = true;
   } else {
     // * Completely compile sources if any of the following change
     // TODO, Toolchain, ASM, C, C++ compiler related to a particular name
@@ -159,7 +158,90 @@ void Target::BuildCompile(std::vector<fs::path> &compile_sources,
     } else {
       RecompileSources(compile_sources, dummy_sources);
     }
-    rebuild_ = dirty_;
+  }
+}
+
+void Target::BuildCompileGenerator() {
+  compile_generator_.AddPregenerateCb([&]() { ConvertForCompile(); });
+  compile_generator_.AddCustomRegenerateCb(
+      [&](const internal::geninfo_unordered_map &previous_info,
+          const internal::geninfo_unordered_map &current_info,
+          std::vector<const internal::GenInfo *> &output_generated_files,
+          std::vector<const internal::GenInfo *>
+              &output_dummy_generated_files) {
+        const bool is_loaded = loader_.Load();
+        (void)is_loaded;
+
+        RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
+                     current_preprocessor_flags_);
+        RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
+                     current_common_compile_flags_);
+        RecheckFlags(loader_.GetLoadedCCompileFlags(),
+                     current_c_compile_flags_);
+        RecheckFlags(loader_.GetLoadedCppCompileFlags(),
+                     current_cpp_compile_flags_);
+        RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
+        RecheckPaths(loader_.GetLoadedHeaders(),
+                     current_header_files_.internal);
+        RecheckPaths(loader_.GetLoadedCompileDependencies(),
+                     current_compile_dependencies_.internal);
+
+        if (dirty_) {
+          for (const auto &ci : current_info) {
+            output_generated_files.push_back(&(ci.second));
+          }
+        } else {
+          bool build = false;
+
+          // previous_info has more items than current_info
+          for (const auto &pi : previous_info) {
+            if (current_info.find(pi.first) == current_info.end()) {
+              SourceRemoved();
+              build = true;
+              break;
+            }
+          }
+
+          // Check all files individually
+          for (const auto &ci : current_info) {
+            if (previous_info.find(ci.first) == previous_info.end()) {
+              // current_info has more items than
+              // previous_info
+              SourceAdded();
+              dirty_ = true;
+            } else {
+              const internal::GenInfo &loaded_geninfo =
+                  previous_info.at(ci.first);
+              BuilderInterface::RecheckPaths(loaded_geninfo.inputs.internal,
+                                             ci.second.inputs.internal);
+              RecheckChanged(loaded_geninfo.outputs, ci.second.outputs);
+              RecheckChanged(loaded_geninfo.commands, ci.second.commands);
+              if (dirty_) {
+                SourceUpdated();
+              }
+            }
+
+            if (dirty_) {
+              output_generated_files.push_back(&(ci.second));
+              build = true;
+            } else {
+              output_dummy_generated_files.push_back(&(ci.second));
+            }
+            dirty_ = false;
+          }
+          dirty_ = build;
+        }
+
+        return dirty_;
+      });
+  compile_generator_.AddPostgenerateCb([&]() { dirty_ = true; });
+
+  for (const auto &cof : current_object_files_) {
+    std::string name = fs::path(cof.first)
+                           .lexically_relative(env::get_project_root_dir())
+                           .string();
+    compile_generator_.AddGenInfo(name, {cof.first}, {cof.second.GetPathname()},
+                                  {CompileCommand(cof.first)}, true);
   }
 }
 
@@ -179,6 +261,49 @@ void Target::BuildLink() {
     LinkTarget();
     Store();
   }
+}
+
+void Target::BuildLinkGenerator() {
+  link_generator_.AddPregenerateCb([&]() { ConvertForLink(); });
+  link_generator_.AddCustomRegenerateCb(
+      [&](const internal::geninfo_unordered_map &previous_info,
+          const internal::geninfo_unordered_map &current_info,
+          std::vector<const internal::GenInfo *> &output_generated_files,
+          std::vector<const internal::GenInfo *>
+              &output_dummy_generated_files) {
+        (void)previous_info;
+        // * Completely rebuild target / link if any of the following change
+        // Target compiled source files either during Compile / Recompile
+        // Target library dependencies
+        RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
+        RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
+        RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
+                           current_external_lib_deps_);
+        RecheckPaths(loader_.GetLoadedLinkDependencies(),
+                     current_link_dependencies_.internal);
+        RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_.internal);
+
+        if (dirty_) {
+          for (const auto &ci : current_info) {
+            output_generated_files.push_back(&(ci.second));
+          }
+        } else {
+          for (const auto &ci : current_info) {
+            output_dummy_generated_files.push_back(&(ci.second));
+          }
+        }
+
+        return dirty_;
+      });
+  link_generator_.AddPostgenerateCb([&]() {
+    Store();
+    dirty_ = true;
+    build_ = true;
+  });
+  std::string name =
+      GetTargetPath().lexically_relative(env::get_project_build_dir()).string();
+  link_generator_.AddGenInfo(name, {}, {GetTargetPath()}, {LinkCommand()},
+                             false);
 }
 
 void Target::LinkTarget() {
