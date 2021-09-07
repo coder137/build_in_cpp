@@ -43,7 +43,7 @@ void Generator::GenerateTask(tf::FlowBuilder &builder) {
     }
   });
 
-  build_task_ = builder.emplace([&](tf::Subflow &subflow) {
+  tf::Task generate_task = builder.emplace([&](tf::Subflow &subflow) {
     std::vector<const internal::GenInfo *> generated_files;
     std::vector<const internal::GenInfo *> dummy_generated_files;
     BuildGenerate(generated_files, dummy_generated_files);
@@ -75,12 +75,12 @@ void Generator::GenerateTask(tf::FlowBuilder &builder) {
     }
   });
 
-  build_task_.succeed(pregenerate_task);
-  build_task_.precede(postgenerate_task);
+  generate_task.succeed(pregenerate_task);
+  generate_task.precede(postgenerate_task);
 
   pregenerate_task.name(kPreGenerateTaskName);
+  generate_task.name(kGenerateTaskName);
   postgenerate_task.name(kPostGenerateTaskName);
-  build_task_.name(kGenerateTaskName);
 }
 
 } // namespace buildcc::base

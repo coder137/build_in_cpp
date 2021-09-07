@@ -129,7 +129,6 @@ private:
   internal::GeneratorLoader loader_;
 
   tf::Taskflow tf_;
-  tf::Task build_task_;
 };
 
 } // namespace buildcc::base
