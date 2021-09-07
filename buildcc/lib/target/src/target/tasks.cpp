@@ -37,37 +37,19 @@ namespace buildcc::base {
 void Target::CompileTask() {
   env::log_trace(name_, __FUNCTION__);
 
-  compile_task_ = tf_.emplace([this](tf::Subflow &subflow) {
-    ConvertForCompile();
-
-    std::vector<fs::path> compile_sources;
-    std::vector<fs::path> dummy_sources;
-    BuildCompile(compile_sources, dummy_sources);
-
-    for (const auto &cs : compile_sources) {
-      std::string name =
-          cs.lexically_relative(env::get_project_root_dir()).string();
-      std::replace(name.begin(), name.end(), '\\', '/');
-      (void)subflow.emplace([this, cs]() { CompileSource(cs); }).name(name);
-    }
-
-    // NOTE, This has just been added for graph generation
-    for (const auto &dcs : dummy_sources) {
-      std::string name =
-          dcs.lexically_relative(env::get_project_root_dir()).string();
-      std::replace(name.begin(), name.end(), '\\', '/');
-      (void)subflow.emplace([]() {}).name(name);
-    }
-  });
+  BuildCompileGenerator();
+  compile_task_ = tf_.emplace(
+      [&](tf::Subflow &subflow) { compile_generator_.Build(subflow); });
   compile_task_.name(kCompileTaskName);
 }
 
 void Target::LinkTask() {
   env::log_trace(name_, __FUNCTION__);
-  link_task_ = tf_.emplace([this]() {
-    ConvertForLink();
-    BuildLink();
-  });
+
+  BuildLinkGenerator();
+  link_task_ = tf_.emplace(
+      [&](tf::Subflow &subflow) { link_generator_.Build(subflow); });
+
   link_task_.name(kLinkTaskName);
   link_task_.succeed(compile_task_);
 }
