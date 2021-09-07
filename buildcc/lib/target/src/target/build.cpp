@@ -80,20 +80,8 @@ std::string Target::LinkCommand() const {
           {"compiled_sources", aggregated_compiled_sources},
           {"lib_deps",
            fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
-                       internal::aggregate(current_lib_deps_.internal))},
+                       internal::aggregate(current_lib_deps_.user))},
       });
-
-  const bool success = command_.ConstructAndExecute(
-      link_command_,
-      {
-          {"output", output_target},
-          {"compiled_sources", aggregated_compiled_sources},
-          {"lib_deps",
-           fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
-                       internal::aggregate(current_lib_deps_.internal))},
-      });
-  env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
-  return "";
 }
 
 //
@@ -118,12 +106,10 @@ void Target::ConvertForCompile() {
 }
 
 void Target::ConvertForLink() {
-  std::for_each(
-      current_lib_deps_.user.cbegin(), current_lib_deps_.user.cend(),
-      [this](const Target *target) {
-        current_lib_deps_.internal.emplace(
-            internal::Path::CreateExistingPath(target->GetTargetPath()));
-      });
+  for (const auto &user_ld : current_lib_deps_.user) {
+    current_lib_deps_.internal.emplace(
+        internal::Path::CreateExistingPath(user_ld));
+  }
 
   for (const auto &user_ld : current_link_dependencies_.user) {
     current_link_dependencies_.internal.emplace(
