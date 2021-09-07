@@ -170,7 +170,11 @@ void Target::BuildCompileGenerator() {
   }
 }
 
-void Target::BuildLink() {
+void Target::BuildLink(
+    const internal::geninfo_unordered_map &previous_info,
+    const internal::geninfo_unordered_map &current_info,
+    std::vector<const internal::GenInfo *> &output_generated_files,
+    std::vector<const internal::GenInfo *> &output_dummy_generated_files) {
   // * Completely rebuild target / link if any of the following change
   // Target compiled source files either during Compile / Recompile
   // Target library dependencies
@@ -183,8 +187,17 @@ void Target::BuildLink() {
   RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_.internal);
 
   if (dirty_) {
-    LinkTarget();
-    Store();
+    std::transform(current_info.begin(), current_info.end(),
+                   std::back_inserter(output_generated_files),
+                   [](const auto &ci) -> const internal::GenInfo * {
+                     return &(ci.second);
+                   });
+  } else {
+    std::transform(current_info.begin(), current_info.end(),
+                   std::back_inserter(output_dummy_generated_files),
+                   [](const auto &ci) -> const internal::GenInfo * {
+                     return &(ci.second);
+                   });
   }
 }
 
@@ -196,32 +209,8 @@ void Target::BuildLinkGenerator() {
           std::vector<const internal::GenInfo *> &output_generated_files,
           std::vector<const internal::GenInfo *>
               &output_dummy_generated_files) {
-        (void)previous_info;
-        // * Completely rebuild target / link if any of the following change
-        // Target compiled source files either during Compile / Recompile
-        // Target library dependencies
-        RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
-        RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
-        RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
-                           current_external_lib_deps_);
-        RecheckPaths(loader_.GetLoadedLinkDependencies(),
-                     current_link_dependencies_.internal);
-        RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_.internal);
-
-        if (dirty_) {
-          std::transform(current_info.begin(), current_info.end(),
-                         std::back_inserter(output_generated_files),
-                         [](const auto &ci) -> const internal::GenInfo * {
-                           return &(ci.second);
-                         });
-        } else {
-          std::transform(current_info.begin(), current_info.end(),
-                         std::back_inserter(output_dummy_generated_files),
-                         [](const auto &ci) -> const internal::GenInfo * {
-                           return &(ci.second);
-                         });
-        }
-
+        BuildLink(previous_info, current_info, output_generated_files,
+                  output_dummy_generated_files);
         return dirty_;
       });
   link_generator_.AddPostgenerateCb([&]() {
@@ -233,11 +222,6 @@ void Target::BuildLinkGenerator() {
       GetTargetPath().lexically_relative(env::get_project_build_dir()).string();
   link_generator_.AddGenInfo(name, {}, {GetTargetPath()}, {LinkCommand()},
                              false);
-}
-
-void Target::LinkTarget() {
-  const bool success = Command::Execute(LinkCommand());
-  env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
 }
 
 } // namespace buildcc::base

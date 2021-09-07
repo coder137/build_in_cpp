@@ -237,7 +237,11 @@ private:
       const internal::geninfo_unordered_map &current_info,
       std::vector<const internal::GenInfo *> &output_generated_files,
       std::vector<const internal::GenInfo *> &output_dummy_generated_files);
-  void BuildLink();
+  void BuildLink(
+      const internal::geninfo_unordered_map &previous_info,
+      const internal::geninfo_unordered_map &current_info,
+      std::vector<const internal::GenInfo *> &output_generated_files,
+      std::vector<const internal::GenInfo *> &output_dummy_generated_files);
 
   void BuildCompileGenerator();
   void BuildLinkGenerator();
@@ -252,9 +256,6 @@ private:
       const internal::geninfo_unordered_map &current_info,
       std::vector<const internal::GenInfo *> &output_generated_files,
       std::vector<const internal::GenInfo *> &output_dummy_generated_files);
-
-  // Link
-  void LinkTarget();
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
