@@ -37,9 +37,9 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
 
   // Relate input source files with output object files
   const auto absolute_compiled_source =
-      internal::Path::CreateNewPath(absolute_output_filepath);
-  fs::create_directories(absolute_compiled_source.GetPathname().parent_path());
-  current_object_files_.insert({absolute_source, absolute_compiled_source});
+      fs::path(absolute_output_filepath).make_preferred();
+  fs::create_directories(absolute_compiled_source.parent_path());
+  current_object_files_.emplace(absolute_source, absolute_compiled_source);
 }
 
 void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
@@ -169,7 +169,8 @@ void Target::CompileSource(const fs::path &current_source) const {
 
 std::string Target::CompileCommand(const fs::path &current_source) const {
   const std::string output =
-      GetCompiledSourcePath(current_source).GetPathAsString();
+      internal::Path::CreateNewPath(GetCompiledSourcePath(current_source))
+          .GetPathAsString();
   const std::string input =
       internal::Path::CreateExistingPath(current_source).GetPathAsString();
 

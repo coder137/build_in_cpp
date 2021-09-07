@@ -155,16 +155,15 @@ const std::string &Target::GetCompiler(const fs::path &source) const {
   return toolchain_.GetCppCompiler();
 }
 
-const internal::Path &
-Target::GetCompiledSourcePath(const fs::path &source) const {
+const fs::path &Target::GetCompiledSourcePath(const fs::path &source) const {
   const auto fiter = current_object_files_.find(source);
   env::assert_fatal(fiter != current_object_files_.end(),
                     fmt::format("{} not found", source.string()));
   return current_object_files_.at(source);
 }
 
-internal::path_unordered_set Target::GetCompiledSources() const {
-  internal::path_unordered_set compiled_sources;
+internal::fs_unordered_set Target::GetCompiledSources() const {
+  internal::fs_unordered_set compiled_sources;
   for (const auto &p : current_object_files_) {
     compiled_sources.insert(p.second);
   }

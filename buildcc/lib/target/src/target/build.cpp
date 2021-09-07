@@ -228,7 +228,7 @@ void Target::BuildCompileGenerator() {
     std::string name = fs::path(cof.first)
                            .lexically_relative(env::get_project_root_dir())
                            .string();
-    compile_generator_.AddGenInfo(name, {cof.first}, {cof.second.GetPathname()},
+    compile_generator_.AddGenInfo(name, {cof.first}, {cof.second},
                                   {CompileCommand(cof.first)}, true);
   }
 }

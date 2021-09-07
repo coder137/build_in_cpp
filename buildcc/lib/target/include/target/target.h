@@ -220,8 +220,8 @@ protected:
 
   const std::string &GetCompiler(const fs::path &source) const;
 
-  const internal::Path &GetCompiledSourcePath(const fs::path &source) const;
-  internal::path_unordered_set GetCompiledSources() const;
+  const fs::path &GetCompiledSourcePath(const fs::path &source) const;
+  internal::fs_unordered_set GetCompiledSources() const;
   std::optional<std::string> GetCompiledFlags(FileExtType type) const;
 
 private:
@@ -290,7 +290,7 @@ private:
   internal::Files<internal::fs_unordered_set> current_source_files_;
   // NOTE, Always store the absolute source path -> absolute compiled source
   // path here
-  std::unordered_map<fs::path, internal::Path, internal::PathHash>
+  std::unordered_map<fs::path, fs::path, internal::PathHash>
       current_object_files_;
 
   internal::Files<internal::fs_unordered_set> current_header_files_;
