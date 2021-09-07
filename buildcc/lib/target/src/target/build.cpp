@@ -165,6 +165,7 @@ void Target::BuildCompileGenerator() {
     std::string name = fs::path(cof.first)
                            .lexically_relative(env::get_project_root_dir())
                            .string();
+    std::replace(name.begin(), name.end(), '\\', '/');
     compile_generator_.AddGenInfo(name, {cof.first}, {cof.second},
                                   {CompileCommand(cof.first)}, true);
   }
@@ -221,6 +222,7 @@ void Target::BuildLinkGenerator() {
   });
   std::string name =
       GetTargetPath().lexically_relative(env::get_project_build_dir()).string();
+  std::replace(name.begin(), name.end(), '\\', '/');
   link_generator_.AddGenInfo(name, {}, {GetTargetPath()}, {LinkCommand()},
                              false);
 }
