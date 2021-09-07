@@ -4,8 +4,8 @@
 
 namespace buildcc::base {
 
-void Generator::GenerateTask(tf::Taskflow &tf) {
-  (void)tf;
+void Generator::GenerateTask(tf::FlowBuilder &builder) {
+  (void)builder;
 
   pregenerate_cb_();
   Convert();

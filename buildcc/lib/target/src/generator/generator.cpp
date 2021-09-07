@@ -48,7 +48,7 @@ void Generator::AddPostgenerateCb(const std::function<void(void)> &cb) {
 }
 
 void Generator::Build() { GenerateTask(tf_); }
-void Generator::Build(tf::Taskflow &tf) { GenerateTask(tf); }
+void Generator::Build(tf::FlowBuilder &builder) { GenerateTask(builder); }
 
 // PRIVATE
 

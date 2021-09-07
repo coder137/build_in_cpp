@@ -91,14 +91,14 @@ public:
   void AddPostgenerateCb(const std::function<void(void)> &cb);
 
   void Build() override;
-  void Build(tf::Taskflow &tf);
+  void Build(tf::FlowBuilder &builder);
 
   // Getter
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
   tf::Taskflow &GetTaskflow() { return tf_; }
 
 private:
-  void GenerateTask(tf::Taskflow &tf);
+  void GenerateTask(tf::FlowBuilder &builder);
   // Convert from UserGenInfo to internal::GenInfo
   void Convert();
   void
