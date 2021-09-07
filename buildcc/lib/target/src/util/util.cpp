@@ -42,15 +42,6 @@ std::string aggregate(const std::unordered_set<std::string> &list) {
   return fmt::format("{}", fmt::join(list, " "));
 }
 
-std::string aggregate(const buildcc::internal::path_unordered_set &paths) {
-  std::vector<std::string> agg;
-  std::transform(paths.begin(), paths.end(), std::back_inserter(agg),
-                 [](const buildcc::internal::Path &p) -> std::string {
-                   return p.GetPathAsString();
-                 });
-  return aggregate(agg);
-}
-
 std::string aggregate(const buildcc::internal::fs_unordered_set &paths) {
   std::vector<std::string> agg;
   std::transform(

@@ -39,7 +39,6 @@ bool is_previous_paths_different(const path_unordered_set &previous_paths,
 // Aggregates
 std::string aggregate(const std::vector<std::string> &list);
 std::string aggregate(const std::unordered_set<std::string> &list);
-std::string aggregate(const buildcc::internal::path_unordered_set &paths);
 std::string aggregate(const buildcc::internal::fs_unordered_set &paths);
 
 std::string aggregate_with_prefix(const std::string &prefix,
