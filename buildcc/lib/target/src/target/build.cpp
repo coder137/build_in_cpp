@@ -175,6 +175,7 @@ void Target::BuildLink(
     const internal::geninfo_unordered_map &current_info,
     std::vector<const internal::GenInfo *> &output_generated_files,
     std::vector<const internal::GenInfo *> &output_dummy_generated_files) {
+  (void)previous_info;
   // * Completely rebuild target / link if any of the following change
   // Target compiled source files either during Compile / Recompile
   // Target library dependencies
