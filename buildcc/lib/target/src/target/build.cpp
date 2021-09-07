@@ -117,34 +117,35 @@ void Target::ConvertForLink() {
   }
 }
 
-void Target::BuildCompile(std::vector<fs::path> &compile_sources,
-                          std::vector<fs::path> &dummy_sources) {
+bool Target::BuildCompile(
+    const internal::geninfo_unordered_map &previous_info,
+    const internal::geninfo_unordered_map &current_info,
+    std::vector<const internal::GenInfo *> &output_generated_files,
+    std::vector<const internal::GenInfo *> &output_dummy_generated_files) {
   const bool is_loaded = loader_.Load();
-  if (!is_loaded) {
-    CompileSources(compile_sources);
-    dirty_ = true;
-  } else {
-    // * Completely compile sources if any of the following change
-    // TODO, Toolchain, ASM, C, C++ compiler related to a particular name
-    RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
-                 current_preprocessor_flags_);
-    RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
-                 current_common_compile_flags_);
-    RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
-    RecheckFlags(loader_.GetLoadedCppCompileFlags(),
-                 current_cpp_compile_flags_);
-    RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
-    RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
-    RecheckPaths(loader_.GetLoadedCompileDependencies(),
-                 current_compile_dependencies_.internal);
+  (void)is_loaded;
 
-    // * Compile sources
-    if (dirty_) {
-      CompileSources(compile_sources);
-    } else {
-      RecompileSources(compile_sources, dummy_sources);
-    }
+  // * Completely compile sources if any of the following change
+  // TODO, Toolchain, ASM, C, C++ compiler related to a particular name
+  RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
+               current_preprocessor_flags_);
+  RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
+               current_common_compile_flags_);
+  RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
+  RecheckFlags(loader_.GetLoadedCppCompileFlags(), current_cpp_compile_flags_);
+  RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
+  RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
+  RecheckPaths(loader_.GetLoadedCompileDependencies(),
+               current_compile_dependencies_.internal);
+
+  if (dirty_) {
+    CompileSources(current_info, output_generated_files);
+  } else {
+    RecompileSources(previous_info, current_info, output_generated_files,
+                     output_dummy_generated_files);
   }
+
+  return dirty_;
 }
 
 void Target::BuildCompileGenerator() {
@@ -155,72 +156,8 @@ void Target::BuildCompileGenerator() {
           std::vector<const internal::GenInfo *> &output_generated_files,
           std::vector<const internal::GenInfo *>
               &output_dummy_generated_files) {
-        const bool is_loaded = loader_.Load();
-        (void)is_loaded;
-
-        RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
-                     current_preprocessor_flags_);
-        RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
-                     current_common_compile_flags_);
-        RecheckFlags(loader_.GetLoadedCCompileFlags(),
-                     current_c_compile_flags_);
-        RecheckFlags(loader_.GetLoadedCppCompileFlags(),
-                     current_cpp_compile_flags_);
-        RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
-        RecheckPaths(loader_.GetLoadedHeaders(),
-                     current_header_files_.internal);
-        RecheckPaths(loader_.GetLoadedCompileDependencies(),
-                     current_compile_dependencies_.internal);
-
-        if (dirty_) {
-          std::transform(current_info.begin(), current_info.end(),
-                         std::back_inserter(output_generated_files),
-                         [](const auto &ci) -> const internal::GenInfo * {
-                           return &(ci.second);
-                         });
-        } else {
-          bool build = false;
-
-          // previous_info has more items than current_info
-          for (const auto &pi : previous_info) {
-            if (current_info.find(pi.first) == current_info.end()) {
-              SourceRemoved();
-              build = true;
-              break;
-            }
-          }
-
-          // Check all files individually
-          for (const auto &ci : current_info) {
-            if (previous_info.find(ci.first) == previous_info.end()) {
-              // current_info has more items than
-              // previous_info
-              SourceAdded();
-              dirty_ = true;
-            } else {
-              const internal::GenInfo &loaded_geninfo =
-                  previous_info.at(ci.first);
-              BuilderInterface::RecheckPaths(loaded_geninfo.inputs.internal,
-                                             ci.second.inputs.internal);
-              RecheckChanged(loaded_geninfo.outputs, ci.second.outputs);
-              RecheckChanged(loaded_geninfo.commands, ci.second.commands);
-              if (dirty_) {
-                SourceUpdated();
-              }
-            }
-
-            if (dirty_) {
-              output_generated_files.push_back(&(ci.second));
-              build = true;
-            } else {
-              output_dummy_generated_files.push_back(&(ci.second));
-            }
-            dirty_ = false;
-          }
-          dirty_ = build;
-        }
-
-        return dirty_;
+        return BuildCompile(previous_info, current_info, output_generated_files,
+                            output_dummy_generated_files);
       });
   compile_generator_.AddPostgenerateCb([&]() { dirty_ = true; });
 

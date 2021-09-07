@@ -232,18 +232,26 @@ private:
   void ConvertForLink();
 
   // Build
-  void BuildCompile(std::vector<fs::path> &compile_sources,
-                    std::vector<fs::path> &dummy_sources);
+  bool BuildCompile(
+      const internal::geninfo_unordered_map &previous_info,
+      const internal::geninfo_unordered_map &current_info,
+      std::vector<const internal::GenInfo *> &output_generated_files,
+      std::vector<const internal::GenInfo *> &output_dummy_generated_files);
   void BuildLink();
 
   void BuildCompileGenerator();
   void BuildLinkGenerator();
 
   // Compile
-  void CompileSources(std::vector<fs::path> &compile_sources);
-  void RecompileSources(std::vector<fs::path> &compile_sources,
-                        std::vector<fs::path> &dummy_sources);
-  void CompileSource(const fs::path &current_source) const;
+  void CompileSources(
+      const internal::geninfo_unordered_map &current_info,
+      std::vector<const internal::GenInfo *> &output_generated_files);
+
+  void RecompileSources(
+      const internal::geninfo_unordered_map &previous_info,
+      const internal::geninfo_unordered_map &current_info,
+      std::vector<const internal::GenInfo *> &output_generated_files,
+      std::vector<const internal::GenInfo *> &output_dummy_generated_files);
 
   // Link
   void LinkTarget();
