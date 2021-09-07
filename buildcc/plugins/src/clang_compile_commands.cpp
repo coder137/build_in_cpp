@@ -35,9 +35,8 @@ void ClangCompileCommands::AddTarget(const base::Target *target) {
 void ClangCompileCommands::Generate() {
   // Early terminate if rebuild is not required
   const bool regenerate = std::any_of(
-      targets_.begin(), targets_.end(), [](const base::Target *target) {
-        return (target->FirstBuild() || target->Rebuild());
-      });
+      targets_.begin(), targets_.end(),
+      [](const base::Target *target) { return target->GetBuildState(); });
   if (!regenerate) {
     env::log_trace("ClangCompileCommands", "Generate -> false");
     return;
