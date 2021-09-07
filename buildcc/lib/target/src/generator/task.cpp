@@ -18,6 +18,14 @@
 
 #include "command/command.h"
 
+namespace {
+
+constexpr const char *const kPreGenerateTaskName = "PreGenerate";
+constexpr const char *const kGenerateTaskName = "Generate";
+constexpr const char *const kPostGenerateTaskName = "PostGenerate";
+
+} // namespace
+
 namespace buildcc::base {
 
 void Generator::GenerateTask(tf::FlowBuilder &builder) {
@@ -27,6 +35,7 @@ void Generator::GenerateTask(tf::FlowBuilder &builder) {
     Convert();
   });
 
+  // TODO, See if postgenerate_cb_ needs to be inside the dirty_ condition
   tf::Task postgenerate_task = builder.emplace([this]() {
     if (dirty_) {
       Store();
@@ -69,9 +78,9 @@ void Generator::GenerateTask(tf::FlowBuilder &builder) {
   build_task_.succeed(pregenerate_task);
   build_task_.precede(postgenerate_task);
 
-  pregenerate_task.name("PreGenerate");
-  postgenerate_task.name("PostGenerate");
-  build_task_.name(name_);
+  pregenerate_task.name(kPreGenerateTaskName);
+  postgenerate_task.name(kPostGenerateTaskName);
+  build_task_.name(kGenerateTaskName);
 }
 
 } // namespace buildcc::base
