@@ -187,9 +187,11 @@ void Target::BuildCompileGenerator() {
                      current_compile_dependencies_.internal);
 
         if (dirty_) {
-          for (const auto &ci : current_info) {
-            output_generated_files.push_back(&(ci.second));
-          }
+          std::transform(current_info.begin(), current_info.end(),
+                         std::back_inserter(output_generated_files),
+                         [](const auto &ci) -> const internal::GenInfo * {
+                           return &(ci.second);
+                         });
         } else {
           bool build = false;
 
@@ -284,13 +286,17 @@ void Target::BuildLinkGenerator() {
         RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_.internal);
 
         if (dirty_) {
-          for (const auto &ci : current_info) {
-            output_generated_files.push_back(&(ci.second));
-          }
+          std::transform(current_info.begin(), current_info.end(),
+                         std::back_inserter(output_generated_files),
+                         [](const auto &ci) -> const internal::GenInfo * {
+                           return &(ci.second);
+                         });
         } else {
-          for (const auto &ci : current_info) {
-            output_dummy_generated_files.push_back(&(ci.second));
-          }
+          std::transform(current_info.begin(), current_info.end(),
+                         std::back_inserter(output_dummy_generated_files),
+                         [](const auto &ci) -> const internal::GenInfo * {
+                           return &(ci.second);
+                         });
         }
 
         return dirty_;
