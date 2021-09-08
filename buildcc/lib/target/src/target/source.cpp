@@ -37,9 +37,9 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
 
   // Relate input source files with output object files
   const auto absolute_compiled_source =
-      internal::Path::CreateNewPath(absolute_output_filepath);
-  fs::create_directories(absolute_compiled_source.GetPathname().parent_path());
-  current_object_files_.insert({absolute_source, absolute_compiled_source});
+      fs::path(absolute_output_filepath).make_preferred();
+  fs::create_directories(absolute_compiled_source.parent_path());
+  current_object_files_.emplace(absolute_source, absolute_compiled_source);
 }
 
 void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
@@ -108,68 +108,56 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
 
 // Private
 
-void Target::CompileSources(std::vector<fs::path> &compile_sources) {
-  env::log_trace(name_, __FUNCTION__);
-  std::transform(current_source_files_.internal.begin(),
-                 current_source_files_.internal.end(),
-                 std::back_inserter(compile_sources),
-                 [](const buildcc::internal::Path &p) -> fs::path {
-                   return p.GetPathname();
-                 });
-}
+void Target::RecompileSources(
+    const internal::geninfo_unordered_map &previous_info,
+    const internal::geninfo_unordered_map &current_info,
+    std::vector<const internal::GenInfo *> &output_generated_files,
+    std::vector<const internal::GenInfo *> &output_dummy_generated_files) {
+  // RecompileSources
+  bool build = false;
 
-void Target::RecompileSources(std::vector<fs::path> &compile_sources,
-                              std::vector<fs::path> &dummy_sources) {
-  env::log_trace(name_, __FUNCTION__);
-
-  const auto &previous_source_files = loader_.GetLoadedSources();
-
-  // * Cannot find previous source in current source files
-  const bool is_source_removed = internal::is_previous_paths_different(
-      previous_source_files, current_source_files_.internal);
-  if (is_source_removed) {
-    dirty_ = true;
-    SourceRemoved();
-  }
-
-  for (const auto &current_file : current_source_files_.internal) {
-    const auto &current_source = current_file.GetPathname();
-
-    // Find current_file in the loaded sources
-    auto iter = previous_source_files.find(current_file);
-
-    if (iter == previous_source_files.end()) {
-      // *1 New source file added to build
-      compile_sources.push_back(current_source);
-      dirty_ = true;
-      SourceAdded();
-    } else {
-      // *2 Current file is updated
-      if (current_file.GetLastWriteTimestamp() >
-          iter->GetLastWriteTimestamp()) {
-        compile_sources.push_back(current_source);
-        dirty_ = true;
-        SourceUpdated();
-      } else {
-        // TODO, Verify the `physical` presence of object file
-
-        // ELSE
-        // *3 Do nothing
-        dummy_sources.push_back(current_source);
-      }
+  // previous_info has more items than current_info
+  for (const auto &pi : previous_info) {
+    if (current_info.find(pi.first) == current_info.end()) {
+      SourceRemoved();
+      build = true;
+      break;
     }
   }
-}
 
-void Target::CompileSource(const fs::path &current_source) const {
-  const bool success = Command::Execute(CompileCommand(current_source));
-  env::assert_fatal(success, fmt::format("Compilation failed for: {}",
-                                         current_source.string()));
+  // Check all files individually
+  for (const auto &ci : current_info) {
+    if (previous_info.find(ci.first) == previous_info.end()) {
+      // current_info has more items than
+      // previous_info
+      SourceAdded();
+      dirty_ = true;
+    } else {
+      const internal::GenInfo &loaded_geninfo = previous_info.at(ci.first);
+      BuilderInterface::RecheckPaths(loaded_geninfo.inputs.internal,
+                                     ci.second.inputs.internal);
+      RecheckChanged(loaded_geninfo.outputs, ci.second.outputs);
+      RecheckChanged(loaded_geninfo.commands, ci.second.commands);
+      if (dirty_) {
+        SourceUpdated();
+      }
+    }
+
+    if (dirty_) {
+      output_generated_files.push_back(&(ci.second));
+      build = true;
+    } else {
+      output_dummy_generated_files.push_back(&(ci.second));
+    }
+    dirty_ = false;
+  }
+  dirty_ = build;
 }
 
 std::string Target::CompileCommand(const fs::path &current_source) const {
   const std::string output =
-      GetCompiledSourcePath(current_source).GetPathAsString();
+      internal::Path::CreateNewPath(GetCompiledSourcePath(current_source))
+          .GetPathAsString();
   const std::string input =
       internal::Path::CreateExistingPath(current_source).GetPathAsString();
 

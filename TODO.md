@@ -4,13 +4,7 @@
 - [ ] Bootstrapping
   - [x] Via CMake
   - [ ] Via buildcc
-- [x] Subprocess/Process
-  - Tiny Process Library
-  - Reproc
-  - Ninja Subprocess 
-- [ ] Command/Subprocess class to construct a specialized query
-  - Currently, `internal::command` uses `std::system` and command tokens are passed in through `std::vector` (no sanitization or security)
-  - This class must also be easy enough to be used by users to construct external commands.
+- [ ] Command/Subprocess Redirect stdout and stderr for Subprocess
 - [ ] Plugin - ClangFormat
 - [ ] Plugin - Graph Visualizer
 - [ ] PrecompileHeader support
@@ -31,8 +25,17 @@
   - Online documentation (read the docs)
   - Github pages
 - [ ] CI/CD
-- [ ] Codecov
-- [ ] Codacy
+  - [ ] Linux
+    - [x] GCC
+    - [ ] Clang
+  - [ ] Windows
+    - [ ] MSVC
+    - [ ] MinGW
+  - [ ] MacOS
+- [ ] Codecoverage
+  - [x] Codecov
+  - [ ] Coveralls
+- [x] Codacy
 
 # Optimization
 
@@ -44,9 +47,6 @@
 - [ ] `std::string` vs `std::string_view` usage
 - [ ] Static library vs Shared Library when linking buildcc (See **Software Architecture** section)
   - Static library linking is extremely slow on certain compilers
-- [ ] Third party library optimization
-  - flatbuffers
-  - Do not create static/dynamic **fmt** or **spdlog** library, use INTERFACE header only library. We might need to write our own cmake script for INTERFACE and INSTALL.
 - [ ] C++20 constexpr `std::string` and `std::vector` usage
 
 # Tests

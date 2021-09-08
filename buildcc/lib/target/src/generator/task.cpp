@@ -18,15 +18,35 @@
 
 #include "command/command.h"
 
+namespace {
+
+constexpr const char *const kPreGenerateTaskName = "PreGenerate";
+constexpr const char *const kGenerateTaskName = "Generate";
+constexpr const char *const kPostGenerateTaskName = "PostGenerate";
+
+} // namespace
+
 namespace buildcc::base {
 
-void Generator::GenerateTask() {
-  build_task_ = tf_.emplace([&](tf::Subflow &subflow) {
+void Generator::GenerateTask(tf::FlowBuilder &builder) {
+
+  tf::Task pregenerate_task = builder.emplace([this]() {
+    pregenerate_cb_();
     Convert();
-    const auto generated_files = BuildGenerate();
-    if (!dirty_) {
-      return;
+  });
+
+  // TODO, See if postgenerate_cb_ needs to be inside the dirty_ condition
+  tf::Task postgenerate_task = builder.emplace([this]() {
+    if (dirty_) {
+      Store();
+      postgenerate_cb_();
     }
+  });
+
+  tf::Task generate_task = builder.emplace([&](tf::Subflow &subflow) {
+    std::vector<const internal::GenInfo *> generated_files;
+    std::vector<const internal::GenInfo *> dummy_generated_files;
+    BuildGenerate(generated_files, dummy_generated_files);
 
     for (const auto &info : generated_files) {
       if (info->parallel) {
@@ -40,7 +60,7 @@ void Generator::GenerateTask() {
             .name(info->name);
       } else {
         subflow
-            .emplace([&]() {
+            .emplace([info]() {
               for (const auto &command : info->commands) {
                 bool success = Command::Execute(command);
                 env::assert_fatal(success, fmt::format("{} failed", command));
@@ -49,9 +69,18 @@ void Generator::GenerateTask() {
             .name(info->name);
       }
     }
-    Store();
+
+    for (const auto &info : dummy_generated_files) {
+      subflow.placeholder().name(info->name);
+    }
   });
-  build_task_.name(fmt::format("BuildTask:{}", name_));
+
+  generate_task.succeed(pregenerate_task);
+  generate_task.precede(postgenerate_task);
+
+  pregenerate_task.name(kPreGenerateTaskName);
+  generate_task.name(kGenerateTaskName);
+  postgenerate_task.name(kPostGenerateTaskName);
 }
 
 } // namespace buildcc::base

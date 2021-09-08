@@ -56,11 +56,4 @@ std::string Command::Construct(
   return constructed_string;
 }
 
-bool Command::ConstructAndExecute(
-    std::string_view format,
-    const std::unordered_map<const char *, std::string> &arguments) const {
-  const std::string constructed_command = Construct(format, arguments);
-  return Execute(constructed_command);
-}
-
 } // namespace buildcc

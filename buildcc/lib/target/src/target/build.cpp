@@ -22,6 +22,20 @@
 
 #include "fmt/format.h"
 
+namespace {
+
+void CompileSources(
+    const buildcc::internal::geninfo_unordered_map &current_info,
+    std::vector<const buildcc::internal::GenInfo *> &output_generated_files) {
+  std::transform(current_info.begin(), current_info.end(),
+                 std::back_inserter(output_generated_files),
+                 [](const auto &ci) -> const buildcc::internal::GenInfo * {
+                   return &(ci.second);
+                 });
+}
+
+} // namespace
+
 namespace buildcc::base {
 
 // * Load
@@ -64,6 +78,26 @@ void Target::Build() {
   LinkTask();
 }
 
+std::string Target::LinkCommand() const {
+
+  // Add compiled sources
+  const std::string aggregated_compiled_sources =
+      internal::aggregate(GetCompiledSources());
+
+  const std::string output_target =
+      internal::Path::CreateNewPath(GetTargetPath()).GetPathAsString();
+
+  return command_.Construct(
+      link_command_,
+      {
+          {"output", output_target},
+          {"compiled_sources", aggregated_compiled_sources},
+          {"lib_deps",
+           fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
+                       internal::aggregate(current_lib_deps_.user))},
+      });
+}
+
 //
 
 void Target::ConvertForCompile() {
@@ -86,12 +120,10 @@ void Target::ConvertForCompile() {
 }
 
 void Target::ConvertForLink() {
-  std::for_each(
-      current_lib_deps_.user.cbegin(), current_lib_deps_.user.cend(),
-      [this](const Target *target) {
-        current_lib_deps_.internal.emplace(
-            internal::Path::CreateExistingPath(target->GetTargetPath()));
-      });
+  for (const auto &user_ld : current_lib_deps_.user) {
+    current_lib_deps_.internal.emplace(
+        internal::Path::CreateExistingPath(user_ld));
+  }
 
   for (const auto &user_ld : current_link_dependencies_.user) {
     current_link_dependencies_.internal.emplace(
@@ -99,39 +131,66 @@ void Target::ConvertForLink() {
   }
 }
 
-void Target::BuildCompile(std::vector<fs::path> &compile_sources,
-                          std::vector<fs::path> &dummy_sources) {
+bool Target::BuildCompile(
+    const internal::geninfo_unordered_map &previous_info,
+    const internal::geninfo_unordered_map &current_info,
+    std::vector<const internal::GenInfo *> &output_generated_files,
+    std::vector<const internal::GenInfo *> &output_dummy_generated_files) {
   const bool is_loaded = loader_.Load();
-  if (!is_loaded) {
-    CompileSources(compile_sources);
-    dirty_ = true;
-    first_build_ = true;
-  } else {
-    // * Completely compile sources if any of the following change
-    // TODO, Toolchain, ASM, C, C++ compiler related to a particular name
-    RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
-                 current_preprocessor_flags_);
-    RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
-                 current_common_compile_flags_);
-    RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
-    RecheckFlags(loader_.GetLoadedCppCompileFlags(),
-                 current_cpp_compile_flags_);
-    RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
-    RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
-    RecheckPaths(loader_.GetLoadedCompileDependencies(),
-                 current_compile_dependencies_.internal);
+  (void)is_loaded;
 
-    // * Compile sources
-    if (dirty_) {
-      CompileSources(compile_sources);
-    } else {
-      RecompileSources(compile_sources, dummy_sources);
-    }
-    rebuild_ = dirty_;
+  // * Completely compile sources if any of the following change
+  // TODO, Toolchain, ASM, C, C++ compiler related to a particular name
+  RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
+               current_preprocessor_flags_);
+  RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
+               current_common_compile_flags_);
+  RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
+  RecheckFlags(loader_.GetLoadedCppCompileFlags(), current_cpp_compile_flags_);
+  RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
+  RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
+  RecheckPaths(loader_.GetLoadedCompileDependencies(),
+               current_compile_dependencies_.internal);
+
+  if (dirty_) {
+    CompileSources(current_info, output_generated_files);
+  } else {
+    RecompileSources(previous_info, current_info, output_generated_files,
+                     output_dummy_generated_files);
+  }
+
+  return dirty_;
+}
+
+void Target::BuildCompileGenerator() {
+  compile_generator_.AddPregenerateCb([&]() { ConvertForCompile(); });
+  compile_generator_.AddCustomRegenerateCb(
+      [&](const internal::geninfo_unordered_map &previous_info,
+          const internal::geninfo_unordered_map &current_info,
+          std::vector<const internal::GenInfo *> &output_generated_files,
+          std::vector<const internal::GenInfo *>
+              &output_dummy_generated_files) {
+        return BuildCompile(previous_info, current_info, output_generated_files,
+                            output_dummy_generated_files);
+      });
+  compile_generator_.AddPostgenerateCb([&]() { dirty_ = true; });
+
+  for (const auto &cof : current_object_files_) {
+    std::string name = fs::path(cof.first)
+                           .lexically_relative(env::get_project_root_dir())
+                           .string();
+    std::replace(name.begin(), name.end(), '\\', '/');
+    compile_generator_.AddGenInfo(name, {cof.first}, {cof.second},
+                                  {CompileCommand(cof.first)}, true);
   }
 }
 
-void Target::BuildLink() {
+void Target::BuildLink(
+    const internal::geninfo_unordered_map &previous_info,
+    const internal::geninfo_unordered_map &current_info,
+    std::vector<const internal::GenInfo *> &output_generated_files,
+    std::vector<const internal::GenInfo *> &output_dummy_generated_files) {
+  (void)previous_info;
   // * Completely rebuild target / link if any of the following change
   // Target compiled source files either during Compile / Recompile
   // Target library dependencies
@@ -144,29 +203,42 @@ void Target::BuildLink() {
   RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_.internal);
 
   if (dirty_) {
-    LinkTarget();
-    Store();
+    std::transform(current_info.begin(), current_info.end(),
+                   std::back_inserter(output_generated_files),
+                   [](const auto &ci) -> const internal::GenInfo * {
+                     return &(ci.second);
+                   });
+  } else {
+    std::transform(current_info.begin(), current_info.end(),
+                   std::back_inserter(output_dummy_generated_files),
+                   [](const auto &ci) -> const internal::GenInfo * {
+                     return &(ci.second);
+                   });
   }
 }
 
-void Target::LinkTarget() {
-  // Add compiled sources
-  const std::string aggregated_compiled_sources =
-      internal::aggregate(GetCompiledSources());
-
-  const std::string output_target =
-      internal::Path::CreateNewPath(GetTargetPath()).GetPathAsString();
-
-  const bool success = command_.ConstructAndExecute(
-      link_command_,
-      {
-          {"output", output_target},
-          {"compiled_sources", aggregated_compiled_sources},
-          {"lib_deps",
-           fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
-                       internal::aggregate(current_lib_deps_.internal))},
+void Target::BuildLinkGenerator() {
+  link_generator_.AddPregenerateCb([&]() { ConvertForLink(); });
+  link_generator_.AddCustomRegenerateCb(
+      [&](const internal::geninfo_unordered_map &previous_info,
+          const internal::geninfo_unordered_map &current_info,
+          std::vector<const internal::GenInfo *> &output_generated_files,
+          std::vector<const internal::GenInfo *>
+              &output_dummy_generated_files) {
+        BuildLink(previous_info, current_info, output_generated_files,
+                  output_dummy_generated_files);
+        return dirty_;
       });
-  env::assert_fatal(success, fmt::format("Compilation failed for: {}", name_));
+  link_generator_.AddPostgenerateCb([&]() {
+    Store();
+    dirty_ = true;
+    build_ = true;
+  });
+  std::string name =
+      GetTargetPath().lexically_relative(env::get_project_build_dir()).string();
+  std::replace(name.begin(), name.end(), '\\', '/');
+  link_generator_.AddGenInfo(name, GetCompiledSources(), {GetTargetPath()},
+                             {LinkCommand()}, false);
 }
 
 } // namespace buildcc::base

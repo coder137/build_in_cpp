@@ -29,6 +29,7 @@
 #include "target/builder_interface.h"
 
 // Internal
+#include "target/generator.h"
 #include "target/path.h"
 #include "target/target_loader.h"
 
@@ -84,7 +85,9 @@ public:
                                 target_path_relative_to_root),
         target_intermediate_dir_(fs::path(env::get_project_build_dir()) /
                                  toolchain.GetName() / name),
-        loader_(name, target_intermediate_dir_) {
+        loader_(name, target_intermediate_dir_),
+        compile_generator_("Compile", target_intermediate_dir_),
+        link_generator_("Link", target_intermediate_dir_) {
     Initialize();
   }
   virtual ~Target() {}
@@ -145,12 +148,8 @@ public:
   // TODO, Add more setters
 
   // Getters
-  std::string CompileCommand(const fs::path &current_source) const;
 
-  // TODO, Check if these need to be made const
   tf::Taskflow &GetTaskflow() { return tf_; }
-  tf::Task &GetCompileTask() { return compile_task_; }
-  tf::Task &GetLinkTask() { return link_task_; }
 
   fs::path GetTargetPath() const {
     fs::path path =
@@ -179,7 +178,7 @@ public:
   const internal::fs_unordered_set &GetCurrentHeaderFiles() const {
     return current_header_files_.user;
   }
-  const std::unordered_set<const Target *> &GetTargetLibDeps() const {
+  const internal::fs_unordered_set &GetTargetLibDeps() const {
     return current_lib_deps_.user;
   }
   const internal::fs_unordered_set &GetCurrentIncludeDirs() const {
@@ -201,8 +200,15 @@ public:
     return current_link_flags_;
   }
 
-  bool FirstBuild() const { return first_build_; }
-  bool Rebuild() const { return rebuild_; }
+  // Getters to use after `build`
+
+  std::string CompileCommand(const fs::path &current_source) const;
+  std::string LinkCommand() const;
+
+  tf::Task &GetCompileTask() { return compile_task_; }
+  tf::Task &GetLinkTask() { return link_task_; }
+
+  bool GetBuildState() const { return build_; }
 
   // TODO, Add more getters
 
@@ -214,8 +220,8 @@ protected:
 
   const std::string &GetCompiler(const fs::path &source) const;
 
-  const internal::Path &GetCompiledSourcePath(const fs::path &source) const;
-  internal::path_unordered_set GetCompiledSources() const;
+  const fs::path &GetCompiledSourcePath(const fs::path &source) const;
+  internal::fs_unordered_set GetCompiledSources() const;
   std::optional<std::string> GetCompiledFlags(FileExtType type) const;
 
 private:
@@ -226,18 +232,26 @@ private:
   void ConvertForLink();
 
   // Build
-  void BuildCompile(std::vector<fs::path> &compile_sources,
-                    std::vector<fs::path> &dummy_sources);
-  void BuildLink();
+  bool BuildCompile(
+      const internal::geninfo_unordered_map &previous_info,
+      const internal::geninfo_unordered_map &current_info,
+      std::vector<const internal::GenInfo *> &output_generated_files,
+      std::vector<const internal::GenInfo *> &output_dummy_generated_files);
+  void BuildLink(
+      const internal::geninfo_unordered_map &previous_info,
+      const internal::geninfo_unordered_map &current_info,
+      std::vector<const internal::GenInfo *> &output_generated_files,
+      std::vector<const internal::GenInfo *> &output_dummy_generated_files);
+
+  void BuildCompileGenerator();
+  void BuildLinkGenerator();
 
   // Compile
-  void CompileSources(std::vector<fs::path> &compile_sources);
-  void RecompileSources(std::vector<fs::path> &compile_sources,
-                        std::vector<fs::path> &dummy_sources);
-  void CompileSource(const fs::path &current_source) const;
-
-  // Link
-  void LinkTarget();
+  void RecompileSources(
+      const internal::geninfo_unordered_map &previous_info,
+      const internal::geninfo_unordered_map &current_info,
+      std::vector<const internal::GenInfo *> &output_generated_files,
+      std::vector<const internal::GenInfo *> &output_dummy_generated_files);
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
@@ -281,12 +295,12 @@ private:
   internal::Files<internal::fs_unordered_set> current_source_files_;
   // NOTE, Always store the absolute source path -> absolute compiled source
   // path here
-  std::unordered_map<fs::path, internal::Path, internal::PathHash>
+  std::unordered_map<fs::path, fs::path, internal::PathHash>
       current_object_files_;
 
   internal::Files<internal::fs_unordered_set> current_header_files_;
 
-  internal::Files<std::unordered_set<const Target *>> current_lib_deps_;
+  internal::Files<internal::fs_unordered_set> current_lib_deps_;
 
   internal::fs_unordered_set current_include_dirs_;
   internal::fs_unordered_set current_lib_dirs_;
@@ -310,10 +324,11 @@ private:
 
   internal::FbsLoader loader_;
   Command command_;
+  Generator compile_generator_;
+  Generator link_generator_;
 
   // Build states
-  bool first_build_ = false;
-  bool rebuild_ = false;
+  bool build_ = false;
 
   tf::Taskflow tf_;
   tf::Task compile_task_;

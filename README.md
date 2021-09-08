@@ -25,9 +25,15 @@ Build C, C++ and ASM files in C++
 
 # General Information
 
-- A `compile` + `link` procedure is called a **Target**
+- A one stage `input / output` procedure is called a **Generator** with a wide variety of use cases
+  - Single input creates single output
+  - Single input creates multiple outputs
+  - Multiple inputs create single output
+  - Multiple inputs creates multiple outputs
+- A two stage `compile` and `link` procedure is called a **Target**
   - This means that Executables, StaticLibraries and DynamicLibraries are all categorized as Targets
   - In the future C++20 modules can also be its own target dependending on compiler implementations
+  - The two stages are built using **Generators** where link generation depends on compile generation
 - Every Target requires a complementary (and compatible) **Toolchain**
   - This ensures that cross compiling is very easy and explicit in nature.
   - Multiple toolchains can be _mixed_ in a single build file i.e we can generate targets using the GCC, Clang, MSVC and many other compilers **simultaneously**.
@@ -67,7 +73,7 @@ See also [Software Architecture](#software-architecture)
 
 ## Community Plugin
 
-- [x] [ClangCompileCommands](buildcc/plugins/clang_compile_commands.h)
+- [x] [ClangCompileCommands](buildcc/plugins/include/plugins/clang_compile_commands.h)
 - [ ] ClangFormat
 - [ ] Target graph visualizer (through Taskflow)
 

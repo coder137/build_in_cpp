@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
     }
 
     // Copy case
-    if (generic_target.FirstBuild() || generic_target.Rebuild()) {
+    if (generic_target.GetBuildState()) {
       fs::remove(copy_to_path);
       fs::copy(copy_from_path, copy_to_path);
     }

@@ -33,9 +33,6 @@ public:
   std::string Construct(std::string_view format,
                         const std::unordered_map<const char *, std::string>
                             &arguments = {}) const;
-  bool ConstructAndExecute(std::string_view format,
-                           const std::unordered_map<const char *, std::string>
-                               &arguments = {}) const;
 
   static bool Execute(const std::string &command);
 
