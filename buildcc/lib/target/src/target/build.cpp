@@ -223,8 +223,8 @@ void Target::BuildLinkGenerator() {
   std::string name =
       GetTargetPath().lexically_relative(env::get_project_build_dir()).string();
   std::replace(name.begin(), name.end(), '\\', '/');
-  link_generator_.AddGenInfo(name, {}, {GetTargetPath()}, {LinkCommand()},
-                             false);
+  link_generator_.AddGenInfo(name, GetCompiledSources(), {GetTargetPath()},
+                             {LinkCommand()}, false);
 }
 
 } // namespace buildcc::base
