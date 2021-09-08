@@ -247,10 +247,6 @@ private:
   void BuildLinkGenerator();
 
   // Compile
-  void CompileSources(
-      const internal::geninfo_unordered_map &current_info,
-      std::vector<const internal::GenInfo *> &output_generated_files);
-
   void RecompileSources(
       const internal::geninfo_unordered_map &previous_info,
       const internal::geninfo_unordered_map &current_info,

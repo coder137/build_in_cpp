@@ -22,6 +22,20 @@
 
 #include "fmt/format.h"
 
+namespace {
+
+void CompileSources(
+    const buildcc::internal::geninfo_unordered_map &current_info,
+    std::vector<const buildcc::internal::GenInfo *> &output_generated_files) {
+  std::transform(current_info.begin(), current_info.end(),
+                 std::back_inserter(output_generated_files),
+                 [](const auto &ci) -> const buildcc::internal::GenInfo * {
+                   return &(ci.second);
+                 });
+}
+
+} // namespace
+
 namespace buildcc::base {
 
 // * Load
