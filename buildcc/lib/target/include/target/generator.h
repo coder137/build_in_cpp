@@ -99,7 +99,6 @@ public:
 
 private:
   void GenerateTask(tf::FlowBuilder &builder);
-  // Convert from UserGenInfo to internal::GenInfo
   void Convert();
   void
   BuildGenerate(std::vector<const internal::GenInfo *> &generated_files,
