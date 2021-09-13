@@ -48,21 +48,20 @@ jobs:
         # Linux has 2 cores
         run: |
           cmake --build --list-presets
-          cmake --build --preset=${{env.BUILD_MSVC_PRESET}} --parallel 2
+          cmake --build --preset=${{env.BUILD_MSVC_PRESET}} --config Release --parallel 2
 
-      # TODO, Solve this issue
-      # - name: Install
-      #   working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
-      #   run: |
-      #     cmake --install .
+      - name: Install
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+        run: |
+          cmake --install .
 
-      # - name: AfterInstall Example
-      #   working-directory: ${{github.workspace}}/example/gcc/AfterInstall
-      #   run: |
-      #     cmake -B build -G Ninja
-      #     cmake --build build --parallel 2
-      #     cd build
-      #     ./build
+      - name: AfterInstall Example
+        working-directory: ${{github.workspace}}/example/gcc/AfterInstall
+        run: |
+          cmake -B build
+          cmake --build build --parallel 2
+          cd build
+          ./build
 
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
