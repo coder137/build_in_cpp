@@ -66,22 +66,22 @@ jobs:
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_simple_example_linux
+          cmake --build . --target run_hybrid_simple_example_win
 
       - name: Hybrid Foolib Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_foolib_example_linux
+          cmake --build . --target run_hybrid_foolib_example_win
 
       - name: Hybrid External Lib Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_externallib_example_linux
+          cmake --build . --target run_hybrid_externallib_example_win
 
       - name: Hybrid Custom Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_customtarget_example_linux
+          cmake --build . --target run_hybrid_customtarget_example_win
 
       - name: Hybrid Generic Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
@@ -139,22 +139,22 @@ jobs:
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_simple_example_linux
+          cmake --build . --target run_hybrid_simple_example_win
 
       - name: Hybrid Foolib Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_foolib_example_linux
+          cmake --build . --target run_hybrid_foolib_example_win
 
       - name: Hybrid External Lib Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_externallib_example_linux
+          cmake --build . --target run_hybrid_externallib_example_win
 
       - name: Hybrid Custom Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_customtarget_example_linux
+          cmake --build . --target run_hybrid_customtarget_example_win
 
       - name: Hybrid Generic Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
