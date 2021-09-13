@@ -26,17 +26,22 @@ jobs:
         with:
           submodules: true
 
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: System Packages
+        run: |
+          choco install llvm
+          choco install cppcheck
+
       - name: Check environment
         run: |
           cmake --version
-          gcc --version
+          cl ?
           clang --version
-          ninja --version
-          doxygen --version
-          gcovr --version
-          lcov --version
-          cppcheck --version
           clang-tidy --version
+          cppcheck --version
+          python --version
+          pip --version
 
       - name: Configure CMake
         run: |
