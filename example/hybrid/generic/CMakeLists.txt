@@ -26,7 +26,7 @@ add_custom_target(run_hybrid_generic_example
     COMMAND hybrid_generic_example --help-all
     COMMAND hybrid_generic_example toolchain --help-all
     COMMAND hybrid_generic_example --config ${CMAKE_CURRENT_SOURCE_DIR}/build_generic.toml
-    COMMAND dot -Tpng graph.dot -o graph.PNG
+    # COMMAND dot -Tpng graph.dot -o graph.PNG
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS hybrid_generic_example buildcc
     VERBATIM USES_TERMINAL
