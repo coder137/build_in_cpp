@@ -13,6 +13,7 @@ env:
   BUILD_FOLDER_DEV_ALL: _build_gcc_dev_all
   BUILD_DEV_SINGLE_PRESET: gcc_dev_single
   BUILD_FOLDER_DEV_SINGLE: _build_gcc_dev_single
+  BUILD_DEV_INTERFACE_PRESET: gcc_dev_interface
   BUILD_FOLDER_DEV_INTERFACE: _build_gcc_dev_interface
 
 jobs:
@@ -219,7 +220,7 @@ jobs:
       - name: Configure CMake
         run: |
           cmake --list-presets
-          cmake --preset=gcc_dev_interface
+          cmake --preset=${{env.BUILD_DEV_INTERFACE_PRESET}}
 
       - name: Static Analysis
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_INTERFACE}}
@@ -229,8 +230,8 @@ jobs:
         # Linux has 2 cores
         run: |
           cmake --build --list-presets
-          cmake --build --preset=gcc_dev_interface --parallel 2
+          cmake --build --preset=${{env.BUILD_DEV_INTERFACE_PRESET}} --parallel 2
 
       - name: Test
         run: |
-          ctest --preset=gcc_dev_interface --parallel 2
+          ctest --preset=${{env.BUILD_DEV_INTERFACE_PRESET}} --parallel 2
