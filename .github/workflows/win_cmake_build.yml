@@ -28,18 +28,12 @@ jobs:
 
       - uses: ilammy/msvc-dev-cmd@v1
 
-      - name: System Packages
-        run: |
-          choco install llvm
-          choco install cppcheck
-
       - name: Check environment
         run: |
           cmake --version
           cl ?
           clang --version
           clang-tidy --version
-          cppcheck --version
           python --version
           pip --version
 
@@ -47,10 +41,6 @@ jobs:
         run: |
           cmake --list-presets
           cmake --preset=${{env.BUILD_PRESET}}
-
-      - name: Static Analysis
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
-        run: cmake --build . --target cppcheck_static_analysis
 
       - name: Build
         # Linux has 2 cores
