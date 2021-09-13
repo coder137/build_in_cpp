@@ -54,6 +54,7 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
           cmake --install .
+          $env:Path += ";C:/Program Files (x86)/BuildCC"
 
       - name: AfterInstall Example
         working-directory: ${{github.workspace}}/example/gcc/AfterInstall
@@ -127,6 +128,7 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
         run: |
           cmake --install .
+          $env:Path += ";C:/Program Files (x86)/BuildCC"
 
       - name: AfterInstall Example
         working-directory: ${{github.workspace}}/example/gcc/AfterInstall
