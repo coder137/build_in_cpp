@@ -48,14 +48,10 @@ jobs:
           cmake --build --list-presets
           cmake --build --preset=${{env.BUILD_PRESET}} --parallel 2
 
-      - name: Test
-        run: |
-          ctest --preset=${{env.BUILD_PRESET}} --parallel 2
-
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          sudo cmake --install .
+          cmake --install .
 
       - name: AfterInstall Example
         working-directory: ${{github.workspace}}/example/gcc/AfterInstall
