@@ -60,9 +60,10 @@ jobs:
         run: |
           $env:Path += ";C:/Program Files (x86)/BuildCC"
           cmake -B build
-          cmake --build build --parallel 2
+          cmake --build build --config Release --parallel 2
           cd build
-          ./build
+          ls
+          .\build.exe
 
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
