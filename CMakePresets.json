@@ -114,8 +114,8 @@
                 "BUILDCC_EXAMPLES": true,
                 "BUILDCC_TESTING": false,
                 "BUILDCC_CLANGTIDY": false,
-                "BUILDCC_CPPCHECK": true,
-                "BUILDCC_DOCUMENTATION": true,
+                "BUILDCC_CPPCHECK": false,
+                "BUILDCC_DOCUMENTATION": false,
                 "BUILDCC_NO_DEPRECATED": false
             }
         }
