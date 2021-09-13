@@ -136,7 +136,8 @@ jobs:
           cmake -B build
           cmake --build build --parallel 2
           cd build
-          ./build
+          ls
+          .\build.exe
 
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
