@@ -9,13 +9,16 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
+  BUILD_DEV_ALL_PRESET: gcc_dev_all
   BUILD_FOLDER_DEV_ALL: _build_gcc_dev_all
+  BUILD_DEV_SINGLE_PRESET: gcc_dev_single
   BUILD_FOLDER_DEV_SINGLE: _build_gcc_dev_single
+  BUILD_DEV_INTERFACE_PRESET: gcc_dev_interface
   BUILD_FOLDER_DEV_INTERFACE: _build_gcc_dev_interface
 
 jobs:
   build_all:
-    name: BuildCC single and interface Lib
+    name: GCC single and interface Lib
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
@@ -46,7 +49,7 @@ jobs:
       - name: Configure CMake
         run: |
           cmake --list-presets
-          cmake --preset=gcc_dev_all
+          cmake --preset=${{env.BUILD_DEV_ALL_PRESET}}
 
       - name: Static Analysis
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
@@ -56,11 +59,11 @@ jobs:
         # Linux has 2 cores
         run: |
           cmake --build --list-presets
-          cmake --build --preset=gcc_dev_all --parallel 2
+          cmake --build --preset=${{env.BUILD_DEV_ALL_PRESET}} --parallel 2
 
       - name: Test
         run: |
-          ctest --preset=gcc_dev_all --parallel 2
+          ctest --preset=${{env.BUILD_DEV_ALL_PRESET}} --parallel 2
 
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
@@ -101,7 +104,7 @@ jobs:
           cmake --build . --target run_hybrid_generic_example
 
   build_single:
-    name: BuildCC single lib
+    name: GCC single lib
     runs-on: ubuntu-latest
 
     steps:
@@ -128,7 +131,7 @@ jobs:
       - name: Configure CMake
         run: |
           cmake --list-presets
-          cmake --preset=gcc_dev_single
+          cmake --preset=${{env.BUILD_DEV_SINGLE_PRESET}}
 
       - name: Static Analysis
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
@@ -138,11 +141,11 @@ jobs:
         # Linux has 2 cores
         run: |
           cmake --build --list-presets
-          cmake --build --preset=gcc_dev_single --parallel 2
+          cmake --build --preset=${{env.BUILD_DEV_SINGLE_PRESET}} --parallel 2
 
       - name: Test
         run: |
-          ctest --preset=gcc_dev_single --parallel 2
+          ctest --preset=${{env.BUILD_DEV_SINGLE_PRESET}} --parallel 2
 
       - name: Coveralls
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
@@ -190,7 +193,7 @@ jobs:
           cmake --build . --target run_hybrid_generic_example
 
   build_interface:
-    name: BuildCC interface lib
+    name: GCC interface lib
     runs-on: ubuntu-latest
 
     steps:
@@ -217,7 +220,7 @@ jobs:
       - name: Configure CMake
         run: |
           cmake --list-presets
-          cmake --preset=gcc_dev_interface
+          cmake --preset=${{env.BUILD_DEV_INTERFACE_PRESET}}
 
       - name: Static Analysis
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_INTERFACE}}
@@ -227,8 +230,8 @@ jobs:
         # Linux has 2 cores
         run: |
           cmake --build --list-presets
-          cmake --build --preset=gcc_dev_interface --parallel 2
+          cmake --build --preset=${{env.BUILD_DEV_INTERFACE_PRESET}} --parallel 2
 
       - name: Test
         run: |
-          ctest --preset=gcc_dev_interface --parallel 2
+          ctest --preset=${{env.BUILD_DEV_INTERFACE_PRESET}} --parallel 2

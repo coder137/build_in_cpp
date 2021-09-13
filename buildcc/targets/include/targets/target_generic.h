@@ -24,16 +24,27 @@
 
 namespace buildcc {
 
+// TODO, Complete this for other options
 struct SyncTargetOptions {
   bool preprocessor_flags_{false};
   bool common_compile_flags_{false};
   bool c_compile_flags_{false};
   bool cpp_compile_flags_{false};
   bool link_flags_{false};
+
+  SyncTargetOptions() {}
+  SyncTargetOptions(bool preprocessor_flags, bool common_compile_flags,
+                    bool c_compile_flags, bool cpp_compile_flags,
+                    bool link_flags)
+      : preprocessor_flags_(preprocessor_flags),
+        common_compile_flags_(common_compile_flags),
+        c_compile_flags_(c_compile_flags),
+        cpp_compile_flags_(cpp_compile_flags), link_flags_(link_flags) {}
 };
 
-inline void SyncTargets(base::Target &dest, const base::Target &source,
-                        const SyncTargetOptions &options = {}) {
+inline void
+SyncTargets(base::Target &dest, const base::Target &source,
+            const SyncTargetOptions &options = SyncTargetOptions()) {
   dest.target_ext_ = source.target_ext_;
   dest.obj_ext_ = source.obj_ext_;
   dest.prefix_include_dir_ = source.prefix_include_dir_;
@@ -96,12 +107,7 @@ public:
       break;
     }
     SyncTargets(*this, *target,
-                {
-                    .common_compile_flags_ = true,
-                    .c_compile_flags_ = true,
-                    .cpp_compile_flags_ = true,
-                    .link_flags_ = true,
-                });
+                SyncTargetOptions(false, true, true, true, true));
   }
   ~ExecutableTarget_generic() {}
 };
@@ -130,12 +136,7 @@ public:
       break;
     }
     SyncTargets(*this, *target,
-                {
-                    .common_compile_flags_ = true,
-                    .c_compile_flags_ = true,
-                    .cpp_compile_flags_ = true,
-                    .link_flags_ = true,
-                });
+                SyncTargetOptions(false, true, true, true, true));
   }
 };
 
@@ -163,12 +164,7 @@ public:
       break;
     }
     SyncTargets(*this, *target,
-                {
-                    .common_compile_flags_ = true,
-                    .c_compile_flags_ = true,
-                    .cpp_compile_flags_ = true,
-                    .link_flags_ = true,
-                });
+                SyncTargetOptions(false, true, true, true, true));
   }
 };
 
@@ -197,12 +193,7 @@ public:
       break;
     }
     SyncTargets(*this, *target,
-                {
-                    .common_compile_flags_ = true,
-                    .c_compile_flags_ = true,
-                    .cpp_compile_flags_ = true,
-                    .link_flags_ = true,
-                });
+                SyncTargetOptions(false, true, true, true, true));
   }
 };
 
