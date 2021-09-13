@@ -9,8 +9,8 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
-  BUILD_PRESET: msvc_dev_all
-  BUILD_FOLDER_DEV_ALL: _build_msvc_dev_all
+  BUILD_MSVC_PRESET: msvc_dev_all
+  BUILD_FOLDER_MSVC_DEV_ALL: _build_msvc_dev_all
 
 jobs:
   build_all:
@@ -40,16 +40,16 @@ jobs:
       - name: Configure CMake
         run: |
           cmake --list-presets
-          cmake --preset=${{env.BUILD_PRESET}}
+          cmake --preset=${{env.BUILD_MSVC_PRESET}}
 
       - name: Build
         # Linux has 2 cores
         run: |
           cmake --build --list-presets
-          cmake --build --preset=${{env.BUILD_PRESET}} --parallel 2
+          cmake --build --preset=${{env.BUILD_MSVC_PRESET}} --parallel 2
 
       - name: Install
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
           cmake --install .
 
@@ -62,26 +62,26 @@ jobs:
           ./build
 
       - name: Hybrid Simple Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
           cmake --build . --target run_hybrid_simple_example_linux
 
       - name: Hybrid Foolib Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
           cmake --build . --target run_hybrid_foolib_example_linux
 
       - name: Hybrid External Lib Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
           cmake --build . --target run_hybrid_externallib_example_linux
 
       - name: Hybrid Custom Target Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
           cmake --build . --target run_hybrid_customtarget_example_linux
 
       - name: Hybrid Generic Target Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
           cmake --build . --target run_hybrid_generic_example
