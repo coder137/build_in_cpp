@@ -105,7 +105,6 @@
             "generator": "Visual Studio 16 2019",
             "binaryDir": "${sourceDir}/_build_msvc_dev_all",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
                 "BUILDCC_INSTALL": true,
                 "BUILDCC_FLATBUFFERS_FLATC": true,
                 "BUILDCC_BUILD_AS_SINGLE_LIB": true,
