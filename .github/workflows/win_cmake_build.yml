@@ -61,7 +61,7 @@ jobs:
           $env:Path += ";C:/Program Files (x86)/BuildCC"
           cmake -B build
           cmake --build build --config Release --parallel 2
-          cd build
+          cd build/Release
           ls
           .\build.exe
 
@@ -136,7 +136,7 @@ jobs:
           $env:Path += ";C:/Program Files (x86)/BuildCC"
           cmake -B build
           cmake --build build --parallel 2
-          cd build
+          cd build/Debug
           ls
           .\build.exe
 
