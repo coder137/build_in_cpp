@@ -2,6 +2,8 @@
 
 [![Linux GCC build](https://github.com/coder137/build_in_cpp/actions/workflows/linux_gcc_cmake_build.yml/badge.svg)](https://github.com/coder137/build_in_cpp/actions/workflows/linux_gcc_cmake_build.yml)
 
+[![Windows CMake build](https://github.com/coder137/build_in_cpp/actions/workflows/win_cmake_build.yml/badge.svg)](https://github.com/coder137/build_in_cpp/actions/workflows/win_cmake_build.yml)
+
 [![codecov](https://codecov.io/gh/coder137/build_in_cpp/branch/main/graph/badge.svg?token=M71H05PIDW)](https://codecov.io/gh/coder137/build_in_cpp)
 
 Build C, C++ and ASM files in C++
@@ -20,8 +22,8 @@ Build C, C++ and ASM files in C++
   - Taskflow v3.1.0
   - CLI11 v1.9.1
   - Tiny Process Library v2.0.4
-  - fmt v7.1.3
-  - spdlog v1.8.5
+  - fmt v8.0.1
+  - spdlog v1.9.2
 
 # General Information
 
