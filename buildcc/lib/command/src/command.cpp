@@ -18,6 +18,7 @@
 
 #include <algorithm>
 
+#include "fmt/args.h"
 #include "fmt/format.h"
 
 #include "env/assert_fatal.h"
