@@ -17,6 +17,7 @@
 #ifndef TARGET_BUILDER_INTERFACE_H_
 #define TARGET_BUILDER_INTERFACE_H_
 
+#include <algorithm>
 #include <unordered_set>
 
 #include "target/path.h"
@@ -63,7 +64,10 @@ protected:
 
     // * Old path is removed
     const bool removed =
-        internal::is_previous_paths_different(previous_path, current_path);
+        std::any_of(previous_path.begin(), previous_path.end(),
+                    [&](const internal::Path &p) {
+                      return current_path.find(p) == current_path.end();
+                    });
     if (removed) {
       if (path_removed_cb) {
         path_removed_cb();

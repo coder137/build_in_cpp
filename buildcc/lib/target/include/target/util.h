@@ -24,21 +24,11 @@
 
 namespace buildcc::internal {
 
-// Checks
-/**
- * @brief Perform check to see if previous path is present in current path
- *
- * @param previous_paths
- * @param current_paths
- * @return true
- * @return false
- */
-bool is_previous_paths_different(const path_unordered_set &previous_paths,
-                                 const path_unordered_set &current_paths);
-
 // Aggregates
-std::string aggregate(const std::vector<std::string> &list);
-std::string aggregate(const std::unordered_set<std::string> &list);
+template <typename T> std::string aggregate(const T &list) {
+  return fmt::format("{}", fmt::join(list, ", "));
+}
+
 std::string aggregate(const buildcc::internal::fs_unordered_set &paths);
 
 std::string aggregate_with_prefix(const std::string &prefix,

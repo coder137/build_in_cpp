@@ -23,24 +23,7 @@
 
 namespace buildcc::internal {
 
-// rechecks
-bool is_previous_paths_different(const path_unordered_set &previous_paths,
-                                 const path_unordered_set &current_paths) {
-  return std::any_of(previous_paths.begin(), previous_paths.end(),
-                     [&](const internal::Path &p) {
-                       return current_paths.find(p) == current_paths.end();
-                     });
-}
-
 // Aggregates
-
-std::string aggregate(const std::vector<std::string> &list) {
-  return fmt::format("{}", fmt::join(list, " "));
-}
-
-std::string aggregate(const std::unordered_set<std::string> &list) {
-  return fmt::format("{}", fmt::join(list, " "));
-}
 
 std::string aggregate(const buildcc::internal::fs_unordered_set &paths) {
   std::vector<std::string> agg;
