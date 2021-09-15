@@ -26,7 +26,7 @@ namespace buildcc::internal {
 
 // Aggregates
 template <typename T> std::string aggregate(const T &list) {
-  return fmt::format("{}", fmt::join(list, ", "));
+  return fmt::format("{}", fmt::join(list, " "));
 }
 
 std::string aggregate(const buildcc::internal::fs_unordered_set &paths);
