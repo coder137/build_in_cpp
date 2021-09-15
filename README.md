@@ -24,6 +24,7 @@ Build C, C++ and ASM files in C++
   - Tiny Process Library v2.0.4
   - fmt v8.0.1
   - spdlog v1.9.2
+  - CppUTest v4.0
 
 # General Information
 
