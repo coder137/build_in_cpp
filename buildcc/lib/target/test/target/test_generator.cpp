@@ -25,6 +25,24 @@ TEST_GROUP(GeneratorTestGroup)
 
 fs::path BUILD_DIR = "intermediate/generator";
 
+TEST(GeneratorTestGroup, Generator_AddPregenerateCb) {
+  fs::path TEST_BUILD_DIR = BUILD_DIR / "AddPregenerateCb";
+  fs::create_directories(TEST_BUILD_DIR);
+
+  buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+  CHECK_THROWS(std::exception,
+               generator.AddPregenerateCb(std::function<void(void)>()));
+}
+
+TEST(GeneratorTestGroup, Generator_AddPostgenerateCb) {
+  fs::path TEST_BUILD_DIR = BUILD_DIR / "AddPostgenerateCb";
+  fs::create_directories(TEST_BUILD_DIR);
+
+  buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+  CHECK_THROWS(std::exception,
+               generator.AddPostgenerateCb(std::function<void(void)>()));
+}
+
 TEST(GeneratorTestGroup, Generator_AddInfo) {
   fs::path TEST_BUILD_DIR = BUILD_DIR / "AddInfo";
   fs::create_directories(TEST_BUILD_DIR);
@@ -381,8 +399,9 @@ TEST(GeneratorTestGroup, Generator_AddCustomRegenerate) {
          "data/dummy_main.c"},
         true);
 
-    generator.AddCustomRegenerateCb(
-        buildcc::base::custom_regenerate_cb_params());
+    CHECK_THROWS(std::exception,
+                 generator.AddCustomRegenerateCb(
+                     buildcc::base::custom_regenerate_cb_params()));
     generator.Build();
   }
 
