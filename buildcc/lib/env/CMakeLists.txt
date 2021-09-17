@@ -2,6 +2,7 @@
 if (${TESTING})
     add_library(mock_env STATIC
         mock/logging.cpp
+        mock/assert_fatal.cpp
         src/env.cpp
     )
     target_include_directories(mock_env PUBLIC 
@@ -16,6 +17,7 @@ endif()
 
 set(ENV_SRCS
     src/env.cpp
+    src/assert_fatal.cpp
     src/logging.cpp
     include/env/assert_fatal.h
     include/env/env.h

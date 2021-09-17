@@ -34,16 +34,17 @@ void Generator::AddGenInfo(const std::string &name,
 }
 
 void Generator::AddCustomRegenerateCb(const custom_regenerate_cb_params &cb) {
-  if (cb) {
-    custom_regenerate_cb_ = cb;
-  }
+  ASSERT_FATAL(cb, "Bad function: cb");
+  custom_regenerate_cb_ = cb;
 }
 
 void Generator::AddPregenerateCb(const std::function<void(void)> &cb) {
+  ASSERT_FATAL(cb, "Bad function: cb");
   pregenerate_cb_ = cb;
 }
 
 void Generator::AddPostgenerateCb(const std::function<void(void)> &cb) {
+  ASSERT_FATAL(cb, "Bad function: cb");
   postgenerate_cb_ = cb;
 }
 

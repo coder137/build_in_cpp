@@ -23,24 +23,36 @@
 
 namespace buildcc::env {
 
-class assert_exception : public std::exception {
-public:
-  assert_exception(const char *const message) : message_(message) {}
+/**
+ * @brief During Release -> std::terminate
+ * During Unit Test -> throw std::exception
+ */
+[[noreturn]] void assert_handle_fatal();
 
-private:
-  virtual const char *what() const throw() { return message_; }
-
-private:
-  const char *const message_;
-};
-
-inline void assert_fatal(bool expression, const std::string &message) {
-  if (!expression) {
-    buildcc::env::log_critical("assert", message);
-    throw assert_exception(message.c_str());
+template <bool expr> inline void assert_fatal(const char *message) {
+  if constexpr (!expr) {
+    env::log_critical("assert", message);
+    assert_handle_fatal();
   }
 }
 
+template <bool expr> inline void assert_fatal(const std::string &message) {
+  assert_fatal<expr>(message.c_str());
+}
+
+inline void assert_fatal(bool expression, const char *message) {
+  if (!expression) {
+    assert_fatal<false>(message);
+  }
+}
+
+inline void assert_fatal(bool expression, const std::string &message) {
+  assert_fatal(expression, message.c_str());
+}
+
 } // namespace buildcc::env
+
+#define ASSERT_FATAL(expr, message)                                            \
+  ((expr) ? static_cast<void>(0) : buildcc::env::assert_fatal<false>(message))
 
 #endif

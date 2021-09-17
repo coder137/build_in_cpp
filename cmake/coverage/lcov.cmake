@@ -15,15 +15,16 @@ else()
     )
     set(LCOV_REMOVE_OPTIONS 
         "/usr*"
-        "*/generated*"
         "*/CppUTestExt*"
+        "*/CppUTest*"
+        "*/fmt*"
         "*/spdlog*"
         "*/flatbuffers*"
-        "*/CppUTest*"
-        "*/test*"
-        "*/fmt*"
         "*/taskflow*"
+        "*/generated*"
+        "*/test*"
         "*/mock*"
+        "*/private*"
     )
     add_custom_target(lcov_coverage
         COMMAND ${lcov_program} --zerocounters --directory ${CMAKE_SOURCE_DIR} ${LCOV_RC_OPTIONS}

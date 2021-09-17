@@ -35,21 +35,8 @@ TEST(PathTestGroup, Path_ExistingPathStaticConstructor) {
 }
 
 TEST(PathTestGroup, Path_ExistingPathStaticConstructor_ThrowFileException) {
-  CHECK_THROWS(
-      buildcc::env::assert_exception,
-      buildcc::internal::Path::CreateExistingPath("random_path_main.cpp"));
-
-  try {
-    auto existing_filename =
-        buildcc::internal::Path::CreateExistingPath("random_path_main.cpp");
-  } catch (const buildcc::env::assert_exception &e) {
-    // * NOTE, We cannot check this since different compilers might
-    // have different error messages
-    // STRCMP_EQUAL(
-    //     e.what(),
-    //     "filesystem error: cannot get file time: No such file or directory "
-    //     "[random_path_main.cpp]");
-  }
+  CHECK_THROWS(std::exception, buildcc::internal::Path::CreateExistingPath(
+                                   "random_path_main.cpp"));
 }
 
 TEST(PathTestGroup, PathConstructor_NewPathStaticConstructor) {

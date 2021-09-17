@@ -40,14 +40,14 @@ protected:
   void RecheckChanged(
       const T &previous, const T &current,
       const std::function<void(void)> &callback = []() {}) {
+    ASSERT_FATAL(callback, "Bad function: callback");
+
     if (dirty_) {
       return;
     }
 
     if (previous != current) {
-      if (callback) {
-        callback();
-      }
+      callback();
       dirty_ = true;
     }
   }
@@ -58,6 +58,10 @@ protected:
       const std::function<void(void)> &path_removed_cb = []() {},
       const std::function<void(void)> &path_added_cb = []() {},
       const std::function<void(void)> &path_updated_cb = []() {}) {
+    ASSERT_FATAL(path_removed_cb, "Bad function: path_removed_cb");
+    ASSERT_FATAL(path_added_cb, "Bad function: path_added_cb");
+    ASSERT_FATAL(path_updated_cb, "Bad function: path_updated_cb");
+
     if (dirty_) {
       return;
     }
@@ -69,38 +73,27 @@ protected:
                       return current_path.find(p) == current_path.end();
                     });
     if (removed) {
-      if (path_removed_cb) {
-        path_removed_cb();
-      }
+      path_removed_cb();
       dirty_ = true;
       return;
     }
 
-    for (const auto &path : current_path) {
-      auto iter = previous_path.find(path);
-
-      if (iter == previous_path.end()) {
-        // * New path added
-        if (path_added_cb) {
-          path_added_cb();
-        }
-        dirty_ = true;
-      } else {
-        // * Path is updated
-        if (path.GetLastWriteTimestamp() > iter->GetLastWriteTimestamp()) {
-          if (path_updated_cb) {
-            path_updated_cb();
-          }
-          dirty_ = true;
-        } else {
-          // * Do nothing
-        }
-      }
-
-      if (dirty_) {
-        break;
-      }
-    }
+    dirty_ = std::any_of(current_path.begin(), current_path.end(),
+                         [&](const internal::Path &p) {
+                           const auto find = previous_path.find(p);
+                           bool added_cond = (find == previous_path.end());
+                           if (added_cond) {
+                             path_added_cb();
+                             return true;
+                           }
+                           bool updated_cond = p.GetLastWriteTimestamp() >
+                                               find->GetLastWriteTimestamp();
+                           if (updated_cond) {
+                             path_updated_cb();
+                             return true;
+                           }
+                           return false;
+                         });
   }
 
 private:
