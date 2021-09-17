@@ -8,6 +8,14 @@ target_link_libraries(target_interface INTERFACE
     mock_target
 )
 
+# Interfaces
+add_executable(test_builder_interface
+    test_builder_interface.cpp
+)
+target_link_libraries(test_builder_interface PRIVATE target_interface)
+
+add_test(NAME test_builder_interface COMMAND test_builder_interface)
+
 # Generator
 add_executable(test_generator
     test_generator.cpp
