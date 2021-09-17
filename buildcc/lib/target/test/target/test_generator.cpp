@@ -39,8 +39,7 @@ TEST(GeneratorTestGroup, Generator_AddInfo) {
                         "data/dummy_main.c"},
                        true);
 
-  CHECK_THROWS(buildcc::env::assert_exception,
-               generator.AddGenInfo("gcc_1", {}, {}, {}, true));
+  CHECK_THROWS(std::exception, generator.AddGenInfo("gcc_1", {}, {}, {}, true));
 }
 
 TEST(GeneratorTestGroup, Generator_Build) {
