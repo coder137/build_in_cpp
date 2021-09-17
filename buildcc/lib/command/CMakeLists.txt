@@ -16,6 +16,12 @@ if (${TESTING})
     )
     target_compile_options(mock_command PUBLIC ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_FLAGS})
     target_link_options(mock_command PUBLIC ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS})
+
+    # Tests
+    add_executable(test_command test/test_command.cpp)
+    target_link_libraries(test_command PRIVATE mock_command)
+    
+    add_test(NAME test_command COMMAND test_command)
 endif()
 
 set(COMMAND_SRCS
