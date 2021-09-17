@@ -36,25 +36,22 @@ std::string Command::Construct(
     const std::unordered_map<const char *, std::string> &arguments) const {
   // Construct your arguments
   fmt::dynamic_format_arg_store<fmt::format_context> store;
-  std::string constructed_string;
-  try {
+  std::for_each(default_values_.cbegin(), default_values_.cend(),
+                [&store](const std::pair<const char *, std::string> &p) {
+                  env::assert_fatal(p.first != NULL,
+                                    "Default Argument must not be NULL");
+                  store.push_back(fmt::arg(p.first, p.second));
+                });
 
-    std::for_each(default_values_.cbegin(), default_values_.cend(),
-                  [&store](const std::pair<const char *, std::string> &p) {
-                    store.push_back(fmt::arg(p.first, p.second));
-                  });
+  std::for_each(arguments.cbegin(), arguments.cend(),
+                [&store](const std::pair<const char *, std::string> &p) {
+                  env::assert_fatal(p.first != NULL,
+                                    "Argument must not be NULL");
+                  store.push_back(fmt::arg(p.first, p.second));
+                });
 
-    std::for_each(arguments.cbegin(), arguments.cend(),
-                  [&store](const std::pair<const char *, std::string> &p) {
-                    store.push_back(fmt::arg(p.first, p.second));
-                  });
-
-    // Construct your command
-    constructed_string = fmt::vformat(format, store);
-  } catch (const std::exception &e) {
-    env::assert_fatal(false, e.what());
-  }
-  return constructed_string;
+  // Construct your command
+  return fmt::vformat(format, store);
 }
 
 } // namespace buildcc
