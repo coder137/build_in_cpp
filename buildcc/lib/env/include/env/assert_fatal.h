@@ -24,8 +24,8 @@
 namespace buildcc::env {
 
 /**
- * @brief During RELEASE calls std::terminate
- * TODO, During DEBUG/Unit Test calls throw std::exception
+ * @brief During Release -> std::terminate
+ * During Unit Test -> throw std::exception
  */
 [[noreturn]] void assert_handle_fatal();
 
