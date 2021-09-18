@@ -78,22 +78,27 @@ protected:
       return;
     }
 
-    dirty_ = std::any_of(current_path.begin(), current_path.end(),
-                         [&](const internal::Path &p) {
-                           const auto find = previous_path.find(p);
-                           bool added_cond = (find == previous_path.end());
-                           if (added_cond) {
-                             path_added_cb();
-                             return true;
-                           }
-                           bool updated_cond = p.GetLastWriteTimestamp() >
-                                               find->GetLastWriteTimestamp();
-                           if (updated_cond) {
-                             path_updated_cb();
-                             return true;
-                           }
-                           return false;
-                         });
+    dirty_ = std::any_of(
+        current_path.cbegin(), current_path.cend(),
+        [&](const internal::Path &p) -> bool {
+          bool dirty = false;
+          const auto find = previous_path.find(p);
+          const bool added_cond = (find == previous_path.end());
+          if (added_cond) {
+            path_added_cb();
+            dirty = true;
+          } else {
+            const bool updated_cond =
+                (p.GetLastWriteTimestamp() > find->GetLastWriteTimestamp());
+            if (updated_cond) {
+              path_updated_cb();
+              dirty = true;
+            } else {
+              dirty = false;
+            }
+          }
+          return dirty;
+        });
   }
 
 private:
