@@ -1,0 +1,164 @@
+#include "env/util.h"
+
+#include <iostream>
+
+#include "env/host_os.h"
+
+// NOTE, Make sure all these includes are AFTER the system and header includes
+#include "CppUTest/CommandLineTestRunner.h"
+#include "CppUTest/MemoryLeakDetectorNewMacros.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/Utest.h"
+
+// clang-format off
+TEST_GROUP(EnvUtilTestGroup)
+{
+};
+// clang-format on
+
+// SaveFile
+
+TEST(EnvUtilTestGroup, Util_SaveFile_NullptrInput) {
+  constexpr const char *const FILENAME = "NullptrInput.txt";
+  fs::remove(FILENAME);
+
+  const char *data = nullptr;
+  bool save = buildcc::env::SaveFile(FILENAME, data, 1, false);
+  CHECK_FALSE(save);
+}
+
+TEST(EnvUtilTestGroup, Util_SaveFile_NullptrName) {
+  const char *filename = nullptr;
+  bool save = buildcc::env::SaveFile(filename, "Hello", false);
+  CHECK_FALSE(save);
+}
+
+TEST(EnvUtilTestGroup, Util_SaveFile_BadWrite) {
+  constexpr const char *const FILENAME = "BadWrite.txt";
+  fs::remove(FILENAME);
+  bool save = buildcc::env::SaveFile(FILENAME, "Hello", -1, false);
+  CHECK_FALSE(save);
+}
+
+TEST(EnvUtilTestGroup, Util_SaveFile_GoodWrite) {
+  constexpr const char *const FILENAME = "GoodWrite.txt";
+  fs::remove(FILENAME);
+  bool save = buildcc::env::SaveFile(FILENAME, "Hello", false);
+  CHECK_TRUE(save);
+}
+
+TEST(EnvUtilTestGroup, Util_SaveFile_BadWrite_Binary) {
+  constexpr const char *const FILENAME = "BadWrite_Binary.txt";
+  fs::remove(FILENAME);
+  bool save = buildcc::env::SaveFile(FILENAME, "Hello", -1, true);
+  CHECK_FALSE(save);
+}
+
+TEST(EnvUtilTestGroup, Util_SaveFile_GoodWrite_Binary) {
+  constexpr const char *const FILENAME = "GoodWrite_Binary.txt";
+  fs::remove(FILENAME);
+  bool save = buildcc::env::SaveFile(FILENAME, "Hello", true);
+  CHECK_TRUE(save);
+}
+
+TEST(EnvUtilTestGroup, Util_SaveFile_CheckDirectory) {
+  // NOTE, This is a directory
+  constexpr const char *const DIRNAME = "my_random_directory";
+  fs::create_directory(DIRNAME);
+  bool save = buildcc::env::SaveFile(DIRNAME, "Hello", true);
+  CHECK_FALSE(save);
+}
+
+TEST(EnvUtilTestGroup, Util_SaveFile_CannotWrite) {
+  constexpr const char *const FILENAME = "CannotWrite.txt";
+  fs::remove(FILENAME);
+  bool save = buildcc::env::SaveFile(FILENAME, "Hello", false);
+  CHECK_TRUE(save);
+
+  std::error_code err;
+  fs::permissions(FILENAME, fs::perms::none, err);
+  if (err) {
+    FAIL("Cannot disable file permissions");
+  }
+
+  save = buildcc::env::SaveFile(FILENAME, "Hello", false);
+  CHECK_FALSE(save);
+}
+
+// Load File
+TEST(EnvUtilTestGroup, Util_LoadFile_CheckDirectory) {
+  // NOTE, This is a directory
+  constexpr const char *const DIRNAME = "my_random_directory";
+  fs::create_directory(DIRNAME);
+  std::string str;
+  bool load = buildcc::env::LoadFile(DIRNAME, false, &str);
+  std::cout << str << std::endl;
+  CHECK_FALSE(load);
+}
+
+TEST(EnvUtilTestGroup, Util_LoadFile_NullptrName) {
+  const char *filename = nullptr;
+  std::string str;
+  bool load = buildcc::env::LoadFile(filename, false, &str);
+  CHECK_FALSE(load);
+}
+
+TEST(EnvUtilTestGroup, Util_LoadFile_NullptrBuf) {
+  constexpr const char *const FILENAME = "NullptrBuf.txt";
+
+  std::string *str = nullptr;
+  bool load = buildcc::env::LoadFile(FILENAME, false, str);
+  CHECK_FALSE(load);
+}
+
+TEST(EnvUtilTestGroup, Util_LoadFile_NullptrBufAndName) {
+  const char *filename = nullptr;
+  std::string *str = nullptr;
+  bool load = buildcc::env::LoadFile(filename, false, str);
+  CHECK_FALSE(load);
+}
+
+TEST(EnvUtilTestGroup, Util_LoadFile_ReadBinary) {
+  constexpr const char *const FILENAME = "ReadBinary.txt";
+
+  char data[] = {0x00, 0x01, 0x02, 0x03, 0x04};
+  bool save = buildcc::env::SaveFile(FILENAME, data, sizeof(data), true);
+  CHECK_TRUE(save);
+
+  std::string str;
+  bool load = buildcc::env::LoadFile(FILENAME, true, &str);
+  MEMCMP_EQUAL(data, str.data(), sizeof(data));
+  CHECK_TRUE(load);
+}
+
+TEST(EnvUtilTestGroup, Util_LoadFile_ReadTxt) {
+  constexpr const char *const FILENAME = "ReadTxt.txt";
+
+  bool save = buildcc::env::SaveFile(FILENAME, "ReadTxt", false);
+  CHECK_TRUE(save);
+
+  std::string str;
+  bool load = buildcc::env::LoadFile(FILENAME, false, &str);
+  STRCMP_EQUAL(str.c_str(), "ReadTxt");
+  CHECK_TRUE(load);
+}
+
+TEST(EnvUtilTestGroup, Util_LoadFile_CannotOpen) {
+  constexpr const char *const FILENAME = "CannotOpen.txt";
+  buildcc::env::SaveFile(FILENAME, "Random Data", false);
+
+  // Remove read permission
+  std::error_code err;
+  fs::permissions(FILENAME, fs::perms::none, err);
+  if (err) {
+    FAIL("Cannot disable file permissions");
+  }
+
+  std::string str;
+  bool load = buildcc::env::LoadFile(FILENAME, true, &str);
+  CHECK_FALSE(load);
+}
+
+int main(int ac, char **av) {
+  return CommandLineTestRunner::RunAllTests(ac, av);
+}

@@ -10,9 +10,18 @@ if (${TESTING})
     )
     target_link_libraries(mock_env PUBLIC
         fmt::fmt-header-only
+        CppUTest
+        CppUTestExt
+        gcov
     )
     target_compile_options(mock_env PUBLIC ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_FLAGS})
     target_link_options(mock_env PUBLIC ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS})
+
+    # Tests
+    add_executable(test_env_util test/test_env_util.cpp)
+    target_link_libraries(test_env_util PRIVATE mock_env)
+
+    add_test(NAME test_env_util COMMAND test_env_util)
 endif()
 
 set(ENV_SRCS
