@@ -41,22 +41,45 @@ namespace fs = std::filesystem;
 
 namespace buildcc::env {
 
+/**
+ * Condition under which code throws and should terminate
+ * 1: ofs.write -> badbit
+ */
 inline bool SaveFile(const char *name, const char *buf, size_t len,
                      bool binary) {
+  if (buf == nullptr) {
+    return false;
+  }
   std::ofstream ofs(name, binary ? std::ofstream::binary : std::ofstream::out);
   if (!ofs.is_open()) {
     return false;
   }
-  ofs.write(buf, len);
-  return !ofs.bad();
+
+  // * 1
+  std::ostream &os = ofs.write(buf, len);
+  return !os.bad();
 }
 
 inline bool SaveFile(const char *name, const std::string &buf, bool binary) {
   return SaveFile(name, buf.c_str(), buf.size(), binary);
 }
 
+/**
+ * Condition under which code throws and should terminate
+ * 1: fs::file_size -> filesystem_error, bad_alloc error
+ * 2: resize -> length_error, bad_alloc error
+ * 3: ifs.read -> badbit
+ * 4:
+ */
 inline bool LoadFile(const char *name, bool binary, std::string *buf) {
-  if (fs::is_directory(name)) {
+  if (name == nullptr || buf == nullptr) {
+    return false;
+  }
+  std::error_code errcode;
+  if (fs::is_directory(name, errcode)) {
+    return false;
+  }
+  if (errcode) {
     return false;
   }
   std::ifstream ifs(name, binary ? std::ifstream::binary : std::ifstream::in);
@@ -65,12 +88,17 @@ inline bool LoadFile(const char *name, bool binary, std::string *buf) {
   }
   if (binary) {
     // The fastest way to read a file into a string.
+    // If we cannot get the file size we should terminate
+    // * 1
     auto size = static_cast<size_t>(fs::file_size(name));
+    // * 2
     buf->resize(size);
+    // * 3
     // flawfinder: ignore
     ifs.read(buf->data(), buf->size());
   } else {
     // This is slower, but works correctly on all platforms for text files.
+    // * 4
     std::ostringstream oss;
     oss << ifs.rdbuf();
     *buf = oss.str();
