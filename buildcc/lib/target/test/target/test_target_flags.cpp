@@ -36,7 +36,7 @@ TEST_GROUP(TargetTestPreprocessorFlagGroup)
 };
 // clang-format on
 
-static const fs::path target_source_intermediate_path =
+static const fs::path target_preprocessorflag_intermediate_path =
     fs::path(BUILD_TARGET_FLAG_INTERMEDIATE_DIR) / gcc.GetName();
 
 TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
@@ -44,7 +44,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
   constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
 
   auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
-  auto intermediate_path = target_source_intermediate_path / NAME;
+  auto intermediate_path = target_preprocessorflag_intermediate_path / NAME;
 
   // Delete
   fs::remove_all(intermediate_path);
@@ -73,7 +73,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
   constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
 
   auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
-  auto intermediate_path = target_source_intermediate_path / NAME;
+  auto intermediate_path = target_preprocessorflag_intermediate_path / NAME;
 
   // Delete
   fs::remove_all(intermediate_path);
