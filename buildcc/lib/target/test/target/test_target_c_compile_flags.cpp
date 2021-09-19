@@ -19,6 +19,8 @@
 #include "CppUTest/Utest.h"
 #include "CppUTestExt/MockSupport.h"
 
+// ------------- C COMPILE FLAGS ---------------
+
 // clang-format off
 TEST_GROUP(TargetTestCCompileFlagsGroup)
 {
@@ -32,15 +34,15 @@ static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
                                           "gcc", "as", "gcc", "g++", "ar",
                                           "ld");
 
-static const fs::path target_source_intermediate_path =
-    fs::path(BUILD_TARGET_C_COMPILE_INTERMEDIATE_DIR) / gcc.GetName();
+static const fs::path target_cflag_intermediate_path =
+    fs::path(BUILD_TARGET_FLAG_INTERMEDIATE_DIR) / gcc.GetName();
 
 TEST(TargetTestCCompileFlagsGroup, Target_AddCompileFlag) {
   constexpr const char *const NAME = "AddCCompileFlag.exe";
   constexpr const char *const DUMMY_MAIN = "dummy_main.c";
 
   auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
-  auto intermediate_path = target_source_intermediate_path / NAME;
+  auto intermediate_path = target_cflag_intermediate_path / NAME;
 
   // Delete
   fs::remove_all(intermediate_path);
@@ -69,7 +71,7 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
   constexpr const char *const DUMMY_MAIN = "dummy_main.c";
 
   auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
-  auto intermediate_path = target_source_intermediate_path / NAME;
+  auto intermediate_path = target_cflag_intermediate_path / NAME;
 
   // Delete
   fs::remove_all(intermediate_path);
@@ -111,7 +113,6 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
 }
 
 int main(int ac, char **av) {
-  buildcc::env::init(BUILD_SCRIPT_SOURCE,
-                     BUILD_TARGET_C_COMPILE_INTERMEDIATE_DIR);
+  buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_TARGET_FLAG_INTERMEDIATE_DIR);
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
