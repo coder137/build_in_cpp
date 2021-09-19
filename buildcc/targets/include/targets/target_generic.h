@@ -24,64 +24,109 @@
 
 namespace buildcc {
 
-// TODO, Complete this for other options
-struct SyncTargetOptions {
-  bool preprocessor_flags_{false};
-  bool common_compile_flags_{false};
-  bool c_compile_flags_{false};
-  bool cpp_compile_flags_{false};
-  bool link_flags_{false};
+struct CopyTarget {
+  // TODO, Add other options
+  enum class Option {
+    Defaults,
+    PreprocessorFlags,
+    CommonCompileFlags,
+    AsmCompileFlags,
+    CCompileFlags,
+    CppCompileFlags,
+    LinkFlags,
+  };
 
-  SyncTargetOptions() {}
-  SyncTargetOptions(bool preprocessor_flags, bool common_compile_flags,
-                    bool c_compile_flags, bool cpp_compile_flags,
-                    bool link_flags)
-      : preprocessor_flags_(preprocessor_flags),
-        common_compile_flags_(common_compile_flags),
-        c_compile_flags_(c_compile_flags),
-        cpp_compile_flags_(cpp_compile_flags), link_flags_(link_flags) {}
+  CopyTarget(base::Target &dest, const base::Target &source)
+      : dest_(dest), source_(source) {}
+  CopyTarget(const CopyTarget &target) = delete;
+  CopyTarget(CopyTarget &&target) = delete;
+
+  CopyTarget &Add(Option opt) {
+    options_.insert(opt);
+    return *this;
+  }
+
+  CopyTarget &Add(std::initializer_list<Option> opts) {
+    options_.insert(opts.begin(), opts.end());
+    return *this;
+  }
+
+  void Copy() {
+    for (Option opt : options_) {
+      switch (opt) {
+      case Option::Defaults:
+        Defaults();
+        break;
+
+      case Option::PreprocessorFlags:
+        CopyCb<std::unordered_set<std::string>, std::string>(
+            source_.GetCurrentPreprocessorFlags(),
+            [&](const std::string &f) { dest_.AddPreprocessorFlag(f); });
+        break;
+
+      case Option::CommonCompileFlags:
+        CopyCb<std::unordered_set<std::string>, std::string>(
+            source_.GetCurrentCommonCompileFlags(),
+            [&](const std::string &f) { dest_.AddCommonCompileFlag(f); });
+        break;
+
+      case Option::AsmCompileFlags:
+        CopyCb<std::unordered_set<std::string>, std::string>(
+            source_.GetCurrentAsmCompileFlags(),
+            [&](const std::string &f) { dest_.AddAsmCompileFlag(f); });
+        break;
+
+      case Option::CCompileFlags:
+        CopyCb<std::unordered_set<std::string>, std::string>(
+            source_.GetCurrentCCompileFlags(),
+            [&](const std::string &f) { dest_.AddCCompileFlag(f); });
+        break;
+
+      case Option::CppCompileFlags:
+        CopyCb<std::unordered_set<std::string>, std::string>(
+            source_.GetCurrentCppCompileFlags(),
+            [&](const std::string &f) { dest_.AddCppCompileFlag(f); });
+        break;
+
+      case Option::LinkFlags:
+        CopyCb<std::unordered_set<std::string>, std::string>(
+            source_.GetCurrentLinkFlags(),
+            [&](const std::string &f) { dest_.AddLinkFlag(f); });
+        break;
+
+      default:
+        env::assert_fatal<false>("Invalid Option");
+        break;
+      }
+    }
+  }
+
+private:
+  void Defaults() {
+    dest_.target_ext_ = source_.target_ext_;
+    dest_.obj_ext_ = source_.obj_ext_;
+    dest_.prefix_include_dir_ = source_.prefix_include_dir_;
+    dest_.prefix_lib_dir_ = source_.prefix_lib_dir_;
+    dest_.compile_command_ = source_.compile_command_;
+    dest_.link_command_ = source_.link_command_;
+  }
+
+  template <typename list_type, typename var_type>
+  void CopyCb(
+      const list_type &copy_source_list,
+      const std::function<void(const var_type &)> &cb = [](const var_type &) {
+      }) {
+    ASSERT_FATAL(cb, "Bad Function: cb");
+    for (const var_type &s : copy_source_list) {
+      cb(s);
+    }
+  }
+
+private:
+  const base::Target &source_;
+  base::Target &dest_;
+  std::unordered_set<Option> options_;
 };
-
-inline void
-SyncTargets(base::Target &dest, const base::Target &source,
-            const SyncTargetOptions &options = SyncTargetOptions()) {
-  dest.target_ext_ = source.target_ext_;
-  dest.obj_ext_ = source.obj_ext_;
-  dest.prefix_include_dir_ = source.prefix_include_dir_;
-  dest.prefix_lib_dir_ = source.prefix_lib_dir_;
-  dest.compile_command_ = source.compile_command_;
-  dest.link_command_ = source.link_command_;
-
-  if (options.preprocessor_flags_) {
-    for (const auto &flag : source.GetCurrentPreprocessorFlags()) {
-      dest.AddPreprocessorFlag(flag);
-    }
-  }
-
-  if (options.common_compile_flags_) {
-    for (const auto &flag : source.GetCurrentCommonCompileFlags()) {
-      dest.AddCommonCompileFlag(flag);
-    }
-  }
-
-  if (options.c_compile_flags_) {
-    for (const auto &flag : source.GetCurrentCCompileFlags()) {
-      dest.AddCCompileFlag(flag);
-    }
-  }
-
-  if (options.cpp_compile_flags_) {
-    for (const auto &flag : source.GetCurrentCppCompileFlags()) {
-      dest.AddCppCompileFlag(flag);
-    }
-  }
-
-  if (options.link_flags_) {
-    for (const auto &flag : source.GetCurrentLinkFlags()) {
-      dest.AddLinkFlag(flag);
-    }
-  }
-}
 
 class ExecutableTarget_generic : public base::Target {
 public:
@@ -106,8 +151,18 @@ public:
       env::assert_fatal(false, "Compiler ID not supported");
       break;
     }
-    SyncTargets(*this, *target,
-                SyncTargetOptions(false, true, true, true, true));
+
+    // Copy these parameters
+    CopyTarget(*this, *target)
+        .Add({
+            CopyTarget::Option::Defaults,
+            CopyTarget::Option::CommonCompileFlags,
+            CopyTarget::Option::AsmCompileFlags,
+            CopyTarget::Option::CCompileFlags,
+            CopyTarget::Option::CppCompileFlags,
+            CopyTarget::Option::LinkFlags,
+        })
+        .Copy();
   }
   ~ExecutableTarget_generic() {}
 };
@@ -135,8 +190,17 @@ public:
       env::assert_fatal(false, "Compiler ID not supported");
       break;
     }
-    SyncTargets(*this, *target,
-                SyncTargetOptions(false, true, true, true, true));
+    // Copy these parameters
+    CopyTarget(*this, *target)
+        .Add({
+            CopyTarget::Option::Defaults,
+            CopyTarget::Option::CommonCompileFlags,
+            CopyTarget::Option::AsmCompileFlags,
+            CopyTarget::Option::CCompileFlags,
+            CopyTarget::Option::CppCompileFlags,
+            CopyTarget::Option::LinkFlags,
+        })
+        .Copy();
   }
 };
 
@@ -163,8 +227,17 @@ public:
       env::assert_fatal(false, "Compiler ID not supported");
       break;
     }
-    SyncTargets(*this, *target,
-                SyncTargetOptions(false, true, true, true, true));
+    // Copy these parameters
+    CopyTarget(*this, *target)
+        .Add({
+            CopyTarget::Option::Defaults,
+            CopyTarget::Option::CommonCompileFlags,
+            CopyTarget::Option::AsmCompileFlags,
+            CopyTarget::Option::CCompileFlags,
+            CopyTarget::Option::CppCompileFlags,
+            CopyTarget::Option::LinkFlags,
+        })
+        .Copy();
   }
 };
 
@@ -192,8 +265,17 @@ public:
       env::assert_fatal(false, "Compiler ID not supported");
       break;
     }
-    SyncTargets(*this, *target,
-                SyncTargetOptions(false, true, true, true, true));
+    // Copy these parameters
+    CopyTarget(*this, *target)
+        .Add({
+            CopyTarget::Option::Defaults,
+            CopyTarget::Option::CommonCompileFlags,
+            CopyTarget::Option::AsmCompileFlags,
+            CopyTarget::Option::CCompileFlags,
+            CopyTarget::Option::CppCompileFlags,
+            CopyTarget::Option::LinkFlags,
+        })
+        .Copy();
   }
 };
 

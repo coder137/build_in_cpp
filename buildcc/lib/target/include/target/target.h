@@ -135,6 +135,7 @@ public:
   // * Flags
   void AddPreprocessorFlag(const std::string &flag);
   void AddCommonCompileFlag(const std::string &flag);
+  void AddAsmCompileFlag(const std::string &flag);
   void AddCCompileFlag(const std::string &flag);
   void AddCppCompileFlag(const std::string &flag);
   void AddLinkFlag(const std::string &flag);
@@ -189,6 +190,9 @@ public:
   }
   const std::unordered_set<std::string> &GetCurrentCommonCompileFlags() const {
     return current_common_compile_flags_;
+  }
+  const std::unordered_set<std::string> &GetCurrentAsmCompileFlags() const {
+    return current_asm_compile_flags_;
   }
   const std::unordered_set<std::string> &GetCurrentCCompileFlags() const {
     return current_c_compile_flags_;
@@ -309,6 +313,7 @@ private:
 
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_common_compile_flags_;
+  std::unordered_set<std::string> current_asm_compile_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;
   std::unordered_set<std::string> current_cpp_compile_flags_;
   std::unordered_set<std::string> current_link_flags_;
@@ -317,6 +322,7 @@ private:
   internal::Files<internal::fs_unordered_set> current_link_dependencies_;
 
   // TODO, Might not need to be persistent
+  std::string aggregated_asm_compile_flags_;
   std::string aggregated_c_compile_flags_;
   std::string aggregated_cpp_compile_flags_;
 

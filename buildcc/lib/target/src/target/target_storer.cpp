@@ -63,6 +63,8 @@ bool Target::Store() {
       internal::CreateFbsVectorString(builder, current_preprocessor_flags_);
   auto fbs_common_compile_flags =
       internal::CreateFbsVectorString(builder, current_common_compile_flags_);
+  auto fbs_asm_compile_flags =
+      internal::CreateFbsVectorString(builder, current_asm_compile_flags_);
   auto fbs_c_compile_flags =
       internal::CreateFbsVectorString(builder, current_c_compile_flags_);
   auto fbs_cpp_compile_flags =
@@ -79,8 +81,9 @@ bool Target::Store() {
       builder, name_.c_str(), fbs_target_type, &fbs_source_files,
       &fbs_header_files, &fbs_lib_deps, &fbs_external_lib_deps,
       &fbs_include_dirs, &fbs_lib_dirs, &fbs_preprocessor_flags,
-      &fbs_common_compile_flags, &fbs_c_compile_flags, &fbs_cpp_compile_flags,
-      &fbs_link_flags, &fbs_compile_dependencies, &fbs_link_dependencies);
+      &fbs_common_compile_flags, &fbs_asm_compile_flags, &fbs_c_compile_flags,
+      &fbs_cpp_compile_flags, &fbs_link_flags, &fbs_compile_dependencies,
+      &fbs_link_dependencies);
   fbs::FinishTargetBuffer(builder, fbs_target);
 
   auto file_path = GetBinaryPath();

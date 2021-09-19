@@ -90,6 +90,9 @@ FileExtType Target::GetFileExtType(const fs::path &filepath) const {
 
 std::optional<std::string> Target::GetCompiledFlags(FileExtType type) const {
   switch (type) {
+  case FileExtType::Asm:
+    return aggregated_asm_compile_flags_;
+    break;
   case FileExtType::C:
     return aggregated_c_compile_flags_;
     break;

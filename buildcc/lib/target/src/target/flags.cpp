@@ -24,6 +24,9 @@ void Target::AddPreprocessorFlag(const std::string &flag) {
 void Target::AddCommonCompileFlag(const std::string &flag) {
   current_common_compile_flags_.insert(flag);
 }
+void Target::AddAsmCompileFlag(const std::string &flag) {
+  current_asm_compile_flags_.insert(flag);
+}
 void Target::AddCCompileFlag(const std::string &flag) {
   current_c_compile_flags_.insert(flag);
 }

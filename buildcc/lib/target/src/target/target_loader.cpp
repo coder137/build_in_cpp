@@ -58,6 +58,7 @@ bool FbsLoader::Load() {
 
   Extract(target->preprocessor_flags(), loaded_preprocessor_flags_);
   Extract(target->common_compile_flags(), loaded_common_compile_flags_);
+  Extract(target->asm_compile_flags(), loaded_asm_compile_flags_);
   Extract(target->c_compile_flags(), loaded_c_compile_flags_);
   Extract(target->cpp_compile_flags(), loaded_cpp_compile_flags_);
   Extract(target->link_flags(), loaded_link_flags_);
