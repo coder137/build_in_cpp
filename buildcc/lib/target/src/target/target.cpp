@@ -137,23 +137,21 @@ bool Target::IsValidHeader(const fs::path &headerpath) const {
   return valid;
 }
 
-std::string Target::GetCompiler(const fs::path &source) const {
-  std::string compiler;
+std::optional<std::string> Target::GetCompiler(const fs::path &source) const {
   switch (GetFileExtType(source)) {
   case FileExtType::Asm:
-    compiler = toolchain_.GetAsmCompiler();
+    return toolchain_.GetAsmCompiler();
     break;
   case FileExtType::C:
-    compiler = toolchain_.GetCCompiler();
+    return toolchain_.GetCCompiler();
     break;
   case FileExtType::Cpp:
-    compiler = toolchain_.GetCppCompiler();
+    return toolchain_.GetCppCompiler();
     break;
   default:
-    buildcc::env::assert_fatal<false>(
-        fmt::format("Invalid source {}", source.string()));
+    break;
   }
-  return compiler;
+  return {};
 }
 
 const fs::path &Target::GetCompiledSourcePath(const fs::path &source) const {
