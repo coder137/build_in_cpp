@@ -222,8 +222,8 @@ protected:
   bool IsValidSource(const fs::path &sourcepath) const;
   bool IsValidHeader(const fs::path &headerpath) const;
 
-  std::optional<std::string> GetCompiler(FileExtType type) const noexcept;
-  std::optional<std::string> GetCompiledFlags(FileExtType type) const noexcept;
+  std::optional<std::string> GetCompiler(FileExtType type) const;
+  std::optional<std::string> GetCompiledFlags(FileExtType type) const;
 
   const fs::path &GetCompiledSourcePath(const fs::path &source) const;
   internal::fs_unordered_set GetCompiledSources() const;

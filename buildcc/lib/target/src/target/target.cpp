@@ -88,8 +88,7 @@ FileExtType Target::GetFileExtType(const fs::path &filepath) const {
   return type;
 }
 
-std::optional<std::string>
-Target::GetCompiledFlags(FileExtType type) const noexcept {
+std::optional<std::string> Target::GetCompiledFlags(FileExtType type) const {
   switch (type) {
   case FileExtType::Asm:
     return aggregated_asm_compile_flags_;
@@ -138,8 +137,7 @@ bool Target::IsValidHeader(const fs::path &headerpath) const {
   return valid;
 }
 
-std::optional<std::string>
-Target::GetCompiler(FileExtType type) const noexcept {
+std::optional<std::string> Target::GetCompiler(FileExtType type) const {
   switch (type) {
   case FileExtType::Asm:
     return toolchain_.GetAsmCompiler();
