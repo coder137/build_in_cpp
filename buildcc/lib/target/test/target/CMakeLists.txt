@@ -63,18 +63,18 @@ add_executable(test_target_external_lib
 )
 target_link_libraries(test_target_external_lib PRIVATE target_interface)
 
+
+# Test target c compile flags
+add_executable(test_target_flags
+    test_target_flags.cpp
+)
+target_link_libraries(test_target_flags PRIVATE target_interface)
+
 # Test target preprocessor flags
 add_executable(test_target_preprocessor_flags
     test_target_preprocessor_flags.cpp
 )
 target_link_libraries(test_target_preprocessor_flags PRIVATE target_interface)
-
-# Test target c compile flags
-add_executable(test_target_c_compile_flags
-    test_target_c_compile_flags.cpp
-)
-target_link_libraries(test_target_c_compile_flags PRIVATE target_interface)
-
 
 # Test target link flags
 add_executable(test_target_link_flags
@@ -96,7 +96,8 @@ add_test(NAME test_target_include_dir COMMAND test_target_include_dir)
 add_test(NAME test_target_lib_dep COMMAND test_target_lib_dep)
 add_test(NAME test_target_external_lib COMMAND test_target_external_lib)
 
+add_test(NAME test_target_flags COMMAND test_target_flags)
+
 add_test(NAME test_target_preprocessor_flags COMMAND test_target_preprocessor_flags)
-add_test(NAME test_target_c_compile_flags COMMAND test_target_c_compile_flags)
 add_test(NAME test_target_link_flags COMMAND test_target_link_flags)
 add_test(NAME test_target_user_deps COMMAND test_target_user_deps)
