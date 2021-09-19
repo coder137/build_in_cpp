@@ -1,5 +1,7 @@
 #include "constants.h"
 
+#include <unistd.h>
+
 #include "expect_command.h"
 #include "expect_target.h"
 
@@ -218,6 +220,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     CHECK_FALSE(loaded_sources.find(new_source_file) == loaded_sources.end());
   }
   {
+    sleep(1);
+
     // * Force copy to trigger recompile for NEW_SOURCE
     // *2 Current file is updated
     auto file_path = source_path / NEW_SOURCE;
