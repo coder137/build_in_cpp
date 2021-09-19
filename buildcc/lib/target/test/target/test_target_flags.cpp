@@ -25,6 +25,95 @@ static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
                                           "gcc", "as", "gcc", "g++", "ar",
                                           "ld");
 
+// ------------- PREPROCESSOR FLAGS ---------------
+
+// clang-format off
+TEST_GROUP(TargetTestPreprocessorFlagGroup)
+{
+    void teardown() {
+      mock().clear();
+    }
+};
+// clang-format on
+
+static const fs::path target_source_intermediate_path =
+    fs::path(BUILD_TARGET_FLAG_INTERMEDIATE_DIR) / gcc.GetName();
+
+TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
+  constexpr const char *const NAME = "AddPreprocessorFlag.exe";
+  constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
+
+  auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
+  auto intermediate_path = target_source_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
+  simple.AddSource(DUMMY_MAIN);
+  simple.AddPreprocessorFlag("-DCOMPILE=1");
+
+  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
+  simple.Build();
+
+  mock().checkExpectations();
+
+  // Verify binary
+  buildcc::internal::FbsLoader loader(NAME, simple.GetTargetIntermediateDir());
+  bool loaded = loader.Load();
+  CHECK_TRUE(loaded);
+
+  CHECK_EQUAL(loader.GetLoadedPreprocessorFlags().size(), 1);
+}
+
+TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
+  constexpr const char *const NAME = "ChangedPreprocessorFlag.exe";
+  constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
+
+  auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
+  auto intermediate_path = target_source_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+
+  {
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.AddSource(DUMMY_MAIN);
+    simple.AddPreprocessorFlag("-DCOMPILE=1");
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    simple.Build();
+  }
+  {
+    // * Remove flag
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.AddSource(DUMMY_MAIN);
+    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    simple.Build();
+  }
+
+  {
+    // * Add flag
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.AddSource(DUMMY_MAIN);
+    simple.AddPreprocessorFlag("-DRANDOM=1");
+    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    simple.Build();
+  }
+
+  mock().checkExpectations();
+}
+
 // ------------- C COMPILE FLAGS ---------------
 
 // clang-format off
