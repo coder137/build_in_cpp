@@ -19,6 +19,12 @@
 #include "CppUTest/Utest.h"
 #include "CppUTestExt/MockSupport.h"
 
+// Constants
+
+static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
+                                          "gcc", "as", "gcc", "g++", "ar",
+                                          "ld");
+
 // ------------- C COMPILE FLAGS ---------------
 
 // clang-format off
@@ -29,10 +35,6 @@ TEST_GROUP(TargetTestCCompileFlagsGroup)
     }
 };
 // clang-format on
-
-static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
-                                          "gcc", "as", "gcc", "g++", "ar",
-                                          "ld");
 
 static const fs::path target_cflag_intermediate_path =
     fs::path(BUILD_TARGET_FLAG_INTERMEDIATE_DIR) / gcc.GetName();
@@ -103,6 +105,95 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddCCompileFlag("-std=c11");
+    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    simple.Build();
+  }
+
+  mock().checkExpectations();
+}
+
+// ------------- CPP COMPILE FLAGS ---------------
+
+// clang-format off
+TEST_GROUP(TargetTestCppCompileFlagsGroup)
+{
+    void teardown() {
+      mock().clear();
+    }
+};
+// clang-format on
+
+static const fs::path target_cppflags_intermediate_path =
+    fs::path(BUILD_TARGET_FLAG_INTERMEDIATE_DIR) / gcc.GetName();
+
+TEST(TargetTestCppCompileFlagsGroup, Target_AddCompileFlag) {
+  constexpr const char *const NAME = "AddCppCompileFlag.exe";
+  constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
+
+  auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
+  auto intermediate_path = target_cppflags_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
+  simple.AddSource(DUMMY_MAIN);
+  simple.AddCppCompileFlag("-std=c++17");
+
+  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
+  simple.Build();
+
+  mock().checkExpectations();
+
+  // Verify binary
+  buildcc::internal::FbsLoader loader(NAME, simple.GetTargetIntermediateDir());
+  bool loaded = loader.Load();
+  CHECK_TRUE(loaded);
+
+  CHECK_EQUAL(loader.GetLoadedCppCompileFlags().size(), 1);
+}
+
+TEST(TargetTestCppCompileFlagsGroup, Target_ChangedCompileFlag) {
+  constexpr const char *const NAME = "ChangedCppCompileFlag.exe";
+  constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
+
+  auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
+  auto intermediate_path = target_cppflags_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+
+  {
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.AddSource(DUMMY_MAIN);
+    simple.AddCCompileFlag("-std=c++17");
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    simple.Build();
+  }
+  {
+    // * Remove flag
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.AddSource(DUMMY_MAIN);
+    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    simple.Build();
+  }
+
+  {
+    // * Add flag
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.AddSource(DUMMY_MAIN);
+    simple.AddCCompileFlag("-std=c++17");
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);

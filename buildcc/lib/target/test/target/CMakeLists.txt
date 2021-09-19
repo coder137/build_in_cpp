@@ -75,11 +75,6 @@ add_executable(test_target_c_compile_flags
 )
 target_link_libraries(test_target_c_compile_flags PRIVATE target_interface)
 
-# Test target cpp compile flags
-add_executable(test_target_cpp_compile_flags
-    test_target_cpp_compile_flags.cpp
-)
-target_link_libraries(test_target_cpp_compile_flags PRIVATE target_interface)
 
 # Test target link flags
 add_executable(test_target_link_flags
@@ -103,6 +98,5 @@ add_test(NAME test_target_external_lib COMMAND test_target_external_lib)
 
 add_test(NAME test_target_preprocessor_flags COMMAND test_target_preprocessor_flags)
 add_test(NAME test_target_c_compile_flags COMMAND test_target_c_compile_flags)
-add_test(NAME test_target_cpp_compile_flags COMMAND test_target_cpp_compile_flags)
 add_test(NAME test_target_link_flags COMMAND test_target_link_flags)
 add_test(NAME test_target_user_deps COMMAND test_target_user_deps)

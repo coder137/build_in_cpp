@@ -15,7 +15,6 @@ inline constexpr char const * BUILD_TARGET_FLAG_INTERMEDIATE_DIR = "@CMAKE_CURRE
 
 // TODO, Remove these
 inline constexpr char const * BUILD_TARGET_PREPROCESSOR_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_preprocessor_flag";
-inline constexpr char const * BUILD_TARGET_CPP_COMPILE_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_cpp_compile_flag";
 inline constexpr char const * BUILD_TARGET_LINK_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_link_flag";
 
 inline constexpr char const * BUILD_TARGET_USER_DEPS_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_user_deps";
