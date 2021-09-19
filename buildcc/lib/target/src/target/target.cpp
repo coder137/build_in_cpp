@@ -137,8 +137,8 @@ bool Target::IsValidHeader(const fs::path &headerpath) const {
   return valid;
 }
 
-std::optional<std::string> Target::GetCompiler(const fs::path &source) const {
-  switch (GetFileExtType(source)) {
+std::optional<std::string> Target::GetCompiler(FileExtType type) const {
+  switch (type) {
   case FileExtType::Asm:
     return toolchain_.GetAsmCompiler();
     break;
