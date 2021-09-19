@@ -51,6 +51,8 @@ void Target::Build() {
   tf_.name(fmt::format("[{}] {}", toolchain_.GetName(), name_));
 
   // TODO, Optimize these
+  aggregated_asm_compile_flags_ =
+      internal::aggregate(current_asm_compile_flags_);
   aggregated_c_compile_flags_ = internal::aggregate(current_c_compile_flags_);
   aggregated_cpp_compile_flags_ =
       internal::aggregate(current_cpp_compile_flags_);
@@ -145,6 +147,7 @@ bool Target::BuildCompile(
                current_preprocessor_flags_);
   RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
                current_common_compile_flags_);
+  RecheckFlags(loader_.GetLoadedAsmCompileFlags(), current_asm_compile_flags_);
   RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
   RecheckFlags(loader_.GetLoadedCppCompileFlags(), current_cpp_compile_flags_);
   RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
