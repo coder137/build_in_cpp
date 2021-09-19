@@ -162,10 +162,9 @@ std::string Target::CompileCommand(const fs::path &current_source) const {
       internal::Path::CreateExistingPath(current_source).GetPathAsString();
 
   const auto type = GetFileExtType(current_source);
-  const std::string &aggregated_compile_flags =
+  const std::string aggregated_compile_flags =
       GetCompiledFlags(type).value_or("");
-
-  const std::string compiler = GetCompiler(current_source);
+  const std::string compiler = GetCompiler(current_source).value_or("");
   return command_.Construct(compile_command_,
                             {
                                 {"compiler", compiler},
