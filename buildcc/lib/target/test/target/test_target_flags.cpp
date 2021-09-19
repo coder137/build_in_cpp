@@ -114,6 +114,111 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
   mock().checkExpectations();
 }
 
+// ------------- ASM COMPILE FLAGS ---------------
+
+// clang-format off
+TEST_GROUP(TargetTestAsmCompileFlagGroup)
+{
+    void teardown() {
+      mock().clear();
+    }
+};
+// clang-format on
+
+static const fs::path target_asmflag_intermediate_path =
+    fs::path(BUILD_TARGET_FLAG_INTERMEDIATE_DIR) / gcc.GetName();
+
+TEST(TargetTestAsmCompileFlagGroup, Target_AddCompileFlag) {
+  constexpr const char *const NAME = "AddAsmCompileFlag.exe";
+  constexpr const char *const EMPTY_ASM = "asm/empty_asm.s";
+
+  auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
+  auto intermediate_path = target_asmflag_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
+  simple.AddSource(EMPTY_ASM);
+  simple.AddAsmCompileFlag("-O0");
+  simple.AddAsmCompileFlag("-g");
+
+  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
+  simple.Build();
+
+  mock().checkExpectations();
+
+  // Verify binary
+  buildcc::internal::FbsLoader loader(NAME, simple.GetTargetIntermediateDir());
+  bool loaded = loader.Load();
+  CHECK_TRUE(loaded);
+
+  CHECK_EQUAL(loader.GetLoadedAsmCompileFlags().size(), 2);
+}
+
+TEST(TargetTestAsmCompileFlagGroup, Target_ChangedCompileFlag) {
+  constexpr const char *const NAME = "ChangedAsmCompileFlag.exe";
+  constexpr const char *const EMPTY_ASM = "asm/empty_asm.s";
+
+  auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
+  auto intermediate_path = target_asmflag_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+
+  {
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.AddSource(EMPTY_ASM);
+    simple.AddAsmCompileFlag("-O0");
+    simple.AddAsmCompileFlag("-g");
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    simple.Build();
+  }
+  {
+    // * No Change
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.AddSource(EMPTY_ASM);
+    simple.AddAsmCompileFlag("-O0");
+    simple.AddAsmCompileFlag("-g");
+
+    simple.Build();
+  }
+  {
+    // * Remove flag
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.AddSource(EMPTY_ASM);
+    simple.AddAsmCompileFlag("-O0");
+
+    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    simple.Build();
+  }
+
+  {
+    // * Add flag
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.AddSource(EMPTY_ASM);
+    simple.AddAsmCompileFlag("-O0");
+    simple.AddAsmCompileFlag("-g");
+
+    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    simple.Build();
+  }
+
+  mock().checkExpectations();
+}
+
 // ------------- C COMPILE FLAGS ---------------
 
 // clang-format off
