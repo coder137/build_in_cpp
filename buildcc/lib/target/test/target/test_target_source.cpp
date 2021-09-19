@@ -252,6 +252,27 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
   mock().checkExpectations();
 }
 
+TEST(TargetTestSourceGroup, Target_CompileCommand) {
+  constexpr const char *const NAME = "CompileCommand.exe";
+  auto intermediate_path = target_source_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+  {
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.valid_c_ext_.insert(".invalid");
+    simple.AddSource("fileext/invalid_file.invalid");
+    simple.valid_c_ext_.clear();
+    simple.valid_c_ext_.insert(".c");
+
+    auto p = simple.GetTargetRootDir() / "fileext/invalid_file.invalid";
+    p.make_preferred();
+    // GetCompiler for invalid file throws
+    CHECK_THROWS(std::exception, simple.CompileCommand(p));
+  }
+}
+
 int main(int ac, char **av) {
   buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_TARGET_SOURCE_INTERMEDIATE_DIR);
   return CommandLineTestRunner::RunAllTests(ac, av);
