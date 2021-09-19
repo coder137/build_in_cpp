@@ -114,6 +114,110 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
   mock().checkExpectations();
 }
 
+// ------------- COMMON COMPILE FLAGS ---------------
+
+// clang-format off
+TEST_GROUP(TargetTestCommonCompileFlagsGroup)
+{
+    void teardown() {
+      mock().clear();
+    }
+};
+// clang-format on
+
+static const fs::path target_commonflag_intermediate_path =
+    fs::path(BUILD_TARGET_FLAG_INTERMEDIATE_DIR) / gcc.GetName();
+
+TEST(TargetTestCommonCompileFlagsGroup, Target_AddCommonCompileFlag) {
+  constexpr const char *const NAME = "AddCommonCompileFlag.exe";
+  constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
+
+  auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
+  auto intermediate_path = target_commonflag_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
+  simple.AddSource(DUMMY_MAIN);
+  simple.AddCommonCompileFlag("-O0");
+  simple.AddCommonCompileFlag("-g");
+
+  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
+  simple.Build();
+
+  mock().checkExpectations();
+
+  // Verify binary
+  buildcc::internal::FbsLoader loader(NAME, simple.GetTargetIntermediateDir());
+  bool loaded = loader.Load();
+  CHECK_TRUE(loaded);
+
+  CHECK_EQUAL(loader.GetLoadedCommonCompileFlags().size(), 2);
+}
+
+TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
+  constexpr const char *const NAME = "ChangedCommonCompileFlag.exe";
+  constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
+
+  auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
+  auto intermediate_path = target_commonflag_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+
+  {
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.AddSource(DUMMY_MAIN);
+    simple.AddCommonCompileFlag("-O0");
+    simple.AddCommonCompileFlag("-g");
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    simple.Build();
+  }
+  {
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.AddSource(DUMMY_MAIN);
+    simple.AddCommonCompileFlag("-O0");
+    simple.AddCommonCompileFlag("-g");
+
+    simple.Build();
+  }
+  {
+    // * Remove flag
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.AddSource(DUMMY_MAIN);
+    simple.AddCommonCompileFlag("-O0");
+
+    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    simple.Build();
+  }
+
+  {
+    // * Add flag
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.AddSource(DUMMY_MAIN);
+    simple.AddCommonCompileFlag("-O0");
+    simple.AddCommonCompileFlag("-g");
+
+    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    simple.Build();
+  }
+
+  mock().checkExpectations();
+}
+
 // ------------- ASM COMPILE FLAGS ---------------
 
 // clang-format off
