@@ -263,14 +263,19 @@ TEST(TargetTestSourceGroup, Target_CompileCommand) {
                                  gcc, "data");
     simple.valid_c_ext_.insert(".invalid");
     simple.AddSource("fileext/invalid_file.invalid");
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    simple.Build();
     simple.valid_c_ext_.clear();
     simple.valid_c_ext_.insert(".c");
 
     auto p = simple.GetTargetRootDir() / "fileext/invalid_file.invalid";
     p.make_preferred();
-    // GetCompiler for invalid file throws
-    CHECK_THROWS(std::exception, simple.CompileCommand(p));
+    simple.CompileCommand(p);
   }
+
+  mock().checkExpectations();
 }
 
 int main(int ac, char **av) {
