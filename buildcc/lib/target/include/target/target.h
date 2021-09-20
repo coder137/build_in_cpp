@@ -148,7 +148,7 @@ public:
 
   // TODO, Add more setters
 
-  // Getters
+  // Getters (GENERIC)
 
   tf::Taskflow &GetTaskflow() { return tf_; }
 
@@ -204,7 +204,7 @@ public:
     return current_link_flags_;
   }
 
-  // Getters to use after `build`
+  // Getters (AFTER BUILD)
 
   std::string CompileCommand(const fs::path &current_source) const;
   std::string LinkCommand() const;
