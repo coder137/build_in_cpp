@@ -137,11 +137,8 @@ bool Target::IsValidHeader(const fs::path &headerpath) const {
   return valid;
 }
 
-// TODO, Since we are sanitizing the input source files when adding we might
-// only need to check for valid sources (ASM, C, CPP)
-// i.e we can eliminate the default case
-const std::string &Target::GetCompiler(const fs::path &source) const {
-  switch (GetFileExtType(source)) {
+std::optional<std::string> Target::GetCompiler(FileExtType type) const {
+  switch (type) {
   case FileExtType::Asm:
     return toolchain_.GetAsmCompiler();
     break;
@@ -149,13 +146,12 @@ const std::string &Target::GetCompiler(const fs::path &source) const {
     return toolchain_.GetCCompiler();
     break;
   case FileExtType::Cpp:
+    return toolchain_.GetCppCompiler();
     break;
   default:
-    buildcc::env::assert_fatal(
-        false, fmt::format("Invalid source {}", source.string()));
     break;
   }
-  return toolchain_.GetCppCompiler();
+  return {};
 }
 
 const fs::path &Target::GetCompiledSourcePath(const fs::path &source) const {

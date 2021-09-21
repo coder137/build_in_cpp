@@ -1,5 +1,7 @@
 #include "constants.h"
 
+#include <unistd.h>
+
 #include "expect_command.h"
 #include "expect_target.h"
 
@@ -218,6 +220,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     CHECK_FALSE(loaded_sources.find(new_source_file) == loaded_sources.end());
   }
   {
+    sleep(1);
+
     // * Force copy to trigger recompile for NEW_SOURCE
     // *2 Current file is updated
     auto file_path = source_path / NEW_SOURCE;
@@ -246,6 +250,54 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
   }
 
   mock().checkExpectations();
+}
+
+TEST(TargetTestSourceGroup, Target_CompileCommand) {
+  constexpr const char *const NAME = "CompileCommand.exe";
+  auto intermediate_path = target_source_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+  {
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.valid_c_ext_.insert(".invalid");
+    simple.AddSource("fileext/invalid_file.invalid");
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    simple.Build();
+    simple.valid_c_ext_.clear();
+    simple.valid_c_ext_.insert(".c");
+
+    auto p = simple.GetTargetRootDir() / "fileext/invalid_file.invalid";
+    p.make_preferred();
+    simple.CompileCommand(p);
+  }
+
+  mock().checkExpectations();
+}
+
+TEST(TargetTestSourceGroup, Target_CompileCommand_Throws) {
+  constexpr const char *const NAME = "CompileCommand.exe";
+  auto intermediate_path = target_source_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+  {
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.valid_c_ext_.insert(".invalid");
+    simple.AddSource("fileext/invalid_file.invalid");
+    simple.valid_c_ext_.clear();
+    simple.valid_c_ext_.insert(".c");
+
+    auto p = simple.GetTargetRootDir() / "fileext/invalid_file.invalid";
+    p.make_preferred();
+
+    // Throws when you call CompileCommand before Build
+    CHECK_THROWS(std::exception, simple.CompileCommand(p));
+  }
 }
 
 int main(int ac, char **av) {

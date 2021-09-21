@@ -148,7 +148,7 @@ public:
 
   // TODO, Add more setters
 
-  // Getters
+  // Getters (GENERIC)
 
   tf::Taskflow &GetTaskflow() { return tf_; }
 
@@ -204,7 +204,7 @@ public:
     return current_link_flags_;
   }
 
-  // Getters to use after `build`
+  // Getters (AFTER BUILD)
 
   std::string CompileCommand(const fs::path &current_source) const;
   std::string LinkCommand() const;
@@ -222,11 +222,11 @@ protected:
   bool IsValidSource(const fs::path &sourcepath) const;
   bool IsValidHeader(const fs::path &headerpath) const;
 
-  const std::string &GetCompiler(const fs::path &source) const;
+  std::optional<std::string> GetCompiler(FileExtType type) const;
+  std::optional<std::string> GetCompiledFlags(FileExtType type) const;
 
   const fs::path &GetCompiledSourcePath(const fs::path &source) const;
   internal::fs_unordered_set GetCompiledSources() const;
-  std::optional<std::string> GetCompiledFlags(FileExtType type) const;
 
 private:
   void Initialize();
