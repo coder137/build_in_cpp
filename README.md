@@ -62,8 +62,6 @@ Build C, C++ and ASM files in C++
 ![Taskflow dependency](example/hybrid/simple/graph.PNG)
 See also [Software Architecture](#software-architecture)
 
-
-
 ## Software Architecture
 
 ### Interface lib dependencies
