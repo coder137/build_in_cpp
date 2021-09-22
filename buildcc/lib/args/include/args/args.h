@@ -68,7 +68,7 @@ public:
   Args() { Initialize(); }
   Args(const Args &) = delete;
 
-  void Parse(int argc, char **argv);
+  void Parse(int argc, const char *const *argv);
 
   // TODO, Check if these are necessary
   CLI::App &Ref() { return app_; }

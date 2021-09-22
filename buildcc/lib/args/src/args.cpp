@@ -48,22 +48,17 @@ void Args::AddCustomTarget(const std::string &name,
       ->default_val(initial.link_command);
 }
 
-void Args::Parse(int argc, char **argv) {
+void Args::Parse(int argc, const char *const *argv) {
   try {
     app_.parse(argc, argv);
   } catch (const CLI::ParseError &e) {
-    env::log_critical("Args::Parse", e.what());
     exit(app_.exit(e));
   }
 }
 
 // Private
 
-void Args::Initialize() {
-  RootArgs();
-  CommonToolchainArgs();
-  CommonTargetArgs();
-}
+void Args::Initialize() { RootArgs(); }
 
 void Args::RootArgs() {
   app_.set_help_all_flag("--help-all", "Expand individual options");
@@ -74,8 +69,8 @@ void Args::RootArgs() {
   app_.set_config("--config", "", "Read a <config>.toml file")->expected(1);
 
   // Root flags
-  app_.add_flag("-c,--clean", clean_, "Clean artifacts")->group("Root");
-  app_.add_option("-l,--loglevel", loglevel_, "LogLevel settings")
+  app_.add_flag("--clean", clean_, "Clean artifacts")->group("Root");
+  app_.add_option("--loglevel", loglevel_, "LogLevel settings")
       ->transform(CLI::CheckedTransformer(loglevel_map_, CLI::ignore_case))
       ->group("Root");
 
