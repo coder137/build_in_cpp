@@ -99,6 +99,21 @@ Developers interested in using **_BuildCC_**
 - BUILDCC_PRECOMPILE_HEADERS: OFF
 - BUILDCC_EXAMPLES: OFF
   - Uses SINGLE_LIB for its examples
+- BUILDCC_TESTING: ON
+  - Unit testing with `ctest --output-on-failure`
+  - Only active for GCC compilers
+  - Provides code coverage
+  - `cmake --build {builddir} --target lcov_coverage` (on linux ONLY)
+  - `cmake --build {builddir} --target gcovr_coverage` (installed via pip gcovr)
+- BUILDCC_CLANGTIDY: ON
+  - Auto runs with CMake
+- BUILDCC_CPPCHECK: ON
+  - Cppcheck with `cmake --build {builddir} --target cppcheck_static_analysis`
+- BUILDCC_DOCUMENTATION: ON
+  - Basic Doxygen generated html pages
+  - `cmake --build {builddir} --target doxygen_documentation`
+- BUILDCC_NO_DEPRECATED: OFF
+  - Required on certain clang arch compilers `-Wno-deprecated` flag
 
 ## Build
 
