@@ -2,6 +2,7 @@
 if (${TESTING})
 add_library(mock_args
     src/args.cpp
+    mock/parse.cpp
     # src/register.cpp
 )
 target_include_directories(mock_args PUBLIC
@@ -38,6 +39,7 @@ endif()
 
 set(ARGS_SRCS
     src/args.cpp
+    src/parse.cpp
     src/register.cpp
     include/args/args.h
     include/args/register.h

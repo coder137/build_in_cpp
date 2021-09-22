@@ -48,14 +48,6 @@ void Args::AddCustomTarget(const std::string &name,
       ->default_val(initial.link_command);
 }
 
-void Args::Parse(int argc, const char *const *argv) {
-  try {
-    app_.parse(argc, argv);
-  } catch (const CLI::ParseError &e) {
-    exit(app_.exit(e));
-  }
-}
-
 // Private
 
 void Args::Initialize() { RootArgs(); }
