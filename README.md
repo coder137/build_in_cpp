@@ -29,7 +29,7 @@ Build C, C++ and ASM files in C++
 - Third Party Libraries (See License below)
   - Flatbuffers v2.0.0
   - Taskflow v3.1.0
-  - CLI11 v1.9.1
+  - CLI11 v2.1.0
   - Tiny Process Library v2.0.4
   - fmt v8.0.1
   - spdlog v1.9.2
