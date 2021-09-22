@@ -18,8 +18,31 @@
 
 namespace {
 
+// Groups
+constexpr const char *const kRootGroup = "Root";
+
+// Options & Flags
+constexpr const char *const kHelpAllFlag = "--help-all";
+constexpr const char *const kHelpAllDesc = "Expand individual options.";
+
+constexpr const char *const kConfigFlag = "--config";
+constexpr const char *const kConfigDesc = "Read <config>.toml files.";
 constexpr int kMinFiles = 0;
-constexpr int kMaxFiles = INT_MAX;
+constexpr int kMaxFiles = 10;
+
+constexpr const char *const kCleanFlag = "--clean";
+constexpr const char *const kCleanDesc = "Clean artifacts";
+
+constexpr const char *const kLoglevelFlag = "--loglevel";
+constexpr const char *const kLoglevelDesc = "LogLevel settings";
+
+constexpr const char *const kRootDirFlag = "--root_dir";
+constexpr const char *const kRootDirDesc =
+    "Project root directory (relative to current directory)";
+
+constexpr const char *const kBuildDirFlag = "--build_dir";
+constexpr const char *const kBuildDirDesc =
+    "Project build dir (relative to current directory)";
 
 } // namespace
 
@@ -60,26 +83,23 @@ void Args::AddCustomTarget(const std::string &name,
 void Args::Initialize() { RootArgs(); }
 
 void Args::RootArgs() {
-  app_.set_help_all_flag("--help-all", "Expand individual options");
+  app_.set_help_all_flag(kHelpAllFlag, kHelpAllDesc);
 
-  app_.set_config("--config", "", "Read a <config>.toml file")
-      ->expected(kMinFiles, kMaxFiles);
+  app_.set_config(kConfigFlag, "", kConfigDesc)->expected(kMinFiles, kMaxFiles);
 
   // Root flags
-  app_.add_flag("--clean", clean_, "Clean artifacts")->group("Root");
-  app_.add_option("--loglevel", loglevel_, "LogLevel settings")
+  app_.add_flag(kCleanFlag, clean_, kCleanDesc)->group(kRootGroup);
+  app_.add_option(kLoglevelFlag, loglevel_, kLoglevelDesc)
       ->transform(CLI::CheckedTransformer(loglevel_map_, CLI::ignore_case))
-      ->group("Root");
+      ->group(kRootGroup);
 
   // Dir flags
-  app_.add_option("--root_dir", project_root_dir_,
-                  "Project root directory (relative to current directory)")
+  app_.add_option(kRootDirFlag, project_root_dir_, kRootDirDesc)
       ->required()
-      ->group("Root");
-  app_.add_option("--build_dir", project_build_dir_,
-                  "Project build dir (relative to current directory)")
+      ->group(kRootGroup);
+  app_.add_option(kBuildDirFlag, project_build_dir_, kBuildDirDesc)
       ->required()
-      ->group("Root");
+      ->group(kRootGroup);
 }
 
 void Args::CommonToolchainArgs() {
