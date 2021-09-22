@@ -10,7 +10,16 @@ Build C, C++ and ASM files in C++
 
 # Aim
 
-**_BuildCC_** aims to be an alternative to **Makefiles** while using the feature rich C++ language. 
+**_BuildCC_** aims to be an alternative to **Makefiles** while using the feature rich C++ language instead of a custom DSL. 
+
+## Features
+
+- Complete flexibility for custom workflows and toolchains
+- C++ language feature benefits and **debuggable build binaries**
+- Optimized rebuilds through serialization. See [target.fbs schema](buildcc/schema/target.fbs)
+  - Can optimize for rebuilds by comparing the previous stored build with current build.
+  - See also [FAQ](#faq)
+- Customizable for community plugins. More details provided in the `Community Plugin` section.
 
 ## Pre-requisites
 
@@ -53,15 +62,6 @@ Build C, C++ and ASM files in C++
 ![Taskflow dependency](example/hybrid/simple/graph.PNG)
 See also [Software Architecture](#software-architecture)
 
-## Features
-
-- Complete flexibility for custom workflows and toolchains
-- C++ language feature benefits and **debuggable build binaries**
-- Optimized rebuilds through serialization. See [target.fbs schema](buildcc/lib/target/fbs/target.fbs)
-  - Can optimize for rebuilds by comparing the previous stored build with current build.
-  - See also [FAQ](#faq)
-- Customizable for community plugins. More details provided in the `Community Plugin` section.
-
 ## Software Architecture
 
 ### Interface lib dependencies
@@ -99,6 +99,21 @@ Developers interested in using **_BuildCC_**
 - BUILDCC_PRECOMPILE_HEADERS: OFF
 - BUILDCC_EXAMPLES: OFF
   - Uses SINGLE_LIB for its examples
+- BUILDCC_TESTING: ON
+  - Unit testing with `ctest --output-on-failure`
+  - Only active for GCC compilers
+  - Provides code coverage
+  - `cmake --build {builddir} --target lcov_coverage` (on linux ONLY)
+  - `cmake --build {builddir} --target gcovr_coverage` (installed via pip gcovr)
+- BUILDCC_CLANGTIDY: ON
+  - Auto runs with CMake
+- BUILDCC_CPPCHECK: ON
+  - Cppcheck with `cmake --build {builddir} --target cppcheck_static_analysis`
+- BUILDCC_DOCUMENTATION: ON
+  - Basic Doxygen generated html pages
+  - `cmake --build {builddir} --target doxygen_documentation`
+- BUILDCC_NO_DEPRECATED: OFF
+  - Required on certain clang arch compilers `-Wno-deprecated` flag
 
 ## Build
 

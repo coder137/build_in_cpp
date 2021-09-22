@@ -25,10 +25,10 @@ TEST(CommandTestGroup, Construct_Basic) {
 
 TEST(CommandTestGroup, Construct_MultipleArgs) {
   buildcc::Command command;
-  command.AddDefaultArguments({{
+  command.AddDefaultArguments({
       {"h", "hello"},
       {"w", "world"},
-  }});
+  });
   std::string s = command.Construct("{h} {w} {f} {c}", {
                                                            {"f", "from"},
                                                            {"c", "coder137"},

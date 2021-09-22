@@ -2,15 +2,18 @@
 # Feature
 
 - [ ] Bootstrapping
-  - [x] Via CMake
-  - [ ] Via buildcc
+  - [x] Via CMake (Static Library)
+  - [ ] Via CMake (Dynamic Library)
+  - [ ] builcc bootstrap (Executable)
+  - [ ] Via buildcc bootstrap (Static Library)
+  - [ ] Via buildcc bootstrap (Dynamic Library)
 - [ ] Command/Subprocess Redirect stdout and stderr for Subprocess
-- [ ] Plugin - ClangFormat
-- [ ] Plugin - Graph Visualizer
 - [ ] PrecompileHeader support
 - [ ] C++20 module support
   - Understand flags
   - Understand procedure for GCC, MSVC and Clang
+- [ ] Plugin - ClangFormat
+- [ ] Plugin - Graph Visualizer
 
 # User QOL
 
@@ -29,7 +32,8 @@
     - [x] GCC
     - [ ] Clang
   - [ ] Windows
-    - [ ] MSVC
+    - [x] MSVC
+    - [x] Clang
     - [ ] MinGW
   - [ ] MacOS
 - [ ] Codecoverage
@@ -39,19 +43,13 @@
 
 # Optimization
 
-- [ ] `fs::path::string_type` conversion to `std::string`
-  - In windows `fs::path::string_type` is `std::wstring`, discuss potential pitfalls for conversion and storing as `std::string` 
 - [ ] Aggregated strings stored in Target vs `std::insert` on `std::vector` and `std::unordered_set`
-- [ ] Handling exceptions and generating fatal exceptions
-  - Discuss different strategies for exceptions i.e throw, std::error_code etc 
 - [ ] `std::string` vs `std::string_view` usage
-- [ ] Static library vs Shared Library when linking buildcc (See **Software Architecture** section)
-  - Static library linking is extremely slow on certain compilers
 - [ ] C++20 constexpr `std::string` and `std::vector` usage
 
 # Tests
 
-- [ ] 100% Line Coverage
+- [x] 100% Line Coverage
 - [ ] Improve Branch Coverage
 - [ ] Benchmark example CMake vs BuildCC
 - [ ] Speed profiling `subprocess` vs `std::system` with gprof and qcachegrind

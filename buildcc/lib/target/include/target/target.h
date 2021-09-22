@@ -150,8 +150,6 @@ public:
 
   // Getters (GENERIC)
 
-  tf::Taskflow &GetTaskflow() { return tf_; }
-
   fs::path GetTargetPath() const {
     fs::path path =
         GetTargetIntermediateDir() / fmt::format("{}{}", name_, target_ext_);
@@ -170,9 +168,6 @@ public:
     return target_intermediate_dir_;
   }
 
-  // TODO, Consider returning `std::vector<std::string>` OR
-  // `std::vector<fs::path>` for these getters
-  // These APIs are meant to be consumed by users
   const internal::fs_unordered_set &GetCurrentSourceFiles() const {
     return current_source_files_.user;
   }
@@ -209,6 +204,7 @@ public:
   std::string CompileCommand(const fs::path &current_source) const;
   std::string LinkCommand() const;
 
+  tf::Taskflow &GetTaskflow() { return tf_; }
   tf::Task &GetCompileTask() { return compile_task_; }
   tf::Task &GetLinkTask() { return link_task_; }
 
