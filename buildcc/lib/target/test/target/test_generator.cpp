@@ -142,6 +142,60 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
   mock().checkExpectations();
 }
 
+TEST(GeneratorTestGroup, Generator_Rebuild_CurrentNotFound) {
+  fs::path TEST_BUILD_DIR = BUILD_DIR / "Rebuild_CurrentNotFound";
+  fs::create_directories(TEST_BUILD_DIR);
+
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    generator.AddGenInfo(
+        "gcc_1",
+        {
+            "data/dummy_main.c",
+        },
+        {TEST_BUILD_DIR / "dummy_main.exe"},
+        {"gcc -o "
+         "intermediate/generator/Rebuild_CurrentNotFound/dummy_main.exe "
+         "data/dummy_main.c"},
+        true);
+
+    generator.AddGenInfo(
+        "gcc_2",
+        {
+            "data/dummy_main.c",
+        },
+        {TEST_BUILD_DIR / "dummy_main.exe"},
+        {"gcc -o "
+         "intermediate/generator/Rebuild_CurrentNotFound/dummy_main.exe "
+         "data/dummy_main.c"},
+        true);
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::m::CommandExpect_Execute(1, true);
+    generator.Build();
+  }
+
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    generator.AddGenInfo(
+        "gcc_1",
+        {
+            "data/dummy_main.c",
+        },
+        {TEST_BUILD_DIR / "dummy_main.exe"},
+        {"gcc -o "
+         "intermediate/generator/Rebuild_CurrentNotFound/dummy_main.exe "
+         "data/dummy_main.c"},
+        true);
+
+    // gcc_2 missing
+
+    generator.Build();
+  }
+
+  mock().checkExpectations();
+}
+
 TEST(GeneratorTestGroup, Generator_Rebuild_PreviousNotFound) {
   fs::path TEST_BUILD_DIR = BUILD_DIR / "Rebuild_PreviousNotFound";
   fs::create_directories(TEST_BUILD_DIR);
