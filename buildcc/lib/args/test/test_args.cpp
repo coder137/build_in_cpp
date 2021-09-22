@@ -33,6 +33,19 @@ TEST(ArgsTestGroup, Args_BasicExit) {
   CHECK_THROWS(std::exception, args.Parse(argc, av.data()));
 }
 
+TEST(ArgsTestGroup, Args_MultiToml) {
+  std::vector<const char *> av{"", "--config", "configs/basic_parse.toml",
+                               "--config", "configs/no_clean.toml"};
+  int argc = av.size();
+
+  buildcc::Args args;
+  args.Parse(argc, av.data());
+
+  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
+  CHECK_FALSE(args.Clean());
+}
+
 int main(int ac, char **av) {
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
