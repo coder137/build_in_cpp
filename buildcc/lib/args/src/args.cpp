@@ -16,6 +16,13 @@
 
 #include "args/args.h"
 
+namespace {
+
+constexpr int kMinFiles = 0;
+constexpr int kMaxFiles = INT_MAX;
+
+} // namespace
+
 namespace buildcc {
 
 void Args::AddCustomToolchain(const std::string &name,
@@ -55,10 +62,8 @@ void Args::Initialize() { RootArgs(); }
 void Args::RootArgs() {
   app_.set_help_all_flag("--help-all", "Expand individual options");
 
-  // TODO, Currently only expects 1
-  // From CLI11 2.0 onwards multiple configuration files can be added, increase
-  // this limit
-  app_.set_config("--config", "", "Read a <config>.toml file")->expected(1);
+  app_.set_config("--config", "", "Read a <config>.toml file")
+      ->expected(kMinFiles, kMaxFiles);
 
   // Root flags
   app_.add_flag("--clean", clean_, "Clean artifacts")->group("Root");
