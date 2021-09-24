@@ -9,15 +9,17 @@ else()
 message("GCOVR at ${gcovr_program}")
 
 set(GCOVR_REMOVE_OPTIONS 
-    --exclude "(.+/)?generated(.+/)?"
-    --exclude "(.+/)?test(.+/)?"
     --exclude "(.+/)?flatbuffers(.+/)?"
     --exclude "(.+/)?spdlog(.+/)?"
-    --exclude "(.+/)?CppUTest(.+/)?"
-    --exclude "(.+/)?CppUTestExt(.+/)?"
-    --exclude "(.+/)?mock(.+/)?"
     --exclude "(.+/)?fmt(.+/)?"
     --exclude "(.+/)?taskflow(.+/)?"
+    --exclude "(.+/)?CLI11(.+/)?"
+    --exclude "(.+/)?CppUTest(.+/)?"
+    --exclude "(.+/)?CppUTestExt(.+/)?"
+
+    --exclude "(.+/)?mock(.+/)?"
+    --exclude "(.+/)?generated(.+/)?"
+    --exclude "(.+/)?test(.+/)?"
 )
 
 # TODO, Update

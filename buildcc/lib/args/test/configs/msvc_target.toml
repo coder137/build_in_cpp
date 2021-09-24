@@ -1,0 +1,4 @@
+[target.msvc]
+compile_command = "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} {compile_flags} /Fo{output} /c {input}"
+link_command = "{linker} {link_flags} {lib_dirs} /OUT:{output} {lib_deps} {compiled_sources}"
+

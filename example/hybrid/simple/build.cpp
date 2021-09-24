@@ -14,6 +14,10 @@ static void cflags_build_cb(base::Target &cflags);
 int main(int argc, char **argv) {
   // 1. Get arguments
   Args args;
+  Args::ToolchainArg arg_gcc;
+  Args::ToolchainArg arg_msvc;
+  args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
+  args.AddToolchain("msvc", "Generic msvc toolchain", arg_msvc);
   args.Parse(argc, argv);
 
   // 2. Initialize your environment
@@ -34,17 +38,17 @@ int main(int argc, char **argv) {
   ExecutableTarget_msvc m_cflags("cflags", msvc, "files");
 
   // Select your builds and tests using the .toml files
-  reg.Build(args.GetGccState(), g_cppflags, cppflags_build_cb);
-  reg.Build(args.GetMsvcState(), m_cppflags, cppflags_build_cb);
-  reg.Build(args.GetGccState(), g_cflags, cflags_build_cb);
-  reg.Build(args.GetMsvcState(), m_cflags, cflags_build_cb);
+  reg.Build(arg_gcc.state, g_cppflags, cppflags_build_cb);
+  reg.Build(arg_msvc.state, m_cppflags, cppflags_build_cb);
+  reg.Build(arg_gcc.state, g_cflags, cflags_build_cb);
+  reg.Build(arg_msvc.state, m_cflags, cflags_build_cb);
 
   // 5. Test steps
   // NOTE, For now they are just dummy callbacks
-  reg.Test(args.GetGccState(), g_cppflags, [](base::Target &target) {});
-  reg.Test(args.GetMsvcState(), m_cppflags, [](base::Target &target) {});
-  reg.Test(args.GetGccState(), g_cflags, [](base::Target &target) {});
-  reg.Test(args.GetMsvcState(), m_cflags, [](base::Target &target) {});
+  reg.Test(arg_gcc.state, g_cppflags, [](base::Target &target) {});
+  reg.Test(arg_msvc.state, m_cppflags, [](base::Target &target) {});
+  reg.Test(arg_gcc.state, g_cflags, [](base::Target &target) {});
+  reg.Test(arg_msvc.state, m_cflags, [](base::Target &target) {});
 
   // 6. Build Target
   reg.RunBuild();

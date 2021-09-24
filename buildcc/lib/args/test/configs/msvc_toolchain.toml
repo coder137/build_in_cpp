@@ -1,0 +1,11 @@
+# Depending on the compile_command and link_command associated with the relevant target these are the minimal parameters required
+[toolchain.msvc]
+build = true
+test = true
+id = "msvc"
+name = "msvc"
+asm_compiler = "cl"
+c_compiler = "cl"
+cpp_compiler = "cl"
+archiver = "lib"
+linker = "link"

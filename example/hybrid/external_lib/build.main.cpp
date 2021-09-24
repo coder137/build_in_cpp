@@ -10,6 +10,10 @@ static void foolib_build_cb(base::Target &target);
 int main(int argc, char **argv) {
   // 1. Get arguments
   Args args;
+  Args::ToolchainArg arg_gcc;
+  Args::ToolchainArg arg_msvc;
+  args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
+  args.AddToolchain("msvc", "Generic msvc toolchain", arg_msvc);
   args.Parse(argc, argv);
 
   // 2. Initialize your environment
@@ -26,8 +30,8 @@ int main(int argc, char **argv) {
   ExecutableTarget_gcc g_foolib("cppflags", gcc, "");
   ExecutableTarget_msvc m_foolib("cppflags", msvc, "");
 
-  reg.Build(args.GetGccState(), g_foolib, foolib_build_cb);
-  reg.Build(args.GetMsvcState(), m_foolib, foolib_build_cb);
+  reg.Build(arg_gcc.state, g_foolib, foolib_build_cb);
+  reg.Build(arg_msvc.state, m_foolib, foolib_build_cb);
 
   // 5.
   reg.RunBuild();
