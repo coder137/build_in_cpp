@@ -82,10 +82,12 @@ const std::unordered_map<const char *, buildcc::base::Toolchain::Id>
 
 namespace buildcc {
 
-void Args::AddCustomToolchain(const std::string &name,
-                              const std::string &description, ToolchainArg &out,
-                              const ToolchainArg &initial) {
-  CLI::App *t_user = AddToolchain(name, description, "Custom", out.state);
+void Args::AddToolchain(const std::string &name, const std::string &description,
+                        ToolchainArg &out, const ToolchainArg &initial) {
+  CLI::App *t_user = toolchain_->add_subcommand(name, description)
+                         ->group("Supported Toolchains");
+  t_user->add_flag(kToolchainBuildParam, out.state.build);
+  t_user->add_flag(kToolchainTestParam, out.state.test);
 
   t_user->add_option(kToolchainIdParam, out.id, "Toolchain ID settings")
       ->transform(CLI::CheckedTransformer(kToolchainIdMap, CLI::ignore_case))
@@ -103,9 +105,8 @@ void Args::AddCustomToolchain(const std::string &name,
       ->default_val(initial.linker);
 }
 
-void Args::AddCustomTarget(const std::string &name,
-                           const std::string &description, TargetArg &out,
-                           const TargetArg &initial) {
+void Args::AddTarget(const std::string &name, const std::string &description,
+                     TargetArg &out, const TargetArg &initial) {
   CLI::App *target_user =
       target_->add_subcommand(name, description)->group("Custom");
   target_user->add_option("--compile_command", out.compile_command)
@@ -142,17 +143,6 @@ void Args::RootArgs() {
   app_.add_option(kBuildDirParam, project_build_dir_, kBuildDirDesc)
       ->required()
       ->group(kRootGroup);
-}
-
-CLI::App *Args::AddToolchain(const std::string &name,
-                             const std::string &description,
-                             const std::string &group,
-                             ToolchainState &toolchain_state) {
-  CLI::App *t_user =
-      toolchain_->add_subcommand(name, description)->group(group);
-  t_user->add_flag(kToolchainBuildParam, toolchain_state.build);
-  t_user->add_flag(kToolchainTestParam, toolchain_state.test);
-  return t_user;
 }
 
 } // namespace buildcc

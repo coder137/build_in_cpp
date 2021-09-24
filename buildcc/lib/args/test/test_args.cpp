@@ -55,7 +55,7 @@ TEST(ArgsTestGroup, Args_CustomToolchain) {
 
   buildcc::Args args;
   buildcc::Args::ToolchainArg gcc_toolchain;
-  args.AddCustomToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
   args.Parse(argc, av.data());
 
   STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
@@ -90,8 +90,8 @@ TEST(ArgsTestGroup, Args_MultipleCustomToolchain) {
   buildcc::Args args;
   buildcc::Args::ToolchainArg gcc_toolchain;
   buildcc::Args::ToolchainArg msvc_toolchain;
-  args.AddCustomToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  args.AddCustomToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
   args.Parse(argc, av.data());
 
   STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
@@ -128,15 +128,14 @@ TEST(ArgsTestGroup, Args_DuplicateCustomToolchain) {
   buildcc::Args args;
   buildcc::Args::ToolchainArg gcc_toolchain;
   buildcc::Args::ToolchainArg other_gcc_toolchain;
-  args.AddCustomToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
 
   // CLI11 Throws an exception when multiple toolchains with same name are added
   // NOTE, This behaviour does not need to be tested since it is provided by
   // CLI11
   // This test is as an example of wrong usage by the user
-  CHECK_THROWS(std::exception,
-               args.AddCustomToolchain("gcc", "Other gcc toolchain",
-                                       other_gcc_toolchain));
+  CHECK_THROWS(std::exception, args.AddToolchain("gcc", "Other gcc toolchain",
+                                                 other_gcc_toolchain));
 }
 
 int main(int ac, char **av) {

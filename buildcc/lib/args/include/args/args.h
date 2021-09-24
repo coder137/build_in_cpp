@@ -38,6 +38,9 @@ public:
     bool test{false};
   };
 
+  // TODO, Rename to Toolchain
+  // TODO, Put ToolchainState into Args::Toolchain
+  // TODO, Add operator() overload and remove ConstructToolchain
   struct ToolchainArg {
     ToolchainArg(){};
 
@@ -87,11 +90,11 @@ public:
   const CLI::App &ConstRef() const { return app_; }
 
   // Setters
-  void AddCustomToolchain(const std::string &name,
-                          const std::string &description, ToolchainArg &out,
-                          const ToolchainArg &initial = ToolchainArg());
-  void AddCustomTarget(const std::string &name, const std::string &description,
-                       TargetArg &out, const TargetArg &initial = TargetArg());
+  void AddToolchain(const std::string &name, const std::string &description,
+                    ToolchainArg &out,
+                    const ToolchainArg &initial = ToolchainArg());
+  void AddTarget(const std::string &name, const std::string &description,
+                 TargetArg &out, const TargetArg &initial = TargetArg());
 
   // Getters
   bool Clean() const { return clean_; }
@@ -100,35 +103,27 @@ public:
   const fs::path &GetProjectRootDir() const { return project_root_dir_; }
   const fs::path &GetProjectBuildDir() const { return project_build_dir_; }
 
-  // Arg supported toolchains
-  // TODO, Add more as needed
+  // TODO, Remove custom toolchain support
   const ToolchainState &GetGccState() const { return gcc_state_; }
   const ToolchainState &GetMsvcState() const { return msvc_state_; }
 
 private:
   void Initialize();
-
   void RootArgs();
 
-  CLI::App *AddToolchain(const std::string &name,
-                         const std::string &description,
-                         const std::string &group,
-                         ToolchainState &toolchain_state);
-
 private:
-  CLI::App app_{"BuildCC buildsystem"};
-
+  // Required parameters
   bool clean_{false};
   env::LogLevel loglevel_{env::LogLevel::Info};
-
-  // directory
   fs::path project_root_dir_{""};
   fs::path project_build_dir_{"_internal"};
 
+  // TODO, Remove
   ToolchainState gcc_state_{false, false};
   ToolchainState msvc_state_{false, false};
 
   // Internal
+  CLI::App app_{"BuildCC buildsystem"};
   CLI::App *toolchain_{nullptr};
   CLI::App *target_{nullptr};
 };
