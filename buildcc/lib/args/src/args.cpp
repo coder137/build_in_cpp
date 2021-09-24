@@ -48,6 +48,16 @@ constexpr const char *const kBuildDirDesc =
 constexpr const char *const kToolchainSubcommand = "toolchain";
 constexpr const char *const kToolchainDesc = "Select Toolchain";
 
+constexpr const char *const kToolchainBuildFlag = "--build";
+constexpr const char *const kToolchainTestFlag = "--test";
+constexpr const char *const kToolchainIdOption = "--id";
+constexpr const char *const kToolchainNameOption = "--name";
+constexpr const char *const kToolchainAsmCompilerOption = "--asm_compiler";
+constexpr const char *const kToolchainCCompilerOption = "--c_compiler";
+constexpr const char *const kToolchainCppCompilerOption = "--cpp_compiler";
+constexpr const char *const kToolchainArchiverOption = "--archiver";
+constexpr const char *const kToolchainLinkerOption = "--linker";
+
 constexpr const char *const kTargetSubcommand = "target";
 constexpr const char *const kTargetDesc = "Select Target";
 
@@ -77,18 +87,20 @@ void Args::AddCustomToolchain(const std::string &name,
                               const ToolchainArg &initial) {
   CLI::App *t_user = AddToolchain(name, description, "Custom", out.state);
 
-  t_user->add_option("--id", out.id, "Toolchain ID settings")
+  t_user->add_option(kToolchainIdOption, out.id, "Toolchain ID settings")
       ->transform(CLI::CheckedTransformer(kToolchainIdMap, CLI::ignore_case))
       ->default_val(initial.id);
-  t_user->add_option("--name", out.name)->default_val(initial.name);
-  t_user->add_option("--asm_compiler", out.asm_compiler)
+  t_user->add_option(kToolchainNameOption, out.name)->default_val(initial.name);
+  t_user->add_option(kToolchainAsmCompilerOption, out.asm_compiler)
       ->default_val(initial.asm_compiler);
-  t_user->add_option("--c_compiler", out.c_compiler)
+  t_user->add_option(kToolchainCCompilerOption, out.c_compiler)
       ->default_val(initial.c_compiler);
-  t_user->add_option("--cpp_compiler", out.cpp_compiler)
+  t_user->add_option(kToolchainCppCompilerOption, out.cpp_compiler)
       ->default_val(initial.cpp_compiler);
-  t_user->add_option("--archiver", out.archiver)->default_val(initial.archiver);
-  t_user->add_option("--linker", out.linker)->default_val(initial.linker);
+  t_user->add_option(kToolchainArchiverOption, out.archiver)
+      ->default_val(initial.archiver);
+  t_user->add_option(kToolchainLinkerOption, out.linker)
+      ->default_val(initial.linker);
 }
 
 void Args::AddCustomTarget(const std::string &name,
@@ -137,8 +149,8 @@ CLI::App *Args::AddToolchain(const std::string &name,
                              ToolchainState &toolchain_state) {
   CLI::App *t_user =
       toolchain_->add_subcommand(name, description)->group(group);
-  t_user->add_flag("-b,--build", toolchain_state.build);
-  t_user->add_flag("-t,--test", toolchain_state.test);
+  t_user->add_flag(kToolchainBuildFlag, toolchain_state.build);
+  t_user->add_flag(kToolchainTestFlag, toolchain_state.test);
   return t_user;
 }
 
