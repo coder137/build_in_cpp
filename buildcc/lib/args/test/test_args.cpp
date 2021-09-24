@@ -21,6 +21,7 @@ TEST(ArgsTestGroup, Args_BasicParse) {
 
   STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
+  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
   CHECK_TRUE(args.Clean());
 }
 
@@ -43,6 +44,7 @@ TEST(ArgsTestGroup, Args_MultiToml) {
 
   STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
+  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
   CHECK_FALSE(args.Clean());
 }
 
