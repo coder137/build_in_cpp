@@ -182,7 +182,80 @@ TEST(ArgsTestGroup, Args_CustomTarget) {
                "{lib_dirs} {lib_deps}");
 }
 
-TEST(ArgsTestGroup, Args_MultipleCustomTarget) {}
+TEST(ArgsTestGroup, Args_MultipleCustomTarget) {
+  std::vector<const char *> av{
+      "",
+      "--config",
+      "configs/basic_parse.toml",
+      "--config",
+      "configs/gcc_toolchain.toml",
+      "--config",
+      "configs/gcc_target.toml",
+      "--config",
+      "configs/msvc_toolchain.toml",
+      "--config",
+      "configs/msvc_target.toml",
+  };
+  int argc = av.size();
+
+  buildcc::Args args;
+  buildcc::Args::ToolchainArg gcc_toolchain;
+  buildcc::Args::TargetArg gcc_target;
+  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  args.AddTarget("gcc", "Generic gcc target", gcc_target);
+  buildcc::Args::ToolchainArg msvc_toolchain;
+  buildcc::Args::TargetArg msvc_target;
+  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  args.AddTarget("msvc", "Generic msvc target", msvc_target);
+  args.Parse(argc, av.data());
+
+  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
+  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(args.Clean());
+
+  // GCC
+
+  // Toolchain
+  CHECK_TRUE(gcc_toolchain.state.build);
+  CHECK_FALSE(gcc_toolchain.state.test);
+  CHECK(gcc_toolchain.id == buildcc::base::Toolchain::Id::Gcc);
+  STRCMP_EQUAL(gcc_toolchain.name.c_str(), "gcc");
+  STRCMP_EQUAL(gcc_toolchain.asm_compiler.c_str(), "as");
+  STRCMP_EQUAL(gcc_toolchain.c_compiler.c_str(), "gcc");
+  STRCMP_EQUAL(gcc_toolchain.cpp_compiler.c_str(), "g++");
+  STRCMP_EQUAL(gcc_toolchain.archiver.c_str(), "ar");
+  STRCMP_EQUAL(gcc_toolchain.linker.c_str(), "ld");
+
+  // Target
+  STRCMP_EQUAL(gcc_target.compile_command.c_str(),
+               "{compiler} {preprocessor_flags} {include_dirs} "
+               "{common_compile_flags} {compile_flags} -o {output} -c {input}");
+  STRCMP_EQUAL(gcc_target.link_command.c_str(),
+               "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
+               "{lib_dirs} {lib_deps}");
+
+  // MSVC
+
+  // Toolchain
+  CHECK_TRUE(msvc_toolchain.state.build);
+  CHECK_TRUE(msvc_toolchain.state.test);
+  CHECK(msvc_toolchain.id == buildcc::base::Toolchain::Id::Msvc);
+  STRCMP_EQUAL(msvc_toolchain.name.c_str(), "msvc");
+  STRCMP_EQUAL(msvc_toolchain.asm_compiler.c_str(), "cl");
+  STRCMP_EQUAL(msvc_toolchain.c_compiler.c_str(), "cl");
+  STRCMP_EQUAL(msvc_toolchain.cpp_compiler.c_str(), "cl");
+  STRCMP_EQUAL(msvc_toolchain.archiver.c_str(), "lib");
+  STRCMP_EQUAL(msvc_toolchain.linker.c_str(), "link");
+
+  // Target
+  STRCMP_EQUAL(msvc_target.compile_command.c_str(),
+               "{compiler} {preprocessor_flags} {include_dirs} "
+               "{common_compile_flags} {compile_flags} /Fo{output} /c {input}");
+  STRCMP_EQUAL(msvc_target.link_command.c_str(),
+               "{linker} {link_flags} {lib_dirs} /OUT:{output} {lib_deps} "
+               "{compiled_sources}");
+}
 
 int main(int ac, char **av) {
   return CommandLineTestRunner::RunAllTests(ac, av);
