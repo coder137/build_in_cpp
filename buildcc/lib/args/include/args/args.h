@@ -103,10 +103,6 @@ public:
   const fs::path &GetProjectRootDir() const { return project_root_dir_; }
   const fs::path &GetProjectBuildDir() const { return project_build_dir_; }
 
-  // TODO, Remove custom toolchain support
-  const ToolchainState &GetGccState() const { return gcc_state_; }
-  const ToolchainState &GetMsvcState() const { return msvc_state_; }
-
 private:
   void Initialize();
   void RootArgs();
@@ -117,10 +113,6 @@ private:
   env::LogLevel loglevel_{env::LogLevel::Info};
   fs::path project_root_dir_{""};
   fs::path project_build_dir_{"_internal"};
-
-  // TODO, Remove
-  ToolchainState gcc_state_{false, false};
-  ToolchainState msvc_state_{false, false};
 
   // Internal
   CLI::App app_{"BuildCC buildsystem"};
