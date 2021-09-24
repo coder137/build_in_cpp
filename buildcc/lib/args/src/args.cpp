@@ -51,6 +51,23 @@ constexpr const char *const kToolchainDesc = "Select Toolchain";
 constexpr const char *const kTargetSubcommand = "target";
 constexpr const char *const kTargetDesc = "Select Target";
 
+const std::unordered_map<const char *, buildcc::env::LogLevel> kLogLevelMap{
+    {"trace", buildcc::env::LogLevel::Trace},
+    {"debug", buildcc::env::LogLevel::Debug},
+    {"info", buildcc::env::LogLevel::Info},
+    {"warning", buildcc::env::LogLevel::Warning},
+    {"critical", buildcc::env::LogLevel::Critical},
+};
+
+const std::unordered_map<const char *, buildcc::base::Toolchain::Id>
+    kToolchainIdMap{
+        {"gcc", buildcc::base::Toolchain::Id::Gcc},
+        {"msvc", buildcc::base::Toolchain::Id::Msvc},
+        {"clang", buildcc::base::Toolchain::Id::Clang},
+        {"custom", buildcc::base::Toolchain::Id::Custom},
+        {"undefined", buildcc::base::Toolchain::Id::Undefined},
+    };
+
 } // namespace
 
 namespace buildcc {
@@ -60,15 +77,8 @@ void Args::AddCustomToolchain(const std::string &name,
                               const ToolchainArg &initial) {
   CLI::App *t_user = AddToolchain(name, description, "Custom", out.state);
 
-  const std::unordered_map<std::string, base::Toolchain::Id> toolchain_id_map_{
-      {"gcc", base::Toolchain::Id::Gcc},
-      {"msvc", base::Toolchain::Id::Msvc},
-      {"clang", base::Toolchain::Id::Clang},
-      {"custom", base::Toolchain::Id::Custom},
-      {"undefined", base::Toolchain::Id::Undefined},
-  };
   t_user->add_option("--id", out.id, "Toolchain ID settings")
-      ->transform(CLI::CheckedTransformer(toolchain_id_map_, CLI::ignore_case))
+      ->transform(CLI::CheckedTransformer(kToolchainIdMap, CLI::ignore_case))
       ->default_val(initial.id);
   t_user->add_option("--name", out.name)->default_val(initial.name);
   t_user->add_option("--asm_compiler", out.asm_compiler)
@@ -106,16 +116,10 @@ void Args::RootArgs() {
   app_.set_config(kConfigFlag, "", kConfigDesc)->expected(kMinFiles, kMaxFiles);
 
   // Root flags
-  const std::unordered_map<std::string, env::LogLevel> loglevel_map_{
-      {"trace", env::LogLevel::Trace},
-      {"debug", env::LogLevel::Debug},
-      {"info", env::LogLevel::Info},
-      {"warning", env::LogLevel::Warning},
-      {"critical", env::LogLevel::Critical},
-  };
+
   app_.add_flag(kCleanFlag, clean_, kCleanDesc)->group(kRootGroup);
   app_.add_option(kLoglevelFlag, loglevel_, kLoglevelDesc)
-      ->transform(CLI::CheckedTransformer(loglevel_map_, CLI::ignore_case))
+      ->transform(CLI::CheckedTransformer(kLogLevelMap, CLI::ignore_case))
       ->group(kRootGroup);
 
   // Dir flags
