@@ -22,25 +22,25 @@ namespace {
 constexpr const char *const kRootGroup = "Root";
 
 // Options & Flags
-constexpr const char *const kHelpAllFlag = "--help-all";
+constexpr const char *const kHelpAllParam = "--help-all";
 constexpr const char *const kHelpAllDesc = "Expand individual options.";
 
-constexpr const char *const kConfigFlag = "--config";
+constexpr const char *const kConfigParam = "--config";
 constexpr const char *const kConfigDesc = "Read <config>.toml files.";
 constexpr int kMinFiles = 0;
 constexpr int kMaxFiles = 10;
 
-constexpr const char *const kCleanFlag = "--clean";
+constexpr const char *const kCleanParam = "--clean";
 constexpr const char *const kCleanDesc = "Clean artifacts";
 
-constexpr const char *const kLoglevelFlag = "--loglevel";
+constexpr const char *const kLoglevelParam = "--loglevel";
 constexpr const char *const kLoglevelDesc = "LogLevel settings";
 
-constexpr const char *const kRootDirFlag = "--root_dir";
+constexpr const char *const kRootDirParam = "--root_dir";
 constexpr const char *const kRootDirDesc =
     "Project root directory (relative to current directory)";
 
-constexpr const char *const kBuildDirFlag = "--build_dir";
+constexpr const char *const kBuildDirParam = "--build_dir";
 constexpr const char *const kBuildDirDesc =
     "Project build dir (relative to current directory)";
 
@@ -48,15 +48,15 @@ constexpr const char *const kBuildDirDesc =
 constexpr const char *const kToolchainSubcommand = "toolchain";
 constexpr const char *const kToolchainDesc = "Select Toolchain";
 
-constexpr const char *const kToolchainBuildFlag = "--build";
-constexpr const char *const kToolchainTestFlag = "--test";
-constexpr const char *const kToolchainIdOption = "--id";
-constexpr const char *const kToolchainNameOption = "--name";
-constexpr const char *const kToolchainAsmCompilerOption = "--asm_compiler";
-constexpr const char *const kToolchainCCompilerOption = "--c_compiler";
-constexpr const char *const kToolchainCppCompilerOption = "--cpp_compiler";
-constexpr const char *const kToolchainArchiverOption = "--archiver";
-constexpr const char *const kToolchainLinkerOption = "--linker";
+constexpr const char *const kToolchainBuildParam = "--build";
+constexpr const char *const kToolchainTestParam = "--test";
+constexpr const char *const kToolchainIdParam = "--id";
+constexpr const char *const kToolchainNameParam = "--name";
+constexpr const char *const kToolchainAsmCompilerParam = "--asm_compiler";
+constexpr const char *const kToolchainCCompilerParam = "--c_compiler";
+constexpr const char *const kToolchainCppCompilerParam = "--cpp_compiler";
+constexpr const char *const kToolchainArchiverParam = "--archiver";
+constexpr const char *const kToolchainLinkerParam = "--linker";
 
 constexpr const char *const kTargetSubcommand = "target";
 constexpr const char *const kTargetDesc = "Select Target";
@@ -87,19 +87,19 @@ void Args::AddCustomToolchain(const std::string &name,
                               const ToolchainArg &initial) {
   CLI::App *t_user = AddToolchain(name, description, "Custom", out.state);
 
-  t_user->add_option(kToolchainIdOption, out.id, "Toolchain ID settings")
+  t_user->add_option(kToolchainIdParam, out.id, "Toolchain ID settings")
       ->transform(CLI::CheckedTransformer(kToolchainIdMap, CLI::ignore_case))
       ->default_val(initial.id);
-  t_user->add_option(kToolchainNameOption, out.name)->default_val(initial.name);
-  t_user->add_option(kToolchainAsmCompilerOption, out.asm_compiler)
+  t_user->add_option(kToolchainNameParam, out.name)->default_val(initial.name);
+  t_user->add_option(kToolchainAsmCompilerParam, out.asm_compiler)
       ->default_val(initial.asm_compiler);
-  t_user->add_option(kToolchainCCompilerOption, out.c_compiler)
+  t_user->add_option(kToolchainCCompilerParam, out.c_compiler)
       ->default_val(initial.c_compiler);
-  t_user->add_option(kToolchainCppCompilerOption, out.cpp_compiler)
+  t_user->add_option(kToolchainCppCompilerParam, out.cpp_compiler)
       ->default_val(initial.cpp_compiler);
-  t_user->add_option(kToolchainArchiverOption, out.archiver)
+  t_user->add_option(kToolchainArchiverParam, out.archiver)
       ->default_val(initial.archiver);
-  t_user->add_option(kToolchainLinkerOption, out.linker)
+  t_user->add_option(kToolchainLinkerParam, out.linker)
       ->default_val(initial.linker);
 }
 
@@ -123,22 +123,23 @@ void Args::Initialize() {
 }
 
 void Args::RootArgs() {
-  app_.set_help_all_flag(kHelpAllFlag, kHelpAllDesc);
+  app_.set_help_all_flag(kHelpAllParam, kHelpAllDesc);
 
-  app_.set_config(kConfigFlag, "", kConfigDesc)->expected(kMinFiles, kMaxFiles);
+  app_.set_config(kConfigParam, "", kConfigDesc)
+      ->expected(kMinFiles, kMaxFiles);
 
   // Root flags
 
-  app_.add_flag(kCleanFlag, clean_, kCleanDesc)->group(kRootGroup);
-  app_.add_option(kLoglevelFlag, loglevel_, kLoglevelDesc)
+  app_.add_flag(kCleanParam, clean_, kCleanDesc)->group(kRootGroup);
+  app_.add_option(kLoglevelParam, loglevel_, kLoglevelDesc)
       ->transform(CLI::CheckedTransformer(kLogLevelMap, CLI::ignore_case))
       ->group(kRootGroup);
 
   // Dir flags
-  app_.add_option(kRootDirFlag, project_root_dir_, kRootDirDesc)
+  app_.add_option(kRootDirParam, project_root_dir_, kRootDirDesc)
       ->required()
       ->group(kRootGroup);
-  app_.add_option(kBuildDirFlag, project_build_dir_, kBuildDirDesc)
+  app_.add_option(kBuildDirParam, project_build_dir_, kBuildDirDesc)
       ->required()
       ->group(kRootGroup);
 }
@@ -149,8 +150,8 @@ CLI::App *Args::AddToolchain(const std::string &name,
                              ToolchainState &toolchain_state) {
   CLI::App *t_user =
       toolchain_->add_subcommand(name, description)->group(group);
-  t_user->add_flag(kToolchainBuildFlag, toolchain_state.build);
-  t_user->add_flag(kToolchainTestFlag, toolchain_state.test);
+  t_user->add_flag(kToolchainBuildParam, toolchain_state.build);
+  t_user->add_flag(kToolchainTestParam, toolchain_state.test);
   return t_user;
 }
 
