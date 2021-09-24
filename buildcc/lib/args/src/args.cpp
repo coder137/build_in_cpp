@@ -61,6 +61,9 @@ constexpr const char *const kToolchainLinkerParam = "--linker";
 constexpr const char *const kTargetSubcommand = "target";
 constexpr const char *const kTargetDesc = "Select Target";
 
+constexpr const char *const kTargetCompileCommandParam = "--compile_command";
+constexpr const char *const kTargetLinkCommandParam = "--link_command";
+
 const std::unordered_map<const char *, buildcc::env::LogLevel> kLogLevelMap{
     {"trace", buildcc::env::LogLevel::Trace},
     {"debug", buildcc::env::LogLevel::Debug},
@@ -109,9 +112,9 @@ void Args::AddTarget(const std::string &name, const std::string &description,
                      TargetArg &out, const TargetArg &initial) {
   CLI::App *target_user =
       target_->add_subcommand(name, description)->group("Custom");
-  target_user->add_option("--compile_command", out.compile_command)
+  target_user->add_option(kTargetCompileCommandParam, out.compile_command)
       ->default_val(initial.compile_command);
-  target_user->add_option("--link_command", out.link_command)
+  target_user->add_option(kTargetLinkCommandParam, out.link_command)
       ->default_val(initial.link_command);
 }
 
