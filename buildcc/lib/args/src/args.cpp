@@ -47,6 +47,8 @@ constexpr const char *const kBuildDirDesc =
 // Subcommands
 constexpr const char *const kToolchainSubcommand = "toolchain";
 constexpr const char *const kToolchainDesc = "Select Toolchain";
+constexpr const char *const kToolchainGroup = "Supported Toolchains";
+constexpr const char *const kToolchainIdDesc = "Toolchain ID settings";
 
 constexpr const char *const kToolchainBuildParam = "--build";
 constexpr const char *const kToolchainTestParam = "--test";
@@ -60,6 +62,7 @@ constexpr const char *const kToolchainLinkerParam = "--linker";
 
 constexpr const char *const kTargetSubcommand = "target";
 constexpr const char *const kTargetDesc = "Select Target";
+constexpr const char *const kTargetGroup = "Custom Target";
 
 constexpr const char *const kTargetCompileCommandParam = "--compile_command";
 constexpr const char *const kTargetLinkCommandParam = "--link_command";
@@ -87,12 +90,12 @@ namespace buildcc {
 
 void Args::AddToolchain(const std::string &name, const std::string &description,
                         ToolchainArg &out, const ToolchainArg &initial) {
-  CLI::App *t_user = toolchain_->add_subcommand(name, description)
-                         ->group("Supported Toolchains");
+  CLI::App *t_user =
+      toolchain_->add_subcommand(name, description)->group(kToolchainGroup);
   t_user->add_flag(kToolchainBuildParam, out.state.build);
   t_user->add_flag(kToolchainTestParam, out.state.test);
 
-  t_user->add_option(kToolchainIdParam, out.id, "Toolchain ID settings")
+  t_user->add_option(kToolchainIdParam, out.id, kToolchainIdDesc)
       ->transform(CLI::CheckedTransformer(kToolchainIdMap, CLI::ignore_case))
       ->default_val(initial.id);
   t_user->add_option(kToolchainNameParam, out.name)->default_val(initial.name);
@@ -111,7 +114,7 @@ void Args::AddToolchain(const std::string &name, const std::string &description,
 void Args::AddTarget(const std::string &name, const std::string &description,
                      TargetArg &out, const TargetArg &initial) {
   CLI::App *target_user =
-      target_->add_subcommand(name, description)->group("Custom");
+      target_->add_subcommand(name, description)->group(kTargetGroup);
   target_user->add_option(kTargetCompileCommandParam, out.compile_command)
       ->default_val(initial.compile_command);
   target_user->add_option(kTargetLinkCommandParam, out.link_command)
