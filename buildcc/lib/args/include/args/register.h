@@ -39,16 +39,15 @@ public:
   };
 
 public:
-  Register(const Args &args) : args_(args) {}
+  Register(const Args &args) : args_(args) { Initialize(); }
+  Register(const Register &) = delete;
 
-  void Env();
   void Clean(const std::function<void(void)> &clean_cb);
 
   void Build(const Args::ToolchainState &toolchain_state, base::Target &target,
              const std::function<void(base::Target &)> &build_cb);
   void Test(const Args::ToolchainState &toolchain_state, base::Target &target,
             const std::function<void(base::Target &)> &test_cb);
-
   void Dep(const base::Target &target, const base::Target &dependency);
 
   void RunBuild();
@@ -56,6 +55,12 @@ public:
 
   // Getters
   const tf::Taskflow &GetTaskflow() const { return taskflow_; }
+
+private:
+  void Initialize();
+
+  // Setup env:: defaults
+  void Env();
 
 private:
   const Args &args_;

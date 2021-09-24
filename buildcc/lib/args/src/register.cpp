@@ -27,12 +27,6 @@ namespace fs = std::filesystem;
 
 namespace buildcc {
 
-void Register::Env() {
-  env::init(fs::current_path() / args_.GetProjectRootDir(),
-            fs::current_path() / args_.GetProjectBuildDir());
-  env::set_log_level(args_.GetLogLevel());
-}
-
 void Register::Clean(const std::function<void(void)> &clean_cb) {
   if (args_.Clean()) {
     clean_cb();
@@ -75,7 +69,7 @@ void Register::Dep(const base::Target &target, const base::Target &dependency) {
     target_task.succeed(dep_task);
   } catch (const std::out_of_range &e) {
     (void)e;
-    env::assert_fatal(false, "Call Register::Build API on target and "
+    env::assert_fatal<false>("Call Register::Build API on target and "
                              "dependency before Register::Dep API");
   }
 }
@@ -91,6 +85,16 @@ void Register::RunTest() {
                   fmt::format("Testing \'{}\'", t.first.string()));
     t.second.cb_(t.second.target_);
   }
+}
+
+// Private
+
+void Register::Initialize() { Env(); }
+
+void Register::Env() {
+  env::init(fs::current_path() / args_.GetProjectRootDir(),
+            fs::current_path() / args_.GetProjectBuildDir());
+  env::set_log_level(args_.GetLogLevel());
 }
 
 } // namespace buildcc
