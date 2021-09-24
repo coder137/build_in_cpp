@@ -12,9 +12,8 @@ int main(int argc, char **argv) {
   Args args;
   Args::ToolchainArg toolchain_clang_gnu;
   Args::TargetArg target_clang_gnu;
-  args.AddCustomToolchain("clang_gnu", "Clang GNU toolchain",
-                          toolchain_clang_gnu);
-  args.AddCustomTarget("clang_gnu", "Clang GNU target", target_clang_gnu);
+  args.AddToolchain("clang_gnu", "Clang GNU toolchain", toolchain_clang_gnu);
+  args.AddTarget("clang_gnu", "Clang GNU target", target_clang_gnu);
   args.Parse(argc, argv);
 
   // 2. Initialize your environment

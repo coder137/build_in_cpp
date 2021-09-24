@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
         ->group("Custom");
 
     // NOTE, You can add more custom toolchains as per your requirement
-    args.AddCustomToolchain("user", "User defined toolchain", custom_toolchain);
+    args.AddToolchain("user", "User defined toolchain", custom_toolchain);
   } catch (const std::exception &e) {
     std::cout << "EXCEPTION " << e.what() << std::endl;
   }
