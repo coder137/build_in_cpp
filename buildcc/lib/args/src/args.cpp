@@ -44,6 +44,13 @@ constexpr const char *const kBuildDirFlag = "--build_dir";
 constexpr const char *const kBuildDirDesc =
     "Project build dir (relative to current directory)";
 
+// Subcommands
+constexpr const char *const kToolchainSubcommand = "toolchain";
+constexpr const char *const kToolchainDesc = "Select Toolchain";
+
+constexpr const char *const kTargetSubcommand = "target";
+constexpr const char *const kTargetDesc = "Select Target";
+
 } // namespace
 
 namespace buildcc {
@@ -80,7 +87,11 @@ void Args::AddCustomTarget(const std::string &name,
 
 // Private
 
-void Args::Initialize() { RootArgs(); }
+void Args::Initialize() {
+  RootArgs();
+  toolchain_ = app_.add_subcommand(kToolchainSubcommand, kToolchainDesc);
+  target_ = app_.add_subcommand(kTargetSubcommand, kTargetDesc);
+}
 
 void Args::RootArgs() {
   app_.set_help_all_flag(kHelpAllFlag, kHelpAllDesc);
@@ -103,14 +114,11 @@ void Args::RootArgs() {
 }
 
 void Args::CommonToolchainArgs() {
-  toolchain_ = app_.add_subcommand("toolchain", "Select Toolchain");
   (void)AddToolchain("gcc", "GNU GCC Toolchain", "Supported", gcc_state_);
   (void)AddToolchain("msvc", "MSVC Toolchain", "Supported", msvc_state_);
 }
 
-void Args::CommonTargetArgs() {
-  target_ = app_.add_subcommand("target", "Select target");
-}
+void Args::CommonTargetArgs() {}
 
 CLI::App *Args::AddToolchain(const std::string &name,
                              const std::string &description,
