@@ -124,7 +124,20 @@ TEST(ArgsTestGroup, Args_MultipleCustomToolchain) {
   STRCMP_EQUAL(msvc_toolchain.linker.c_str(), "link");
 }
 
-TEST(ArgsTestGroup, Args_DuplicateCustomToolchain) {}
+TEST(ArgsTestGroup, Args_DuplicateCustomToolchain) {
+  buildcc::Args args;
+  buildcc::Args::ToolchainArg gcc_toolchain;
+  buildcc::Args::ToolchainArg other_gcc_toolchain;
+  args.AddCustomToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+
+  // CLI11 Throws an exception when multiple toolchains with same name are added
+  // NOTE, This behaviour does not need to be tested since it is provided by
+  // CLI11
+  // This test is as an example of wrong usage by the user
+  CHECK_THROWS(std::exception,
+               args.AddCustomToolchain("gcc", "Other gcc toolchain",
+                                       other_gcc_toolchain));
+}
 
 int main(int ac, char **av) {
   return CommandLineTestRunner::RunAllTests(ac, av);
