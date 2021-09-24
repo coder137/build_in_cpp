@@ -62,7 +62,7 @@ constexpr const char *const kToolchainLinkerParam = "--linker";
 
 constexpr const char *const kTargetSubcommand = "target";
 constexpr const char *const kTargetDesc = "Select Target";
-constexpr const char *const kTargetGroup = "Custom Target";
+constexpr const char *const kTargetGroup = "Custom Targets";
 
 constexpr const char *const kTargetCompileCommandParam = "--compile_command";
 constexpr const char *const kTargetLinkCommandParam = "--link_command";
