@@ -41,6 +41,18 @@ public:
   struct ToolchainArg {
     ToolchainArg(){};
 
+    ToolchainArg(base::Toolchain::Id initial_id,
+                 const std::string &initial_name,
+                 const std::string &initial_asm_compiler,
+                 const std::string &initial_c_compiler,
+                 const std::string &initial_cpp_compiler,
+                 const std::string &initial_archiver,
+                 const std::string &initial_linker)
+        : id(initial_id), name(initial_name),
+          asm_compiler(initial_asm_compiler), c_compiler(initial_c_compiler),
+          cpp_compiler(initial_cpp_compiler), archiver(initial_archiver),
+          linker(initial_linker) {}
+
     base::Toolchain ConstructToolchain() {
       base::Toolchain toolchain(id, name, asm_compiler, c_compiler,
                                 cpp_compiler, archiver, linker);
@@ -97,8 +109,6 @@ private:
   void Initialize();
 
   void RootArgs();
-  void CommonToolchainArgs();
-  void CommonTargetArgs();
 
   CLI::App *AddToolchain(const std::string &name,
                          const std::string &description,
@@ -110,21 +120,6 @@ private:
 
   bool clean_{false};
   env::LogLevel loglevel_{env::LogLevel::Info};
-  const std::map<std::string, env::LogLevel> loglevel_map_{
-      {"Trace", env::LogLevel::Trace},
-      {"Debug", env::LogLevel::Debug},
-      {"Info", env::LogLevel::Info},
-      {"Warning", env::LogLevel::Warning},
-      {"Critical", env::LogLevel::Critical},
-  };
-
-  const std::map<std::string, base::Toolchain::Id> toolchain_id_map_{
-      {"Gcc", base::Toolchain::Id::Gcc},
-      {"Msvc", base::Toolchain::Id::Msvc},
-      {"Clang", base::Toolchain::Id::Clang},
-      {"Custom", base::Toolchain::Id::Custom},
-      {"Undefined", base::Toolchain::Id::Undefined},
-  };
 
   // directory
   fs::path project_root_dir_{""};
