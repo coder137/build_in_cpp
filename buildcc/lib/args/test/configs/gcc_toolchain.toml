@@ -1,0 +1,11 @@
+# Depending on the compile_command and link_command associated with the relevant target these are the minimal parameters required
+[toolchain.gcc]
+build = true
+test = false
+id = "gcc"
+name = "gcc"
+asm_compiler = "as"
+c_compiler = "gcc"
+cpp_compiler = "g++"
+archiver = "ar"
+linker = "ld"
