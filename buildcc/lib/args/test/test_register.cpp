@@ -283,13 +283,19 @@ TEST(RegisterTestGroup, Register_Test) {
                           [](buildcc::base::Target &target) { (void)target; }));
   }
 
+  // Correct Usage
   {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(stateSuccess, target,
               [](buildcc::base::Target &target) { (void)target; });
-    reg.Test(stateSuccess, target,
-             [](buildcc::base::Target &target) { (void)target; });
+    reg.Test(stateSuccess, target, [](buildcc::base::Target &target) {
+      (void)target;
+      mock().actualCall("Register::Test::Callback");
+    });
+
+    mock().expectNCalls(1, "Register::Test::Callback");
+    reg.RunTest();
   }
 
   buildcc::env::deinit();
