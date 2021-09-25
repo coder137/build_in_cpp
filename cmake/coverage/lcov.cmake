@@ -12,6 +12,7 @@ else()
     set(LCOV_RC_OPTIONS 
         --rc lcov_branch_coverage=1
         --rc genhtml_branch_coverage=1
+        --rc geninfo_no_exception_branch=1
     )
     set(LCOV_REMOVE_OPTIONS 
         "/usr*"
