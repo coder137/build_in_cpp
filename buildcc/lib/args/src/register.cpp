@@ -36,13 +36,12 @@ void Register::Clean(const std::function<void(void)> &clean_cb) {
 void Register::Build(const Args::ToolchainState &toolchain_state,
                      base::Target &target,
                      const std::function<void(base::Target &)> &build_cb) {
-  tf::Task task;
   if (toolchain_state.build) {
-    task = BuildTask(target);
+    tf::Task task = BuildTask(target);
     build_cb(target);
     // TODO, Add target.Build here
+    deps_.insert({target.GetTargetPath(), task});
   }
-  deps_.insert({target.GetTargetPath(), task});
 }
 
 void Register::Test(const Args::ToolchainState &toolchain_state,
@@ -59,16 +58,13 @@ void Register::Test(const Args::ToolchainState &toolchain_state,
 }
 
 void Register::Dep(const base::Target &target, const base::Target &dependency) {
-  tf::Task target_task;
-  tf::Task dep_task;
   try {
-    target_task = deps_.at(target.GetTargetPath());
-    dep_task = deps_.at(dependency.GetTargetPath());
-    if (target_task.empty() || dep_task.empty()) {
-      return;
-    }
+    // target_task / dep_task cannot be empty
+    // Either present or not found
+    tf::Task target_task = deps_.at(target.GetTargetPath());
+    tf::Task dep_task = deps_.at(dependency.GetTargetPath());
     target_task.succeed(dep_task);
-  } catch (const std::out_of_range &e) {
+  } catch (const std::exception &e) {
     (void)e;
     env::assert_fatal<false>("Call Register::Build API on target and "
                              "dependency before Register::Dep API");
