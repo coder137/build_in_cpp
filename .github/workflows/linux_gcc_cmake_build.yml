@@ -116,6 +116,7 @@ jobs:
           sudo apt-get install ninja-build doxygen graphviz gcovr cppcheck clang-tidy
 
       - name: Install LCOV
+        run: |
           git clone -b v1.15 https://github.com/linux-test-project/lcov.git
           sudo make install
           lcov --version
