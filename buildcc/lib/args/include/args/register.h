@@ -29,16 +29,6 @@ namespace buildcc {
 
 class Register {
 public:
-  struct TestInfo {
-    base::Target &target_;
-    std::function<void(base::Target &target)> cb_;
-
-    TestInfo(base::Target &target,
-             const std::function<void(base::Target &target)> &cb)
-        : target_(target), cb_(cb) {}
-  };
-
-public:
   Register(const Args &args) : args_(args) { Initialize(); }
   Register(const Register &) = delete;
 
@@ -57,10 +47,23 @@ public:
   const tf::Taskflow &GetTaskflow() const { return taskflow_; }
 
 private:
+  struct TestInfo {
+    base::Target &target_;
+    std::function<void(base::Target &target)> cb_;
+
+    TestInfo(base::Target &target,
+             const std::function<void(base::Target &target)> &cb)
+        : target_(target), cb_(cb) {}
+  };
+
+private:
   void Initialize();
 
   // Setup env:: defaults
   void Env();
+
+  //
+  tf::Task BuildTask(base::Target &target);
 
 private:
   const Args &args_;

@@ -38,8 +38,9 @@ void Register::Build(const Args::ToolchainState &toolchain_state,
                      const std::function<void(base::Target &)> &build_cb) {
   tf::Task task;
   if (toolchain_state.build) {
-    task = taskflow_.composed_of(target.GetTaskflow()).name("Task");
+    task = BuildTask(target);
     build_cb(target);
+    // TODO, Add target.Build here
   }
   deps_.insert({target.GetTargetPath(), task});
 }
