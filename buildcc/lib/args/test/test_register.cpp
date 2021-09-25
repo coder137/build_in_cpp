@@ -303,5 +303,6 @@ TEST(RegisterTestGroup, Register_Test) {
 }
 
 int main(int ac, char **av) {
+  MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
