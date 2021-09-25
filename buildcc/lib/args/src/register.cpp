@@ -65,6 +65,12 @@ void Register::Test(const Args::ToolchainState &toolchain_state,
     return;
   }
 
+  const auto target_iter = deps_.find(target.GetTargetPath());
+  if (target_iter == deps_.end()) {
+    env::assert_fatal<false>(
+        "Call Register::Build API on target before Register::Test API");
+  }
+
   const bool added =
       tests_.emplace(target.GetTargetPath(), TestInfo(target, test_cb)).second;
   env::assert_fatal(
