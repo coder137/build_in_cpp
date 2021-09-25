@@ -118,6 +118,8 @@ jobs:
       - name: Install LCOV
         run: |
           git clone -b v1.15 https://github.com/linux-test-project/lcov.git
+          ls
+          cd lcov
           sudo make install
           lcov --version
 
