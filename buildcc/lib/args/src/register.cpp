@@ -45,17 +45,15 @@ void Register::Build(const Args::ToolchainState &toolchain_state,
 }
 
 void Register::Dep(const base::Target &target, const base::Target &dependency) {
-  try {
-    // target_task / dep_task cannot be empty
-    // Either present or not found
-    tf::Task target_task = deps_.at(target.GetTargetPath());
-    tf::Task dep_task = deps_.at(dependency.GetTargetPath());
-    target_task.succeed(dep_task);
-  } catch (const std::exception &e) {
-    (void)e;
+  // target_task / dep_task cannot be empty
+  // Either present or not found
+  const auto target_iter = deps_.find(target.GetTargetPath());
+  const auto dep_iter = deps_.find(dependency.GetTargetPath());
+  if (target_iter == deps_.end() || dep_iter == deps_.end()) {
     env::assert_fatal<false>("Call Register::Build API on target and "
                              "dependency before Register::Dep API");
   }
+  target_iter->second.succeed(dep_iter->second);
 }
 
 void Register::Test(const Args::ToolchainState &toolchain_state,
