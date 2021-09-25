@@ -34,10 +34,37 @@ public:
 
   void Clean(const std::function<void(void)> &clean_cb);
 
+  /**
+   * @brief Register the Target to be built
+   *
+   * @param toolchain_state `build state` registers the target
+   * @param target target taskflow is registered
+   * @param build_cb custom user callback to setup target build requirements
+   */
   void Build(const Args::ToolchainState &toolchain_state, base::Target &target,
              const std::function<void(base::Target &)> &build_cb);
+
+  /**
+   * @brief Register the Target to be run
+   * PreReq: Call `Register::Build` before calling `Register::Test`
+   *
+   * @param toolchain_state `build and test state` registers the target for
+   * testing
+   * @param target target is registered for test
+   * @param test_cb custom user callback for testing
+   */
   void Test(const Args::ToolchainState &toolchain_state, base::Target &target,
             const std::function<void(base::Target &)> &test_cb);
+
+  /**
+   * @brief Setup dependency between 2 Targets
+   * PreReq: Call `Register::Build` before calling `Register::Dep`
+   *
+   * @param target
+   * @param dependency
+   * Target runs after dependency is built
+   *
+   */
   void Dep(const base::Target &target, const base::Target &dependency);
 
   void RunBuild();
