@@ -29,6 +29,51 @@ namespace buildcc {
 
 class Register {
 public:
+  Register(const Args &args) : args_(args) { Initialize(); }
+  Register(const Register &) = delete;
+
+  void Clean(const std::function<void(void)> &clean_cb);
+
+  /**
+   * @brief Register the Target to be built
+   *
+   * @param toolchain_state `build state` registers the target
+   * @param target target taskflow is registered
+   * @param build_cb custom user callback to setup target build requirements
+   */
+  void Build(const Args::ToolchainState &toolchain_state, base::Target &target,
+             const std::function<void(base::Target &)> &build_cb);
+
+  /**
+   * @brief Register the Target to be run
+   * PreReq: Call `Register::Build` before calling `Register::Test`
+   *
+   * @param toolchain_state `build and test state` registers the target for
+   * testing
+   * @param target target is registered for test
+   * @param test_cb custom user callback for testing
+   */
+  void Test(const Args::ToolchainState &toolchain_state, base::Target &target,
+            const std::function<void(base::Target &)> &test_cb);
+
+  /**
+   * @brief Setup dependency between 2 Targets
+   * PreReq: Call `Register::Build` before calling `Register::Dep`
+   *
+   * @param target
+   * @param dependency
+   * Target runs after dependency is built
+   *
+   */
+  void Dep(const base::Target &target, const base::Target &dependency);
+
+  void RunBuild();
+  void RunTest();
+
+  // Getters
+  const tf::Taskflow &GetTaskflow() const { return taskflow_; }
+
+private:
   struct TestInfo {
     base::Target &target_;
     std::function<void(base::Target &target)> cb_;
@@ -38,24 +83,14 @@ public:
         : target_(target), cb_(cb) {}
   };
 
-public:
-  Register(const Args &args) : args_(args) {}
+private:
+  void Initialize();
 
+  // Setup env:: defaults
   void Env();
-  void Clean(const std::function<void(void)> &clean_cb);
 
-  void Build(const Args::ToolchainState &toolchain_state, base::Target &target,
-             const std::function<void(base::Target &)> &build_cb);
-  void Test(const Args::ToolchainState &toolchain_state, base::Target &target,
-            const std::function<void(base::Target &)> &test_cb);
-
-  void Dep(const base::Target &target, const base::Target &dependency);
-
-  void RunBuild();
-  void RunTest();
-
-  // Getters
-  const tf::Taskflow &GetTaskflow() const { return taskflow_; }
+  //
+  tf::Task BuildTask(base::Target &target);
 
 private:
   const Args &args_;

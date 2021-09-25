@@ -3,7 +3,8 @@ if (${TESTING})
 add_library(mock_args
     src/args.cpp
     mock/parse.cpp
-    # src/register.cpp
+    src/register.cpp
+    mock/tasks.cpp
 )
 target_include_directories(mock_args PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -32,7 +33,17 @@ target_link_libraries(test_args PRIVATE
     mock_args
 )
 
+add_executable(test_register
+    test/test_register.cpp
+)
+target_link_libraries(test_register PRIVATE 
+    mock_args
+)
+
 add_test(NAME test_args COMMAND test_args
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
+)
+add_test(NAME test_register COMMAND test_register
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
 )
 endif()
@@ -41,6 +52,7 @@ set(ARGS_SRCS
     src/args.cpp
     src/parse.cpp
     src/register.cpp
+    src/tasks.cpp
     include/args/args.h
     include/args/register.h
 )

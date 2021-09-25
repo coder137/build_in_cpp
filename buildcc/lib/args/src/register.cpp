@@ -27,12 +27,6 @@ namespace fs = std::filesystem;
 
 namespace buildcc {
 
-void Register::Env() {
-  env::init(fs::current_path() / args_.GetProjectRootDir(),
-            fs::current_path() / args_.GetProjectBuildDir());
-  env::set_log_level(args_.GetLogLevel());
-}
-
 void Register::Clean(const std::function<void(void)> &clean_cb) {
   if (args_.Clean()) {
     clean_cb();
@@ -42,12 +36,24 @@ void Register::Clean(const std::function<void(void)> &clean_cb) {
 void Register::Build(const Args::ToolchainState &toolchain_state,
                      base::Target &target,
                      const std::function<void(base::Target &)> &build_cb) {
-  tf::Task task;
   if (toolchain_state.build) {
-    task = taskflow_.composed_of(target.GetTaskflow()).name("Task");
+    tf::Task task = BuildTask(target);
     build_cb(target);
+    // TODO, Add target.Build here
+    deps_.insert({target.GetTargetPath(), task});
   }
-  deps_.insert({target.GetTargetPath(), task});
+}
+
+void Register::Dep(const base::Target &target, const base::Target &dependency) {
+  // target_task / dep_task cannot be empty
+  // Either present or not found
+  const auto target_iter = deps_.find(target.GetTargetPath());
+  const auto dep_iter = deps_.find(dependency.GetTargetPath());
+  if (target_iter == deps_.end() || dep_iter == deps_.end()) {
+    env::assert_fatal<false>("Call Register::Build API on target and "
+                             "dependency before Register::Dep API");
+  }
+  target_iter->second.succeed(dep_iter->second);
 }
 
 void Register::Test(const Args::ToolchainState &toolchain_state,
@@ -57,32 +63,16 @@ void Register::Test(const Args::ToolchainState &toolchain_state,
     return;
   }
 
+  const auto target_iter = deps_.find(target.GetTargetPath());
+  if (target_iter == deps_.end()) {
+    env::assert_fatal<false>(
+        "Call Register::Build API on target before Register::Test API");
+  }
+
   const bool added =
       tests_.emplace(target.GetTargetPath(), TestInfo(target, test_cb)).second;
   env::assert_fatal(
       added, fmt::format("Could not register test {}", target.GetName()));
-}
-
-void Register::Dep(const base::Target &target, const base::Target &dependency) {
-  tf::Task target_task;
-  tf::Task dep_task;
-  try {
-    target_task = deps_.at(target.GetTargetPath());
-    dep_task = deps_.at(dependency.GetTargetPath());
-    if (target_task.empty() || dep_task.empty()) {
-      return;
-    }
-    target_task.succeed(dep_task);
-  } catch (const std::out_of_range &e) {
-    (void)e;
-    env::assert_fatal(false, "Call Register::Build API on target and "
-                             "dependency before Register::Dep API");
-  }
-}
-
-void Register::RunBuild() {
-  executor_.run(taskflow_);
-  executor_.wait_for_all();
 }
 
 void Register::RunTest() {
@@ -91,6 +81,16 @@ void Register::RunTest() {
                   fmt::format("Testing \'{}\'", t.first.string()));
     t.second.cb_(t.second.target_);
   }
+}
+
+// Private
+
+void Register::Initialize() { Env(); }
+
+void Register::Env() {
+  env::init(fs::current_path() / args_.GetProjectRootDir(),
+            fs::current_path() / args_.GetProjectBuildDir());
+  env::set_log_level(args_.GetLogLevel());
 }
 
 } // namespace buildcc

@@ -21,6 +21,7 @@ else()
         "*/spdlog*"
         "*/flatbuffers*"
         "*/taskflow*"
+        "*/CLI11*"
         "*/generated*"
         "*/test*"
         "*/mock*"
