@@ -9,4 +9,6 @@ tf::Task Register::BuildTask(base::Target &target) {
   return taskflow_.placeholder();
 }
 
+void Register::RunBuild() {}
+
 } // namespace buildcc

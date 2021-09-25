@@ -44,19 +44,6 @@ void Register::Build(const Args::ToolchainState &toolchain_state,
   }
 }
 
-void Register::Test(const Args::ToolchainState &toolchain_state,
-                    base::Target &target,
-                    const std::function<void(base::Target &)> &test_cb) {
-  if (!(toolchain_state.build && toolchain_state.test)) {
-    return;
-  }
-
-  const bool added =
-      tests_.emplace(target.GetTargetPath(), TestInfo(target, test_cb)).second;
-  env::assert_fatal(
-      added, fmt::format("Could not register test {}", target.GetName()));
-}
-
 void Register::Dep(const base::Target &target, const base::Target &dependency) {
   try {
     // target_task / dep_task cannot be empty
@@ -71,9 +58,17 @@ void Register::Dep(const base::Target &target, const base::Target &dependency) {
   }
 }
 
-void Register::RunBuild() {
-  executor_.run(taskflow_);
-  executor_.wait_for_all();
+void Register::Test(const Args::ToolchainState &toolchain_state,
+                    base::Target &target,
+                    const std::function<void(base::Target &)> &test_cb) {
+  if (!(toolchain_state.build && toolchain_state.test)) {
+    return;
+  }
+
+  const bool added =
+      tests_.emplace(target.GetTargetPath(), TestInfo(target, test_cb)).second;
+  env::assert_fatal(
+      added, fmt::format("Could not register test {}", target.GetName()));
 }
 
 void Register::RunTest() {
