@@ -36,30 +36,32 @@ void Register::Clean(const std::function<void(void)> &clean_cb) {
 void Register::Build(const Args::ToolchainState &toolchain_state,
                      base::Target &target,
                      const std::function<void(base::Target &)> &build_cb) {
+  tf::Task task;
   if (toolchain_state.build) {
     build_cb(target);
-
-    tf::Task task = BuildTask(target);
-    const bool stored =
-        targets_.store.emplace(target.GetBinaryPath(), task).second;
-    env::assert_fatal(
-        stored, fmt::format("Could not register target {}", target.GetName()));
+    task = BuildTask(target);
   }
+  const bool target_stored =
+      targets_.store.emplace(target.GetBinaryPath(), task).second;
+  env::assert_fatal(target_stored, fmt::format("Could not register target {}",
+                                               target.GetName()));
 
   tf::Task graph_task = graphs_.tf.placeholder().name(fmt::format(
       "[{}] {}", target.GetToolchain().GetName(), target.GetName()));
-  const bool stored =
+  const bool graph_stored =
       graphs_.store.emplace(target.GetBinaryPath(), graph_task).second;
-  env::assert_fatal(
-      stored, fmt::format("Could not register graph {}", target.GetName()));
+  env::assert_fatal(graph_stored, fmt::format("Could not register graph {}",
+                                              target.GetName()));
 }
 
 void Register::Dep(RegInfo &reginfo, const base::Target &target,
                    const base::Target &dependency) {
-  // target_task / dep_task cannot be empty
-  // Either present or not found
+  //  empty tasks -> not built so skip
   const auto target_iter = reginfo.store.find(target.GetBinaryPath());
   const auto dep_iter = reginfo.store.find(dependency.GetBinaryPath());
+  if (target_iter->second.empty() || dep_iter->second.empty()) {
+    return;
+  }
   if (target_iter == reginfo.store.end() || dep_iter == reginfo.store.end()) {
     env::assert_fatal<false>("Call Register::Build API on target and "
                              "dependency before Register::Dep API");
