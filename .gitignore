@@ -14,6 +14,8 @@ _deps
 *build/
 *_build_*/
 .vscode/
+.vs/
+.idea/
 
 # Files
 *.gcov
