@@ -96,6 +96,9 @@ private:
   // Setup env:: defaults
   void Env();
 
+  void Dep(RegInfo &reginfo, const base::Target &target,
+           const base::Target &dependency);
+
   //
   tf::Task BuildTask(base::Target &target);
 
@@ -103,6 +106,7 @@ private:
   const Args &args_;
 
   RegInfo targets_{"Targets"};
+  RegInfo graphs_{"Graphs"};
 
   tf::Executor executor_;
 
