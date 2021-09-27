@@ -73,6 +73,8 @@ public:
   // Getters
   const tf::Taskflow &GetTaskflow() const { return targets_.tf; }
 
+  std::string Graph() { return graphs_.tf.dump(); }
+
 private:
   struct TestInfo {
     base::Target &target_;
