@@ -87,10 +87,8 @@ private:
     std::unordered_map<fs::path, tf::Task, internal::PathHash> relation;
     tf::Taskflow tf_;
 
-    RegInfo(const std::string & name) : tf_(name) {}
+    RegInfo(const std::string &name) : tf_(name) {}
   };
-
-
 
 private:
   void Initialize();
