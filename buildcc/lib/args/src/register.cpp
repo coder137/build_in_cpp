@@ -17,6 +17,7 @@
 #include "args/register.h"
 
 #include <filesystem>
+#include <queue>
 
 #include "fmt/format.h"
 
@@ -36,23 +37,58 @@ void Register::Clean(const std::function<void(void)> &clean_cb) {
 void Register::Build(const Args::ToolchainState &toolchain_state,
                      base::Target &target,
                      const std::function<void(base::Target &)> &build_cb) {
+  tf::Task task;
   if (toolchain_state.build) {
-    tf::Task task = BuildTask(target);
     build_cb(target);
-    // TODO, Add target.Build here
-    deps_.insert({target.GetTargetPath(), task});
+    task = BuildTask(target);
   }
+  const bool target_stored =
+      targets_.store.emplace(target.GetBinaryPath(), task).second;
+  env::assert_fatal(target_stored, fmt::format("Could not register target {}",
+                                               target.GetName()));
 }
 
 void Register::Dep(const base::Target &target, const base::Target &dependency) {
-  // target_task / dep_task cannot be empty
-  // Either present or not found
-  const auto target_iter = deps_.find(target.GetTargetPath());
-  const auto dep_iter = deps_.find(dependency.GetTargetPath());
-  if (target_iter == deps_.end() || dep_iter == deps_.end()) {
+  //  empty tasks -> not built so skip
+  const auto target_iter = targets_.store.find(target.GetBinaryPath());
+  const auto dep_iter = targets_.store.find(dependency.GetBinaryPath());
+  if (target_iter == targets_.store.end() || dep_iter == targets_.store.end()) {
     env::assert_fatal<false>("Call Register::Build API on target and "
                              "dependency before Register::Dep API");
   }
+  if (target_iter->second.empty() || dep_iter->second.empty()) {
+    return;
+  }
+  std::string deppath = dependency.GetTargetPath()
+                            .lexically_relative(env::get_project_build_dir())
+                            .string();
+  std::replace(deppath.begin(), deppath.end(), '\\', '/');
+
+  // DONE, Detect already added dependency
+  target_iter->second.for_each_dependent([&](const tf::Task &t) {
+    env::log_trace("for_each_dependent", t.name());
+    if (t.name() == deppath) {
+      env::assert_fatal<false>("Dependency already added");
+    }
+  });
+
+  // DONE, Detect cyclic dependency
+  std::queue<tf::Task> taskqueue;
+  taskqueue.push(target_iter->second);
+
+  while (!taskqueue.empty()) {
+    tf::Task current_task = taskqueue.front();
+    taskqueue.pop();
+
+    current_task.for_each_successor([&](const tf::Task &t) {
+      env::log_trace("for_each_successor", t.name());
+      taskqueue.push(t);
+      if (t.name() == deppath) {
+        env::assert_fatal<false>("Cyclic dependency detected");
+      }
+    });
+  }
+
   target_iter->second.succeed(dep_iter->second);
 }
 
@@ -63,14 +99,14 @@ void Register::Test(const Args::ToolchainState &toolchain_state,
     return;
   }
 
-  const auto target_iter = deps_.find(target.GetTargetPath());
-  if (target_iter == deps_.end()) {
+  const auto target_iter = targets_.store.find(target.GetBinaryPath());
+  if (target_iter == targets_.store.end()) {
     env::assert_fatal<false>(
         "Call Register::Build API on target before Register::Test API");
   }
 
   const bool added =
-      tests_.emplace(target.GetTargetPath(), TestInfo(target, test_cb)).second;
+      tests_.emplace(target.GetBinaryPath(), TestInfo(target, test_cb)).second;
   env::assert_fatal(
       added, fmt::format("Could not register test {}", target.GetName()));
 }

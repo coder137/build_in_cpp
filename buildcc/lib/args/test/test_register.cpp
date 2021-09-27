@@ -122,7 +122,7 @@ TEST(RegisterTestGroup, Register_Build) {
   mock().checkExpectations();
 }
 
-TEST(RegisterTestGroup, Register_Dep) {
+TEST(RegisterTestGroup, Register_NoBuildAndDep) {
   std::vector<const char *> av{
       "",
       "--config",
@@ -154,29 +154,22 @@ TEST(RegisterTestGroup, Register_Dep) {
   // 4 options
   // T -> Target
   // D -> Dep
-  // T0D0
-  // T0D1
-  // T1D0
+  // T0D0 -> Throw
+  // T0D1 -> Throw
+  // T1D0 -> Throw
   // T1D1 -> This is the only condition for success
-  buildcc::Args::ToolchainState falseState{false, false};
+  // buildcc::Args::ToolchainState falseState{false, false};
   buildcc::Args::ToolchainState trueState{true, true};
 
   // T0D0
   {
     buildcc::Register reg(args);
-    reg.Build(falseState, target,
-              [](buildcc::base::Target &target) { (void)target; });
-    reg.Build(falseState, dependency,
-              [](buildcc::base::Target &target) { (void)target; });
-
     CHECK_THROWS(std::exception, reg.Dep(target, dependency));
   }
 
   // T0D1
   {
     buildcc::Register reg(args);
-    reg.Build(falseState, target,
-              [](buildcc::base::Target &target) { (void)target; });
     mock().expectNCalls(1, "BuildTask_depT");
     reg.Build(trueState, dependency,
               [](buildcc::base::Target &target) { (void)target; });
@@ -189,8 +182,6 @@ TEST(RegisterTestGroup, Register_Dep) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(trueState, target,
-              [](buildcc::base::Target &target) { (void)target; });
-    reg.Build(falseState, dependency,
               [](buildcc::base::Target &target) { (void)target; });
 
     CHECK_THROWS(std::exception, reg.Dep(target, dependency));
@@ -207,6 +198,242 @@ TEST(RegisterTestGroup, Register_Dep) {
               [](buildcc::base::Target &target) { (void)target; });
 
     reg.Dep(target, dependency);
+  }
+
+  buildcc::env::deinit();
+  mock().checkExpectations();
+}
+
+TEST(RegisterTestGroup, Register_BuildAndDep) {
+  std::vector<const char *> av{
+      "",
+      "--config",
+      "configs/basic_parse.toml",
+  };
+  int argc = av.size();
+
+  buildcc::Args args;
+  buildcc::Args::ToolchainArg gcc_toolchain;
+  buildcc::Args::ToolchainArg msvc_toolchain;
+  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  args.Parse(argc, av.data());
+
+  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
+  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(args.Clean());
+
+  // Make dummy toolchain and target
+  buildcc::env::init(fs::current_path(), fs::current_path());
+  buildcc::base::Toolchain toolchain(buildcc::base::Toolchain::Id::Gcc, "", "",
+                                     "", "", "", "");
+  buildcc::base::Target target("dummyT", buildcc::base::TargetType::Executable,
+                               toolchain, "");
+  buildcc::base::Target dependency(
+      "depT", buildcc::base::TargetType::Executable, toolchain, "");
+
+  // 4 options
+  // T -> Target
+  // D -> Dep
+  // T0D0 -> Ignore
+  // T0D1 -> Ignore
+  // T1D0 -> Ignore
+  // T1D1 -> This is the only condition for success
+  buildcc::Args::ToolchainState falseState{false, false};
+  buildcc::Args::ToolchainState trueState{true, true};
+
+  // T0D0
+  {
+    buildcc::Register reg(args);
+    reg.Build(falseState, target,
+              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(falseState, dependency,
+              [](buildcc::base::Target &target) { (void)target; });
+
+    reg.Dep(target, dependency);
+  }
+
+  // T0D1
+  {
+    buildcc::Register reg(args);
+    reg.Build(falseState, target,
+              [](buildcc::base::Target &target) { (void)target; });
+    mock().expectNCalls(1, "BuildTask_depT");
+    reg.Build(trueState, dependency,
+              [](buildcc::base::Target &target) { (void)target; });
+
+    reg.Dep(target, dependency);
+  }
+
+  // T1D0
+  {
+    buildcc::Register reg(args);
+    mock().expectNCalls(1, "BuildTask_dummyT");
+    reg.Build(trueState, target,
+              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(falseState, dependency,
+              [](buildcc::base::Target &target) { (void)target; });
+
+    reg.Dep(target, dependency);
+  }
+
+  // T1D1
+  {
+    buildcc::Register reg(args);
+    mock().expectNCalls(1, "BuildTask_dummyT");
+    mock().expectNCalls(1, "BuildTask_depT");
+    reg.Build(trueState, target,
+              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(trueState, dependency,
+              [](buildcc::base::Target &target) { (void)target; });
+
+    reg.Dep(target, dependency);
+  }
+
+  buildcc::env::deinit();
+  mock().checkExpectations();
+}
+
+TEST(RegisterTestGroup, Register_DepDuplicate) {
+  std::vector<const char *> av{
+      "",
+      "--config",
+      "configs/basic_parse.toml",
+  };
+  int argc = av.size();
+
+  buildcc::Args args;
+  buildcc::Args::ToolchainArg gcc_toolchain;
+  buildcc::Args::ToolchainArg msvc_toolchain;
+  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  args.Parse(argc, av.data());
+
+  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
+  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(args.Clean());
+
+  // Make dummy toolchain and target
+  buildcc::env::init(fs::current_path(), fs::current_path());
+  buildcc::base::Toolchain toolchain(buildcc::base::Toolchain::Id::Gcc, "", "",
+                                     "", "", "", "");
+  buildcc::base::Target target("dummyT", buildcc::base::TargetType::Executable,
+                               toolchain, "");
+  buildcc::base::Target dependency(
+      "depT", buildcc::base::TargetType::Executable, toolchain, "");
+  buildcc::base::Target dependency2(
+      "dep2T", buildcc::base::TargetType::Executable, toolchain, "");
+
+  buildcc::Args::ToolchainState trueState{true, true};
+
+  // Duplicate dependency with 2 Targets
+  {
+    buildcc::Register reg(args);
+    mock().expectNCalls(1, "BuildTask_dummyT");
+    mock().expectNCalls(1, "BuildTask_depT");
+    reg.Build(trueState, target,
+              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(trueState, dependency,
+              [](buildcc::base::Target &target) { (void)target; });
+
+    reg.Dep(target, dependency);
+    CHECK_THROWS(std::exception, reg.Dep(target, dependency));
+  }
+
+  // Duplicate dependency with 3 Targets
+  {
+    buildcc::Register reg(args);
+    mock().expectNCalls(1, "BuildTask_dummyT");
+    mock().expectNCalls(1, "BuildTask_depT");
+    mock().expectNCalls(1, "BuildTask_dep2T");
+
+    reg.Build(trueState, target,
+              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(trueState, dependency,
+              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(trueState, dependency2,
+              [](buildcc::base::Target &target) { (void)target; });
+
+    reg.Dep(dependency, dependency2);
+    reg.Dep(target, dependency);
+    reg.Dep(target, dependency2);
+
+    CHECK_THROWS(std::exception, reg.Dep(target, dependency));
+    CHECK_THROWS(std::exception, reg.Dep(target, dependency2));
+  }
+
+  buildcc::env::deinit();
+  mock().checkExpectations();
+}
+
+TEST(RegisterTestGroup, Register_DepCyclic) {
+  std::vector<const char *> av{
+      "",
+      "--config",
+      "configs/basic_parse.toml",
+  };
+  int argc = av.size();
+
+  buildcc::Args args;
+  buildcc::Args::ToolchainArg gcc_toolchain;
+  buildcc::Args::ToolchainArg msvc_toolchain;
+  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  args.Parse(argc, av.data());
+
+  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
+  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(args.Clean());
+
+  // Make dummy toolchain and target
+  buildcc::env::init(fs::current_path(), fs::current_path());
+  buildcc::base::Toolchain toolchain(buildcc::base::Toolchain::Id::Gcc, "", "",
+                                     "", "", "", "");
+  buildcc::base::Target target("dummyT", buildcc::base::TargetType::Executable,
+                               toolchain, "");
+  buildcc::base::Target dependency(
+      "depT", buildcc::base::TargetType::Executable, toolchain, "");
+  buildcc::base::Target dependency2(
+      "dep2T", buildcc::base::TargetType::Executable, toolchain, "");
+
+  buildcc::Args::ToolchainState trueState{true, true};
+
+  // Immediate cyclic depdendency
+  {
+    buildcc::Register reg(args);
+    mock().expectNCalls(1, "BuildTask_dummyT");
+    mock().expectNCalls(1, "BuildTask_depT");
+    reg.Build(trueState, target,
+              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(trueState, dependency,
+              [](buildcc::base::Target &target) { (void)target; });
+
+    reg.Dep(target, dependency);
+    CHECK_THROWS(std::exception, reg.Dep(dependency, target));
+  }
+
+  // Duplicate dependency with 3 Targets
+  {
+    buildcc::Register reg(args);
+    mock().expectNCalls(1, "BuildTask_dummyT");
+    mock().expectNCalls(1, "BuildTask_depT");
+    mock().expectNCalls(1, "BuildTask_dep2T");
+
+    reg.Build(trueState, target,
+              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(trueState, dependency,
+              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(trueState, dependency2,
+              [](buildcc::base::Target &target) { (void)target; });
+
+    reg.Dep(dependency, dependency2);
+    reg.Dep(target, dependency);
+
+    // dependency2 -> dependency -> target -> dependency2
+    CHECK_THROWS(std::exception, reg.Dep(dependency2, target));
   }
 
   buildcc::env::deinit();
