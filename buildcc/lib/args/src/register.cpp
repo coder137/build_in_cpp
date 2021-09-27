@@ -45,21 +45,13 @@ void Register::Build(const Args::ToolchainState &toolchain_state,
       targets_.store.emplace(target.GetBinaryPath(), task).second;
   env::assert_fatal(target_stored, fmt::format("Could not register target {}",
                                                target.GetName()));
-
-  tf::Task graph_task = graphs_.tf.placeholder().name(fmt::format(
-      "[{}] {}", target.GetToolchain().GetName(), target.GetName()));
-  const bool graph_stored =
-      graphs_.store.emplace(target.GetBinaryPath(), graph_task).second;
-  env::assert_fatal(graph_stored, fmt::format("Could not register graph {}",
-                                              target.GetName()));
 }
 
-void Register::Dep(RegInfo &reginfo, const base::Target &target,
-                   const base::Target &dependency) {
+void Register::Dep(const base::Target &target, const base::Target &dependency) {
   //  empty tasks -> not built so skip
-  const auto target_iter = reginfo.store.find(target.GetBinaryPath());
-  const auto dep_iter = reginfo.store.find(dependency.GetBinaryPath());
-  if (target_iter == reginfo.store.end() || dep_iter == reginfo.store.end()) {
+  const auto target_iter = targets_.store.find(target.GetBinaryPath());
+  const auto dep_iter = targets_.store.find(dependency.GetBinaryPath());
+  if (target_iter == targets_.store.end() || dep_iter == targets_.store.end()) {
     env::assert_fatal<false>("Call Register::Build API on target and "
                              "dependency before Register::Dep API");
   }
@@ -67,14 +59,6 @@ void Register::Dep(RegInfo &reginfo, const base::Target &target,
     return;
   }
   target_iter->second.succeed(dep_iter->second);
-}
-
-void Register::Dep(const base::Target &target, const base::Target &dependency) {
-  // Target
-  Dep(targets_, target, dependency);
-
-  // Graph
-  Dep(graphs_, target, dependency);
 }
 
 void Register::Test(const Args::ToolchainState &toolchain_state,
