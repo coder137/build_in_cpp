@@ -58,6 +58,27 @@ void Register::Dep(const base::Target &target, const base::Target &dependency) {
   if (target_iter->second.empty() || dep_iter->second.empty()) {
     return;
   }
+  std::string deppath = dependency.GetTargetPath()
+                            .lexically_relative(env::get_project_build_dir())
+                            .string();
+  std::replace(deppath.begin(), deppath.end(), '\\', '/');
+
+  // DONE, Detect already added dependency
+  target_iter->second.for_each_dependent([&](const tf::Task &t) {
+    env::log_trace("for_each_dependent", t.name());
+    if (t.name() == deppath) {
+      env::assert_fatal<false>("Dependency already added");
+    }
+  });
+
+  // DONE, Detect cyclic dependency
+  target_iter->second.for_each_successor([&](const tf::Task &t) {
+    env::log_trace("for_each_successor", t.name());
+    if (t.name() == deppath) {
+      env::assert_fatal<false>("Cyclic dependency detected");
+    }
+  });
+
   target_iter->second.succeed(dep_iter->second);
 }
 
