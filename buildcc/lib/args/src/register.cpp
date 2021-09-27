@@ -17,6 +17,7 @@
 #include "args/register.h"
 
 #include <filesystem>
+#include <queue>
 
 #include "fmt/format.h"
 
@@ -72,12 +73,21 @@ void Register::Dep(const base::Target &target, const base::Target &dependency) {
   });
 
   // DONE, Detect cyclic dependency
-  target_iter->second.for_each_successor([&](const tf::Task &t) {
-    env::log_trace("for_each_successor", t.name());
-    if (t.name() == deppath) {
-      env::assert_fatal<false>("Cyclic dependency detected");
-    }
-  });
+  std::queue<tf::Task> taskqueue;
+  taskqueue.push(target_iter->second);
+
+  while (!taskqueue.empty()) {
+    tf::Task current_task = taskqueue.front();
+    taskqueue.pop();
+
+    current_task.for_each_successor([&](const tf::Task &t) {
+      env::log_trace("for_each_successor", t.name());
+      taskqueue.push(t);
+      if (t.name() == deppath) {
+        env::assert_fatal<false>("Cyclic dependency detected");
+      }
+    });
+  }
 
   target_iter->second.succeed(dep_iter->second);
 }
