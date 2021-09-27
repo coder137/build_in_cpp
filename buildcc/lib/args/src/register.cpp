@@ -37,9 +37,9 @@ void Register::Build(const Args::ToolchainState &toolchain_state,
                      base::Target &target,
                      const std::function<void(base::Target &)> &build_cb) {
   if (toolchain_state.build) {
-    tf::Task task = BuildTask(target);
     build_cb(target);
-    // TODO, Add target.Build here
+
+    tf::Task task = BuildTask(target);
     deps_.relation.emplace(target.GetTargetPath(), task);
   }
 }
