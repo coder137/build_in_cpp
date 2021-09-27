@@ -40,16 +40,16 @@ void Register::Build(const Args::ToolchainState &toolchain_state,
     tf::Task task = BuildTask(target);
     build_cb(target);
     // TODO, Add target.Build here
-    deps_.insert({target.GetTargetPath(), task});
+    deps_.relation.emplace(target.GetTargetPath(), task);
   }
 }
 
 void Register::Dep(const base::Target &target, const base::Target &dependency) {
   // target_task / dep_task cannot be empty
   // Either present or not found
-  const auto target_iter = deps_.find(target.GetTargetPath());
-  const auto dep_iter = deps_.find(dependency.GetTargetPath());
-  if (target_iter == deps_.end() || dep_iter == deps_.end()) {
+  const auto target_iter = deps_.relation.find(target.GetTargetPath());
+  const auto dep_iter = deps_.relation.find(dependency.GetTargetPath());
+  if (target_iter == deps_.relation.end() || dep_iter == deps_.relation.end()) {
     env::assert_fatal<false>("Call Register::Build API on target and "
                              "dependency before Register::Dep API");
   }
@@ -63,8 +63,8 @@ void Register::Test(const Args::ToolchainState &toolchain_state,
     return;
   }
 
-  const auto target_iter = deps_.find(target.GetTargetPath());
-  if (target_iter == deps_.end()) {
+  const auto target_iter = deps_.relation.find(target.GetTargetPath());
+  if (target_iter == deps_.relation.end()) {
     env::assert_fatal<false>(
         "Call Register::Build API on target before Register::Test API");
   }

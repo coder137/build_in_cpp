@@ -71,7 +71,7 @@ public:
   void RunTest();
 
   // Getters
-  const tf::Taskflow &GetTaskflow() const { return taskflow_; }
+  const tf::Taskflow &GetTaskflow() const { return deps_.tf_; }
 
 private:
   struct TestInfo {
@@ -82,6 +82,15 @@ private:
              const std::function<void(base::Target &target)> &cb)
         : target_(target), cb_(cb) {}
   };
+
+  struct RegInfo {
+    std::unordered_map<fs::path, tf::Task, internal::PathHash> relation;
+    tf::Taskflow tf_;
+
+    RegInfo(const std::string & name) : tf_(name) {}
+  };
+
+
 
 private:
   void Initialize();
@@ -94,11 +103,12 @@ private:
 
 private:
   const Args &args_;
+
+  RegInfo deps_{"Targets"};
+
   tf::Executor executor_;
-  tf::Taskflow taskflow_{"Targets"};
 
   std::unordered_map<fs::path, TestInfo, internal::PathHash> tests_;
-  std::unordered_map<fs::path, tf::Task, internal::PathHash> deps_;
 };
 
 } // namespace buildcc
