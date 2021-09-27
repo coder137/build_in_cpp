@@ -40,16 +40,16 @@ void Register::Build(const Args::ToolchainState &toolchain_state,
     build_cb(target);
 
     tf::Task task = BuildTask(target);
-    deps_.relation.emplace(target.GetBinaryPath(), task);
+    targets_.store.emplace(target.GetBinaryPath(), task);
   }
 }
 
 void Register::Dep(const base::Target &target, const base::Target &dependency) {
   // target_task / dep_task cannot be empty
   // Either present or not found
-  const auto target_iter = deps_.relation.find(target.GetBinaryPath());
-  const auto dep_iter = deps_.relation.find(dependency.GetBinaryPath());
-  if (target_iter == deps_.relation.end() || dep_iter == deps_.relation.end()) {
+  const auto target_iter = targets_.store.find(target.GetBinaryPath());
+  const auto dep_iter = targets_.store.find(dependency.GetBinaryPath());
+  if (target_iter == targets_.store.end() || dep_iter == targets_.store.end()) {
     env::assert_fatal<false>("Call Register::Build API on target and "
                              "dependency before Register::Dep API");
   }
@@ -63,8 +63,8 @@ void Register::Test(const Args::ToolchainState &toolchain_state,
     return;
   }
 
-  const auto target_iter = deps_.relation.find(target.GetBinaryPath());
-  if (target_iter == deps_.relation.end()) {
+  const auto target_iter = targets_.store.find(target.GetBinaryPath());
+  if (target_iter == targets_.store.end()) {
     env::assert_fatal<false>(
         "Call Register::Build API on target before Register::Test API");
   }

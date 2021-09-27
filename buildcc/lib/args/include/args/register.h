@@ -71,7 +71,7 @@ public:
   void RunTest();
 
   // Getters
-  const tf::Taskflow &GetTaskflow() const { return deps_.tf_; }
+  const tf::Taskflow &GetTaskflow() const { return targets_.tf; }
 
 private:
   struct TestInfo {
@@ -84,10 +84,10 @@ private:
   };
 
   struct RegInfo {
-    std::unordered_map<fs::path, tf::Task, internal::PathHash> relation;
-    tf::Taskflow tf_;
+    std::unordered_map<fs::path, tf::Task, internal::PathHash> store;
+    tf::Taskflow tf;
 
-    RegInfo(const std::string &name) : tf_(name) {}
+    RegInfo(const std::string &name) : tf(name) {}
   };
 
 private:
@@ -102,7 +102,7 @@ private:
 private:
   const Args &args_;
 
-  RegInfo deps_{"Targets"};
+  RegInfo targets_{"Targets"};
 
   tf::Executor executor_;
 

@@ -3,11 +3,11 @@
 namespace buildcc {
 
 tf::Task Register::BuildTask(base::Target &target) {
-  return deps_.tf_.composed_of(target.GetTaskflow()).name("Task");
+  return targets_.tf.composed_of(target.GetTaskflow()).name("Task");
 }
 
 void Register::RunBuild() {
-  executor_.run(deps_.tf_);
+  executor_.run(targets_.tf);
   executor_.wait_for_all();
 }
 
