@@ -122,7 +122,7 @@ TEST(RegisterTestGroup, Register_Build) {
   mock().checkExpectations();
 }
 
-TEST(RegisterTestGroup, Register_Dep) {
+TEST(RegisterTestGroup, Register_BuildAndDep) {
   std::vector<const char *> av{
       "",
       "--config",
@@ -154,9 +154,9 @@ TEST(RegisterTestGroup, Register_Dep) {
   // 4 options
   // T -> Target
   // D -> Dep
-  // T0D0
-  // T0D1
-  // T1D0
+  // T0D0 -> Ignore
+  // T0D1 -> Ignore
+  // T1D0 -> Ignore
   // T1D1 -> This is the only condition for success
   buildcc::Args::ToolchainState falseState{false, false};
   buildcc::Args::ToolchainState trueState{true, true};
@@ -169,7 +169,7 @@ TEST(RegisterTestGroup, Register_Dep) {
     reg.Build(falseState, dependency,
               [](buildcc::base::Target &target) { (void)target; });
 
-    CHECK_THROWS(std::exception, reg.Dep(target, dependency));
+    reg.Dep(target, dependency);
   }
 
   // T0D1
@@ -181,7 +181,7 @@ TEST(RegisterTestGroup, Register_Dep) {
     reg.Build(trueState, dependency,
               [](buildcc::base::Target &target) { (void)target; });
 
-    CHECK_THROWS(std::exception, reg.Dep(target, dependency));
+    reg.Dep(target, dependency);
   }
 
   // T1D0
@@ -193,7 +193,7 @@ TEST(RegisterTestGroup, Register_Dep) {
     reg.Build(falseState, dependency,
               [](buildcc::base::Target &target) { (void)target; });
 
-    CHECK_THROWS(std::exception, reg.Dep(target, dependency));
+    reg.Dep(target, dependency);
   }
 
   // T1D1
