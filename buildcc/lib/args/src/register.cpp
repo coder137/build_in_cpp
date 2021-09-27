@@ -59,12 +59,12 @@ void Register::Dep(RegInfo &reginfo, const base::Target &target,
   //  empty tasks -> not built so skip
   const auto target_iter = reginfo.store.find(target.GetBinaryPath());
   const auto dep_iter = reginfo.store.find(dependency.GetBinaryPath());
-  if (target_iter->second.empty() || dep_iter->second.empty()) {
-    return;
-  }
   if (target_iter == reginfo.store.end() || dep_iter == reginfo.store.end()) {
     env::assert_fatal<false>("Call Register::Build API on target and "
                              "dependency before Register::Dep API");
+  }
+  if (target_iter->second.empty() || dep_iter->second.empty()) {
+    return;
   }
   target_iter->second.succeed(dep_iter->second);
 }
