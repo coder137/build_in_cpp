@@ -18,11 +18,20 @@ TEST(PluginsTestGroup, BuildccFind_Search) {
   bool found = findcmake.Search();
   CHECK_TRUE(found);
 
-  std::vector<fs::path> matches = findcmake.GetPathMatches();
+  const std::vector<fs::path> &matches = findcmake.GetPathMatches();
   CHECK_TRUE(!matches.empty());
 }
 
-TEST(PluginsTestGroup, BuildccFind_BadEnv) {}
+TEST(PluginsTestGroup, BuildccFind_BadEnv) {
+  buildcc::plugin::BuildccFind findrandomenv(
+      "cmake", buildcc::plugin::BuildccFind::Type::HostExecutable,
+      {"FIND_RANDOM_ENV"});
+  bool found = findrandomenv.Search();
+  CHECK_FALSE(found);
+
+  const std::vector<fs::path> &matches = findrandomenv.GetPathMatches();
+  CHECK_TRUE(matches.empty());
+}
 
 int main(int ac, char **av) {
   return CommandLineTestRunner::RunAllTests(ac, av);
