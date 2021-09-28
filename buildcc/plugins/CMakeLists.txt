@@ -1,6 +1,8 @@
 set(PLUGINS_SRCS
     src/clang_compile_commands.cpp
+    src/buildcc_find.cpp
     include/plugins/clang_compile_commands.h
+    include/plugins/buildcc_find.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})
