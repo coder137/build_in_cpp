@@ -140,10 +140,6 @@ bool BuildccFind::SearchHostExecutable() {
                            matches.end());
   }
 
-  // TODO,
-  // for (const auto &asp : absolute_search_paths_) {
-  // }
-
   return !target_matches_.empty();
 }
 
