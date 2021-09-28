@@ -1,6 +1,44 @@
+# Plugin test
+if (${TESTING})
+add_library(mock_plugins
+    src/buildcc_find.cpp
+)
+target_include_directories(mock_plugins PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+target_compile_options(mock_plugins PUBLIC 
+    ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_FLAGS}
+)
+target_link_options(mock_plugins PUBLIC 
+    ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS}
+)
+target_link_libraries(mock_plugins PUBLIC 
+    mock_target
+
+    CppUTest
+    CppUTestExt
+    gcov
+)
+
+# Tests
+add_executable(test_buildcc_find
+    test/test_buildcc_find.cpp
+)
+target_link_libraries(test_buildcc_find PRIVATE
+    mock_plugins
+)
+
+add_test(NAME test_buildcc_find COMMAND test_buildcc_find
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
+)
+
+endif()
+
 set(PLUGINS_SRCS
     src/clang_compile_commands.cpp
+    src/buildcc_find.cpp
     include/plugins/clang_compile_commands.h
+    include/plugins/buildcc_find.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})
