@@ -33,6 +33,39 @@ TEST(PluginsTestGroup, BuildccFind_BadEnv) {
   CHECK_TRUE(matches.empty());
 }
 
+TEST(PluginsTestGroup, BuildccFind_WrongExecutable) {
+  buildcc::plugin::BuildccFind findrandomexecutable(
+      "random_cmake_executable",
+      buildcc::plugin::BuildccFind::Type::HostExecutable, {"FIND_RANDOM_ENV"});
+  bool found = findrandomexecutable.Search();
+  CHECK_FALSE(found);
+
+  const std::vector<fs::path> &matches = findrandomexecutable.GetPathMatches();
+  CHECK_TRUE(matches.empty());
+}
+
+TEST(PluginsTestGroup, BuildccFind_SearchUnimplemented) {
+  {
+    buildcc::plugin::BuildccFind findunimplemented(
+        "random_library", buildcc::plugin::BuildccFind::Type::BuildccLibrary);
+    bool found = findunimplemented.Search();
+    CHECK_FALSE(found);
+
+    const std::vector<fs::path> &matches = findunimplemented.GetPathMatches();
+    CHECK_TRUE(matches.empty());
+  }
+
+  {
+    buildcc::plugin::BuildccFind findunimplemented(
+        "random_library", buildcc::plugin::BuildccFind::Type::BuildccPlugin);
+    bool found = findunimplemented.Search();
+    CHECK_FALSE(found);
+
+    const std::vector<fs::path> &matches = findunimplemented.GetPathMatches();
+    CHECK_TRUE(matches.empty());
+  }
+}
+
 int main(int ac, char **av) {
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
