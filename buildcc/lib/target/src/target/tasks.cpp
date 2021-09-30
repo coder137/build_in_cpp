@@ -45,8 +45,25 @@ void Target::CompileTask() {
 void Target::LinkTask() {
   env::log_trace(name_, __FUNCTION__);
 
-  link_task_ = tf_.emplace(
-      [&](tf::Subflow &subflow) { link_generator_.Build(subflow); });
+  link_task_ = tf_.emplace([&]() {
+    ConvertForLink();
+
+    RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
+    RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
+    RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
+                       current_external_lib_deps_);
+    RecheckPaths(loader_.GetLoadedLinkDependencies(),
+                 current_link_dependencies_.internal);
+    RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_.internal);
+
+    if (dirty_) {
+      bool success = Command::Execute(LinkCommand());
+      env::assert_fatal(success, "Failed to link target");
+      Store();
+    }
+
+    build_ = true;
+  });
 
   link_task_.name(kLinkTaskName);
   link_task_.succeed(compile_task_);
