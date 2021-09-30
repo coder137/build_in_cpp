@@ -86,8 +86,7 @@ public:
         target_intermediate_dir_(fs::path(env::get_project_build_dir()) /
                                  toolchain.GetName() / name),
         loader_(name, target_intermediate_dir_),
-        compile_generator_("Compile", target_intermediate_dir_),
-        link_generator_("Link", target_intermediate_dir_) {
+        compile_generator_("Compile", target_intermediate_dir_) {
     Initialize();
   }
   virtual ~Target() {}
@@ -244,7 +243,6 @@ private:
       std::vector<const internal::GenInfo *> &output_dummy_generated_files);
 
   void BuildCompileGenerator();
-  void BuildLinkGenerator();
 
   // Compile
   void RecompileSources(
@@ -327,7 +325,6 @@ private:
   internal::FbsLoader loader_;
   Command command_;
   Generator compile_generator_;
-  Generator link_generator_;
 
   // Build states
   bool build_ = false;

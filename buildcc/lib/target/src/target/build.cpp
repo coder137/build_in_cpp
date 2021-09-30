@@ -78,7 +78,6 @@ void Target::Build() {
 
   // Compile and Link generator
   BuildCompileGenerator();
-  BuildLinkGenerator();
 
   // Register the tasks
   CompileTask();
@@ -223,30 +222,6 @@ void Target::BuildLink(
                      return &(ci.second);
                    });
   }
-}
-
-void Target::BuildLinkGenerator() {
-  link_generator_.AddPregenerateCb([&]() { ConvertForLink(); });
-  link_generator_.AddCustomRegenerateCb(
-      [&](const internal::geninfo_unordered_map &previous_info,
-          const internal::geninfo_unordered_map &current_info,
-          std::vector<const internal::GenInfo *> &output_generated_files,
-          std::vector<const internal::GenInfo *>
-              &output_dummy_generated_files) {
-        BuildLink(previous_info, current_info, output_generated_files,
-                  output_dummy_generated_files);
-        return dirty_;
-      });
-  link_generator_.AddPostgenerateCb([&]() {
-    Store();
-    dirty_ = true;
-    build_ = true;
-  });
-  std::string name =
-      GetTargetPath().lexically_relative(env::get_project_build_dir()).string();
-  std::replace(name.begin(), name.end(), '\\', '/');
-  link_generator_.AddGenInfo(name, GetCompiledSources(), {GetTargetPath()},
-                             {LinkCommand()}, false);
 }
 
 } // namespace buildcc::base
