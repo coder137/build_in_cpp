@@ -85,8 +85,7 @@ public:
                                 target_path_relative_to_root),
         target_intermediate_dir_(fs::path(env::get_project_build_dir()) /
                                  toolchain.GetName() / name),
-        loader_(name, target_intermediate_dir_),
-        compile_generator_("Compile", target_intermediate_dir_) {
+        loader_(name, target_intermediate_dir_) {
     Initialize();
   }
   virtual ~Target() {}
@@ -308,7 +307,6 @@ private:
 
   internal::FbsLoader loader_;
   Command command_;
-  Generator compile_generator_;
 
   // Build states
   bool build_ = false;
