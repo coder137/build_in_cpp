@@ -236,11 +236,6 @@ private:
       const internal::geninfo_unordered_map &current_info,
       std::vector<const internal::GenInfo *> &output_generated_files,
       std::vector<const internal::GenInfo *> &output_dummy_generated_files);
-  void BuildLink(
-      const internal::geninfo_unordered_map &previous_info,
-      const internal::geninfo_unordered_map &current_info,
-      std::vector<const internal::GenInfo *> &output_generated_files,
-      std::vector<const internal::GenInfo *> &output_dummy_generated_files);
 
   void BuildCompileGenerator();
 
