@@ -230,21 +230,10 @@ private:
   void ConvertForCompile();
   void ConvertForLink();
 
-  // Build
-  bool BuildCompile(
-      const internal::geninfo_unordered_map &previous_info,
-      const internal::geninfo_unordered_map &current_info,
-      std::vector<const internal::GenInfo *> &output_generated_files,
-      std::vector<const internal::GenInfo *> &output_dummy_generated_files);
-
-  void BuildCompileGenerator();
-
   // Compile
-  void RecompileSources(
-      const internal::geninfo_unordered_map &previous_info,
-      const internal::geninfo_unordered_map &current_info,
-      std::vector<const internal::GenInfo *> &output_generated_files,
-      std::vector<const internal::GenInfo *> &output_dummy_generated_files);
+  void CompileSources(std::vector<fs::path> &source_files);
+  void RecompileSources(std::vector<fs::path> &source_files,
+                        std::vector<fs::path> &dummy_source_files);
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,

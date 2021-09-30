@@ -37,8 +37,56 @@ namespace buildcc::base {
 void Target::CompileTask() {
   env::log_trace(name_, __FUNCTION__);
 
-  compile_task_ = tf_.emplace(
-      [&](tf::Subflow &subflow) { compile_generator_.Build(subflow); });
+  compile_task_ = tf_.emplace([&](tf::Subflow &subflow) {
+    ConvertForCompile();
+
+    std::vector<fs::path> source_files;
+    std::vector<fs::path> dummy_source_files;
+
+    if (!loader_.IsLoaded()) {
+      CompileSources(source_files);
+      dirty_ = true;
+    } else {
+      RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
+                   current_preprocessor_flags_);
+      RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
+                   current_common_compile_flags_);
+      RecheckFlags(loader_.GetLoadedAsmCompileFlags(),
+                   current_asm_compile_flags_);
+      RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
+      RecheckFlags(loader_.GetLoadedCppCompileFlags(),
+                   current_cpp_compile_flags_);
+      RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
+      RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
+      RecheckPaths(loader_.GetLoadedCompileDependencies(),
+                   current_compile_dependencies_.internal);
+
+      if (dirty_) {
+        CompileSources(source_files);
+      } else {
+        RecompileSources(source_files, dummy_source_files);
+      }
+    }
+
+    for (const auto &s : source_files) {
+      std::string name =
+          s.lexically_relative(env::get_project_root_dir()).string();
+      std::replace(name.begin(), name.end(), '\\', '/');
+      (void)subflow
+          .emplace([this, s]() {
+            bool success = Command::Execute(CompileCommand(s));
+            env::assert_fatal(success, "Could not compile source");
+          })
+          .name(name);
+    }
+
+    for (const auto &ds : dummy_source_files) {
+      std::string name =
+          ds.lexically_relative(env::get_project_root_dir()).string();
+      std::replace(name.begin(), name.end(), '\\', '/');
+      subflow.placeholder().name(name);
+    }
+  });
   compile_task_.name(kCompileTaskName);
 }
 
