@@ -37,7 +37,6 @@ namespace buildcc::base {
 void Target::CompileTask() {
   env::log_trace(name_, __FUNCTION__);
 
-  BuildCompileGenerator();
   compile_task_ = tf_.emplace(
       [&](tf::Subflow &subflow) { compile_generator_.Build(subflow); });
   compile_task_.name(kCompileTaskName);
@@ -46,7 +45,6 @@ void Target::CompileTask() {
 void Target::LinkTask() {
   env::log_trace(name_, __FUNCTION__);
 
-  BuildLinkGenerator();
   link_task_ = tf_.emplace(
       [&](tf::Subflow &subflow) { link_generator_.Build(subflow); });
 

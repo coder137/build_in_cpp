@@ -4,14 +4,8 @@
 
 namespace buildcc::base {
 
-void Target::CompileTask() {
-  BuildCompileGenerator();
-  compile_generator_.Build();
-}
+void Target::CompileTask() { compile_generator_.Build(); }
 
-void Target::LinkTask() {
-  BuildLinkGenerator();
-  link_generator_.Build();
-}
+void Target::LinkTask() { link_generator_.Build(); }
 
 } // namespace buildcc::base

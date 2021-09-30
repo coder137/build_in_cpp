@@ -76,6 +76,11 @@ void Target::Build() {
       {"linker", toolchain_.GetLinker()},
   });
 
+  // Compile and Link generator
+  BuildCompileGenerator();
+  BuildLinkGenerator();
+
+  // Register the tasks
   CompileTask();
   LinkTask();
 }
