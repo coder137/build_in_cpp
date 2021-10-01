@@ -73,6 +73,12 @@ See also [Software Architecture](#software-architecture)
 
 - See also [how to generate graphs using CMake](doc/software_architecture/generate_cmake_graphviz.md)
 
+## Dependency Chart
+
+![Depedency Chart](doc/software_architecture/uml/dependency_graph.png)
+
+- See also [how to create uml diagrams using VSCode](doc/software_architecture/create_uml_diagrams.md)
+
 ## Community Plugin
 
 - [x] [ClangCompileCommands](buildcc/plugins/include/plugins/clang_compile_commands.h)
