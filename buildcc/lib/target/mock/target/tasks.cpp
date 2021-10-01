@@ -1,17 +1,19 @@
 #include "target/target.h"
 
-#include "CppUTestExt/MockSupport.h"
-
 namespace buildcc::base {
 
 void Target::CompileTask() {
-  BuildCompileGenerator();
-  compile_generator_.Build();
+  std::vector<fs::path> source_files;
+  std::vector<fs::path> dummy_source_files;
+
+  BuildCompile(source_files, dummy_source_files);
+
+  for (const auto &s : source_files) {
+    bool success = Command::Execute(CompileCommand(s));
+    env::assert_fatal(success, "Could not compile source");
+  }
 }
 
-void Target::LinkTask() {
-  BuildLinkGenerator();
-  link_generator_.Build();
-}
+void Target::LinkTask() { BuildLink(); }
 
 } // namespace buildcc::base

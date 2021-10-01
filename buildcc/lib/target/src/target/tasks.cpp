@@ -27,8 +27,8 @@
 
 namespace {
 
-constexpr const char *const kCompileTaskName = "Compile";
-constexpr const char *const kLinkTaskName = "Link";
+constexpr const char *const kCompileTaskName = "Objects";
+constexpr const char *const kLinkTaskName = "Target";
 
 } // namespace
 
@@ -37,18 +37,39 @@ namespace buildcc::base {
 void Target::CompileTask() {
   env::log_trace(name_, __FUNCTION__);
 
-  BuildCompileGenerator();
-  compile_task_ = tf_.emplace(
-      [&](tf::Subflow &subflow) { compile_generator_.Build(subflow); });
+  compile_task_ = tf_.emplace([&](tf::Subflow &subflow) {
+    std::vector<fs::path> source_files;
+    std::vector<fs::path> dummy_source_files;
+
+    BuildCompile(source_files, dummy_source_files);
+
+    for (const auto &s : source_files) {
+      std::string name =
+          s.lexically_relative(env::get_project_root_dir()).string();
+      std::replace(name.begin(), name.end(), '\\', '/');
+      (void)subflow
+          .emplace([this, s]() {
+            bool success = Command::Execute(CompileCommand(s));
+            env::assert_fatal(success, "Could not compile source");
+          })
+          .name(name);
+    }
+
+    // For graph creation
+    for (const auto &ds : dummy_source_files) {
+      std::string name =
+          ds.lexically_relative(env::get_project_root_dir()).string();
+      std::replace(name.begin(), name.end(), '\\', '/');
+      (void)subflow.placeholder().name(name);
+    }
+  });
   compile_task_.name(kCompileTaskName);
 }
 
 void Target::LinkTask() {
   env::log_trace(name_, __FUNCTION__);
 
-  BuildLinkGenerator();
-  link_task_ = tf_.emplace(
-      [&](tf::Subflow &subflow) { link_generator_.Build(subflow); });
+  link_task_ = tf_.emplace([&]() { BuildLink(); });
 
   link_task_.name(kLinkTaskName);
   link_task_.succeed(compile_task_);

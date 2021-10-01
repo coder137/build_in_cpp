@@ -85,9 +85,7 @@ public:
                                 target_path_relative_to_root),
         target_intermediate_dir_(fs::path(env::get_project_build_dir()) /
                                  toolchain.GetName() / name),
-        loader_(name, target_intermediate_dir_),
-        compile_generator_("Compile", target_intermediate_dir_),
-        link_generator_("Link", target_intermediate_dir_) {
+        loader_(name, target_intermediate_dir_) {
     Initialize();
   }
   virtual ~Target() {}
@@ -96,6 +94,10 @@ public:
 
   // Builders
   void Build() override;
+
+  void BuildCompile(std::vector<fs::path> &source_files,
+                    std::vector<fs::path> &dummy_source_files);
+  void BuildLink();
 
   // Setters
 
@@ -231,27 +233,10 @@ private:
   void ConvertForCompile();
   void ConvertForLink();
 
-  // Build
-  bool BuildCompile(
-      const internal::geninfo_unordered_map &previous_info,
-      const internal::geninfo_unordered_map &current_info,
-      std::vector<const internal::GenInfo *> &output_generated_files,
-      std::vector<const internal::GenInfo *> &output_dummy_generated_files);
-  void BuildLink(
-      const internal::geninfo_unordered_map &previous_info,
-      const internal::geninfo_unordered_map &current_info,
-      std::vector<const internal::GenInfo *> &output_generated_files,
-      std::vector<const internal::GenInfo *> &output_dummy_generated_files);
-
-  void BuildCompileGenerator();
-  void BuildLinkGenerator();
-
   // Compile
-  void RecompileSources(
-      const internal::geninfo_unordered_map &previous_info,
-      const internal::geninfo_unordered_map &current_info,
-      std::vector<const internal::GenInfo *> &output_generated_files,
-      std::vector<const internal::GenInfo *> &output_dummy_generated_files);
+  void CompileSources(std::vector<fs::path> &source_files);
+  void RecompileSources(std::vector<fs::path> &source_files,
+                        std::vector<fs::path> &dummy_source_files);
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
@@ -326,8 +311,6 @@ private:
 
   internal::FbsLoader loader_;
   Command command_;
-  Generator compile_generator_;
-  Generator link_generator_;
 
   // Build states
   bool build_ = false;

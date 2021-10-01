@@ -31,18 +31,32 @@ TEST(GeneratorTestGroup, Generator_AddPregenerateCb) {
   fs::path TEST_BUILD_DIR = BUILD_DIR / "AddPregenerateCb";
   fs::create_directories(TEST_BUILD_DIR);
 
-  buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-  CHECK_THROWS(std::exception,
-               generator.AddPregenerateCb(std::function<void(void)>()));
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    CHECK_THROWS(std::exception,
+                 generator.AddPregenerateCb(std::function<void(void)>()));
+  }
+
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    generator.AddPregenerateCb([]() {});
+  }
 }
 
 TEST(GeneratorTestGroup, Generator_AddPostgenerateCb) {
   fs::path TEST_BUILD_DIR = BUILD_DIR / "AddPostgenerateCb";
   fs::create_directories(TEST_BUILD_DIR);
 
-  buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-  CHECK_THROWS(std::exception,
-               generator.AddPostgenerateCb(std::function<void(void)>()));
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    CHECK_THROWS(std::exception,
+                 generator.AddPostgenerateCb(std::function<void(void)>()));
+  }
+
+  {
+    buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
+    generator.AddPostgenerateCb([]() {});
+  }
 }
 
 TEST(GeneratorTestGroup, Generator_AddInfo) {

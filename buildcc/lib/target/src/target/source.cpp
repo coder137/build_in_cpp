@@ -108,50 +108,59 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
 
 // Private
 
-void Target::RecompileSources(
-    const internal::geninfo_unordered_map &previous_info,
-    const internal::geninfo_unordered_map &current_info,
-    std::vector<const internal::GenInfo *> &output_generated_files,
-    std::vector<const internal::GenInfo *> &output_dummy_generated_files) {
-  // RecompileSources
-  bool build = false;
+void Target::CompileSources(std::vector<fs::path> &source_files) {
+  std::transform(current_source_files_.internal.begin(),
+                 current_source_files_.internal.end(),
+                 std::back_inserter(source_files),
+                 [](const buildcc::internal::Path &p) -> fs::path {
+                   return p.GetPathname();
+                 });
+}
 
-  // previous_info has more items than current_info
-  for (const auto &pi : previous_info) {
-    if (current_info.find(pi.first) == current_info.end()) {
-      SourceRemoved();
-      build = true;
-      break;
-    }
+void Target::RecompileSources(std::vector<fs::path> &source_files,
+                              std::vector<fs::path> &dummy_source_files) {
+  env::log_trace(name_, __FUNCTION__);
+
+  const auto &previous_source_files = loader_.GetLoadedSources();
+
+  // * Cannot find previous source in current source files
+  const bool is_source_removed =
+      std::any_of(previous_source_files.begin(), previous_source_files.end(),
+                  [&](const internal::Path &p) {
+                    return current_source_files_.internal.find(p) ==
+                           current_source_files_.internal.end();
+                  });
+
+  if (is_source_removed) {
+    dirty_ = true;
+    SourceRemoved();
   }
 
-  // Check all files individually
-  for (const auto &ci : current_info) {
-    if (previous_info.find(ci.first) == previous_info.end()) {
-      // current_info has more items than
-      // previous_info
-      SourceAdded();
+  for (const auto &current_file : current_source_files_.internal) {
+    const auto &current_source = current_file.GetPathname();
+
+    // Find current_file in the loaded sources
+    auto iter = previous_source_files.find(current_file);
+
+    if (iter == previous_source_files.end()) {
+      // *1 New source file added to build
+      source_files.push_back(current_source);
       dirty_ = true;
+      SourceAdded();
     } else {
-      const internal::GenInfo &loaded_geninfo = previous_info.at(ci.first);
-      BuilderInterface::RecheckPaths(loaded_geninfo.inputs.internal,
-                                     ci.second.inputs.internal);
-      RecheckChanged(loaded_geninfo.outputs, ci.second.outputs);
-      RecheckChanged(loaded_geninfo.commands, ci.second.commands);
-      if (dirty_) {
+      // *2 Current file is updated
+      if (current_file.GetLastWriteTimestamp() >
+          iter->GetLastWriteTimestamp()) {
+        source_files.push_back(current_source);
+        dirty_ = true;
         SourceUpdated();
+      } else {
+        // ELSE
+        // *3 Do nothing
+        dummy_source_files.push_back(current_source);
       }
     }
-
-    if (dirty_) {
-      output_generated_files.push_back(&(ci.second));
-      build = true;
-    } else {
-      output_dummy_generated_files.push_back(&(ci.second));
-    }
-    dirty_ = false;
   }
-  dirty_ = build;
 }
 
 std::string Target::CompileCommand(const fs::path &current_source) const {

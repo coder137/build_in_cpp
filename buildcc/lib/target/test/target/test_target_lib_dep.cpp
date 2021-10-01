@@ -100,6 +100,7 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
     foolib.Build();
+    CHECK_FALSE(foolib.GetBuildState());
 
     // Executable for static
     buildcc::base::Target exe_target(
@@ -108,6 +109,7 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
     exe_target.Build();
+    CHECK_FALSE(exe_target.GetBuildState());
   }
 
   mock().checkExpectations();

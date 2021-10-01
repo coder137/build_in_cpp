@@ -22,20 +22,6 @@
 
 #include "fmt/format.h"
 
-namespace {
-
-void CompileSources(
-    const buildcc::internal::geninfo_unordered_map &current_info,
-    std::vector<const buildcc::internal::GenInfo *> &output_generated_files) {
-  std::transform(current_info.begin(), current_info.end(),
-                 std::back_inserter(output_generated_files),
-                 [](const auto &ci) -> const buildcc::internal::GenInfo * {
-                   return &(ci.second);
-                 });
-}
-
-} // namespace
-
 namespace buildcc::base {
 
 // * Load
@@ -76,6 +62,10 @@ void Target::Build() {
       {"linker", toolchain_.GetLinker()},
   });
 
+  // Load the serialized file
+  (void)loader_.Load();
+
+  // Register the tasks
   CompileTask();
   LinkTask();
 }
@@ -133,70 +123,39 @@ void Target::ConvertForLink() {
   }
 }
 
-bool Target::BuildCompile(
-    const internal::geninfo_unordered_map &previous_info,
-    const internal::geninfo_unordered_map &current_info,
-    std::vector<const internal::GenInfo *> &output_generated_files,
-    std::vector<const internal::GenInfo *> &output_dummy_generated_files) {
-  const bool is_loaded = loader_.Load();
-  (void)is_loaded;
+void Target::BuildCompile(std::vector<fs::path> &source_files,
+                          std::vector<fs::path> &dummy_source_files) {
+  ConvertForCompile();
 
-  // * Completely compile sources if any of the following change
-  // TODO, Toolchain, ASM, C, C++ compiler related to a particular name
-  RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
-               current_preprocessor_flags_);
-  RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
-               current_common_compile_flags_);
-  RecheckFlags(loader_.GetLoadedAsmCompileFlags(), current_asm_compile_flags_);
-  RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
-  RecheckFlags(loader_.GetLoadedCppCompileFlags(), current_cpp_compile_flags_);
-  RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
-  RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
-  RecheckPaths(loader_.GetLoadedCompileDependencies(),
-               current_compile_dependencies_.internal);
-
-  if (dirty_) {
-    CompileSources(current_info, output_generated_files);
+  if (!loader_.IsLoaded()) {
+    CompileSources(source_files);
+    dirty_ = true;
   } else {
-    RecompileSources(previous_info, current_info, output_generated_files,
-                     output_dummy_generated_files);
-  }
+    RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
+                 current_preprocessor_flags_);
+    RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
+                 current_common_compile_flags_);
+    RecheckFlags(loader_.GetLoadedAsmCompileFlags(),
+                 current_asm_compile_flags_);
+    RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
+    RecheckFlags(loader_.GetLoadedCppCompileFlags(),
+                 current_cpp_compile_flags_);
+    RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
+    RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
+    RecheckPaths(loader_.GetLoadedCompileDependencies(),
+                 current_compile_dependencies_.internal);
 
-  return dirty_;
-}
-
-void Target::BuildCompileGenerator() {
-  compile_generator_.AddPregenerateCb([&]() { ConvertForCompile(); });
-  compile_generator_.AddCustomRegenerateCb(
-      [&](const internal::geninfo_unordered_map &previous_info,
-          const internal::geninfo_unordered_map &current_info,
-          std::vector<const internal::GenInfo *> &output_generated_files,
-          std::vector<const internal::GenInfo *>
-              &output_dummy_generated_files) {
-        return BuildCompile(previous_info, current_info, output_generated_files,
-                            output_dummy_generated_files);
-      });
-  compile_generator_.AddPostgenerateCb([&]() { dirty_ = true; });
-
-  for (const auto &cof : current_object_files_) {
-    std::string name = fs::path(cof.first)
-                           .lexically_relative(env::get_project_root_dir())
-                           .string();
-    std::replace(name.begin(), name.end(), '\\', '/');
-    compile_generator_.AddGenInfo(name, {cof.first}, {cof.second},
-                                  {CompileCommand(cof.first)}, true);
+    if (dirty_) {
+      CompileSources(source_files);
+    } else {
+      RecompileSources(source_files, dummy_source_files);
+    }
   }
 }
 
-void Target::BuildLink(
-    const internal::geninfo_unordered_map &previous_info,
-    const internal::geninfo_unordered_map &current_info,
-    std::vector<const internal::GenInfo *> &output_generated_files,
-    std::vector<const internal::GenInfo *> &output_dummy_generated_files) {
-  (void)previous_info;
-  // * Completely rebuild target / link if any of the following change
-  // Target compiled source files either during Compile / Recompile
-  // Target library dependencies
+void Target::BuildLink() {
+  ConvertForLink();
+
   RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
   RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
   RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
@@ -206,42 +165,11 @@ void Target::BuildLink(
   RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_.internal);
 
   if (dirty_) {
-    std::transform(current_info.begin(), current_info.end(),
-                   std::back_inserter(output_generated_files),
-                   [](const auto &ci) -> const internal::GenInfo * {
-                     return &(ci.second);
-                   });
-  } else {
-    std::transform(current_info.begin(), current_info.end(),
-                   std::back_inserter(output_dummy_generated_files),
-                   [](const auto &ci) -> const internal::GenInfo * {
-                     return &(ci.second);
-                   });
-  }
-}
-
-void Target::BuildLinkGenerator() {
-  link_generator_.AddPregenerateCb([&]() { ConvertForLink(); });
-  link_generator_.AddCustomRegenerateCb(
-      [&](const internal::geninfo_unordered_map &previous_info,
-          const internal::geninfo_unordered_map &current_info,
-          std::vector<const internal::GenInfo *> &output_generated_files,
-          std::vector<const internal::GenInfo *>
-              &output_dummy_generated_files) {
-        BuildLink(previous_info, current_info, output_generated_files,
-                  output_dummy_generated_files);
-        return dirty_;
-      });
-  link_generator_.AddPostgenerateCb([&]() {
+    bool success = Command::Execute(LinkCommand());
+    env::assert_fatal(success, "Failed to link target");
     Store();
-    dirty_ = true;
     build_ = true;
-  });
-  std::string name =
-      GetTargetPath().lexically_relative(env::get_project_build_dir()).string();
-  std::replace(name.begin(), name.end(), '\\', '/');
-  link_generator_.AddGenInfo(name, GetCompiledSources(), {GetTargetPath()},
-                             {LinkCommand()}, false);
+  }
 }
 
 } // namespace buildcc::base

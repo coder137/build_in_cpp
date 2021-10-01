@@ -57,6 +57,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   simple.Build();
+  CHECK_TRUE(simple.GetBuildState());
 
   mock().checkExpectations();
 
@@ -87,6 +88,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
   {
     // * Remove flag
@@ -97,6 +99,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
 
   {
@@ -109,6 +112,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
 
   mock().checkExpectations();
@@ -147,6 +151,7 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_AddCommonCompileFlag) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   simple.Build();
+  CHECK_TRUE(simple.GetBuildState());
 
   mock().checkExpectations();
 
@@ -178,6 +183,7 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
   {
     buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
@@ -187,6 +193,7 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
     simple.AddCommonCompileFlag("-g");
 
     simple.Build();
+    CHECK_FALSE(simple.GetBuildState());
   }
   {
     // * Remove flag
@@ -199,6 +206,7 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
 
   {
@@ -213,6 +221,7 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
 
   mock().checkExpectations();
@@ -251,6 +260,7 @@ TEST(TargetTestAsmCompileFlagGroup, Target_AddCompileFlag) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   simple.Build();
+  CHECK_TRUE(simple.GetBuildState());
 
   mock().checkExpectations();
 
@@ -282,6 +292,7 @@ TEST(TargetTestAsmCompileFlagGroup, Target_ChangedCompileFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
   {
     // * No Change
@@ -292,6 +303,7 @@ TEST(TargetTestAsmCompileFlagGroup, Target_ChangedCompileFlag) {
     simple.AddAsmCompileFlag("-g");
 
     simple.Build();
+    CHECK_FALSE(simple.GetBuildState());
   }
   {
     // * Remove flag
@@ -304,6 +316,7 @@ TEST(TargetTestAsmCompileFlagGroup, Target_ChangedCompileFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
 
   {
@@ -318,6 +331,7 @@ TEST(TargetTestAsmCompileFlagGroup, Target_ChangedCompileFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
 
   mock().checkExpectations();
@@ -355,6 +369,7 @@ TEST(TargetTestCCompileFlagsGroup, Target_AddCompileFlag) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   simple.Build();
+  CHECK_TRUE(simple.GetBuildState());
 
   mock().checkExpectations();
 
@@ -385,6 +400,7 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
   {
     // * Remove flag
@@ -395,6 +411,7 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
 
   {
@@ -407,6 +424,7 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
 
   mock().checkExpectations();
@@ -444,6 +462,7 @@ TEST(TargetTestCppCompileFlagsGroup, Target_AddCompileFlag) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   simple.Build();
+  CHECK_TRUE(simple.GetBuildState());
 
   mock().checkExpectations();
 
@@ -474,6 +493,7 @@ TEST(TargetTestCppCompileFlagsGroup, Target_ChangedCompileFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
   {
     // * Remove flag
@@ -484,6 +504,7 @@ TEST(TargetTestCppCompileFlagsGroup, Target_ChangedCompileFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
 
   {
@@ -496,6 +517,7 @@ TEST(TargetTestCppCompileFlagsGroup, Target_ChangedCompileFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
 
   mock().checkExpectations();
@@ -533,6 +555,7 @@ TEST(TargetTestLinkFlagsGroup, Target_AddLinkFlag) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   simple.Build();
+  CHECK_TRUE(simple.GetBuildState());
 
   mock().checkExpectations();
 
@@ -563,6 +586,7 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
   {
     // * Remove flag
@@ -572,6 +596,7 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
 
   {
@@ -583,6 +608,7 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    CHECK_TRUE(simple.GetBuildState());
   }
 
   mock().checkExpectations();

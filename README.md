@@ -45,7 +45,6 @@ Build C, C++ and ASM files in C++
 - A two stage `compile` and `link` procedure is called a **Target**
   - This means that Executables, StaticLibraries and DynamicLibraries are all categorized as Targets
   - In the future C++20 modules can also be its own target dependending on compiler implementations
-  - The two stages are built using **Generators** where link generation depends on compile generation
 - Every Target requires a complementary (and compatible) **Toolchain**
   - This ensures that cross compiling is very easy and explicit in nature.
   - Multiple toolchains can be _mixed_ in a single build file i.e we can generate targets using the GCC, Clang, MSVC and many other compilers **simultaneously**.
@@ -73,6 +72,12 @@ See also [Software Architecture](#software-architecture)
 ![BuildCC Single library](doc/software_architecture/buildcc_single_lib.PNG)
 
 - See also [how to generate graphs using CMake](doc/software_architecture/generate_cmake_graphviz.md)
+
+## Dependency Chart
+
+![Depedency Chart](doc/software_architecture/uml/dependency_graph.png)
+
+- See also [how to create uml diagrams using VSCode](doc/software_architecture/create_uml_diagrams.md)
 
 ## Community Plugin
 
