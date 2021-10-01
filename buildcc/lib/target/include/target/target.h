@@ -95,6 +95,10 @@ public:
   // Builders
   void Build() override;
 
+  void BuildCompile(std::vector<fs::path> &source_files,
+                    std::vector<fs::path> &dummy_source_files);
+  void BuildLink();
+
   // Setters
 
   // * Sources
