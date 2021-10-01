@@ -54,9 +54,8 @@ void Target::LinkTask() {
     bool success = Command::Execute(LinkCommand());
     env::assert_fatal(success, "Failed to link target");
     Store();
+    build_ = true;
   }
-
-  build_ = true;
 }
 
 } // namespace buildcc::base
