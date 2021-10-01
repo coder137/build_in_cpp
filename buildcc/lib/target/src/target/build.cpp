@@ -68,6 +68,8 @@ void Target::Build() {
   // Register the tasks
   CompileTask();
   LinkTask();
+
+  lock_ = true;
 }
 
 std::string Target::LinkCommand() const {
@@ -90,7 +92,15 @@ std::string Target::LinkCommand() const {
       });
 }
 
-//
+// Private
+
+void Target::LockedAfterBuild() {
+  env::assert_fatal(lock_, "Cannot use this function after Target::Build");
+}
+
+void Target::UnlockedAfterBuild() {
+  env::assert_fatal(!lock_, "Cannot use this function before Target::Build");
+}
 
 void Target::ConvertForCompile() {
   // Convert user_source_files to current_source_files

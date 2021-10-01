@@ -229,6 +229,10 @@ protected:
 private:
   void Initialize();
 
+  // Throws exceptions when Target functions are used inappropriately
+  void LockedAfterBuild();
+  void UnlockedAfterBuild();
+
   //
   void ConvertForCompile();
   void ConvertForLink();
@@ -314,6 +318,7 @@ private:
 
   // Build states
   bool build_ = false;
+  bool lock_ = false;
 
   tf::Taskflow tf_;
   tf::Task compile_task_;
