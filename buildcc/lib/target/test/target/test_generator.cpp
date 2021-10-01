@@ -39,7 +39,7 @@ TEST(GeneratorTestGroup, Generator_AddPregenerateCb) {
 
   {
     buildcc::base::Generator generator("custom_file_generator", TEST_BUILD_DIR);
-    generator.AddPostgenerateCb([]() {});
+    generator.AddPregenerateCb([]() {});
   }
 }
 
