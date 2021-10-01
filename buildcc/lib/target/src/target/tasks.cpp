@@ -27,8 +27,8 @@
 
 namespace {
 
-constexpr const char *const kCompileTaskName = "Compile";
-constexpr const char *const kLinkTaskName = "Link";
+constexpr const char *const kCompileTaskName = "Objects";
+constexpr const char *const kLinkTaskName = "Target";
 
 } // namespace
 
