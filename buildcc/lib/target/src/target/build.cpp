@@ -31,6 +31,9 @@ namespace buildcc::base {
 // * Link
 // Library dependencies
 void Target::Build() {
+  LockedAfterBuild();
+  Lock();
+
   env::log_trace(name_, __FUNCTION__);
 
   // Taskflow updates
@@ -71,7 +74,7 @@ void Target::Build() {
 }
 
 std::string Target::LinkCommand() const {
-
+  UnlockedAfterBuild();
   // Add compiled sources
   const std::string aggregated_compiled_sources =
       internal::aggregate(GetCompiledSources());
@@ -90,7 +93,17 @@ std::string Target::LinkCommand() const {
       });
 }
 
-//
+// Private
+
+void Target::Lock() { lock_ = true; }
+
+void Target::LockedAfterBuild() const {
+  env::assert_fatal(!lock_, "Cannot use this function after Target::Build");
+}
+
+void Target::UnlockedAfterBuild() const {
+  env::assert_fatal(lock_, "Cannot use this function before Target::Build");
+}
 
 void Target::ConvertForCompile() {
   // Convert user_source_files to current_source_files

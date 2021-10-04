@@ -95,10 +95,6 @@ public:
   // Builders
   void Build() override;
 
-  void BuildCompile(std::vector<fs::path> &source_files,
-                    std::vector<fs::path> &dummy_source_files);
-  void BuildLink();
-
   // Setters
 
   // * Sources
@@ -152,6 +148,14 @@ public:
 
   // Getters (GENERIC)
 
+  // Target state
+
+  // Set during first build or rebuild
+  bool GetBuildState() const { return build_; }
+
+  // lock == true after Build is called
+  bool GetLockState() const { return lock_; }
+
   fs::path GetTargetPath() const {
     fs::path path =
         GetTargetIntermediateDir() / fmt::format("{}{}", name_, target_ext_);
@@ -201,16 +205,23 @@ public:
     return current_link_flags_;
   }
 
-  // Getters (AFTER BUILD)
+  // Getters (UnlockedAfterBuild)
 
-  std::string CompileCommand(const fs::path &current_source) const;
+  std::string CompileCommand(const fs::path &absolute_current_source) const;
   std::string LinkCommand() const;
 
-  tf::Taskflow &GetTaskflow() { return tf_; }
-  tf::Task &GetCompileTask() { return compile_task_; }
-  tf::Task &GetLinkTask() { return link_task_; }
-
-  bool GetBuildState() const { return build_; }
+  tf::Taskflow &GetTaskflow() {
+    UnlockedAfterBuild();
+    return tf_;
+  }
+  tf::Task &GetCompileTask() {
+    UnlockedAfterBuild();
+    return compile_task_;
+  }
+  tf::Task &GetLinkTask() {
+    UnlockedAfterBuild();
+    return link_task_;
+  }
 
   // TODO, Add more getters
 
@@ -228,6 +239,21 @@ protected:
 
 private:
   void Initialize();
+
+  // Sets lock_ == true
+  // NOTE: There is no Unlock function
+  void Lock();
+
+  // Expects lock_ == false
+  void LockedAfterBuild() const;
+
+  // Expects lock_ == true
+  void UnlockedAfterBuild() const;
+
+  // Build
+  void BuildCompile(std::vector<fs::path> &source_files,
+                    std::vector<fs::path> &dummy_source_files);
+  void BuildLink();
 
   //
   void ConvertForCompile();
@@ -314,6 +340,7 @@ private:
 
   // Build states
   bool build_ = false;
+  bool lock_ = false;
 
   tf::Taskflow tf_;
   tf::Task compile_task_;

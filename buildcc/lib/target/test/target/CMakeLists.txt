@@ -76,6 +76,11 @@ add_executable(test_target_user_deps
 )
 target_link_libraries(test_target_user_deps PRIVATE target_interface)
 
+add_executable(test_target_lock
+    test_target_lock.cpp
+)
+target_link_libraries(test_target_lock PRIVATE target_interface)
+
 # Tests
 add_test(NAME test_base_target COMMAND test_base_target)
 add_test(NAME test_target_source COMMAND test_target_source)
@@ -86,3 +91,4 @@ add_test(NAME test_target_external_lib COMMAND test_target_external_lib)
 
 add_test(NAME test_target_flags COMMAND test_target_flags)
 add_test(NAME test_target_user_deps COMMAND test_target_user_deps)
+add_test(NAME test_target_lock COMMAND test_target_lock)

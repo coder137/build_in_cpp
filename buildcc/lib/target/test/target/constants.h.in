@@ -14,3 +14,5 @@ inline constexpr char const * BUILD_TARGET_EXTERNAL_LIB_INTERMEDIATE_DIR = "@CMA
 inline constexpr char const * BUILD_TARGET_FLAG_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_flag";
 
 inline constexpr char const * BUILD_TARGET_USER_DEPS_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_user_deps";
+
+inline constexpr char const * BUILD_TARGET_LOCK_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_lock";

@@ -19,21 +19,27 @@
 namespace buildcc::base {
 
 void Target::AddPreprocessorFlag(const std::string &flag) {
+  LockedAfterBuild();
   current_preprocessor_flags_.insert(flag);
 }
 void Target::AddCommonCompileFlag(const std::string &flag) {
+  LockedAfterBuild();
   current_common_compile_flags_.insert(flag);
 }
 void Target::AddAsmCompileFlag(const std::string &flag) {
+  LockedAfterBuild();
   current_asm_compile_flags_.insert(flag);
 }
 void Target::AddCCompileFlag(const std::string &flag) {
+  LockedAfterBuild();
   current_c_compile_flags_.insert(flag);
 }
 void Target::AddCppCompileFlag(const std::string &flag) {
+  LockedAfterBuild();
   current_cpp_compile_flags_.insert(flag);
 }
 void Target::AddLinkFlag(const std::string &flag) {
+  LockedAfterBuild();
   current_link_flags_.insert(flag);
 }
 
