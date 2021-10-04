@@ -8,7 +8,7 @@
 	path = third_party/cpputest
 	url = https://github.com/cpputest/cpputest.git
 [submodule "fmt"]
-	path = fmt
+	path = third_party/fmt
 	url = https://github.com/fmtlib/fmt.git
 [submodule "CLI11"]
 	path = CLI11
