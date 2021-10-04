@@ -95,10 +95,6 @@ public:
   // Builders
   void Build() override;
 
-  void BuildCompile(std::vector<fs::path> &source_files,
-                    std::vector<fs::path> &dummy_source_files);
-  void BuildLink();
-
   // Setters
 
   // * Sources
@@ -229,9 +225,20 @@ protected:
 private:
   void Initialize();
 
-  // Throws exceptions when Target functions are used inappropriately
+  // Sets lock_ == true
+  // NOTE: There is no Unlock function
+  void Lock();
+
+  // Expects lock_ == false
   void LockedAfterBuild();
+
+  // Expects lock_ == true
   void UnlockedAfterBuild();
+
+  // Build
+  void BuildCompile(std::vector<fs::path> &source_files,
+                    std::vector<fs::path> &dummy_source_files);
+  void BuildLink();
 
   //
   void ConvertForCompile();

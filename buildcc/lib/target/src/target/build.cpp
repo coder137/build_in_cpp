@@ -31,6 +31,9 @@ namespace buildcc::base {
 // * Link
 // Library dependencies
 void Target::Build() {
+  LockedAfterBuild();
+  Lock();
+
   env::log_trace(name_, __FUNCTION__);
 
   // Taskflow updates
@@ -68,8 +71,6 @@ void Target::Build() {
   // Register the tasks
   CompileTask();
   LinkTask();
-
-  lock_ = true;
 }
 
 std::string Target::LinkCommand() const {
@@ -94,12 +95,14 @@ std::string Target::LinkCommand() const {
 
 // Private
 
+void Target::Lock() { lock_ = true; }
+
 void Target::LockedAfterBuild() {
-  env::assert_fatal(lock_, "Cannot use this function after Target::Build");
+  env::assert_fatal(!lock_, "Cannot use this function after Target::Build");
 }
 
 void Target::UnlockedAfterBuild() {
-  env::assert_fatal(!lock_, "Cannot use this function before Target::Build");
+  env::assert_fatal(lock_, "Cannot use this function before Target::Build");
 }
 
 void Target::ConvertForCompile() {
