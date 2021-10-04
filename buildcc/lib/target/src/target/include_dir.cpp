@@ -26,6 +26,7 @@
 namespace buildcc::base {
 
 void Target::AddHeaderAbsolute(const fs::path &absolute_filepath) {
+  LockedAfterBuild();
   env::assert_fatal(IsValidHeader(absolute_filepath),
                     fmt::format("{} does not have a valid header extension",
                                 absolute_filepath.string()));
@@ -70,6 +71,7 @@ void Target::AddIncludeDir(const fs::path &relative_include_dir,
 
 void Target::AddIncludeDirAbsolute(const fs::path &absolute_include_dir,
                                    bool glob_headers) {
+  LockedAfterBuild();
   current_include_dirs_.insert(absolute_include_dir);
 
   if (glob_headers) {
