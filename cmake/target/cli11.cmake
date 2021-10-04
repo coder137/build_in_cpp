@@ -1,4 +1,4 @@
-add_subdirectory(CLI11)
+add_subdirectory(third_party/CLI11)
 file(GLOB CLI_INCLUDE_HEADERS "${CLI11_SOURCE_DIR}/include/CLI/*.hpp")
 
 if (${BUILDCC_INSTALL})

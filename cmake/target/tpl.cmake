@@ -1,3 +1,5 @@
+add_subdirectory(third_party/tiny-process-library)
+
 if (${BUILDCC_INSTALL})
     install(TARGETS tiny-process-library
         EXPORT tiny-process-library-config
