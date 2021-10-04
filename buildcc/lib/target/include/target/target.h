@@ -207,7 +207,7 @@ public:
 
   // Getters (UnlockedAfterBuild)
 
-  std::string CompileCommand(const fs::path &current_source) const;
+  std::string CompileCommand(const fs::path &absolute_current_source) const;
   std::string LinkCommand() const;
 
   tf::Taskflow &GetTaskflow() {

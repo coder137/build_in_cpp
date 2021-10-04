@@ -164,15 +164,17 @@ void Target::RecompileSources(std::vector<fs::path> &source_files,
   }
 }
 
-std::string Target::CompileCommand(const fs::path &current_source) const {
+std::string
+Target::CompileCommand(const fs::path &absolute_current_source) const {
   UnlockedAfterBuild();
-  const std::string output =
-      internal::Path::CreateNewPath(GetCompiledSourcePath(current_source))
-          .GetPathAsString();
+  const std::string output = internal::Path::CreateNewPath(
+                                 GetCompiledSourcePath(absolute_current_source))
+                                 .GetPathAsString();
   const std::string input =
-      internal::Path::CreateExistingPath(current_source).GetPathAsString();
+      internal::Path::CreateExistingPath(absolute_current_source)
+          .GetPathAsString();
 
-  const auto type = GetFileExtType(current_source);
+  const auto type = GetFileExtType(absolute_current_source);
   const std::string aggregated_compile_flags =
       GetCompiledFlags(type).value_or("");
   const std::string compiler = GetCompiler(type).value_or("");
