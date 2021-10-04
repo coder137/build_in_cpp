@@ -1,0 +1,8 @@
+set(C++11 ON CACHE BOOL "CppUTests C++11 support")
+set(CPPUTEST_FLAGS OFF CACHE BOOL "CppUTests Flags off")
+set(WERROR ON CACHE BOOL "CppUTests all errors")
+set(LONGLONG ON CACHE BOOL "CppUTests Long Long support")
+set(TESTS OFF CACHE BOOL "CppUTests tests off")
+set(TESTS_BUILD_DISCOVER OFF CACHE BOOL "CppUTests Tests discover")
+set(VERBOSE_CONFIG OFF CACHE BOOL "Config print to screen")
+add_subdirectory(third_party/cpputest)

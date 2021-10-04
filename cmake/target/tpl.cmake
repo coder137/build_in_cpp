@@ -1,3 +1,5 @@
+add_subdirectory(third_party/tiny-process-library)
+
 if (${BUILDCC_INSTALL})
     install(TARGETS tiny-process-library
         EXPORT tiny-process-library-config
@@ -11,5 +13,5 @@ if (${BUILDCC_INSTALL})
         DESTINATION lib/cmake/tiny-process-library
         )
 
-    install(FILES tiny-process-library/process.hpp DESTINATION include)
+    install(FILES third_party/tiny-process-library/process.hpp DESTINATION include)
 endif()

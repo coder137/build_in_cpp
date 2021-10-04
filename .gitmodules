@@ -1,21 +1,21 @@
 [submodule "flatbuffers"]
-	path = flatbuffers
+	path = third_party/flatbuffers
 	url = https://github.com/google/flatbuffers.git
 [submodule "spdlog"]
-	path = spdlog
+	path = third_party/spdlog
 	url = https://github.com/gabime/spdlog.git
 [submodule "cpputest"]
-	path = cpputest
+	path = third_party/cpputest
 	url = https://github.com/cpputest/cpputest.git
 [submodule "fmt"]
-	path = fmt
+	path = third_party/fmt
 	url = https://github.com/fmtlib/fmt.git
 [submodule "CLI11"]
-	path = CLI11
+	path = third_party/CLI11
 	url = https://github.com/CLIUtils/CLI11.git
 [submodule "taskflow"]
-	path = taskflow
+	path = third_party/taskflow
 	url = https://github.com/taskflow/taskflow.git
 [submodule "tiny-process-library"]
-	path = tiny-process-library
+	path = third_party/tiny-process-library
 	url = https://gitlab.com/eidheim/tiny-process-library.git

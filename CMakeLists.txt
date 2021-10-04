@@ -69,53 +69,20 @@ include(cmake/tool/cppcheck.cmake)
 include(cmake/tool/doxygen.cmake)
 
 # Libraries
-
-# TODO, Update FLATBUFFERS option to conditionally compile FLATC
-
-# Set flatbuffer specific options here
-set(FLATBUFFERS_BUILD_CPP17 ON CACHE BOOL "Flatbuffers C++17 support")
-set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "Flatbuffers build tests")
-set(FLATBUFFERS_BUILD_FLATC ${BUILDCC_FLATBUFFERS_FLATC} CACHE BOOL "Flatbuffers build flatc")
-set(FLATBUFFERS_BUILD_FLATHASH OFF CACHE BOOL "Flatbuffers build flathash")
-set(FLATBUFFERS_BUILD_FLATLIB OFF CACHE BOOL "Flatbuffers build flatlib")
-set(FLATBUFFERS_LIBCXX_WITH_CLANG OFF CACHE BOOL "Flatbuffers LIBCXX")
-set(FLATBUFFERS_INSTALL ON CACHE BOOL "Enable the installation of targets.")
-set(FLATBUFFERS_ENABLE_PCH ${BUILDCC_PRECOMPILE_HEADERS} CACHE BOOL "Flatbuffers PCH")
-add_subdirectory(flatbuffers)
 include(cmake/target/flatbuffers.cmake)
 
-set(FMT_INSTALL ON CACHE BOOL "Fmt install")
-add_subdirectory(fmt)
-# TODO, Remove fmt library generation and install target
-# set_target_properties(fmt PROPERTIES EXCLUDE_FROM_ALL ON)
+include(cmake/target/fmt.cmake)
 
-# set(SPDLOG_BUILD_SHARED ON CACHE BOOL "Spdlog built as dynamic library")
-set(SPDLOG_INSTALL ON CACHE BOOL "Spdlog install")
-set(SPDLOG_FMT_EXTERNAL OFF CACHE BOOL "Spdlog FMT external lib")
-set(SPDLOG_FMT_EXTERNAL_HO ON CACHE BOOL "Spdlog FMT header only external lib")
-set(SPDLOG_ENABLE_PCH ${BUILDCC_PRECOMPILE_HEADERS} CACHE BOOL "Spdlog PCH")
-add_subdirectory(spdlog)
-# TODO, Remove spdlog library generation and install target
-# set_target_properties(spdlog PROPERTIES EXCLUDE_FROM_ALL ON)
+include(cmake/target/spdlog.cmake)
 
 include(cmake/target/cli11.cmake)
 
-set(TF_BUILD_TESTS OFF CACHE BOOL "TF Tests")
-set(TF_BUILD_EXAMPLES OFF CACHE BOOL "TF Examples")
-add_subdirectory(taskflow)
+include(cmake/target/taskflow.cmake)
 
-add_subdirectory(tiny-process-library)
 include(cmake/target/tpl.cmake)
 
 if (${TESTING})
-    set(C++11 ON CACHE BOOL "CppUTests C++11 support")
-    set(CPPUTEST_FLAGS OFF CACHE BOOL "CppUTests Flags off")
-    set(WERROR ON CACHE BOOL "CppUTests all errors")
-    set(LONGLONG ON CACHE BOOL "CppUTests Long Long support")
-    set(TESTS OFF CACHE BOOL "CppUTests tests off")
-    set(TESTS_BUILD_DISCOVER OFF CACHE BOOL "CppUTests Tests discover")
-    set(VERBOSE_CONFIG OFF CACHE BOOL "Config print to screen")
-    add_subdirectory(cpputest)
+    include(cmake/target/cpputest.cmake)
 endif()
 
 # Coverage
