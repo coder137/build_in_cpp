@@ -13,6 +13,7 @@ set(FLATBUFFERS_ENABLE_PCH ${BUILDCC_PRECOMPILE_HEADERS} CACHE BOOL "Flatbuffers
 add_subdirectory(third_party/flatbuffers)
 
 set(FBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/flatbuffers/include/flatbuffers")
+set(FBS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/flatbuffers/include")
 file(GLOB FLATBUFFERS_INCLUDE_HEADERS "${FBS_DIR}/*.h")
 if(${BUILDCC_PRECOMPILE_HEADERS})
     list(APPEND FLATBUFFERS_INCLUDE_HEADERS ${FBS_DIR}/pch/pch.h)
@@ -22,12 +23,12 @@ add_library(flatbuffers_header_only INTERFACE
     ${FLATBUFFERS_INCLUDE_HEADERS}
 )
 target_include_directories(flatbuffers_header_only INTERFACE 
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/flatbuffers/include>
+    $<BUILD_INTERFACE:${FBS_INCLUDE_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 
 if (${BUILDCC_INSTALL})
     install(TARGETS flatbuffers_header_only DESTINATION lib EXPORT flatbuffers_header_onlyConfig)
-    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/flatbuffers/include/ DESTINATION "include")
+    install(DIRECTORY ${FBS_INCLUDE_DIR} DESTINATION "include")
     install(EXPORT flatbuffers_header_onlyConfig DESTINATION "lib/cmake/flatbuffers_header_only")
 endif()
