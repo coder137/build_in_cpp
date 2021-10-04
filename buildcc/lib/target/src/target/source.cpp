@@ -165,6 +165,7 @@ void Target::RecompileSources(std::vector<fs::path> &source_files,
 }
 
 std::string Target::CompileCommand(const fs::path &current_source) const {
+  UnlockedAfterBuild();
   const std::string output =
       internal::Path::CreateNewPath(GetCompiledSourcePath(current_source))
           .GetPathAsString();

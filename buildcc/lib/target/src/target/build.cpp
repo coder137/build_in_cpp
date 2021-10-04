@@ -74,7 +74,7 @@ void Target::Build() {
 }
 
 std::string Target::LinkCommand() const {
-
+  UnlockedAfterBuild();
   // Add compiled sources
   const std::string aggregated_compiled_sources =
       internal::aggregate(GetCompiledSources());
