@@ -2,7 +2,7 @@
 	path = third_party/flatbuffers
 	url = https://github.com/google/flatbuffers.git
 [submodule "spdlog"]
-	path = spdlog
+	path = third_party/spdlog
 	url = https://github.com/gabime/spdlog.git
 [submodule "cpputest"]
 	path = cpputest
