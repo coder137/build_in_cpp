@@ -97,11 +97,11 @@ std::string Target::LinkCommand() const {
 
 void Target::Lock() { lock_ = true; }
 
-void Target::LockedAfterBuild() {
+void Target::LockedAfterBuild() const {
   env::assert_fatal(!lock_, "Cannot use this function after Target::Build");
 }
 
-void Target::UnlockedAfterBuild() {
+void Target::UnlockedAfterBuild() const {
   env::assert_fatal(lock_, "Cannot use this function before Target::Build");
 }
 

@@ -230,10 +230,10 @@ private:
   void Lock();
 
   // Expects lock_ == false
-  void LockedAfterBuild();
+  void LockedAfterBuild() const;
 
   // Expects lock_ == true
-  void UnlockedAfterBuild();
+  void UnlockedAfterBuild() const;
 
   // Build
   void BuildCompile(std::vector<fs::path> &source_files,
