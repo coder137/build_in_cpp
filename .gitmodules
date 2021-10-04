@@ -11,7 +11,7 @@
 	path = third_party/fmt
 	url = https://github.com/fmtlib/fmt.git
 [submodule "CLI11"]
-	path = CLI11
+	path = third_party/CLI11
 	url = https://github.com/CLIUtils/CLI11.git
 [submodule "taskflow"]
 	path = taskflow
