@@ -14,7 +14,7 @@
 	path = third_party/CLI11
 	url = https://github.com/CLIUtils/CLI11.git
 [submodule "taskflow"]
-	path = taskflow
+	path = third_party/taskflow
 	url = https://github.com/taskflow/taskflow.git
 [submodule "tiny-process-library"]
 	path = tiny-process-library
