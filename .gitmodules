@@ -1,5 +1,5 @@
 [submodule "flatbuffers"]
-	path = flatbuffers
+	path = third_party/flatbuffers
 	url = https://github.com/google/flatbuffers.git
 [submodule "spdlog"]
 	path = spdlog
