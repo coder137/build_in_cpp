@@ -17,5 +17,5 @@
 	path = third_party/taskflow
 	url = https://github.com/taskflow/taskflow.git
 [submodule "tiny-process-library"]
-	path = tiny-process-library
+	path = third_party/tiny-process-library
 	url = https://gitlab.com/eidheim/tiny-process-library.git
