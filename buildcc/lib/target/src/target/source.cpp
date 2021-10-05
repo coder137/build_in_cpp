@@ -64,34 +64,7 @@ void Target::AddSource(const fs::path &relative_filename,
       target_root_source_dir_ / relative_to_target_path / relative_filename;
   absolute_source.make_preferred();
 
-  // Compute the relative compiled source path
-  fs::path relative =
-      absolute_source.lexically_relative(env::get_project_root_dir());
-
-  // - Check if out of root
-  // - Convert .. to __
-  // NOTE, Similar to how CMake handles out of root files
-  std::string relstr = relative.string();
-  if (relstr.find("..") != std::string::npos) {
-    // TODO, If unnecessary, remove this warning
-    env::log_warning(
-        name_,
-        fmt::format("Out of project root path detected for {} -> "
-                    "{}.\nConverting .. to __ but it is recommended to use the "
-                    "AddSourceAbsolute(abs_source_input, abs_obj_output) or "
-                    "GlobSourceAbsolute(abs_source_input, abs_obj_output) "
-                    "API if possible.",
-                    absolute_source.string(), relative.string()));
-    std::replace(relstr.begin(), relstr.end(), '.', '_');
-    relative = relstr;
-  }
-
-  // Compute relative object path
-  fs::path absolute_compiled_source = target_intermediate_dir_ / relative;
-  absolute_compiled_source.replace_filename(
-      fmt::format("{}{}", absolute_source.filename().string(), obj_ext_));
-
-  AddSourceAbsolute(absolute_source, absolute_compiled_source);
+  AddSourceAbsolute(absolute_source, ConstructObjectPath(absolute_source));
 }
 
 void Target::GlobSources(const fs::path &relative_to_target_path) {

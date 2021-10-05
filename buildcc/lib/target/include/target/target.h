@@ -234,6 +234,8 @@ protected:
   std::optional<std::string> GetCompiler(FileExtType type) const;
   std::optional<std::string> GetCompiledFlags(FileExtType type) const;
 
+  fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
+
   const fs::path &GetCompiledSourcePath(const fs::path &source) const;
   internal::fs_unordered_set GetCompiledSources() const;
 
