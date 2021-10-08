@@ -272,14 +272,14 @@ TEST(TargetTestSourceGroup, Target_CompileCommand) {
 
     auto p = simple.GetTargetRootDir() / "fileext/invalid_file.invalid";
     p.make_preferred();
-    simple.CompileCommand(p);
+    simple.GetObjectInfo(p);
   }
 
   mock().checkExpectations();
 }
 
 TEST(TargetTestSourceGroup, Target_CompileCommand_Throws) {
-  constexpr const char *const NAME = "CompileCommand.exe";
+  constexpr const char *const NAME = "CompileCommand_Throws.exe";
   auto intermediate_path = target_source_intermediate_path / NAME;
 
   // Delete
@@ -296,7 +296,26 @@ TEST(TargetTestSourceGroup, Target_CompileCommand_Throws) {
     p.make_preferred();
 
     // Throws when you call CompileCommand before Build
-    CHECK_THROWS(std::exception, simple.CompileCommand(p));
+    CHECK_THROWS(std::exception, simple.GetObjectInfo(p));
+  }
+}
+
+TEST(TargetTestSourceGroup, Target_ConstructCompileCommand_Throws) {
+  constexpr const char *const NAME = "ConstructCompileCommand_Throws.exe";
+  auto intermediate_path = target_source_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+  {
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    simple.valid_c_ext_.insert(".invalid");
+    simple.AddSource("fileext/invalid_file.invalid");
+    simple.valid_c_ext_.clear();
+    simple.valid_c_ext_.insert(".c");
+    simple.compile_command_ = "{invalid_compile_string}";
+
+    CHECK_THROWS(std::exception, simple.Build());
   }
 }
 
