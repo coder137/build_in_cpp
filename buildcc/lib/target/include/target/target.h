@@ -63,6 +63,7 @@ public:
     fs::path output;
     std::string command;
 
+    OutputInfo() {}
     OutputInfo(const fs::path &o, const std::string &c)
         : output(o), command(c) {}
   };
@@ -97,8 +98,7 @@ public:
                                 target_path_relative_to_root),
         target_intermediate_dir_(fs::path(env::get_project_build_dir()) /
                                  toolchain.GetName() / name),
-        loader_(name, target_intermediate_dir_),
-        current_target_file_(ConstructTargetPath(), "") {
+        loader_(name, target_intermediate_dir_) {
     Initialize();
   }
   virtual ~Target() {}
@@ -172,7 +172,11 @@ public:
   // NOTE, We are constructing the path
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
 
-  const fs::path &GetTargetPath() const { return current_target_file_.output; }
+  // ! FIXME, We cannot cache this path during Constructor initialization phase
+  // because `target_ext_` is supplied later.
+  // TODO, Add Config to Constructor for default values (public members) so that
+  // we can cache these variables during Target construction
+  fs::path GetTargetPath() const { return ConstructTargetPath(); }
 
   // Const references
   const std::string &GetName() const { return name_; }
