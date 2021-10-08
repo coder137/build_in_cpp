@@ -99,8 +99,8 @@ TEST(TargetTestLock, Unlock_APIs) {
                             "data");
 
   CHECK_THROWS(std::exception,
-               exe.CompileCommand(exe.GetTargetRootDir() / "dummy_main.c"));
-  CHECK_THROWS(std::exception, exe.LinkCommand());
+               exe.GetObjectInfo(exe.GetTargetRootDir() / "dummy_main.c"));
+  CHECK_THROWS(std::exception, exe.GetTargetInfo());
 
   exe.AddSource("dummy_main.c");
   buildcc::m::CommandExpect_Execute(1, true);
@@ -108,8 +108,8 @@ TEST(TargetTestLock, Unlock_APIs) {
   exe.Build();
   mock().checkExpectations();
 
-  exe.CompileCommand(exe.GetTargetRootDir() / "dummy_main.c");
-  exe.LinkCommand();
+  exe.GetObjectInfo(exe.GetTargetRootDir() / "dummy_main.c");
+  exe.GetTargetInfo();
 }
 
 int main(int ac, char **av) {
