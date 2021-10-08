@@ -47,14 +47,14 @@
 
 ## Action on Target
 
-- [ ] `compile_header.cpp`
-- [ ] `compile_source.cpp`
-- [ ] `link_target.cpp`
+- [ ] `compile_header.cpp` (pch)
+- [ ] `compile_source.cpp` (object)
+- [ ] `link_target.cpp` (executable, library, C++20 module)
 - `build.cpp`
   - Setup tasks by using the above files
   - [ ] PrecompileHeader (pch) files
-  - [x] Object files
-  - [x] Target file
+  - [x] Object
+  - [x] Target
 - `tasks.cpp`
   - Runs the tasks using Taskflow
   - Contains mock equivalent for CppUTest
