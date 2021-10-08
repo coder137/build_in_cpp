@@ -54,8 +54,8 @@ TEST(TargetTestLibDep, StaticLibrary_SimpleBuildTest) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::FbsLoader loader(STATIC_NAME,
-                                      foolib.GetTargetIntermediateDir());
+  buildcc::internal::TargetLoader loader(STATIC_NAME,
+                                         foolib.GetTargetIntermediateDir());
   bool loaded = loader.Load();
   CHECK_TRUE(loaded);
 

@@ -105,7 +105,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
 
   mock().checkExpectations();
 
-  buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+  buildcc::internal::TargetLoader loader(NAME, intermediate_path);
   bool is_loaded = loader.Load();
   CHECK_TRUE(is_loaded);
 
@@ -180,7 +180,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     buildcc::m::CommandExpect_Execute(1, true); // link
     simple.Build();
 
-    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
 
@@ -210,7 +210,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     // Run the second Build to test Recompile
     simple.Build();
 
-    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
 
@@ -239,7 +239,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
 
-    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
 

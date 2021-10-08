@@ -53,7 +53,8 @@ TEST(TargetTestExternalLib, TestAddLibDir) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::FbsLoader loader(EXENAME, exe.GetTargetIntermediateDir());
+  buildcc::internal::TargetLoader loader(EXENAME,
+                                         exe.GetTargetIntermediateDir());
   bool loaded = loader.Load();
   CHECK_TRUE(loaded);
 
@@ -80,7 +81,8 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_Simple) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::FbsLoader loader(EXENAME, exe.GetTargetIntermediateDir());
+  buildcc::internal::TargetLoader loader(EXENAME,
+                                         exe.GetTargetIntermediateDir());
   bool loaded = loader.Load();
   CHECK_TRUE(loaded);
 

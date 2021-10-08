@@ -114,7 +114,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     buildcc::m::CommandExpect_Execute(1, true);
     include_compile.Build();
 
-    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
     const auto &loaded_sources = loader.GetLoadedSources();
@@ -145,7 +145,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     buildcc::m::CommandExpect_Execute(1, true);
     include_compile.Build();
 
-    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
     const auto &loaded_sources = loader.GetLoadedSources();
@@ -173,7 +173,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     buildcc::m::CommandExpect_Execute(1, true);
     include_compile.Build();
 
-    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
     const auto &loaded_sources = loader.GetLoadedSources();
@@ -225,7 +225,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     buildcc::m::CommandExpect_Execute(1, true);
     add_header.Build();
 
-    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
     CHECK_EQUAL(loader.GetLoadedSources().size(), 2);
@@ -247,7 +247,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     buildcc::m::CommandExpect_Execute(1, true);
     add_header.Build();
 
-    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
     CHECK_EQUAL(loader.GetLoadedSources().size(), 2);
@@ -275,7 +275,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     buildcc::m::CommandExpect_Execute(1, true);
     add_header.Build();
 
-    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
     CHECK_EQUAL(loader.GetLoadedSources().size(), 2);
@@ -296,7 +296,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     buildcc::m::CommandExpect_Execute(1, true);
     add_header.Build();
 
-    buildcc::internal::FbsLoader loader(NAME, intermediate_path);
+    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
     CHECK_TRUE(is_loaded);
     CHECK_EQUAL(loader.GetLoadedSources().size(), 2);
