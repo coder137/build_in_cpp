@@ -250,7 +250,6 @@ protected:
 
   std::optional<std::string> GetCompiler(FileExtType type) const;
   std::optional<std::string> GetCompiledFlags(FileExtType type) const;
-
   internal::fs_unordered_set GetCompiledSources() const;
 
   const OutputInfo &GetObjectInfo(const fs::path &source) const;
@@ -329,7 +328,7 @@ private:
   fs::path target_intermediate_dir_;
 
   // Internal
-  internal::FbsLoader loader_;
+  internal::TargetLoader loader_;
 
   // Used for serialization
   internal::Files<internal::fs_unordered_set> current_source_files_;

@@ -26,7 +26,7 @@
 namespace buildcc::internal {
 
 // Public functions
-bool FbsLoader::Load() {
+bool TargetLoader::Load() {
   env::log_trace(name_, __FUNCTION__);
 
   auto file_path = GetBinaryPath();
@@ -71,6 +71,6 @@ bool FbsLoader::Load() {
 }
 
 // Private functions
-void FbsLoader::Initialize() {}
+void TargetLoader::Initialize() {}
 
 } // namespace buildcc::internal
