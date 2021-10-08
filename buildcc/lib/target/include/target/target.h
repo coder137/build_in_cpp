@@ -63,7 +63,6 @@ public:
     fs::path output;
     std::string command;
 
-    OutputInfo() {}
     OutputInfo(const fs::path &o, const std::string &c)
         : output(o), command(c) {}
   };
@@ -98,7 +97,8 @@ public:
                                 target_path_relative_to_root),
         target_intermediate_dir_(fs::path(env::get_project_build_dir()) /
                                  toolchain.GetName() / name),
-        loader_(name, target_intermediate_dir_) {
+        loader_(name, target_intermediate_dir_),
+        current_target_file_(ConstructTargetPath(), "") {
     Initialize();
   }
   virtual ~Target() {}
@@ -169,14 +169,10 @@ public:
   // lock == true after Build is called
   bool GetLockState() const { return lock_; }
 
-  // TODO, Rename this to ConstructTargetPath
-  fs::path GetTargetPath() const {
-    fs::path path =
-        GetTargetIntermediateDir() / fmt::format("{}{}", name_, target_ext_);
-    path.make_preferred();
-    return path;
-  }
+  // NOTE, We are constructing the path
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
+
+  const fs::path &GetTargetPath() const { return current_target_file_.output; }
 
   // Const references
   const std::string &GetName() const { return name_; }
@@ -221,10 +217,14 @@ public:
 
   // Getters (UnlockedAfterBuild)
 
-  const OutputInfo &GetObjectInfo(const fs::path &source) const;
-  const OutputInfo &GetTargetInfo() const {
+  const std::string &GetCompileCommand(const fs::path &source) const {
     UnlockedAfterBuild();
-    return current_target_file_;
+    return GetObjectInfo(source).command;
+  }
+
+  const std::string &GetLinkCommand() const {
+    UnlockedAfterBuild();
+    return GetTargetInfo().command;
   }
 
   tf::Taskflow &GetTaskflow() {
@@ -251,9 +251,10 @@ protected:
   std::optional<std::string> GetCompiler(FileExtType type) const;
   std::optional<std::string> GetCompiledFlags(FileExtType type) const;
 
-  fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
-
   internal::fs_unordered_set GetCompiledSources() const;
+
+  const OutputInfo &GetObjectInfo(const fs::path &source) const;
+  const OutputInfo &GetTargetInfo() const { return current_target_file_; }
 
 private:
   void Initialize();
@@ -312,7 +313,9 @@ private:
   void FlagChanged();
   void ExternalLibChanged();
 
-  // Commands
+  // Construct
+  fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
+  fs::path ConstructTargetPath() const;
   std::string
   ConstructCompileCommand(const fs::path &absolute_current_source) const;
   std::string ConstructLinkCommand() const;
@@ -326,6 +329,7 @@ private:
   fs::path target_intermediate_dir_;
 
   // Internal
+  internal::FbsLoader loader_;
 
   // Used for serialization
   internal::Files<internal::fs_unordered_set> current_source_files_;
@@ -356,8 +360,6 @@ private:
   std::string aggregated_cpp_compile_flags_;
 
   // TODO, Add more internal variables
-
-  internal::FbsLoader loader_;
   Command command_;
 
   // Build states

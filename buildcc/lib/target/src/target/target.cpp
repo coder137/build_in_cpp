@@ -187,8 +187,14 @@ Target::ConstructObjectPath(const fs::path &absolute_source_file) const {
   return absolute_compiled_source;
 }
 
+fs::path Target::ConstructTargetPath() const {
+  fs::path path =
+      GetTargetIntermediateDir() / fmt::format("{}{}", name_, target_ext_);
+  path.make_preferred();
+  return path;
+}
+
 const Target::OutputInfo &Target::GetObjectInfo(const fs::path &source) const {
-  UnlockedAfterBuild();
   const auto fiter = current_object_files_.find(source);
   env::assert_fatal(fiter != current_object_files_.end(),
                     fmt::format("{} not found", source.string()));

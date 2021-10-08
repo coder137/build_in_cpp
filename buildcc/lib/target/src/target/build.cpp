@@ -72,8 +72,6 @@ void Target::Build() {
 
   // Link Command
   current_target_file_.command = ConstructLinkCommand();
-  // TODO, Rename this to ConstructTargetPath
-  current_target_file_.output = GetTargetPath();
 
   // Load the serialized file
   (void)loader_.Load();

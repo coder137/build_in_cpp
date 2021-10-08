@@ -49,7 +49,7 @@ void Target::CompileTask() {
       std::replace(name.begin(), name.end(), '\\', '/');
       (void)subflow
           .emplace([this, s]() {
-            bool success = Command::Execute(GetObjectInfo(s).command);
+            bool success = Command::Execute(GetCompileCommand(s));
             env::assert_fatal(success, "Could not compile source");
           })
           .name(name);
