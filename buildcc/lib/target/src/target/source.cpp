@@ -63,7 +63,6 @@ void Target::AddSource(const fs::path &relative_filename,
   // Compute the absolute source path
   fs::path absolute_source =
       target_root_source_dir_ / relative_to_target_path / relative_filename;
-  absolute_source.make_preferred();
 
   AddSourceAbsolute(absolute_source, ConstructObjectPath(absolute_source));
 }
@@ -76,7 +75,7 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
 
   for (const auto &p : fs::directory_iterator(absolute_input_path)) {
     if (IsValidSource(p.path())) {
-      AddSource(p.path().lexically_relative(target_root_source_dir_));
+      AddSourceAbsolute(p.path(), ConstructObjectPath(p.path()));
     }
   }
 }
