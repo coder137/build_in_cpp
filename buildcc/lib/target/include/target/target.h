@@ -354,11 +354,6 @@ private:
       current_object_files_;
   OutputInfo current_target_file_;
 
-  // TODO, Might not need to be persistent
-  std::string aggregated_asm_compile_flags_;
-  std::string aggregated_c_compile_flags_;
-  std::string aggregated_cpp_compile_flags_;
-
   // TODO, Add more internal variables
   Command command_;
 

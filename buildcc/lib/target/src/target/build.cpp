@@ -39,13 +39,6 @@ void Target::Build() {
   // Taskflow updates
   tf_.name(fmt::format("[{}] {}", toolchain_.GetName(), name_));
 
-  // TODO, Optimize these
-  aggregated_asm_compile_flags_ =
-      internal::aggregate(current_asm_compile_flags_);
-  aggregated_c_compile_flags_ = internal::aggregate(current_c_compile_flags_);
-  aggregated_cpp_compile_flags_ =
-      internal::aggregate(current_cpp_compile_flags_);
-
   command_.AddDefaultArguments({
       {"include_dirs", internal::aggregate_with_prefix(prefix_include_dir_,
                                                        current_include_dirs_)},
