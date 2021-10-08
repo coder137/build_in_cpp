@@ -28,7 +28,6 @@
 
 namespace buildcc::internal {
 
-// TODO, Change name to TargetLoader
 class TargetLoader : public LoaderInterface {
 public:
   explicit TargetLoader(const std::string &name, const fs::path &relative_path)
