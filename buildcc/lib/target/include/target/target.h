@@ -179,6 +179,8 @@ public:
   fs::path GetTargetPath() const { return ConstructTargetPath(); }
 
   // Const references
+
+  // TODO, Shift getters to source file as well
   const std::string &GetName() const { return name_; }
   const Toolchain &GetToolchain() const { return toolchain_; }
   base::TargetType GetTargetType() const { return type_; }
@@ -330,11 +332,12 @@ private:
   const Toolchain &toolchain_;
   fs::path target_root_source_dir_;
   fs::path target_intermediate_dir_;
-
-  // Internal
   internal::TargetLoader loader_;
 
+  // Internal
+
   // Used for serialization
+  // TODO, Use an internal::Storer class / struct for this to reduce clutter
   internal::Files<internal::fs_unordered_set> current_source_files_;
   internal::Files<internal::fs_unordered_set> current_header_files_;
   internal::Files<internal::fs_unordered_set> current_lib_deps_;
@@ -357,16 +360,14 @@ private:
       current_object_files_;
   OutputInfo current_target_file_;
 
-  // TODO, Add more internal variables
   Command command_;
+  tf::Taskflow tf_;
+  tf::Task compile_task_;
+  tf::Task link_task_;
 
   // Build states
   bool build_ = false;
   bool lock_ = false;
-
-  tf::Taskflow tf_;
-  tf::Task compile_task_;
-  tf::Task link_task_;
 };
 
 } // namespace buildcc::base
