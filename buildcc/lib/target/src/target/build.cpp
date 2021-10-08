@@ -65,6 +65,16 @@ void Target::Build() {
       {"linker", toolchain_.GetLinker()},
   });
 
+  // Compile Command
+  for (auto &object_rel : current_object_files_) {
+    object_rel.second.command = ConstructCompileCommand(object_rel.first);
+  }
+
+  // Link Command
+  current_target_file_.command = ConstructLinkCommand();
+  // TODO, Rename this to ConstructTargetPath
+  current_target_file_.output = GetTargetPath();
+
   // Load the serialized file
   (void)loader_.Load();
 
@@ -73,8 +83,7 @@ void Target::Build() {
   LinkTask();
 }
 
-std::string Target::LinkCommand() const {
-  UnlockedAfterBuild();
+std::string Target::ConstructLinkCommand() const {
   // Add compiled sources
   const std::string aggregated_compiled_sources =
       internal::aggregate(GetCompiledSources());
@@ -105,7 +114,7 @@ void Target::UnlockedAfterBuild() const {
   env::assert_fatal(lock_, "Cannot use this function before Target::Build");
 }
 
-void Target::ConvertForCompile() {
+void Target::PreCompile() {
   // Convert user_source_files to current_source_files
   for (const auto &user_sf : current_source_files_.user) {
     current_source_files_.internal.emplace(
@@ -124,7 +133,7 @@ void Target::ConvertForCompile() {
   }
 }
 
-void Target::ConvertForLink() {
+void Target::PreLink() {
   for (const auto &user_ld : current_lib_deps_.user) {
     current_lib_deps_.internal.emplace(
         internal::Path::CreateExistingPath(user_ld));
@@ -138,7 +147,7 @@ void Target::ConvertForLink() {
 
 void Target::BuildCompile(std::vector<fs::path> &source_files,
                           std::vector<fs::path> &dummy_source_files) {
-  ConvertForCompile();
+  PreCompile();
 
   if (!loader_.IsLoaded()) {
     CompileSources(source_files);
@@ -167,7 +176,7 @@ void Target::BuildCompile(std::vector<fs::path> &source_files,
 }
 
 void Target::BuildLink() {
-  ConvertForLink();
+  PreLink();
 
   RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
   RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
@@ -178,7 +187,7 @@ void Target::BuildLink() {
   RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_.internal);
 
   if (dirty_) {
-    bool success = Command::Execute(LinkCommand());
+    bool success = Command::Execute(current_target_file_.command);
     env::assert_fatal(success, "Failed to link target");
     Store();
     build_ = true;

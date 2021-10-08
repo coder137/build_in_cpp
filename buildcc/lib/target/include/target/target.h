@@ -59,7 +59,20 @@ enum class TargetType {
 class Target : public BuilderInterface {
 
 public:
+  struct OutputInfo {
+    fs::path output;
+    std::string command;
+
+    OutputInfo() {}
+    OutputInfo(const fs::path &o, const std::string &c)
+        : output(o), command(c) {}
+  };
+
+public:
   // TODO, Consider making these std::string_view for string literals
+  // TODO, Do not give unrestricted access to these public variables, Consider
+  // adding `Config` to the TargetConstructor
+
   std::string target_ext_{""};
   std::string obj_ext_{".o"};
   std::string prefix_include_dir_{"-I"};
@@ -156,6 +169,7 @@ public:
   // lock == true after Build is called
   bool GetLockState() const { return lock_; }
 
+  // TODO, Rename this to ConstructTargetPath
   fs::path GetTargetPath() const {
     fs::path path =
         GetTargetIntermediateDir() / fmt::format("{}{}", name_, target_ext_);
@@ -207,8 +221,11 @@ public:
 
   // Getters (UnlockedAfterBuild)
 
-  std::string CompileCommand(const fs::path &absolute_current_source) const;
-  std::string LinkCommand() const;
+  const OutputInfo &GetObjectInfo(const fs::path &source) const;
+  const OutputInfo &GetTargetInfo() const {
+    UnlockedAfterBuild();
+    return current_target_file_;
+  }
 
   tf::Taskflow &GetTaskflow() {
     UnlockedAfterBuild();
@@ -236,7 +253,6 @@ protected:
 
   fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
 
-  const fs::path &GetCompiledSourcePath(const fs::path &source) const;
   internal::fs_unordered_set GetCompiledSources() const;
 
 private:
@@ -258,8 +274,8 @@ private:
   void BuildLink();
 
   //
-  void ConvertForCompile();
-  void ConvertForLink();
+  void PreCompile();
+  void PreLink();
 
   // Compile
   void CompileSources(std::vector<fs::path> &source_files);
@@ -296,6 +312,11 @@ private:
   void FlagChanged();
   void ExternalLibChanged();
 
+  // Commands
+  std::string
+  ConstructCompileCommand(const fs::path &absolute_current_source) const;
+  std::string ConstructLinkCommand() const;
+
 private:
   // Constructor defined
   std::string name_;
@@ -305,30 +326,29 @@ private:
   fs::path target_intermediate_dir_;
 
   // Internal
+
+  // Used for serialization
   internal::Files<internal::fs_unordered_set> current_source_files_;
-  // NOTE, Always store the absolute source path -> absolute compiled source
-  // path here
-  std::unordered_map<fs::path, fs::path, internal::PathHash>
-      current_object_files_;
-
   internal::Files<internal::fs_unordered_set> current_header_files_;
-
   internal::Files<internal::fs_unordered_set> current_lib_deps_;
-
   internal::fs_unordered_set current_include_dirs_;
   internal::fs_unordered_set current_lib_dirs_;
-
   std::unordered_set<std::string> current_external_lib_deps_;
-
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_common_compile_flags_;
   std::unordered_set<std::string> current_asm_compile_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;
   std::unordered_set<std::string> current_cpp_compile_flags_;
   std::unordered_set<std::string> current_link_flags_;
-
   internal::Files<internal::fs_unordered_set> current_compile_dependencies_;
   internal::Files<internal::fs_unordered_set> current_link_dependencies_;
+
+  // Not used for serialization
+  // NOTE, Always store the absolute source path -> absolute compiled source
+  // path here
+  std::unordered_map<fs::path, OutputInfo, internal::PathHash>
+      current_object_files_;
+  OutputInfo current_target_file_;
 
   // TODO, Might not need to be persistent
   std::string aggregated_asm_compile_flags_;

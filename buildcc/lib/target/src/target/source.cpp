@@ -40,7 +40,8 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
   const auto absolute_compiled_source =
       fs::path(absolute_output_filepath).make_preferred();
   fs::create_directories(absolute_compiled_source.parent_path());
-  current_object_files_.emplace(absolute_source, absolute_compiled_source);
+  current_object_files_.emplace(absolute_source,
+                                OutputInfo(absolute_compiled_source, ""));
 }
 
 void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
@@ -138,14 +139,12 @@ void Target::RecompileSources(std::vector<fs::path> &source_files,
 }
 
 std::string
-Target::CompileCommand(const fs::path &absolute_current_source) const {
-  UnlockedAfterBuild();
+Target::ConstructCompileCommand(const fs::path &absolute_current_source) const {
   const std::string output = internal::Path::CreateNewPath(
-                                 GetCompiledSourcePath(absolute_current_source))
+                                 GetObjectInfo(absolute_current_source).output)
                                  .GetPathAsString();
   const std::string input =
-      internal::Path::CreateExistingPath(absolute_current_source)
-          .GetPathAsString();
+      internal::Path::CreateNewPath(absolute_current_source).GetPathAsString();
 
   const auto type = GetFileExtType(absolute_current_source);
   const std::string aggregated_compile_flags =
