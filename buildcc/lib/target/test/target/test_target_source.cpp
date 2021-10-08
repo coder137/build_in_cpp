@@ -272,7 +272,7 @@ TEST(TargetTestSourceGroup, Target_CompileCommand) {
 
     auto p = simple.GetTargetRootDir() / "fileext/invalid_file.invalid";
     p.make_preferred();
-    simple.GetObjectInfo(p);
+    simple.GetCompileCommand(p);
   }
 
   mock().checkExpectations();
@@ -296,7 +296,7 @@ TEST(TargetTestSourceGroup, Target_CompileCommand_Throws) {
     p.make_preferred();
 
     // Throws when you call CompileCommand before Build
-    CHECK_THROWS(std::exception, simple.GetObjectInfo(p));
+    CHECK_THROWS(std::exception, simple.GetCompileCommand(p));
   }
 }
 
