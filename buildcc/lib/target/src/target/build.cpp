@@ -74,25 +74,6 @@ void Target::Build() {
   LinkTask();
 }
 
-std::string Target::ConstructLinkCommand() const {
-  // Add compiled sources
-  const std::string aggregated_compiled_sources =
-      internal::aggregate(GetCompiledSources());
-
-  const std::string output_target =
-      internal::Path::CreateNewPath(GetTargetPath()).GetPathAsString();
-
-  return command_.Construct(
-      link_command_,
-      {
-          {"output", output_target},
-          {"compiled_sources", aggregated_compiled_sources},
-          {"lib_deps",
-           fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
-                       internal::aggregate(current_lib_deps_.user))},
-      });
-}
-
 // Private
 
 void Target::Lock() { lock_ = true; }
@@ -103,37 +84,6 @@ void Target::LockedAfterBuild() const {
 
 void Target::UnlockedAfterBuild() const {
   env::assert_fatal(lock_, "Cannot use this function before Target::Build");
-}
-
-void Target::PreLink() {
-  for (const auto &user_ld : current_lib_deps_.user) {
-    current_lib_deps_.internal.emplace(
-        internal::Path::CreateExistingPath(user_ld));
-  }
-
-  for (const auto &user_ld : current_link_dependencies_.user) {
-    current_link_dependencies_.internal.emplace(
-        internal::Path::CreateExistingPath(user_ld));
-  }
-}
-
-void Target::BuildLink() {
-  PreLink();
-
-  RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
-  RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
-  RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
-                     current_external_lib_deps_);
-  RecheckPaths(loader_.GetLoadedLinkDependencies(),
-               current_link_dependencies_.internal);
-  RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_.internal);
-
-  if (dirty_) {
-    bool success = Command::Execute(current_target_file_.command);
-    env::assert_fatal(success, "Failed to link target");
-    Store();
-    build_ = true;
-  }
 }
 
 } // namespace buildcc::base

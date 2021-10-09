@@ -23,6 +23,7 @@ add_library(mock_target STATIC
     src/target/additional_deps.cpp
 
     src/target/compile_source.cpp
+    src/target/link_target.cpp
     src/target/build.cpp
 
     # Target mocks

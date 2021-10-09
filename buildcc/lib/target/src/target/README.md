@@ -52,8 +52,8 @@
 ## Action on Target
 
 - [ ] `compile_header.cpp` (pch)
-- [ ] `compile_source.cpp` (object)
-- [ ] `link_target.cpp` (executable, library, C++20 module)
+- [x] `compile_source.cpp` (object)
+- [x] `link_target.cpp` (executable, library, C++20 module)
 - [x] `build.cpp`
   - Setup tasks by using the above files
   - [ ] PrecompileHeader (pch) files
