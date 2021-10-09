@@ -105,49 +105,11 @@ bool Target::IsValidHeader(const fs::path &headerpath) const {
   return valid;
 }
 
-fs::path
-Target::ConstructObjectPath(const fs::path &absolute_source_file) const {
-  // Compute the relative compiled source path
-  fs::path relative =
-      absolute_source_file.lexically_relative(env::get_project_root_dir());
-
-  // - Check if out of root
-  // - Convert .. to __
-  // NOTE, Similar to how CMake handles out of root files
-  std::string relstr = relative.string();
-  if (relstr.find("..") != std::string::npos) {
-    // TODO, If unnecessary, remove this warning
-    env::log_warning(
-        name_,
-        fmt::format("Out of project root path detected for {} -> "
-                    "{}.\nConverting .. to __ but it is recommended to use the "
-                    "AddSourceAbsolute(abs_source_input, abs_obj_output) or "
-                    "GlobSourceAbsolute(abs_source_input, abs_obj_output) "
-                    "API if possible.",
-                    absolute_source_file.string(), relative.string()));
-    std::replace(relstr.begin(), relstr.end(), '.', '_');
-    relative = relstr;
-  }
-
-  // Compute relative object path
-  fs::path absolute_compiled_source = target_intermediate_dir_ / relative;
-  absolute_compiled_source.replace_filename(
-      fmt::format("{}{}", absolute_source_file.filename().string(), obj_ext_));
-  return absolute_compiled_source;
-}
-
 fs::path Target::ConstructTargetPath() const {
   fs::path path =
       GetTargetIntermediateDir() / fmt::format("{}{}", name_, target_ext_);
   path.make_preferred();
   return path;
-}
-
-const Target::OutputInfo &Target::GetObjectInfo(const fs::path &source) const {
-  const auto fiter = current_object_files_.find(source);
-  env::assert_fatal(fiter != current_object_files_.end(),
-                    fmt::format("{} not found", source.string()));
-  return current_object_files_.at(source);
 }
 
 // PRIVATE

@@ -60,6 +60,67 @@ internal::fs_unordered_set Target::GetCompiledSources() const {
   return compiled_sources;
 }
 
+const Target::OutputInfo &Target::GetObjectInfo(const fs::path &source) const {
+  const auto fiter = current_object_files_.find(source);
+  env::assert_fatal(fiter != current_object_files_.end(),
+                    fmt::format("{} not found", source.string()));
+  return current_object_files_.at(source);
+}
+
+// Construct APIs
+fs::path
+Target::ConstructObjectPath(const fs::path &absolute_source_file) const {
+  // Compute the relative compiled source path
+  fs::path relative =
+      absolute_source_file.lexically_relative(env::get_project_root_dir());
+
+  // - Check if out of root
+  // - Convert .. to __
+  // NOTE, Similar to how CMake handles out of root files
+  std::string relstr = relative.string();
+  if (relstr.find("..") != std::string::npos) {
+    // TODO, If unnecessary, remove this warning
+    env::log_warning(
+        name_,
+        fmt::format("Out of project root path detected for {} -> "
+                    "{}.\nConverting .. to __ but it is recommended to use the "
+                    "AddSourceAbsolute(abs_source_input, abs_obj_output) or "
+                    "GlobSourceAbsolute(abs_source_input, abs_obj_output) "
+                    "API if possible.",
+                    absolute_source_file.string(), relative.string()));
+    std::replace(relstr.begin(), relstr.end(), '.', '_');
+    relative = relstr;
+  }
+
+  // Compute relative object path
+  fs::path absolute_compiled_source = target_intermediate_dir_ / relative;
+  absolute_compiled_source.replace_filename(
+      fmt::format("{}{}", absolute_source_file.filename().string(), obj_ext_));
+  return absolute_compiled_source;
+}
+
+std::string
+Target::ConstructCompileCommand(const fs::path &absolute_current_source) const {
+  const std::string output = internal::Path::CreateNewPath(
+                                 GetObjectInfo(absolute_current_source).output)
+                                 .GetPathAsString();
+  const std::string input =
+      internal::Path::CreateNewPath(absolute_current_source).GetPathAsString();
+
+  const auto type = GetFileExtType(absolute_current_source);
+  const std::string aggregated_compile_flags =
+      GetCompiledFlags(type).value_or("");
+  const std::string compiler = GetCompiler(type).value_or("");
+  return command_.Construct(compile_command_,
+                            {
+                                {"compiler", compiler},
+                                {"compile_flags", aggregated_compile_flags},
+                                {"output", output},
+                                {"input", input},
+                            });
+}
+
+// Compile APIs
 void Target::CompileSources(std::vector<fs::path> &source_files) {
   std::transform(current_source_files_.internal.begin(),
                  current_source_files_.internal.end(),
@@ -113,27 +174,6 @@ void Target::RecompileSources(std::vector<fs::path> &source_files,
       }
     }
   }
-}
-
-std::string
-Target::ConstructCompileCommand(const fs::path &absolute_current_source) const {
-  const std::string output = internal::Path::CreateNewPath(
-                                 GetObjectInfo(absolute_current_source).output)
-                                 .GetPathAsString();
-  const std::string input =
-      internal::Path::CreateNewPath(absolute_current_source).GetPathAsString();
-
-  const auto type = GetFileExtType(absolute_current_source);
-  const std::string aggregated_compile_flags =
-      GetCompiledFlags(type).value_or("");
-  const std::string compiler = GetCompiler(type).value_or("");
-  return command_.Construct(compile_command_,
-                            {
-                                {"compiler", compiler},
-                                {"compile_flags", aggregated_compile_flags},
-                                {"output", output},
-                                {"input", input},
-                            });
 }
 
 void Target::PreCompile() {
