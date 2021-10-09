@@ -338,9 +338,9 @@ private:
 
   // Used for serialization
   // TODO, Use an internal::Storer class / struct for this to reduce clutter
-  internal::Files<internal::fs_unordered_set> current_source_files_;
-  internal::Files<internal::fs_unordered_set> current_header_files_;
-  internal::Files<internal::fs_unordered_set> current_lib_deps_;
+  internal::default_files current_source_files_;
+  internal::default_files current_header_files_;
+  internal::default_files current_lib_deps_;
   internal::fs_unordered_set current_include_dirs_;
   internal::fs_unordered_set current_lib_dirs_;
   std::unordered_set<std::string> current_external_lib_deps_;
@@ -350,8 +350,8 @@ private:
   std::unordered_set<std::string> current_c_compile_flags_;
   std::unordered_set<std::string> current_cpp_compile_flags_;
   std::unordered_set<std::string> current_link_flags_;
-  internal::Files<internal::fs_unordered_set> current_compile_dependencies_;
-  internal::Files<internal::fs_unordered_set> current_link_dependencies_;
+  internal::default_files current_compile_dependencies_;
+  internal::default_files current_link_dependencies_;
 
   // Not used for serialization
   // NOTE, Always store the absolute source path -> absolute compiled source
