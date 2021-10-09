@@ -59,46 +59,37 @@ enum class TargetType {
 class Target : public BuilderInterface {
 
 public:
-  struct OutputInfo {
-    fs::path output;
-    std::string command;
+  struct Config {
+    std::string target_ext{""};
+    std::string obj_ext{".o"};
+    std::string prefix_include_dir{"-I"};
+    std::string prefix_lib_dir{"-L"};
+    std::unordered_set<std::string> valid_c_ext{".c"};
+    std::unordered_set<std::string> valid_cpp_ext{".cpp", ".cxx", ".cc"};
+    std::unordered_set<std::string> valid_asm_ext{".s", ".S", ".asm"};
+    std::unordered_set<std::string> valid_header_ext{".h", ".hpp"};
 
-    OutputInfo() {}
-    OutputInfo(const fs::path &o, const std::string &c)
-        : output(o), command(c) {}
+    std::string compile_command{
+        "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
+        "{compile_flags} -o {output} -c {input}"};
+    std::string link_command{
+        "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
+        "{lib_dirs} {lib_deps}"};
+
+    Config() {}
   };
-
-public:
-  // TODO, Consider making these std::string_view for string literals
-  // TODO, Do not give unrestricted access to these public variables, Consider
-  // adding `Config` to the TargetConstructor
-
-  std::string target_ext_{""};
-  std::string obj_ext_{".o"};
-  std::string prefix_include_dir_{"-I"};
-  std::string prefix_lib_dir_{"-L"};
-  std::unordered_set<std::string> valid_c_ext_{".c"};
-  std::unordered_set<std::string> valid_cpp_ext_{".cpp", ".cxx", ".cc"};
-  std::unordered_set<std::string> valid_asm_ext_{".s", ".S", ".asm"};
-  std::unordered_set<std::string> valid_header_ext_{".h", ".hpp"};
-
-  std::string_view compile_command_{
-      "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
-      "{compile_flags} -o {output} -c {input}"};
-  std::string_view link_command_{
-      "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
-      "{lib_dirs} {lib_deps}"};
 
 public:
   explicit Target(const std::string &name, TargetType type,
                   const Toolchain &toolchain,
-                  const fs::path &target_path_relative_to_root)
+                  const fs::path &target_path_relative_to_root,
+                  const Config &config = Config())
       : name_(name), type_(type), toolchain_(toolchain),
         target_root_source_dir_(env::get_project_root_dir() /
                                 target_path_relative_to_root),
         target_intermediate_dir_(fs::path(env::get_project_build_dir()) /
                                  toolchain.GetName() / name),
-        loader_(name, target_intermediate_dir_) {
+        loader_(name, target_intermediate_dir_), config_(config) {
     Initialize();
   }
   virtual ~Target() {}
@@ -189,7 +180,6 @@ public:
   const fs::path &GetTargetIntermediateDir() const {
     return target_intermediate_dir_;
   }
-
   const internal::fs_unordered_set &GetCurrentSourceFiles() const {
     return current_source_files_.user;
   }
@@ -227,7 +217,6 @@ public:
     UnlockedAfterBuild();
     return GetObjectInfo(source).command;
   }
-
   const std::string &GetLinkCommand() const {
     UnlockedAfterBuild();
     return GetTargetInfo().command;
@@ -247,6 +236,16 @@ public:
   }
 
   // TODO, Add more getters
+
+private:
+  struct OutputInfo {
+    fs::path output;
+    std::string command;
+
+    OutputInfo() {}
+    OutputInfo(const fs::path &o, const std::string &c)
+        : output(o), command(c) {}
+  };
 
 private:
   void Initialize();
@@ -332,6 +331,7 @@ private:
   fs::path target_root_source_dir_;
   fs::path target_intermediate_dir_;
   internal::TargetLoader loader_;
+  Config config_;
 
   // Internal
 
