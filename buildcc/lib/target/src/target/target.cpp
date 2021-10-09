@@ -46,29 +46,6 @@ bool IsValidTargetType(buildcc::base::TargetType type) {
 
 namespace buildcc::base {
 
-// PUBLIC
-void Target::AddCompileDependencyAbsolute(const fs::path &absolute_path) {
-  LockedAfterBuild();
-  current_compile_dependencies_.user.insert(absolute_path);
-}
-void Target::AddLinkDependencyAbsolute(const fs::path &absolute_path) {
-  LockedAfterBuild();
-  current_link_dependencies_.user.insert(absolute_path);
-}
-
-void Target::AddCompileDependency(const fs::path &relative_path) {
-  fs::path absolute_path = GetTargetRootDir() / relative_path;
-  AddCompileDependencyAbsolute(absolute_path);
-}
-void Target::AddLinkDependency(const fs::path &relative_path) {
-  fs::path absolute_path = GetTargetRootDir() / relative_path;
-  AddLinkDependencyAbsolute(absolute_path);
-}
-
-// PROTECTED
-
-// Getters
-
 FileExtType Target::GetFileExtType(const fs::path &filepath) const {
   if (!filepath.has_extension()) {
     return FileExtType::Invalid;
@@ -88,23 +65,6 @@ FileExtType Target::GetFileExtType(const fs::path &filepath) const {
   }
 
   return type;
-}
-
-std::optional<std::string> Target::GetCompiledFlags(FileExtType type) const {
-  switch (type) {
-  case FileExtType::Asm:
-    return aggregated_asm_compile_flags_;
-    break;
-  case FileExtType::C:
-    return aggregated_c_compile_flags_;
-    break;
-  case FileExtType::Cpp:
-    return aggregated_cpp_compile_flags_;
-    break;
-  default:
-    break;
-  }
-  return {};
 }
 
 bool Target::IsValidSource(const fs::path &sourcepath) const {
@@ -139,39 +99,12 @@ bool Target::IsValidHeader(const fs::path &headerpath) const {
   return valid;
 }
 
-std::optional<std::string> Target::GetCompiler(FileExtType type) const {
-  switch (type) {
-  case FileExtType::Asm:
-    return toolchain_.GetAsmCompiler();
-    break;
-  case FileExtType::C:
-    return toolchain_.GetCCompiler();
-    break;
-  case FileExtType::Cpp:
-    return toolchain_.GetCppCompiler();
-    break;
-  default:
-    break;
-  }
-  return {};
+fs::path Target::ConstructTargetPath() const {
+  fs::path path =
+      GetTargetIntermediateDir() / fmt::format("{}{}", name_, target_ext_);
+  path.make_preferred();
+  return path;
 }
-
-const fs::path &Target::GetCompiledSourcePath(const fs::path &source) const {
-  const auto fiter = current_object_files_.find(source);
-  env::assert_fatal(fiter != current_object_files_.end(),
-                    fmt::format("{} not found", source.string()));
-  return current_object_files_.at(source);
-}
-
-internal::fs_unordered_set Target::GetCompiledSources() const {
-  internal::fs_unordered_set compiled_sources;
-  for (const auto &p : current_object_files_) {
-    compiled_sources.insert(p.second);
-  }
-  return compiled_sources;
-}
-
-// PRIVATE
 
 void Target::Initialize() {
   // Checks

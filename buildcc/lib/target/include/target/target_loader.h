@@ -28,15 +28,14 @@
 
 namespace buildcc::internal {
 
-// TODO, Change name to TargetLoader
-class FbsLoader : public LoaderInterface {
+class TargetLoader : public LoaderInterface {
 public:
-  explicit FbsLoader(const std::string &name, const fs::path &relative_path)
+  explicit TargetLoader(const std::string &name, const fs::path &relative_path)
       : name_(name), relative_path_(relative_path) {
     Initialize();
   }
 
-  FbsLoader(const FbsLoader &loader) = delete;
+  TargetLoader(const TargetLoader &loader) = delete;
 
 public:
   bool Load() override;

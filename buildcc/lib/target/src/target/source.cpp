@@ -40,7 +40,8 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
   const auto absolute_compiled_source =
       fs::path(absolute_output_filepath).make_preferred();
   fs::create_directories(absolute_compiled_source.parent_path());
-  current_object_files_.emplace(absolute_source, absolute_compiled_source);
+  current_object_files_.emplace(absolute_source,
+                                OutputInfo(absolute_compiled_source, ""));
 }
 
 void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
@@ -62,36 +63,8 @@ void Target::AddSource(const fs::path &relative_filename,
   // Compute the absolute source path
   fs::path absolute_source =
       target_root_source_dir_ / relative_to_target_path / relative_filename;
-  absolute_source.make_preferred();
 
-  // Compute the relative compiled source path
-  fs::path relative =
-      absolute_source.lexically_relative(env::get_project_root_dir());
-
-  // - Check if out of root
-  // - Convert .. to __
-  // NOTE, Similar to how CMake handles out of root files
-  std::string relstr = relative.string();
-  if (relstr.find("..") != std::string::npos) {
-    // TODO, If unnecessary, remove this warning
-    env::log_warning(
-        name_,
-        fmt::format("Out of project root path detected for {} -> "
-                    "{}.\nConverting .. to __ but it is recommended to use the "
-                    "AddSourceAbsolute(abs_source_input, abs_obj_output) or "
-                    "GlobSourceAbsolute(abs_source_input, abs_obj_output) "
-                    "API if possible.",
-                    absolute_source.string(), relative.string()));
-    std::replace(relstr.begin(), relstr.end(), '.', '_');
-    relative = relstr;
-  }
-
-  // Compute relative object path
-  fs::path absolute_compiled_source = target_intermediate_dir_ / relative;
-  absolute_compiled_source.replace_filename(
-      fmt::format("{}{}", absolute_source.filename().string(), obj_ext_));
-
-  AddSourceAbsolute(absolute_source, absolute_compiled_source);
+  AddSourceAbsolute(absolute_source, ConstructObjectPath(absolute_source));
 }
 
 void Target::GlobSources(const fs::path &relative_to_target_path) {
@@ -102,89 +75,9 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
 
   for (const auto &p : fs::directory_iterator(absolute_input_path)) {
     if (IsValidSource(p.path())) {
-      AddSource(p.path().lexically_relative(target_root_source_dir_));
+      AddSourceAbsolute(p.path(), ConstructObjectPath(p.path()));
     }
   }
-}
-
-// Private
-
-void Target::CompileSources(std::vector<fs::path> &source_files) {
-  std::transform(current_source_files_.internal.begin(),
-                 current_source_files_.internal.end(),
-                 std::back_inserter(source_files),
-                 [](const buildcc::internal::Path &p) -> fs::path {
-                   return p.GetPathname();
-                 });
-}
-
-void Target::RecompileSources(std::vector<fs::path> &source_files,
-                              std::vector<fs::path> &dummy_source_files) {
-  env::log_trace(name_, __FUNCTION__);
-
-  const auto &previous_source_files = loader_.GetLoadedSources();
-
-  // * Cannot find previous source in current source files
-  const bool is_source_removed =
-      std::any_of(previous_source_files.begin(), previous_source_files.end(),
-                  [&](const internal::Path &p) {
-                    return current_source_files_.internal.find(p) ==
-                           current_source_files_.internal.end();
-                  });
-
-  if (is_source_removed) {
-    dirty_ = true;
-    SourceRemoved();
-  }
-
-  for (const auto &current_file : current_source_files_.internal) {
-    const auto &current_source = current_file.GetPathname();
-
-    // Find current_file in the loaded sources
-    auto iter = previous_source_files.find(current_file);
-
-    if (iter == previous_source_files.end()) {
-      // *1 New source file added to build
-      source_files.push_back(current_source);
-      dirty_ = true;
-      SourceAdded();
-    } else {
-      // *2 Current file is updated
-      if (current_file.GetLastWriteTimestamp() >
-          iter->GetLastWriteTimestamp()) {
-        source_files.push_back(current_source);
-        dirty_ = true;
-        SourceUpdated();
-      } else {
-        // ELSE
-        // *3 Do nothing
-        dummy_source_files.push_back(current_source);
-      }
-    }
-  }
-}
-
-std::string
-Target::CompileCommand(const fs::path &absolute_current_source) const {
-  UnlockedAfterBuild();
-  const std::string output = internal::Path::CreateNewPath(
-                                 GetCompiledSourcePath(absolute_current_source))
-                                 .GetPathAsString();
-  const std::string input =
-      internal::Path::CreateExistingPath(absolute_current_source)
-          .GetPathAsString();
-
-  const auto type = GetFileExtType(absolute_current_source);
-  const std::string aggregated_compile_flags =
-      GetCompiledFlags(type).value_or("");
-  const std::string compiler = GetCompiler(type).value_or("");
-  return command_.Construct(compile_command_,
-                            {
-                                {"compiler", compiler},
-                                {"compile_flags", aggregated_compile_flags},
-                                {"output", output},
-                                {"input", input},
-                            });
 }
 
 } // namespace buildcc::base

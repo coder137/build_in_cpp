@@ -61,7 +61,7 @@ R"({{
       // DONE, Get std::vector<std::string> CompileCommand
       // DONE, Get intermediate directory from env
       std::string file = f.string();
-      std::string command = t->CompileCommand(file);
+      std::string command = t->GetCompileCommand(file);
       std::string directory = env::get_project_build_dir().string();
 
       std::replace(file.begin(), file.end(), '\\', '/');

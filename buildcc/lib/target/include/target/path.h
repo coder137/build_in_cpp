@@ -137,6 +137,8 @@ template <typename T> struct Files {
   Files(const path_unordered_set &i, const T &u) : internal(i), user(u) {}
 };
 
+typedef Files<fs_unordered_set> default_files;
+
 } // namespace buildcc::internal
 
 #endif

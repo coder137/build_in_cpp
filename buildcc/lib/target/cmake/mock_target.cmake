@@ -12,14 +12,19 @@ add_library(mock_target STATIC
     mock/generator/recheck_states.cpp
 
     # Target
+    src/target/target.cpp
     src/target/target_loader.cpp
     src/target/target_storer.cpp
-    src/target/target.cpp
+
     src/target/source.cpp
     src/target/include_dir.cpp
     src/target/lib.cpp
-    src/target/build.cpp
     src/target/flags.cpp
+    src/target/additional_deps.cpp
+
+    src/target/compile_source.cpp
+    src/target/link_target.cpp
+    src/target/build.cpp
 
     # Target mocks
     mock/target/recheck_states.cpp

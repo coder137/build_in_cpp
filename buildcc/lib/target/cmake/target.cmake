@@ -18,18 +18,24 @@ set(TARGET_SRCS
     include/target/generator.h
 
     # Target
+    src/target/target.cpp
     src/target/target_loader.cpp
     src/target/target_storer.cpp
-    src/target/target.cpp
+    include/target/target_loader.h
+    include/target/target.h
+
     src/target/source.cpp
     src/target/include_dir.cpp
     src/target/lib.cpp
-    src/target/build.cpp
     src/target/flags.cpp
+    src/target/additional_deps.cpp
+
     src/target/recheck_states.cpp
+
+    src/target/compile_source.cpp
+    src/target/link_target.cpp
+    src/target/build.cpp
     src/target/tasks.cpp
-    include/target/target_loader.h
-    include/target/target.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})

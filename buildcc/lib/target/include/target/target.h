@@ -59,7 +59,20 @@ enum class TargetType {
 class Target : public BuilderInterface {
 
 public:
+  struct OutputInfo {
+    fs::path output;
+    std::string command;
+
+    OutputInfo() {}
+    OutputInfo(const fs::path &o, const std::string &c)
+        : output(o), command(c) {}
+  };
+
+public:
   // TODO, Consider making these std::string_view for string literals
+  // TODO, Do not give unrestricted access to these public variables, Consider
+  // adding `Config` to the TargetConstructor
+
   std::string target_ext_{""};
   std::string obj_ext_{".o"};
   std::string prefix_include_dir_{"-I"};
@@ -156,15 +169,18 @@ public:
   // lock == true after Build is called
   bool GetLockState() const { return lock_; }
 
-  fs::path GetTargetPath() const {
-    fs::path path =
-        GetTargetIntermediateDir() / fmt::format("{}{}", name_, target_ext_);
-    path.make_preferred();
-    return path;
-  }
+  // NOTE, We are constructing the path
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
 
+  // ! FIXME, We cannot cache this path during Constructor initialization phase
+  // because `target_ext_` is supplied later.
+  // TODO, Add Config to Constructor for default values (public members) so that
+  // we can cache these variables during Target construction
+  fs::path GetTargetPath() const { return ConstructTargetPath(); }
+
   // Const references
+
+  // TODO, Shift getters to source file as well
   const std::string &GetName() const { return name_; }
   const Toolchain &GetToolchain() const { return toolchain_; }
   base::TargetType GetTargetType() const { return type_; }
@@ -207,8 +223,15 @@ public:
 
   // Getters (UnlockedAfterBuild)
 
-  std::string CompileCommand(const fs::path &absolute_current_source) const;
-  std::string LinkCommand() const;
+  const std::string &GetCompileCommand(const fs::path &source) const {
+    UnlockedAfterBuild();
+    return GetObjectInfo(source).command;
+  }
+
+  const std::string &GetLinkCommand() const {
+    UnlockedAfterBuild();
+    return GetTargetInfo().command;
+  }
 
   tf::Taskflow &GetTaskflow() {
     UnlockedAfterBuild();
@@ -224,18 +247,6 @@ public:
   }
 
   // TODO, Add more getters
-
-protected:
-  // Getters
-  FileExtType GetFileExtType(const fs::path &filepath) const;
-  bool IsValidSource(const fs::path &sourcepath) const;
-  bool IsValidHeader(const fs::path &headerpath) const;
-
-  std::optional<std::string> GetCompiler(FileExtType type) const;
-  std::optional<std::string> GetCompiledFlags(FileExtType type) const;
-
-  const fs::path &GetCompiledSourcePath(const fs::path &source) const;
-  internal::fs_unordered_set GetCompiledSources() const;
 
 private:
   void Initialize();
@@ -256,8 +267,8 @@ private:
   void BuildLink();
 
   //
-  void ConvertForCompile();
-  void ConvertForLink();
+  void PreCompile();
+  void PreLink();
 
   // Compile
   void CompileSources(std::vector<fs::path> &source_files);
@@ -294,6 +305,25 @@ private:
   void FlagChanged();
   void ExternalLibChanged();
 
+  // Construct
+  fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
+  fs::path ConstructTargetPath() const;
+  std::string
+  ConstructCompileCommand(const fs::path &absolute_current_source) const;
+  std::string ConstructLinkCommand() const;
+
+  // Getters
+  FileExtType GetFileExtType(const fs::path &filepath) const;
+  bool IsValidSource(const fs::path &sourcepath) const;
+  bool IsValidHeader(const fs::path &headerpath) const;
+
+  std::optional<std::string> GetCompiler(FileExtType type) const;
+  std::optional<std::string> GetCompiledFlags(FileExtType type) const;
+  internal::fs_unordered_set GetCompiledSources() const;
+
+  const OutputInfo &GetObjectInfo(const fs::path &source) const;
+  const OutputInfo &GetTargetInfo() const { return current_target_file_; }
+
 private:
   // Constructor defined
   std::string name_;
@@ -301,50 +331,42 @@ private:
   const Toolchain &toolchain_;
   fs::path target_root_source_dir_;
   fs::path target_intermediate_dir_;
+  internal::TargetLoader loader_;
 
   // Internal
-  internal::Files<internal::fs_unordered_set> current_source_files_;
-  // NOTE, Always store the absolute source path -> absolute compiled source
-  // path here
-  std::unordered_map<fs::path, fs::path, internal::PathHash>
-      current_object_files_;
 
-  internal::Files<internal::fs_unordered_set> current_header_files_;
-
-  internal::Files<internal::fs_unordered_set> current_lib_deps_;
-
+  // Used for serialization
+  // TODO, Use an internal::Storer class / struct for this to reduce clutter
+  internal::default_files current_source_files_;
+  internal::default_files current_header_files_;
+  internal::default_files current_lib_deps_;
   internal::fs_unordered_set current_include_dirs_;
   internal::fs_unordered_set current_lib_dirs_;
-
   std::unordered_set<std::string> current_external_lib_deps_;
-
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_common_compile_flags_;
   std::unordered_set<std::string> current_asm_compile_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;
   std::unordered_set<std::string> current_cpp_compile_flags_;
   std::unordered_set<std::string> current_link_flags_;
+  internal::default_files current_compile_dependencies_;
+  internal::default_files current_link_dependencies_;
 
-  internal::Files<internal::fs_unordered_set> current_compile_dependencies_;
-  internal::Files<internal::fs_unordered_set> current_link_dependencies_;
+  // Not used for serialization
+  // NOTE, Always store the absolute source path -> absolute compiled source
+  // path here
+  std::unordered_map<fs::path, OutputInfo, internal::PathHash>
+      current_object_files_;
+  OutputInfo current_target_file_;
 
-  // TODO, Might not need to be persistent
-  std::string aggregated_asm_compile_flags_;
-  std::string aggregated_c_compile_flags_;
-  std::string aggregated_cpp_compile_flags_;
-
-  // TODO, Add more internal variables
-
-  internal::FbsLoader loader_;
   Command command_;
+  tf::Taskflow tf_;
+  tf::Task compile_task_;
+  tf::Task link_task_;
 
   // Build states
   bool build_ = false;
   bool lock_ = false;
-
-  tf::Taskflow tf_;
-  tf::Task compile_task_;
-  tf::Task link_task_;
 };
 
 } // namespace buildcc::base
