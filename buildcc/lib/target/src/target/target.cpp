@@ -54,13 +54,13 @@ FileExtType Target::GetFileExtType(const fs::path &filepath) const {
   FileExtType type = FileExtType::Invalid;
   const std::string ext = filepath.extension().string();
 
-  if (valid_c_ext_.count(ext) == 1) {
+  if (config_.valid_c_ext.count(ext) == 1) {
     type = FileExtType::C;
-  } else if (valid_cpp_ext_.count(ext) == 1) {
+  } else if (config_.valid_cpp_ext.count(ext) == 1) {
     type = FileExtType::Cpp;
-  } else if (valid_asm_ext_.count(ext) == 1) {
+  } else if (config_.valid_asm_ext.count(ext) == 1) {
     type = FileExtType::Asm;
-  } else if (valid_header_ext_.count(ext) == 1) {
+  } else if (config_.valid_header_ext.count(ext) == 1) {
     type = FileExtType::Header;
   }
 
@@ -100,8 +100,8 @@ bool Target::IsValidHeader(const fs::path &headerpath) const {
 }
 
 fs::path Target::ConstructTargetPath() const {
-  fs::path path =
-      GetTargetIntermediateDir() / fmt::format("{}{}", name_, target_ext_);
+  fs::path path = GetTargetIntermediateDir() /
+                  fmt::format("{}{}", name_, config_.target_ext);
   path.make_preferred();
   return path;
 }

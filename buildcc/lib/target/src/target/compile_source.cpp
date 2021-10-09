@@ -94,8 +94,8 @@ Target::ConstructObjectPath(const fs::path &absolute_source_file) const {
 
   // Compute relative object path
   fs::path absolute_compiled_source = target_intermediate_dir_ / relative;
-  absolute_compiled_source.replace_filename(
-      fmt::format("{}{}", absolute_source_file.filename().string(), obj_ext_));
+  absolute_compiled_source.replace_filename(fmt::format(
+      "{}{}", absolute_source_file.filename().string(), config_.obj_ext));
   return absolute_compiled_source;
 }
 
@@ -111,7 +111,7 @@ Target::ConstructCompileCommand(const fs::path &absolute_current_source) const {
   const std::string aggregated_compile_flags =
       GetCompiledFlags(type).value_or("");
   const std::string compiler = GetCompiler(type).value_or("");
-  return command_.Construct(compile_command_,
+  return command_.Construct(config_.compile_command,
                             {
                                 {"compiler", compiler},
                                 {"compile_flags", aggregated_compile_flags},
