@@ -32,6 +32,7 @@ set(TARGET_SRCS
 
     src/target/recheck_states.cpp
 
+    src/target/compile_source.cpp
     src/target/build.cpp
     src/target/tasks.cpp
 )

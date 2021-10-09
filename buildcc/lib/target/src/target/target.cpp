@@ -73,23 +73,6 @@ FileExtType Target::GetFileExtType(const fs::path &filepath) const {
   return type;
 }
 
-std::optional<std::string> Target::GetCompiledFlags(FileExtType type) const {
-  switch (type) {
-  case FileExtType::Asm:
-    return internal::aggregate(current_asm_compile_flags_);
-    break;
-  case FileExtType::C:
-    return internal::aggregate(current_c_compile_flags_);
-    break;
-  case FileExtType::Cpp:
-    return internal::aggregate(current_cpp_compile_flags_);
-    break;
-  default:
-    break;
-  }
-  return {};
-}
-
 bool Target::IsValidSource(const fs::path &sourcepath) const {
   bool valid = false;
   switch (GetFileExtType(sourcepath)) {
@@ -120,23 +103,6 @@ bool Target::IsValidHeader(const fs::path &headerpath) const {
     break;
   }
   return valid;
-}
-
-std::optional<std::string> Target::GetCompiler(FileExtType type) const {
-  switch (type) {
-  case FileExtType::Asm:
-    return toolchain_.GetAsmCompiler();
-    break;
-  case FileExtType::C:
-    return toolchain_.GetCCompiler();
-    break;
-  case FileExtType::Cpp:
-    return toolchain_.GetCppCompiler();
-    break;
-  default:
-    break;
-  }
-  return {};
 }
 
 fs::path
@@ -182,14 +148,6 @@ const Target::OutputInfo &Target::GetObjectInfo(const fs::path &source) const {
   env::assert_fatal(fiter != current_object_files_.end(),
                     fmt::format("{} not found", source.string()));
   return current_object_files_.at(source);
-}
-
-internal::fs_unordered_set Target::GetCompiledSources() const {
-  internal::fs_unordered_set compiled_sources;
-  for (const auto &p : current_object_files_) {
-    compiled_sources.insert(p.second.output);
-  }
-  return compiled_sources;
 }
 
 // PRIVATE

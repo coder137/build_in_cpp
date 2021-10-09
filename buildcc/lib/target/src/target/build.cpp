@@ -105,25 +105,6 @@ void Target::UnlockedAfterBuild() const {
   env::assert_fatal(lock_, "Cannot use this function before Target::Build");
 }
 
-void Target::PreCompile() {
-  // Convert user_source_files to current_source_files
-  for (const auto &user_sf : current_source_files_.user) {
-    current_source_files_.internal.emplace(
-        buildcc::internal::Path::CreateExistingPath(user_sf));
-  }
-
-  // Convert user_header_files to current_header_files
-  for (const auto &user_hf : current_header_files_.user) {
-    current_header_files_.internal.emplace(
-        buildcc::internal::Path::CreateExistingPath(user_hf));
-  }
-
-  for (const auto &user_cd : current_compile_dependencies_.user) {
-    current_compile_dependencies_.internal.emplace(
-        internal::Path::CreateExistingPath(user_cd));
-  }
-}
-
 void Target::PreLink() {
   for (const auto &user_ld : current_lib_deps_.user) {
     current_lib_deps_.internal.emplace(
@@ -133,36 +114,6 @@ void Target::PreLink() {
   for (const auto &user_ld : current_link_dependencies_.user) {
     current_link_dependencies_.internal.emplace(
         internal::Path::CreateExistingPath(user_ld));
-  }
-}
-
-void Target::BuildCompile(std::vector<fs::path> &source_files,
-                          std::vector<fs::path> &dummy_source_files) {
-  PreCompile();
-
-  if (!loader_.IsLoaded()) {
-    CompileSources(source_files);
-    dirty_ = true;
-  } else {
-    RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
-                 current_preprocessor_flags_);
-    RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
-                 current_common_compile_flags_);
-    RecheckFlags(loader_.GetLoadedAsmCompileFlags(),
-                 current_asm_compile_flags_);
-    RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
-    RecheckFlags(loader_.GetLoadedCppCompileFlags(),
-                 current_cpp_compile_flags_);
-    RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
-    RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
-    RecheckPaths(loader_.GetLoadedCompileDependencies(),
-                 current_compile_dependencies_.internal);
-
-    if (dirty_) {
-      CompileSources(source_files);
-    } else {
-      RecompileSources(source_files, dummy_source_files);
-    }
   }
 }
 

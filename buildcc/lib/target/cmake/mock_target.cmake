@@ -22,6 +22,7 @@ add_library(mock_target STATIC
     src/target/flags.cpp
     src/target/additional_deps.cpp
 
+    src/target/compile_source.cpp
     src/target/build.cpp
 
     # Target mocks

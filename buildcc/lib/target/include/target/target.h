@@ -248,19 +248,6 @@ public:
 
   // TODO, Add more getters
 
-protected:
-  // Getters
-  FileExtType GetFileExtType(const fs::path &filepath) const;
-  bool IsValidSource(const fs::path &sourcepath) const;
-  bool IsValidHeader(const fs::path &headerpath) const;
-
-  std::optional<std::string> GetCompiler(FileExtType type) const;
-  std::optional<std::string> GetCompiledFlags(FileExtType type) const;
-  internal::fs_unordered_set GetCompiledSources() const;
-
-  const OutputInfo &GetObjectInfo(const fs::path &source) const;
-  const OutputInfo &GetTargetInfo() const { return current_target_file_; }
-
 private:
   void Initialize();
 
@@ -324,6 +311,18 @@ private:
   std::string
   ConstructCompileCommand(const fs::path &absolute_current_source) const;
   std::string ConstructLinkCommand() const;
+
+  // Getters
+  FileExtType GetFileExtType(const fs::path &filepath) const;
+  bool IsValidSource(const fs::path &sourcepath) const;
+  bool IsValidHeader(const fs::path &headerpath) const;
+
+  std::optional<std::string> GetCompiler(FileExtType type) const;
+  std::optional<std::string> GetCompiledFlags(FileExtType type) const;
+  internal::fs_unordered_set GetCompiledSources() const;
+
+  const OutputInfo &GetObjectInfo(const fs::path &source) const;
+  const OutputInfo &GetTargetInfo() const { return current_target_file_; }
 
 private:
   // Constructor defined
