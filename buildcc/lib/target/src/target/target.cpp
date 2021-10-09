@@ -46,12 +46,6 @@ bool IsValidTargetType(buildcc::base::TargetType type) {
 
 namespace buildcc::base {
 
-// PUBLIC
-
-// PROTECTED
-
-// Getters
-
 FileExtType Target::GetFileExtType(const fs::path &filepath) const {
   if (!filepath.has_extension()) {
     return FileExtType::Invalid;
@@ -111,8 +105,6 @@ fs::path Target::ConstructTargetPath() const {
   path.make_preferred();
   return path;
 }
-
-// PRIVATE
 
 void Target::Initialize() {
   // Checks
