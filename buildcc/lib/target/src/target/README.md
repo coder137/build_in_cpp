@@ -1,37 +1,41 @@
 # Target Segregation
 
-- `target.cpp`
+- [x] `target.cpp`
+  - Initialization
   - Common target specific utility functions
   - Assertion functions
   - Validity checks
-- `target_loader.cpp`
+- [x] `target_loader.cpp`
   - Load from flatbuffer schema file
-- `target_storer.cpp`
+- [x] `target_storer.cpp`
   - Store to flatbuffer schema file
 
 ## Inputs to Target
 
-- `source.cpp`
+- [x] `source.cpp`
   - Source File
-- `include_dir.cpp`
+- [x] `include_dir.cpp`
   - Include Dir
   - Header File
-- `lib.cpp`
+- [x] `lib.cpp`
   - Lib Dir
   - Lib File (full path Target supplied)
   - External Lib File (relative link using -l)
-- `flags.cpp`
+- [x] `flags.cpp`
   - PreprocessorFlags
   -  CommonCompileFlags
   -   AsmCompileFlags
   -   CCompileFlags
   -   CppCompileFlag
   -   LinkFlags
-
+- [ ] `additional_deps.cpp`
+  - PreCompileHeader dependencies
+  - Compile dependencies
+  - Link dependencies 
 
 ## Target states
 
-- `recheck_states.cpp`
+- [x] `recheck_states.cpp`
   - Add Recheck callback during mock calls
   - these callback functions are left blank during in release (only used during unit tests)
 - Functions that are mocked during unit tests
@@ -50,11 +54,11 @@
 - [ ] `compile_header.cpp` (pch)
 - [ ] `compile_source.cpp` (object)
 - [ ] `link_target.cpp` (executable, library, C++20 module)
-- `build.cpp`
+- [x] `build.cpp`
   - Setup tasks by using the above files
   - [ ] PrecompileHeader (pch) files
   - [x] Object
   - [x] Target
-- `tasks.cpp`
+- [x] `tasks.cpp`
   - Runs the tasks using Taskflow
   - Contains mock equivalent for CppUTest
