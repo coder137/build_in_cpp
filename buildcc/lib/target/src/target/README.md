@@ -28,7 +28,7 @@
   -   CCompileFlags
   -   CppCompileFlag
   -   LinkFlags
-- [ ] `additional_deps.cpp`
+- [x] `additional_deps.cpp`
   - PreCompileHeader dependencies
   - Compile dependencies
   - Link dependencies 
