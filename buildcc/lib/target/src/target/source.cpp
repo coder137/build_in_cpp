@@ -28,9 +28,10 @@ namespace buildcc::base {
 void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
                                const fs::path &absolute_output_filepath) {
   LockedAfterBuild();
-  env::assert_fatal(IsValidSource(absolute_input_filepath),
+  env::assert_fatal(ext_.IsValidSource(absolute_input_filepath),
                     fmt::format("{} does not have a valid source extension",
                                 absolute_input_filepath.string()));
+  ext_.SetSourceState(absolute_input_filepath);
 
   const fs::path absolute_source =
       fs::path(absolute_input_filepath).make_preferred();
@@ -47,7 +48,7 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
 void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
                                  const fs::path &absolute_output_path) {
   for (const auto &p : fs::directory_iterator(absolute_input_path)) {
-    if (IsValidSource(p.path())) {
+    if (ext_.IsValidSource(p.path())) {
       fs::path absolute_output_source =
           absolute_output_path /
           fmt::format("{}{}", p.path().filename().string(), config_.obj_ext);
@@ -74,7 +75,7 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
       target_root_source_dir_ / relative_to_target_path;
 
   for (const auto &p : fs::directory_iterator(absolute_input_path)) {
-    if (IsValidSource(p.path())) {
+    if (ext_.IsValidSource(p.path())) {
       AddSourceAbsolute(p.path(), ConstructObjectPath(p.path()));
     }
   }

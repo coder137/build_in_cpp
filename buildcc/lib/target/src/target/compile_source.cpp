@@ -74,11 +74,10 @@ Target::ConstructCompileCommand(const fs::path &absolute_current_source) const {
   const std::string input =
       internal::Path::CreateNewPath(absolute_current_source).GetPathAsString();
 
-  const auto type = GetFileExtType(absolute_current_source);
-  Compiler compiler(*this);
+  const auto type = ext_.GetType(absolute_current_source);
   const std::string selected_aggregated_compile_flags =
-      compiler.GetCompileFlags(type).value_or("");
-  const std::string selected_compiler = compiler.GetCompiler(type).value_or("");
+      ext_.GetCompileFlags(type).value_or("");
+  const std::string selected_compiler = ext_.GetCompiler(type).value_or("");
   return command_.Construct(
       config_.compile_command,
       {
