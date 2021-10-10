@@ -44,15 +44,16 @@ public:
   FileExt(Target &target) : target_(target) {}
 
   // Setters
-  void SetSourceState(const fs::path &filepath);
+  void SetSourceState(Type type);
 
   // Getters
   Type GetType(const fs::path &filepath) const;
+
   std::optional<std::string> GetCompileFlags(Type type) const;
   std::optional<std::string> GetCompiler(Type type) const;
 
-  bool IsValidSource(const fs::path &sourcepath) const;
-  bool IsValidHeader(const fs::path &headerpath) const;
+  static bool IsValidSource(Type type);
+  static bool IsValidHeader(Type type);
 
 private:
   Target &target_;

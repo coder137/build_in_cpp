@@ -20,8 +20,8 @@
 
 namespace buildcc::base {
 
-void FileExt::SetSourceState(const fs::path &filepath) {
-  switch (GetType(filepath)) {
+void FileExt::SetSourceState(Type type) {
+  switch (type) {
   case FileExt::Type::Asm:
     target_.state_.contains_asm_src = true;
     break;
@@ -92,9 +92,9 @@ std::optional<std::string> FileExt::GetCompiler(FileExt::Type type) const {
   return {};
 }
 
-bool FileExt::IsValidSource(const fs::path &sourcepath) const {
+bool FileExt::IsValidSource(Type type) {
   bool valid = false;
-  switch (GetType(sourcepath)) {
+  switch (type) {
   case FileExt::Type::Asm:
   case FileExt::Type::C:
   case FileExt::Type::Cpp:
@@ -108,9 +108,9 @@ bool FileExt::IsValidSource(const fs::path &sourcepath) const {
   return valid;
 }
 
-bool FileExt::IsValidHeader(const fs::path &headerpath) const {
+bool FileExt::IsValidHeader(Type type) {
   bool valid = false;
-  switch (GetType(headerpath)) {
+  switch (type) {
   case FileExt::Type::Header:
     valid = true;
     break;
