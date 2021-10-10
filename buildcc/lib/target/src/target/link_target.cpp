@@ -66,7 +66,7 @@ void Target::BuildLink() {
     bool success = Command::Execute(current_target_file_.command);
     env::assert_fatal(success, "Failed to link target");
     Store();
-    build_ = true;
+    state_.build = true;
   }
 }
 

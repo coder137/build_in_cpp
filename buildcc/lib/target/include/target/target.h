@@ -63,8 +63,10 @@ public:
   struct Config {
     std::string target_ext{""};
     std::string obj_ext{".o"};
+
     std::string prefix_include_dir{"-I"};
     std::string prefix_lib_dir{"-L"};
+
     std::string compile_command{
         "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
         "{compile_flags} -o {output} -c {input}"};
@@ -78,6 +80,14 @@ public:
     std::unordered_set<std::string> valid_header_ext{".h", ".hpp"};
 
     Config() {}
+  };
+
+  struct State {
+    bool contains_asm_src{false};
+    bool contains_c_src{false};
+    bool contains_cpp_src{false};
+    bool build{false};
+    bool lock{false};
   };
 
 public:
@@ -157,10 +167,9 @@ public:
   // Target state
 
   // Set during first build or rebuild
-  bool GetBuildState() const { return build_; }
-
   // lock == true after Build is called
-  bool GetLockState() const { return lock_; }
+  bool GetBuildState() const { return state_.build; }
+  bool GetLockState() const { return state_.lock; }
 
   // NOTE, We are constructing the path
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
@@ -363,14 +372,12 @@ private:
       current_object_files_;
   OutputInfo current_target_file_;
 
+  State state_;
   Command command_;
+
   tf::Taskflow tf_;
   tf::Task compile_task_;
   tf::Task link_task_;
-
-  // Build states
-  bool build_ = false;
-  bool lock_ = false;
 };
 
 // Friend classes

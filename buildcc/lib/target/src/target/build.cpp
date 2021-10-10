@@ -76,14 +76,16 @@ void Target::Build() {
 
 // Private
 
-void Target::Lock() { lock_ = true; }
+void Target::Lock() { state_.lock = true; }
 
 void Target::LockedAfterBuild() const {
-  env::assert_fatal(!lock_, "Cannot use this function after Target::Build");
+  env::assert_fatal(!state_.lock,
+                    "Cannot use this function after Target::Build");
 }
 
 void Target::UnlockedAfterBuild() const {
-  env::assert_fatal(lock_, "Cannot use this function before Target::Build");
+  env::assert_fatal(state_.lock,
+                    "Cannot use this function before Target::Build");
 }
 
 } // namespace buildcc::base
