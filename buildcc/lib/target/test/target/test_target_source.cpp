@@ -252,31 +252,6 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
   mock().checkExpectations();
 }
 
-TEST(TargetTestSourceGroup, Target_CompileCommand) {
-  constexpr const char *const NAME = "CompileCommand.exe";
-  auto intermediate_path = target_source_intermediate_path / NAME;
-
-  // Delete
-  fs::remove_all(intermediate_path);
-  {
-    buildcc::base::Target::Config config;
-    config.valid_c_ext.insert(".invalid");
-    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
-                                 gcc, "data", config);
-    simple.AddSource("fileext/invalid_file.invalid");
-
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
-    simple.Build();
-
-    auto p = simple.GetTargetRootDir() / "fileext/invalid_file.invalid";
-    p.make_preferred();
-    simple.GetCompileCommand(p);
-  }
-
-  mock().checkExpectations();
-}
-
 TEST(TargetTestSourceGroup, Target_CompileCommand_Throws) {
   constexpr const char *const NAME = "CompileCommand_Throws.exe";
   auto intermediate_path = target_source_intermediate_path / NAME;
@@ -284,35 +259,15 @@ TEST(TargetTestSourceGroup, Target_CompileCommand_Throws) {
   // Delete
   fs::remove_all(intermediate_path);
   {
-    buildcc::base::Target::Config config;
-    config.valid_c_ext.insert(".invalid");
     buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
-                                 gcc, "data", config);
-    simple.AddSource("fileext/invalid_file.invalid");
+                                 gcc, "data");
+    simple.AddSource("dummy_main.c");
 
-    auto p = simple.GetTargetRootDir() / "fileext/invalid_file.invalid";
+    auto p = simple.GetTargetRootDir() / "dummy_main.c";
     p.make_preferred();
 
     // Throws when you call CompileCommand before Build
     CHECK_THROWS(std::exception, simple.GetCompileCommand(p));
-  }
-}
-
-TEST(TargetTestSourceGroup, Target_ConstructCompileCommand_Throws) {
-  constexpr const char *const NAME = "ConstructCompileCommand_Throws.exe";
-  auto intermediate_path = target_source_intermediate_path / NAME;
-
-  // Delete
-  fs::remove_all(intermediate_path);
-  {
-    buildcc::base::Target::Config config;
-    config.valid_c_ext.insert(".invalid");
-    config.compile_command = "{invalid_compile_string}";
-    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
-                                 gcc, "data", config);
-    simple.AddSource("fileext/invalid_file.invalid");
-
-    CHECK_THROWS(std::exception, simple.Build());
   }
 }
 
