@@ -81,7 +81,7 @@ public:
   ExecutableTarget_gcc(
       const std::string &name, const base::Toolchain &toolchain,
       const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::TargetType::Executable, toolchain,
+      : Target(name, base::Target::Type::Executable, toolchain,
                target_path_relative_to_root,
                ConfigInterface<GccConfig>::Executable()) {}
 };
@@ -90,7 +90,7 @@ class StaticTarget_gcc : public base::Target {
 public:
   StaticTarget_gcc(const std::string &name, const base::Toolchain &toolchain,
                    const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::TargetType::StaticLibrary, toolchain,
+      : Target(name, base::Target::Type::StaticLibrary, toolchain,
                target_path_relative_to_root,
                ConfigInterface<GccConfig>::StaticLib()) {}
 };
@@ -99,7 +99,7 @@ class DynamicTarget_gcc : public base::Target {
 public:
   DynamicTarget_gcc(const std::string &name, const base::Toolchain &toolchain,
                     const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::TargetType::DynamicLibrary, toolchain,
+      : Target(name, base::Target::Type::DynamicLibrary, toolchain,
                target_path_relative_to_root,
                ConfigInterface<GccConfig>::DynamicLib()) {
     AddCommonCompileFlag("-fpic");

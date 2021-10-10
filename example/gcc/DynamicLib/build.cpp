@@ -22,13 +22,13 @@ int main(void) {
   base::Toolchain gcc(base::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++", "ar",
                       "ld");
 
-  const std::string_view dynl_ext =
-      Target_generic::Extension(base::TargetType::DynamicLibrary, gcc.GetId());
+  const std::string_view dynl_ext = Target_generic::Extension(
+      base::Target::Type::DynamicLibrary, gcc.GetId());
   DynamicTarget_gcc randomDynLib(fmt::format("librandyn{}", dynl_ext), gcc,
                                  "files");
 
   const std::string_view ex_ext =
-      Target_generic::Extension(base::TargetType::Executable, gcc.GetId());
+      Target_generic::Extension(base::Target::Type::Executable, gcc.GetId());
   ExecutableTarget_gcc target(fmt::format("dynamictest{}", ex_ext), gcc,
                               "files");
 

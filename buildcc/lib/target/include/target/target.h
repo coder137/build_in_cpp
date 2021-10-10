@@ -51,17 +51,15 @@ enum class FileExtType {
   Invalid,
 };
 
-// TODO, Push this inside Target and make public
-// TODO, Rename to Type
-enum class TargetType {
-  Executable,
-  StaticLibrary,
-  DynamicLibrary,
-};
-
 class Target : public BuilderInterface {
 
 public:
+  enum class Type {
+    Executable,
+    StaticLibrary,
+    DynamicLibrary,
+  };
+
   struct Config {
     std::string target_ext{""};
     std::string obj_ext{".o"};
@@ -83,7 +81,7 @@ public:
   };
 
 public:
-  explicit Target(const std::string &name, TargetType type,
+  explicit Target(const std::string &name, Type type,
                   const Toolchain &toolchain,
                   const fs::path &target_path_relative_to_root,
                   const Config &config = Config())
@@ -178,7 +176,7 @@ public:
   // TODO, Shift getters to source file as well
   const std::string &GetName() const { return name_; }
   const Toolchain &GetToolchain() const { return toolchain_; }
-  base::TargetType GetTargetType() const { return type_; }
+  Target::Type GetType() const { return type_; }
   const fs::path &GetTargetRootDir() const { return target_root_source_dir_; }
   const fs::path &GetTargetIntermediateDir() const {
     return target_intermediate_dir_;
@@ -332,7 +330,7 @@ private:
 private:
   // Constructor defined
   std::string name_;
-  TargetType type_;
+  Type type_;
   const Toolchain &toolchain_;
   fs::path target_root_source_dir_;
   fs::path target_intermediate_dir_;

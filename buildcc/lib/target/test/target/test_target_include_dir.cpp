@@ -36,8 +36,8 @@ static const fs::path target_include_dir_intermediate_path =
 TEST(TargetTestIncludeDirGroup, Target_HeaderTypes) {
   constexpr const char *const NAME = "HeaderTypes.exe";
   auto intermediate_path = target_include_dir_intermediate_path / NAME;
-  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
-                               "data");
+  buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
+                               gcc, "data");
 
   simple.AddHeader("fileext/header_file1.h");
   simple.AddHeader("fileext/header_file2.hpp");
@@ -61,8 +61,8 @@ TEST(TargetTestIncludeDirGroup, TargetGlobHeader) {
 
   // Delete
   fs::remove_all(intermediate_path);
-  buildcc::base::Target globHeader(NAME, buildcc::base::TargetType::Executable,
-                                   gcc, "data");
+  buildcc::base::Target globHeader(
+      NAME, buildcc::base::Target::Type::Executable, gcc, "data");
   globHeader.GlobHeaders("include");
   globHeader.GlobHeaders("");
   CHECK_EQUAL(globHeader.GetCurrentHeaderFiles().size(), 1);
@@ -75,7 +75,7 @@ TEST(TargetTestIncludeDirGroup, TargetGlobThroughIncludeDir) {
   // Delete
   fs::remove_all(intermediate_path);
   buildcc::base::Target globIncludeDir(
-      NAME, buildcc::base::TargetType::Executable, gcc, "data");
+      NAME, buildcc::base::Target::Type::Executable, gcc, "data");
   globIncludeDir.AddIncludeDir("include", true);
   globIncludeDir.AddIncludeDir("", true);
   CHECK_EQUAL(globIncludeDir.GetCurrentHeaderFiles().size(), 1);
@@ -103,7 +103,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
 
   {
     buildcc::base::Target include_compile(
-        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        NAME, buildcc::base::Target::Type::Executable, gcc, "data");
     include_compile.AddSource(DUMMY_MAIN_C);
     include_compile.AddSource(INCLUDE_HEADER_SOURCE);
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
@@ -133,7 +133,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
   {
     // * 1 Adding new include directory
     buildcc::base::Target include_compile(
-        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        NAME, buildcc::base::Target::Type::Executable, gcc, "data");
     include_compile.AddSource(DUMMY_MAIN_C);
     include_compile.AddSource(INCLUDE_HEADER_SOURCE);
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
@@ -163,7 +163,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
   {
     // * Remove include directory
     buildcc::base::Target include_compile(
-        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        NAME, buildcc::base::Target::Type::Executable, gcc, "data");
     include_compile.AddSource(DUMMY_MAIN_C);
     include_compile.AddSource(INCLUDE_HEADER_SOURCE);
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
@@ -216,7 +216,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
   // Initial build
   {
     buildcc::base::Target add_header(
-        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        NAME, buildcc::base::Target::Type::Executable, gcc, "data");
     add_header.AddSource(DUMMY_MAIN_C);
     add_header.AddSource(INCLUDE_HEADER_SOURCE);
     add_header.AddIncludeDir(RELATIVE_INCLUDE_DIR);
@@ -236,7 +236,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
   // Add header
   {
     buildcc::base::Target add_header(
-        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        NAME, buildcc::base::Target::Type::Executable, gcc, "data");
     add_header.AddSource(DUMMY_MAIN_C);
     add_header.AddSource(INCLUDE_HEADER_SOURCE);
     add_header.AddHeader(RELATIVE_HEADER_FILE);
@@ -264,7 +264,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
                            std::string{""}, false);
 
     buildcc::base::Target add_header(
-        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        NAME, buildcc::base::Target::Type::Executable, gcc, "data");
     add_header.AddSource(DUMMY_MAIN_C);
     add_header.AddSource(INCLUDE_HEADER_SOURCE);
     add_header.AddHeader(RELATIVE_HEADER_FILE);
@@ -286,7 +286,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
   // Remove header
   {
     buildcc::base::Target add_header(
-        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        NAME, buildcc::base::Target::Type::Executable, gcc, "data");
     add_header.AddSource(DUMMY_MAIN_C);
     add_header.AddSource(INCLUDE_HEADER_SOURCE);
     add_header.AddIncludeDir(RELATIVE_INCLUDE_DIR);

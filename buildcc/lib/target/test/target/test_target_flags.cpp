@@ -49,8 +49,8 @@ TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
-                               "data");
+  buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
+                               gcc, "data");
   simple.AddSource(DUMMY_MAIN);
   simple.AddPreprocessorFlag("-DCOMPILE=1");
 
@@ -81,7 +81,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
   fs::remove_all(intermediate_path);
 
   {
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddPreprocessorFlag("-DCOMPILE=1");
@@ -93,7 +93,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
   }
   {
     // * Remove flag
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
@@ -105,7 +105,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
 
   {
     // * Add flag
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddPreprocessorFlag("-DRANDOM=1");
@@ -143,8 +143,8 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_AddCommonCompileFlag) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
-                               "data");
+  buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
+                               gcc, "data");
   simple.AddSource(DUMMY_MAIN);
   simple.AddCommonCompileFlag("-O0");
   simple.AddCommonCompileFlag("-g");
@@ -176,7 +176,7 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
   fs::remove_all(intermediate_path);
 
   {
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddCommonCompileFlag("-O0");
@@ -188,7 +188,7 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
     CHECK_TRUE(simple.GetBuildState());
   }
   {
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddCommonCompileFlag("-O0");
@@ -199,7 +199,7 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
   }
   {
     // * Remove flag
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddCommonCompileFlag("-O0");
@@ -213,7 +213,7 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
 
   {
     // * Add flag
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddCommonCompileFlag("-O0");
@@ -253,8 +253,8 @@ TEST(TargetTestAsmCompileFlagGroup, Target_AddCompileFlag) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
-                               "data");
+  buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
+                               gcc, "data");
   simple.AddSource(EMPTY_ASM);
   simple.AddAsmCompileFlag("-O0");
   simple.AddAsmCompileFlag("-g");
@@ -286,7 +286,7 @@ TEST(TargetTestAsmCompileFlagGroup, Target_ChangedCompileFlag) {
   fs::remove_all(intermediate_path);
 
   {
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(EMPTY_ASM);
     simple.AddAsmCompileFlag("-O0");
@@ -299,7 +299,7 @@ TEST(TargetTestAsmCompileFlagGroup, Target_ChangedCompileFlag) {
   }
   {
     // * No Change
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(EMPTY_ASM);
     simple.AddAsmCompileFlag("-O0");
@@ -310,7 +310,7 @@ TEST(TargetTestAsmCompileFlagGroup, Target_ChangedCompileFlag) {
   }
   {
     // * Remove flag
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(EMPTY_ASM);
     simple.AddAsmCompileFlag("-O0");
@@ -324,7 +324,7 @@ TEST(TargetTestAsmCompileFlagGroup, Target_ChangedCompileFlag) {
 
   {
     // * Add flag
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(EMPTY_ASM);
     simple.AddAsmCompileFlag("-O0");
@@ -364,8 +364,8 @@ TEST(TargetTestCCompileFlagsGroup, Target_AddCompileFlag) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
-                               "data");
+  buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
+                               gcc, "data");
   simple.AddSource(DUMMY_MAIN);
   simple.AddCCompileFlag("-std=c11");
 
@@ -396,7 +396,7 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
   fs::remove_all(intermediate_path);
 
   {
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddCCompileFlag("-std=c11");
@@ -408,7 +408,7 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
   }
   {
     // * Remove flag
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
@@ -420,7 +420,7 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
 
   {
     // * Add flag
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddCCompileFlag("-std=c11");
@@ -458,8 +458,8 @@ TEST(TargetTestCppCompileFlagsGroup, Target_AddCompileFlag) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
-                               "data");
+  buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
+                               gcc, "data");
   simple.AddSource(DUMMY_MAIN);
   simple.AddCppCompileFlag("-std=c++17");
 
@@ -490,7 +490,7 @@ TEST(TargetTestCppCompileFlagsGroup, Target_ChangedCompileFlag) {
   fs::remove_all(intermediate_path);
 
   {
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddCCompileFlag("-std=c++17");
@@ -502,7 +502,7 @@ TEST(TargetTestCppCompileFlagsGroup, Target_ChangedCompileFlag) {
   }
   {
     // * Remove flag
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
@@ -514,7 +514,7 @@ TEST(TargetTestCppCompileFlagsGroup, Target_ChangedCompileFlag) {
 
   {
     // * Add flag
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddCCompileFlag("-std=c++17");
@@ -552,8 +552,8 @@ TEST(TargetTestLinkFlagsGroup, Target_AddLinkFlag) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
-                               "data");
+  buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
+                               gcc, "data");
   simple.AddSource(DUMMY_MAIN);
   simple.AddLinkFlag("-lm");
 
@@ -584,7 +584,7 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
   fs::remove_all(intermediate_path);
 
   {
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddLinkFlag("-lm");
@@ -596,7 +596,7 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
   }
   {
     // * Remove flag
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
@@ -607,7 +607,7 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
 
   {
     // * Add flag
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddLinkFlag("-lm");

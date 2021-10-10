@@ -68,7 +68,7 @@ public:
   static base::Target ::Config DynamicLib(Args... args) {
     return T::DynamicLib(std::forward<Args>(args)...);
   }
-  // TODO, Add more functions according to `Target::TargetType`
+  // TODO, Add more functions according to `Target::Type`
 };
 
 } // namespace buildcc
