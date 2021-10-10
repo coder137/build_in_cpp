@@ -42,6 +42,7 @@
 
 namespace buildcc::base {
 
+// TODO, Make this private
 enum class FileExtType {
   Asm,
   C,
@@ -50,6 +51,8 @@ enum class FileExtType {
   Invalid,
 };
 
+// TODO, Push this inside Target and make public
+// TODO, Rename to Type
 enum class TargetType {
   Executable,
   StaticLibrary,
@@ -64,17 +67,17 @@ public:
     std::string obj_ext{".o"};
     std::string prefix_include_dir{"-I"};
     std::string prefix_lib_dir{"-L"};
-    std::unordered_set<std::string> valid_c_ext{".c"};
-    std::unordered_set<std::string> valid_cpp_ext{".cpp", ".cxx", ".cc"};
-    std::unordered_set<std::string> valid_asm_ext{".s", ".S", ".asm"};
-    std::unordered_set<std::string> valid_header_ext{".h", ".hpp"};
-
     std::string compile_command{
         "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
         "{compile_flags} -o {output} -c {input}"};
     std::string link_command{
         "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
         "{lib_dirs} {lib_deps}"};
+
+    std::unordered_set<std::string> valid_c_ext{".c"};
+    std::unordered_set<std::string> valid_cpp_ext{".cpp", ".cxx", ".cc"};
+    std::unordered_set<std::string> valid_asm_ext{".s", ".S", ".asm"};
+    std::unordered_set<std::string> valid_header_ext{".h", ".hpp"};
 
     Config() {}
   };
@@ -94,6 +97,7 @@ public:
   }
   virtual ~Target() {}
 
+  Target(Target &&target) = default;
   Target(const Target &target) = delete;
 
   // Builders
@@ -175,11 +179,12 @@ public:
   const std::string &GetName() const { return name_; }
   const Toolchain &GetToolchain() const { return toolchain_; }
   base::TargetType GetTargetType() const { return type_; }
-
   const fs::path &GetTargetRootDir() const { return target_root_source_dir_; }
   const fs::path &GetTargetIntermediateDir() const {
     return target_intermediate_dir_;
   }
+  const Config &GetConfig() const { return config_; }
+
   const internal::fs_unordered_set &GetCurrentSourceFiles() const {
     return current_source_files_.user;
   }
