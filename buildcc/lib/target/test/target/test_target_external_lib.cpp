@@ -40,7 +40,7 @@ TEST(TargetTestExternalLib, TestAddLibDir) {
 
   fs::remove_all(intermediate_path / EXENAME);
 
-  buildcc::base::Target exe(EXENAME, buildcc::base::TargetType::StaticLibrary,
+  buildcc::base::Target exe(EXENAME, buildcc::base::Target::Type::StaticLibrary,
                             gcc, "data");
   exe.AddSource("foo_main.cpp");
   exe.AddLibDir(exe.GetTargetPath().parent_path());
@@ -67,7 +67,7 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_Simple) {
 
   fs::remove_all(intermediate_path / EXENAME);
 
-  buildcc::base::Target exe(EXENAME, buildcc::base::TargetType::StaticLibrary,
+  buildcc::base::Target exe(EXENAME, buildcc::base::Target::Type::StaticLibrary,
                             gcc, "data");
   exe.AddSource("foo_main.cpp");
   exe.AddLibDir(exe.GetTargetPath().parent_path());
@@ -97,8 +97,8 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_RebuildChanged) {
 
   // First build
   {
-    buildcc::base::Target exe(EXENAME, buildcc::base::TargetType::StaticLibrary,
-                              gcc, "data");
+    buildcc::base::Target exe(
+        EXENAME, buildcc::base::Target::Type::StaticLibrary, gcc, "data");
     exe.AddSource("foo_main.cpp");
     exe.AddLibDir(exe.GetTargetPath().parent_path());
 
@@ -110,8 +110,8 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_RebuildChanged) {
 
   // Add
   {
-    buildcc::base::Target exe(EXENAME, buildcc::base::TargetType::StaticLibrary,
-                              gcc, "data");
+    buildcc::base::Target exe(
+        EXENAME, buildcc::base::Target::Type::StaticLibrary, gcc, "data");
     exe.AddSource("foo_main.cpp");
     exe.AddLibDir(exe.GetTargetPath().parent_path());
     exe.AddLibDep("-lfoo");
@@ -124,8 +124,8 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_RebuildChanged) {
 
   // Remove
   {
-    buildcc::base::Target exe(EXENAME, buildcc::base::TargetType::StaticLibrary,
-                              gcc, "data");
+    buildcc::base::Target exe(
+        EXENAME, buildcc::base::Target::Type::StaticLibrary, gcc, "data");
     exe.AddSource("foo_main.cpp");
     exe.AddLibDir(exe.GetTargetPath().parent_path());
 

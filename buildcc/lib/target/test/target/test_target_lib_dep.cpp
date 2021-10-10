@@ -43,7 +43,7 @@ TEST(TargetTestLibDep, StaticLibrary_SimpleBuildTest) {
   fs::remove_all(intermediate_path / STATIC_NAME);
 
   buildcc::base::Target foolib(
-      STATIC_NAME, buildcc::base::TargetType::StaticLibrary, gcc, "data");
+      STATIC_NAME, buildcc::base::Target::Type::StaticLibrary, gcc, "data");
   foolib.AddSource("foo.cpp", "foo");
   foolib.AddIncludeDir("foo");
 
@@ -71,8 +71,9 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
   fs::remove_all(intermediate_path / EXE_NAME);
 
   {
-    buildcc::base::Target foolib(
-        STATIC_FOO_LIB, buildcc::base::TargetType::StaticLibrary, gcc, "data");
+    buildcc::base::Target foolib(STATIC_FOO_LIB,
+                                 buildcc::base::Target::Type::StaticLibrary,
+                                 gcc, "data");
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
 
@@ -84,7 +85,7 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
 
     // Executable for static
     buildcc::base::Target exe_target(
-        EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        EXE_NAME, buildcc::base::Target::Type::Executable, gcc, "data");
     exe_target.AddSource("foo_main.cpp");
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
@@ -95,8 +96,9 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
   }
 
   {
-    buildcc::base::Target foolib(
-        STATIC_FOO_LIB, buildcc::base::TargetType::StaticLibrary, gcc, "data");
+    buildcc::base::Target foolib(STATIC_FOO_LIB,
+                                 buildcc::base::Target::Type::StaticLibrary,
+                                 gcc, "data");
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
     foolib.Build();
@@ -104,7 +106,7 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
 
     // Executable for static
     buildcc::base::Target exe_target(
-        EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        EXE_NAME, buildcc::base::Target::Type::Executable, gcc, "data");
     exe_target.AddSource("foo_main.cpp");
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
@@ -123,7 +125,7 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
   fs::remove_all(intermediate_path / EXE_NAME);
 
   buildcc::base::Target foolib(
-      STATIC_NAME, buildcc::base::TargetType::StaticLibrary, gcc, "data");
+      STATIC_NAME, buildcc::base::Target::Type::StaticLibrary, gcc, "data");
   foolib.AddSource("foo/foo.cpp");
   foolib.AddIncludeDir("foo");
 
@@ -138,7 +140,7 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
   // Executable for static
   {
     buildcc::base::Target exe_target(
-        EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        EXE_NAME, buildcc::base::Target::Type::Executable, gcc, "data");
     exe_target.AddSource("empty_main.cpp");
     exe_target.AddIncludeDir("foo");
 
@@ -151,7 +153,7 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
   // Build
   {
     buildcc::base::Target exe_target(
-        EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        EXE_NAME, buildcc::base::Target::Type::Executable, gcc, "data");
     exe_target.AddSource("empty_main.cpp");
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
@@ -164,7 +166,7 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
   // * Remove library
   {
     buildcc::base::Target exe_target(
-        EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        EXE_NAME, buildcc::base::Target::Type::Executable, gcc, "data");
     exe_target.AddSource("empty_main.cpp");
     exe_target.AddIncludeDir("foo");
 
@@ -186,7 +188,7 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
   // Build initial
   {
     buildcc::base::Target foolib(
-        STATIC_NAME, buildcc::base::TargetType::StaticLibrary, gcc, "data");
+        STATIC_NAME, buildcc::base::Target::Type::StaticLibrary, gcc, "data");
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
 
@@ -199,7 +201,7 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     CHECK_TRUE(saved);
 
     buildcc::base::Target exe_target(
-        EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        EXE_NAME, buildcc::base::Target::Type::Executable, gcc, "data");
     exe_target.AddSource("foo_main.cpp");
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
@@ -212,7 +214,7 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
   // * Update static library
   {
     buildcc::base::Target foolib(
-        STATIC_NAME, buildcc::base::TargetType::StaticLibrary, gcc, "data");
+        STATIC_NAME, buildcc::base::Target::Type::StaticLibrary, gcc, "data");
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
     foolib.AddIncludeDir("");
@@ -229,7 +231,7 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     CHECK_TRUE(saved);
 
     buildcc::base::Target exe_target(
-        EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        EXE_NAME, buildcc::base::Target::Type::Executable, gcc, "data");
     exe_target.AddSource("foo_main.cpp");
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);

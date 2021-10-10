@@ -29,8 +29,8 @@ TEST(TargetBaseTestGroup, InvalidTargetType) {
   fs::remove_all(intermediate_path / INVALID_NAME);
 
   CHECK_THROWS(std::exception,
-               buildcc::base::Target(INVALID_NAME, (buildcc::base::TargetType)3,
-                                     gcc, ""));
+               buildcc::base::Target(INVALID_NAME,
+                                     (buildcc::base::Target::Type)3, gcc, ""));
 
   buildcc::env::deinit();
 }
@@ -40,7 +40,7 @@ TEST(TargetBaseTestGroup, NoEnvInit) {
 
   CHECK_THROWS(std::exception,
                buildcc::base::Target(
-                   NAME, buildcc::base::TargetType::Executable, gcc, "data"));
+                   NAME, buildcc::base::Target::Type::Executable, gcc, "data"));
 }
 
 // TODO, Check toolchain change
