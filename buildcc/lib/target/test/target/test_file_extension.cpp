@@ -62,6 +62,9 @@ TEST(TargetFileExtensionTestGroup, GetType) {
 
   type = ext.GetType(fs::current_path() / "my_filepath.notfound");
   CHECK(type == buildcc::base::FileExt::Type::Invalid);
+
+  type = ext.GetType(fs::current_path());
+  CHECK(type == buildcc::base::FileExt::Type::Invalid);
 }
 
 int main(int ac, char **av) {
