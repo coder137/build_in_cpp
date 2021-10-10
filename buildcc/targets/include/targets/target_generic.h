@@ -116,17 +116,17 @@ private:
 
 class GenericConfig {
 public:
-  static base::Target::Config Generic(base::TargetType type,
+  static base::Target::Config Generic(base::Target::Type type,
                                       base::Toolchain::Id id) {
     base::Target::Config config;
     switch (type) {
-    case base::TargetType::Executable:
+    case base::Target::Type::Executable:
       config = Executable(id);
       break;
-    case base::TargetType::StaticLibrary:
+    case base::Target::Type::StaticLibrary:
       config = StaticLib(id);
       break;
-    case base::TargetType::DynamicLibrary:
+    case base::Target::Type::DynamicLibrary:
       config = DynamicLib(id);
       break;
     default:
@@ -211,7 +211,7 @@ public:
   ExecutableTarget_generic(
       const std::string &name, const base::Toolchain &toolchain,
       const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::TargetType::Executable, toolchain,
+      : Target(name, base::Target::Type::Executable, toolchain,
                target_path_relative_to_root,
                ConfigInterface<GenericConfig, base::Toolchain::Id>::Executable(
                    toolchain.GetId())) {
@@ -251,7 +251,7 @@ public:
   StaticTarget_generic(
       const std::string &name, const base::Toolchain &toolchain,
       const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::TargetType::StaticLibrary, toolchain,
+      : Target(name, base::Target::Type::StaticLibrary, toolchain,
                target_path_relative_to_root,
                ConfigInterface<GenericConfig, base::Toolchain::Id>::StaticLib(
                    toolchain.GetId())) {
@@ -289,7 +289,7 @@ public:
   DynamicTarget_generic(
       const std::string &name, const base::Toolchain &toolchain,
       const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::TargetType::DynamicLibrary, toolchain,
+      : Target(name, base::Target::Type::DynamicLibrary, toolchain,
                target_path_relative_to_root,
                ConfigInterface<GenericConfig, base::Toolchain::Id>::DynamicLib(
                    toolchain.GetId())) {
@@ -324,25 +324,25 @@ public:
 
 class Target_generic : public base::Target {
 public:
-  Target_generic(const std::string &name, base::TargetType type,
+  Target_generic(const std::string &name, base::Target::Type type,
                  const base::Toolchain &toolchain,
                  const std::filesystem::path &target_path_relative_to_root)
       : Target(
             name, type, toolchain, target_path_relative_to_root,
-            ConfigInterface<GenericConfig, base::TargetType,
+            ConfigInterface<GenericConfig, base::Target::Type,
                             base::Toolchain::Id>::Generic(type,
                                                           toolchain.GetId())) {
     std::unique_ptr<base::Target> target;
     switch (type) {
-    case base::TargetType::Executable:
+    case base::Target::Type::Executable:
       target = std::make_unique<ExecutableTarget_generic>(
           name, toolchain, target_path_relative_to_root);
       break;
-    case base::TargetType::StaticLibrary:
+    case base::Target::Type::StaticLibrary:
       target = std::make_unique<StaticTarget_generic>(
           name, toolchain, target_path_relative_to_root);
       break;
-    case base::TargetType::DynamicLibrary:
+    case base::Target::Type::DynamicLibrary:
       target = std::make_unique<DynamicTarget_generic>(
           name, toolchain, target_path_relative_to_root);
       break;
