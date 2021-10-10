@@ -243,6 +243,9 @@ public:
   // TODO, Add more getters
 
 private:
+  friend class Compiler;
+
+private:
   struct OutputInfo {
     fs::path output;
     std::string command;
@@ -321,8 +324,6 @@ private:
   bool IsValidSource(const fs::path &sourcepath) const;
   bool IsValidHeader(const fs::path &headerpath) const;
 
-  std::optional<std::string> GetCompiler(FileExtType type) const;
-  std::optional<std::string> GetCompiledFlags(FileExtType type) const;
   internal::fs_unordered_set GetCompiledSources() const;
 
   const OutputInfo &GetObjectInfo(const fs::path &source) const;
@@ -372,6 +373,50 @@ private:
   // Build states
   bool build_ = false;
   bool lock_ = false;
+};
+
+// Friend classes
+
+class Compiler {
+public:
+  Compiler(const Target &target) : target_(target) {}
+
+  std::optional<std::string> GetCompileFlags(FileExtType type) {
+    switch (type) {
+    case FileExtType::Asm:
+      return internal::aggregate(target_.current_asm_compile_flags_);
+      break;
+    case FileExtType::C:
+      return internal::aggregate(target_.current_c_compile_flags_);
+      break;
+    case FileExtType::Cpp:
+      return internal::aggregate(target_.current_cpp_compile_flags_);
+      break;
+    default:
+      break;
+    }
+    return {};
+  }
+
+  std::optional<std::string> GetCompiler(FileExtType type) {
+    switch (type) {
+    case FileExtType::Asm:
+      return target_.toolchain_.GetAsmCompiler();
+      break;
+    case FileExtType::C:
+      return target_.toolchain_.GetCCompiler();
+      break;
+    case FileExtType::Cpp:
+      return target_.toolchain_.GetCppCompiler();
+      break;
+    default:
+      break;
+    }
+    return {};
+  }
+
+private:
+  const Target &target_;
 };
 
 } // namespace buildcc::base

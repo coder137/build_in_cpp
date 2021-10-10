@@ -18,40 +18,6 @@
 
 namespace buildcc::base {
 
-std::optional<std::string> Target::GetCompiler(FileExtType type) const {
-  switch (type) {
-  case FileExtType::Asm:
-    return toolchain_.GetAsmCompiler();
-    break;
-  case FileExtType::C:
-    return toolchain_.GetCCompiler();
-    break;
-  case FileExtType::Cpp:
-    return toolchain_.GetCppCompiler();
-    break;
-  default:
-    break;
-  }
-  return {};
-}
-
-std::optional<std::string> Target::GetCompiledFlags(FileExtType type) const {
-  switch (type) {
-  case FileExtType::Asm:
-    return internal::aggregate(current_asm_compile_flags_);
-    break;
-  case FileExtType::C:
-    return internal::aggregate(current_c_compile_flags_);
-    break;
-  case FileExtType::Cpp:
-    return internal::aggregate(current_cpp_compile_flags_);
-    break;
-  default:
-    break;
-  }
-  return {};
-}
-
 internal::fs_unordered_set Target::GetCompiledSources() const {
   internal::fs_unordered_set compiled_sources;
   for (const auto &p : current_object_files_) {
@@ -99,6 +65,7 @@ Target::ConstructObjectPath(const fs::path &absolute_source_file) const {
   return absolute_compiled_source;
 }
 
+// NOTE, Since input has been sanitized, absolute current source is valid
 std::string
 Target::ConstructCompileCommand(const fs::path &absolute_current_source) const {
   const std::string output = internal::Path::CreateNewPath(
@@ -108,16 +75,18 @@ Target::ConstructCompileCommand(const fs::path &absolute_current_source) const {
       internal::Path::CreateNewPath(absolute_current_source).GetPathAsString();
 
   const auto type = GetFileExtType(absolute_current_source);
-  const std::string aggregated_compile_flags =
-      GetCompiledFlags(type).value_or("");
-  const std::string compiler = GetCompiler(type).value_or("");
-  return command_.Construct(config_.compile_command,
-                            {
-                                {"compiler", compiler},
-                                {"compile_flags", aggregated_compile_flags},
-                                {"output", output},
-                                {"input", input},
-                            });
+  Compiler compiler(*this);
+  const std::string selected_aggregated_compile_flags =
+      compiler.GetCompileFlags(type).value_or("");
+  const std::string selected_compiler = compiler.GetCompiler(type).value_or("");
+  return command_.Construct(
+      config_.compile_command,
+      {
+          {"compiler", selected_compiler},
+          {"compile_flags", selected_aggregated_compile_flags},
+          {"output", output},
+          {"input", input},
+      });
 }
 
 // Compile APIs
