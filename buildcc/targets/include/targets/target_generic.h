@@ -117,17 +117,17 @@ private:
 class GenericConfig {
 public:
   static base::Target::Config Generic(base::TargetType type,
-                                      const base::Toolchain &toolchain) {
+                                      base::Toolchain::Id id) {
     base::Target::Config config;
     switch (type) {
     case base::TargetType::Executable:
-      config = Executable(toolchain);
+      config = Executable(id);
       break;
     case base::TargetType::StaticLibrary:
-      config = StaticLib(toolchain);
+      config = StaticLib(id);
       break;
     case base::TargetType::DynamicLibrary:
-      config = DynamicLib(toolchain);
+      config = DynamicLib(id);
       break;
     default:
       env::assert_fatal<false>("Target Type not supported");
@@ -137,21 +137,20 @@ public:
     return config;
   }
 
-  static base::Target::Config Executable(const base::Toolchain &toolchain) {
-    return DefaultGenericExecutable(toolchain);
+  static base::Target::Config Executable(base::Toolchain::Id id) {
+    return DefaultGenericExecutable(id);
   }
-  static base::Target::Config StaticLib(const base::Toolchain &toolchain) {
-    return DefaultGenericStaticLib(toolchain);
+  static base::Target::Config StaticLib(base::Toolchain::Id id) {
+    return DefaultGenericStaticLib(id);
   }
-  static base::Target::Config DynamicLib(const base::Toolchain &toolchain) {
-    return DefaultGenericDynamicLib(toolchain);
+  static base::Target::Config DynamicLib(base::Toolchain::Id id) {
+    return DefaultGenericDynamicLib(id);
   }
 
 private:
-  static base::Target::Config
-  DefaultGenericExecutable(const base::Toolchain &toolchain) {
+  static base::Target::Config DefaultGenericExecutable(base::Toolchain::Id id) {
     base::Target::Config config;
-    switch (toolchain.GetId()) {
+    switch (id) {
     case base::Toolchain::Id::Gcc:
       config = GccConfig::Executable();
       break;
@@ -168,10 +167,9 @@ private:
     return config;
   }
 
-  static base::Target::Config
-  DefaultGenericStaticLib(const base::Toolchain &toolchain) {
+  static base::Target::Config DefaultGenericStaticLib(base::Toolchain::Id id) {
     base::Target::Config config;
-    switch (toolchain.GetId()) {
+    switch (id) {
     case base::Toolchain::Id::Gcc:
       config = GccConfig::StaticLib();
       break;
@@ -188,10 +186,9 @@ private:
     return config;
   }
 
-  static base::Target::Config
-  DefaultGenericDynamicLib(const base::Toolchain &toolchain) {
+  static base::Target::Config DefaultGenericDynamicLib(base::Toolchain::Id id) {
     base::Target::Config config;
-    switch (toolchain.GetId()) {
+    switch (id) {
     case base::Toolchain::Id::Gcc:
       config = GccConfig::DynamicLib();
       break;
@@ -216,7 +213,8 @@ public:
       const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::Executable, toolchain,
                target_path_relative_to_root,
-               GenericConfig::Executable(toolchain)) {
+               ConfigInterface<GenericConfig, base::Toolchain::Id>::Executable(
+                   toolchain.GetId())) {
     std::unique_ptr<base::Target> target;
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
@@ -255,7 +253,8 @@ public:
       const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::StaticLibrary, toolchain,
                target_path_relative_to_root,
-               GenericConfig::StaticLib(toolchain)) {
+               ConfigInterface<GenericConfig, base::Toolchain::Id>::StaticLib(
+                   toolchain.GetId())) {
     std::unique_ptr<base::Target> target;
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
@@ -292,7 +291,8 @@ public:
       const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::DynamicLibrary, toolchain,
                target_path_relative_to_root,
-               GenericConfig::DynamicLib(toolchain)) {
+               ConfigInterface<GenericConfig, base::Toolchain::Id>::DynamicLib(
+                   toolchain.GetId())) {
     std::unique_ptr<base::Target> target;
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
@@ -327,8 +327,11 @@ public:
   Target_generic(const std::string &name, base::TargetType type,
                  const base::Toolchain &toolchain,
                  const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, type, toolchain, target_path_relative_to_root,
-               GenericConfig::Generic(type, toolchain)) {
+      : Target(
+            name, type, toolchain, target_path_relative_to_root,
+            ConfigInterface<GenericConfig, base::TargetType,
+                            base::Toolchain::Id>::Generic(type,
+                                                          toolchain.GetId())) {
     std::unique_ptr<base::Target> target;
     switch (type) {
     case base::TargetType::Executable:

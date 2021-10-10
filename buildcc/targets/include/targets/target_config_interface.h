@@ -19,6 +19,8 @@
 
 #include "target/target.h"
 
+#include <utility>
+
 namespace buildcc {
 
 // USAGE:
@@ -52,11 +54,20 @@ namespace buildcc {
 // };
 
 // Compile-Time interface check
-template <typename T> class ConfigInterface {
+template <typename T, typename... Args> class ConfigInterface {
 public:
-  static base::Target::Config Executable() { return T::Executable(); }
-  static base::Target::Config StaticLib() { return T::StaticLib(); }
-  static base::Target ::Config DynamicLib() { return T::DynamicLib(); }
+  static base::Target::Config Generic(Args... args) {
+    return T::Generic(std::forward<Args>(args)...);
+  }
+  static base::Target::Config Executable(Args... args) {
+    return T::Executable(std::forward<Args>(args)...);
+  }
+  static base::Target::Config StaticLib(Args... args) {
+    return T::StaticLib(std::forward<Args>(args)...);
+  }
+  static base::Target ::Config DynamicLib(Args... args) {
+    return T::DynamicLib(std::forward<Args>(args)...);
+  }
   // TODO, Add more functions according to `Target::TargetType`
 };
 
