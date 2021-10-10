@@ -11,6 +11,10 @@ add_library(mock_target STATIC
     mock/generator/task.cpp
     mock/generator/recheck_states.cpp
 
+    # Target friend
+    src/target/friend/file_extension.cpp
+    include/target/friend/file_extension.h
+
     # Target
     src/target/target.cpp
     src/target/target_loader.cpp
