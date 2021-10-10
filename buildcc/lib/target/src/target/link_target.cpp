@@ -28,7 +28,7 @@ std::string Target::ConstructLinkCommand() const {
       internal::Path::CreateNewPath(GetTargetPath()).GetPathAsString();
 
   return command_.Construct(
-      link_command_,
+      config_.link_command,
       {
           {"output", output_target},
           {"compiled_sources", aggregated_compiled_sources},

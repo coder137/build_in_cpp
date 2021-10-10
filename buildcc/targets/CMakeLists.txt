@@ -1,6 +1,12 @@
 set(TARGET_SPECIALIZED_SRCS
+    # Interfaces
+    include/targets/target_config_interface.h
+
+    # Specialized targets
     include/targets/target_gcc.h
     include/targets/target_msvc.h
+
+    # User targets
     include/targets/target_generic.h
     include/targets/target_custom.h
 )

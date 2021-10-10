@@ -40,10 +40,10 @@ void Target::Build() {
   tf_.name(fmt::format("[{}] {}", toolchain_.GetName(), name_));
 
   command_.AddDefaultArguments({
-      {"include_dirs", internal::aggregate_with_prefix(prefix_include_dir_,
-                                                       current_include_dirs_)},
-      {"lib_dirs",
-       internal::aggregate_with_prefix(prefix_lib_dir_, current_lib_dirs_)},
+      {"include_dirs", internal::aggregate_with_prefix(
+                           config_.prefix_include_dir, current_include_dirs_)},
+      {"lib_dirs", internal::aggregate_with_prefix(config_.prefix_lib_dir,
+                                                   current_lib_dirs_)},
 
       {"preprocessor_flags", internal::aggregate(current_preprocessor_flags_)},
       {"common_compile_flags",

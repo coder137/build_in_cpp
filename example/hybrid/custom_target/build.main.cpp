@@ -40,9 +40,11 @@ int main(int argc, char **argv) {
   base::Toolchain clang = toolchain_clang_gnu.ConstructToolchain();
 
   // * M2, Get from Args (see build_linux.toml or build_win.toml files)
+  base::Target::Config config;
+  config.compile_command = target_clang_gnu.compile_command;
+  config.link_command = target_clang_gnu.link_command;
   Target_custom c_foolib("CFoolib.exe", base::TargetType::Executable, clang, "",
-                         target_clang_gnu.compile_command,
-                         target_clang_gnu.link_command);
+                         config);
   reg.Build(toolchain_clang_gnu.state, c_foolib, foolib_build_cb);
 
   // 5.

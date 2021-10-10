@@ -50,7 +50,7 @@ void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
     if (IsValidSource(p.path())) {
       fs::path absolute_output_source =
           absolute_output_path /
-          fmt::format("{}{}", p.path().filename().string(), obj_ext_);
+          fmt::format("{}{}", p.path().filename().string(), config_.obj_ext);
       AddSourceAbsolute(p.path(), absolute_output_source);
     }
   }

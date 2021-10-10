@@ -19,39 +19,68 @@
 
 #include "target/target.h"
 
+#include "targets/target_config_interface.h"
+
 // TODO, Combine all of these into Target_msvc
 namespace buildcc {
 
 // MSVC Constants
-constexpr std::string_view kMsvcExecutableExt = ".exe";
-constexpr std::string_view kMsvcStaticLibExt = ".lib";
+constexpr const char *const kMsvcExecutableExt = ".exe";
+constexpr const char *const kMsvcStaticLibExt = ".lib";
 // Why is `kWinDynamicLibExt != .dll` but `.lib` instead?
 // See `kMsvcDynamicLibLinkCommand`
 // IMPLIB .lib stubs are what is linked during link time
 // OUT .dll needs to be present in the executable folder during runtime
-constexpr std::string_view kMsvcDynamicLibExt = ".lib";
+constexpr const char *const kMsvcDynamicLibExt = ".lib";
 
-constexpr std::string_view kMsvcObjExt = ".obj";
-constexpr std::string_view kMsvcPrefixIncludeDir = "/I";
-constexpr std::string_view kMsvcPrefixLibDir = "/LIBPATH:";
+constexpr const char *const kMsvcObjExt = ".obj";
+constexpr const char *const kMsvcPrefixIncludeDir = "/I";
+constexpr const char *const kMsvcPrefixLibDir = "/LIBPATH:";
 // TODO, Split this into individual CompileCommands if any differences occur
-constexpr std::string_view kMsvcCompileCommand =
+constexpr const char *const kMsvcCompileCommand =
     "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
     "{compile_flags} /Fo{output} /c {input}";
-constexpr std::string_view kMsvcExecutableLinkCommand =
+constexpr const char *const kMsvcExecutableLinkCommand =
     "{linker} {link_flags} {lib_dirs} /OUT:{output} {lib_deps} "
     "{compiled_sources}";
-constexpr std::string_view kMsvcStaticLibLinkCommand =
+constexpr const char *const kMsvcStaticLibLinkCommand =
     "{archiver} {link_flags} /OUT:{output} {compiled_sources}";
-constexpr std::string_view kMsvcDynamicLibLinkCommand =
+constexpr const char *const kMsvcDynamicLibLinkCommand =
     "{linker} /DLL {link_flags} /OUT:{output}.dll /IMPLIB:{output} "
     "{compiled_sources}";
 
-inline void DefaultMsvcOptions(base::Target &target) {
-  target.obj_ext_ = kMsvcObjExt;
-  target.prefix_include_dir_ = kMsvcPrefixIncludeDir;
-  target.prefix_lib_dir_ = kMsvcPrefixLibDir;
+class MsvcConfig {
+public:
+  static base::Target::Config Executable() {
+    return DefaultMsvcConfig(kMsvcExecutableExt, kMsvcCompileCommand,
+                             kMsvcExecutableLinkCommand);
+  }
+  static base::Target::Config StaticLib() {
+    return DefaultMsvcConfig(kMsvcStaticLibExt, kMsvcCompileCommand,
+                             kMsvcStaticLibLinkCommand);
+  }
+  static base::Target ::Config DynamicLib() {
+    return DefaultMsvcConfig(kMsvcDynamicLibExt, kMsvcCompileCommand,
+                             kMsvcDynamicLibLinkCommand);
+  }
 
+private:
+  static base::Target::Config
+  DefaultMsvcConfig(const std::string &target_ext,
+                    const std::string &compile_command,
+                    const std::string &link_command) {
+    base::Target::Config config;
+    config.target_ext = target_ext;
+    config.obj_ext = kMsvcObjExt;
+    config.prefix_include_dir = kMsvcPrefixIncludeDir;
+    config.prefix_lib_dir = kMsvcPrefixLibDir;
+    config.compile_command = compile_command;
+    config.link_command = link_command;
+    return config;
+  }
+};
+
+inline void DefaultMsvcOptions(base::Target &target) {
   target.AddCCompileFlag("/nologo");
   target.AddCppCompileFlag("/nologo");
   target.AddCppCompileFlag("/EHsc"); // TODO, Might need to remove this
@@ -64,10 +93,8 @@ public:
       const std::string &name, const base::Toolchain &toolchain,
       const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::Executable, toolchain,
-               target_path_relative_to_root) {
-    target_ext_ = kMsvcExecutableExt;
-    compile_command_ = kMsvcCompileCommand;
-    link_command_ = kMsvcExecutableLinkCommand;
+               target_path_relative_to_root,
+               ConfigInterface<MsvcConfig>::Executable()) {
     DefaultMsvcOptions(*this);
   }
 };
@@ -77,10 +104,8 @@ public:
   StaticTarget_msvc(const std::string &name, const base::Toolchain &toolchain,
                     const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::StaticLibrary, toolchain,
-               target_path_relative_to_root) {
-    target_ext_ = kMsvcStaticLibExt;
-    compile_command_ = kMsvcCompileCommand;
-    link_command_ = kMsvcStaticLibLinkCommand;
+               target_path_relative_to_root,
+               ConfigInterface<MsvcConfig>::StaticLib()) {
     DefaultMsvcOptions(*this);
   }
 };
@@ -90,10 +115,8 @@ public:
   DynamicTarget_msvc(const std::string &name, const base::Toolchain &toolchain,
                      const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::DynamicLibrary, toolchain,
-               target_path_relative_to_root) {
-    target_ext_ = kMsvcDynamicLibExt;
-    compile_command_ = kMsvcCompileCommand;
-    link_command_ = kMsvcDynamicLibLinkCommand;
+               target_path_relative_to_root,
+               ConfigInterface<MsvcConfig>::DynamicLib()) {
     DefaultMsvcOptions(*this);
   }
 };

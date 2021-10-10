@@ -17,19 +17,11 @@
 #ifndef TARGETS_TARGET_CUSTOM_H_
 #define TARGETS_TARGET_CUSTOM_H_
 
+#include "target/target.h"
+
 namespace buildcc {
 
-class Target_custom : public base::Target {
-public:
-  Target_custom(const std::string &name, base::TargetType type,
-                const base::Toolchain &toolchain,
-                const std::filesystem::path &target_path_relative_to_root,
-                std::string_view compile_command, std::string_view link_command)
-      : Target(name, type, toolchain, target_path_relative_to_root) {
-    compile_command_ = compile_command;
-    link_command_ = link_command;
-  }
-};
+typedef base::Target Target_custom;
 
 } // namespace buildcc
 

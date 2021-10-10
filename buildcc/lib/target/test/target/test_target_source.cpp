@@ -259,16 +259,15 @@ TEST(TargetTestSourceGroup, Target_CompileCommand) {
   // Delete
   fs::remove_all(intermediate_path);
   {
+    buildcc::base::Target::Config config;
+    config.valid_c_ext.insert(".invalid");
     buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
-    simple.valid_c_ext_.insert(".invalid");
+                                 gcc, "data", config);
     simple.AddSource("fileext/invalid_file.invalid");
 
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
-    simple.valid_c_ext_.clear();
-    simple.valid_c_ext_.insert(".c");
 
     auto p = simple.GetTargetRootDir() / "fileext/invalid_file.invalid";
     p.make_preferred();
@@ -285,12 +284,11 @@ TEST(TargetTestSourceGroup, Target_CompileCommand_Throws) {
   // Delete
   fs::remove_all(intermediate_path);
   {
+    buildcc::base::Target::Config config;
+    config.valid_c_ext.insert(".invalid");
     buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
-    simple.valid_c_ext_.insert(".invalid");
+                                 gcc, "data", config);
     simple.AddSource("fileext/invalid_file.invalid");
-    simple.valid_c_ext_.clear();
-    simple.valid_c_ext_.insert(".c");
 
     auto p = simple.GetTargetRootDir() / "fileext/invalid_file.invalid";
     p.make_preferred();
@@ -307,15 +305,56 @@ TEST(TargetTestSourceGroup, Target_ConstructCompileCommand_Throws) {
   // Delete
   fs::remove_all(intermediate_path);
   {
+    buildcc::base::Target::Config config;
+    config.valid_c_ext.insert(".invalid");
+    config.compile_command = "{invalid_compile_string}";
     buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
-    simple.valid_c_ext_.insert(".invalid");
+                                 gcc, "data", config);
     simple.AddSource("fileext/invalid_file.invalid");
-    simple.valid_c_ext_.clear();
-    simple.valid_c_ext_.insert(".c");
-    simple.compile_command_ = "{invalid_compile_string}";
 
     CHECK_THROWS(std::exception, simple.Build());
+  }
+}
+
+TEST(TargetTestSourceGroup, TargetFriend_Compiler) {
+  constexpr const char *const NAME = "TargetFriend_Compiler.exe";
+  auto intermediate_path = target_source_intermediate_path / NAME;
+
+  // Delete
+  fs::remove_all(intermediate_path);
+  {
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
+                                 gcc, "data");
+    buildcc::base::Compiler compiler(simple);
+    compiler.GetCompileFlags(buildcc::base::FileExtType::Asm);
+    compiler.GetCompileFlags(buildcc::base::FileExtType::C);
+    compiler.GetCompileFlags(buildcc::base::FileExtType::Cpp);
+    CHECK_THROWS(
+        std::exception,
+        compiler.GetCompileFlags(buildcc::base::FileExtType::Header).value());
+    CHECK_THROWS(
+        std::exception,
+        compiler.GetCompileFlags(buildcc::base::FileExtType::Invalid).value());
+
+    std::string selected_compiler;
+    selected_compiler =
+        compiler.GetCompiler(buildcc::base::FileExtType::Asm).value_or("");
+    STRCMP_EQUAL(selected_compiler.c_str(), gcc.GetAsmCompiler().c_str());
+
+    selected_compiler =
+        compiler.GetCompiler(buildcc::base::FileExtType::C).value_or("");
+    STRCMP_EQUAL(selected_compiler.c_str(), gcc.GetCCompiler().c_str());
+
+    selected_compiler =
+        compiler.GetCompiler(buildcc::base::FileExtType::Cpp).value_or("");
+    STRCMP_EQUAL(selected_compiler.c_str(), gcc.GetCppCompiler().c_str());
+
+    CHECK_THROWS(
+        std::exception,
+        compiler.GetCompiler(buildcc::base::FileExtType::Header).value());
+    CHECK_THROWS(
+        std::exception,
+        compiler.GetCompiler(buildcc::base::FileExtType::Invalid).value());
   }
 }
 
