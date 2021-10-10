@@ -27,7 +27,6 @@ namespace buildcc {
 struct CopyTarget {
   // TODO, Add other options
   enum class Option {
-    Defaults,
     PreprocessorFlags,
     CommonCompileFlags,
     AsmCompileFlags,
@@ -54,10 +53,6 @@ struct CopyTarget {
   void Copy() {
     for (Option opt : options_) {
       switch (opt) {
-      case Option::Defaults:
-        Defaults();
-        break;
-
       case Option::PreprocessorFlags:
         CopyCb<std::unordered_set<std::string>, std::string>(
             source_.GetCurrentPreprocessorFlags(),
@@ -102,15 +97,6 @@ struct CopyTarget {
   }
 
 private:
-  void Defaults() {
-    dest_.target_ext_ = source_.target_ext_;
-    dest_.obj_ext_ = source_.obj_ext_;
-    dest_.prefix_include_dir_ = source_.prefix_include_dir_;
-    dest_.prefix_lib_dir_ = source_.prefix_lib_dir_;
-    dest_.compile_command_ = source_.compile_command_;
-    dest_.link_command_ = source_.link_command_;
-  }
-
   template <typename list_type, typename var_type>
   void CopyCb(
       const list_type &copy_source_list,
@@ -128,13 +114,109 @@ private:
   std::unordered_set<Option> options_;
 };
 
+class GenericConfig {
+public:
+  static base::Target::Config Generic(base::TargetType type,
+                                      const base::Toolchain &toolchain) {
+    base::Target::Config config;
+    switch (type) {
+    case base::TargetType::Executable:
+      config = Executable(toolchain);
+      break;
+    case base::TargetType::StaticLibrary:
+      config = StaticLib(toolchain);
+      break;
+    case base::TargetType::DynamicLibrary:
+      config = DynamicLib(toolchain);
+      break;
+    default:
+      env::assert_fatal<false>("Target Type not supported");
+      break;
+    }
+
+    return config;
+  }
+
+  static base::Target::Config Executable(const base::Toolchain &toolchain) {
+    return DefaultGenericExecutable(toolchain);
+  }
+  static base::Target::Config StaticLib(const base::Toolchain &toolchain) {
+    return DefaultGenericStaticLib(toolchain);
+  }
+  static base::Target::Config DynamicLib(const base::Toolchain &toolchain) {
+    return DefaultGenericDynamicLib(toolchain);
+  }
+
+private:
+  static base::Target::Config
+  DefaultGenericExecutable(const base::Toolchain &toolchain) {
+    base::Target::Config config;
+    switch (toolchain.GetId()) {
+    case base::Toolchain::Id::Gcc:
+      config = GccConfig::Executable();
+      break;
+    case base::Toolchain::Id::Msvc:
+      config = MsvcConfig::Executable();
+      break;
+    case base::Toolchain::Id::Clang:
+    case base::Toolchain::Id::MinGW:
+    default:
+      env::assert_fatal<false>("Compiler ID not supported");
+      break;
+    }
+
+    return config;
+  }
+
+  static base::Target::Config
+  DefaultGenericStaticLib(const base::Toolchain &toolchain) {
+    base::Target::Config config;
+    switch (toolchain.GetId()) {
+    case base::Toolchain::Id::Gcc:
+      config = GccConfig::StaticLib();
+      break;
+    case base::Toolchain::Id::Msvc:
+      config = MsvcConfig::StaticLib();
+      break;
+    case base::Toolchain::Id::Clang:
+    case base::Toolchain::Id::MinGW:
+    default:
+      env::assert_fatal<false>("Compiler ID not supported");
+      break;
+    }
+
+    return config;
+  }
+
+  static base::Target::Config
+  DefaultGenericDynamicLib(const base::Toolchain &toolchain) {
+    base::Target::Config config;
+    switch (toolchain.GetId()) {
+    case base::Toolchain::Id::Gcc:
+      config = GccConfig::DynamicLib();
+      break;
+    case base::Toolchain::Id::Msvc:
+      config = MsvcConfig::DynamicLib();
+      break;
+    case base::Toolchain::Id::Clang:
+    case base::Toolchain::Id::MinGW:
+    default:
+      env::assert_fatal<false>("Compiler ID not supported");
+      break;
+    }
+
+    return config;
+  }
+};
+
 class ExecutableTarget_generic : public base::Target {
 public:
   ExecutableTarget_generic(
       const std::string &name, const base::Toolchain &toolchain,
       const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::Executable, toolchain,
-               target_path_relative_to_root) {
+               target_path_relative_to_root,
+               GenericConfig::Executable(toolchain)) {
     std::unique_ptr<base::Target> target;
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
@@ -155,7 +237,6 @@ public:
     // Copy these parameters
     CopyTarget(*this, *target)
         .Add({
-            CopyTarget::Option::Defaults,
             CopyTarget::Option::CommonCompileFlags,
             CopyTarget::Option::AsmCompileFlags,
             CopyTarget::Option::CCompileFlags,
@@ -173,7 +254,8 @@ public:
       const std::string &name, const base::Toolchain &toolchain,
       const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::StaticLibrary, toolchain,
-               target_path_relative_to_root) {
+               target_path_relative_to_root,
+               GenericConfig::StaticLib(toolchain)) {
     std::unique_ptr<base::Target> target;
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
@@ -193,7 +275,6 @@ public:
     // Copy these parameters
     CopyTarget(*this, *target)
         .Add({
-            CopyTarget::Option::Defaults,
             CopyTarget::Option::CommonCompileFlags,
             CopyTarget::Option::AsmCompileFlags,
             CopyTarget::Option::CCompileFlags,
@@ -210,7 +291,8 @@ public:
       const std::string &name, const base::Toolchain &toolchain,
       const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::TargetType::DynamicLibrary, toolchain,
-               target_path_relative_to_root) {
+               target_path_relative_to_root,
+               GenericConfig::DynamicLib(toolchain)) {
     std::unique_ptr<base::Target> target;
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
@@ -230,7 +312,6 @@ public:
     // Copy these parameters
     CopyTarget(*this, *target)
         .Add({
-            CopyTarget::Option::Defaults,
             CopyTarget::Option::CommonCompileFlags,
             CopyTarget::Option::AsmCompileFlags,
             CopyTarget::Option::CCompileFlags,
@@ -246,7 +327,8 @@ public:
   Target_generic(const std::string &name, base::TargetType type,
                  const base::Toolchain &toolchain,
                  const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, type, toolchain, target_path_relative_to_root) {
+      : Target(name, type, toolchain, target_path_relative_to_root,
+               GenericConfig::Generic(type, toolchain)) {
     std::unique_ptr<base::Target> target;
     switch (type) {
     case base::TargetType::Executable:
@@ -268,7 +350,6 @@ public:
     // Copy these parameters
     CopyTarget(*this, *target)
         .Add({
-            CopyTarget::Option::Defaults,
             CopyTarget::Option::CommonCompileFlags,
             CopyTarget::Option::AsmCompileFlags,
             CopyTarget::Option::CCompileFlags,
