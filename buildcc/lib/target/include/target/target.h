@@ -164,6 +164,7 @@ public:
 
   // Set during first build or rebuild
   // lock == true after Build is called
+  const State &GetState() const { return state_; }
   bool GetBuildState() const { return state_.build; }
   bool GetLockState() const { return state_.lock; }
 

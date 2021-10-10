@@ -67,6 +67,86 @@ TEST(TargetFileExtensionTestGroup, GetType) {
   CHECK(type == buildcc::base::FileExt::Type::Invalid);
 }
 
+TEST(TargetFileExtensionTestGroup, GetCompiler) {
+  constexpr const char *const NAME = "GetCompiler.exe";
+  buildcc::base::Target target(NAME, buildcc::base::Target::Type::Executable,
+                               gcc, "data");
+
+  // Use config defaults and test
+  buildcc::base::FileExt ext(target);
+  std::string compiler;
+
+  compiler = ext.GetCompiler(buildcc::base::FileExt::Type::Asm).value();
+  STRCMP_EQUAL(compiler.c_str(), "as");
+
+  compiler = ext.GetCompiler(buildcc::base::FileExt::Type::C).value();
+  STRCMP_EQUAL(compiler.c_str(), "gcc");
+
+  compiler = ext.GetCompiler(buildcc::base::FileExt::Type::Cpp).value();
+  STRCMP_EQUAL(compiler.c_str(), "g++");
+
+  CHECK_THROWS(std::exception,
+               ext.GetCompiler(buildcc::base::FileExt::Type::Header).value());
+
+  CHECK_THROWS(std::exception,
+               ext.GetCompiler(buildcc::base::FileExt::Type::Invalid).value());
+}
+
+TEST(TargetFileExtensionTestGroup, GetCompileFlags) {
+  constexpr const char *const NAME = "GetCompileFlags.exe";
+  buildcc::base::Target target(NAME, buildcc::base::Target::Type::Executable,
+                               gcc, "data");
+
+  // Use config defaults and test
+  buildcc::base::FileExt ext(target);
+
+  ext.GetCompileFlags(buildcc::base::FileExt::Type::Asm).value();
+  ext.GetCompileFlags(buildcc::base::FileExt::Type::C).value();
+  ext.GetCompileFlags(buildcc::base::FileExt::Type::Cpp).value();
+
+  CHECK_THROWS(
+      std::exception,
+      ext.GetCompileFlags(buildcc::base::FileExt::Type::Header).value());
+
+  CHECK_THROWS(
+      std::exception,
+      ext.GetCompileFlags(buildcc::base::FileExt::Type::Invalid).value());
+}
+
+TEST(TargetFileExtensionTestGroup, SetSourceState) {
+  constexpr const char *const NAME = "SetSourceState.exe";
+  buildcc::base::Target target(NAME, buildcc::base::Target::Type::Executable,
+                               gcc, "data");
+
+  // Use config defaults and test
+  buildcc::base::FileExt ext(target);
+
+  CHECK_FALSE(target.GetState().contains_asm_src);
+  CHECK_FALSE(target.GetState().contains_c_src);
+  CHECK_FALSE(target.GetState().contains_cpp_src);
+
+  ext.SetSourceState(buildcc::base::FileExt::Type::Invalid);
+  ext.SetSourceState(buildcc::base::FileExt::Type::Header);
+  CHECK_FALSE(target.GetState().contains_asm_src);
+  CHECK_FALSE(target.GetState().contains_c_src);
+  CHECK_FALSE(target.GetState().contains_cpp_src);
+
+  ext.SetSourceState(buildcc::base::FileExt::Type::Asm);
+  CHECK_TRUE(target.GetState().contains_asm_src);
+  CHECK_FALSE(target.GetState().contains_c_src);
+  CHECK_FALSE(target.GetState().contains_cpp_src);
+
+  ext.SetSourceState(buildcc::base::FileExt::Type::C);
+  CHECK_TRUE(target.GetState().contains_asm_src);
+  CHECK_TRUE(target.GetState().contains_c_src);
+  CHECK_FALSE(target.GetState().contains_cpp_src);
+
+  ext.SetSourceState(buildcc::base::FileExt::Type::Cpp);
+  CHECK_TRUE(target.GetState().contains_asm_src);
+  CHECK_TRUE(target.GetState().contains_c_src);
+  CHECK_TRUE(target.GetState().contains_cpp_src);
+}
+
 int main(int ac, char **av) {
   buildcc::env::init(fs::current_path(), fs::current_path() / "intermediate" /
                                              "target_file_extension");
