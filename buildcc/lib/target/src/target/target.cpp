@@ -46,59 +46,6 @@ bool IsValidTargetType(buildcc::base::Target::Type type) {
 
 namespace buildcc::base {
 
-FileExtType Target::GetFileExtType(const fs::path &filepath) const {
-  if (!filepath.has_extension()) {
-    return FileExtType::Invalid;
-  }
-
-  FileExtType type = FileExtType::Invalid;
-  const std::string ext = filepath.extension().string();
-
-  if (config_.valid_c_ext.count(ext) == 1) {
-    type = FileExtType::C;
-  } else if (config_.valid_cpp_ext.count(ext) == 1) {
-    type = FileExtType::Cpp;
-  } else if (config_.valid_asm_ext.count(ext) == 1) {
-    type = FileExtType::Asm;
-  } else if (config_.valid_header_ext.count(ext) == 1) {
-    type = FileExtType::Header;
-  }
-
-  return type;
-}
-
-bool Target::IsValidSource(const fs::path &sourcepath) const {
-  bool valid = false;
-  switch (GetFileExtType(sourcepath)) {
-  case FileExtType::Asm:
-  case FileExtType::C:
-  case FileExtType::Cpp:
-    valid = true;
-    break;
-  case FileExtType::Header:
-  default:
-    valid = false;
-    break;
-  }
-  return valid;
-}
-
-bool Target::IsValidHeader(const fs::path &headerpath) const {
-  bool valid = false;
-  switch (GetFileExtType(headerpath)) {
-  case FileExtType::Header:
-    valid = true;
-    break;
-  case FileExtType::Asm:
-  case FileExtType::C:
-  case FileExtType::Cpp:
-  default:
-    valid = false;
-    break;
-  }
-  return valid;
-}
-
 fs::path Target::ConstructTargetPath() const {
   fs::path path = GetTargetIntermediateDir() /
                   fmt::format("{}{}", name_, config_.target_ext);

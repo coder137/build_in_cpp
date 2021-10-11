@@ -17,6 +17,10 @@ set(TARGET_SRCS
     include/target/generator_loader.h
     include/target/generator.h
 
+    # Target friend
+    src/target/friend/file_extension.cpp
+    include/target/friend/file_extension.h
+
     # Target
     src/target/target.cpp
     src/target/target_loader.cpp

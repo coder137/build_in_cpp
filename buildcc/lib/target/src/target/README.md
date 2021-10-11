@@ -49,6 +49,10 @@
   - FlagChanged
   - ExternalLibChanged
 
+## Target friend
+
+- [x] file_extension.cpp
+
 ## Action on Target
 
 - [ ] `compile_header.cpp` (pch)

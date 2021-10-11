@@ -26,13 +26,18 @@
 #include <unordered_set>
 #include <vector>
 
+// Interface
 #include "target/builder_interface.h"
+
+// Friend
+#include "target/friend/file_extension.h"
 
 // Internal
 #include "target/generator.h"
 #include "target/path.h"
 #include "target/target_loader.h"
 
+// Components
 #include "command/command.h"
 #include "env/env.h"
 #include "toolchain/toolchain.h"
@@ -41,15 +46,6 @@
 #include "taskflow/taskflow.hpp"
 
 namespace buildcc::base {
-
-// TODO, Make this private
-enum class FileExtType {
-  Asm,
-  C,
-  Cpp,
-  Header,
-  Invalid,
-};
 
 class Target : public BuilderInterface {
 
@@ -61,10 +57,14 @@ public:
   };
 
   struct Config {
+    Config() {}
+
     std::string target_ext{""};
     std::string obj_ext{".o"};
+
     std::string prefix_include_dir{"-I"};
     std::string prefix_lib_dir{"-L"};
+
     std::string compile_command{
         "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
         "{compile_flags} -o {output} -c {input}"};
@@ -76,15 +76,21 @@ public:
     std::unordered_set<std::string> valid_cpp_ext{".cpp", ".cxx", ".cc"};
     std::unordered_set<std::string> valid_asm_ext{".s", ".S", ".asm"};
     std::unordered_set<std::string> valid_header_ext{".h", ".hpp"};
+  };
 
-    Config() {}
+  struct State {
+    bool contains_asm_src{false};
+    bool contains_c_src{false};
+    bool contains_cpp_src{false};
+    bool build{false};
+    bool lock{false};
   };
 
 public:
   explicit Target(const std::string &name, Type type,
                   const Toolchain &toolchain,
                   const fs::path &target_path_relative_to_root,
-                  const Config &config = Config())
+                  const Config &config = {})
       : name_(name), type_(type), toolchain_(toolchain),
         target_root_source_dir_(env::get_project_root_dir() /
                                 target_path_relative_to_root),
@@ -157,10 +163,10 @@ public:
   // Target state
 
   // Set during first build or rebuild
-  bool GetBuildState() const { return build_; }
-
   // lock == true after Build is called
-  bool GetLockState() const { return lock_; }
+  const State &GetState() const { return state_; }
+  bool GetBuildState() const { return state_.build; }
+  bool GetLockState() const { return state_.lock; }
 
   // NOTE, We are constructing the path
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
@@ -241,7 +247,7 @@ public:
   // TODO, Add more getters
 
 private:
-  friend class Compiler;
+  friend class FileExt;
 
 private:
   struct OutputInfo {
@@ -317,11 +323,6 @@ private:
   ConstructCompileCommand(const fs::path &absolute_current_source) const;
   std::string ConstructLinkCommand() const;
 
-  // Getters
-  FileExtType GetFileExtType(const fs::path &filepath) const;
-  bool IsValidSource(const fs::path &sourcepath) const;
-  bool IsValidHeader(const fs::path &headerpath) const;
-
   internal::fs_unordered_set GetCompiledSources() const;
 
   const OutputInfo &GetObjectInfo(const fs::path &source) const;
@@ -363,58 +364,13 @@ private:
       current_object_files_;
   OutputInfo current_target_file_;
 
+  State state_;
   Command command_;
+  FileExt ext_{*this};
+
   tf::Taskflow tf_;
   tf::Task compile_task_;
   tf::Task link_task_;
-
-  // Build states
-  bool build_ = false;
-  bool lock_ = false;
-};
-
-// Friend classes
-
-class Compiler {
-public:
-  Compiler(const Target &target) : target_(target) {}
-
-  std::optional<std::string> GetCompileFlags(FileExtType type) {
-    switch (type) {
-    case FileExtType::Asm:
-      return internal::aggregate(target_.current_asm_compile_flags_);
-      break;
-    case FileExtType::C:
-      return internal::aggregate(target_.current_c_compile_flags_);
-      break;
-    case FileExtType::Cpp:
-      return internal::aggregate(target_.current_cpp_compile_flags_);
-      break;
-    default:
-      break;
-    }
-    return {};
-  }
-
-  std::optional<std::string> GetCompiler(FileExtType type) {
-    switch (type) {
-    case FileExtType::Asm:
-      return target_.toolchain_.GetAsmCompiler();
-      break;
-    case FileExtType::C:
-      return target_.toolchain_.GetCCompiler();
-      break;
-    case FileExtType::Cpp:
-      return target_.toolchain_.GetCppCompiler();
-      break;
-    default:
-      break;
-    }
-    return {};
-  }
-
-private:
-  const Target &target_;
 };
 
 } // namespace buildcc::base
