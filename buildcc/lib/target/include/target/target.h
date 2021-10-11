@@ -57,6 +57,8 @@ public:
   };
 
   struct Config {
+    Config() {}
+
     std::string target_ext{""};
     std::string obj_ext{".o"};
 
@@ -74,8 +76,6 @@ public:
     std::unordered_set<std::string> valid_cpp_ext{".cpp", ".cxx", ".cc"};
     std::unordered_set<std::string> valid_asm_ext{".s", ".S", ".asm"};
     std::unordered_set<std::string> valid_header_ext{".h", ".hpp"};
-
-    Config() {}
   };
 
   struct State {
@@ -90,7 +90,7 @@ public:
   explicit Target(const std::string &name, Type type,
                   const Toolchain &toolchain,
                   const fs::path &target_path_relative_to_root,
-                  const Config &config = Config())
+                  const Config &config = {})
       : name_(name), type_(type), toolchain_(toolchain),
         target_root_source_dir_(env::get_project_root_dir() /
                                 target_path_relative_to_root),
