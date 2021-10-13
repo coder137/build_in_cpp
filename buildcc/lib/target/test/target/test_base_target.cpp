@@ -1,5 +1,7 @@
 #include "constants.h"
 
+#include "expect_command.h"
+
 #include "target/target.h"
 
 #include "env/env.h"
@@ -9,10 +11,14 @@
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/Utest.h"
+#include "CppUTestExt/MockSupport.h"
 
 // clang-format off
 TEST_GROUP(TargetBaseTestGroup)
 {
+  void teardown() {
+    mock().clear();
+  }
 };
 // clang-format on
 static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
@@ -81,10 +87,13 @@ TEST(TargetBaseTestGroup, TargetConfig_BadLinkCommand) {
     buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
                                  gcc, "data", config);
     simple.AddSource("dummy_main.c");
+
+    buildcc::m::CommandExpect_Execute(1, true);
     CHECK_THROWS(std::exception, simple.Build());
   }
 
   buildcc::env::deinit();
+  mock().checkExpectations();
 }
 
 // TODO, Check toolchain change
