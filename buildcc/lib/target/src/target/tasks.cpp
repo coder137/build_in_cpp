@@ -27,12 +27,20 @@
 
 namespace {
 
+constexpr const char *const kPchTaskName = "Pch";
 constexpr const char *const kCompileTaskName = "Objects";
 constexpr const char *const kLinkTaskName = "Target";
 
 } // namespace
 
 namespace buildcc::base {
+
+void Target::PchTask() {
+  env::log_trace(name_, __FUNCTION__);
+
+  pch_task_ = tf_.emplace([&]() { BuildPch(); });
+  pch_task_.name(kPchTaskName);
+}
 
 void Target::CompileTask() {
   env::log_trace(name_, __FUNCTION__);
@@ -70,8 +78,13 @@ void Target::LinkTask() {
   env::log_trace(name_, __FUNCTION__);
 
   link_task_ = tf_.emplace([&]() { BuildLink(); });
-
   link_task_.name(kLinkTaskName);
+
+  // Only add if not empty
+  // PCH may not be used
+  if (!pch_task_.empty()) {
+    compile_task_.succeed(pch_task_);
+  }
   link_task_.succeed(compile_task_);
 }
 
