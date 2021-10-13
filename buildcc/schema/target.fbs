@@ -30,6 +30,7 @@ table Target {
     // Files
     source_files:[Path];
     header_files:[Path];
+    pch_files:[Path];
     lib_deps:[Path];
 
     // Links

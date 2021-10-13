@@ -47,6 +47,7 @@ public:
 
   const path_unordered_set &GetLoadedSources() const { return loaded_sources_; }
   const path_unordered_set &GetLoadedHeaders() const { return loaded_headers_; }
+  const path_unordered_set &GetLoadedPchs() const { return loaded_pchs_; }
   const path_unordered_set &GetLoadedLibDeps() const {
     return loaded_lib_deps_;
   }
@@ -93,6 +94,7 @@ private:
 
   path_unordered_set loaded_sources_;
   path_unordered_set loaded_headers_;
+  path_unordered_set loaded_pchs_;
   path_unordered_set loaded_lib_deps_;
 
   std::unordered_set<std::string> loaded_external_lib_dirs_;

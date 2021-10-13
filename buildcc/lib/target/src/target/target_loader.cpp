@@ -49,6 +49,7 @@ bool TargetLoader::Load() {
 
   ExtractPath(target->source_files(), loaded_sources_);
   ExtractPath(target->header_files(), loaded_headers_);
+  ExtractPath(target->pch_files(), loaded_pchs_);
   ExtractPath(target->lib_deps(), loaded_lib_deps_);
 
   Extract(target->external_lib_deps(), loaded_external_lib_dirs_);
