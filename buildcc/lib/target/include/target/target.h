@@ -106,7 +106,6 @@ public:
   }
   virtual ~Target() {}
 
-  Target(Target &&target) = default;
   Target(const Target &target) = delete;
 
   // Builders
