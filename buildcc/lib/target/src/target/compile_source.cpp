@@ -168,7 +168,6 @@ void Target::BuildCompile(std::vector<fs::path> &source_files,
   PreCompile();
 
   if (!loader_.IsLoaded()) {
-    CompileSources(source_files);
     dirty_ = true;
   } else {
     RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
@@ -184,12 +183,12 @@ void Target::BuildCompile(std::vector<fs::path> &source_files,
     RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
     RecheckPaths(loader_.GetLoadedCompileDependencies(),
                  current_compile_dependencies_.internal);
+  }
 
-    if (dirty_) {
-      CompileSources(source_files);
-    } else {
-      RecompileSources(source_files, dummy_source_files);
-    }
+  if (dirty_) {
+    CompileSources(source_files);
+  } else {
+    RecompileSources(source_files, dummy_source_files);
   }
 }
 
