@@ -17,6 +17,8 @@
 - [x] `include_dir.cpp`
   - Include Dir
   - Header File
+- [x] `pch.cpp`
+  - Precompile Header files 
 - [x] `lib.cpp`
   - Lib Dir
   - Lib File (full path Target supplied)
@@ -55,7 +57,7 @@
 
 ## Action on Target
 
-- [ ] `compile_header.cpp` (pch)
+- [x] `compile_header.cpp` (pch)
 - [x] `compile_source.cpp` (object)
 - [x] `link_target.cpp` (executable, library, C++20 module)
 - [x] `build.cpp`
