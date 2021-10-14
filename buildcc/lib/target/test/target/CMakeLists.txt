@@ -45,6 +45,12 @@ add_executable(test_base_target
 )
 target_link_libraries(test_base_target PRIVATE target_interface)
 
+# Test target pch
+add_executable(test_target_pch
+    test_target_pch.cpp
+)
+target_link_libraries(test_target_pch PRIVATE target_interface)
+
 # Test target sources
 add_executable(test_target_source
     test_target_source.cpp
@@ -96,6 +102,7 @@ target_link_libraries(test_target_lock PRIVATE target_interface)
 
 # Tests
 add_test(NAME test_base_target COMMAND test_base_target)
+add_test(NAME test_target_pch COMMAND test_target_pch)
 add_test(NAME test_target_source COMMAND test_target_source)
 add_test(NAME test_target_source_out_of_root COMMAND test_target_source_out_of_root)
 add_test(NAME test_target_include_dir COMMAND test_target_include_dir)
