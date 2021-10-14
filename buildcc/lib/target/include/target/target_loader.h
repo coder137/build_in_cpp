@@ -65,6 +65,9 @@ public:
   const std::unordered_set<std::string> &GetLoadedCommonCompileFlags() const {
     return loaded_common_compile_flags_;
   }
+  const std::unordered_set<std::string> &GetLoadedPchFlags() const {
+    return loaded_pch_flags_;
+  }
   const std::unordered_set<std::string> &GetLoadedAsmCompileFlags() const {
     return loaded_asm_compile_flags_;
   }
@@ -104,6 +107,7 @@ private:
 
   std::unordered_set<std::string> loaded_preprocessor_flags_;
   std::unordered_set<std::string> loaded_common_compile_flags_;
+  std::unordered_set<std::string> loaded_pch_flags_;
   std::unordered_set<std::string> loaded_asm_compile_flags_;
   std::unordered_set<std::string> loaded_c_compile_flags_;
   std::unordered_set<std::string> loaded_cpp_compile_flags_;

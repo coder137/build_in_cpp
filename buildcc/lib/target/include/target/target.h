@@ -378,6 +378,7 @@ private:
   std::unordered_set<std::string> current_external_lib_deps_;
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_common_compile_flags_;
+  std::unordered_set<std::string> current_pch_flags_;
   std::unordered_set<std::string> current_asm_compile_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;
   std::unordered_set<std::string> current_cpp_compile_flags_;

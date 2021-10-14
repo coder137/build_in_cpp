@@ -43,6 +43,7 @@ table Target {
     // Flags
     preprocessor_flags:[string];
     common_compile_flags:[string];
+    pch_flags:[string];
     asm_compile_flags:[string];
     c_compile_flags:[string];
     cpp_compile_flags:[string];
