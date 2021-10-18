@@ -63,7 +63,7 @@ void Target::BuildLink() {
   RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_.internal);
 
   if (dirty_) {
-    bool success = Command::Execute(current_target_file_.command);
+    bool success = Command::Execute(GetLinkCommand());
     env::assert_fatal(success, "Failed to link target");
     Store();
     state_.build = true;

@@ -61,10 +61,15 @@ public:
 
     std::string target_ext{""};
     std::string obj_ext{".o"};
+    std::string pch_header_ext{".hpp"};
+    std::string pch_compile_ext{".gch"};
 
     std::string prefix_include_dir{"-I"};
     std::string prefix_lib_dir{"-L"};
 
+    std::string pch_command{"{compiler} {preprocessor_flags} {include_dirs} "
+                            "{common_compile_flags} {pch_flags} "
+                            "{compile_flags} -o {output} -c {input}"};
     std::string compile_command{
         "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
         "{compile_flags} -o {output} -c {input}"};
@@ -101,7 +106,6 @@ public:
   }
   virtual ~Target() {}
 
-  Target(Target &&target) = default;
   Target(const Target &target) = delete;
 
   // Builders
@@ -129,6 +133,11 @@ public:
   void GlobHeaders(const fs::path &relative_to_target_path);
   void GlobHeadersAbsolute(const fs::path &absolute_path);
 
+  // PCH
+  void AddPch(const fs::path &relative_filename,
+              const fs::path &relative_to_target_path = "");
+  void AddPchAbsolute(const fs::path &absolute_filepath);
+
   // * Include and Lib directory
   void AddIncludeDir(const fs::path &relative_include_dir,
                      bool glob_headers = false);
@@ -145,6 +154,7 @@ public:
   // * Flags
   void AddPreprocessorFlag(const std::string &flag);
   void AddCommonCompileFlag(const std::string &flag);
+  void AddPchFlag(const std::string &flag);
   void AddAsmCompileFlag(const std::string &flag);
   void AddCCompileFlag(const std::string &flag);
   void AddCppCompileFlag(const std::string &flag);
@@ -177,6 +187,17 @@ public:
   // we can cache these variables during Target construction
   fs::path GetTargetPath() const { return ConstructTargetPath(); }
 
+  // TODO, Make these construct APIs
+  fs::path GetPchHeaderPath() const {
+    return target_intermediate_dir_ /
+           fmt::format("buildcc_pch{}", config_.pch_header_ext);
+  }
+  // Each target only has only 1 PCH file
+  fs::path GetPchCompilePath() const {
+    return GetPchHeaderPath().replace_extension(
+        fmt::format("{}{}", config_.pch_header_ext, config_.pch_compile_ext));
+  }
+
   // Const references
 
   // TODO, Shift getters to source file as well
@@ -206,6 +227,9 @@ public:
   }
   const std::unordered_set<std::string> &GetCurrentCommonCompileFlags() const {
     return current_common_compile_flags_;
+  }
+  const std::unordered_set<std::string> &GetCurrentPchFlags() const {
+    return current_pch_flags_;
   }
   const std::unordered_set<std::string> &GetCurrentAsmCompileFlags() const {
     return current_asm_compile_flags_;
@@ -273,11 +297,15 @@ private:
   void UnlockedAfterBuild() const;
 
   // Build
+  void BuildPch();
+  // TODO, Rename to BuildObject
   void BuildCompile(std::vector<fs::path> &source_files,
                     std::vector<fs::path> &dummy_source_files);
   void BuildLink();
 
   //
+  void PrePchCompile();
+  // TODO, Rename to PreObjectCompile
   void PreCompile();
   void PreLink();
 
@@ -298,6 +326,8 @@ private:
       const std::unordered_set<std::string> &current_external_libs);
 
   // Tasks
+  void PchTask();
+  // TODO, Rename to ObjectTask and TargetTask
   void CompileTask();
   void LinkTask();
 
@@ -319,6 +349,7 @@ private:
   // Construct
   fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
   fs::path ConstructTargetPath() const;
+  std::string ConstructPchCompileCommand() const;
   std::string
   ConstructCompileCommand(const fs::path &absolute_current_source) const;
   std::string ConstructLinkCommand() const;
@@ -344,12 +375,14 @@ private:
   // TODO, Use an internal::Storer class / struct for this to reduce clutter
   internal::default_files current_source_files_;
   internal::default_files current_header_files_;
+  internal::default_files current_pch_files_;
   internal::default_files current_lib_deps_;
   internal::fs_unordered_set current_include_dirs_;
   internal::fs_unordered_set current_lib_dirs_;
   std::unordered_set<std::string> current_external_lib_deps_;
   std::unordered_set<std::string> current_preprocessor_flags_;
   std::unordered_set<std::string> current_common_compile_flags_;
+  std::unordered_set<std::string> current_pch_flags_;
   std::unordered_set<std::string> current_asm_compile_flags_;
   std::unordered_set<std::string> current_c_compile_flags_;
   std::unordered_set<std::string> current_cpp_compile_flags_;
@@ -360,6 +393,8 @@ private:
   // Not used for serialization
   // NOTE, Always store the absolute source path -> absolute compiled source
   // path here
+  OutputInfo pch_file_;
+  // TODO, Remove current from these
   std::unordered_map<fs::path, OutputInfo, internal::PathHash>
       current_object_files_;
   OutputInfo current_target_file_;
@@ -369,6 +404,7 @@ private:
   FileExt ext_{*this};
 
   tf::Taskflow tf_;
+  tf::Task pch_task_;
   tf::Task compile_task_;
   tf::Task link_task_;
 };

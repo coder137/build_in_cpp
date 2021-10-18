@@ -26,6 +26,10 @@ void Target::AddCommonCompileFlag(const std::string &flag) {
   LockedAfterBuild();
   current_common_compile_flags_.insert(flag);
 }
+void Target::AddPchFlag(const std::string &flag) {
+  LockedAfterBuild();
+  current_pch_flags_.insert(flag);
+}
 void Target::AddAsmCompileFlag(const std::string &flag) {
   LockedAfterBuild();
   current_asm_compile_flags_.insert(flag);

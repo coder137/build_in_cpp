@@ -58,19 +58,25 @@ void Target::Build() {
       {"linker", toolchain_.GetLinker()},
   });
 
-  // Compile Command
-  for (auto &object_rel : current_object_files_) {
-    object_rel.second.command = ConstructCompileCommand(object_rel.first);
-  }
-
-  // Link Command
-  current_target_file_.command = ConstructLinkCommand();
-
   // Load the serialized file
   (void)loader_.Load();
 
-  // Register the tasks
+  // PCH Compile
+  if (!current_pch_files_.user.empty()) {
+    // TODO, Update .output at Constructor
+    pch_file_.command = ConstructPchCompileCommand();
+    PchTask();
+  }
+
+  // Compile Command
+  // Link Command
+  for (auto &object_rel : current_object_files_) {
+    object_rel.second.command = ConstructCompileCommand(object_rel.first);
+  }
   CompileTask();
+
+  // TODO, Update .output at Constructor
+  current_target_file_.command = ConstructLinkCommand();
   LinkTask();
 }
 

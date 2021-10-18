@@ -13,7 +13,6 @@ add_library(mock_target STATIC
 
     # Target friend
     src/target/friend/file_extension.cpp
-    include/target/friend/file_extension.h
 
     # Target
     src/target/target.cpp
@@ -22,10 +21,12 @@ add_library(mock_target STATIC
 
     src/target/source.cpp
     src/target/include_dir.cpp
+    src/target/pch.cpp
     src/target/lib.cpp
     src/target/flags.cpp
     src/target/additional_deps.cpp
 
+    src/target/compile_pch.cpp
     src/target/compile_source.cpp
     src/target/link_target.cpp
     src/target/build.cpp

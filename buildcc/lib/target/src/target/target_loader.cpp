@@ -49,6 +49,7 @@ bool TargetLoader::Load() {
 
   ExtractPath(target->source_files(), loaded_sources_);
   ExtractPath(target->header_files(), loaded_headers_);
+  ExtractPath(target->pch_files(), loaded_pchs_);
   ExtractPath(target->lib_deps(), loaded_lib_deps_);
 
   Extract(target->external_lib_deps(), loaded_external_lib_dirs_);
@@ -58,6 +59,7 @@ bool TargetLoader::Load() {
 
   Extract(target->preprocessor_flags(), loaded_preprocessor_flags_);
   Extract(target->common_compile_flags(), loaded_common_compile_flags_);
+  Extract(target->pch_flags(), loaded_pch_flags_);
   Extract(target->asm_compile_flags(), loaded_asm_compile_flags_);
   Extract(target->c_compile_flags(), loaded_c_compile_flags_);
   Extract(target->cpp_compile_flags(), loaded_cpp_compile_flags_);

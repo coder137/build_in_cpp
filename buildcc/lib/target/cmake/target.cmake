@@ -30,12 +30,14 @@ set(TARGET_SRCS
 
     src/target/source.cpp
     src/target/include_dir.cpp
+    src/target/pch.cpp
     src/target/lib.cpp
     src/target/flags.cpp
     src/target/additional_deps.cpp
 
     src/target/recheck_states.cpp
 
+    src/target/compile_pch.cpp
     src/target/compile_source.cpp
     src/target/link_target.cpp
     src/target/build.cpp

@@ -2,31 +2,31 @@
 
 When constructing custom commands we need to supply our own pattern to the buildsystem
 
-This is done by overriding the 2 `virtual base::Target` functions
+This is done by overriding the 3 `base::Target::Config` strings
 
-**IMPORTANT: Make sure they are string literals** 
 ```cpp
-std::string_view CompileCommand() const override {
-  return "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o {output} -c {input}";
-}
+base::Target::Config config;
 
-std::string_view Link() const override {
-  return "{cpp_compiler} {link_flags} {compiled_sources} -o {output} {lib_dirs} {lib_deps}";
-}
+config.pch_command = "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} {pch_flags} {compile_flags} -o {output} -c {input}";
+
+config.compile_command = "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} {compile_flags} -o {output} -c {input}";
+
+config.link_command = "{cpp_compiler} {link_flags} {compiled_sources} -o {output} {lib_dirs} {lib_deps}";
 ```
 
-- See [GCC specific overrides](../../buildcc/targets/target_gcc.h)
-- See [MSVC specific overrides](../../buildcc/targets/target_msvc.h)
+- See [GCC specific overrides](../../buildcc/targets/include/targets/target_gcc.h)
+- See [MSVC specific overrides](../../buildcc/targets/include/targets/target_msvc.h)
 
 # General
 
-The following `{}` commands are available to both `CompileCommand` and `Link` functions
+The following `{}` commands are available to both `pch_command`, `compile_command` and `link_command`
 
 See [build.cpp Target::Build API](../../buildcc/lib/target/src/target/build.cpp)
 
 - `include_dirs`: Aggregated include directories for header files
 - `lib_dirs`: Aggregated lib directories for external libraries
 - `preprocessor_flags`: Preprocessor definitions
+- `common_compile_flags`: Common compile flags for `PCH`, `ASM`, `C` and `CPP` files
 - `link_flags`: Flags supplied during linking
 - `asm_compiler`: Assembly compiler
 - `c_compiler`: C compiler
@@ -34,9 +34,19 @@ See [build.cpp Target::Build API](../../buildcc/lib/target/src/target/build.cpp)
 - `archiver`: Archiver for Static Libraries
 - `linker`: Linker usually used during the Linking phase / Library creation
 
+# PCH Specific
+
+See [compile_pch.cpp Target::ConstructPchCompileCommand API](../../buildcc/lib/target/src/target/compile_pch.cpp)
+
+- `compiler`: Selects CPP compiler if project contains CPP source else C compiler
+- `pch_flags`: Aggregated pch specific flags
+- `compile_flags`: Selects CPP flags if project contains CPP source else C flags
+- `output`: PCH output path
+- `input`: PCH input generated path (Headers are aggregated into a .h file)
+
 # Compile Specific
 
-See [source.cpp Target::CompileCommand API](../../buildcc/lib/target/src/target/source.cpp)
+See [compile_source.cpp Target::ConstructCompileCommand API](../../buildcc/lib/target/src/target/compile_source.cpp)
 
 - `compiler`: Automatically chosen amongst ASM, C and C++ toolchain compiler
 - `compile_flags`: Automatically chosen amongst `{c/cpp}_flags`
@@ -45,7 +55,7 @@ See [source.cpp Target::CompileCommand API](../../buildcc/lib/target/src/target/
 
 # Links Specific
 
-See [build.cpp Target::Target API](../../buildcc/lib/target/src/target/build.cpp)
+See [link_target.cpp Target::ConstructLinkCommand API](../../buildcc/lib/target/src/target/link_target.cpp)
 
 - `output`: Generated target as `Target::GetName()`
 - `compiled_sources`: Aggregated object files

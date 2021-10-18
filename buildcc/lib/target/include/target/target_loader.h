@@ -47,6 +47,7 @@ public:
 
   const path_unordered_set &GetLoadedSources() const { return loaded_sources_; }
   const path_unordered_set &GetLoadedHeaders() const { return loaded_headers_; }
+  const path_unordered_set &GetLoadedPchs() const { return loaded_pchs_; }
   const path_unordered_set &GetLoadedLibDeps() const {
     return loaded_lib_deps_;
   }
@@ -63,6 +64,9 @@ public:
   }
   const std::unordered_set<std::string> &GetLoadedCommonCompileFlags() const {
     return loaded_common_compile_flags_;
+  }
+  const std::unordered_set<std::string> &GetLoadedPchFlags() const {
+    return loaded_pch_flags_;
   }
   const std::unordered_set<std::string> &GetLoadedAsmCompileFlags() const {
     return loaded_asm_compile_flags_;
@@ -93,6 +97,7 @@ private:
 
   path_unordered_set loaded_sources_;
   path_unordered_set loaded_headers_;
+  path_unordered_set loaded_pchs_;
   path_unordered_set loaded_lib_deps_;
 
   std::unordered_set<std::string> loaded_external_lib_dirs_;
@@ -102,6 +107,7 @@ private:
 
   std::unordered_set<std::string> loaded_preprocessor_flags_;
   std::unordered_set<std::string> loaded_common_compile_flags_;
+  std::unordered_set<std::string> loaded_pch_flags_;
   std::unordered_set<std::string> loaded_asm_compile_flags_;
   std::unordered_set<std::string> loaded_c_compile_flags_;
   std::unordered_set<std::string> loaded_cpp_compile_flags_;
