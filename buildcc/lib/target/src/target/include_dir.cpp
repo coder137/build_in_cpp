@@ -31,7 +31,7 @@ void Target::AddHeaderAbsolute(const fs::path &absolute_filepath) {
   env::assert_fatal(FileExt::IsValidHeader(file_ext_type),
                     fmt::format("{} does not have a valid header extension",
                                 absolute_filepath.string()));
-  current_header_files_.user.insert(absolute_filepath);
+  storer_.current_header_files.user.insert(absolute_filepath);
 }
 
 void Target::AddHeader(const fs::path &relative_filename,
@@ -74,7 +74,7 @@ void Target::AddIncludeDir(const fs::path &relative_include_dir,
 void Target::AddIncludeDirAbsolute(const fs::path &absolute_include_dir,
                                    bool glob_headers) {
   LockedAfterBuild();
-  current_include_dirs_.insert(absolute_include_dir);
+  storer_.current_include_dirs.insert(absolute_include_dir);
 
   if (glob_headers) {
     GlobHeadersAbsolute(absolute_include_dir);
