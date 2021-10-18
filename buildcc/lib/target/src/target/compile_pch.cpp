@@ -63,7 +63,7 @@ std::string Target::ConstructPchCompileCommand() const {
       config_.pch_command,
       {
           {"compiler", compiler},
-          {"pch_flags", internal::aggregate(current_pch_flags_)},
+          {"pch_flags", internal::aggregate(GetCurrentPchFlags())},
           {"compile_flags", compile_flags},
           {"output", GetPchCompilePath().string()},
           {"input", GetPchHeaderPath().string()},
@@ -71,8 +71,8 @@ std::string Target::ConstructPchCompileCommand() const {
 }
 
 void Target::PrePchCompile() {
-  for (const auto &user_pf : current_pch_files_.user) {
-    current_pch_files_.internal.emplace(
+  for (const auto &user_pf : GetCurrentPchFiles()) {
+    storer_.current_pch_files.internal.emplace(
         buildcc::internal::Path::CreateExistingPath(user_pf));
   }
 }
@@ -83,20 +83,21 @@ void Target::BuildPch() {
     dirty_ = true;
   } else {
     RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
-                 current_preprocessor_flags_);
+                 GetCurrentPreprocessorFlags());
     RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
-                 current_common_compile_flags_);
-    RecheckFlags(loader_.GetLoadedPchFlags(), current_pch_flags_);
-    RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
+                 GetCurrentCommonCompileFlags());
+    RecheckFlags(loader_.GetLoadedPchFlags(), GetCurrentPchFlags());
+    RecheckFlags(loader_.GetLoadedCCompileFlags(), GetCurrentCCompileFlags());
     RecheckFlags(loader_.GetLoadedCppCompileFlags(),
-                 current_cpp_compile_flags_);
-    RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
-    RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
-    RecheckPaths(loader_.GetLoadedPchs(), current_pch_files_.internal);
+                 GetCurrentCppCompileFlags());
+    RecheckDirs(loader_.GetLoadedIncludeDirs(), GetCurrentIncludeDirs());
+    RecheckPaths(loader_.GetLoadedHeaders(),
+                 storer_.current_header_files.internal);
+    RecheckPaths(loader_.GetLoadedPchs(), storer_.current_pch_files.internal);
   }
 
   if (dirty_) {
-    AggregateToFile(GetPchHeaderPath(), current_pch_files_.user);
+    AggregateToFile(GetPchHeaderPath(), GetCurrentPchFiles());
     bool success = Command::Execute(pch_file_.command);
     env::assert_fatal(success, "Failed to compile pch");
   }
