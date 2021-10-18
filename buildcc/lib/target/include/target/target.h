@@ -36,6 +36,7 @@
 #include "target/generator.h"
 #include "target/path.h"
 #include "target/target_loader.h"
+#include "target/target_storer.h"
 
 // Components
 #include "command/command.h"
@@ -210,38 +211,45 @@ public:
   }
   const Config &GetConfig() const { return config_; }
 
+  //
   const internal::fs_unordered_set &GetCurrentSourceFiles() const {
-    return current_source_files_.user;
+    return storer_.current_source_files.user;
   }
   const internal::fs_unordered_set &GetCurrentHeaderFiles() const {
-    return current_header_files_.user;
+    return storer_.current_header_files.user;
+  }
+  const internal::fs_unordered_set &GetCurrentPchFiles() const {
+    return storer_.current_pch_files.user;
   }
   const internal::fs_unordered_set &GetTargetLibDeps() const {
-    return current_lib_deps_.user;
+    return storer_.current_lib_deps.user;
   }
   const internal::fs_unordered_set &GetCurrentIncludeDirs() const {
-    return current_include_dirs_;
+    return storer_.current_include_dirs;
+  }
+  const internal::fs_unordered_set &GetCurrentLibDirs() const {
+    return storer_.current_lib_dirs;
   }
   const std::unordered_set<std::string> &GetCurrentPreprocessorFlags() const {
-    return current_preprocessor_flags_;
+    return storer_.current_preprocessor_flags;
   }
   const std::unordered_set<std::string> &GetCurrentCommonCompileFlags() const {
-    return current_common_compile_flags_;
+    return storer_.current_common_compile_flags;
   }
   const std::unordered_set<std::string> &GetCurrentPchFlags() const {
-    return current_pch_flags_;
+    return storer_.current_pch_flags;
   }
   const std::unordered_set<std::string> &GetCurrentAsmCompileFlags() const {
-    return current_asm_compile_flags_;
+    return storer_.current_asm_compile_flags;
   }
   const std::unordered_set<std::string> &GetCurrentCCompileFlags() const {
-    return current_c_compile_flags_;
+    return storer_.current_c_compile_flags;
   }
   const std::unordered_set<std::string> &GetCurrentCppCompileFlags() const {
-    return current_cpp_compile_flags_;
+    return storer_.current_cpp_compile_flags;
   }
   const std::unordered_set<std::string> &GetCurrentLinkFlags() const {
-    return current_link_flags_;
+    return storer_.current_link_flags;
   }
 
   // Getters (UnlockedAfterBuild)
@@ -369,26 +377,8 @@ private:
   internal::TargetLoader loader_;
   Config config_;
 
-  // Internal
-
   // Used for serialization
-  // TODO, Use an internal::Storer class / struct for this to reduce clutter
-  internal::default_files current_source_files_;
-  internal::default_files current_header_files_;
-  internal::default_files current_pch_files_;
-  internal::default_files current_lib_deps_;
-  internal::fs_unordered_set current_include_dirs_;
-  internal::fs_unordered_set current_lib_dirs_;
-  std::unordered_set<std::string> current_external_lib_deps_;
-  std::unordered_set<std::string> current_preprocessor_flags_;
-  std::unordered_set<std::string> current_common_compile_flags_;
-  std::unordered_set<std::string> current_pch_flags_;
-  std::unordered_set<std::string> current_asm_compile_flags_;
-  std::unordered_set<std::string> current_c_compile_flags_;
-  std::unordered_set<std::string> current_cpp_compile_flags_;
-  std::unordered_set<std::string> current_link_flags_;
-  internal::default_files current_compile_dependencies_;
-  internal::default_files current_link_dependencies_;
+  internal::TargetStorer storer_;
 
   // Not used for serialization
   // NOTE, Always store the absolute source path -> absolute compiled source
