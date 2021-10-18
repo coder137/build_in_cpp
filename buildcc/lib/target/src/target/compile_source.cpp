@@ -90,8 +90,8 @@ Target::ConstructCompileCommand(const fs::path &absolute_current_source) const {
 
 // Compile APIs
 void Target::CompileSources(std::vector<fs::path> &source_files) {
-  std::transform(current_source_files_.internal.begin(),
-                 current_source_files_.internal.end(),
+  std::transform(storer_.current_source_files.internal.begin(),
+                 storer_.current_source_files.internal.end(),
                  std::back_inserter(source_files),
                  [](const buildcc::internal::Path &p) -> fs::path {
                    return p.GetPathname();
@@ -108,8 +108,8 @@ void Target::RecompileSources(std::vector<fs::path> &source_files,
   const bool is_source_removed =
       std::any_of(previous_source_files.begin(), previous_source_files.end(),
                   [&](const internal::Path &p) {
-                    return current_source_files_.internal.find(p) ==
-                           current_source_files_.internal.end();
+                    return storer_.current_source_files.internal.find(p) ==
+                           storer_.current_source_files.internal.end();
                   });
 
   if (is_source_removed) {
@@ -117,7 +117,7 @@ void Target::RecompileSources(std::vector<fs::path> &source_files,
     SourceRemoved();
   }
 
-  for (const auto &current_file : current_source_files_.internal) {
+  for (const auto &current_file : storer_.current_source_files.internal) {
     const auto &current_source = current_file.GetPathname();
 
     // Find current_file in the loaded sources
@@ -146,19 +146,19 @@ void Target::RecompileSources(std::vector<fs::path> &source_files,
 
 void Target::PreCompile() {
   // Convert user_source_files to current_source_files
-  for (const auto &user_sf : current_source_files_.user) {
-    current_source_files_.internal.emplace(
+  for (const auto &user_sf : GetCurrentSourceFiles()) {
+    storer_.current_source_files.internal.emplace(
         buildcc::internal::Path::CreateExistingPath(user_sf));
   }
 
   // Convert user_header_files to current_header_files
-  for (const auto &user_hf : current_header_files_.user) {
-    current_header_files_.internal.emplace(
+  for (const auto &user_hf : GetCurrentHeaderFiles()) {
+    storer_.current_header_files.internal.emplace(
         buildcc::internal::Path::CreateExistingPath(user_hf));
   }
 
-  for (const auto &user_cd : current_compile_dependencies_.user) {
-    current_compile_dependencies_.internal.emplace(
+  for (const auto &user_cd : storer_.current_compile_dependencies.user) {
+    storer_.current_compile_dependencies.internal.emplace(
         internal::Path::CreateExistingPath(user_cd));
   }
 }
@@ -171,18 +171,19 @@ void Target::BuildCompile(std::vector<fs::path> &source_files,
     dirty_ = true;
   } else {
     RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
-                 current_preprocessor_flags_);
+                 GetCurrentPreprocessorFlags());
     RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
-                 current_common_compile_flags_);
+                 GetCurrentCommonCompileFlags());
     RecheckFlags(loader_.GetLoadedAsmCompileFlags(),
-                 current_asm_compile_flags_);
-    RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
+                 GetCurrentAsmCompileFlags());
+    RecheckFlags(loader_.GetLoadedCCompileFlags(), GetCurrentCCompileFlags());
     RecheckFlags(loader_.GetLoadedCppCompileFlags(),
-                 current_cpp_compile_flags_);
-    RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
-    RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
+                 GetCurrentCppCompileFlags());
+    RecheckDirs(loader_.GetLoadedIncludeDirs(), GetCurrentIncludeDirs());
+    RecheckPaths(loader_.GetLoadedHeaders(),
+                 storer_.current_header_files.internal);
     RecheckPaths(loader_.GetLoadedCompileDependencies(),
-                 current_compile_dependencies_.internal);
+                 storer_.current_compile_dependencies.internal);
   }
 
   if (dirty_) {
