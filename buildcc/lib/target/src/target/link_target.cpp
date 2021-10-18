@@ -33,20 +33,21 @@ std::string Target::ConstructLinkCommand() const {
           {"output", output_target},
           {"compiled_sources", aggregated_compiled_sources},
           {"lib_deps",
-           fmt::format("{} {}", internal::aggregate(current_external_lib_deps_),
-                       internal::aggregate(current_lib_deps_.user))},
+           fmt::format("{} {}",
+                       internal::aggregate(storer_.current_external_lib_deps),
+                       internal::aggregate(storer_.current_lib_deps.user))},
       });
 }
 
 // Link APIs
 void Target::PreLink() {
-  for (const auto &user_ld : current_lib_deps_.user) {
-    current_lib_deps_.internal.emplace(
+  for (const auto &user_ld : storer_.current_lib_deps.user) {
+    storer_.current_lib_deps.internal.emplace(
         internal::Path::CreateExistingPath(user_ld));
   }
 
-  for (const auto &user_ld : current_link_dependencies_.user) {
-    current_link_dependencies_.internal.emplace(
+  for (const auto &user_ld : storer_.current_link_dependencies.user) {
+    storer_.current_link_dependencies.internal.emplace(
         internal::Path::CreateExistingPath(user_ld));
   }
 }
@@ -54,13 +55,13 @@ void Target::PreLink() {
 void Target::BuildLink() {
   PreLink();
 
-  RecheckFlags(loader_.GetLoadedLinkFlags(), current_link_flags_);
-  RecheckDirs(loader_.GetLoadedLibDirs(), current_lib_dirs_);
+  RecheckFlags(loader_.GetLoadedLinkFlags(), GetCurrentLinkFlags());
+  RecheckDirs(loader_.GetLoadedLibDirs(), GetCurrentLibDirs());
   RecheckExternalLib(loader_.GetLoadedExternalLibDeps(),
-                     current_external_lib_deps_);
+                     storer_.current_external_lib_deps);
   RecheckPaths(loader_.GetLoadedLinkDependencies(),
-               current_link_dependencies_.internal);
-  RecheckPaths(loader_.GetLoadedLibDeps(), current_lib_deps_.internal);
+               storer_.current_link_dependencies.internal);
+  RecheckPaths(loader_.GetLoadedLibDeps(), storer_.current_lib_deps.internal);
 
   if (dirty_) {
     bool success = Command::Execute(GetLinkCommand());
