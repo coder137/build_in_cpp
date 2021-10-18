@@ -44,42 +44,42 @@ bool Target::Store() {
 
   auto fbs_target_type = CreateFbsTargetType(type_);
 
-  auto fbs_source_files =
-      internal::CreateFbsVectorPath(builder, current_source_files_.internal);
-  auto fbs_header_files =
-      internal::CreateFbsVectorPath(builder, current_header_files_.internal);
-  auto fbs_pch_files =
-      internal::CreateFbsVectorPath(builder, current_pch_files_.internal);
+  auto fbs_source_files = internal::CreateFbsVectorPath(
+      builder, storer_.current_source_files.internal);
+  auto fbs_header_files = internal::CreateFbsVectorPath(
+      builder, storer_.current_header_files.internal);
+  auto fbs_pch_files = internal::CreateFbsVectorPath(
+      builder, storer_.current_pch_files.internal);
   auto fbs_lib_deps =
-      internal::CreateFbsVectorPath(builder, current_lib_deps_.internal);
+      internal::CreateFbsVectorPath(builder, storer_.current_lib_deps.internal);
 
-  auto fbs_external_lib_deps =
-      internal::CreateFbsVectorString(builder, current_external_lib_deps_);
+  auto fbs_external_lib_deps = internal::CreateFbsVectorString(
+      builder, storer_.current_external_lib_deps);
 
   auto fbs_include_dirs =
-      internal::CreateFbsVectorString(builder, current_include_dirs_);
+      internal::CreateFbsVectorString(builder, storer_.current_include_dirs);
   auto fbs_lib_dirs =
-      internal::CreateFbsVectorString(builder, current_lib_dirs_);
+      internal::CreateFbsVectorString(builder, storer_.current_lib_dirs);
 
-  auto fbs_preprocessor_flags =
-      internal::CreateFbsVectorString(builder, current_preprocessor_flags_);
-  auto fbs_common_compile_flags =
-      internal::CreateFbsVectorString(builder, current_common_compile_flags_);
+  auto fbs_preprocessor_flags = internal::CreateFbsVectorString(
+      builder, storer_.current_preprocessor_flags);
+  auto fbs_common_compile_flags = internal::CreateFbsVectorString(
+      builder, storer_.current_common_compile_flags);
   auto fbs_pch_flags =
-      internal::CreateFbsVectorString(builder, current_pch_flags_);
-  auto fbs_asm_compile_flags =
-      internal::CreateFbsVectorString(builder, current_asm_compile_flags_);
+      internal::CreateFbsVectorString(builder, storer_.current_pch_flags);
+  auto fbs_asm_compile_flags = internal::CreateFbsVectorString(
+      builder, storer_.current_asm_compile_flags);
   auto fbs_c_compile_flags =
-      internal::CreateFbsVectorString(builder, current_c_compile_flags_);
-  auto fbs_cpp_compile_flags =
-      internal::CreateFbsVectorString(builder, current_cpp_compile_flags_);
+      internal::CreateFbsVectorString(builder, storer_.current_c_compile_flags);
+  auto fbs_cpp_compile_flags = internal::CreateFbsVectorString(
+      builder, storer_.current_cpp_compile_flags);
   auto fbs_link_flags =
-      internal::CreateFbsVectorString(builder, current_link_flags_);
+      internal::CreateFbsVectorString(builder, storer_.current_link_flags);
 
   auto fbs_compile_dependencies = internal::CreateFbsVectorPath(
-      builder, current_compile_dependencies_.internal);
+      builder, storer_.current_compile_dependencies.internal);
   auto fbs_link_dependencies = internal::CreateFbsVectorPath(
-      builder, current_link_dependencies_.internal);
+      builder, storer_.current_link_dependencies.internal);
 
   auto fbs_target = fbs::CreateTargetDirect(
       builder, name_.c_str(), fbs_target_type, &fbs_source_files,
