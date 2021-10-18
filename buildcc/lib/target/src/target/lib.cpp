@@ -33,21 +33,21 @@ void Target::AddLibDirAbsolute(const fs::path &absolute_lib_dir) {
   env::log_trace(name_, __FUNCTION__);
 
   LockedAfterBuild();
-  current_lib_dirs_.insert(absolute_lib_dir);
+  storer_.current_lib_dirs.insert(absolute_lib_dir);
 }
 
 void Target::AddLibDep(const Target &lib_dep) {
   env::log_trace(name_, __FUNCTION__);
 
   LockedAfterBuild();
-  current_lib_deps_.user.insert(lib_dep.GetTargetPath());
+  storer_.current_lib_deps.user.insert(lib_dep.GetTargetPath());
 }
 
 void Target::AddLibDep(const std::string &lib_dep) {
   env::log_trace(name_, __FUNCTION__);
 
   LockedAfterBuild();
-  current_external_lib_deps_.insert(lib_dep);
+  storer_.current_external_lib_deps.insert(lib_dep);
 }
 
 } // namespace buildcc::base
