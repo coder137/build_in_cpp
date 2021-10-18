@@ -18,6 +18,7 @@
 
 #include "env/assert_fatal.h"
 #include "env/util.h"
+#include "target/util.h"
 
 namespace {
 
@@ -62,7 +63,7 @@ std::string Target::ConstructPchCompileCommand() const {
       config_.pch_command,
       {
           {"compiler", compiler},
-          {"pch_flags", ""}, // TODO, Add PCH specific flags
+          {"pch_flags", internal::aggregate(current_pch_flags_)},
           {"compile_flags", compile_flags},
           {"output", GetPchCompilePath().string()},
           {"input", GetPchHeaderPath().string()},
@@ -81,6 +82,16 @@ void Target::BuildPch() {
   if (!loader_.IsLoaded()) {
     dirty_ = true;
   } else {
+    RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
+                 current_preprocessor_flags_);
+    RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
+                 current_common_compile_flags_);
+    RecheckFlags(loader_.GetLoadedPchFlags(), current_pch_flags_);
+    RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
+    RecheckFlags(loader_.GetLoadedCppCompileFlags(),
+                 current_cpp_compile_flags_);
+    RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
+    RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
     RecheckPaths(loader_.GetLoadedPchs(), current_pch_files_.internal);
   }
 
