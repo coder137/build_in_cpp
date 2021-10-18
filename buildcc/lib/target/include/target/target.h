@@ -365,7 +365,7 @@ private:
   internal::fs_unordered_set GetCompiledSources() const;
 
   const OutputInfo &GetObjectInfo(const fs::path &source) const;
-  const OutputInfo &GetTargetInfo() const { return current_target_file_; }
+  const OutputInfo &GetTargetInfo() const { return target_file_; }
 
 private:
   // Constructor defined
@@ -384,10 +384,8 @@ private:
   // NOTE, Always store the absolute source path -> absolute compiled source
   // path here
   OutputInfo pch_file_;
-  // TODO, Remove current from these
-  std::unordered_map<fs::path, OutputInfo, internal::PathHash>
-      current_object_files_;
-  OutputInfo current_target_file_;
+  std::unordered_map<fs::path, OutputInfo, internal::PathHash> object_files_;
+  OutputInfo target_file_;
 
   State state_;
   Command command_;

@@ -42,8 +42,8 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
   const auto absolute_compiled_source =
       fs::path(absolute_output_filepath).make_preferred();
   fs::create_directories(absolute_compiled_source.parent_path());
-  current_object_files_.emplace(absolute_source,
-                                OutputInfo(absolute_compiled_source, ""));
+  object_files_.emplace(absolute_source,
+                        OutputInfo(absolute_compiled_source, ""));
 }
 
 void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,

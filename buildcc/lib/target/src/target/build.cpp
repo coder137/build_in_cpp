@@ -72,13 +72,13 @@ void Target::Build() {
 
   // Compile Command
   // Link Command
-  for (auto &object_rel : current_object_files_) {
+  for (auto &object_rel : object_files_) {
     object_rel.second.command = ConstructCompileCommand(object_rel.first);
   }
   CompileTask();
 
   // TODO, Update .output at Constructor
-  current_target_file_.command = ConstructLinkCommand();
+  target_file_.command = ConstructLinkCommand();
   LinkTask();
 }
 

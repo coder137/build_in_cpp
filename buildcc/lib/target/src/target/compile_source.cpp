@@ -20,17 +20,17 @@ namespace buildcc::base {
 
 internal::fs_unordered_set Target::GetCompiledSources() const {
   internal::fs_unordered_set compiled_sources;
-  for (const auto &p : current_object_files_) {
+  for (const auto &p : object_files_) {
     compiled_sources.insert(p.second.output);
   }
   return compiled_sources;
 }
 
 const Target::OutputInfo &Target::GetObjectInfo(const fs::path &source) const {
-  const auto fiter = current_object_files_.find(source);
-  env::assert_fatal(fiter != current_object_files_.end(),
+  const auto fiter = object_files_.find(source);
+  env::assert_fatal(fiter != object_files_.end(),
                     fmt::format("{} not found", source.string()));
-  return current_object_files_.at(source);
+  return object_files_.at(source);
 }
 
 // Construct APIs
