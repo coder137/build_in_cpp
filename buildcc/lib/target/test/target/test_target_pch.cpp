@@ -230,6 +230,25 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
   mock().checkExpectations();
 }
 
+TEST(TargetPchTestGroup, Target_AddPchFlag_Build) {
+  constexpr const char *const NAME = "AddPchFlag_Build.exe";
+
+  buildcc::base::Target target(NAME, buildcc::base::Target::Type::Executable,
+                               gcc, "data");
+  target.AddPchFlag("-H");
+  target.AddPch("pch/pch_header_1.h");
+  target.AddPch("pch/pch_header_2.h");
+
+  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
+  target.Build();
+  bool exists = fs::exists(target.GetPchHeaderPath());
+  CHECK_TRUE(exists);
+  CHECK_EQUAL(target.GetCurrentPchFlags().size(), 1);
+
+  mock().checkExpectations();
+}
+
 int main(int ac, char **av) {
   const fs::path target_source_intermediate_path =
       fs::path(BUILD_TARGET_PCH_INTERMEDIATE_DIR) / gcc.GetName();

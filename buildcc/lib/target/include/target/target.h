@@ -228,6 +228,9 @@ public:
   const std::unordered_set<std::string> &GetCurrentCommonCompileFlags() const {
     return current_common_compile_flags_;
   }
+  const std::unordered_set<std::string> &GetCurrentPchFlags() const {
+    return current_pch_flags_;
+  }
   const std::unordered_set<std::string> &GetCurrentAsmCompileFlags() const {
     return current_asm_compile_flags_;
   }
