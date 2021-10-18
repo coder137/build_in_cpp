@@ -154,6 +154,7 @@ public:
   // * Flags
   void AddPreprocessorFlag(const std::string &flag);
   void AddCommonCompileFlag(const std::string &flag);
+  void AddPchFlag(const std::string &flag);
   void AddAsmCompileFlag(const std::string &flag);
   void AddCCompileFlag(const std::string &flag);
   void AddCppCompileFlag(const std::string &flag);
