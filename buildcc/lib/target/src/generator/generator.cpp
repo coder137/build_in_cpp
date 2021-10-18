@@ -55,10 +55,7 @@ void Generator::Build(tf::FlowBuilder &builder) { GenerateTask(builder); }
 
 void Generator::Convert() {
   for (auto &ci : current_info_) {
-    for (const auto &user_i : ci.second.inputs.user) {
-      ci.second.inputs.internal.emplace(
-          internal::Path::CreateExistingPath(user_i));
-    }
+    ci.second.inputs.Convert();
   }
 }
 

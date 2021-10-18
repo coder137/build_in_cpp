@@ -70,12 +70,7 @@ std::string Target::ConstructPchCompileCommand() const {
       });
 }
 
-void Target::PrePchCompile() {
-  for (const auto &user_pf : GetCurrentPchFiles()) {
-    storer_.current_pch_files.internal.emplace(
-        buildcc::internal::Path::CreateExistingPath(user_pf));
-  }
-}
+void Target::PrePchCompile() { storer_.current_pch_files.Convert(); }
 
 void Target::BuildPch() {
   PrePchCompile();

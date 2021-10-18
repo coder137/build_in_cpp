@@ -41,15 +41,9 @@ std::string Target::ConstructLinkCommand() const {
 
 // Link APIs
 void Target::PreLink() {
-  for (const auto &user_ld : storer_.current_lib_deps.user) {
-    storer_.current_lib_deps.internal.emplace(
-        internal::Path::CreateExistingPath(user_ld));
-  }
+  storer_.current_lib_deps.Convert();
 
-  for (const auto &user_ld : storer_.current_link_dependencies.user) {
-    storer_.current_link_dependencies.internal.emplace(
-        internal::Path::CreateExistingPath(user_ld));
-  }
+  storer_.current_link_dependencies.Convert();
 }
 
 void Target::BuildLink() {

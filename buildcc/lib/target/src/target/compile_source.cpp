@@ -146,21 +146,13 @@ void Target::RecompileSources(std::vector<fs::path> &source_files,
 
 void Target::PreCompile() {
   // Convert user_source_files to current_source_files
-  for (const auto &user_sf : GetCurrentSourceFiles()) {
-    storer_.current_source_files.internal.emplace(
-        buildcc::internal::Path::CreateExistingPath(user_sf));
-  }
+  storer_.current_source_files.Convert();
 
   // Convert user_header_files to current_header_files
-  for (const auto &user_hf : GetCurrentHeaderFiles()) {
-    storer_.current_header_files.internal.emplace(
-        buildcc::internal::Path::CreateExistingPath(user_hf));
-  }
+  storer_.current_header_files.Convert();
 
-  for (const auto &user_cd : storer_.current_compile_dependencies.user) {
-    storer_.current_compile_dependencies.internal.emplace(
-        internal::Path::CreateExistingPath(user_cd));
-  }
+  // Convert user_compile_dependencies to current_compile_dependencies
+  storer_.current_compile_dependencies.Convert();
 }
 
 void Target::BuildCompile(std::vector<fs::path> &source_files,
