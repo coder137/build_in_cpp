@@ -65,7 +65,7 @@ void Target::AddSource(const fs::path &relative_filename,
 
   // Compute the absolute source path
   fs::path absolute_source =
-      target_root_source_dir_ / relative_to_target_path / relative_filename;
+      target_root_dir_ / relative_to_target_path / relative_filename;
 
   AddSourceAbsolute(absolute_source, ConstructObjectPath(absolute_source));
 }
@@ -73,8 +73,7 @@ void Target::AddSource(const fs::path &relative_filename,
 void Target::GlobSources(const fs::path &relative_to_target_path) {
   env::log_trace(name_, __FUNCTION__);
 
-  fs::path absolute_input_path =
-      target_root_source_dir_ / relative_to_target_path;
+  fs::path absolute_input_path = target_root_dir_ / relative_to_target_path;
 
   for (const auto &p : fs::directory_iterator(absolute_input_path)) {
     const auto file_ext_type = ext_.GetType(p.path());

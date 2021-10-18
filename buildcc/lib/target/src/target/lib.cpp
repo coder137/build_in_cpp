@@ -25,7 +25,7 @@ namespace buildcc::base {
 void Target::AddLibDir(const fs::path &relative_lib_dir) {
   env::log_trace(name_, __FUNCTION__);
 
-  fs::path final_lib_dir = target_root_source_dir_ / relative_lib_dir;
+  fs::path final_lib_dir = target_root_dir_ / relative_lib_dir;
   AddLibDirAbsolute(final_lib_dir);
 }
 

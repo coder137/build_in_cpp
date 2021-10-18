@@ -35,7 +35,7 @@ void Target::AddPch(const fs::path &relative_filename,
 
   // Compute the absolute source path
   fs::path absolute_pch =
-      target_root_source_dir_ / relative_to_target_path / relative_filename;
+      target_root_dir_ / relative_to_target_path / relative_filename;
 
   AddPchAbsolute(absolute_pch);
 }

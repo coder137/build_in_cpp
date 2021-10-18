@@ -40,14 +40,14 @@ void Target::AddHeader(const fs::path &relative_filename,
 
   // Check Source
   fs::path absolute_filepath =
-      target_root_source_dir_ / relative_to_target_path / relative_filename;
+      target_root_dir_ / relative_to_target_path / relative_filename;
   AddHeaderAbsolute(absolute_filepath);
 }
 
 void Target::GlobHeaders(const fs::path &relative_to_target_path) {
   env::log_trace(name_, __FUNCTION__);
 
-  fs::path absolute_path = target_root_source_dir_ / relative_to_target_path;
+  fs::path absolute_path = target_root_dir_ / relative_to_target_path;
   GlobHeadersAbsolute(absolute_path);
 }
 
@@ -67,7 +67,7 @@ void Target::AddIncludeDir(const fs::path &relative_include_dir,
   env::log_trace(name_, __FUNCTION__);
 
   const fs::path absolute_include_dir =
-      (target_root_source_dir_ / relative_include_dir);
+      (target_root_dir_ / relative_include_dir);
   AddIncludeDirAbsolute(absolute_include_dir, glob_headers);
 }
 
