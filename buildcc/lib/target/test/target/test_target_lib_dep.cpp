@@ -55,7 +55,7 @@ TEST(TargetTestLibDep, StaticLibrary_SimpleBuildTest) {
 
   // Verify binary
   buildcc::internal::TargetLoader loader(STATIC_NAME,
-                                         foolib.GetTargetIntermediateDir());
+                                         foolib.GetTargetBuildDir());
   bool loaded = loader.Load();
   CHECK_TRUE(loaded);
 

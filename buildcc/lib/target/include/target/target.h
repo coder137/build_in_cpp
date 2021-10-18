@@ -100,9 +100,9 @@ public:
       : name_(name), type_(type), toolchain_(toolchain),
         target_root_dir_(env::get_project_root_dir() /
                          target_path_relative_to_root),
-        target_intermediate_dir_(fs::path(env::get_project_build_dir()) /
-                                 toolchain.GetName() / name),
-        loader_(name, target_intermediate_dir_), config_(config) {
+        target_build_dir_(fs::path(env::get_project_build_dir()) /
+                          toolchain.GetName() / name),
+        loader_(name, target_build_dir_), config_(config) {
     Initialize();
   }
   virtual ~Target() {}
@@ -190,7 +190,7 @@ public:
 
   // TODO, Make these construct APIs
   fs::path GetPchHeaderPath() const {
-    return target_intermediate_dir_ /
+    return target_build_dir_ /
            fmt::format("buildcc_pch{}", config_.pch_header_ext);
   }
   // Each target only has only 1 PCH file
@@ -206,9 +206,7 @@ public:
   const Toolchain &GetToolchain() const { return toolchain_; }
   Target::Type GetType() const { return type_; }
   const fs::path &GetTargetRootDir() const { return target_root_dir_; }
-  const fs::path &GetTargetIntermediateDir() const {
-    return target_intermediate_dir_;
-  }
+  const fs::path &GetTargetBuildDir() const { return target_build_dir_; }
   const Config &GetConfig() const { return config_; }
 
   //
@@ -373,7 +371,7 @@ private:
   Type type_;
   const Toolchain &toolchain_;
   fs::path target_root_dir_;
-  fs::path target_intermediate_dir_;
+  fs::path target_build_dir_;
   internal::TargetLoader loader_;
   Config config_;
 
