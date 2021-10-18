@@ -31,7 +31,7 @@ namespace buildcc::internal {
 
 struct GenInfo {
   std::string name;
-  Files<fs_unordered_set> inputs;
+  default_files inputs;
   fs_unordered_set outputs;
   std::vector<std::string> commands;
   bool parallel{false};
