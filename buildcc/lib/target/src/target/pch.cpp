@@ -26,7 +26,7 @@ void Target::AddPchAbsolute(const fs::path &absolute_filepath) {
                                 absolute_filepath.string()));
 
   const fs::path absolute_pch = fs::path(absolute_filepath).make_preferred();
-  current_pch_files_.user.insert(absolute_pch);
+  storer_.current_pch_files.user.insert(absolute_pch);
 }
 
 void Target::AddPch(const fs::path &relative_filename,
