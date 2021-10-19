@@ -77,7 +77,7 @@ void Target::ObjectTask() {
 void Target::TargetTask() {
   env::log_trace(name_, __FUNCTION__);
 
-  link_task_ = tf_.emplace([&]() { BuildLink(); });
+  link_task_ = tf_.emplace([&]() { BuildTargetLink(); });
   link_task_.name(kLinkTaskName);
 
   // Only add if not empty

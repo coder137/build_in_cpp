@@ -16,6 +16,6 @@ void Target::ObjectTask() {
   }
 }
 
-void Target::TargetTask() { BuildLink(); }
+void Target::TargetTask() { BuildTargetLink(); }
 
 } // namespace buildcc::base

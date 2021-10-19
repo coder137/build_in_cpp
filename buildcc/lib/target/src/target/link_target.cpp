@@ -46,7 +46,7 @@ void Target::PreTargetLink() {
   storer_.current_link_dependencies.Convert();
 }
 
-void Target::BuildLink() {
+void Target::BuildTargetLink() {
   PreTargetLink();
 
   RecheckFlags(loader_.GetLoadedLinkFlags(), GetCurrentLinkFlags());
