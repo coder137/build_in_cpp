@@ -26,12 +26,8 @@ namespace buildcc::base {
 
 class Target;
 
-// TODO, Instead of Compile write FileExt class with Type enum instead
-// We can then unit test all the FileExt functions properly through the public
-// interface
 class FileExt {
 public:
-  // TODO, Make this private if the Type does not need to be exposed
   enum class Type {
     Asm,
     C,
