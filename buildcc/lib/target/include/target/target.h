@@ -62,7 +62,7 @@ public:
 
     std::string target_ext{""};
     std::string obj_ext{".o"};
-    std::string pch_header_ext{".hpp"};
+    std::string pch_header_ext{".h"};
     std::string pch_compile_ext{".gch"};
 
     std::string prefix_include_dir{"-I"};
