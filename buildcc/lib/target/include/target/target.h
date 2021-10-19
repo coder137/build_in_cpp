@@ -97,12 +97,12 @@ public:
                   const Toolchain &toolchain,
                   const fs::path &target_path_relative_to_root,
                   const Config &config = {})
-      : name_(name), type_(type), toolchain_(toolchain),
+      : name_(name), type_(type), toolchain_(toolchain), config_(config),
         target_root_dir_(env::get_project_root_dir() /
                          target_path_relative_to_root),
         target_build_dir_(fs::path(env::get_project_build_dir()) /
                           toolchain.GetName() / name),
-        loader_(name, target_build_dir_), config_(config), ext_(*this) {
+        loader_(name, target_build_dir_), ext_(*this) {
     Initialize();
   }
   virtual ~Target() {}
@@ -370,10 +370,11 @@ private:
   std::string name_;
   Type type_;
   const Toolchain &toolchain_;
+  Config config_;
+
   fs::path target_root_dir_;
   fs::path target_build_dir_;
   internal::TargetLoader loader_;
-  Config config_;
 
   // Used for serialization
   internal::TargetStorer storer_;
