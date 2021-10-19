@@ -102,7 +102,7 @@ public:
                          target_path_relative_to_root),
         target_build_dir_(fs::path(env::get_project_build_dir()) /
                           toolchain.GetName() / name),
-        loader_(name, target_build_dir_), config_(config) {
+        loader_(name, target_build_dir_), config_(config), ext_(*this) {
     Initialize();
   }
   virtual ~Target() {}
@@ -387,7 +387,9 @@ private:
 
   State state_;
   Command command_;
-  FileExt ext_{*this};
+
+  // Friend
+  FileExt ext_;
 
   tf::Taskflow tf_;
   tf::Task pch_task_;
