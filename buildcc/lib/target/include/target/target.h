@@ -312,7 +312,7 @@ private:
   //
   void PrePchCompile();
   void PreObjectCompile();
-  void PreLink();
+  void PreTargetLink();
 
   // Compile
   void CompileSources(std::vector<fs::path> &source_files);

@@ -40,14 +40,14 @@ std::string Target::ConstructLinkCommand() const {
 }
 
 // Link APIs
-void Target::PreLink() {
+void Target::PreTargetLink() {
   storer_.current_lib_deps.Convert();
 
   storer_.current_link_dependencies.Convert();
 }
 
 void Target::BuildLink() {
-  PreLink();
+  PreTargetLink();
 
   RecheckFlags(loader_.GetLoadedLinkFlags(), GetCurrentLinkFlags());
   RecheckDirs(loader_.GetLoadedLibDirs(), GetCurrentLibDirs());
