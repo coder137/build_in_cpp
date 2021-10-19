@@ -140,18 +140,10 @@ struct default_files {
       : internal(i), user(u) {}
 
   void Convert() {
-    if (call_once_) {
-      return;
-    }
-
-    call_once_ = true;
     for (const auto &p : user) {
       internal.emplace(Path::CreateExistingPath(p));
     }
   }
-
-private:
-  bool call_once_{false};
 };
 
 } // namespace buildcc::internal
