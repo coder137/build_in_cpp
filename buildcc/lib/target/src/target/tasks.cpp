@@ -49,7 +49,7 @@ void Target::ObjectTask() {
     std::vector<fs::path> source_files;
     std::vector<fs::path> dummy_source_files;
 
-    BuildCompile(source_files, dummy_source_files);
+    BuildObjectCompile(source_files, dummy_source_files);
 
     for (const auto &s : source_files) {
       std::string name =

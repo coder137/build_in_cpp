@@ -155,8 +155,8 @@ void Target::PreObjectCompile() {
   storer_.current_compile_dependencies.Convert();
 }
 
-void Target::BuildCompile(std::vector<fs::path> &source_files,
-                          std::vector<fs::path> &dummy_source_files) {
+void Target::BuildObjectCompile(std::vector<fs::path> &source_files,
+                                std::vector<fs::path> &dummy_source_files) {
   PreObjectCompile();
 
   if (!loader_.IsLoaded()) {
