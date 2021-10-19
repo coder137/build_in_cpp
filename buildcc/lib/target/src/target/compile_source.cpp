@@ -20,17 +20,17 @@ namespace buildcc::base {
 
 internal::fs_unordered_set Target::GetCompiledSources() const {
   internal::fs_unordered_set compiled_sources;
-  for (const auto &p : current_object_files_) {
+  for (const auto &p : object_files_) {
     compiled_sources.insert(p.second.output);
   }
   return compiled_sources;
 }
 
 const Target::OutputInfo &Target::GetObjectInfo(const fs::path &source) const {
-  const auto fiter = current_object_files_.find(source);
-  env::assert_fatal(fiter != current_object_files_.end(),
+  const auto fiter = object_files_.find(source);
+  env::assert_fatal(fiter != object_files_.end(),
                     fmt::format("{} not found", source.string()));
-  return current_object_files_.at(source);
+  return object_files_.at(source);
 }
 
 // Construct APIs
@@ -59,7 +59,7 @@ Target::ConstructObjectPath(const fs::path &absolute_source_file) const {
   }
 
   // Compute relative object path
-  fs::path absolute_compiled_source = target_intermediate_dir_ / relative;
+  fs::path absolute_compiled_source = target_build_dir_ / relative;
   absolute_compiled_source.replace_filename(fmt::format(
       "{}{}", absolute_source_file.filename().string(), config_.obj_ext));
   return absolute_compiled_source;
@@ -90,8 +90,8 @@ Target::ConstructCompileCommand(const fs::path &absolute_current_source) const {
 
 // Compile APIs
 void Target::CompileSources(std::vector<fs::path> &source_files) {
-  std::transform(current_source_files_.internal.begin(),
-                 current_source_files_.internal.end(),
+  std::transform(storer_.current_source_files.internal.begin(),
+                 storer_.current_source_files.internal.end(),
                  std::back_inserter(source_files),
                  [](const buildcc::internal::Path &p) -> fs::path {
                    return p.GetPathname();
@@ -108,8 +108,8 @@ void Target::RecompileSources(std::vector<fs::path> &source_files,
   const bool is_source_removed =
       std::any_of(previous_source_files.begin(), previous_source_files.end(),
                   [&](const internal::Path &p) {
-                    return current_source_files_.internal.find(p) ==
-                           current_source_files_.internal.end();
+                    return storer_.current_source_files.internal.find(p) ==
+                           storer_.current_source_files.internal.end();
                   });
 
   if (is_source_removed) {
@@ -117,7 +117,7 @@ void Target::RecompileSources(std::vector<fs::path> &source_files,
     SourceRemoved();
   }
 
-  for (const auto &current_file : current_source_files_.internal) {
+  for (const auto &current_file : storer_.current_source_files.internal) {
     const auto &current_source = current_file.GetPathname();
 
     // Find current_file in the loaded sources
@@ -144,45 +144,38 @@ void Target::RecompileSources(std::vector<fs::path> &source_files,
   }
 }
 
-void Target::PreCompile() {
+void Target::PreObjectCompile() {
   // Convert user_source_files to current_source_files
-  for (const auto &user_sf : current_source_files_.user) {
-    current_source_files_.internal.emplace(
-        buildcc::internal::Path::CreateExistingPath(user_sf));
-  }
+  storer_.current_source_files.Convert();
 
   // Convert user_header_files to current_header_files
-  for (const auto &user_hf : current_header_files_.user) {
-    current_header_files_.internal.emplace(
-        buildcc::internal::Path::CreateExistingPath(user_hf));
-  }
+  storer_.current_header_files.Convert();
 
-  for (const auto &user_cd : current_compile_dependencies_.user) {
-    current_compile_dependencies_.internal.emplace(
-        internal::Path::CreateExistingPath(user_cd));
-  }
+  // Convert user_compile_dependencies to current_compile_dependencies
+  storer_.current_compile_dependencies.Convert();
 }
 
-void Target::BuildCompile(std::vector<fs::path> &source_files,
-                          std::vector<fs::path> &dummy_source_files) {
-  PreCompile();
+void Target::BuildObjectCompile(std::vector<fs::path> &source_files,
+                                std::vector<fs::path> &dummy_source_files) {
+  PreObjectCompile();
 
   if (!loader_.IsLoaded()) {
     dirty_ = true;
   } else {
     RecheckFlags(loader_.GetLoadedPreprocessorFlags(),
-                 current_preprocessor_flags_);
+                 GetCurrentPreprocessorFlags());
     RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
-                 current_common_compile_flags_);
+                 GetCurrentCommonCompileFlags());
     RecheckFlags(loader_.GetLoadedAsmCompileFlags(),
-                 current_asm_compile_flags_);
-    RecheckFlags(loader_.GetLoadedCCompileFlags(), current_c_compile_flags_);
+                 GetCurrentAsmCompileFlags());
+    RecheckFlags(loader_.GetLoadedCCompileFlags(), GetCurrentCCompileFlags());
     RecheckFlags(loader_.GetLoadedCppCompileFlags(),
-                 current_cpp_compile_flags_);
-    RecheckDirs(loader_.GetLoadedIncludeDirs(), current_include_dirs_);
-    RecheckPaths(loader_.GetLoadedHeaders(), current_header_files_.internal);
+                 GetCurrentCppCompileFlags());
+    RecheckDirs(loader_.GetLoadedIncludeDirs(), GetCurrentIncludeDirs());
+    RecheckPaths(loader_.GetLoadedHeaders(),
+                 storer_.current_header_files.internal);
     RecheckPaths(loader_.GetLoadedCompileDependencies(),
-                 current_compile_dependencies_.internal);
+                 storer_.current_compile_dependencies.internal);
   }
 
   if (dirty_) {

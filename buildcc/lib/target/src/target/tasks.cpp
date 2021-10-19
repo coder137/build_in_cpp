@@ -38,18 +38,18 @@ namespace buildcc::base {
 void Target::PchTask() {
   env::log_trace(name_, __FUNCTION__);
 
-  pch_task_ = tf_.emplace([&]() { BuildPch(); });
+  pch_task_ = tf_.emplace([&]() { BuildPchCompile(); });
   pch_task_.name(kPchTaskName);
 }
 
-void Target::CompileTask() {
+void Target::ObjectTask() {
   env::log_trace(name_, __FUNCTION__);
 
   compile_task_ = tf_.emplace([&](tf::Subflow &subflow) {
     std::vector<fs::path> source_files;
     std::vector<fs::path> dummy_source_files;
 
-    BuildCompile(source_files, dummy_source_files);
+    BuildObjectCompile(source_files, dummy_source_files);
 
     for (const auto &s : source_files) {
       std::string name =
@@ -74,10 +74,10 @@ void Target::CompileTask() {
   compile_task_.name(kCompileTaskName);
 }
 
-void Target::LinkTask() {
+void Target::TargetTask() {
   env::log_trace(name_, __FUNCTION__);
 
-  link_task_ = tf_.emplace([&]() { BuildLink(); });
+  link_task_ = tf_.emplace([&]() { BuildTargetLink(); });
   link_task_.name(kLinkTaskName);
 
   // Only add if not empty

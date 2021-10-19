@@ -21,11 +21,13 @@ set(TARGET_SRCS
     src/target/friend/file_extension.cpp
     include/target/friend/file_extension.h
 
+
     # Target
     src/target/target.cpp
     src/target/target_loader.cpp
     src/target/target_storer.cpp
     include/target/target_loader.h
+    include/target/target_storer.h
     include/target/target.h
 
     src/target/source.cpp

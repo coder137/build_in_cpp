@@ -77,11 +77,6 @@ public:
     return Path(pathname, 0);
   }
 
-  // Setters
-  void SetLastWriteTimestamp(std::uint64_t timestamp) {
-    last_write_timestamp_ = timestamp;
-  }
-
   // Getters
   std::uint64_t GetLastWriteTimestamp() const { return last_write_timestamp_; }
   const fs::path &GetPathname() const { return pathname_; }
@@ -129,15 +124,27 @@ typedef std::unordered_set<fs::path, PathHash> fs_unordered_set;
 // The input to a Generator / Target might also be generated!
 // We must only verify the File timestamp AFTER dependent Generator(s) /
 // Target(s) have been built
-template <typename T> struct Files {
+// ? Why not do everything inside path_unordered_set?
+// Users might want to query just the `fs_unordered_set` instead of the entire
+// internal::path_unordered_set (The timestamp is internal information that the
+// user does not need)
+// In this case we opt for runtime (speed) optimization instead of memory
+// optimization by caching the `user` information and `internal` information
+// together
+struct default_files {
   path_unordered_set internal;
-  T user;
+  fs_unordered_set user;
 
-  Files() {}
-  Files(const path_unordered_set &i, const T &u) : internal(i), user(u) {}
+  default_files() {}
+  default_files(const path_unordered_set &i, const fs_unordered_set &u)
+      : internal(i), user(u) {}
+
+  void Convert() {
+    for (const auto &p : user) {
+      internal.emplace(Path::CreateExistingPath(p));
+    }
+  }
 };
-
-typedef Files<fs_unordered_set> default_files;
 
 } // namespace buildcc::internal
 

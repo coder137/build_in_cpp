@@ -36,6 +36,7 @@
 #include "target/generator.h"
 #include "target/path.h"
 #include "target/target_loader.h"
+#include "target/target_storer.h"
 
 // Components
 #include "command/command.h"
@@ -96,12 +97,12 @@ public:
                   const Toolchain &toolchain,
                   const fs::path &target_path_relative_to_root,
                   const Config &config = {})
-      : name_(name), type_(type), toolchain_(toolchain),
-        target_root_source_dir_(env::get_project_root_dir() /
-                                target_path_relative_to_root),
-        target_intermediate_dir_(fs::path(env::get_project_build_dir()) /
-                                 toolchain.GetName() / name),
-        loader_(name, target_intermediate_dir_), config_(config) {
+      : name_(name), type_(type), toolchain_(toolchain), config_(config),
+        target_root_dir_(env::get_project_root_dir() /
+                         target_path_relative_to_root),
+        target_build_dir_(fs::path(env::get_project_build_dir()) /
+                          toolchain.GetName() / name),
+        loader_(name, target_build_dir_), ext_(*this) {
     Initialize();
   }
   virtual ~Target() {}
@@ -189,7 +190,7 @@ public:
 
   // TODO, Make these construct APIs
   fs::path GetPchHeaderPath() const {
-    return target_intermediate_dir_ /
+    return target_build_dir_ /
            fmt::format("buildcc_pch{}", config_.pch_header_ext);
   }
   // Each target only has only 1 PCH file
@@ -204,44 +205,49 @@ public:
   const std::string &GetName() const { return name_; }
   const Toolchain &GetToolchain() const { return toolchain_; }
   Target::Type GetType() const { return type_; }
-  const fs::path &GetTargetRootDir() const { return target_root_source_dir_; }
-  const fs::path &GetTargetIntermediateDir() const {
-    return target_intermediate_dir_;
-  }
+  const fs::path &GetTargetRootDir() const { return target_root_dir_; }
+  const fs::path &GetTargetBuildDir() const { return target_build_dir_; }
   const Config &GetConfig() const { return config_; }
 
+  //
   const internal::fs_unordered_set &GetCurrentSourceFiles() const {
-    return current_source_files_.user;
+    return storer_.current_source_files.user;
   }
   const internal::fs_unordered_set &GetCurrentHeaderFiles() const {
-    return current_header_files_.user;
+    return storer_.current_header_files.user;
+  }
+  const internal::fs_unordered_set &GetCurrentPchFiles() const {
+    return storer_.current_pch_files.user;
   }
   const internal::fs_unordered_set &GetTargetLibDeps() const {
-    return current_lib_deps_.user;
+    return storer_.current_lib_deps.user;
   }
   const internal::fs_unordered_set &GetCurrentIncludeDirs() const {
-    return current_include_dirs_;
+    return storer_.current_include_dirs;
+  }
+  const internal::fs_unordered_set &GetCurrentLibDirs() const {
+    return storer_.current_lib_dirs;
   }
   const std::unordered_set<std::string> &GetCurrentPreprocessorFlags() const {
-    return current_preprocessor_flags_;
+    return storer_.current_preprocessor_flags;
   }
   const std::unordered_set<std::string> &GetCurrentCommonCompileFlags() const {
-    return current_common_compile_flags_;
+    return storer_.current_common_compile_flags;
   }
   const std::unordered_set<std::string> &GetCurrentPchFlags() const {
-    return current_pch_flags_;
+    return storer_.current_pch_flags;
   }
   const std::unordered_set<std::string> &GetCurrentAsmCompileFlags() const {
-    return current_asm_compile_flags_;
+    return storer_.current_asm_compile_flags;
   }
   const std::unordered_set<std::string> &GetCurrentCCompileFlags() const {
-    return current_c_compile_flags_;
+    return storer_.current_c_compile_flags;
   }
   const std::unordered_set<std::string> &GetCurrentCppCompileFlags() const {
-    return current_cpp_compile_flags_;
+    return storer_.current_cpp_compile_flags;
   }
   const std::unordered_set<std::string> &GetCurrentLinkFlags() const {
-    return current_link_flags_;
+    return storer_.current_link_flags;
   }
 
   // Getters (UnlockedAfterBuild)
@@ -297,17 +303,15 @@ private:
   void UnlockedAfterBuild() const;
 
   // Build
-  void BuildPch();
-  // TODO, Rename to BuildObject
-  void BuildCompile(std::vector<fs::path> &source_files,
-                    std::vector<fs::path> &dummy_source_files);
-  void BuildLink();
+  void BuildPchCompile();
+  void BuildObjectCompile(std::vector<fs::path> &source_files,
+                          std::vector<fs::path> &dummy_source_files);
+  void BuildTargetLink();
 
   //
   void PrePchCompile();
-  // TODO, Rename to PreObjectCompile
-  void PreCompile();
-  void PreLink();
+  void PreObjectCompile();
+  void PreTargetLink();
 
   // Compile
   void CompileSources(std::vector<fs::path> &source_files);
@@ -327,9 +331,8 @@ private:
 
   // Tasks
   void PchTask();
-  // TODO, Rename to ObjectTask and TargetTask
-  void CompileTask();
-  void LinkTask();
+  void ObjectTask();
+  void TargetTask();
 
   // Fbs
   bool Store() override;
@@ -357,51 +360,34 @@ private:
   internal::fs_unordered_set GetCompiledSources() const;
 
   const OutputInfo &GetObjectInfo(const fs::path &source) const;
-  const OutputInfo &GetTargetInfo() const { return current_target_file_; }
+  const OutputInfo &GetTargetInfo() const { return target_file_; }
 
 private:
   // Constructor defined
   std::string name_;
   Type type_;
   const Toolchain &toolchain_;
-  fs::path target_root_source_dir_;
-  fs::path target_intermediate_dir_;
-  internal::TargetLoader loader_;
   Config config_;
 
-  // Internal
+  fs::path target_root_dir_;
+  fs::path target_build_dir_;
+  internal::TargetLoader loader_;
 
   // Used for serialization
-  // TODO, Use an internal::Storer class / struct for this to reduce clutter
-  internal::default_files current_source_files_;
-  internal::default_files current_header_files_;
-  internal::default_files current_pch_files_;
-  internal::default_files current_lib_deps_;
-  internal::fs_unordered_set current_include_dirs_;
-  internal::fs_unordered_set current_lib_dirs_;
-  std::unordered_set<std::string> current_external_lib_deps_;
-  std::unordered_set<std::string> current_preprocessor_flags_;
-  std::unordered_set<std::string> current_common_compile_flags_;
-  std::unordered_set<std::string> current_pch_flags_;
-  std::unordered_set<std::string> current_asm_compile_flags_;
-  std::unordered_set<std::string> current_c_compile_flags_;
-  std::unordered_set<std::string> current_cpp_compile_flags_;
-  std::unordered_set<std::string> current_link_flags_;
-  internal::default_files current_compile_dependencies_;
-  internal::default_files current_link_dependencies_;
+  internal::TargetStorer storer_;
 
   // Not used for serialization
   // NOTE, Always store the absolute source path -> absolute compiled source
   // path here
   OutputInfo pch_file_;
-  // TODO, Remove current from these
-  std::unordered_map<fs::path, OutputInfo, internal::PathHash>
-      current_object_files_;
-  OutputInfo current_target_file_;
+  std::unordered_map<fs::path, OutputInfo, internal::PathHash> object_files_;
+  OutputInfo target_file_;
 
   State state_;
   Command command_;
-  FileExt ext_{*this};
+
+  // Friend
+  FileExt ext_;
 
   tf::Taskflow tf_;
   tf::Task pch_task_;

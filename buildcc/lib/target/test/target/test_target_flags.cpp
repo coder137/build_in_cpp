@@ -62,8 +62,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(NAME,
-                                         simple.GetTargetIntermediateDir());
+  buildcc::internal::TargetLoader loader(NAME, simple.GetTargetBuildDir());
   bool loaded = loader.Load();
   CHECK_TRUE(loaded);
 
@@ -157,8 +156,7 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_AddCommonCompileFlag) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(NAME,
-                                         simple.GetTargetIntermediateDir());
+  buildcc::internal::TargetLoader loader(NAME, simple.GetTargetBuildDir());
   bool loaded = loader.Load();
   CHECK_TRUE(loaded);
 
@@ -267,8 +265,7 @@ TEST(TargetTestAsmCompileFlagGroup, Target_AddCompileFlag) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(NAME,
-                                         simple.GetTargetIntermediateDir());
+  buildcc::internal::TargetLoader loader(NAME, simple.GetTargetBuildDir());
   bool loaded = loader.Load();
   CHECK_TRUE(loaded);
 
@@ -377,8 +374,7 @@ TEST(TargetTestCCompileFlagsGroup, Target_AddCompileFlag) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(NAME,
-                                         simple.GetTargetIntermediateDir());
+  buildcc::internal::TargetLoader loader(NAME, simple.GetTargetBuildDir());
   bool loaded = loader.Load();
   CHECK_TRUE(loaded);
 
@@ -471,8 +467,7 @@ TEST(TargetTestCppCompileFlagsGroup, Target_AddCompileFlag) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(NAME,
-                                         simple.GetTargetIntermediateDir());
+  buildcc::internal::TargetLoader loader(NAME, simple.GetTargetBuildDir());
   bool loaded = loader.Load();
   CHECK_TRUE(loaded);
 
@@ -565,8 +560,7 @@ TEST(TargetTestLinkFlagsGroup, Target_AddLinkFlag) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(NAME,
-                                         simple.GetTargetIntermediateDir());
+  buildcc::internal::TargetLoader loader(NAME, simple.GetTargetBuildDir());
   bool loaded = loader.Load();
   CHECK_TRUE(loaded);
 

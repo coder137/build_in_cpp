@@ -47,8 +47,8 @@ bool IsValidTargetType(buildcc::base::Target::Type type) {
 namespace buildcc::base {
 
 fs::path Target::ConstructTargetPath() const {
-  fs::path path = GetTargetIntermediateDir() /
-                  fmt::format("{}{}", name_, config_.target_ext);
+  fs::path path =
+      GetTargetBuildDir() / fmt::format("{}{}", name_, config_.target_ext);
   path.make_preferred();
   return path;
 }
@@ -59,7 +59,7 @@ void Target::Initialize() {
       env::is_init(),
       "Environment is not initialized. Use the buildcc::env::init API");
   env::assert_fatal(IsValidTargetType(type_), "Invalid Target Type");
-  fs::create_directories(target_intermediate_dir_);
+  fs::create_directories(target_build_dir_);
 }
 
 // Rechecks

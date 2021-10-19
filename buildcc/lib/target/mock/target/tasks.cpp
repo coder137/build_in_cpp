@@ -2,13 +2,13 @@
 
 namespace buildcc::base {
 
-void Target::PchTask() { BuildPch(); }
+void Target::PchTask() { BuildPchCompile(); }
 
-void Target::CompileTask() {
+void Target::ObjectTask() {
   std::vector<fs::path> source_files;
   std::vector<fs::path> dummy_source_files;
 
-  BuildCompile(source_files, dummy_source_files);
+  BuildObjectCompile(source_files, dummy_source_files);
 
   for (const auto &s : source_files) {
     bool success = Command::Execute(GetCompileCommand(s));
@@ -16,6 +16,6 @@ void Target::CompileTask() {
   }
 }
 
-void Target::LinkTask() { BuildLink(); }
+void Target::TargetTask() { BuildTargetLink(); }
 
 } // namespace buildcc::base

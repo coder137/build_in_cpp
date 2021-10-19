@@ -40,15 +40,17 @@ void Target::Build() {
   tf_.name(fmt::format("[{}] {}", toolchain_.GetName(), name_));
 
   command_.AddDefaultArguments({
-      {"include_dirs", internal::aggregate_with_prefix(
-                           config_.prefix_include_dir, current_include_dirs_)},
+      {"include_dirs",
+       internal::aggregate_with_prefix(config_.prefix_include_dir,
+                                       GetCurrentIncludeDirs())},
       {"lib_dirs", internal::aggregate_with_prefix(config_.prefix_lib_dir,
-                                                   current_lib_dirs_)},
+                                                   GetCurrentLibDirs())},
 
-      {"preprocessor_flags", internal::aggregate(current_preprocessor_flags_)},
+      {"preprocessor_flags",
+       internal::aggregate(GetCurrentPreprocessorFlags())},
       {"common_compile_flags",
-       internal::aggregate(current_common_compile_flags_)},
-      {"link_flags", internal::aggregate(current_link_flags_)},
+       internal::aggregate(GetCurrentCommonCompileFlags())},
+      {"link_flags", internal::aggregate(GetCurrentLinkFlags())},
 
       // Toolchain executables here
       {"asm_compiler", toolchain_.GetAsmCompiler()},
@@ -62,7 +64,7 @@ void Target::Build() {
   (void)loader_.Load();
 
   // PCH Compile
-  if (!current_pch_files_.user.empty()) {
+  if (!GetCurrentPchFiles().empty()) {
     // TODO, Update .output at Constructor
     pch_file_.command = ConstructPchCompileCommand();
     PchTask();
@@ -70,14 +72,14 @@ void Target::Build() {
 
   // Compile Command
   // Link Command
-  for (auto &object_rel : current_object_files_) {
+  for (auto &object_rel : object_files_) {
     object_rel.second.command = ConstructCompileCommand(object_rel.first);
   }
-  CompileTask();
+  ObjectTask();
 
   // TODO, Update .output at Constructor
-  current_target_file_.command = ConstructLinkCommand();
-  LinkTask();
+  target_file_.command = ConstructLinkCommand();
+  TargetTask();
 }
 
 // Private

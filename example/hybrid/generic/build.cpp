@@ -86,12 +86,12 @@ int main(int argc, char **argv) {
     fs::path copy_to_path;
     if (toolchain.GetId() == base::Toolchain::Id::Msvc) {
       copy_from_path = foolib_target.GetTargetPath().string() + ".dll";
-      copy_to_path = generic_target.GetTargetIntermediateDir() /
+      copy_to_path = generic_target.GetTargetBuildDir() /
                      (foolib_target.GetName() + ".dll");
     } else {
       copy_from_path = foolib_target.GetTargetPath();
       copy_to_path =
-          generic_target.GetTargetIntermediateDir() /
+          generic_target.GetTargetBuildDir() /
           (foolib_target.GetName() + foolib_target.GetConfig().target_ext);
     }
 

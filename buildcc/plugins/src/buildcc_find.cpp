@@ -41,7 +41,7 @@ constexpr const char *const kLinuxEnvDelim = ":";
 // TODO, Add Environment Variable delimiters for more operating systems
 // ; for windows
 // : for linux
-constexpr const char *const GetEnvVarDelim() {
+constexpr char const *GetEnvVarDelim() {
   if constexpr (buildcc::env::is_win()) {
     return kWinEnvDelim;
   } else if constexpr (buildcc::env::is_linux()) {

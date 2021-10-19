@@ -20,31 +20,31 @@ namespace buildcc::base {
 
 void Target::AddPreprocessorFlag(const std::string &flag) {
   LockedAfterBuild();
-  current_preprocessor_flags_.insert(flag);
+  storer_.current_preprocessor_flags.insert(flag);
 }
 void Target::AddCommonCompileFlag(const std::string &flag) {
   LockedAfterBuild();
-  current_common_compile_flags_.insert(flag);
+  storer_.current_common_compile_flags.insert(flag);
 }
 void Target::AddPchFlag(const std::string &flag) {
   LockedAfterBuild();
-  current_pch_flags_.insert(flag);
+  storer_.current_pch_flags.insert(flag);
 }
 void Target::AddAsmCompileFlag(const std::string &flag) {
   LockedAfterBuild();
-  current_asm_compile_flags_.insert(flag);
+  storer_.current_asm_compile_flags.insert(flag);
 }
 void Target::AddCCompileFlag(const std::string &flag) {
   LockedAfterBuild();
-  current_c_compile_flags_.insert(flag);
+  storer_.current_c_compile_flags.insert(flag);
 }
 void Target::AddCppCompileFlag(const std::string &flag) {
   LockedAfterBuild();
-  current_cpp_compile_flags_.insert(flag);
+  storer_.current_cpp_compile_flags.insert(flag);
 }
 void Target::AddLinkFlag(const std::string &flag) {
   LockedAfterBuild();
-  current_link_flags_.insert(flag);
+  storer_.current_link_flags.insert(flag);
 }
 
 } // namespace buildcc::base
