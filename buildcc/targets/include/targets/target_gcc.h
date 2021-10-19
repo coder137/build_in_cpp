@@ -30,10 +30,17 @@ constexpr const char *const kGccStaticLibExt = ".a";
 constexpr const char *const kGccDynamicLibExt = ".so";
 
 constexpr const char *const kGccObjExt = ".o";
+constexpr const char *const kGccPchHeaderExt = ".h";
+constexpr const char *const kGccPchCompileExt = ".gch";
 
 // GCC
 constexpr const char *const kGccPrefixIncludeDir = "-I";
 constexpr const char *const kGccPrefixLibDir = "-L";
+
+constexpr const char *const kGccGenericPchCompileCommand =
+    "{compiler} {preprocessor_flags} {include_dirs} "
+    "{common_compile_flags} {pch_flags} "
+    "{compile_flags} -o {output} -c {input}";
 constexpr const char *const kGccGenericCompileCommand =
     "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
     "{compile_flags} -o {output} -c {input}";
@@ -68,13 +75,25 @@ private:
     base::Target::Config config;
     config.target_ext = target_ext;
     config.obj_ext = kGccObjExt;
+    config.pch_header_ext = kGccPchHeaderExt;
+    config.pch_compile_ext = kGccPchCompileExt;
     std::string prefix_include_dir = kGccPrefixIncludeDir;
     std::string prefix_lib_dir = kGccPrefixLibDir;
+    config.pch_command = kGccGenericPchCompileCommand;
     config.compile_command = compile_command;
     config.link_command = link_command;
     return config;
   }
 };
+
+inline void DefaultGccOptions(base::Target &target) {
+  if (!target.GetCurrentPchFiles().empty()) {
+    target.AddCommonCompileFlag(
+        fmt::format("-include {}",
+                    target.GetPchCompilePath().replace_extension("").string()));
+    target.AddCommonCompileFlag("-H");
+  }
+}
 
 class ExecutableTarget_gcc : public base::Target {
 public:
@@ -84,6 +103,10 @@ public:
       : Target(name, base::Target::Type::Executable, toolchain,
                target_path_relative_to_root,
                ConfigInterface<GccConfig>::Executable()) {}
+  void Build() {
+    DefaultGccOptions(*this);
+    Target::Build();
+  }
 };
 
 class StaticTarget_gcc : public base::Target {
@@ -93,6 +116,11 @@ public:
       : Target(name, base::Target::Type::StaticLibrary, toolchain,
                target_path_relative_to_root,
                ConfigInterface<GccConfig>::StaticLib()) {}
+
+  void Build() {
+    DefaultGccOptions(*this);
+    Target::Build();
+  }
 };
 
 class DynamicTarget_gcc : public base::Target {
@@ -101,8 +129,11 @@ public:
                     const std::filesystem::path &target_path_relative_to_root)
       : Target(name, base::Target::Type::DynamicLibrary, toolchain,
                target_path_relative_to_root,
-               ConfigInterface<GccConfig>::DynamicLib()) {
+               ConfigInterface<GccConfig>::DynamicLib()) {}
+  void Build() {
     AddCommonCompileFlag("-fpic");
+    DefaultGccOptions(*this);
+    Target::Build();
   }
 };
 
