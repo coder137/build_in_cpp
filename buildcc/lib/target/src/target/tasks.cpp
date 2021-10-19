@@ -42,7 +42,7 @@ void Target::PchTask() {
   pch_task_.name(kPchTaskName);
 }
 
-void Target::CompileTask() {
+void Target::ObjectTask() {
   env::log_trace(name_, __FUNCTION__);
 
   compile_task_ = tf_.emplace([&](tf::Subflow &subflow) {
@@ -74,7 +74,7 @@ void Target::CompileTask() {
   compile_task_.name(kCompileTaskName);
 }
 
-void Target::LinkTask() {
+void Target::TargetTask() {
   env::log_trace(name_, __FUNCTION__);
 
   link_task_ = tf_.emplace([&]() { BuildLink(); });

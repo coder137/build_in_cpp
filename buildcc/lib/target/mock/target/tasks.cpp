@@ -4,7 +4,7 @@ namespace buildcc::base {
 
 void Target::PchTask() { BuildPch(); }
 
-void Target::CompileTask() {
+void Target::ObjectTask() {
   std::vector<fs::path> source_files;
   std::vector<fs::path> dummy_source_files;
 
@@ -16,6 +16,6 @@ void Target::CompileTask() {
   }
 }
 
-void Target::LinkTask() { BuildLink(); }
+void Target::TargetTask() { BuildLink(); }
 
 } // namespace buildcc::base

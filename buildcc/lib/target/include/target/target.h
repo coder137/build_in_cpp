@@ -333,9 +333,8 @@ private:
 
   // Tasks
   void PchTask();
-  // TODO, Rename to ObjectTask and TargetTask
-  void CompileTask();
-  void LinkTask();
+  void ObjectTask();
+  void TargetTask();
 
   // Fbs
   bool Store() override;

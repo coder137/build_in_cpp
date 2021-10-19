@@ -75,11 +75,11 @@ void Target::Build() {
   for (auto &object_rel : object_files_) {
     object_rel.second.command = ConstructCompileCommand(object_rel.first);
   }
-  CompileTask();
+  ObjectTask();
 
   // TODO, Update .output at Constructor
   target_file_.command = ConstructLinkCommand();
-  LinkTask();
+  TargetTask();
 }
 
 // Private
