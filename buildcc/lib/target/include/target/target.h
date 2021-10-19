@@ -311,8 +311,7 @@ private:
 
   //
   void PrePchCompile();
-  // TODO, Rename to PreObjectCompile
-  void PreCompile();
+  void PreObjectCompile();
   void PreLink();
 
   // Compile

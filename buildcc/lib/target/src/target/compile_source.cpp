@@ -144,7 +144,7 @@ void Target::RecompileSources(std::vector<fs::path> &source_files,
   }
 }
 
-void Target::PreCompile() {
+void Target::PreObjectCompile() {
   // Convert user_source_files to current_source_files
   storer_.current_source_files.Convert();
 
@@ -157,7 +157,7 @@ void Target::PreCompile() {
 
 void Target::BuildCompile(std::vector<fs::path> &source_files,
                           std::vector<fs::path> &dummy_source_files) {
-  PreCompile();
+  PreObjectCompile();
 
   if (!loader_.IsLoaded()) {
     dirty_ = true;
