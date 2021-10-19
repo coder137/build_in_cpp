@@ -72,7 +72,7 @@ std::string Target::ConstructPchCompileCommand() const {
 
 void Target::PrePchCompile() { storer_.current_pch_files.Convert(); }
 
-void Target::BuildPch() {
+void Target::BuildPchCompile() {
   PrePchCompile();
   if (!loader_.IsLoaded()) {
     dirty_ = true;

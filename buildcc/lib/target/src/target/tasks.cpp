@@ -38,7 +38,7 @@ namespace buildcc::base {
 void Target::PchTask() {
   env::log_trace(name_, __FUNCTION__);
 
-  pch_task_ = tf_.emplace([&]() { BuildPch(); });
+  pch_task_ = tf_.emplace([&]() { BuildPchCompile(); });
   pch_task_.name(kPchTaskName);
 }
 
