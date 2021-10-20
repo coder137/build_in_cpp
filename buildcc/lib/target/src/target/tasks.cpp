@@ -38,7 +38,17 @@ namespace buildcc::base {
 void Target::PchTask() {
   env::log_trace(name_, __FUNCTION__);
 
-  pch_task_ = tf_.emplace([&]() { BuildPchCompile(); });
+  pch_task_ = tf_.emplace([&](tf::Subflow &subflow) {
+    BuildPchCompile();
+
+    // For Graph generation
+    for (const auto &p : GetCurrentPchFiles()) {
+      std::string name =
+          p.lexically_relative(env::get_project_root_dir()).string();
+      std::replace(name.begin(), name.end(), '\\', '/');
+      subflow.placeholder().name(name);
+    }
+  });
   pch_task_.name(kPchTaskName);
 }
 
@@ -63,7 +73,7 @@ void Target::ObjectTask() {
           .name(name);
     }
 
-    // For graph creation
+    // For graph generation
     for (const auto &ds : dummy_source_files) {
       std::string name =
           ds.lexically_relative(env::get_project_root_dir()).string();
