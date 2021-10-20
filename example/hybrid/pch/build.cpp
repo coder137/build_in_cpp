@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
   // 8. Post Build steps
 
   // - Clang Compile Commands
-  // plugin::ClangCompileCommands({&g_cflags, &g_cppflags}).Generate();
+  plugin::ClangCompileCommands({&g_cflags, &g_cppflags}).Generate();
 
   // - Plugin Graph
   std::string output = reg.GetTaskflow().dump();
