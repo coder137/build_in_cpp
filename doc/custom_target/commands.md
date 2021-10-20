@@ -34,6 +34,11 @@ See [build.cpp Target::Build API](../../buildcc/lib/target/src/target/build.cpp)
 - `archiver`: Archiver for Static Libraries
 - `linker`: Linker usually used during the Linking phase / Library creation
 
+> NOTE, When PCH is not used these flags are aggregated to an empty string ("")
+
+- `pch_compile_flags`: PCH flags applied when compiling a PCH
+- `pch_object_flags`: PCH flags applied to object files after compiling a PCH
+
 # PCH Specific
 
 See [compile_pch.cpp Target::ConstructPchCompileCommand API](../../buildcc/lib/target/src/target/compile_pch.cpp)
