@@ -101,6 +101,11 @@ jobs:
         run: |
           cmake --build . --target run_hybrid_generic_example
 
+      - name: Hybrid PCH Target Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
+        run: |
+          cmake --build . --target run_hybrid_pch_example_linux
+
   build_single:
     name: GCC single lib
     runs-on: ubuntu-latest
@@ -196,6 +201,11 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
           cmake --build . --target run_hybrid_generic_example
+
+      - name: Hybrid PCH Target Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
+        run: |
+          cmake --build . --target run_hybrid_pch_example_linux
 
   build_interface:
     name: GCC interface lib

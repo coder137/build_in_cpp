@@ -230,12 +230,12 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
   mock().checkExpectations();
 }
 
-TEST(TargetPchTestGroup, Target_AddPchFlag_Build) {
-  constexpr const char *const NAME = "AddPchFlag_Build.exe";
+TEST(TargetPchTestGroup, Target_AddPchCompileFlag_Build) {
+  constexpr const char *const NAME = "AddPchCompileFlag_Build.exe";
 
   buildcc::base::Target target(NAME, buildcc::base::Target::Type::Executable,
                                gcc, "data");
-  target.AddPchFlag("-H");
+  target.AddPchCompileFlag("-H");
   target.AddPch("pch/pch_header_1.h");
   target.AddPch("pch/pch_header_2.h");
 
@@ -244,7 +244,26 @@ TEST(TargetPchTestGroup, Target_AddPchFlag_Build) {
   target.Build();
   bool exists = fs::exists(target.GetPchHeaderPath());
   CHECK_TRUE(exists);
-  CHECK_EQUAL(target.GetCurrentPchFlags().size(), 1);
+  CHECK_EQUAL(target.GetCurrentPchCompileFlags().size(), 1);
+
+  mock().checkExpectations();
+}
+
+TEST(TargetPchTestGroup, Target_AddPchObjectFlag_Build) {
+  constexpr const char *const NAME = "AddPchObjectFlag_Build.exe";
+
+  buildcc::base::Target target(NAME, buildcc::base::Target::Type::Executable,
+                               gcc, "data");
+  target.AddPchObjectFlag("-H");
+  target.AddPch("pch/pch_header_1.h");
+  target.AddPch("pch/pch_header_2.h");
+
+  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::m::CommandExpect_Execute(1, true);
+  target.Build();
+  bool exists = fs::exists(target.GetPchHeaderPath());
+  CHECK_TRUE(exists);
+  CHECK_EQUAL(target.GetCurrentPchObjectFlags().size(), 1);
 
   mock().checkExpectations();
 }

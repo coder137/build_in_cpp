@@ -36,7 +36,8 @@ struct TargetStorer {
 
   std::unordered_set<std::string> current_preprocessor_flags;
   std::unordered_set<std::string> current_common_compile_flags;
-  std::unordered_set<std::string> current_pch_flags;
+  std::unordered_set<std::string> current_pch_compile_flags;
+  std::unordered_set<std::string> current_pch_object_flags;
   std::unordered_set<std::string> current_asm_compile_flags;
   std::unordered_set<std::string> current_c_compile_flags;
   std::unordered_set<std::string> current_cpp_compile_flags;

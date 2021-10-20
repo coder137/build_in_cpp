@@ -29,6 +29,8 @@ struct CopyTarget {
   enum class Option {
     PreprocessorFlags,
     CommonCompileFlags,
+    PchCompileFlags,
+    PchObjectFlags,
     AsmCompileFlags,
     CCompileFlags,
     CppCompileFlags,
@@ -63,6 +65,18 @@ struct CopyTarget {
         CopyCb<std::unordered_set<std::string>, std::string>(
             source_.GetCurrentCommonCompileFlags(),
             [&](const std::string &f) { dest_.AddCommonCompileFlag(f); });
+        break;
+
+      case Option::PchCompileFlags:
+        CopyCb<std::unordered_set<std::string>, std::string>(
+            source_.GetCurrentPchCompileFlags(),
+            [&](const std::string &f) { dest_.AddPchCompileFlag(f); });
+        break;
+
+      case Option::PchObjectFlags:
+        CopyCb<std::unordered_set<std::string>, std::string>(
+            source_.GetCurrentPchObjectFlags(),
+            [&](const std::string &f) { dest_.AddPchObjectFlag(f); });
         break;
 
       case Option::AsmCompileFlags:
@@ -109,8 +123,8 @@ private:
   }
 
 private:
-  const base::Target &source_;
   base::Target &dest_;
+  const base::Target &source_;
   std::unordered_set<Option> options_;
 };
 
@@ -236,6 +250,8 @@ public:
     CopyTarget(*this, *target)
         .Add({
             CopyTarget::Option::CommonCompileFlags,
+            CopyTarget::Option::PchCompileFlags,
+            CopyTarget::Option::PchObjectFlags,
             CopyTarget::Option::AsmCompileFlags,
             CopyTarget::Option::CCompileFlags,
             CopyTarget::Option::CppCompileFlags,
@@ -275,6 +291,8 @@ public:
     CopyTarget(*this, *target)
         .Add({
             CopyTarget::Option::CommonCompileFlags,
+            CopyTarget::Option::PchCompileFlags,
+            CopyTarget::Option::PchObjectFlags,
             CopyTarget::Option::AsmCompileFlags,
             CopyTarget::Option::CCompileFlags,
             CopyTarget::Option::CppCompileFlags,
@@ -313,6 +331,8 @@ public:
     CopyTarget(*this, *target)
         .Add({
             CopyTarget::Option::CommonCompileFlags,
+            CopyTarget::Option::PchCompileFlags,
+            CopyTarget::Option::PchObjectFlags,
             CopyTarget::Option::AsmCompileFlags,
             CopyTarget::Option::CCompileFlags,
             CopyTarget::Option::CppCompileFlags,
@@ -354,6 +374,8 @@ public:
     CopyTarget(*this, *target)
         .Add({
             CopyTarget::Option::CommonCompileFlags,
+            CopyTarget::Option::PchCompileFlags,
+            CopyTarget::Option::PchObjectFlags,
             CopyTarget::Option::AsmCompileFlags,
             CopyTarget::Option::CCompileFlags,
             CopyTarget::Option::CppCompileFlags,

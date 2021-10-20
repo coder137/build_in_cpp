@@ -7,9 +7,9 @@ This is done by overriding the 3 `base::Target::Config` strings
 ```cpp
 base::Target::Config config;
 
-config.pch_command = "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} {pch_flags} {compile_flags} -o {output} -c {input}";
+config.pch_command = "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} {pch_compile_flags} {compile_flags} -o {output} -c {input}";
 
-config.compile_command = "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} {compile_flags} -o {output} -c {input}";
+config.compile_command = "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} {pch_object_flags} {compile_flags} -o {output} -c {input}";
 
 config.link_command = "{cpp_compiler} {link_flags} {compiled_sources} -o {output} {lib_dirs} {lib_deps}";
 ```
@@ -34,12 +34,16 @@ See [build.cpp Target::Build API](../../buildcc/lib/target/src/target/build.cpp)
 - `archiver`: Archiver for Static Libraries
 - `linker`: Linker usually used during the Linking phase / Library creation
 
+> NOTE, When PCH is not used these flags are aggregated to an empty string ("")
+
+- `pch_compile_flags`: PCH flags applied when compiling a PCH
+- `pch_object_flags`: PCH flags applied to object files after compiling a PCH
+
 # PCH Specific
 
 See [compile_pch.cpp Target::ConstructPchCompileCommand API](../../buildcc/lib/target/src/target/compile_pch.cpp)
 
 - `compiler`: Selects CPP compiler if project contains CPP source else C compiler
-- `pch_flags`: Aggregated pch specific flags
 - `compile_flags`: Selects CPP flags if project contains CPP source else C flags
 - `output`: PCH output path
 - `input`: PCH input generated path (Headers are aggregated into a .h file)

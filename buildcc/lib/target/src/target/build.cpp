@@ -22,6 +22,26 @@
 
 #include "fmt/format.h"
 
+namespace {
+
+constexpr const char *const kIncludeDirs = "include_dirs";
+constexpr const char *const kLibDirs = "lib_dirs";
+
+constexpr const char *const kPreprocessorFlags = "preprocessor_flags";
+constexpr const char *const kCommonCompileFlags = "common_compile_flags";
+constexpr const char *const kLinkFlags = "link_flags";
+
+constexpr const char *const kPchCompileFlags = "pch_compile_flags";
+constexpr const char *const kPchObjectFlags = "pch_object_flags";
+
+constexpr const char *const kAsmCompiler = "asm_compiler";
+constexpr const char *const kCCompiler = "c_compiler";
+constexpr const char *const kCppCompiler = "cpp_compiler";
+constexpr const char *const kArchiver = "archiver";
+constexpr const char *const kLinker = "linker";
+
+} // namespace
+
 namespace buildcc::base {
 
 // * Load
@@ -40,24 +60,22 @@ void Target::Build() {
   tf_.name(fmt::format("[{}] {}", toolchain_.GetName(), name_));
 
   command_.AddDefaultArguments({
-      {"include_dirs",
-       internal::aggregate_with_prefix(config_.prefix_include_dir,
-                                       GetCurrentIncludeDirs())},
-      {"lib_dirs", internal::aggregate_with_prefix(config_.prefix_lib_dir,
-                                                   GetCurrentLibDirs())},
+      {kIncludeDirs, internal::aggregate_with_prefix(config_.prefix_include_dir,
+                                                     GetCurrentIncludeDirs())},
+      {kLibDirs, internal::aggregate_with_prefix(config_.prefix_lib_dir,
+                                                 GetCurrentLibDirs())},
 
-      {"preprocessor_flags",
-       internal::aggregate(GetCurrentPreprocessorFlags())},
-      {"common_compile_flags",
+      {kPreprocessorFlags, internal::aggregate(GetCurrentPreprocessorFlags())},
+      {kCommonCompileFlags,
        internal::aggregate(GetCurrentCommonCompileFlags())},
-      {"link_flags", internal::aggregate(GetCurrentLinkFlags())},
+      {kLinkFlags, internal::aggregate(GetCurrentLinkFlags())},
 
       // Toolchain executables here
-      {"asm_compiler", toolchain_.GetAsmCompiler()},
-      {"c_compiler", toolchain_.GetCCompiler()},
-      {"cpp_compiler", toolchain_.GetCppCompiler()},
-      {"archiver", toolchain_.GetArchiver()},
-      {"linker", toolchain_.GetLinker()},
+      {kAsmCompiler, toolchain_.GetAsmCompiler()},
+      {kCCompiler, toolchain_.GetCCompiler()},
+      {kCppCompiler, toolchain_.GetCppCompiler()},
+      {kArchiver, toolchain_.GetArchiver()},
+      {kLinker, toolchain_.GetLinker()},
   });
 
   // Load the serialized file
@@ -65,9 +83,18 @@ void Target::Build() {
 
   // PCH Compile
   if (!GetCurrentPchFiles().empty()) {
+    command_.AddDefaultArguments({
+        {kPchCompileFlags, internal::aggregate(GetCurrentPchCompileFlags())},
+        {kPchObjectFlags, internal::aggregate(GetCurrentPchObjectFlags())},
+    });
+
     // TODO, Update .output at Constructor
     pch_file_.command = ConstructPchCompileCommand();
     PchTask();
+  } else {
+    command_.AddDefaultArguments({
+        {kPchObjectFlags, ""},
+    });
   }
 
   // Compile Command
