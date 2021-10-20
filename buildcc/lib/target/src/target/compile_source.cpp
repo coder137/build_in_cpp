@@ -166,6 +166,7 @@ void Target::BuildObjectCompile(std::vector<fs::path> &source_files,
                  GetCurrentPreprocessorFlags());
     RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
                  GetCurrentCommonCompileFlags());
+    RecheckFlags(loader_.GetLoadedPchObjectFlags(), GetCurrentPchObjectFlags());
     RecheckFlags(loader_.GetLoadedAsmCompileFlags(),
                  GetCurrentAsmCompileFlags());
     RecheckFlags(loader_.GetLoadedCCompileFlags(), GetCurrentCCompileFlags());

@@ -62,15 +62,13 @@ std::string Target::ConstructPchCompileCommand() const {
       GetState().contains_cpp_src ? FileExt::Type::Cpp : FileExt::Type::C;
   const std::string compile_flags =
       ext_.GetCompileFlags(file_ext_type).value_or("");
-  return command_.Construct(
-      config_.pch_command,
-      {
-          {"compiler", compiler},
-          {"pch_flags", internal::aggregate(GetCurrentPchFlags())},
-          {"compile_flags", compile_flags},
-          {"output", GetPchCompilePath().string()},
-          {"input", GetPchHeaderPath().string()},
-      });
+  return command_.Construct(config_.pch_command,
+                            {
+                                {"compiler", compiler},
+                                {"compile_flags", compile_flags},
+                                {"output", GetPchCompilePath().string()},
+                                {"input", GetPchHeaderPath().string()},
+                            });
 }
 
 void Target::PrePchCompile() { storer_.current_pch_files.Convert(); }
@@ -84,7 +82,8 @@ void Target::BuildPchCompile() {
                  GetCurrentPreprocessorFlags());
     RecheckFlags(loader_.GetLoadedCommonCompileFlags(),
                  GetCurrentCommonCompileFlags());
-    RecheckFlags(loader_.GetLoadedPchFlags(), GetCurrentPchFlags());
+    RecheckFlags(loader_.GetLoadedPchCompileFlags(),
+                 GetCurrentPchCompileFlags());
     RecheckFlags(loader_.GetLoadedCCompileFlags(), GetCurrentCCompileFlags());
     RecheckFlags(loader_.GetLoadedCppCompileFlags(),
                  GetCurrentCppCompileFlags());
