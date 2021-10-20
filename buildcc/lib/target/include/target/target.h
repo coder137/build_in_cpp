@@ -57,6 +57,7 @@ public:
     DynamicLibrary,
   };
 
+  // Defaults set for the GCC compiler
   struct Config {
     Config() {}
 
@@ -69,11 +70,11 @@ public:
     std::string prefix_lib_dir{"-L"};
 
     std::string pch_command{"{compiler} {preprocessor_flags} {include_dirs} "
-                            "{common_compile_flags} {pch_flags} "
+                            "{common_compile_flags} {pch_compile_flags} "
                             "{compile_flags} -o {output} -c {input}"};
     std::string compile_command{
         "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
-        "{compile_flags} -o {output} -c {input}"};
+        "{pch_object_flags} {compile_flags} -o {output} -c {input}"};
     std::string link_command{
         "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
         "{lib_dirs} {lib_deps}"};
@@ -155,7 +156,8 @@ public:
   // * Flags
   void AddPreprocessorFlag(const std::string &flag);
   void AddCommonCompileFlag(const std::string &flag);
-  void AddPchFlag(const std::string &flag);
+  void AddPchCompileFlag(const std::string &flag);
+  void AddPchObjectFlag(const std::string &flag);
   void AddAsmCompileFlag(const std::string &flag);
   void AddCCompileFlag(const std::string &flag);
   void AddCppCompileFlag(const std::string &flag);
@@ -234,8 +236,11 @@ public:
   const std::unordered_set<std::string> &GetCurrentCommonCompileFlags() const {
     return storer_.current_common_compile_flags;
   }
-  const std::unordered_set<std::string> &GetCurrentPchFlags() const {
-    return storer_.current_pch_flags;
+  const std::unordered_set<std::string> &GetCurrentPchCompileFlags() const {
+    return storer_.current_pch_compile_flags;
+  }
+  const std::unordered_set<std::string> &GetCurrentPchObjectFlags() const {
+    return storer_.current_pch_object_flags;
   }
   const std::unordered_set<std::string> &GetCurrentAsmCompileFlags() const {
     return storer_.current_asm_compile_flags;
