@@ -16,6 +16,12 @@
 
 #include "target/target.h"
 
+namespace {
+constexpr const char *const kOutput = "output";
+constexpr const char *const kCompiledSources = "compiled_sources";
+constexpr const char *const kLibDeps = "lib_deps";
+} // namespace
+
 namespace buildcc::base {
 
 // Construct APIs
@@ -30,9 +36,9 @@ std::string Target::ConstructLinkCommand() const {
   return command_.Construct(
       config_.link_command,
       {
-          {"output", output_target},
-          {"compiled_sources", aggregated_compiled_sources},
-          {"lib_deps",
+          {kOutput, output_target},
+          {kCompiledSources, aggregated_compiled_sources},
+          {kLibDeps,
            fmt::format("{} {}",
                        internal::aggregate(storer_.current_external_lib_deps),
                        internal::aggregate(storer_.current_lib_deps.user))},
