@@ -58,10 +58,12 @@ Build C, C++ and ASM files in C++
   - Argument passing has been made easy using the `buildcc::Args` module.
 
 **Taskflow dependency for hybrid/simple example**
-![Taskflow dependency](example/hybrid/simple/graph.PNG)
-See also [Software Architecture](#software-architecture)
+![Hybrid Simple example](example/hybrid/simple/graph.PNG)
 
-## Software Architecture
+**Taskflow dependency for hybrid/pch example**
+![Hybrid PCH example](example/hybrid/pch/graph.PNG)
+
+# Software Architecture
 
 ### Interface lib dependencies
 
@@ -82,6 +84,10 @@ See also [Software Architecture](#software-architecture)
 ## Community Plugin
 
 - [x] [ClangCompileCommands](buildcc/plugins/include/plugins/clang_compile_commands.h)
+- [ ] [BuildCCFind](buildcc/plugins/include/plugins/buildcc_find.h)
+  - [x] Host system executable
+  - [ ] BuildCC Library
+  - [ ] BuildCC Plugin
 - [ ] ClangFormat
 - [ ] Target graph visualizer (through Taskflow)
 
@@ -165,7 +171,7 @@ cpack -G NSIS
 
 Contains **proof of concept** and **real world** [examples](example/README.md).
 
-# Developer
+# Developer Guide
 
 Developers interested in contributing to **_BuildCC_**
 
