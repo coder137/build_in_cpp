@@ -16,6 +16,15 @@
 
 #include "target/target.h"
 
+namespace {
+
+constexpr const char *const kCompiler = "compiler";
+constexpr const char *const kCompileFlags = "compile_flags";
+constexpr const char *const kOutput = "output";
+constexpr const char *const kInput = "input";
+
+} // namespace
+
 namespace buildcc::base {
 
 internal::fs_unordered_set Target::GetCompiledSources() const {
@@ -81,10 +90,10 @@ Target::ConstructCompileCommand(const fs::path &absolute_current_source) const {
   return command_.Construct(
       config_.compile_command,
       {
-          {"compiler", selected_compiler},
-          {"compile_flags", selected_aggregated_compile_flags},
-          {"output", output},
-          {"input", input},
+          {kCompiler, selected_compiler},
+          {kCompileFlags, selected_aggregated_compile_flags},
+          {kOutput, output},
+          {kInput, input},
       });
 }
 
