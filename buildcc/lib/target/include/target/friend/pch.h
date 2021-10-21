@@ -26,13 +26,13 @@ namespace buildcc::base {
 
 class Target;
 
-// TODO, Refactor the names
 class Pch {
 public:
   Pch(Target &target)
       : target_(target), header_path_(ConstructHeaderPath()),
         compile_path_(ConstructCompilePath()) {}
 
+  // NOTE, These APIs should be called inside `Target::Build`
   void CacheCompileCommand();
   void PchTask();
 

@@ -16,6 +16,7 @@
 
 #include "target/friend/pch.h"
 
+#include "target/path.h"
 #include "target/target.h"
 
 #include "env/util.h"
@@ -93,10 +94,7 @@ void Pch::BuildCompile() {
   }
 
   if (target_.dirty_) {
-    // TODO, CACHE
-    AggregateToFile(target_.GetPchHeaderPath(), target_.GetCurrentPchFiles());
-
-    // TODO, Shift this inside, private
+    AggregateToFile(header_path_, target_.GetCurrentPchFiles());
     bool success = Command::Execute(command_);
     env::assert_fatal(success, "Failed to compile pch");
   }
@@ -122,15 +120,17 @@ std::string Pch::ConstructCompileCommand() const {
                                           : FileExt::Type::C;
   const std::string compile_flags =
       target_.ext_.GetCompileFlags(file_ext_type).value_or("");
-  return target_.command_.Construct(
-      target_.config_.pch_command,
-      {
-          {kCompiler, compiler},
-          {kCompileFlags, compile_flags},
-          // TODO, Improve this, CACHE
-          {kOutput, target_.GetPchCompilePath().string()},
-          {kInput, target_.GetPchHeaderPath().string()},
-      });
+  const std::string pch_compile_path =
+      internal::Path::CreateNewPath(compile_path_).GetPathAsString();
+  const std::string pch_header_path =
+      internal::Path::CreateNewPath(header_path_).GetPathAsString();
+  return target_.command_.Construct(target_.config_.pch_command,
+                                    {
+                                        {kCompiler, compiler},
+                                        {kCompileFlags, compile_flags},
+                                        {kOutput, pch_compile_path},
+                                        {kInput, pch_header_path},
+                                    });
 }
 
 void Pch::PreCompile() {
