@@ -31,6 +31,7 @@
 
 // Friend
 #include "target/friend/file_extension.h"
+#include "target/friend/pch.h"
 
 // Internal
 #include "target/generator.h"
@@ -103,7 +104,7 @@ public:
                          target_path_relative_to_root),
         target_build_dir_(fs::path(env::get_project_build_dir()) /
                           toolchain.GetName() / name),
-        loader_(name, target_build_dir_), ext_(*this) {
+        loader_(name, target_build_dir_), ext_(*this), pch_(*this) {
     Initialize();
   }
   virtual ~Target() {}
@@ -283,6 +284,7 @@ public:
 
 private:
   friend class FileExt;
+  friend class Pch;
 
 private:
   struct OutputInfo {
@@ -308,13 +310,11 @@ private:
   void UnlockedAfterBuild() const;
 
   // Build
-  void BuildPchCompile();
   void BuildObjectCompile(std::vector<fs::path> &source_files,
                           std::vector<fs::path> &dummy_source_files);
   void BuildTargetLink();
 
   //
-  void PrePchCompile();
   void PreObjectCompile();
   void PreTargetLink();
 
@@ -335,7 +335,6 @@ private:
       const std::unordered_set<std::string> &current_external_libs);
 
   // Tasks
-  void PchTask();
   void ObjectTask();
   void TargetTask();
 
@@ -357,7 +356,7 @@ private:
   // Construct
   fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
   fs::path ConstructTargetPath() const;
-  std::string ConstructPchCompileCommand() const;
+
   std::string
   ConstructCompileCommand(const fs::path &absolute_current_source) const;
   std::string ConstructLinkCommand() const;
@@ -393,6 +392,7 @@ private:
 
   // Friend
   FileExt ext_;
+  Pch pch_;
 
   tf::Taskflow tf_;
   tf::Task pch_task_;

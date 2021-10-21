@@ -89,8 +89,8 @@ void Target::Build() {
     });
 
     // TODO, Update .output at Constructor
-    pch_file_.command = ConstructPchCompileCommand();
-    PchTask();
+    pch_file_.command = pch_.ConstructPchCompileCommand();
+    pch_.PchTask();
   } else {
     command_.AddDefaultArguments({
         {kPchObjectFlags, ""},
