@@ -65,7 +65,7 @@ void Pch::CacheCompileCommand() { command_ = ConstructCompileCommand(); }
 
 // PRIVATE
 
-void Pch::BuildPchCompile() {
+void Pch::BuildCompile() {
   PreCompile();
 
   const auto &loader = target_.loader_;

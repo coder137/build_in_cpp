@@ -37,7 +37,7 @@ namespace buildcc::base {
 
 void Pch::PchTask() {
   target_.pch_task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
-    BuildPchCompile();
+    BuildCompile();
 
     // For Graph generation
     for (const auto &p : target_.GetCurrentPchFiles()) {

@@ -47,7 +47,7 @@ private:
   std::string ConstructCompileCommand() const;
 
   void PreCompile();
-  void BuildPchCompile();
+  void BuildCompile();
 
 private:
   Target &target_;
