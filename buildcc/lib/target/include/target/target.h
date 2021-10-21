@@ -30,8 +30,8 @@
 #include "target/builder_interface.h"
 
 // Friend
+#include "target/friend/compile_pch.h"
 #include "target/friend/file_extension.h"
-#include "target/friend/pch.h"
 
 // Internal
 #include "target/generator.h"
