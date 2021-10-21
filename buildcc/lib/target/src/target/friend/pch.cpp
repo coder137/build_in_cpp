@@ -61,7 +61,7 @@ namespace buildcc::base {
 
 // PUBLIC
 
-void Pch::CacheCompileCommand() { command_ = ConstructPchCompileCommand(); }
+void Pch::CacheCompileCommand() { command_ = ConstructCompileCommand(); }
 
 void Pch::BuildPchCompile() {
   PrePchCompile();
@@ -113,7 +113,7 @@ fs::path Pch::ConstructCompilePath() const {
                   target_.GetConfig().pch_compile_ext));
 }
 
-std::string Pch::ConstructPchCompileCommand() const {
+std::string Pch::ConstructCompileCommand() const {
   const std::string compiler = target_.GetState().contains_cpp_src
                                    ? target_.GetToolchain().GetCppCompiler()
                                    : target_.GetToolchain().GetCCompiler();

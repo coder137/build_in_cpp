@@ -44,7 +44,7 @@ private:
   fs::path ConstructHeaderPath() const;
   fs::path ConstructCompilePath() const;
 
-  std::string ConstructPchCompileCommand() const;
+  std::string ConstructCompileCommand() const;
 
   void PrePchCompile();
   void BuildPchCompile();
