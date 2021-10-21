@@ -59,30 +59,9 @@ void AggregateToFile(const fs::path &filename,
 
 namespace buildcc::base {
 
-std::string Pch::ConstructPchCompileCommand() const {
-  const std::string compiler = target_.GetState().contains_cpp_src
-                                   ? target_.GetToolchain().GetCppCompiler()
-                                   : target_.GetToolchain().GetCCompiler();
-  const FileExt::Type file_ext_type = target_.GetState().contains_cpp_src
-                                          ? FileExt::Type::Cpp
-                                          : FileExt::Type::C;
-  const std::string compile_flags =
-      target_.ext_.GetCompileFlags(file_ext_type).value_or("");
-  return target_.command_.Construct(
-      target_.config_.pch_command,
-      {
-          {kCompiler, compiler},
-          {kCompileFlags, compile_flags},
-          {kOutput, target_.GetPchCompilePath().string()},
-          {kInput, target_.GetPchHeaderPath().string()},
-      });
-}
+// PUBLIC
 
-void Pch::PrePchCompile() {
-  target_.storer_.current_header_files.Convert();
-
-  target_.storer_.current_pch_files.Convert();
-}
+void Pch::CacheCompileCommand() { command_ = ConstructPchCompileCommand(); }
 
 void Pch::BuildPchCompile() {
   PrePchCompile();
@@ -112,10 +91,52 @@ void Pch::BuildPchCompile() {
   }
 
   if (target_.dirty_) {
+    // TODO, CACHE
     AggregateToFile(target_.GetPchHeaderPath(), target_.GetCurrentPchFiles());
-    bool success = Command::Execute(target_.pch_file_.command);
+
+    // TODO, Shift this inside, private
+    bool success = Command::Execute(command_);
     env::assert_fatal(success, "Failed to compile pch");
   }
+}
+
+// PRIVATE
+
+fs::path Pch::ConstructPchHeaderPath() const {
+  return target_.target_build_dir_ /
+         fmt::format("buildcc_pch{}", target_.GetConfig().pch_header_ext);
+}
+
+fs::path Pch::ConstructPchCompilePath() const {
+  return ConstructPchHeaderPath().replace_extension(
+      fmt::format("{}{}", target_.GetConfig().pch_header_ext,
+                  target_.GetConfig().pch_compile_ext));
+}
+
+std::string Pch::ConstructPchCompileCommand() const {
+  const std::string compiler = target_.GetState().contains_cpp_src
+                                   ? target_.GetToolchain().GetCppCompiler()
+                                   : target_.GetToolchain().GetCCompiler();
+  const FileExt::Type file_ext_type = target_.GetState().contains_cpp_src
+                                          ? FileExt::Type::Cpp
+                                          : FileExt::Type::C;
+  const std::string compile_flags =
+      target_.ext_.GetCompileFlags(file_ext_type).value_or("");
+  return target_.command_.Construct(
+      target_.config_.pch_command,
+      {
+          {kCompiler, compiler},
+          {kCompileFlags, compile_flags},
+          // TODO, Improve this, CACHE
+          {kOutput, target_.GetPchCompilePath().string()},
+          {kInput, target_.GetPchHeaderPath().string()},
+      });
+}
+
+void Pch::PrePchCompile() {
+  target_.storer_.current_header_files.Convert();
+
+  target_.storer_.current_pch_files.Convert();
 }
 
 } // namespace buildcc::base

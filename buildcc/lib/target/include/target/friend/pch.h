@@ -17,25 +17,44 @@
 #ifndef TARGET_FRIEND_PCH_H_
 #define TARGET_FRIEND_PCH_H_
 
+#include <filesystem>
 #include <string>
+
+namespace fs = std::filesystem;
 
 namespace buildcc::base {
 
 class Target;
 
+// TODO, Refactor the names
 class Pch {
 public:
-  Pch(Target &target) : target_(target) {}
+  Pch(Target &target)
+      : target_(target), header_path_(ConstructPchHeaderPath()),
+        compile_path_(ConstructPchCompilePath()) {}
+
+  void CacheCompileCommand();
+  void PchTask();
+
+  const fs::path &GetHeaderPath() const { return header_path_; }
+  const fs::path &GetCompilePath() const { return compile_path_; }
+
+private:
+  // Each target only has only 1 PCH file
+  fs::path ConstructPchHeaderPath() const;
+  fs::path ConstructPchCompilePath() const;
 
   std::string ConstructPchCompileCommand() const;
 
   void PrePchCompile();
   void BuildPchCompile();
 
-  void PchTask();
-
 private:
   Target &target_;
+
+  fs::path header_path_;
+  fs::path compile_path_;
+  std::string command_;
 };
 
 } // namespace buildcc::base
