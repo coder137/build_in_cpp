@@ -19,9 +19,9 @@ set(TARGET_SRCS
 
     # Target friend
     src/target/friend/file_extension.cpp
-    src/target/friend/pch.cpp
+    src/target/friend/compile_pch.cpp
     include/target/friend/file_extension.h
-    include/target/friend/pch.h
+    include/target/friend/compile_pch.h
 
     # Target
     src/target/target.cpp

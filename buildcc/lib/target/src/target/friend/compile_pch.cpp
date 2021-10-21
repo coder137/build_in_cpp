@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "target/friend/pch.h"
+#include "target/friend/compile_pch.h"
 
 #include "target/path.h"
 #include "target/target.h"

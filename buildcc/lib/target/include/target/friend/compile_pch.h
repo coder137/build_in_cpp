@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_FRIEND_PCH_H_
-#define TARGET_FRIEND_PCH_H_
+#ifndef TARGET_FRIEND_COMPILE_PCH_H_
+#define TARGET_FRIEND_COMPILE_PCH_H_
 
 #include <filesystem>
 #include <string>
