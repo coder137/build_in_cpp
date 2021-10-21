@@ -2,7 +2,7 @@
 
 namespace buildcc::base {
 
-void Target::PchTask() { BuildPchCompile(); }
+void Pch::PchTask() { BuildPchCompile(); }
 
 void Target::ObjectTask() {
   std::vector<fs::path> source_files;
