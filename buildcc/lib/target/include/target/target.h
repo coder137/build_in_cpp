@@ -191,16 +191,8 @@ public:
   // we can cache these variables during Target construction
   fs::path GetTargetPath() const { return ConstructTargetPath(); }
 
-  // TODO, Make these construct APIs
-  fs::path GetPchHeaderPath() const {
-    return target_build_dir_ /
-           fmt::format("buildcc_pch{}", config_.pch_header_ext);
-  }
-  // Each target only has only 1 PCH file
-  fs::path GetPchCompilePath() const {
-    return GetPchHeaderPath().replace_extension(
-        fmt::format("{}{}", config_.pch_header_ext, config_.pch_compile_ext));
-  }
+  const fs::path &GetPchHeaderPath() const { return pch_.GetHeaderPath(); }
+  const fs::path &GetPchCompilePath() const { return pch_.GetCompilePath(); }
 
   // Const references
 
@@ -383,7 +375,6 @@ private:
   // Not used for serialization
   // NOTE, Always store the absolute source path -> absolute compiled source
   // path here
-  OutputInfo pch_file_;
   std::unordered_map<fs::path, OutputInfo, internal::PathHash> object_files_;
   OutputInfo target_file_;
 

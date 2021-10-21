@@ -88,8 +88,7 @@ void Target::Build() {
         {kPchObjectFlags, internal::aggregate(GetCurrentPchObjectFlags())},
     });
 
-    // TODO, Update .output at Constructor
-    pch_file_.command = pch_.ConstructPchCompileCommand();
+    pch_.CacheCompileCommand();
     pch_.PchTask();
   } else {
     command_.AddDefaultArguments({
