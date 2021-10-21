@@ -30,7 +30,7 @@ class Target;
 class Pch {
 public:
   Pch(Target &target)
-      : target_(target), header_path_(ConstructPchHeaderPath()),
+      : target_(target), header_path_(ConstructHeaderPath()),
         compile_path_(ConstructPchCompilePath()) {}
 
   void CacheCompileCommand();
@@ -41,7 +41,7 @@ public:
 
 private:
   // Each target only has only 1 PCH file
-  fs::path ConstructPchHeaderPath() const;
+  fs::path ConstructHeaderPath() const;
   fs::path ConstructPchCompilePath() const;
 
   std::string ConstructPchCompileCommand() const;

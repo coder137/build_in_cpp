@@ -102,13 +102,13 @@ void Pch::BuildPchCompile() {
 
 // PRIVATE
 
-fs::path Pch::ConstructPchHeaderPath() const {
+fs::path Pch::ConstructHeaderPath() const {
   return target_.target_build_dir_ /
          fmt::format("buildcc_pch{}", target_.GetConfig().pch_header_ext);
 }
 
 fs::path Pch::ConstructPchCompilePath() const {
-  return ConstructPchHeaderPath().replace_extension(
+  return ConstructHeaderPath().replace_extension(
       fmt::format("{}{}", target_.GetConfig().pch_header_ext,
                   target_.GetConfig().pch_compile_ext));
 }
