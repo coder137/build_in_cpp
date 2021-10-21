@@ -107,7 +107,7 @@ fs::path Pch::ConstructHeaderPath() const {
          fmt::format("buildcc_pch{}", target_.GetConfig().pch_header_ext);
 }
 
-fs::path Pch::ConstructPchCompilePath() const {
+fs::path Pch::ConstructCompilePath() const {
   return ConstructHeaderPath().replace_extension(
       fmt::format("{}{}", target_.GetConfig().pch_header_ext,
                   target_.GetConfig().pch_compile_ext));
