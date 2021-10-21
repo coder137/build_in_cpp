@@ -46,7 +46,7 @@ private:
 
   std::string ConstructCompileCommand() const;
 
-  void PrePchCompile();
+  void PreCompile();
   void BuildPchCompile();
 
 private:

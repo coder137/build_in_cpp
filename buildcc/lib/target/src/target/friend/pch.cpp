@@ -63,8 +63,10 @@ namespace buildcc::base {
 
 void Pch::CacheCompileCommand() { command_ = ConstructCompileCommand(); }
 
+// PRIVATE
+
 void Pch::BuildPchCompile() {
-  PrePchCompile();
+  PreCompile();
 
   const auto &loader = target_.loader_;
 
@@ -100,8 +102,6 @@ void Pch::BuildPchCompile() {
   }
 }
 
-// PRIVATE
-
 fs::path Pch::ConstructHeaderPath() const {
   return target_.target_build_dir_ /
          fmt::format("buildcc_pch{}", target_.GetConfig().pch_header_ext);
@@ -133,7 +133,7 @@ std::string Pch::ConstructCompileCommand() const {
       });
 }
 
-void Pch::PrePchCompile() {
+void Pch::PreCompile() {
   target_.storer_.current_header_files.Convert();
 
   target_.storer_.current_pch_files.Convert();
