@@ -36,7 +36,7 @@ constexpr const char *const kLinkTaskName = "Target";
 namespace buildcc::base {
 
 void Pch::PchTask() {
-  target_.pch_task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
+  task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
     BuildCompile();
 
     // For Graph generation
@@ -47,7 +47,7 @@ void Pch::PchTask() {
       subflow.placeholder().name(name);
     }
   });
-  target_.pch_task_.name(kPchTaskName);
+  task_.name(kPchTaskName);
 }
 
 void Target::ObjectTask() {
@@ -90,8 +90,8 @@ void Target::TargetTask() {
 
   // Only add if not empty
   // PCH may not be used
-  if (!pch_task_.empty()) {
-    compile_task_.succeed(pch_task_);
+  if (!pch_.GetTask().empty()) {
+    compile_task_.succeed(pch_.GetTask());
   }
   link_task_.succeed(compile_task_);
 }

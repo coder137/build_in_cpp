@@ -20,6 +20,8 @@
 #include <filesystem>
 #include <string>
 
+#include "taskflow/taskflow.hpp"
+
 namespace fs = std::filesystem;
 
 namespace buildcc::base {
@@ -38,6 +40,7 @@ public:
 
   const fs::path &GetHeaderPath() const { return header_path_; }
   const fs::path &GetCompilePath() const { return compile_path_; }
+  const tf::Task &GetTask() const { return task_; }
 
 private:
   // Each target only has only 1 PCH file
@@ -55,6 +58,8 @@ private:
   fs::path header_path_;
   fs::path compile_path_;
   std::string command_;
+
+  tf::Task task_;
 };
 
 } // namespace buildcc::base

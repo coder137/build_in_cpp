@@ -386,7 +386,6 @@ private:
   Pch pch_;
 
   tf::Taskflow tf_;
-  tf::Task pch_task_;
   tf::Task compile_task_;
   tf::Task link_task_;
 };
