@@ -35,21 +35,19 @@ constexpr const char *const kLinkTaskName = "Target";
 
 namespace buildcc::base {
 
-void Target::PchTask() {
-  env::log_trace(name_, __FUNCTION__);
-
-  pch_task_ = tf_.emplace([&](tf::Subflow &subflow) {
-    BuildPchCompile();
+void Pch::PchTask() {
+  task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
+    BuildCompile();
 
     // For Graph generation
-    for (const auto &p : GetCurrentPchFiles()) {
+    for (const auto &p : target_.GetCurrentPchFiles()) {
       std::string name =
           p.lexically_relative(env::get_project_root_dir()).string();
       std::replace(name.begin(), name.end(), '\\', '/');
       subflow.placeholder().name(name);
     }
   });
-  pch_task_.name(kPchTaskName);
+  task_.name(kPchTaskName);
 }
 
 void Target::ObjectTask() {
@@ -92,8 +90,8 @@ void Target::TargetTask() {
 
   // Only add if not empty
   // PCH may not be used
-  if (!pch_task_.empty()) {
-    compile_task_.succeed(pch_task_);
+  if (!pch_.GetTask().empty()) {
+    compile_task_.succeed(pch_.GetTask());
   }
   link_task_.succeed(compile_task_);
 }

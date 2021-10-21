@@ -30,6 +30,7 @@
 #include "target/builder_interface.h"
 
 // Friend
+#include "target/friend/compile_pch.h"
 #include "target/friend/file_extension.h"
 
 // Internal
@@ -103,7 +104,7 @@ public:
                          target_path_relative_to_root),
         target_build_dir_(fs::path(env::get_project_build_dir()) /
                           toolchain.GetName() / name),
-        loader_(name, target_build_dir_), ext_(*this) {
+        loader_(name, target_build_dir_), ext_(*this), pch_(*this) {
     Initialize();
   }
   virtual ~Target() {}
@@ -190,16 +191,8 @@ public:
   // we can cache these variables during Target construction
   fs::path GetTargetPath() const { return ConstructTargetPath(); }
 
-  // TODO, Make these construct APIs
-  fs::path GetPchHeaderPath() const {
-    return target_build_dir_ /
-           fmt::format("buildcc_pch{}", config_.pch_header_ext);
-  }
-  // Each target only has only 1 PCH file
-  fs::path GetPchCompilePath() const {
-    return GetPchHeaderPath().replace_extension(
-        fmt::format("{}{}", config_.pch_header_ext, config_.pch_compile_ext));
-  }
+  const fs::path &GetPchHeaderPath() const { return pch_.GetHeaderPath(); }
+  const fs::path &GetPchCompilePath() const { return pch_.GetCompilePath(); }
 
   // Const references
 
@@ -283,6 +276,7 @@ public:
 
 private:
   friend class FileExt;
+  friend class Pch;
 
 private:
   struct OutputInfo {
@@ -308,13 +302,11 @@ private:
   void UnlockedAfterBuild() const;
 
   // Build
-  void BuildPchCompile();
   void BuildObjectCompile(std::vector<fs::path> &source_files,
                           std::vector<fs::path> &dummy_source_files);
   void BuildTargetLink();
 
   //
-  void PrePchCompile();
   void PreObjectCompile();
   void PreTargetLink();
 
@@ -335,7 +327,6 @@ private:
       const std::unordered_set<std::string> &current_external_libs);
 
   // Tasks
-  void PchTask();
   void ObjectTask();
   void TargetTask();
 
@@ -357,7 +348,7 @@ private:
   // Construct
   fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
   fs::path ConstructTargetPath() const;
-  std::string ConstructPchCompileCommand() const;
+
   std::string
   ConstructCompileCommand(const fs::path &absolute_current_source) const;
   std::string ConstructLinkCommand() const;
@@ -384,7 +375,6 @@ private:
   // Not used for serialization
   // NOTE, Always store the absolute source path -> absolute compiled source
   // path here
-  OutputInfo pch_file_;
   std::unordered_map<fs::path, OutputInfo, internal::PathHash> object_files_;
   OutputInfo target_file_;
 
@@ -393,9 +383,9 @@ private:
 
   // Friend
   FileExt ext_;
+  Pch pch_;
 
   tf::Taskflow tf_;
-  tf::Task pch_task_;
   tf::Task compile_task_;
   tf::Task link_task_;
 };

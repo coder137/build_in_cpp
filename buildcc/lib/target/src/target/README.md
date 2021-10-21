@@ -54,6 +54,7 @@
 ## Target friend
 
 - [x] file_extension.cpp
+- [x] compile_pch.cpp
 
 ## Action on Target
 
