@@ -13,7 +13,7 @@ add_library(mock_target STATIC
 
     # Target friend
     src/target/friend/file_extension.cpp
-    src/target/friend/pch.cpp
+    src/target/friend/compile_pch.cpp
 
     # Target
     src/target/target.cpp
