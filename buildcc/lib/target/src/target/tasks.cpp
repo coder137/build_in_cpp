@@ -35,7 +35,7 @@ constexpr const char *const kLinkTaskName = "Target";
 
 namespace buildcc::base {
 
-void Pch::PchTask() {
+void Pch::Task() {
   task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
     BuildCompile();
 

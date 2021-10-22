@@ -36,7 +36,7 @@ public:
 
   // NOTE, These APIs should be called inside `Target::Build`
   void CacheCompileCommand();
-  void PchTask();
+  void Task();
 
   const fs::path &GetHeaderPath() const { return header_path_; }
   const fs::path &GetCompilePath() const { return compile_path_; }

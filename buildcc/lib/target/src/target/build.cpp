@@ -89,7 +89,7 @@ void Target::Build() {
     });
 
     pch_.CacheCompileCommand();
-    pch_.PchTask();
+    pch_.Task();
   } else {
     command_.AddDefaultArguments({
         {kPchObjectFlags, ""},
