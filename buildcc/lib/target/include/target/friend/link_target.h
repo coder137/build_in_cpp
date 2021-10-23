@@ -20,7 +20,6 @@
 #include <filesystem>
 #include <string>
 
-#include "taskflow/core/task.hpp"
 #include "taskflow/taskflow.hpp"
 
 namespace fs = std::filesystem;
