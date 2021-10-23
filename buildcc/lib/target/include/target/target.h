@@ -30,6 +30,7 @@
 #include "target/builder_interface.h"
 
 // Friend
+#include "target/friend/compile_object.h"
 #include "target/friend/compile_pch.h"
 #include "target/friend/file_extension.h"
 
@@ -104,7 +105,8 @@ public:
                          target_path_relative_to_root),
         target_build_dir_(fs::path(env::get_project_build_dir()) /
                           toolchain.GetName() / name),
-        loader_(name, target_build_dir_), ext_(*this), pch_(*this) {
+        loader_(name, target_build_dir_), ext_(*this), pch_(*this),
+        compile_object_(*this) {
     Initialize();
   }
   virtual ~Target() {}
@@ -252,7 +254,7 @@ public:
 
   const std::string &GetCompileCommand(const fs::path &source) const {
     UnlockedAfterBuild();
-    return GetObjectInfo(source).command;
+    return compile_object_.GetObjectData(source).command;
   }
   const std::string &GetLinkCommand() const {
     UnlockedAfterBuild();
@@ -262,10 +264,6 @@ public:
   tf::Taskflow &GetTaskflow() {
     UnlockedAfterBuild();
     return tf_;
-  }
-  tf::Task &GetCompileTask() {
-    UnlockedAfterBuild();
-    return compile_task_;
   }
   tf::Task &GetLinkTask() {
     UnlockedAfterBuild();
@@ -277,6 +275,7 @@ public:
 private:
   friend class FileExt;
   friend class Pch;
+  friend class CompileObject;
 
 private:
   struct OutputInfo {
@@ -302,18 +301,10 @@ private:
   void UnlockedAfterBuild() const;
 
   // Build
-  void BuildObjectCompile(std::vector<fs::path> &source_files,
-                          std::vector<fs::path> &dummy_source_files);
   void BuildTargetLink();
 
   //
-  void PreObjectCompile();
   void PreTargetLink();
-
-  // Compile
-  void CompileSources(std::vector<fs::path> &source_files);
-  void RecompileSources(std::vector<fs::path> &source_files,
-                        std::vector<fs::path> &dummy_source_files);
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
@@ -327,7 +318,6 @@ private:
       const std::unordered_set<std::string> &current_external_libs);
 
   // Tasks
-  void ObjectTask();
   void TargetTask();
 
   // Fbs
@@ -349,13 +339,8 @@ private:
   fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
   fs::path ConstructTargetPath() const;
 
-  std::string
-  ConstructCompileCommand(const fs::path &absolute_current_source) const;
   std::string ConstructLinkCommand() const;
 
-  internal::fs_unordered_set GetCompiledSources() const;
-
-  const OutputInfo &GetObjectInfo(const fs::path &source) const;
   const OutputInfo &GetTargetInfo() const { return target_file_; }
 
 private:
@@ -369,24 +354,24 @@ private:
   fs::path target_build_dir_;
   internal::TargetLoader loader_;
 
+  // Friend
+  FileExt ext_;
+  // TODO, Rename to CompilePch
+  Pch pch_;
+  CompileObject compile_object_;
+
   // Used for serialization
   internal::TargetStorer storer_;
 
   // Not used for serialization
   // NOTE, Always store the absolute source path -> absolute compiled source
   // path here
-  std::unordered_map<fs::path, OutputInfo, internal::PathHash> object_files_;
   OutputInfo target_file_;
 
   State state_;
   Command command_;
 
-  // Friend
-  FileExt ext_;
-  Pch pch_;
-
   tf::Taskflow tf_;
-  tf::Task compile_task_;
   tf::Task link_task_;
 };
 
