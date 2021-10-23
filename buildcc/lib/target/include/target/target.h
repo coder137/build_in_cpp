@@ -105,7 +105,7 @@ public:
                          target_path_relative_to_root),
         target_build_dir_(fs::path(env::get_project_build_dir()) /
                           toolchain.GetName() / name),
-        loader_(name, target_build_dir_), ext_(*this), pch_(*this),
+        loader_(name, target_build_dir_), ext_(*this), compile_pch_(*this),
         compile_object_(*this) {
     Initialize();
   }
@@ -193,8 +193,12 @@ public:
   // we can cache these variables during Target construction
   fs::path GetTargetPath() const { return ConstructTargetPath(); }
 
-  const fs::path &GetPchHeaderPath() const { return pch_.GetHeaderPath(); }
-  const fs::path &GetPchCompilePath() const { return pch_.GetCompilePath(); }
+  const fs::path &GetPchHeaderPath() const {
+    return compile_pch_.GetHeaderPath();
+  }
+  const fs::path &GetPchCompilePath() const {
+    return compile_pch_.GetCompilePath();
+  }
 
   // Const references
 
@@ -274,7 +278,7 @@ public:
 
 private:
   friend class FileExt;
-  friend class Pch;
+  friend class CompilePch;
   friend class CompileObject;
 
 private:
@@ -357,7 +361,7 @@ private:
   // Friend
   FileExt ext_;
   // TODO, Rename to CompilePch
-  Pch pch_;
+  CompilePch compile_pch_;
   CompileObject compile_object_;
 
   // Used for serialization

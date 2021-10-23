@@ -35,7 +35,7 @@ constexpr const char *const kLinkTaskName = "Target";
 
 namespace buildcc::base {
 
-void Pch::Task() {
+void CompilePch::Task() {
   task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
     BuildCompile();
 
@@ -88,8 +88,8 @@ void Target::TargetTask() {
 
   // Only add if not empty
   // PCH may not be used
-  if (!pch_.GetTask().empty()) {
-    compile_object_.GetTask().succeed(pch_.GetTask());
+  if (!compile_pch_.GetTask().empty()) {
+    compile_object_.GetTask().succeed(compile_pch_.GetTask());
   }
   link_task_.succeed(compile_object_.GetTask());
 }

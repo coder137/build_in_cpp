@@ -88,8 +88,8 @@ void Target::Build() {
         {kPchObjectFlags, internal::aggregate(GetCurrentPchObjectFlags())},
     });
 
-    pch_.CacheCompileCommand();
-    pch_.Task();
+    compile_pch_.CacheCompileCommand();
+    compile_pch_.Task();
   } else {
     command_.AddDefaultArguments({
         {kPchObjectFlags, ""},

@@ -62,11 +62,11 @@ namespace buildcc::base {
 
 // PUBLIC
 
-void Pch::CacheCompileCommand() { command_ = ConstructCompileCommand(); }
+void CompilePch::CacheCompileCommand() { command_ = ConstructCompileCommand(); }
 
 // PRIVATE
 
-void Pch::BuildCompile() {
+void CompilePch::BuildCompile() {
   PreCompile();
 
   const auto &loader = target_.loader_;
@@ -100,18 +100,18 @@ void Pch::BuildCompile() {
   }
 }
 
-fs::path Pch::ConstructHeaderPath() const {
+fs::path CompilePch::ConstructHeaderPath() const {
   return target_.target_build_dir_ /
          fmt::format("buildcc_pch{}", target_.GetConfig().pch_header_ext);
 }
 
-fs::path Pch::ConstructCompilePath() const {
+fs::path CompilePch::ConstructCompilePath() const {
   return ConstructHeaderPath().replace_extension(
       fmt::format("{}{}", target_.GetConfig().pch_header_ext,
                   target_.GetConfig().pch_compile_ext));
 }
 
-std::string Pch::ConstructCompileCommand() const {
+std::string CompilePch::ConstructCompileCommand() const {
   const std::string compiler = target_.GetState().contains_cpp_src
                                    ? target_.GetToolchain().GetCppCompiler()
                                    : target_.GetToolchain().GetCCompiler();
@@ -133,7 +133,7 @@ std::string Pch::ConstructCompileCommand() const {
                                     });
 }
 
-void Pch::PreCompile() {
+void CompilePch::PreCompile() {
   target_.storer_.current_header_files.Convert();
 
   target_.storer_.current_pch_files.Convert();
