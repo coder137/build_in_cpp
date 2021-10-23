@@ -4,14 +4,14 @@ namespace buildcc::base {
 
 void Pch::Task() { BuildCompile(); }
 
-void Target::ObjectTask() {
+void CompileObject::Task() {
   std::vector<fs::path> source_files;
   std::vector<fs::path> dummy_source_files;
 
   BuildObjectCompile(source_files, dummy_source_files);
 
   for (const auto &s : source_files) {
-    bool success = Command::Execute(GetCompileCommand(s));
+    bool success = Command::Execute(GetObjectData(s).command);
     env::assert_fatal(success, "Could not compile source");
   }
 }

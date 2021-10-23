@@ -50,10 +50,8 @@ void Pch::Task() {
   task_.name(kPchTaskName);
 }
 
-void Target::ObjectTask() {
-  env::log_trace(name_, __FUNCTION__);
-
-  compile_task_ = tf_.emplace([&](tf::Subflow &subflow) {
+void CompileObject::Task() {
+  compile_task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
     std::vector<fs::path> source_files;
     std::vector<fs::path> dummy_source_files;
 
@@ -65,7 +63,7 @@ void Target::ObjectTask() {
       std::replace(name.begin(), name.end(), '\\', '/');
       (void)subflow
           .emplace([this, s]() {
-            bool success = Command::Execute(GetCompileCommand(s));
+            bool success = Command::Execute(GetObjectData(s).command);
             env::assert_fatal(success, "Could not compile source");
           })
           .name(name);
@@ -91,9 +89,9 @@ void Target::TargetTask() {
   // Only add if not empty
   // PCH may not be used
   if (!pch_.GetTask().empty()) {
-    compile_task_.succeed(pch_.GetTask());
+    compile_object_.GetTask().succeed(pch_.GetTask());
   }
-  link_task_.succeed(compile_task_);
+  link_task_.succeed(compile_object_.GetTask());
 }
 
 } // namespace buildcc::base
