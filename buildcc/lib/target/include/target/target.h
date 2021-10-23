@@ -33,6 +33,7 @@
 #include "target/friend/compile_object.h"
 #include "target/friend/compile_pch.h"
 #include "target/friend/file_extension.h"
+#include "target/friend/link_target.h"
 
 // Internal
 #include "target/generator.h"
@@ -106,7 +107,7 @@ public:
         target_build_dir_(fs::path(env::get_project_build_dir()) /
                           toolchain.GetName() / name),
         loader_(name, target_build_dir_), ext_(*this), compile_pch_(*this),
-        compile_object_(*this) {
+        compile_object_(*this), link_target_(*this) {
     Initialize();
   }
   virtual ~Target() {}
@@ -187,12 +188,7 @@ public:
   // NOTE, We are constructing the path
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
 
-  // ! FIXME, We cannot cache this path during Constructor initialization phase
-  // because `target_ext_` is supplied later.
-  // TODO, Add Config to Constructor for default values (public members) so that
-  // we can cache these variables during Target construction
-  fs::path GetTargetPath() const { return ConstructTargetPath(); }
-
+  const fs::path &GetTargetPath() const { return link_target_.GetOutput(); }
   const fs::path &GetPchHeaderPath() const {
     return compile_pch_.GetHeaderPath();
   }
@@ -262,16 +258,12 @@ public:
   }
   const std::string &GetLinkCommand() const {
     UnlockedAfterBuild();
-    return GetTargetInfo().command;
+    return link_target_.GetCommand();
   }
 
   tf::Taskflow &GetTaskflow() {
     UnlockedAfterBuild();
     return tf_;
-  }
-  tf::Task &GetLinkTask() {
-    UnlockedAfterBuild();
-    return link_task_;
   }
 
   // TODO, Add more getters
@@ -280,16 +272,7 @@ private:
   friend class FileExt;
   friend class CompilePch;
   friend class CompileObject;
-
-private:
-  struct OutputInfo {
-    fs::path output;
-    std::string command;
-
-    OutputInfo() {}
-    OutputInfo(const fs::path &o, const std::string &c)
-        : output(o), command(c) {}
-  };
+  friend class LinkTarget;
 
 private:
   void Initialize();
@@ -304,12 +287,6 @@ private:
   // Expects lock_ == true
   void UnlockedAfterBuild() const;
 
-  // Build
-  void BuildTargetLink();
-
-  //
-  void PreTargetLink();
-
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
                     const internal::path_unordered_set &current_path);
@@ -320,9 +297,6 @@ private:
   void RecheckExternalLib(
       const std::unordered_set<std::string> &previous_external_libs,
       const std::unordered_set<std::string> &current_external_libs);
-
-  // Tasks
-  void TargetTask();
 
   // Fbs
   bool Store() override;
@@ -341,11 +315,8 @@ private:
 
   // Construct
   fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
-  fs::path ConstructTargetPath() const;
 
-  std::string ConstructLinkCommand() const;
-
-  const OutputInfo &GetTargetInfo() const { return target_file_; }
+  void TaskDeps();
 
 private:
   // Constructor defined
@@ -360,23 +331,15 @@ private:
 
   // Friend
   FileExt ext_;
-  // TODO, Rename to CompilePch
   CompilePch compile_pch_;
   CompileObject compile_object_;
+  LinkTarget link_target_;
 
   // Used for serialization
   internal::TargetStorer storer_;
-
-  // Not used for serialization
-  // NOTE, Always store the absolute source path -> absolute compiled source
-  // path here
-  OutputInfo target_file_;
-
   State state_;
   Command command_;
-
   tf::Taskflow tf_;
-  tf::Task link_task_;
 };
 
 } // namespace buildcc::base

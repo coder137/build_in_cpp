@@ -21,9 +21,11 @@ set(TARGET_SRCS
     src/target/friend/file_extension.cpp
     src/target/friend/compile_pch.cpp
     src/target/friend/compile_object.cpp
+    src/target/friend/link_target.cpp
     include/target/friend/file_extension.h
     include/target/friend/compile_pch.h
     include/target/friend/compile_object.h
+    include/target/friend/link_target.h
 
     # Target
     src/target/target.cpp
@@ -42,7 +44,6 @@ set(TARGET_SRCS
 
     src/target/recheck_states.cpp
 
-    src/target/link_target.cpp
     src/target/build.cpp
     src/target/tasks.cpp
 )

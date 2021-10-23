@@ -15,6 +15,7 @@ add_library(mock_target STATIC
     src/target/friend/file_extension.cpp
     src/target/friend/compile_pch.cpp
     src/target/friend/compile_object.cpp
+    src/target/friend/link_target.cpp
 
     # Target
     src/target/target.cpp
@@ -28,7 +29,6 @@ add_library(mock_target STATIC
     src/target/flags.cpp
     src/target/additional_deps.cpp
 
-    src/target/link_target.cpp
     src/target/build.cpp
 
     # Target mocks

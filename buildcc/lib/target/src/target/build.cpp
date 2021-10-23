@@ -82,6 +82,7 @@ void Target::Build() {
   (void)loader_.Load();
 
   // PCH Compile
+  // TODO, Add state_ for pch
   if (!GetCurrentPchFiles().empty()) {
     command_.AddDefaultArguments({
         {kPchCompileFlags, internal::aggregate(GetCurrentPchCompileFlags())},
@@ -101,9 +102,11 @@ void Target::Build() {
   compile_object_.Task();
 
   // Link Command
-  // TODO, Update .output at Constructor
-  target_file_.command = ConstructLinkCommand();
-  TargetTask();
+  link_target_.CacheLinkCommand();
+  link_target_.Task();
+
+  // Target dependencies
+  TaskDeps();
 }
 
 // Private
