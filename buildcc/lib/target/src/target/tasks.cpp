@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include "target/friend/link_target.h"
 #include "target/target.h"
 
 #include <algorithm>
@@ -80,18 +81,17 @@ void CompileObject::Task() {
   compile_task_.name(kCompileTaskName);
 }
 
-void Target::TargetTask() {
-  env::log_trace(name_, __FUNCTION__);
+void LinkTarget::Task() {
+  task_ = target_.tf_.emplace([&]() { BuildLink(); });
+  task_.name(kLinkTaskName);
+}
 
-  link_task_ = tf_.emplace([&]() { BuildTargetLink(); });
-  link_task_.name(kLinkTaskName);
-
-  // Only add if not empty
-  // PCH may not be used
+void Target::TaskDeps() {
+  // NOTE, PCH may not be used
   if (!compile_pch_.GetTask().empty()) {
     compile_object_.GetTask().succeed(compile_pch_.GetTask());
   }
-  link_task_.succeed(compile_object_.GetTask());
+  link_target_.GetTask().succeed(compile_object_.GetTask());
 }
 
 } // namespace buildcc::base

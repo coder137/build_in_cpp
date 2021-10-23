@@ -16,6 +16,8 @@ void CompileObject::Task() {
   }
 }
 
-void Target::TargetTask() { BuildTargetLink(); }
+void LinkTarget::Task() { BuildLink(); }
+
+void Target::TaskDeps() {}
 
 } // namespace buildcc::base
