@@ -46,13 +46,6 @@ bool IsValidTargetType(buildcc::base::Target::Type type) {
 
 namespace buildcc::base {
 
-fs::path Target::ConstructTargetPath() const {
-  fs::path path =
-      GetTargetBuildDir() / fmt::format("{}{}", name_, config_.target_ext);
-  path.make_preferred();
-  return path;
-}
-
 void Target::Initialize() {
   // Checks
   env::assert_fatal(
