@@ -28,8 +28,6 @@ namespace buildcc::base {
 
 // PUBLIC
 
-// TODO, Add to constructor
-
 void LinkTarget::CacheLinkCommand() {
   // Add compiled sources
   const std::string aggregated_compiled_sources =
