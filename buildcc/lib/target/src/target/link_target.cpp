@@ -28,7 +28,7 @@ namespace buildcc::base {
 std::string Target::ConstructLinkCommand() const {
   // Add compiled sources
   const std::string aggregated_compiled_sources =
-      internal::aggregate(GetCompiledSources());
+      internal::aggregate(compile_object_.GetCompiledSources());
 
   const std::string output_target =
       internal::Path::CreateNewPath(GetTargetPath()).GetPathAsString();

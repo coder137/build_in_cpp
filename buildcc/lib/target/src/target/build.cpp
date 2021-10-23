@@ -88,8 +88,8 @@ void Target::Build() {
         {kPchObjectFlags, internal::aggregate(GetCurrentPchObjectFlags())},
     });
 
-    pch_.CacheCompileCommand();
-    pch_.PchTask();
+    compile_pch_.CacheCompileCommand();
+    compile_pch_.Task();
   } else {
     command_.AddDefaultArguments({
         {kPchObjectFlags, ""},
@@ -97,12 +97,10 @@ void Target::Build() {
   }
 
   // Compile Command
-  // Link Command
-  for (auto &object_rel : object_files_) {
-    object_rel.second.command = ConstructCompileCommand(object_rel.first);
-  }
-  ObjectTask();
+  compile_object_.CacheCompileCommands();
+  compile_object_.Task();
 
+  // Link Command
   // TODO, Update .output at Constructor
   target_file_.command = ConstructLinkCommand();
   TargetTask();

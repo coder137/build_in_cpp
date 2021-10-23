@@ -42,8 +42,8 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
   const auto absolute_compiled_source =
       fs::path(absolute_output_filepath).make_preferred();
   fs::create_directories(absolute_compiled_source.parent_path());
-  object_files_.emplace(absolute_source,
-                        OutputInfo(absolute_compiled_source, ""));
+
+  compile_object_.AddObjectData(absolute_source, absolute_compiled_source);
 }
 
 void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
@@ -81,6 +81,37 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
       AddSourceAbsolute(p.path(), ConstructObjectPath(p.path()));
     }
   }
+}
+
+fs::path
+Target::ConstructObjectPath(const fs::path &absolute_source_file) const {
+  // Compute the relative compiled source path
+  fs::path relative =
+      absolute_source_file.lexically_relative(env::get_project_root_dir());
+
+  // - Check if out of root
+  // - Convert .. to __
+  // NOTE, Similar to how CMake handles out of root files
+  std::string relstr = relative.string();
+  if (relstr.find("..") != std::string::npos) {
+    // TODO, If unnecessary, remove this warning
+    env::log_warning(
+        name_,
+        fmt::format("Out of project root path detected for {} -> "
+                    "{}.\nConverting .. to __ but it is recommended to use the "
+                    "AddSourceAbsolute(abs_source_input, abs_obj_output) or "
+                    "GlobSourceAbsolute(abs_source_input, abs_obj_output) "
+                    "API if possible.",
+                    absolute_source_file.string(), relative.string()));
+    std::replace(relstr.begin(), relstr.end(), '.', '_');
+    relative = relstr;
+  }
+
+  // Compute relative object path
+  fs::path absolute_compiled_source = target_build_dir_ / relative;
+  absolute_compiled_source.replace_filename(fmt::format(
+      "{}{}", absolute_source_file.filename().string(), config_.obj_ext));
+  return absolute_compiled_source;
 }
 
 } // namespace buildcc::base

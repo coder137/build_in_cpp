@@ -28,19 +28,19 @@ namespace buildcc::base {
 
 class Target;
 
-class Pch {
+class CompilePch {
 public:
-  Pch(Target &target)
+  CompilePch(Target &target)
       : target_(target), header_path_(ConstructHeaderPath()),
         compile_path_(ConstructCompilePath()) {}
 
   // NOTE, These APIs should be called inside `Target::Build`
   void CacheCompileCommand();
-  void PchTask();
+  void Task();
 
   const fs::path &GetHeaderPath() const { return header_path_; }
   const fs::path &GetCompilePath() const { return compile_path_; }
-  const tf::Task &GetTask() const { return task_; }
+  tf::Task &GetTask() { return task_; }
 
 private:
   // Each target only has only 1 PCH file
