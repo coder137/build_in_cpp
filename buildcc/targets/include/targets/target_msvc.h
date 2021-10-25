@@ -17,6 +17,7 @@
 #ifndef TARGETS_TARGET_MSVC_H_
 #define TARGETS_TARGET_MSVC_H_
 
+#include "fmt/core.h"
 #include "target/target.h"
 
 #include "targets/target_config_interface.h"
@@ -34,20 +35,29 @@ constexpr const char *const kMsvcStaticLibExt = ".lib";
 constexpr const char *const kMsvcDynamicLibExt = ".lib";
 
 constexpr const char *const kMsvcObjExt = ".obj";
+constexpr const char *const kMsvcPchHeaderExt = ".h";
+constexpr const char *const kMsvcPchCompileExt = ".pch";
+
 constexpr const char *const kMsvcPrefixIncludeDir = "/I";
 constexpr const char *const kMsvcPrefixLibDir = "/LIBPATH:";
+
+constexpr const char *const kMsvcPchCompileCommand =
+    "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
+    "/Yc{input} /FI{input} /Fp{output} {pch_compile_flags} {compile_flags} "
+    "/Fo{pch_object_output} /c {input_source}";
 // TODO, Split this into individual CompileCommands if any differences occur
 constexpr const char *const kMsvcCompileCommand =
     "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
-    "{compile_flags} /Fo{output} /c {input}";
+    "{pch_object_flags} {compile_flags} /Fo{output} /c {input}";
 constexpr const char *const kMsvcExecutableLinkCommand =
     "{linker} {link_flags} {lib_dirs} /OUT:{output} {lib_deps} "
-    "{compiled_sources}";
+    "{compiled_sources} {pch_object_output}";
 constexpr const char *const kMsvcStaticLibLinkCommand =
-    "{archiver} {link_flags} /OUT:{output} {compiled_sources}";
+    "{archiver} {link_flags} /OUT:{output} {compiled_sources} "
+    "{pch_object_output}";
 constexpr const char *const kMsvcDynamicLibLinkCommand =
     "{linker} /DLL {link_flags} /OUT:{output}.dll /IMPLIB:{output} "
-    "{compiled_sources}";
+    "{compiled_sources} {pch_object_output}";
 
 class MsvcConfig {
 public:
@@ -72,8 +82,11 @@ private:
     base::Target::Config config;
     config.target_ext = target_ext;
     config.obj_ext = kMsvcObjExt;
+    config.pch_header_ext = kMsvcPchHeaderExt;
+    config.pch_compile_ext = kMsvcPchCompileExt;
     config.prefix_include_dir = kMsvcPrefixIncludeDir;
     config.prefix_lib_dir = kMsvcPrefixLibDir;
+    config.pch_command = kMsvcPchCompileCommand;
     config.compile_command = compile_command;
     config.link_command = link_command;
     return config;
@@ -85,6 +98,12 @@ inline void DefaultMsvcOptions(base::Target &target) {
   target.AddCppCompileFlag("/nologo");
   target.AddCppCompileFlag("/EHsc"); // TODO, Might need to remove this
   target.AddLinkFlag("/nologo");
+  target.AddPchObjectFlag(
+      fmt::format("/Yu{}", target.GetPchHeaderPath().string()));
+  target.AddPchObjectFlag(
+      fmt::format("/FI{}", target.GetPchHeaderPath().string()));
+  target.AddPchObjectFlag(
+      fmt::format("/Fp{}", target.GetPchCompilePath().string()));
 }
 
 class ExecutableTarget_msvc : public base::Target {
