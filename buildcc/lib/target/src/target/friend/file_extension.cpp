@@ -23,13 +23,13 @@ namespace buildcc::base {
 void FileExt::SetSourceState(Type type) {
   switch (type) {
   case FileExt::Type::Asm:
-    target_.state_.contains_asm_src = true;
+    target_.state_.contains_asm = true;
     break;
   case FileExt::Type::C:
-    target_.state_.contains_c_src = true;
+    target_.state_.contains_c = true;
     break;
   case FileExt::Type::Cpp:
-    target_.state_.contains_cpp_src = true;
+    target_.state_.contains_cpp = true;
     break;
   default:
     break;
