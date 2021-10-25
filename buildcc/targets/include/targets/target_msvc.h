@@ -17,7 +17,6 @@
 #ifndef TARGETS_TARGET_MSVC_H_
 #define TARGETS_TARGET_MSVC_H_
 
-#include "fmt/core.h"
 #include "target/target.h"
 
 #include "targets/target_config_interface.h"
