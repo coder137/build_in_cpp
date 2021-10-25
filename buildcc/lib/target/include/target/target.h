@@ -94,6 +94,7 @@ public:
   };
 
   struct State {
+    bool contains_pch{false};
     bool contains_asm_src{false};
     bool contains_c_src{false};
     bool contains_cpp_src{false};

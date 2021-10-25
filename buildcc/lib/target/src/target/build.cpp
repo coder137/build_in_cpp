@@ -83,8 +83,7 @@ void Target::Build() {
   (void)loader_.Load();
 
   // PCH Compile
-  // TODO, Add state_ for pch
-  if (!GetCurrentPchFiles().empty()) {
+  if (GetState().contains_pch) {
     command_.AddDefaultArguments({
         {kPchCompileFlags, internal::aggregate(GetCurrentPchCompileFlags())},
         {kPchObjectFlags, internal::aggregate(GetCurrentPchObjectFlags())},
