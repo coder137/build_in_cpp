@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#include "target/friend/link_target.h"
 #include "target/target.h"
 
 #include <algorithm>
