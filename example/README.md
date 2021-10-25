@@ -116,5 +116,7 @@ Multi hosts and multi targets
   - For super customized targets and toolchains 
 - [x] Generic
   - Select library type and target-toolchain type at runtime
+- [x] PCH
+  - Precompile header usage with GCC and MSVC compilers 
 - [ ] Debugging
 - [ ] Cross Compilation with Unit Testing
