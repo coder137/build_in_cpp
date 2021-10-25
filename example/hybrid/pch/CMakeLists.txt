@@ -27,11 +27,11 @@ add_custom_target(run_hybrid_pch_example_linux
 )
 
 # TODO, MSVC support
-# add_custom_target(run_hybrid_pch_example_win
-#     COMMAND hybrid_pch_example --help-all
-#     COMMAND hybrid_pch_example --config ${CMAKE_CURRENT_SOURCE_DIR}/build_win.toml
-#     # COMMAND dot -Tpng graph.dot -o graph.PNG
-#     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-#     DEPENDS hybrid_pch_example buildcc
-#     VERBATIM USES_TERMINAL
-# )
+add_custom_target(run_hybrid_pch_example_win
+    COMMAND hybrid_pch_example --help-all
+    COMMAND hybrid_pch_example --config ${CMAKE_CURRENT_SOURCE_DIR}/build_win.toml
+    # COMMAND dot -Tpng graph.dot -o graph.PNG
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    DEPENDS hybrid_pch_example buildcc
+    VERBATIM USES_TERMINAL
+)

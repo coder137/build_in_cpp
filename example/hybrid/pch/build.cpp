@@ -15,11 +15,9 @@ int main(int argc, char **argv) {
   // 1. Get arguments
   Args args;
   Args::ToolchainArg arg_gcc;
+  Args::ToolchainArg arg_msvc;
   args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
-
-  // TODO, PCH support
-  // Args::ToolchainArg arg_msvc;
-  // args.AddToolchain("msvc", "Generic msvc toolchain", arg_msvc);
+  args.AddToolchain("msvc", "Generic msvc toolchain", arg_msvc);
   args.Parse(argc, argv);
 
   // 2. Initialize your environment
@@ -31,31 +29,25 @@ int main(int argc, char **argv) {
   // 4. Build steps
   // Explicit toolchain - target pairs
   Toolchain_gcc gcc;
-  // Toolchain_msvc msvc;
+  Toolchain_msvc msvc;
 
   ExecutableTarget_gcc g_cppflags("cppflags", gcc, "files");
   ExecutableTarget_gcc g_cflags("cflags", gcc, "files");
-
-  // TODO, PCH support
-  // ExecutableTarget_msvc m_cppflags("cppflags", msvc, "files");
-  // ExecutableTarget_msvc m_cflags("cflags", msvc, "files");
+  ExecutableTarget_msvc m_cppflags("cppflags", msvc, "files");
+  ExecutableTarget_msvc m_cflags("cflags", msvc, "files");
 
   // Select your builds and tests using the .toml files
   reg.Build(arg_gcc.state, g_cppflags, cppflags_build_cb);
   reg.Build(arg_gcc.state, g_cflags, cflags_build_cb);
-
-  // TODO, PCH support
-  // reg.Build(arg_msvc.state, m_cppflags, cppflags_build_cb);
-  // reg.Build(arg_msvc.state, m_cflags, cflags_build_cb);
+  reg.Build(arg_msvc.state, m_cppflags, cppflags_build_cb);
+  reg.Build(arg_msvc.state, m_cflags, cflags_build_cb);
 
   // 5. Test steps
   // NOTE, For now they are just dummy callbacks
   reg.Test(arg_gcc.state, g_cppflags, [](base::Target &target) {});
   reg.Test(arg_gcc.state, g_cflags, [](base::Target &target) {});
-
-  // TODO, PCH support
-  // reg.Test(arg_msvc.state, m_cppflags, [](base::Target &target) {});
-  // reg.Test(arg_msvc.state, m_cflags, [](base::Target &target) {});
+  reg.Test(arg_msvc.state, m_cppflags, [](base::Target &target) {});
+  reg.Test(arg_msvc.state, m_cflags, [](base::Target &target) {});
 
   // 6. Build Target
   reg.RunBuild();
