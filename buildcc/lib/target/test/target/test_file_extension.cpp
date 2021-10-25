@@ -121,30 +121,30 @@ TEST(TargetFileExtensionTestGroup, SetSourceState) {
   // Use config defaults and test
   buildcc::base::FileExt ext(target);
 
-  CHECK_FALSE(target.GetState().contains_asm_src);
-  CHECK_FALSE(target.GetState().contains_c_src);
-  CHECK_FALSE(target.GetState().contains_cpp_src);
+  CHECK_FALSE(target.GetState().contains_asm);
+  CHECK_FALSE(target.GetState().contains_c);
+  CHECK_FALSE(target.GetState().contains_cpp);
 
   ext.SetSourceState(buildcc::base::FileExt::Type::Invalid);
   ext.SetSourceState(buildcc::base::FileExt::Type::Header);
-  CHECK_FALSE(target.GetState().contains_asm_src);
-  CHECK_FALSE(target.GetState().contains_c_src);
-  CHECK_FALSE(target.GetState().contains_cpp_src);
+  CHECK_FALSE(target.GetState().contains_asm);
+  CHECK_FALSE(target.GetState().contains_c);
+  CHECK_FALSE(target.GetState().contains_cpp);
 
   ext.SetSourceState(buildcc::base::FileExt::Type::Asm);
-  CHECK_TRUE(target.GetState().contains_asm_src);
-  CHECK_FALSE(target.GetState().contains_c_src);
-  CHECK_FALSE(target.GetState().contains_cpp_src);
+  CHECK_TRUE(target.GetState().contains_asm);
+  CHECK_FALSE(target.GetState().contains_c);
+  CHECK_FALSE(target.GetState().contains_cpp);
 
   ext.SetSourceState(buildcc::base::FileExt::Type::C);
-  CHECK_TRUE(target.GetState().contains_asm_src);
-  CHECK_TRUE(target.GetState().contains_c_src);
-  CHECK_FALSE(target.GetState().contains_cpp_src);
+  CHECK_TRUE(target.GetState().contains_asm);
+  CHECK_TRUE(target.GetState().contains_c);
+  CHECK_FALSE(target.GetState().contains_cpp);
 
   ext.SetSourceState(buildcc::base::FileExt::Type::Cpp);
-  CHECK_TRUE(target.GetState().contains_asm_src);
-  CHECK_TRUE(target.GetState().contains_c_src);
-  CHECK_TRUE(target.GetState().contains_cpp_src);
+  CHECK_TRUE(target.GetState().contains_asm);
+  CHECK_TRUE(target.GetState().contains_c);
+  CHECK_TRUE(target.GetState().contains_cpp);
 }
 
 int main(int ac, char **av) {

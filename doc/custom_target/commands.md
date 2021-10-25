@@ -34,10 +34,11 @@ See [build.cpp Target::Build API](../../buildcc/lib/target/src/target/build.cpp)
 - `archiver`: Archiver for Static Libraries
 - `linker`: Linker usually used during the Linking phase / Library creation
 
-> NOTE, When PCH is not used these flags are aggregated to an empty string ("")
+> NOTE, When PCH is not used these options are aggregated to an empty string ("")
 
 - `pch_compile_flags`: PCH flags applied when compiling a PCH
 - `pch_object_flags`: PCH flags applied to object files after compiling a PCH
+- `pch_object_output`: [Specific use case] Certain compilers (MSVC) require source/object with the header inputs. `input_source` (mentioned below) is added locally during `pch_command` translation whereas `pch_object_output` is added globally. (However the `pch_object_output` will most likely be used by `link_command` translation if added by the user.)
 
 # PCH Specific
 
@@ -47,6 +48,7 @@ See [compile_pch.cpp Target::ConstructPchCompileCommand API](../../buildcc/lib/t
 - `compile_flags`: Selects CPP flags if project contains CPP source else C flags
 - `output`: PCH output path
 - `input`: PCH input generated path (Headers are aggregated into a .h file)
+- `input_source`: PCH input source generated path (Dummy source file with corresponding extension, .c for C source and .cpp for C++ source)
 
 # Compile Specific
 

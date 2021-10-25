@@ -51,6 +51,11 @@
 
 namespace buildcc::base {
 
+// TODO, Discuss if this should be marked final
+// For specialized target-toolchain classes we could force composition instead
+// of the inheritance pattern
+// NOTE, base::Target is meant to be a blank slate which can be customized by
+// the specialized target-toolchain classes
 class Target : public BuilderInterface {
 
 public:
@@ -89,9 +94,10 @@ public:
   };
 
   struct State {
-    bool contains_asm_src{false};
-    bool contains_c_src{false};
-    bool contains_cpp_src{false};
+    bool contains_pch{false};
+    bool contains_asm{false};
+    bool contains_c{false};
+    bool contains_cpp{false};
     bool build{false};
     bool lock{false};
   };

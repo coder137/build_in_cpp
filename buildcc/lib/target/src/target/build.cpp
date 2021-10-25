@@ -33,6 +33,7 @@ constexpr const char *const kLinkFlags = "link_flags";
 
 constexpr const char *const kPchCompileFlags = "pch_compile_flags";
 constexpr const char *const kPchObjectFlags = "pch_object_flags";
+constexpr const char *const kPchObjectOutput = "pch_object_output";
 
 constexpr const char *const kAsmCompiler = "asm_compiler";
 constexpr const char *const kCCompiler = "c_compiler";
@@ -51,10 +52,10 @@ namespace buildcc::base {
 // * Link
 // Library dependencies
 void Target::Build() {
+  env::log_trace(name_, __FUNCTION__);
+
   LockedAfterBuild();
   Lock();
-
-  env::log_trace(name_, __FUNCTION__);
 
   // Taskflow updates
   tf_.name(fmt::format("[{}] {}", toolchain_.GetName(), name_));
@@ -82,18 +83,20 @@ void Target::Build() {
   (void)loader_.Load();
 
   // PCH Compile
-  // TODO, Add state_ for pch
-  if (!GetCurrentPchFiles().empty()) {
+  if (GetState().contains_pch) {
     command_.AddDefaultArguments({
         {kPchCompileFlags, internal::aggregate(GetCurrentPchCompileFlags())},
         {kPchObjectFlags, internal::aggregate(GetCurrentPchObjectFlags())},
+        {kPchObjectOutput, compile_pch_.GetObjectPath().string()},
     });
 
     compile_pch_.CacheCompileCommand();
     compile_pch_.Task();
   } else {
     command_.AddDefaultArguments({
+        {kPchCompileFlags, ""},
         {kPchObjectFlags, ""},
+        {kPchObjectOutput, ""},
     });
   }
 
