@@ -50,6 +50,8 @@ jobs:
           cmakeBuildDirectory: ${{ env.build }}
           # Ruleset file that will determine what checks will be run
           ruleset: NativeRecommendedRules.ruleset
+          ignoredIncludePaths: build/buildcc/schema/generated
+          ignoreSystemHeaders: true
 
       # Upload SARIF file to GitHub Code Scanning Alerts
       - name: Upload SARIF to GitHub
