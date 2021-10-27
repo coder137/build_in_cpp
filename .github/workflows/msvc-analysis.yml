@@ -10,15 +10,18 @@ name: Microsoft C++ Code Analysis
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   schedule:
-    - cron: '43 11 * * 4'
+    - cron: "43 11 * * 4"
 
 env:
   # Path to the CMake build directory.
-  build: '${{ github.workspace }}/build'
+  BUILD_TYPE: Release
+  BUILD_MSVC_PRESET: msvc_dev_all
+  BUILD_FOLDER_MSVC_DEV_ALL: _build_msvc_dev_all
+  build: "${{ github.workspace }}/build"
 
 jobs:
   analyze:
@@ -28,9 +31,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - uses: ilammy/msvc-dev-cmd@v1
 
       - name: Configure CMake
-        run: cmake -B ${{ env.build }}
+        run: |
+          cmake --list-presets
+          cmake --preset=${{env.BUILD_MSVC_PRESET}} -B ${{env.build}}
 
       # Build is not required unless generated source files are used
       # - name: Build CMake
