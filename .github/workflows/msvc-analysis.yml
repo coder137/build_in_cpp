@@ -38,9 +38,9 @@ jobs:
           cmake --list-presets
           cmake --preset=${{env.BUILD_MSVC_PRESET}} -B ${{ env.build }}
 
-      # Build is not required unless generated source files are used
-      # - name: Build CMake
-      #   run: cmake --build ${{ env.build }}
+      # NOTE, We need to build since generated header files are used
+      - name: Build CMake
+        run: cmake --build ${{ env.build }}
 
       - name: Initialize MSVC Code Analysis
         uses: microsoft/msvc-code-analysis-action@04825f6d9e00f87422d6bf04e1a38b1f3ed60d99
@@ -50,6 +50,7 @@ jobs:
           cmakeBuildDirectory: ${{ env.build }}
           # Ruleset file that will determine what checks will be run
           ruleset: NativeRecommendedRules.ruleset
+          ignoredTargetPaths: third_party/flatbuffers;third_party/CLI11;third_party/cpputest;third_party/fmt;third_party/spdlog;third_party/taskflow;third_party/tiny-process-library
           ignoredIncludePaths: build/buildcc/schema/generated
           ignoreSystemHeaders: true
 

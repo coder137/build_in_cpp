@@ -126,7 +126,7 @@
             "binaryDir": "${sourceDir}/_build_msvc_analysis",
             "cacheVariables": {
                 "BUILDCC_INSTALL": false,
-                "BUILDCC_FLATBUFFERS_FLATC": false,
+                "BUILDCC_FLATBUFFERS_FLATC": true,
                 "BUILDCC_BUILD_AS_SINGLE_LIB": true,
                 "BUILDCC_BUILD_AS_INTERFACE": false,
                 "BUILDCC_PRECOMPILE_HEADERS": false,
