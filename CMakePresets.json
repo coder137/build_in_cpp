@@ -117,6 +117,26 @@
                 "BUILDCC_DOCUMENTATION": false,
                 "BUILDCC_NO_DEPRECATED": false
             }
+        },
+        {
+            "name": "msvc_analysis",
+            "displayName": "MSVC Analysis",
+            "description": "MSVC Analysis for CI/CD",
+            "generator": "Visual Studio 16 2019",
+            "binaryDir": "${sourceDir}/_build_msvc_analysis",
+            "cacheVariables": {
+                "BUILDCC_INSTALL": false,
+                "BUILDCC_FLATBUFFERS_FLATC": false,
+                "BUILDCC_BUILD_AS_SINGLE_LIB": true,
+                "BUILDCC_BUILD_AS_INTERFACE": false,
+                "BUILDCC_PRECOMPILE_HEADERS": false,
+                "BUILDCC_EXAMPLES": false,
+                "BUILDCC_TESTING": false,
+                "BUILDCC_CLANGTIDY": false,
+                "BUILDCC_CPPCHECK": false,
+                "BUILDCC_DOCUMENTATION": false,
+                "BUILDCC_NO_DEPRECATED": false
+            }
         }
     ],
     "buildPresets": [
