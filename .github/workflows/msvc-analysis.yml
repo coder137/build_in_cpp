@@ -34,12 +34,12 @@ jobs:
         with:
           submodules: true
 
-      - uses: ilammy/msvc-dev-cmd@v1
+      # - uses: ilammy/msvc-dev-cmd@v1
 
       - name: Configure CMake
         run: |
           cmake --list-presets
-          cmake --preset=${{env.BUILD_MSVC_PRESET}} -B ${{env.build}}
+          cmake --preset=${{env.BUILD_MSVC_PRESET}} -B ${{ env.build }}
 
       # Build is not required unless generated source files are used
       # - name: Build CMake
