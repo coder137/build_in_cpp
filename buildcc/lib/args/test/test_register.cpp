@@ -105,8 +105,8 @@ TEST(RegisterTestGroup, Register_Build) {
     buildcc::Args::ToolchainState state{false, false};
 
     buildcc::Register reg(args);
-    reg.Build(state, target,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        state, [](buildcc::base::Target &target) { (void)target; }, target);
   }
 
   {
@@ -114,8 +114,8 @@ TEST(RegisterTestGroup, Register_Build) {
 
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
-    reg.Build(state, target,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        state, [](buildcc::base::Target &target) { (void)target; }, target);
   }
 
   buildcc::env::deinit();
@@ -171,8 +171,9 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
   {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_depT");
-    reg.Build(trueState, dependency,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; },
+        dependency);
 
     CHECK_THROWS(std::exception, reg.Dep(target, dependency));
   }
@@ -181,8 +182,8 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
   {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
-    reg.Build(trueState, target,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
 
     CHECK_THROWS(std::exception, reg.Dep(target, dependency));
   }
@@ -192,10 +193,11 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     mock().expectNCalls(1, "BuildTask_depT");
-    reg.Build(trueState, target,
-              [](buildcc::base::Target &target) { (void)target; });
-    reg.Build(trueState, dependency,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; },
+        dependency);
 
     reg.Dep(target, dependency);
   }
@@ -246,10 +248,12 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
   // T0D0
   {
     buildcc::Register reg(args);
-    reg.Build(falseState, target,
-              [](buildcc::base::Target &target) { (void)target; });
-    reg.Build(falseState, dependency,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        falseState, [](buildcc::base::Target &target) { (void)target; },
+        target);
+    reg.Build(
+        falseState, [](buildcc::base::Target &target) { (void)target; },
+        dependency);
 
     reg.Dep(target, dependency);
   }
@@ -257,11 +261,13 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
   // T0D1
   {
     buildcc::Register reg(args);
-    reg.Build(falseState, target,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        falseState, [](buildcc::base::Target &target) { (void)target; },
+        target);
     mock().expectNCalls(1, "BuildTask_depT");
-    reg.Build(trueState, dependency,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; },
+        dependency);
 
     reg.Dep(target, dependency);
   }
@@ -270,10 +276,11 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
   {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
-    reg.Build(trueState, target,
-              [](buildcc::base::Target &target) { (void)target; });
-    reg.Build(falseState, dependency,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+    reg.Build(
+        falseState, [](buildcc::base::Target &target) { (void)target; },
+        dependency);
 
     reg.Dep(target, dependency);
   }
@@ -283,10 +290,11 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     mock().expectNCalls(1, "BuildTask_depT");
-    reg.Build(trueState, target,
-              [](buildcc::base::Target &target) { (void)target; });
-    reg.Build(trueState, dependency,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; },
+        dependency);
 
     reg.Dep(target, dependency);
   }
@@ -333,10 +341,11 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     mock().expectNCalls(1, "BuildTask_depT");
-    reg.Build(trueState, target,
-              [](buildcc::base::Target &target) { (void)target; });
-    reg.Build(trueState, dependency,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; },
+        dependency);
 
     reg.Dep(target, dependency);
     CHECK_THROWS(std::exception, reg.Dep(target, dependency));
@@ -349,12 +358,14 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
     mock().expectNCalls(1, "BuildTask_depT");
     mock().expectNCalls(1, "BuildTask_dep2T");
 
-    reg.Build(trueState, target,
-              [](buildcc::base::Target &target) { (void)target; });
-    reg.Build(trueState, dependency,
-              [](buildcc::base::Target &target) { (void)target; });
-    reg.Build(trueState, dependency2,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; },
+        dependency);
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; },
+        dependency2);
 
     reg.Dep(dependency, dependency2);
     reg.Dep(target, dependency);
@@ -406,10 +417,11 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     mock().expectNCalls(1, "BuildTask_depT");
-    reg.Build(trueState, target,
-              [](buildcc::base::Target &target) { (void)target; });
-    reg.Build(trueState, dependency,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; },
+        dependency);
 
     reg.Dep(target, dependency);
     CHECK_THROWS(std::exception, reg.Dep(dependency, target));
@@ -422,12 +434,14 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
     mock().expectNCalls(1, "BuildTask_depT");
     mock().expectNCalls(1, "BuildTask_dep2T");
 
-    reg.Build(trueState, target,
-              [](buildcc::base::Target &target) { (void)target; });
-    reg.Build(trueState, dependency,
-              [](buildcc::base::Target &target) { (void)target; });
-    reg.Build(trueState, dependency2,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; },
+        dependency);
+    reg.Build(
+        trueState, [](buildcc::base::Target &target) { (void)target; },
+        dependency2);
 
     reg.Dep(dependency, dependency2);
     reg.Dep(target, dependency);
@@ -514,8 +528,9 @@ TEST(RegisterTestGroup, Register_Test) {
   {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
-    reg.Build(stateSuccess, target,
-              [](buildcc::base::Target &target) { (void)target; });
+    reg.Build(
+        stateSuccess, [](buildcc::base::Target &target) { (void)target; },
+        target);
     reg.Test(stateSuccess, target, [](buildcc::base::Target &target) {
       (void)target;
       mock().actualCall("Register::Test::Callback");
