@@ -15,6 +15,7 @@
  */
 
 #include "args/register.h"
+#include "env/logging.h"
 
 namespace buildcc {
 
@@ -27,6 +28,8 @@ tf::Task Register::BuildTask(base::Target &target) {
 }
 
 void Register::RunBuild() {
+  env::log_info(__FUNCTION__, fmt::format("Running with {} workers",
+                                          executor_.num_workers()));
   executor_.run(targets_.tf);
   executor_.wait_for_all();
 }

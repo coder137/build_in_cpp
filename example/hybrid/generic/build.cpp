@@ -54,14 +54,13 @@ int main(int argc, char **argv) {
   // Toolchain + Generic Target
   base::Toolchain toolchain = custom_toolchain.ConstructToolchain();
   Target_generic foolib_target("libfoo", default_lib_type, toolchain, "");
-  reg.Build(custom_toolchain.state, foolib_target, foolib_build_cb);
+  reg.Build(custom_toolchain.state, foolib_build_cb, foolib_target);
 
   // Target specific settings
   Target_generic generic_target("generic", base::Target::Type::Executable,
                                 toolchain, "src");
-  auto g_cb = std::bind(generic_build_cb, std::placeholders::_1,
-                        std::ref(foolib_target));
-  reg.Build(custom_toolchain.state, generic_target, g_cb);
+  reg.Build(custom_toolchain.state, generic_build_cb, generic_target,
+            foolib_target);
   reg.Dep(generic_target, foolib_target);
 
   // 5. Test steps

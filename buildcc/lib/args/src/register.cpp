@@ -34,20 +34,6 @@ void Register::Clean(const std::function<void(void)> &clean_cb) {
   }
 }
 
-void Register::Build(const Args::ToolchainState &toolchain_state,
-                     base::Target &target,
-                     const std::function<void(base::Target &)> &build_cb) {
-  tf::Task task;
-  if (toolchain_state.build) {
-    build_cb(target);
-    task = BuildTask(target);
-  }
-  const bool target_stored =
-      targets_.store.emplace(target.GetBinaryPath(), task).second;
-  env::assert_fatal(target_stored, fmt::format("Could not register target {}",
-                                               target.GetName()));
-}
-
 void Register::Dep(const base::Target &target, const base::Target &dependency) {
   //  empty tasks -> not built so skip
   const auto target_iter = targets_.store.find(target.GetBinaryPath());
@@ -114,7 +100,8 @@ void Register::Test(const Args::ToolchainState &toolchain_state,
 void Register::RunTest() {
   for (const auto &t : tests_) {
     env::log_info(__FUNCTION__,
-                  fmt::format("Testing \'{}\'", t.first.string()));
+                  fmt::format("Testing \'{}\'",
+                              t.second.target_.GetTargetPath().string()));
     t.second.cb_(t.second.target_);
   }
 }
