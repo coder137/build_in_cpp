@@ -38,11 +38,23 @@ public:
    * @brief Register the Target to be built
    *
    * @param toolchain_state `build state` registers the target
-   * @param target target taskflow is registered
    * @param build_cb custom user callback to setup target build requirements
+   * @param target target taskflow is registered
+   * @param targets Additional Targets as parameters
    */
-  void Build(const Args::ToolchainState &toolchain_state, base::Target &target,
-             const std::function<void(base::Target &)> &build_cb);
+  template <typename C, typename... Targets>
+  void Build(const Args::ToolchainState &toolchain_state, const C &build_cb,
+             base::Target &target, Targets &...targets) {
+    tf::Task task;
+    if (toolchain_state.build) {
+      build_cb(target, std::forward<Targets &>(targets)...);
+      task = BuildTask(target);
+    }
+    const bool target_stored =
+        targets_.store.emplace(target.GetBinaryPath(), task).second;
+    env::assert_fatal(target_stored, fmt::format("Could not register {} target",
+                                                 target.GetName()));
+  }
 
   /**
    * @brief Register the Target to be run
