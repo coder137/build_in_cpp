@@ -33,8 +33,8 @@ int main(int argc, char **argv) {
   ExecutableTarget_gcc g_foolib("foolib", gcc, "");
   ExecutableTarget_msvc m_foolib("foolib", msvc, "");
 
-  reg.Build(arg_gcc.state, g_foolib, foolib_build_cb);
-  reg.Build(arg_msvc.state, m_foolib, foolib_build_cb);
+  reg.Build(arg_gcc.state, foolib_build_cb, g_foolib);
+  reg.Build(arg_msvc.state, foolib_build_cb, m_foolib);
 
   // * NOTE, This is how we add our custom toolchain
   base::Toolchain clang = toolchain_clang_gnu.ConstructToolchain();
@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
   config.link_command = target_clang_gnu.link_command;
   Target_custom c_foolib("CFoolib.exe", base::Target::Type::Executable, clang,
                          "", config);
-  reg.Build(toolchain_clang_gnu.state, c_foolib, foolib_build_cb);
+  reg.Build(toolchain_clang_gnu.state, foolib_build_cb, c_foolib);
 
   // 5.
   reg.RunBuild();

@@ -7,6 +7,8 @@ using namespace buildcc;
 static void clean_cb();
 static void foolib_build_cb(base::Target &target);
 
+constexpr std::string_view EXE = "build";
+
 int main(int argc, char **argv) {
   // 1. Get arguments
   Args args;
@@ -29,8 +31,8 @@ int main(int argc, char **argv) {
   ExecutableTarget_gcc g_foolib("foolib", gcc, "");
   ExecutableTarget_msvc m_foolib("foolib", msvc, "");
 
-  reg.Build(arg_gcc.state, g_foolib, foolib_build_cb);
-  reg.Build(arg_msvc.state, m_foolib, foolib_build_cb);
+  reg.Build(arg_gcc.state, foolib_build_cb, g_foolib);
+  reg.Build(arg_msvc.state, foolib_build_cb, m_foolib);
 
   // 5.
   reg.RunBuild();
@@ -42,7 +44,9 @@ int main(int argc, char **argv) {
 }
 
 static void clean_cb() {
-  // TODO,
+  env::log_info(
+      EXE, fmt::format("Cleaning {}", env::get_project_build_dir().string()));
+  fs::remove_all(env::get_project_build_dir());
 }
 
 static void foolib_build_cb(base::Target &target) {

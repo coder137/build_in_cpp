@@ -37,10 +37,10 @@ int main(int argc, char **argv) {
   ExecutableTarget_msvc m_cflags("cflags", msvc, "files");
 
   // Select your builds and tests using the .toml files
-  reg.Build(arg_gcc.state, g_cppflags, cppflags_build_cb);
-  reg.Build(arg_gcc.state, g_cflags, cflags_build_cb);
-  reg.Build(arg_msvc.state, m_cppflags, cppflags_build_cb);
-  reg.Build(arg_msvc.state, m_cflags, cflags_build_cb);
+  reg.Build(arg_gcc.state, cppflags_build_cb, g_cppflags);
+  reg.Build(arg_msvc.state, cppflags_build_cb, m_cppflags);
+  reg.Build(arg_gcc.state, cflags_build_cb, g_cflags);
+  reg.Build(arg_msvc.state, cflags_build_cb, m_cflags);
 
   // 5. Test steps
   // NOTE, For now they are just dummy callbacks
