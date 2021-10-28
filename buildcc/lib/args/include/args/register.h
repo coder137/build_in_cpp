@@ -39,21 +39,23 @@ public:
    *
    * @param toolchain_state `build state` registers the target
    * @param build_cb custom user callback to setup target build requirements
-   * @param target target taskflow is registered
-   * @param targets Additional Targets as parameters
+   * @param target target taskflow is passed to build_cb (passed as reference)
+   * @param params Additional parameters (passed as reference)
    */
-  template <typename C, typename... Targets>
+  template <typename C, typename... Params>
   void Build(const Args::ToolchainState &toolchain_state, const C &build_cb,
-             base::Target &target, Targets &...targets) {
+             base::Target &target, Params &...params) {
     tf::Task task;
     if (toolchain_state.build) {
-      build_cb(target, std::forward<Targets &>(targets)...);
+      build_cb(target, std::forward<Params &>(params)...);
       task = BuildTask(target);
     }
     const bool target_stored =
         targets_.store.emplace(target.GetBinaryPath(), task).second;
-    env::assert_fatal(target_stored, fmt::format("Could not register {} target",
-                                                 target.GetName()));
+    env::assert_fatal(
+        target_stored,
+        fmt::format("Duplicate `Register::Build` call detected for target '{}'",
+                    target.GetName()));
   }
 
   /**
