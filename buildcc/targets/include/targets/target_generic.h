@@ -24,110 +24,6 @@
 
 namespace buildcc {
 
-struct CopyTarget {
-  // TODO, Add other options
-  enum class Option {
-    PreprocessorFlags,
-    CommonCompileFlags,
-    PchCompileFlags,
-    PchObjectFlags,
-    AsmCompileFlags,
-    CCompileFlags,
-    CppCompileFlags,
-    LinkFlags,
-  };
-
-  CopyTarget(base::Target &dest, const base::Target &source)
-      : dest_(dest), source_(source) {}
-  CopyTarget(const CopyTarget &target) = delete;
-  CopyTarget(CopyTarget &&target) = delete;
-
-  CopyTarget &Add(Option opt) {
-    options_.insert(opt);
-    return *this;
-  }
-
-  CopyTarget &Add(std::initializer_list<Option> opts) {
-    options_.insert(opts.begin(), opts.end());
-    return *this;
-  }
-
-  void Copy() {
-    for (Option opt : options_) {
-      switch (opt) {
-      case Option::PreprocessorFlags:
-        CopyCb<std::unordered_set<std::string>, std::string>(
-            source_.GetCurrentPreprocessorFlags(),
-            [&](const std::string &f) { dest_.AddPreprocessorFlag(f); });
-        break;
-
-      case Option::CommonCompileFlags:
-        CopyCb<std::unordered_set<std::string>, std::string>(
-            source_.GetCurrentCommonCompileFlags(),
-            [&](const std::string &f) { dest_.AddCommonCompileFlag(f); });
-        break;
-
-      case Option::PchCompileFlags:
-        CopyCb<std::unordered_set<std::string>, std::string>(
-            source_.GetCurrentPchCompileFlags(),
-            [&](const std::string &f) { dest_.AddPchCompileFlag(f); });
-        break;
-
-      case Option::PchObjectFlags:
-        CopyCb<std::unordered_set<std::string>, std::string>(
-            source_.GetCurrentPchObjectFlags(),
-            [&](const std::string &f) { dest_.AddPchObjectFlag(f); });
-        break;
-
-      case Option::AsmCompileFlags:
-        CopyCb<std::unordered_set<std::string>, std::string>(
-            source_.GetCurrentAsmCompileFlags(),
-            [&](const std::string &f) { dest_.AddAsmCompileFlag(f); });
-        break;
-
-      case Option::CCompileFlags:
-        CopyCb<std::unordered_set<std::string>, std::string>(
-            source_.GetCurrentCCompileFlags(),
-            [&](const std::string &f) { dest_.AddCCompileFlag(f); });
-        break;
-
-      case Option::CppCompileFlags:
-        CopyCb<std::unordered_set<std::string>, std::string>(
-            source_.GetCurrentCppCompileFlags(),
-            [&](const std::string &f) { dest_.AddCppCompileFlag(f); });
-        break;
-
-      case Option::LinkFlags:
-        CopyCb<std::unordered_set<std::string>, std::string>(
-            source_.GetCurrentLinkFlags(),
-            [&](const std::string &f) { dest_.AddLinkFlag(f); });
-        break;
-
-      default:
-        env::assert_fatal<false>("Invalid Option");
-        break;
-      }
-    }
-  }
-
-private:
-  template <typename list_type, typename var_type>
-  void CopyCb(
-      const list_type &copy_source_list,
-      const std::function<void(const var_type &)> &cb = [](const var_type &) {
-      }) {
-    ASSERT_FATAL(cb, "Bad Function: cb");
-    for (const var_type &s : copy_source_list) {
-      cb(s);
-    }
-  }
-
-private:
-  base::Target &dest_;
-  const base::Target &source_;
-  std::unordered_set<Option> options_;
-};
-
 class GenericConfig {
 public:
   static base::Target::Config Generic(base::Target::Type type,
@@ -247,17 +143,15 @@ public:
     }
 
     // Copy these parameters
-    CopyTarget(*this, *target)
-        .Add({
-            CopyTarget::Option::CommonCompileFlags,
-            CopyTarget::Option::PchCompileFlags,
-            CopyTarget::Option::PchObjectFlags,
-            CopyTarget::Option::AsmCompileFlags,
-            CopyTarget::Option::CCompileFlags,
-            CopyTarget::Option::CppCompileFlags,
-            CopyTarget::Option::LinkFlags,
-        })
-        .Copy();
+    Copy(*target, {
+                      base::Target::CopyOption::CommonCompileFlags,
+                      base::Target::CopyOption::PchCompileFlags,
+                      base::Target::CopyOption::PchObjectFlags,
+                      base::Target::CopyOption::AsmCompileFlags,
+                      base::Target::CopyOption::CCompileFlags,
+                      base::Target::CopyOption::CppCompileFlags,
+                      base::Target::CopyOption::LinkFlags,
+                  });
   }
   ~ExecutableTarget_generic() {}
 };
@@ -288,17 +182,15 @@ public:
       break;
     }
     // Copy these parameters
-    CopyTarget(*this, *target)
-        .Add({
-            CopyTarget::Option::CommonCompileFlags,
-            CopyTarget::Option::PchCompileFlags,
-            CopyTarget::Option::PchObjectFlags,
-            CopyTarget::Option::AsmCompileFlags,
-            CopyTarget::Option::CCompileFlags,
-            CopyTarget::Option::CppCompileFlags,
-            CopyTarget::Option::LinkFlags,
-        })
-        .Copy();
+    Copy(*target, {
+                      base::Target::CopyOption::CommonCompileFlags,
+                      base::Target::CopyOption::PchCompileFlags,
+                      base::Target::CopyOption::PchObjectFlags,
+                      base::Target::CopyOption::AsmCompileFlags,
+                      base::Target::CopyOption::CCompileFlags,
+                      base::Target::CopyOption::CppCompileFlags,
+                      base::Target::CopyOption::LinkFlags,
+                  });
   }
 };
 
@@ -328,17 +220,15 @@ public:
       break;
     }
     // Copy these parameters
-    CopyTarget(*this, *target)
-        .Add({
-            CopyTarget::Option::CommonCompileFlags,
-            CopyTarget::Option::PchCompileFlags,
-            CopyTarget::Option::PchObjectFlags,
-            CopyTarget::Option::AsmCompileFlags,
-            CopyTarget::Option::CCompileFlags,
-            CopyTarget::Option::CppCompileFlags,
-            CopyTarget::Option::LinkFlags,
-        })
-        .Copy();
+    Copy(*target, {
+                      base::Target::CopyOption::CommonCompileFlags,
+                      base::Target::CopyOption::PchCompileFlags,
+                      base::Target::CopyOption::PchObjectFlags,
+                      base::Target::CopyOption::AsmCompileFlags,
+                      base::Target::CopyOption::CCompileFlags,
+                      base::Target::CopyOption::CppCompileFlags,
+                      base::Target::CopyOption::LinkFlags,
+                  });
   }
 };
 
@@ -371,17 +261,15 @@ public:
       break;
     }
     // Copy these parameters
-    CopyTarget(*this, *target)
-        .Add({
-            CopyTarget::Option::CommonCompileFlags,
-            CopyTarget::Option::PchCompileFlags,
-            CopyTarget::Option::PchObjectFlags,
-            CopyTarget::Option::AsmCompileFlags,
-            CopyTarget::Option::CCompileFlags,
-            CopyTarget::Option::CppCompileFlags,
-            CopyTarget::Option::LinkFlags,
-        })
-        .Copy();
+    Copy(*target, {
+                      base::Target::CopyOption::CommonCompileFlags,
+                      base::Target::CopyOption::PchCompileFlags,
+                      base::Target::CopyOption::PchObjectFlags,
+                      base::Target::CopyOption::AsmCompileFlags,
+                      base::Target::CopyOption::CCompileFlags,
+                      base::Target::CopyOption::CppCompileFlags,
+                      base::Target::CopyOption::LinkFlags,
+                  });
   }
 };
 
