@@ -92,8 +92,7 @@ void Target::Copy(const Target &target,
               [&](const auto &f) { AddPchAbsolute(f); });
       break;
     case CopyOption::LibDeps:
-      CopyVar(target.storer_.current_lib_deps.user,
-              [&](const auto &f) { AddLibDep(f.string()); });
+      storer_.current_lib_deps.user = target.storer_.current_lib_deps.user;
       break;
     case CopyOption::IncludeDirs:
       CopyVar(target.storer_.current_include_dirs,

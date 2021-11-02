@@ -249,6 +249,9 @@ public:
   const internal::fs_unordered_set &GetTargetLibDeps() const {
     return storer_.current_lib_deps.user;
   }
+  const std::unordered_set<std::string> &GetCurrentExternalLibDeps() const {
+    return storer_.current_external_lib_deps;
+  }
   const internal::fs_unordered_set &GetCurrentIncludeDirs() const {
     return storer_.current_include_dirs;
   }
@@ -278,6 +281,12 @@ public:
   }
   const std::unordered_set<std::string> &GetCurrentLinkFlags() const {
     return storer_.current_link_flags;
+  }
+  const internal::fs_unordered_set &GetCurrentCompileDependencies() const {
+    return storer_.current_compile_dependencies.user;
+  }
+  const internal::fs_unordered_set &GetCurrentLinkDependencies() const {
+    return storer_.current_link_dependencies.user;
   }
 
   // Getters (UnlockedAfterBuild)

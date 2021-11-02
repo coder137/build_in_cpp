@@ -66,6 +66,28 @@ TEST(TargetTestCopyGroup, CopyAll) {
                       buildcc::base::Target::CopyOption::CompileDependencies,
                       buildcc::base::Target::CopyOption::LinkDependencies,
                   });
+
+  CHECK_EQUAL(destTarget.GetCurrentSourceFiles().size(), 1);
+  CHECK_EQUAL(destTarget.GetCurrentHeaderFiles().size(), 1);
+  CHECK_EQUAL(destTarget.GetCurrentPchFiles().size(), 1);
+
+  CHECK_EQUAL(destTarget.GetTargetLibDeps().size(), 1);
+  CHECK_EQUAL(destTarget.GetCurrentExternalLibDeps().size(), 1);
+
+  CHECK_EQUAL(destTarget.GetCurrentIncludeDirs().size(), 1);
+  CHECK_EQUAL(destTarget.GetCurrentLibDirs().size(), 1);
+
+  CHECK_EQUAL(destTarget.GetCurrentPreprocessorFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCurrentCommonCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCurrentPchCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCurrentPchObjectFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCurrentAsmCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCurrentCCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCurrentCppCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCurrentLinkFlags().size(), 1);
+
+  CHECK_EQUAL(destTarget.GetCurrentCompileDependencies().size(), 1);
+  CHECK_EQUAL(destTarget.GetCurrentLinkDependencies().size(), 1);
 }
 
 TEST(TargetTestCopyGroup, CopyCrash) {
