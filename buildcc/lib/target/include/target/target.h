@@ -19,6 +19,7 @@
 
 #include <filesystem>
 #include <functional>
+#include <initializer_list>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -63,6 +64,26 @@ public:
     Executable,
     StaticLibrary,
     DynamicLibrary,
+  };
+
+  enum class CopyOption {
+    SourceFiles,
+    HeaderFiles,
+    PchFiles,
+    LibDeps,
+    IncludeDirs,
+    LibDirs,
+    ExternalLibDeps,
+    PreprocessorFlags,
+    CommonCompileFlags,
+    PchCompileFlags,
+    PchObjectFlags,
+    AsmCompileFlags,
+    CCompileFlags,
+    CppCompileFlags,
+    LinkFlags,
+    CompileDependencies,
+    LinkDependencies,
   };
 
   // Defaults set for the GCC compiler
@@ -119,6 +140,9 @@ public:
   virtual ~Target() {}
 
   Target(const Target &target) = delete;
+
+  // Features
+  void Copy(const Target &target, std::initializer_list<CopyOption> options);
 
   // Builders
   void Build() override;
