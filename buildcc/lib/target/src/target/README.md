@@ -55,12 +55,14 @@
 
 - [x] file_extension.cpp
 - [x] compile_pch.cpp
+- [x] compile_object.cpp
+- [x] link_target.cpp
 
 ## Action on Target
 
-- [x] `compile_header.cpp` (pch)
-- [x] `compile_source.cpp` (object)
-- [x] `link_target.cpp` (executable, library, C++20 module)
+- [x] `copy.cpp`
+  - Copy src target to dest
+  - Selective copy using `std::initializer<CopyOption>` 
 - [x] `build.cpp`
   - Setup tasks by using the above files
   - [ ] PrecompileHeader (pch) files

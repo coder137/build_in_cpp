@@ -51,6 +51,10 @@ public:
   void Task();
 
   const ObjectData &GetObjectData(const fs::path &absolute_source) const;
+  const std::unordered_map<fs::path, ObjectData, internal::PathHash> &
+  GetObjectDataMap() const {
+    return object_files_;
+  }
   internal::fs_unordered_set GetCompiledSources() const;
   tf::Task &GetTask() { return compile_task_; }
 
