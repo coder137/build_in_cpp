@@ -58,8 +58,6 @@ void Target::Build() {
   Lock();
 
   // Taskflow updates
-  tf_.name(fmt::format("[{}] {}", toolchain_.GetName(), name_));
-
   command_.AddDefaultArguments({
       {kIncludeDirs, internal::aggregate_with_prefix(config_.prefix_include_dir,
                                                      GetCurrentIncludeDirs())},

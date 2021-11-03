@@ -53,6 +53,13 @@ void Target::Initialize() {
       "Environment is not initialized. Use the buildcc::env::init API");
   env::assert_fatal(IsValidTargetType(type_), "Invalid Target Type");
   fs::create_directories(target_build_dir_);
+
+  // String updates
+  unique_id_ = fmt::format("[{}] {}", toolchain_.GetName(), name_);
+  std::string path =
+      GetTargetPath().lexically_relative(env::get_project_build_dir()).string();
+  std::replace(path.begin(), path.end(), '\\', '/');
+  tf_.name(path);
 }
 
 // Rechecks
