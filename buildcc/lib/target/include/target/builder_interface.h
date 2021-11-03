@@ -35,6 +35,8 @@ class BuilderInterface {
 public:
   virtual void Build() = 0;
 
+  const std::string &UniqueId() const { return unique_id_; }
+
 protected:
   template <typename T>
   void RecheckChanged(
@@ -106,6 +108,7 @@ private:
 
 protected:
   bool dirty_{false};
+  std::string unique_id_;
 };
 
 } // namespace buildcc::base
