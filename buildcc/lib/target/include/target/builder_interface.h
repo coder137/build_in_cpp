@@ -35,7 +35,7 @@ class BuilderInterface {
 public:
   virtual void Build() = 0;
 
-  const std::string &UniqueId() const { return unique_id_; }
+  const std::string &GetUniqueId() const { return unique_id_; }
 
 protected:
   template <typename T>
