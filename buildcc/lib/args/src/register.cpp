@@ -36,8 +36,8 @@ void Register::Clean(const std::function<void(void)> &clean_cb) {
 
 void Register::Dep(const base::Target &target, const base::Target &dependency) {
   //  empty tasks -> not built so skip
-  const auto target_iter = targets_.store.find(target.GetBinaryPath());
-  const auto dep_iter = targets_.store.find(dependency.GetBinaryPath());
+  const auto target_iter = targets_.store.find(target.GetUniqueId());
+  const auto dep_iter = targets_.store.find(dependency.GetUniqueId());
   if (target_iter == targets_.store.end() || dep_iter == targets_.store.end()) {
     env::assert_fatal<false>("Call Register::Build API on target and "
                              "dependency before Register::Dep API");
@@ -45,10 +45,7 @@ void Register::Dep(const base::Target &target, const base::Target &dependency) {
   if (target_iter->second.empty() || dep_iter->second.empty()) {
     return;
   }
-  std::string deppath = dependency.GetTargetPath()
-                            .lexically_relative(env::get_project_build_dir())
-                            .string();
-  std::replace(deppath.begin(), deppath.end(), '\\', '/');
+  const std::string &deppath = dependency.GetUniqueId();
 
   // DONE, Detect already added dependency
   target_iter->second.for_each_dependent([&](const tf::Task &t) {
@@ -85,23 +82,22 @@ void Register::Test(const Args::ToolchainState &toolchain_state,
     return;
   }
 
-  const auto target_iter = targets_.store.find(target.GetBinaryPath());
+  const auto target_iter = targets_.store.find(target.GetUniqueId());
   if (target_iter == targets_.store.end()) {
     env::assert_fatal<false>(
         "Call Register::Build API on target before Register::Test API");
   }
 
   const bool added =
-      tests_.emplace(target.GetBinaryPath(), TestInfo(target, test_cb)).second;
+      tests_.emplace(target.GetUniqueId(), TestInfo(target, test_cb)).second;
   env::assert_fatal(
       added, fmt::format("Could not register test {}", target.GetName()));
 }
 
 void Register::RunTest() {
   for (const auto &t : tests_) {
-    env::log_info(__FUNCTION__,
-                  fmt::format("Testing \'{}\'",
-                              t.second.target_.GetTargetPath().string()));
+    env::log_info(__FUNCTION__, fmt::format("Testing \'{}\'",
+                                            t.second.target_.GetUniqueId()));
     t.second.cb_(t.second.target_);
   }
 }

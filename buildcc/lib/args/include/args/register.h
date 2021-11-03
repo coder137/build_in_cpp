@@ -51,7 +51,7 @@ public:
       task = BuildTask(target);
     }
     const bool target_stored =
-        targets_.store.emplace(target.GetBinaryPath(), task).second;
+        targets_.store.emplace(target.GetUniqueId(), task).second;
     env::assert_fatal(
         target_stored,
         fmt::format("Duplicate `Register::Build` call detected for target '{}'",
