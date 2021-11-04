@@ -117,11 +117,13 @@ private:
 
   // Build
   tf::Taskflow build_tf_{"Targets"};
-  tf::Executor executor_;
-  std::unordered_map<fs::path, tf::Task, internal::PathHash> store_;
+  std::unordered_map<std::string, tf::Task> build_;
 
   // Tests
   std::unordered_map<fs::path, TestInfo, internal::PathHash> tests_;
+
+  //
+  tf::Executor executor_;
 };
 
 } // namespace buildcc

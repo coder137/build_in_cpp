@@ -67,9 +67,9 @@ void Register::Clean(const std::function<void(void)> &clean_cb) {
 }
 
 void Register::Dep(const base::Target &target, const base::Target &dependency) {
-  const auto target_iter = store_.find(target.GetUniqueId());
-  const auto dep_iter = store_.find(dependency.GetUniqueId());
-  env::assert_fatal(!(target_iter == store_.end() || dep_iter == store_.end()),
+  const auto target_iter = build_.find(target.GetUniqueId());
+  const auto dep_iter = build_.find(dependency.GetUniqueId());
+  env::assert_fatal(!(target_iter == build_.end() || dep_iter == build_.end()),
                     "Call Register::Build API on target and "
                     "dependency before Register::Dep API");
 
@@ -94,8 +94,8 @@ void Register::Test(
     return;
   }
 
-  const auto target_iter = store_.find(target.GetUniqueId());
-  if (target_iter == store_.end()) {
+  const auto target_iter = build_.find(target.GetUniqueId());
+  if (target_iter == build_.end()) {
     env::assert_fatal<false>(
         "Call Register::Build API on target before Register::Test API");
   }
@@ -142,7 +142,7 @@ void Register::Env() {
 }
 
 void Register::StoreTarget(const base::Target &target, const tf::Task &task) {
-  const bool stored = store_.emplace(target.GetUniqueId(), task).second;
+  const bool stored = build_.emplace(target.GetUniqueId(), task).second;
   env::assert_fatal(
       stored,
       fmt::format("Duplicate `Register::Build` call detected for target '{}'",
