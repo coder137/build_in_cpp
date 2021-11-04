@@ -91,7 +91,7 @@ public:
   void RunTest();
 
   // Getters
-  const tf::Taskflow &GetBuildTaskflow() const { return build_tf_; }
+  const tf::Taskflow &GetTaskflow() const { return build_tf_; }
 
 private:
   struct TestInfo {
@@ -121,6 +121,10 @@ private:
 
   // Build
   tf::Taskflow build_tf_{"Targets"};
+
+  // TODO, Create a class called BuildInfo
+  // TODO, Store base::Target & target_ there
+  // TODO, Shift the tf::Taskflow construction inside RunBuild instead
   std::unordered_map<std::string, tf::Task> build_;
 
   // Tests
