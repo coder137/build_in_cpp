@@ -67,13 +67,13 @@ void Register::Clean(const std::function<void(void)> &clean_cb) {
 }
 
 void Register::Dep(const base::Target &target, const base::Target &dependency) {
-  //  empty tasks -> not built so skip
   const auto target_iter = store_.find(target.GetUniqueId());
   const auto dep_iter = store_.find(dependency.GetUniqueId());
-  if (target_iter == store_.end() || dep_iter == store_.end()) {
-    env::assert_fatal<false>("Call Register::Build API on target and "
-                             "dependency before Register::Dep API");
-  }
+  env::assert_fatal(!(target_iter == store_.end() || dep_iter == store_.end()),
+                    "Call Register::Build API on target and "
+                    "dependency before Register::Dep API");
+
+  //  empty tasks -> not built so skip
   if (target_iter->second.empty() || dep_iter->second.empty()) {
     return;
   }
