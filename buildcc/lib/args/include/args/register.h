@@ -62,9 +62,19 @@ public:
    * @param target target is registered for test
    * @param test_cb custom user callback for testing
    */
-  // TODO, Update the Test API
-  void Test(const Args::ToolchainState &toolchain_state, base::Target &target,
-            const std::function<void(base::Target &)> &test_cb);
+
+  /**
+   * @brief
+   *
+   * @param toolchain_state
+   * @param command
+   * @param target
+   * @param arguments
+   */
+  void
+  Test(const Args::ToolchainState &toolchain_state, const std::string &command,
+       base::Target &target,
+       const std::unordered_map<const char *, std::string> &arguments = {});
 
   /**
    * @brief Setup dependency between 2 Targets
@@ -85,12 +95,13 @@ public:
 
 private:
   struct TestInfo {
-    base::Target &target_;
-    std::function<void(base::Target &target)> cb_;
+    TestInfo(base::Target &target, const std::string &command,
+             const std::unordered_map<const char *, std::string> &arguments)
+        : target_(target), command_(command), arguments_(arguments) {}
 
-    TestInfo(base::Target &target,
-             const std::function<void(base::Target &target)> &cb)
-        : target_(target), cb_(cb) {}
+    base::Target &target_;
+    std::string command_;
+    std::unordered_map<const char *, std::string> arguments_;
   };
 
 private:
@@ -108,10 +119,12 @@ private:
 private:
   const Args &args_;
 
+  // Build
   tf::Taskflow tf_{"Targets"};
   tf::Executor executor_;
-
   std::unordered_map<fs::path, tf::Task, internal::PathHash> store_;
+
+  // Tests
   std::unordered_map<fs::path, TestInfo, internal::PathHash> tests_;
 };
 

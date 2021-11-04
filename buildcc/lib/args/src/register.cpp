@@ -86,9 +86,10 @@ void Register::Dep(const base::Target &target, const base::Target &dependency) {
   target_iter->second.succeed(dep_iter->second);
 }
 
-void Register::Test(const Args::ToolchainState &toolchain_state,
-                    base::Target &target,
-                    const std::function<void(base::Target &)> &test_cb) {
+void Register::Test(
+    const Args::ToolchainState &toolchain_state, const std::string &command,
+    base::Target &target,
+    const std::unordered_map<const char *, std::string> &arguments = {}) {
   if (!(toolchain_state.build && toolchain_state.test)) {
     return;
   }
@@ -100,7 +101,8 @@ void Register::Test(const Args::ToolchainState &toolchain_state,
   }
 
   const bool added =
-      tests_.emplace(target.GetUniqueId(), TestInfo(target, test_cb)).second;
+      tests_.emplace(target.GetUniqueId(), TestInfo(target, command, arguments))
+          .second;
   env::assert_fatal(
       added, fmt::format("Could not register test {}", target.GetName()));
 }
@@ -109,7 +111,11 @@ void Register::RunTest() {
   for (const auto &t : tests_) {
     env::log_info(__FUNCTION__, fmt::format("Testing \'{}\'",
                                             t.second.target_.GetUniqueId()));
-    t.second.cb_(t.second.target_);
+    Command command;
+    command.AddDefaultArguments({
+        {"executable", t.second.target_.GetTargetPath().string()},
+    });
+    command.Construct(t.second.command_, t.second.arguments_);
   }
 }
 
