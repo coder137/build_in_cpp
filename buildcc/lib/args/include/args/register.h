@@ -50,12 +50,7 @@ public:
       build_cb(target, std::forward<Params &>(params)...);
       task = BuildTask(target);
     }
-    const bool target_stored =
-        targets_.store.emplace(target.GetBinaryPath(), task).second;
-    env::assert_fatal(
-        target_stored,
-        fmt::format("Duplicate `Register::Build` call detected for target '{}'",
-                    target.GetName()));
+    StoreTarget(target, task);
   }
 
   /**
@@ -67,6 +62,7 @@ public:
    * @param target target is registered for test
    * @param test_cb custom user callback for testing
    */
+  // TODO, Update the Test API
   void Test(const Args::ToolchainState &toolchain_state, base::Target &target,
             const std::function<void(base::Target &)> &test_cb);
 
@@ -85,7 +81,7 @@ public:
   void RunTest();
 
   // Getters
-  const tf::Taskflow &GetTaskflow() const { return targets_.tf; }
+  const tf::Taskflow &GetTaskflow() const { return tf_; }
 
 private:
   struct TestInfo {
@@ -97,13 +93,6 @@ private:
         : target_(target), cb_(cb) {}
   };
 
-  struct RegInfo {
-    std::unordered_map<fs::path, tf::Task, internal::PathHash> store;
-    tf::Taskflow tf;
-
-    RegInfo(const std::string &name) : tf(name) {}
-  };
-
 private:
   void Initialize();
 
@@ -113,12 +102,16 @@ private:
   //
   tf::Task BuildTask(base::Target &target);
 
+  //
+  void StoreTarget(const base::Target &target, const tf::Task &task);
+
 private:
   const Args &args_;
 
-  RegInfo targets_{"Targets"};
+  tf::Taskflow tf_{"Targets"};
   tf::Executor executor_;
 
+  std::unordered_map<fs::path, tf::Task, internal::PathHash> store_;
   std::unordered_map<fs::path, TestInfo, internal::PathHash> tests_;
 };
 

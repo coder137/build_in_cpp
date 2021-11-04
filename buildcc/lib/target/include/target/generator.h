@@ -42,7 +42,9 @@ typedef std::function<bool(
 class Generator : public BuilderInterface {
 public:
   Generator(const std::string &name, const fs::path &path)
-      : name_(name), loader_(name, path) {}
+      : name_(name), loader_(name, path) {
+    unique_id_ = name;
+  }
   Generator(const Generator &generator) = delete;
 
   /**

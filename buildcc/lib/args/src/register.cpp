@@ -26,6 +26,38 @@
 
 namespace fs = std::filesystem;
 
+namespace {
+
+void DepDetectDuplicate(const tf::Task &target_task, const std::string &match) {
+  target_task.for_each_dependent([&](const tf::Task &t) {
+    buildcc::env::log_trace("for_each_dependent", t.name());
+    buildcc::env::assert_fatal(
+        !(t.name() == match),
+        fmt::format("Dependency '{}' already added", t.name()));
+  });
+}
+
+void DepDetectCyclicDependency(const tf::Task &target_task,
+                               const std::string &match) {
+  std::queue<tf::Task> taskqueue;
+  taskqueue.push(target_task);
+
+  while (!taskqueue.empty()) {
+    tf::Task current_task = taskqueue.front();
+    taskqueue.pop();
+
+    current_task.for_each_successor([&](const tf::Task &t) {
+      buildcc::env::log_trace("for_each_successor", t.name());
+      taskqueue.push(t);
+      buildcc::env::assert_fatal(
+          !(t.name() == match),
+          fmt::format("Cyclic dependency detected when adding '{}'", t.name()));
+    });
+  }
+}
+
+} // namespace
+
 namespace buildcc {
 
 void Register::Clean(const std::function<void(void)> &clean_cb) {
@@ -35,46 +67,22 @@ void Register::Clean(const std::function<void(void)> &clean_cb) {
 }
 
 void Register::Dep(const base::Target &target, const base::Target &dependency) {
+  const auto target_iter = store_.find(target.GetUniqueId());
+  const auto dep_iter = store_.find(dependency.GetUniqueId());
+  env::assert_fatal(!(target_iter == store_.end() || dep_iter == store_.end()),
+                    "Call Register::Build API on target and "
+                    "dependency before Register::Dep API");
+
   //  empty tasks -> not built so skip
-  const auto target_iter = targets_.store.find(target.GetBinaryPath());
-  const auto dep_iter = targets_.store.find(dependency.GetBinaryPath());
-  if (target_iter == targets_.store.end() || dep_iter == targets_.store.end()) {
-    env::assert_fatal<false>("Call Register::Build API on target and "
-                             "dependency before Register::Dep API");
-  }
   if (target_iter->second.empty() || dep_iter->second.empty()) {
     return;
   }
-  std::string deppath = dependency.GetTargetPath()
-                            .lexically_relative(env::get_project_build_dir())
-                            .string();
-  std::replace(deppath.begin(), deppath.end(), '\\', '/');
 
-  // DONE, Detect already added dependency
-  target_iter->second.for_each_dependent([&](const tf::Task &t) {
-    env::log_trace("for_each_dependent", t.name());
-    if (t.name() == deppath) {
-      env::assert_fatal<false>("Dependency already added");
-    }
-  });
+  const std::string &dep_unique_id = dependency.GetUniqueId();
+  DepDetectDuplicate(target_iter->second, dep_unique_id);
+  DepDetectCyclicDependency(target_iter->second, dep_unique_id);
 
-  // DONE, Detect cyclic dependency
-  std::queue<tf::Task> taskqueue;
-  taskqueue.push(target_iter->second);
-
-  while (!taskqueue.empty()) {
-    tf::Task current_task = taskqueue.front();
-    taskqueue.pop();
-
-    current_task.for_each_successor([&](const tf::Task &t) {
-      env::log_trace("for_each_successor", t.name());
-      taskqueue.push(t);
-      if (t.name() == deppath) {
-        env::assert_fatal<false>("Cyclic dependency detected");
-      }
-    });
-  }
-
+  // Finally do this
   target_iter->second.succeed(dep_iter->second);
 }
 
@@ -85,23 +93,22 @@ void Register::Test(const Args::ToolchainState &toolchain_state,
     return;
   }
 
-  const auto target_iter = targets_.store.find(target.GetBinaryPath());
-  if (target_iter == targets_.store.end()) {
+  const auto target_iter = store_.find(target.GetUniqueId());
+  if (target_iter == store_.end()) {
     env::assert_fatal<false>(
         "Call Register::Build API on target before Register::Test API");
   }
 
   const bool added =
-      tests_.emplace(target.GetBinaryPath(), TestInfo(target, test_cb)).second;
+      tests_.emplace(target.GetUniqueId(), TestInfo(target, test_cb)).second;
   env::assert_fatal(
       added, fmt::format("Could not register test {}", target.GetName()));
 }
 
 void Register::RunTest() {
   for (const auto &t : tests_) {
-    env::log_info(__FUNCTION__,
-                  fmt::format("Testing \'{}\'",
-                              t.second.target_.GetTargetPath().string()));
+    env::log_info(__FUNCTION__, fmt::format("Testing \'{}\'",
+                                            t.second.target_.GetUniqueId()));
     t.second.cb_(t.second.target_);
   }
 }
@@ -114,6 +121,14 @@ void Register::Env() {
   env::init(fs::current_path() / args_.GetProjectRootDir(),
             fs::current_path() / args_.GetProjectBuildDir());
   env::set_log_level(args_.GetLogLevel());
+}
+
+void Register::StoreTarget(const base::Target &target, const tf::Task &task) {
+  const bool stored = store_.emplace(target.GetUniqueId(), task).second;
+  env::assert_fatal(
+      stored,
+      fmt::format("Duplicate `Register::Build` call detected for target '{}'",
+                  target.GetUniqueId()));
 }
 
 } // namespace buildcc

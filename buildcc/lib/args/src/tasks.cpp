@@ -20,17 +20,13 @@
 namespace buildcc {
 
 tf::Task Register::BuildTask(base::Target &target) {
-  std::string targetpath = target.GetTargetPath()
-                               .lexically_relative(env::get_project_build_dir())
-                               .string();
-  std::replace(targetpath.begin(), targetpath.end(), '\\', '/');
-  return targets_.tf.composed_of(target.GetTaskflow()).name(targetpath);
+  return tf_.composed_of(target.GetTaskflow()).name(target.GetUniqueId());
 }
 
 void Register::RunBuild() {
   env::log_info(__FUNCTION__, fmt::format("Running with {} workers",
                                           executor_.num_workers()));
-  executor_.run(targets_.tf);
+  executor_.run(tf_);
   executor_.wait_for_all();
 }
 
