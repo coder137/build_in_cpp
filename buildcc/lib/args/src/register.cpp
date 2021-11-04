@@ -106,12 +106,6 @@ void Register::Test(
       added, fmt::format("Could not register test {}", target.GetName()));
 }
 
-void Register::RunTest() {
-  for (const auto &t : tests_) {
-    t.second.ConstructTestRunner();
-  }
-}
-
 // Private
 
 void Register::Initialize() { Env(); }
@@ -122,17 +116,9 @@ void Register::Env() {
   env::set_log_level(args_.GetLogLevel());
 }
 
-void Register::StoreTarget(const base::Target &target, const tf::Task &task) {
-  const bool stored = build_.emplace(target.GetUniqueId(), task).second;
-  env::assert_fatal(
-      stored,
-      fmt::format("Duplicate `Register::Build` call detected for target '{}'",
-                  target.GetUniqueId()));
-}
-
 //
 
-void Register::TestInfo::ConstructTestRunner() const {
+void Register::TestInfo::TestRunner() const {
   env::log_info(__FUNCTION__,
                 fmt::format("Testing \'{}\'", target_.GetUniqueId()));
   Command command;

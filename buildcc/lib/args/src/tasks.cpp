@@ -30,4 +30,14 @@ void Register::RunBuild() {
   executor_.wait_for_all();
 }
 
+void Register::RunTest() {
+  tf::Taskflow test_tf{"Tests"};
+  test_tf.for_each(
+      tests_.begin(), tests_.end(),
+      [](const std::pair<std::string, TestInfo> &p) { p.second.TestRunner(); });
+
+  executor_.run(test_tf);
+  executor_.wait_for_all();
+}
+
 } // namespace buildcc

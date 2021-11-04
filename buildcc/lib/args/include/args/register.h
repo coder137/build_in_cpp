@@ -50,7 +50,11 @@ public:
       build_cb(target, std::forward<Params &>(params)...);
       task = BuildTask(target);
     }
-    StoreTarget(target, task);
+    const bool stored = build_.emplace(target.GetUniqueId(), task).second;
+    env::assert_fatal(
+        stored,
+        fmt::format("Duplicate `Register::Build` call detected for target '{}'",
+                    target.GetUniqueId()));
   }
 
   /**
@@ -95,8 +99,9 @@ private:
              const std::unordered_map<const char *, std::string> &arguments)
         : target_(target), command_(command), arguments_(arguments) {}
 
-    void ConstructTestRunner() const;
+    void TestRunner() const;
 
+  private:
     base::Target &target_;
     std::string command_;
     std::unordered_map<const char *, std::string> arguments_;
@@ -111,9 +116,6 @@ private:
   //
   tf::Task BuildTask(base::Target &target);
 
-  //
-  void StoreTarget(const base::Target &target, const tf::Task &task);
-
 private:
   const Args &args_;
 
@@ -122,7 +124,6 @@ private:
   std::unordered_map<std::string, tf::Task> build_;
 
   // Tests
-  tf::Taskflow test_tf_{"Tests"};
   std::unordered_map<std::string, TestInfo> tests_;
 
   //

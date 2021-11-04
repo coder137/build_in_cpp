@@ -11,4 +11,9 @@ tf::Task Register::BuildTask(base::Target &target) {
 
 void Register::RunBuild() {}
 
+void Register::RunTest() {
+  std::for_each(tests_.begin(), tests_.end(),
+                [](const auto &p) { p.second.TestRunner(); });
+}
+
 } // namespace buildcc
