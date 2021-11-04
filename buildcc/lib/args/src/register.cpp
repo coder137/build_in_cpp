@@ -26,6 +26,38 @@
 
 namespace fs = std::filesystem;
 
+namespace {
+
+void DepDetectDuplicate(const tf::Task &target_task, const std::string &match) {
+  target_task.for_each_dependent([&](const tf::Task &t) {
+    buildcc::env::log_trace("for_each_dependent", t.name());
+    buildcc::env::assert_fatal(
+        !(t.name() == match),
+        fmt::format("Dependency '{}' already added", t.name()));
+  });
+}
+
+void DepDetectCyclicDependency(const tf::Task &target_task,
+                               const std::string &match) {
+  std::queue<tf::Task> taskqueue;
+  taskqueue.push(target_task);
+
+  while (!taskqueue.empty()) {
+    tf::Task current_task = taskqueue.front();
+    taskqueue.pop();
+
+    current_task.for_each_successor([&](const tf::Task &t) {
+      buildcc::env::log_trace("for_each_successor", t.name());
+      taskqueue.push(t);
+      buildcc::env::assert_fatal(
+          !(t.name() == match),
+          fmt::format("Cyclic dependency detected when adding '{}'", t.name()));
+    });
+  }
+}
+
+} // namespace
+
 namespace buildcc {
 
 void Register::Clean(const std::function<void(void)> &clean_cb) {
@@ -45,32 +77,10 @@ void Register::Dep(const base::Target &target, const base::Target &dependency) {
   if (target_iter->second.empty() || dep_iter->second.empty()) {
     return;
   }
-  const std::string &deppath = dependency.GetUniqueId();
 
-  // DONE, Detect already added dependency
-  target_iter->second.for_each_dependent([&](const tf::Task &t) {
-    env::log_trace("for_each_dependent", t.name());
-    if (t.name() == deppath) {
-      env::assert_fatal<false>("Dependency already added");
-    }
-  });
-
-  // DONE, Detect cyclic dependency
-  std::queue<tf::Task> taskqueue;
-  taskqueue.push(target_iter->second);
-
-  while (!taskqueue.empty()) {
-    tf::Task current_task = taskqueue.front();
-    taskqueue.pop();
-
-    current_task.for_each_successor([&](const tf::Task &t) {
-      env::log_trace("for_each_successor", t.name());
-      taskqueue.push(t);
-      if (t.name() == deppath) {
-        env::assert_fatal<false>("Cyclic dependency detected");
-      }
-    });
-  }
+  const std::string &dep_unique_id = dependency.GetUniqueId();
+  DepDetectDuplicate(target_iter->second, dep_unique_id);
+  DepDetectCyclicDependency(target_iter->second, dep_unique_id);
 
   // Finally do this
   target_iter->second.succeed(dep_iter->second);
