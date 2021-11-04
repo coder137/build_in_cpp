@@ -50,10 +50,10 @@ public:
       build_cb(target, std::forward<Params &>(params)...);
       task = BuildTask(target);
     }
-    const bool target_stored =
+    const bool stored =
         targets_.store.emplace(target.GetUniqueId(), task).second;
     env::assert_fatal(
-        target_stored,
+        stored,
         fmt::format("Duplicate `Register::Build` call detected for target '{}'",
                     target.GetName()));
   }
