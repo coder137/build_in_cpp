@@ -33,18 +33,19 @@ bool Command::Execute(const std::string &command,
   env::assert_fatal(!command.empty(), "Empty command");
   buildcc::env::log_debug("system", command);
 
-  tpl::Process process(
-      command, tpl::Process::string_type(),
+  std::function<void(const char *bytes, size_t n)> stdout_func =
       [&](const char *bytes, size_t n) {
-        if (stdout_data != nullptr) {
-          stdout_data->emplace_back(std::string(bytes, n));
-        }
-      },
+        stdout_data->emplace_back(std::string(bytes, n));
+      };
+
+  std::function<void(const char *bytes, size_t n)> stderr_func =
       [&](const char *bytes, size_t n) {
-        if (stderr_data != nullptr) {
-          stderr_data->emplace_back(std::string(bytes, n));
-        }
-      });
+        stderr_data->emplace_back(std::string(bytes, n));
+      };
+
+  tpl::Process process(command, tpl::Process::string_type(),
+                       stdout_data == nullptr ? nullptr : stdout_func,
+                       stderr_data == nullptr ? nullptr : stderr_func);
   return process.get_exit_status() == 0;
 }
 
