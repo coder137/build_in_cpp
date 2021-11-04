@@ -36,9 +36,9 @@ void Register::Clean(const std::function<void(void)> &clean_cb) {
 
 void Register::Dep(const base::Target &target, const base::Target &dependency) {
   //  empty tasks -> not built so skip
-  const auto target_iter = targets_.store.find(target.GetUniqueId());
-  const auto dep_iter = targets_.store.find(dependency.GetUniqueId());
-  if (target_iter == targets_.store.end() || dep_iter == targets_.store.end()) {
+  const auto target_iter = store_.find(target.GetUniqueId());
+  const auto dep_iter = store_.find(dependency.GetUniqueId());
+  if (target_iter == store_.end() || dep_iter == store_.end()) {
     env::assert_fatal<false>("Call Register::Build API on target and "
                              "dependency before Register::Dep API");
   }
@@ -72,6 +72,7 @@ void Register::Dep(const base::Target &target, const base::Target &dependency) {
     });
   }
 
+  // Finally do this
   target_iter->second.succeed(dep_iter->second);
 }
 
@@ -82,8 +83,8 @@ void Register::Test(const Args::ToolchainState &toolchain_state,
     return;
   }
 
-  const auto target_iter = targets_.store.find(target.GetUniqueId());
-  if (target_iter == targets_.store.end()) {
+  const auto target_iter = store_.find(target.GetUniqueId());
+  if (target_iter == store_.end()) {
     env::assert_fatal<false>(
         "Call Register::Build API on target before Register::Test API");
   }
@@ -110,6 +111,14 @@ void Register::Env() {
   env::init(fs::current_path() / args_.GetProjectRootDir(),
             fs::current_path() / args_.GetProjectBuildDir());
   env::set_log_level(args_.GetLogLevel());
+}
+
+void Register::StoreTarget(const base::Target &target, const tf::Task &task) {
+  const bool stored = store_.emplace(target.GetUniqueId(), task).second;
+  env::assert_fatal(
+      stored,
+      fmt::format("Duplicate `Register::Build` call detected for target '{}'",
+                  target.GetUniqueId()));
 }
 
 } // namespace buildcc
