@@ -87,7 +87,7 @@ public:
   void RunTest();
 
   // Getters
-  const tf::Taskflow &GetTaskflow() const { return tf_; }
+  const tf::Taskflow &GetBuildTaskflow() const { return build_tf_; }
 
 private:
   struct TestInfo {
@@ -116,7 +116,7 @@ private:
   const Args &args_;
 
   // Build
-  tf::Taskflow tf_{"Targets"};
+  tf::Taskflow build_tf_{"Targets"};
   tf::Executor executor_;
   std::unordered_map<fs::path, tf::Task, internal::PathHash> store_;
 
