@@ -64,11 +64,7 @@ int main(int argc, char **argv) {
   reg.Dep(generic_target, foolib_target);
 
   // 5. Test steps
-  reg.Test(custom_toolchain.state, generic_target, [](base::Target &target) {
-    const bool execute =
-        Command::Execute(fmt::format("{}", target.GetTargetPath().string()));
-    env::assert_fatal(execute, "Test failed");
-  });
+  reg.Test(custom_toolchain.state, "{executable}", generic_target);
 
   // 6. Build Target
   reg.RunBuild();

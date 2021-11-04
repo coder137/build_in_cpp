@@ -44,10 +44,10 @@ int main(int argc, char **argv) {
 
   // 5. Test steps
   // NOTE, For now they are just dummy callbacks
-  reg.Test(arg_gcc.state, g_cppflags, [](base::Target &target) {});
-  reg.Test(arg_gcc.state, g_cflags, [](base::Target &target) {});
-  reg.Test(arg_msvc.state, m_cppflags, [](base::Target &target) {});
-  reg.Test(arg_msvc.state, m_cflags, [](base::Target &target) {});
+  reg.Test(arg_gcc.state, "{executable}", g_cppflags);
+  reg.Test(arg_msvc.state, "{executable}", m_cppflags);
+  reg.Test(arg_gcc.state, "{executable}", g_cflags);
+  reg.Test(arg_msvc.state, "{executable}", m_cflags);
 
   // 6. Build Target
   reg.RunBuild();
