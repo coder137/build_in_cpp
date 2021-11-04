@@ -1,5 +1,7 @@
 #include "args/register.h"
 
+#include "expect_command.h"
+
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
@@ -497,22 +499,19 @@ TEST(RegisterTestGroup, Register_Test) {
   // FF
   {
     buildcc::Register reg(args);
-    reg.Test(stateFail, target,
-             [](buildcc::base::Target &target) { (void)target; });
+    reg.Test(stateFail, "{executable}", target);
   }
 
   // TF
   {
     buildcc::Register reg(args);
-    reg.Test(state1, target,
-             [](buildcc::base::Target &target) { (void)target; });
+    reg.Test(state1, "{executable}", target);
   }
 
   // FT
   {
     buildcc::Register reg(args);
-    reg.Test(state2, target,
-             [](buildcc::base::Target &target) { (void)target; });
+    reg.Test(state2, "{executable}", target);
   }
 
   // TT
@@ -520,8 +519,7 @@ TEST(RegisterTestGroup, Register_Test) {
   {
     buildcc::Register reg(args);
     CHECK_THROWS(std::exception,
-                 reg.Test(stateSuccess, target,
-                          [](buildcc::base::Target &target) { (void)target; }));
+                 reg.Test(stateSuccess, "{executable}", target));
   }
 
   // Correct Usage
@@ -531,12 +529,9 @@ TEST(RegisterTestGroup, Register_Test) {
     reg.Build(
         stateSuccess, [](buildcc::base::Target &target) { (void)target; },
         target);
-    reg.Test(stateSuccess, target, [](buildcc::base::Target &target) {
-      (void)target;
-      mock().actualCall("Register::Test::Callback");
-    });
+    reg.Test(stateSuccess, "{executable}", target);
 
-    mock().expectNCalls(1, "Register::Test::Callback");
+    buildcc::m::CommandExpect_Execute(1, true);
     reg.RunTest();
   }
 
