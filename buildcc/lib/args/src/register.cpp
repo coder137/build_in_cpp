@@ -95,10 +95,9 @@ void Register::Test(
   }
 
   const auto target_iter = build_.find(target.GetUniqueId());
-  if (target_iter == build_.end()) {
-    env::assert_fatal<false>(
-        "Call Register::Build API on target before Register::Test API");
-  }
+  env::assert_fatal(
+      !(target_iter == build_.end()),
+      "Call Register::Build API on target before Register::Test API");
 
   const bool added =
       tests_.emplace(target.GetUniqueId(), TestInfo(target, command, arguments))
@@ -109,25 +108,7 @@ void Register::Test(
 
 void Register::RunTest() {
   for (const auto &t : tests_) {
-    env::log_info(__FUNCTION__, fmt::format("Testing \'{}\'",
-                                            t.second.target_.GetUniqueId()));
-    Command command;
-    command.AddDefaultArguments({
-        {"executable", t.second.target_.GetTargetPath().string()},
-    });
-    const std::string test_command =
-        command.Construct(t.second.command_, t.second.arguments_);
-
-    std::vector<std::string> stdout_data;
-    std::vector<std::string> stderr_data;
-    bool executed = Command::Execute(test_command, &stdout_data, &stderr_data);
-    env::assert_fatal(executed, fmt::format("Test {} failed to execute",
-                                            t.second.target_.GetUniqueId()));
-    env::log_info(t.second.target_.GetUniqueId(), "");
-    std::for_each(stdout_data.cbegin(), stdout_data.cend(),
-                  [](const auto &str) { env::log_info("STDOUT", str); });
-    std::for_each(stderr_data.cbegin(), stderr_data.cend(),
-                  [](const auto &str) { env::log_info("STDERR", str); });
+    t.second.ConstructTestRunner();
   }
 }
 
@@ -147,6 +128,29 @@ void Register::StoreTarget(const base::Target &target, const tf::Task &task) {
       stored,
       fmt::format("Duplicate `Register::Build` call detected for target '{}'",
                   target.GetUniqueId()));
+}
+
+//
+
+void Register::TestInfo::ConstructTestRunner() const {
+  env::log_info(__FUNCTION__,
+                fmt::format("Testing \'{}\'", target_.GetUniqueId()));
+  Command command;
+  command.AddDefaultArguments({
+      {"executable", target_.GetTargetPath().string()},
+  });
+  const std::string test_command = command.Construct(command_, arguments_);
+
+  std::vector<std::string> stdout_data;
+  std::vector<std::string> stderr_data;
+  bool executed = Command::Execute(test_command, &stdout_data, &stderr_data);
+  env::assert_fatal(executed, fmt::format("Test {} failed to execute",
+                                          target_.GetUniqueId()));
+  env::log_info(target_.GetUniqueId(), "");
+  std::for_each(stdout_data.cbegin(), stdout_data.cend(),
+                [](const auto &str) { env::log_info("STDOUT", str); });
+  std::for_each(stderr_data.cbegin(), stderr_data.cend(),
+                [](const auto &str) { env::log_info("STDERR", str); });
 }
 
 } // namespace buildcc

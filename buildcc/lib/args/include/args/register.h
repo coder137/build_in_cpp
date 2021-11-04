@@ -95,6 +95,8 @@ private:
              const std::unordered_map<const char *, std::string> &arguments)
         : target_(target), command_(command), arguments_(arguments) {}
 
+    void ConstructTestRunner() const;
+
     base::Target &target_;
     std::string command_;
     std::unordered_map<const char *, std::string> arguments_;
@@ -120,7 +122,8 @@ private:
   std::unordered_map<std::string, tf::Task> build_;
 
   // Tests
-  std::unordered_map<fs::path, TestInfo, internal::PathHash> tests_;
+  tf::Taskflow test_tf_{"Tests"};
+  std::unordered_map<std::string, TestInfo> tests_;
 
   //
   tf::Executor executor_;
