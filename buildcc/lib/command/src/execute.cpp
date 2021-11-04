@@ -27,12 +27,24 @@ namespace tpl = TinyProcessLib;
 
 namespace buildcc {
 
-bool Command::Execute(const std::string &command) {
-  env::assert_fatal(!command.empty(),
-                    fmt::format("Invalid command -> \"{}\"", command));
+bool Command::Execute(const std::string &command,
+                      std::vector<std::string> *stdout_data,
+                      std::vector<std::string> *stderr_data) {
+  env::assert_fatal(!command.empty(), "Empty command");
   buildcc::env::log_debug("system", command);
 
-  tpl::Process process(command);
+  tpl::Process process(
+      command, tpl::Process::string_type(),
+      [&](const char *bytes, size_t n) {
+        if (stdout_data != nullptr) {
+          stdout_data->emplace_back(std::string(bytes, n));
+        }
+      },
+      [&](const char *bytes, size_t n) {
+        if (stderr_data != nullptr) {
+          stderr_data->emplace_back(std::string(bytes, n));
+        }
+      });
   return process.get_exit_status() == 0;
 }
 
