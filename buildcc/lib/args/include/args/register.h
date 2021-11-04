@@ -59,17 +59,13 @@ public:
    *
    * @param toolchain_state `build and test state` registers the target for
    * testing
-   * @param target target is registered for test
-   * @param test_cb custom user callback for testing
-   */
-
-  /**
-   * @brief
+   * @param command Command string pattern
+   * `{executable}` is the built executable which is always added to the pattern
    *
-   * @param toolchain_state
-   * @param command
-   * @param target
-   * @param arguments
+   * @param target Target added as the `{executable}`
+   *
+   * @param arguments Addition arguments to be added to the command string
+   * pattern
    */
   void
   Test(const Args::ToolchainState &toolchain_state, const std::string &command,
