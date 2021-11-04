@@ -115,7 +115,19 @@ void Register::RunTest() {
     command.AddDefaultArguments({
         {"executable", t.second.target_.GetTargetPath().string()},
     });
-    command.Construct(t.second.command_, t.second.arguments_);
+    const std::string test_command =
+        command.Construct(t.second.command_, t.second.arguments_);
+
+    std::vector<std::string> stdout_data;
+    std::vector<std::string> stderr_data;
+    bool executed = Command::Execute(test_command, &stdout_data, &stderr_data);
+    env::assert_fatal(executed, fmt::format("Test {} failed to execute",
+                                            t.second.target_.GetUniqueId()));
+    env::log_info(t.second.target_.GetUniqueId(), "");
+    std::for_each(stdout_data.cbegin(), stdout_data.cend(),
+                  [](const auto &str) { env::log_info("STDOUT", str); });
+    std::for_each(stderr_data.cbegin(), stderr_data.cend(),
+                  [](const auto &str) { env::log_info("STDERR", str); });
   }
 }
 
