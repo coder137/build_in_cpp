@@ -77,7 +77,7 @@ public:
    * @param command Command string pattern
    * `{executable}` is the built executable which is always added to the pattern
    *
-   * @param target Target added as the `{executable}`
+   * @param target Target added as the `{executable}` argument
    *
    * @param arguments Addition arguments to be added to the command string
    * pattern
