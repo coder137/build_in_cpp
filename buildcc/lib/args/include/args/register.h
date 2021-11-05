@@ -58,6 +58,17 @@ public:
   }
 
   /**
+   * @brief Setup dependency between 2 Targets
+   * PreReq: Call `Register::Build` before calling `Register::Dep`
+   *
+   * @param target
+   * @param dependency
+   * Target runs after dependency is built
+   *
+   */
+  void Dep(const base::Target &target, const base::Target &dependency);
+
+  /**
    * @brief Register the Target to be run
    * PreReq: Call `Register::Build` before calling `Register::Test`
    *
@@ -76,17 +87,6 @@ public:
        base::Target &target,
        const std::unordered_map<const char *, std::string> &arguments = {});
 
-  /**
-   * @brief Setup dependency between 2 Targets
-   * PreReq: Call `Register::Build` before calling `Register::Dep`
-   *
-   * @param target
-   * @param dependency
-   * Target runs after dependency is built
-   *
-   */
-  void Dep(const base::Target &target, const base::Target &dependency);
-
   void RunBuild();
   void RunTest();
 
@@ -95,14 +95,14 @@ public:
 
 private:
   struct TestInfo {
-    TestInfo(base::Target &target, const std::string &command,
+    TestInfo(const base::Target &target, const std::string &command,
              const std::unordered_map<const char *, std::string> &arguments)
         : target_(target), command_(command), arguments_(arguments) {}
 
     void TestRunner() const;
 
   private:
-    base::Target &target_;
+    const base::Target &target_;
     std::string command_;
     std::unordered_map<const char *, std::string> arguments_;
   };
@@ -116,15 +116,28 @@ private:
   //
   tf::Task BuildTask(base::Target &target);
 
+  // NOTE, Register::Build and Register::Test both take in Args::ToolchainState
+  // and base::Target &
+  // TODO, Create a Context class for Build, Test and Dep
+  // It can store
+  // * Common
+  // Args::ToolchainState state_
+  // base::Target & target_
+
+  // * Build
+  // tf::Taskflow build_tf_
+  // tf::Task build_task_
+
+  // * Test
+  // tf::Taskflow test_tf_
+  // std::string command_
+  // std::unordered_map<const char *, std::string> arguments_
 private:
   const Args &args_;
 
   // Build
   tf::Taskflow build_tf_{"Targets"};
 
-  // TODO, Create a class called BuildInfo
-  // TODO, Store base::Target & target_ there
-  // TODO, Shift the tf::Taskflow construction inside RunBuild instead
   std::unordered_map<std::string, tf::Task> build_;
 
   // Tests
