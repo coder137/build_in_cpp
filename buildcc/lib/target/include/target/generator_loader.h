@@ -29,45 +29,10 @@
 
 namespace buildcc::internal {
 
-struct GenInfo {
-  std::string name;
-  default_files inputs;
-  fs_unordered_set outputs;
-  std::vector<std::string> commands;
-  bool parallel{false};
-
-  static GenInfo CreateInternalGenInfo(const std::string &n,
-                                       const path_unordered_set &internal_i,
-                                       const fs_unordered_set &o,
-                                       const std::vector<std::string> &c,
-                                       bool p) {
-    return GenInfo(n, internal_i, {}, o, c, p);
-  }
-
-  static GenInfo CreateUserGenInfo(const std::string &n,
-                                   const fs_unordered_set &user_i,
-                                   const fs_unordered_set &o,
-                                   const std::vector<std::string> &c, bool p) {
-    return GenInfo(n, {}, user_i, o, c, p);
-  }
-
-  GenInfo(GenInfo &&info) = default;
-  GenInfo(const GenInfo &info) = delete;
-
-private:
-  explicit GenInfo(const std::string &n, const path_unordered_set &internal_i,
-                   const fs_unordered_set &user_i, const fs_unordered_set &o,
-                   const std::vector<std::string> &c, bool p)
-      : name(n), inputs(internal_i, user_i), outputs(o), commands(c),
-        parallel(p) {}
-};
-
-typedef std::unordered_map<std::string, GenInfo> geninfo_unordered_map;
-
 class GeneratorLoader : public LoaderInterface {
 public:
-  GeneratorLoader(const std::string &name, const fs::path &path)
-      : name_(name), path_(path) {}
+  GeneratorLoader(const std::string &name, const fs::path &absolute_path)
+      : name_(name), path_(absolute_path) {}
 
   GeneratorLoader(const GeneratorLoader &loader) = delete;
 
@@ -78,13 +43,25 @@ public:
     return path_ / fmt::format("{}.bin", name_);
   }
 
-  const geninfo_unordered_map &GetLoadedInfo() { return loaded_info_; }
+  const internal::path_unordered_set &GetLoadedInputFiles() const {
+    return loaded_input_files_;
+  }
+
+  const internal::fs_unordered_set &GetLoadedOutputFiles() const {
+    return loaded_output_files_;
+  }
+
+  const std::vector<std::string> &GetLoadedCommands() const {
+    return loaded_commands_;
+  }
 
 private:
   std::string name_;
   fs::path path_;
 
-  geninfo_unordered_map loaded_info_;
+  internal::path_unordered_set loaded_input_files_;
+  internal::fs_unordered_set loaded_output_files_;
+  std::vector<std::string> loaded_commands_;
 };
 
 } // namespace buildcc::internal
