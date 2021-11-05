@@ -11,9 +11,7 @@ int main() {
 #endif
 
   float f1 = 10.2;
-  float f2 = 1.0;
-  printf("Input a floating point number\r\n");
-  scanf("%f", &f2);
+  float f2 = 2.3;
 
   float value = pow(f1, f2);
   printf("Computed pow: %f\r\n", value);
