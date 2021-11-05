@@ -84,7 +84,7 @@ public:
    */
   void
   Test(const Args::ToolchainState &toolchain_state, const std::string &command,
-       base::Target &target,
+       const base::Target &target,
        const std::unordered_map<const char *, std::string> &arguments = {});
 
   void RunBuild();

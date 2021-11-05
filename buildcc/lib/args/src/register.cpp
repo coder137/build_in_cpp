@@ -88,7 +88,7 @@ void Register::Dep(const base::Target &target, const base::Target &dependency) {
 
 void Register::Test(
     const Args::ToolchainState &toolchain_state, const std::string &command,
-    base::Target &target,
+    const base::Target &target,
     const std::unordered_map<const char *, std::string> &arguments) {
   if (!(toolchain_state.build && toolchain_state.test)) {
     return;
