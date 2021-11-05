@@ -129,10 +129,13 @@ void Register::TestInfo::TestRunner() const {
 
   std::vector<std::string> stdout_data;
   std::vector<std::string> stderr_data;
-  bool executed = Command::Execute(test_command, &stdout_data, &stderr_data);
-  env::assert_fatal(executed, fmt::format("Test {} failed to execute",
-                                          target_.GetUniqueId()));
-  env::log_info(target_.GetUniqueId(), "");
+  const bool success =
+      Command::Execute(test_command, &stdout_data, &stderr_data);
+  (void)success;
+
+  // TODO, Add options for test verboseness
+  // For now just print it out
+  env::log_info("", target_.GetUniqueId());
   std::for_each(stdout_data.cbegin(), stdout_data.cend(),
                 [](const auto &str) { env::log_info("STDOUT", str); });
   std::for_each(stderr_data.cbegin(), stderr_data.cend(),
