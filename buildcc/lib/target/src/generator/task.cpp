@@ -28,17 +28,17 @@ constexpr const char *const kPostGenerateTaskName = "PostGenerate";
 
 namespace buildcc::base {
 
-void Generator::GenerateTask(tf::FlowBuilder &builder) {
+void Generator::GenerateTask() {
 
-  tf::Task pregenerate_task = builder.emplace([this]() { Convert(); });
+  tf::Task pregenerate_task = tf_.emplace([this]() { Convert(); });
 
-  tf::Task postgenerate_task = builder.emplace([this]() {
+  tf::Task postgenerate_task = tf_.emplace([this]() {
     if (dirty_) {
       Store();
     }
   });
 
-  tf::Task generate_task = builder.emplace([&](tf::Subflow &subflow) {
+  tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
     BuildGenerate();
 
     if (!dirty_) {

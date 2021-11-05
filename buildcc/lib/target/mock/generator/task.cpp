@@ -6,8 +6,7 @@
 
 namespace buildcc::base {
 
-void Generator::GenerateTask(tf::FlowBuilder &builder) {
-  (void)builder;
+void Generator::GenerateTask() {
   Convert();
   BuildGenerate();
 

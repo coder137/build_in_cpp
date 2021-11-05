@@ -58,7 +58,7 @@ public:
   tf::Taskflow &GetTaskflow() { return tf_; }
 
 private:
-  void GenerateTask(tf::FlowBuilder &builder);
+  void GenerateTask();
   void Convert();
   void BuildGenerate();
 

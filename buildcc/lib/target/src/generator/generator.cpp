@@ -24,8 +24,7 @@ namespace buildcc::base {
 
 void Generator::Build() {
   (void)loader_.Load();
-
-  GenerateTask(tf_);
+  GenerateTask();
 }
 
 // PRIVATE
