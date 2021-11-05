@@ -67,9 +67,9 @@ void Register::Clean(const std::function<void(void)> &clean_cb) {
 }
 
 void Register::Dep(const base::Target &target, const base::Target &dependency) {
-  const auto target_iter = store_.find(target.GetUniqueId());
-  const auto dep_iter = store_.find(dependency.GetUniqueId());
-  env::assert_fatal(!(target_iter == store_.end() || dep_iter == store_.end()),
+  const auto target_iter = build_.find(target.GetUniqueId());
+  const auto dep_iter = build_.find(dependency.GetUniqueId());
+  env::assert_fatal(!(target_iter == build_.end() || dep_iter == build_.end()),
                     "Call Register::Build API on target and "
                     "dependency before Register::Dep API");
 
@@ -86,31 +86,24 @@ void Register::Dep(const base::Target &target, const base::Target &dependency) {
   target_iter->second.succeed(dep_iter->second);
 }
 
-void Register::Test(const Args::ToolchainState &toolchain_state,
-                    base::Target &target,
-                    const std::function<void(base::Target &)> &test_cb) {
+void Register::Test(
+    const Args::ToolchainState &toolchain_state, const std::string &command,
+    const base::Target &target,
+    const std::unordered_map<const char *, std::string> &arguments) {
   if (!(toolchain_state.build && toolchain_state.test)) {
     return;
   }
 
-  const auto target_iter = store_.find(target.GetUniqueId());
-  if (target_iter == store_.end()) {
-    env::assert_fatal<false>(
-        "Call Register::Build API on target before Register::Test API");
-  }
+  const auto target_iter = build_.find(target.GetUniqueId());
+  env::assert_fatal(
+      !(target_iter == build_.end()),
+      "Call Register::Build API on target before Register::Test API");
 
   const bool added =
-      tests_.emplace(target.GetUniqueId(), TestInfo(target, test_cb)).second;
+      tests_.emplace(target.GetUniqueId(), TestInfo(target, command, arguments))
+          .second;
   env::assert_fatal(
       added, fmt::format("Could not register test {}", target.GetName()));
-}
-
-void Register::RunTest() {
-  for (const auto &t : tests_) {
-    env::log_info(__FUNCTION__, fmt::format("Testing \'{}\'",
-                                            t.second.target_.GetUniqueId()));
-    t.second.cb_(t.second.target_);
-  }
 }
 
 // Private
@@ -123,12 +116,30 @@ void Register::Env() {
   env::set_log_level(args_.GetLogLevel());
 }
 
-void Register::StoreTarget(const base::Target &target, const tf::Task &task) {
-  const bool stored = store_.emplace(target.GetUniqueId(), task).second;
-  env::assert_fatal(
-      stored,
-      fmt::format("Duplicate `Register::Build` call detected for target '{}'",
-                  target.GetUniqueId()));
+//
+
+void Register::TestInfo::TestRunner() const {
+  env::log_info(__FUNCTION__,
+                fmt::format("Testing \'{}\'", target_.GetUniqueId()));
+  Command command;
+  command.AddDefaultArguments({
+      {"executable", target_.GetTargetPath().string()},
+  });
+  const std::string test_command = command.Construct(command_, arguments_);
+
+  std::vector<std::string> stdout_data;
+  std::vector<std::string> stderr_data;
+  const bool success =
+      Command::Execute(test_command, &stdout_data, &stderr_data);
+  (void)success;
+
+  // TODO, Add options for test verboseness
+  // For now just print it out
+  env::log_info("", target_.GetUniqueId());
+  std::for_each(stdout_data.cbegin(), stdout_data.cend(),
+                [](const auto &str) { env::log_info("STDOUT", str); });
+  std::for_each(stderr_data.cbegin(), stderr_data.cend(),
+                [](const auto &str) { env::log_info("STDERR", str); });
 }
 
 } // namespace buildcc

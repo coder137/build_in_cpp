@@ -20,6 +20,7 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <vector>
 
 namespace buildcc {
 
@@ -34,7 +35,9 @@ public:
                         const std::unordered_map<const char *, std::string>
                             &arguments = {}) const;
 
-  static bool Execute(const std::string &command);
+  static bool Execute(const std::string &command,
+                      std::vector<std::string> *stdout_data = nullptr,
+                      std::vector<std::string> *stderr_data = nullptr);
 
 private:
   std::unordered_map<const char *, std::string> default_values_;

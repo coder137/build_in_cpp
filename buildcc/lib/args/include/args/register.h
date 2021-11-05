@@ -50,21 +50,12 @@ public:
       build_cb(target, std::forward<Params &>(params)...);
       task = BuildTask(target);
     }
-    StoreTarget(target, task);
+    const bool stored = build_.emplace(target.GetUniqueId(), task).second;
+    env::assert_fatal(
+        stored,
+        fmt::format("Duplicate `Register::Build` call detected for target '{}'",
+                    target.GetUniqueId()));
   }
-
-  /**
-   * @brief Register the Target to be run
-   * PreReq: Call `Register::Build` before calling `Register::Test`
-   *
-   * @param toolchain_state `build and test state` registers the target for
-   * testing
-   * @param target target is registered for test
-   * @param test_cb custom user callback for testing
-   */
-  // TODO, Update the Test API
-  void Test(const Args::ToolchainState &toolchain_state, base::Target &target,
-            const std::function<void(base::Target &)> &test_cb);
 
   /**
    * @brief Setup dependency between 2 Targets
@@ -77,20 +68,43 @@ public:
    */
   void Dep(const base::Target &target, const base::Target &dependency);
 
+  /**
+   * @brief Register the Target to be run
+   * PreReq: Call `Register::Build` before calling `Register::Test`
+   *
+   * @param toolchain_state `build and test state` registers the target for
+   * testing
+   * @param command Command string pattern
+   * `{executable}` is the built executable which is always added to the pattern
+   *
+   * @param target Target added as the `{executable}` argument
+   *
+   * @param arguments Addition arguments to be added to the command string
+   * pattern
+   */
+  void
+  Test(const Args::ToolchainState &toolchain_state, const std::string &command,
+       const base::Target &target,
+       const std::unordered_map<const char *, std::string> &arguments = {});
+
   void RunBuild();
   void RunTest();
 
   // Getters
-  const tf::Taskflow &GetTaskflow() const { return tf_; }
+  const tf::Taskflow &GetTaskflow() const { return build_tf_; }
 
 private:
   struct TestInfo {
-    base::Target &target_;
-    std::function<void(base::Target &target)> cb_;
+    TestInfo(const base::Target &target, const std::string &command,
+             const std::unordered_map<const char *, std::string> &arguments)
+        : target_(target), command_(command), arguments_(arguments) {}
 
-    TestInfo(base::Target &target,
-             const std::function<void(base::Target &target)> &cb)
-        : target_(target), cb_(cb) {}
+    void TestRunner() const;
+
+  private:
+    const base::Target &target_;
+    std::string command_;
+    std::unordered_map<const char *, std::string> arguments_;
   };
 
 private:
@@ -102,17 +116,35 @@ private:
   //
   tf::Task BuildTask(base::Target &target);
 
-  //
-  void StoreTarget(const base::Target &target, const tf::Task &task);
+  // NOTE, Register::Build and Register::Test both take in Args::ToolchainState
+  // and base::Target &
+  // TODO, Create a Context class for Build, Test and Dep
+  // It can store
+  // * Common
+  // Args::ToolchainState state_
+  // base::Target & target_
 
+  // * Build
+  // tf::Taskflow build_tf_
+  // tf::Task build_task_
+
+  // * Test
+  // tf::Taskflow test_tf_
+  // std::string command_
+  // std::unordered_map<const char *, std::string> arguments_
 private:
   const Args &args_;
 
-  tf::Taskflow tf_{"Targets"};
-  tf::Executor executor_;
+  // Build
+  tf::Taskflow build_tf_{"Targets"};
 
-  std::unordered_map<fs::path, tf::Task, internal::PathHash> store_;
-  std::unordered_map<fs::path, TestInfo, internal::PathHash> tests_;
+  std::unordered_map<std::string, tf::Task> build_;
+
+  // Tests
+  std::unordered_map<std::string, TestInfo> tests_;
+
+  //
+  tf::Executor executor_;
 };
 
 } // namespace buildcc

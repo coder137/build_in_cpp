@@ -6,9 +6,14 @@ namespace buildcc {
 
 tf::Task Register::BuildTask(base::Target &target) {
   mock().actualCall(fmt::format("BuildTask_{}", target.GetName()).c_str());
-  return tf_.placeholder().name(target.GetUniqueId());
+  return build_tf_.placeholder().name(target.GetUniqueId());
 }
 
 void Register::RunBuild() {}
+
+void Register::RunTest() {
+  std::for_each(tests_.begin(), tests_.end(),
+                [](const auto &p) { p.second.TestRunner(); });
+}
 
 } // namespace buildcc

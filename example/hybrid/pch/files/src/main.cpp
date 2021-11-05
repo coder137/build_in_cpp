@@ -11,9 +11,7 @@ int main() {
 #endif
 
   float f1 = 10.2;
-  float f2 = 1.0;
-  std::cout << "input a floating point number" << std::endl;
-  std::cin >> f2;
+  float f2 = 2.3;
 
   float value = pow(f1, f2);
   std::cout << value << std::endl;

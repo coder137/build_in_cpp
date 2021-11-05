@@ -20,13 +20,23 @@
 namespace buildcc {
 
 tf::Task Register::BuildTask(base::Target &target) {
-  return tf_.composed_of(target.GetTaskflow()).name(target.GetUniqueId());
+  return build_tf_.composed_of(target.GetTaskflow()).name(target.GetUniqueId());
 }
 
 void Register::RunBuild() {
   env::log_info(__FUNCTION__, fmt::format("Running with {} workers",
                                           executor_.num_workers()));
-  executor_.run(tf_);
+  executor_.run(build_tf_);
+  executor_.wait_for_all();
+}
+
+void Register::RunTest() {
+  tf::Taskflow test_tf{"Tests"};
+  test_tf.for_each(
+      tests_.begin(), tests_.end(),
+      [](const std::pair<std::string, TestInfo> &p) { p.second.TestRunner(); });
+
+  executor_.run(test_tf);
   executor_.wait_for_all();
 }
 
