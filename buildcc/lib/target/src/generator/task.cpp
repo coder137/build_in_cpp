@@ -30,49 +30,38 @@ namespace buildcc::base {
 
 void Generator::GenerateTask(tf::FlowBuilder &builder) {
 
-  tf::Task pregenerate_task = builder.emplace([this]() {
-    pregenerate_cb_();
-    Convert();
-  });
+  tf::Task pregenerate_task = builder.emplace([this]() { Convert(); });
 
-  // TODO, See if postgenerate_cb_ needs to be inside the dirty_ condition
   tf::Task postgenerate_task = builder.emplace([this]() {
     if (dirty_) {
       Store();
-      postgenerate_cb_();
     }
   });
 
   tf::Task generate_task = builder.emplace([&](tf::Subflow &subflow) {
-    std::vector<const internal::GenInfo *> generated_files;
-    std::vector<const internal::GenInfo *> dummy_generated_files;
-    BuildGenerate(generated_files, dummy_generated_files);
+    BuildGenerate();
 
-    for (const auto &info : generated_files) {
-      if (info->parallel) {
-        subflow
-            .for_each(info->commands.cbegin(), info->commands.cend(),
-                      [](const std::string &command) {
-                        bool success = Command::Execute(command);
-                        env::assert_fatal(success,
-                                          fmt::format("{} failed", command));
-                      })
-            .name(info->name);
-      } else {
-        subflow
-            .emplace([info]() {
-              for (const auto &command : info->commands) {
-                bool success = Command::Execute(command);
-                env::assert_fatal(success, fmt::format("{} failed", command));
-              }
-            })
-            .name(info->name);
-      }
+    if (!dirty_) {
+      return;
     }
 
-    for (const auto &info : dummy_generated_files) {
-      subflow.placeholder().name(info->name);
+    tf::Task gen_task;
+    if (parallel_) {
+      gen_task = subflow.for_each(
+          current_commands_.cbegin(), current_commands_.cend(),
+          [](const std::string &command) {
+            bool success = Command::Execute(command);
+            env::assert_fatal(success, fmt::format("{} failed", command));
+          });
+    } else {
+      gen_task = subflow.emplace([&]() {
+        for (const auto &command : current_commands_) {
+          bool success = Command::Execute(command);
+          env::assert_fatal(success, fmt::format("{} failed", command));
+        }
+      });
     }
+    gen_task.name(name_);
   });
 
   generate_task.succeed(pregenerate_task);
