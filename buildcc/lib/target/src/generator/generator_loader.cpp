@@ -45,18 +45,9 @@ bool GeneratorLoader::Load() {
 
   const auto *generator = fbs::GetGenerator((const void *)buffer.c_str());
 
-  const auto *info = generator->info();
-  for (auto iter = info->cbegin(); iter != info->cend(); iter++) {
-    path_unordered_set i;
-    fs_unordered_set o;
-    std::vector<std::string> c;
-    ExtractPath(iter->inputs(), i);
-    Extract(iter->outputs(), o);
-    Extract(iter->commands(), c);
-    loaded_info_.emplace(iter->name()->c_str(),
-                         GenInfo::CreateInternalGenInfo(
-                             iter->name()->c_str(), i, o, c, iter->parallel()));
-  }
+  ExtractPath(generator->inputs(), loaded_input_files_);
+  Extract(generator->outputs(), loaded_output_files_);
+  Extract(generator->commands(), loaded_commands_);
 
   loaded_ = true;
   return true;

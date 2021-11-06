@@ -16,18 +16,12 @@ include "path.fbs";
 
 namespace schema.internal;
 
-table GenInfo {
+// Each generator consists of many relational files of [input] - [output] - [commands]
+table Generator {
     name:string (key);
     inputs:[Path];
     outputs:[string];
     commands:[string];
-    parallel:bool;
-}
-
-// Each generator consists of many relational files of [input] - [output] - [commands]
-table Generator {
-    name:string (key);
-    info:[GenInfo];
 }
 
 root_type Generator;

@@ -32,26 +32,19 @@ bool Generator::Store() {
 
   flatbuffers::FlatBufferBuilder builder;
 
-  std::vector<flatbuffers::Offset<fbs::GenInfo>> fbs_generator_list;
-  for (const auto &info : current_info_) {
-    const auto &geninfo = info.second;
-    auto fbs_inputs =
-        internal::CreateFbsVectorPath(builder, geninfo.inputs.internal);
-    auto fbs_outputs =
-        internal::CreateFbsVectorString(builder, geninfo.outputs);
-    auto fbs_commands =
-        internal::CreateFbsVectorString(builder, geninfo.commands);
-    auto fbs_geninfo =
-        fbs::CreateGenInfoDirect(builder, geninfo.name.c_str(), &fbs_inputs,
-                                 &fbs_outputs, &fbs_commands, geninfo.parallel);
-    fbs_generator_list.push_back(fbs_geninfo);
-  }
+  auto fbs_input_files =
+      internal::CreateFbsVectorPath(builder, current_input_files_.internal);
+  auto fbs_output_files =
+      internal::CreateFbsVectorString(builder, current_output_files_);
+  auto fbs_commands =
+      internal::CreateFbsVectorString(builder, current_commands_);
 
   auto fbs_generator =
-      fbs::CreateGeneratorDirect(builder, name_.c_str(), &fbs_generator_list);
+      fbs::CreateGeneratorDirect(builder, name_.c_str(), &fbs_input_files,
+                                 &fbs_output_files, &fbs_commands);
   fbs::FinishGeneratorBuffer(builder, fbs_generator);
 
-  auto file_path = GetBinaryPath();
+  const fs::path file_path = GetBinaryPath();
   return env::SaveFile(file_path.string().c_str(),
                        (const char *)builder.GetBufferPointer(),
                        builder.GetSize(), true);

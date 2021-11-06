@@ -19,11 +19,14 @@
 
 #include <functional>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "taskflow/taskflow.hpp"
 
 #include "env/env.h"
+
+#include "command/command.h"
 
 #include "target/builder_interface.h"
 
@@ -32,82 +35,48 @@
 
 namespace buildcc::base {
 
-typedef std::function<bool(
-    const internal::geninfo_unordered_map &previous_info,
-    const internal::geninfo_unordered_map &current_info,
-    std::vector<const internal::GenInfo *> &output_generated_files,
-    std::vector<const internal::GenInfo *> &output_dummy_generated_files)>
-    custom_regenerate_cb_params;
-
 class Generator : public BuilderInterface {
 public:
-  Generator(const std::string &name, const fs::path &path)
-      : name_(name), loader_(name, path) {
-    unique_id_ = name;
+  Generator(const std::string &name,
+            const fs::path &target_path_relative_to_root, bool parallel = false)
+      : name_(name), generator_root_dir_(env::get_project_root_dir() /
+                                         target_path_relative_to_root),
+        generator_build_dir_(env::get_project_build_dir() / name),
+        loader_(name, generator_build_dir_), parallel_(parallel) {
+    Initialize();
   }
   Generator(const Generator &generator) = delete;
 
   /**
-   * @brief Define your input - output - command relation
+   * @brief Add default arguments for input, output and command requirements
    *
-   * @param name GenInfo task name
-   * @param inputs Input files
-   * @param outputs Output files generated
-   * @param commands Commands for input files to generate output files
-   * @param parallel Run commands in parallel
+   * @param arguments Key-Value pair for arguments
+   * NOTE, Key must be a variable (lvalue) not a constant (rvalue)
+   *
    */
-  void AddGenInfo(const std::string &name,
-                  const internal::fs_unordered_set &inputs,
-                  const internal::fs_unordered_set &outputs,
-                  const std::vector<std::string> &commands, bool parallel);
+  void AddDefaultArguments(
+      const std::unordered_map<const char *, std::string> &arguments);
 
-  /**
-   * @brief Implement your own Regenerate callback.
-   * - See `Regenerate` function for generic implementation
-   * - See `Recheck*` APIs in BuilderInterface for custom checks
-   *
-   * @param cb Gives 4 parameters
-   *
-   * const internal::geninfo_unordered_map &previous_info
-   * const internal::geninfo_unordered_map &current_info
-   * std::vector<const internal::GenInfo *> &output_generated_files
-   * std::vector<const internal::GenInfo *> &output_dummy_generated_files
-   *
-   * @return cb should return true or false which sets the dirty_ flag
-   */
-  void AddCustomRegenerateCb(const custom_regenerate_cb_params &cb);
-
-  /**
-   * @brief Custom pre generate callback run before the core generate function
-   *
-   * @param cb
-   */
-  void AddPregenerateCb(const std::function<void(void)> &cb);
-
-  /**
-   * @brief Custom post generate callback run after the core generate function
-   * IF dirty_ == true
-   *
-   * @param cb
-   */
-  void AddPostgenerateCb(const std::function<void(void)> &cb);
+  void AddInput(const std::string &absolute_input_pattern,
+                const char *identifier = nullptr);
+  void AddOutput(const std::string &absolute_output_pattern,
+                 const char *identifier = nullptr);
+  void AddCommand(
+      const std::string &command_pattern,
+      const std::unordered_map<const char *, std::string> &arguments = {});
 
   void Build() override;
-  void Build(tf::FlowBuilder &builder);
 
   // Getter
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
   tf::Taskflow &GetTaskflow() { return tf_; }
 
 private:
-  void GenerateTask(tf::FlowBuilder &builder);
+  void Initialize();
+
+  void GenerateTask();
   void Convert();
-  void
-  BuildGenerate(std::vector<const internal::GenInfo *> &generated_files,
-                std::vector<const internal::GenInfo *> &dummy_generated_files);
-  bool
-  Regenerate(std::vector<const internal::GenInfo *> &generated_files,
-             std::vector<const internal::GenInfo *> &dummy_generated_files);
+  void BuildGenerate();
 
   bool Store() override;
 
@@ -120,15 +89,20 @@ private:
   void CommandChanged();
 
 private:
+  // Constructor
   std::string name_;
-  std::unordered_map<std::string, internal::GenInfo> current_info_;
-
-  custom_regenerate_cb_params custom_regenerate_cb_;
-  std::function<void(void)> pregenerate_cb_{[]() {}};
-  std::function<void(void)> postgenerate_cb_{[]() {}};
-
+  fs::path generator_root_dir_;
+  fs::path generator_build_dir_;
   internal::GeneratorLoader loader_;
 
+  // Serialization
+  internal::default_files current_input_files_;
+  internal::fs_unordered_set current_output_files_;
+  std::vector<std::string> current_commands_;
+  bool parallel_{false};
+
+  // Internal
+  Command command_;
   tf::Taskflow tf_;
 };
 

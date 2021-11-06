@@ -22,106 +22,88 @@
 
 namespace buildcc::base {
 
-void Generator::AddGenInfo(const std::string &name,
-                           const internal::fs_unordered_set &inputs,
-                           const internal::fs_unordered_set &outputs,
-                           const std::vector<std::string> &commands,
-                           bool parallel) {
-  env::assert_fatal(current_info_.find(name) == current_info_.end(),
-                    fmt::format("'{}' information already registered", name));
-  current_info_.emplace(name, internal::GenInfo::CreateUserGenInfo(
-                                  name, inputs, outputs, commands, parallel));
+void Generator::AddDefaultArguments(
+    const std::unordered_map<const char *, std::string> &arguments) {
+  command_.AddDefaultArguments(arguments);
 }
 
-void Generator::AddCustomRegenerateCb(const custom_regenerate_cb_params &cb) {
-  ASSERT_FATAL(cb, "Bad function: cb");
-  custom_regenerate_cb_ = cb;
+void Generator::AddInput(const std::string &absolute_input_pattern,
+                         const char *identifier) {
+  std::string absolute_input_string =
+      command_.Construct(absolute_input_pattern);
+  const auto absolute_input_path =
+      internal::Path::CreateNewPath(absolute_input_string);
+  current_input_files_.user.insert(absolute_input_path.GetPathname());
+
+  if (identifier != nullptr) {
+    command_.AddDefaultArgument(identifier,
+                                absolute_input_path.GetPathAsString());
+  }
 }
 
-void Generator::AddPregenerateCb(const std::function<void(void)> &cb) {
-  ASSERT_FATAL(cb, "Bad function: cb");
-  pregenerate_cb_ = cb;
+void Generator::AddOutput(const std::string &absolute_output_pattern,
+                          const char *identifier) {
+  std::string absolute_output_string =
+      command_.Construct(absolute_output_pattern);
+  const auto absolute_output_path =
+      internal::Path::CreateNewPath(absolute_output_string);
+  current_output_files_.insert(absolute_output_path.GetPathname());
+
+  if (identifier != nullptr) {
+    command_.AddDefaultArgument(identifier,
+                                absolute_output_path.GetPathAsString());
+  }
 }
 
-void Generator::AddPostgenerateCb(const std::function<void(void)> &cb) {
-  ASSERT_FATAL(cb, "Bad function: cb");
-  postgenerate_cb_ = cb;
+void Generator::AddCommand(
+    const std::string &command_pattern,
+    const std::unordered_map<const char *, std::string> &arguments) {
+  std::string constructed_command =
+      command_.Construct(command_pattern, arguments);
+  current_commands_.emplace_back(std::move(constructed_command));
 }
 
-void Generator::Build() { GenerateTask(tf_); }
-void Generator::Build(tf::FlowBuilder &builder) { GenerateTask(builder); }
+void Generator::Build() {
+  (void)loader_.Load();
+
+  GenerateTask();
+}
 
 // PRIVATE
 
-void Generator::Convert() {
-  for (auto &ci : current_info_) {
-    ci.second.inputs.Convert();
-  }
+void Generator::Initialize() {
+  // Checks
+  env::assert_fatal(
+      env::is_init(),
+      "Environment is not initialized. Use the buildcc::env::init API");
+
+  //
+  fs::create_directories(generator_build_dir_);
+  command_.AddDefaultArguments({
+      {"gen_root_dir", generator_root_dir_.string()},
+      {"gen_build_dir", generator_build_dir_.string()},
+  });
+
+  //
+  unique_id_ = name_;
+  tf_.name(name_);
 }
 
-void Generator::BuildGenerate(
-    std::vector<const internal::GenInfo *> &generated_files,
-    std::vector<const internal::GenInfo *> &dummy_generated_files) {
-  const bool loaded = loader_.Load();
-  bool build = false;
-  if (!loaded) {
-    std::for_each(
-        current_info_.cbegin(), current_info_.cend(),
-        [&](const auto &p) { generated_files.push_back(&(p.second)); });
-    build = true;
+void Generator::Convert() { current_input_files_.Convert(); }
+
+void Generator::BuildGenerate() {
+  if (!loader_.IsLoaded()) {
+    dirty_ = true;
   } else {
-    if (custom_regenerate_cb_) {
-      build = custom_regenerate_cb_(loader_.GetLoadedInfo(), current_info_,
-                                    generated_files, dummy_generated_files);
-    } else {
-      build = Regenerate(generated_files, dummy_generated_files);
-    }
+    RecheckPaths(
+        loader_.GetLoadedInputFiles(), current_input_files_.internal,
+        [&]() { InputRemoved(); }, [&]() { InputAdded(); },
+        [&]() { InputUpdated(); });
+    RecheckChanged(loader_.GetLoadedOutputFiles(), current_output_files_,
+                   [&]() { OutputChanged(); });
+    RecheckChanged(loader_.GetLoadedCommands(), current_commands_,
+                   [&]() { CommandChanged(); });
   }
-
-  dirty_ = build;
-}
-
-bool Generator::Regenerate(
-    std::vector<const internal::GenInfo *> &generated_files,
-    std::vector<const internal::GenInfo *> &dummy_generated_files) {
-  bool build = false;
-  const auto &previous_info = loader_.GetLoadedInfo();
-
-  // Previous Info has more items than Current Info
-  for (const auto &pi : previous_info) {
-    if (current_info_.find(pi.first) == current_info_.end()) {
-      build = true;
-      break;
-    }
-  }
-
-  // Check all files individually
-  for (const auto &ci : current_info_) {
-    if (previous_info.find(ci.first) == previous_info.end()) {
-      // This means that current_info has more items than
-      // previous_info
-      dirty_ = true;
-    } else {
-      const internal::GenInfo &loaded_geninfo = previous_info.at(ci.first);
-      RecheckPaths(
-          loaded_geninfo.inputs.internal, ci.second.inputs.internal,
-          [&]() { InputRemoved(); }, [&]() { InputAdded(); },
-          [&]() { InputUpdated(); });
-      RecheckChanged(loaded_geninfo.outputs, ci.second.outputs,
-                     [&]() { OutputChanged(); });
-      RecheckChanged(loaded_geninfo.commands, ci.second.commands,
-                     [&]() { CommandChanged(); });
-    }
-
-    if (dirty_) {
-      generated_files.push_back(&(ci.second));
-      build = true;
-    } else {
-      dummy_generated_files.push_back(&(ci.second));
-    }
-    dirty_ = false;
-  }
-  return build;
 }
 
 } // namespace buildcc::base

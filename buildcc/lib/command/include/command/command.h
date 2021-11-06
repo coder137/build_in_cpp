@@ -28,6 +28,7 @@ class Command {
 public:
   explicit Command() = default;
 
+  void AddDefaultArgument(const char *key, const std::string &value);
   void AddDefaultArguments(
       const std::unordered_map<const char *, std::string> &arguments);
 

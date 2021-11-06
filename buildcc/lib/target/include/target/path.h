@@ -132,9 +132,6 @@ typedef std::unordered_set<fs::path, PathHash> fs_unordered_set;
 // optimization by caching the `user` information and `internal` information
 // together
 struct default_files {
-  path_unordered_set internal;
-  fs_unordered_set user;
-
   default_files() {}
   default_files(const path_unordered_set &i, const fs_unordered_set &u)
       : internal(i), user(u) {}
@@ -149,6 +146,10 @@ struct default_files {
       internal.emplace(Path::CreateExistingPath(p));
     }
   }
+
+public:
+  path_unordered_set internal;
+  fs_unordered_set user;
 
 private:
   bool done_once{false};
