@@ -31,13 +31,14 @@ TEST(GeneratorTestGroup, Generator_Build) {
   constexpr const char *const NAME = "Build";
   buildcc::base::Generator generator(NAME, "");
 
+  generator.AddDefaultArguments({
+      {"compiler", "gcc"},
+  });
+
   generator.AddInput("{gen_root_dir}/dummy_main.c");
   generator.AddOutput("{gen_build_dir}/dummy_main.exe");
   generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                       "{gen_root_dir}/dummy_main.c",
-                       {
-                           {"compiler", "gcc"},
-                       });
+                       "{gen_root_dir}/dummy_main.c");
 
   buildcc::m::CommandExpect_Execute(1, true);
   generator.Build();
