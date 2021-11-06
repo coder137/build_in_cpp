@@ -108,6 +108,14 @@ void Register::Test(
 
 // Private
 
+void Register::BuildStoreTask(const std::string &unique_id,
+                              const tf::Task &task) {
+  const bool stored = build_.emplace(unique_id, task).second;
+  env::assert_fatal(
+      stored, fmt::format("Duplicate `Register::Build` call detected for '{}'",
+                          unique_id));
+}
+
 void Register::Initialize() { Env(); }
 
 void Register::Env() {
