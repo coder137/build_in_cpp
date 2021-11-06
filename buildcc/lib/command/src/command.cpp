@@ -26,6 +26,10 @@
 
 namespace buildcc {
 
+void Command::AddDefaultArgument(const char *key, const std::string &value) {
+  default_values_.emplace(key, value);
+}
+
 void Command::AddDefaultArguments(
     const std::unordered_map<const char *, std::string> &arguments) {
   default_values_.insert(arguments.begin(), arguments.end());
