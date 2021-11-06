@@ -57,8 +57,10 @@ public:
   void AddDefaultArguments(
       const std::unordered_map<const char *, std::string> &arguments);
 
-  void AddInput(const std::string &absolute_input_pattern);
-  void AddOutput(const std::string &absolute_output_pattern);
+  void AddInput(const std::string &absolute_input_pattern,
+                const char *identifier = nullptr);
+  void AddOutput(const std::string &absolute_output_pattern,
+                 const char *identifier = nullptr);
   void AddCommand(
       const std::string &command_pattern,
       const std::unordered_map<const char *, std::string> &arguments = {});

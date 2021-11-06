@@ -27,17 +27,26 @@ void Generator::AddDefaultArguments(
   command_.AddDefaultArguments(arguments);
 }
 
-void Generator::AddInput(const std::string &absolute_input_pattern) {
+void Generator::AddInput(const std::string &absolute_input_pattern,
+                         const char *identifier) {
   std::string absolute_input_string =
       command_.Construct(absolute_input_pattern);
-
   current_input_files_.user.emplace(fs::path(absolute_input_string));
+
+  if (identifier != nullptr) {
+    command_.AddDefaultArgument(identifier, absolute_input_string);
+  }
 }
 
-void Generator::AddOutput(const std::string &absolute_output_pattern) {
+void Generator::AddOutput(const std::string &absolute_output_pattern,
+                          const char *identifier) {
   std::string absolute_output_string =
       command_.Construct(absolute_output_pattern);
   current_output_files_.emplace(fs::path(absolute_output_string));
+
+  if (identifier != nullptr) {
+    command_.AddDefaultArgument(identifier, absolute_output_string);
+  }
 }
 
 void Generator::AddCommand(
