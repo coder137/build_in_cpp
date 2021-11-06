@@ -131,8 +131,8 @@ public:
       : name_(name), type_(type), toolchain_(toolchain), config_(config),
         target_root_dir_(env::get_project_root_dir() /
                          target_path_relative_to_root),
-        target_build_dir_(fs::path(env::get_project_build_dir()) /
-                          toolchain.GetName() / name),
+        target_build_dir_(env::get_project_build_dir() / toolchain.GetName() /
+                          name),
         loader_(name, target_build_dir_), ext_(*this), compile_pch_(*this),
         compile_object_(*this), link_target_(*this) {
     Initialize();
