@@ -22,6 +22,7 @@ namespace {
 
 constexpr const char *const kPreGenerateTaskName = "PreGenerate";
 constexpr const char *const kGenerateTaskName = "Generate";
+// constexpr const char *const kDummyGenerateTaskName = "DummyGenerate";
 constexpr const char *const kPostGenerateTaskName = "PostGenerate";
 
 } // namespace
@@ -30,46 +31,40 @@ namespace buildcc::base {
 
 void Generator::GenerateTask() {
 
-  tf::Task pregenerate_task = tf_.emplace([this]() { Convert(); });
+  tf::Task pregenerate_task = tf_.emplace([this]() {
+    Convert();
+    BuildGenerate();
+    return dirty_;
+  });
+  pregenerate_task.name(kPreGenerateTaskName);
 
   tf::Task postgenerate_task = tf_.emplace([this]() {
     if (dirty_) {
       Store();
     }
   });
+  postgenerate_task.name(kPostGenerateTaskName);
 
-  tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
-    BuildGenerate();
-
-    if (!dirty_) {
-      return;
-    }
-
-    tf::Task gen_task;
-    if (parallel_) {
-      gen_task = subflow.for_each(
-          current_commands_.cbegin(), current_commands_.cend(),
-          [](const std::string &command) {
-            bool success = Command::Execute(command);
-            env::assert_fatal(success, fmt::format("{} failed", command));
-          });
-    } else {
-      gen_task = subflow.emplace([&]() {
-        for (const auto &command : current_commands_) {
+  tf::Task generate_task;
+  if (parallel_) {
+    generate_task = tf_.for_each(
+        current_commands_.cbegin(), current_commands_.cend(),
+        [](const std::string &command) {
           bool success = Command::Execute(command);
           env::assert_fatal(success, fmt::format("{} failed", command));
-        }
-      });
-    }
-    gen_task.name(name_);
-  });
-
-  generate_task.succeed(pregenerate_task);
-  generate_task.precede(postgenerate_task);
-
-  pregenerate_task.name(kPreGenerateTaskName);
+        });
+  } else {
+    generate_task = tf_.emplace([&]() {
+      for (const auto &command : current_commands_) {
+        bool success = Command::Execute(command);
+        env::assert_fatal(success, fmt::format("{} failed", command));
+      }
+    });
+  }
   generate_task.name(kGenerateTaskName);
-  postgenerate_task.name(kPostGenerateTaskName);
+
+  pregenerate_task.precede(postgenerate_task, generate_task);
+  generate_task.precede(postgenerate_task);
 }
 
 } // namespace buildcc::base
