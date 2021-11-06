@@ -71,8 +71,8 @@ public:
    * Target runs after dependency is built
    *
    */
-  // TODO, We can update this to use a BuilderInterface
-  void Dep(const base::Target &target, const base::Target &dependency);
+  void Dep(const base::BuilderInterface &target,
+           const base::BuilderInterface &dependency);
 
   /**
    * @brief Register the Target to be run
