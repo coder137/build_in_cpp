@@ -37,7 +37,6 @@
 #include "target/friend/link_target.h"
 
 // Internal
-#include "target/generator.h"
 #include "target/path.h"
 #include "target/target_loader.h"
 #include "target/target_storer.h"

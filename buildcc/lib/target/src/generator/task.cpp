@@ -22,7 +22,6 @@ namespace {
 
 constexpr const char *const kPreGenerateTaskName = "PreGenerate";
 constexpr const char *const kGenerateTaskName = "Generate";
-// constexpr const char *const kDummyGenerateTaskName = "DummyGenerate";
 constexpr const char *const kPostGenerateTaskName = "PostGenerate";
 
 } // namespace
