@@ -46,6 +46,24 @@ TEST(GeneratorTestGroup, Generator_Build) {
   mock().checkExpectations();
 }
 
+TEST(GeneratorTestGroup, Generator_Identifier) {
+  constexpr const char *const NAME = "Identifier";
+  buildcc::base::Generator generator(NAME, "");
+
+  generator.AddDefaultArguments({
+      {"compiler", "gcc"},
+  });
+
+  generator.AddInput("{gen_root_dir}/dummy_main.c", "dummy_main_c");
+  generator.AddOutput("{gen_build_dir}/dummy_main.exe", "dummy_main_exe");
+  generator.AddCommand("{compiler} -o {dummy_main_exe} {dummy_main_c}");
+
+  buildcc::m::CommandExpect_Execute(1, true);
+  generator.Build();
+
+  mock().checkExpectations();
+}
+
 TEST(GeneratorTestGroup, Generator_Rebuild) {
   constexpr const char *const NAME = "Rebuild";
   {
