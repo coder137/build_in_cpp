@@ -71,6 +71,8 @@ public:
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
   tf::Taskflow &GetTaskflow() { return tf_; }
 
+  const std::string &GetName() { return name_; }
+
 private:
   void Initialize();
 
