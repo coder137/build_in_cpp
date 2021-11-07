@@ -35,6 +35,13 @@ void Command::AddDefaultArguments(
   default_values_.insert(arguments.begin(), arguments.end());
 }
 
+const std::string &Command::GetDefaultValueByKey(const char *key) const {
+  const auto iter = default_values_.find(key);
+  env::assert_fatal(!(iter == default_values_.end()),
+                    fmt::format("Could not find value for '{}'", key));
+  return default_values_.at(key);
+}
+
 std::string Command::Construct(
     std::string_view format,
     const std::unordered_map<const char *, std::string> &arguments) const {

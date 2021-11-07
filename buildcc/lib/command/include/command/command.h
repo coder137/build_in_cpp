@@ -40,6 +40,14 @@ public:
                       std::vector<std::string> *stdout_data = nullptr,
                       std::vector<std::string> *stderr_data = nullptr);
 
+  /**
+   * @brief Get the Default Value By Key object
+   * NOTE: Only works when key/value pairs are added to DefaultArgument(s)
+   *
+   * @return const std::string&
+   */
+  const std::string &GetDefaultValueByKey(const char *key) const;
+
 private:
   std::unordered_map<const char *, std::string> default_values_;
 };
