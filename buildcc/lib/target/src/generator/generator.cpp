@@ -70,7 +70,7 @@ void Generator::Build() {
 }
 
 const std::string &
-Generator::GetFileByIdentifier(const char *file_identifier) const {
+Generator::GetValueByIdentifier(const char *file_identifier) const {
   return command_.GetDefaultValueByKey(file_identifier);
 }
 
