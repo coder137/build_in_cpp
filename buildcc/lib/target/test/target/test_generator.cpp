@@ -260,6 +260,7 @@ TEST(GeneratorTestGroup, Generator_AddDefaultArguments) {
   });
   const std::string &value = generator.GetValueByIdentifier("key");
   STRCMP_EQUAL(value.c_str(), "value");
+  STRCMP_EQUAL(generator.GetName().c_str(), "AddDefaultArgument");
 }
 
 int main(int ac, char **av) {
