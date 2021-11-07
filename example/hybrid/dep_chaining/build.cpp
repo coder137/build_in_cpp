@@ -61,8 +61,17 @@ int main(int argc, char **argv) {
   reg.Dep(g_ctarget, c_generator);
   reg.Dep(m_ctarget, c_generator);
 
+  // Tests
+  reg.Test(arg_gcc.state, "{executable}", g_cpptarget);
+  reg.Test(arg_gcc.state, "{executable}", g_ctarget);
+  reg.Test(arg_msvc.state, "{executable}", m_cpptarget);
+  reg.Test(arg_msvc.state, "{executable}", m_ctarget);
+
   // 6. Build Target
   reg.RunBuild();
+
+  // 7. Test Target
+  reg.RunTest();
 
   // - Clang Compile Commands
   plugin::ClangCompileCommands(
