@@ -251,6 +251,18 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
   mock().checkExpectations();
 }
 
+TEST(GeneratorTestGroup, Generator_AddDefaultArguments) {
+  constexpr const char *const NAME = "AddDefaultArgument";
+  buildcc::base::Generator generator(NAME, "");
+
+  generator.AddDefaultArguments({
+      {"key", "value"},
+  });
+  const std::string &value = generator.GetValueByIdentifier("key");
+  STRCMP_EQUAL(value.c_str(), "value");
+  STRCMP_EQUAL(generator.GetName().c_str(), "AddDefaultArgument");
+}
+
 int main(int ac, char **av) {
   fs::remove_all(BUILD_DIR);
   buildcc::env::init(fs::current_path() / "data", BUILD_DIR);

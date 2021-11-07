@@ -21,6 +21,8 @@
 #include <unordered_map>
 
 #include "args.h"
+
+#include "target/generator.h"
 #include "target/target.h"
 
 #include "taskflow/taskflow.hpp"
@@ -48,13 +50,16 @@ public:
     tf::Task task;
     if (toolchain_state.build) {
       build_cb(target, std::forward<Params &>(params)...);
-      task = BuildTask(target);
+      task = BuildTargetTask(target);
     }
-    const bool stored = build_.emplace(target.GetUniqueId(), task).second;
-    env::assert_fatal(
-        stored,
-        fmt::format("Duplicate `Register::Build` call detected for target '{}'",
-                    target.GetUniqueId()));
+    BuildStoreTask(target.GetUniqueId(), task);
+  }
+
+  template <typename C, typename... Params>
+  void Build(const C &build_cb, base::Generator &generator, Params &...params) {
+    build_cb(generator, std::forward<Params &>(params)...);
+    tf::Task task = BuildGeneratorTask(generator);
+    BuildStoreTask(generator.GetUniqueId(), task);
   }
 
   /**
@@ -66,7 +71,8 @@ public:
    * Target runs after dependency is built
    *
    */
-  void Dep(const base::Target &target, const base::Target &dependency);
+  void Dep(const base::BuilderInterface &target,
+           const base::BuilderInterface &dependency);
 
   /**
    * @brief Register the Target to be run
@@ -113,25 +119,11 @@ private:
   // Setup env:: defaults
   void Env();
 
-  //
-  tf::Task BuildTask(base::Target &target);
+  // BuildTasks
+  tf::Task BuildTargetTask(base::Target &target);
+  tf::Task BuildGeneratorTask(base::Generator &generator);
+  void BuildStoreTask(const std::string &unique_id, const tf::Task &task);
 
-  // NOTE, Register::Build and Register::Test both take in Args::ToolchainState
-  // and base::Target &
-  // TODO, Create a Context class for Build, Test and Dep
-  // It can store
-  // * Common
-  // Args::ToolchainState state_
-  // base::Target & target_
-
-  // * Build
-  // tf::Taskflow build_tf_
-  // tf::Task build_task_
-
-  // * Test
-  // tf::Taskflow test_tf_
-  // std::string command_
-  // std::unordered_map<const char *, std::string> arguments_
 private:
   const Args &args_;
 

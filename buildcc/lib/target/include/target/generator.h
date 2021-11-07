@@ -55,7 +55,7 @@ public:
    *
    */
   void AddDefaultArguments(
-      const std::unordered_map<const char *, std::string> &arguments);
+      const std::unordered_map<std::string, std::string> &arguments);
 
   void AddInput(const std::string &absolute_input_pattern,
                 const char *identifier = nullptr);
@@ -70,6 +70,11 @@ public:
   // Getter
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
   tf::Taskflow &GetTaskflow() { return tf_; }
+
+  const std::string &GetName() { return name_; }
+
+  const std::string &
+  GetValueByIdentifier(const std::string &file_identifier) const;
 
 private:
   void Initialize();

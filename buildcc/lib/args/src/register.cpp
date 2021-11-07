@@ -66,7 +66,8 @@ void Register::Clean(const std::function<void(void)> &clean_cb) {
   }
 }
 
-void Register::Dep(const base::Target &target, const base::Target &dependency) {
+void Register::Dep(const base::BuilderInterface &target,
+                   const base::BuilderInterface &dependency) {
   const auto target_iter = build_.find(target.GetUniqueId());
   const auto dep_iter = build_.find(dependency.GetUniqueId());
   env::assert_fatal(!(target_iter == build_.end() || dep_iter == build_.end()),
@@ -107,6 +108,14 @@ void Register::Test(
 }
 
 // Private
+
+void Register::BuildStoreTask(const std::string &unique_id,
+                              const tf::Task &task) {
+  const bool stored = build_.emplace(unique_id, task).second;
+  env::assert_fatal(
+      stored, fmt::format("Duplicate `Register::Build` call detected for '{}'",
+                          unique_id));
+}
 
 void Register::Initialize() { Env(); }
 

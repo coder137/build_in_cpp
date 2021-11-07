@@ -28,9 +28,9 @@ class Command {
 public:
   explicit Command() = default;
 
-  void AddDefaultArgument(const char *key, const std::string &value);
+  void AddDefaultArgument(const std::string &key, const std::string &value);
   void AddDefaultArguments(
-      const std::unordered_map<const char *, std::string> &arguments);
+      const std::unordered_map<std::string, std::string> &arguments);
 
   std::string Construct(std::string_view format,
                         const std::unordered_map<const char *, std::string>
@@ -40,8 +40,16 @@ public:
                       std::vector<std::string> *stdout_data = nullptr,
                       std::vector<std::string> *stderr_data = nullptr);
 
+  /**
+   * @brief Get the Default Value By Key object
+   * NOTE: Only works when key/value pairs are added to DefaultArgument(s)
+   *
+   * @return const std::string&
+   */
+  const std::string &GetDefaultValueByKey(const std::string &key) const;
+
 private:
-  std::unordered_map<const char *, std::string> default_values_;
+  std::unordered_map<std::string, std::string> default_values_;
 };
 
 } // namespace buildcc

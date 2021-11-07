@@ -23,7 +23,7 @@
 namespace buildcc::base {
 
 void Generator::AddDefaultArguments(
-    const std::unordered_map<const char *, std::string> &arguments) {
+    const std::unordered_map<std::string, std::string> &arguments) {
   command_.AddDefaultArguments(arguments);
 }
 
@@ -67,6 +67,11 @@ void Generator::Build() {
   (void)loader_.Load();
 
   GenerateTask();
+}
+
+const std::string &
+Generator::GetValueByIdentifier(const std::string &file_identifier) const {
+  return command_.GetDefaultValueByKey(file_identifier);
 }
 
 // PRIVATE

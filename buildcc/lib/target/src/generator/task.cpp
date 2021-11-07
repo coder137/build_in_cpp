@@ -19,10 +19,9 @@
 #include "command/command.h"
 
 namespace {
-
+constexpr const char *const kCommandTaskName = "Command";
 constexpr const char *const kPreGenerateTaskName = "PreGenerate";
 constexpr const char *const kGenerateTaskName = "Generate";
-// constexpr const char *const kDummyGenerateTaskName = "DummyGenerate";
 constexpr const char *const kPostGenerateTaskName = "PostGenerate";
 
 } // namespace
@@ -34,7 +33,6 @@ void Generator::GenerateTask() {
   tf::Task pregenerate_task = tf_.emplace([this]() {
     Convert();
     BuildGenerate();
-    return dirty_;
   });
   pregenerate_task.name(kPreGenerateTaskName);
 
@@ -45,25 +43,66 @@ void Generator::GenerateTask() {
   });
   postgenerate_task.name(kPostGenerateTaskName);
 
-  tf::Task generate_task;
-  if (parallel_) {
-    generate_task = tf_.for_each(
-        current_commands_.cbegin(), current_commands_.cend(),
-        [](const std::string &command) {
-          bool success = Command::Execute(command);
-          env::assert_fatal(success, fmt::format("{} failed", command));
+  tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
+    tf::Task command_task;
+    if (dirty_) {
+      if (parallel_) {
+        command_task = subflow.for_each(
+            current_commands_.cbegin(), current_commands_.cend(),
+            [](const std::string &command) {
+              bool success = Command::Execute(command);
+              env::assert_fatal(success, fmt::format("{} failed", command));
+            });
+      } else {
+        command_task = subflow.emplace([&]() {
+          for (const auto &command : current_commands_) {
+            bool success = Command::Execute(command);
+            env::assert_fatal(success, fmt::format("{} failed", command));
+          }
         });
-  } else {
-    generate_task = tf_.emplace([&]() {
-      for (const auto &command : current_commands_) {
-        bool success = Command::Execute(command);
-        env::assert_fatal(success, fmt::format("{} failed", command));
       }
-    });
-  }
+    } else {
+      command_task = subflow.placeholder();
+    }
+    command_task.name(kCommandTaskName);
+
+    for (const auto &i : current_input_files_.user) {
+      std::string name =
+          i.lexically_relative(env::get_project_root_dir()).string();
+      std::replace(name.begin(), name.end(), '\\', '/');
+      tf::Task task = subflow.placeholder().name(name);
+      task.precede(command_task);
+    }
+
+    for (const auto &o : current_output_files_) {
+      std::string name =
+          o.lexically_relative(env::get_project_root_dir()).string();
+      std::replace(name.begin(), name.end(), '\\', '/');
+      tf::Task task = subflow.placeholder().name(name);
+      task.succeed(command_task);
+    }
+  });
   generate_task.name(kGenerateTaskName);
 
-  pregenerate_task.precede(postgenerate_task, generate_task);
+  // tf::Task generate_task;
+  // if (parallel_) {
+  //   generate_task = tf_.for_each(
+  //       current_commands_.cbegin(), current_commands_.cend(),
+  //       [](const std::string &command) {
+  //         bool success = Command::Execute(command);
+  //         env::assert_fatal(success, fmt::format("{} failed", command));
+  //       });
+  // } else {
+  //   generate_task = tf_.emplace([&]() {
+  //     for (const auto &command : current_commands_) {
+  //       bool success = Command::Execute(command);
+  //       env::assert_fatal(success, fmt::format("{} failed", command));
+  //     }
+  //   });
+  // }
+  // generate_task.name(kGenerateTaskName);
+
+  pregenerate_task.precede(generate_task);
   generate_task.precede(postgenerate_task);
 }
 

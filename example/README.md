@@ -118,5 +118,7 @@ Multi hosts and multi targets
   - Select library type and target-toolchain type at runtime
 - [x] PCH
   - Precompile header usage with GCC and MSVC compilers 
+- [x] Dependency Chaining
+  - Chain `Generators` and `Targets` using the `Register` module 
 - [ ] Debugging
 - [ ] Cross Compilation with Unit Testing

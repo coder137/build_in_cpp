@@ -36,15 +36,23 @@ TEST(CommandTestGroup, Construct_MultipleArgs) {
   STRCMP_EQUAL(s.c_str(), "hello world from coder137");
 }
 
-TEST(CommandTestGroup, BadDefaultArguments) {
-  buildcc::Command command;
-  command.AddDefaultArguments({{nullptr, "hi"}});
-  CHECK_THROWS(std::exception, command.Construct("{}"));
-}
-
 TEST(CommandTestGroup, Construct_BadArguments) {
   buildcc::Command command;
   CHECK_THROWS(std::exception, command.Construct("{}", {{nullptr, "hi"}}));
+}
+
+TEST(CommandTestGroup, GetDefaultValueByKey) {
+  buildcc::Command command;
+  command.AddDefaultArgument("key", "value");
+  const std::string &value = command.GetDefaultValueByKey("key");
+
+  STRCMP_EQUAL(value.c_str(), "value");
+}
+
+TEST(CommandTestGroup, GetDefaultValueByKey_BadKey) {
+  buildcc::Command command;
+  command.AddDefaultArgument("key", "value");
+  CHECK_THROWS(std::exception, command.GetDefaultValueByKey("bad_key"));
 }
 
 int main(int ac, char **av) {
