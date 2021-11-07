@@ -251,9 +251,6 @@ Basic Installation steps
 
 - [Why has _this_ third-party library been chosen?](doc/faq/why_this_lib.md)
 - [How do I create my own custom target commands?](doc/custom_target/commands.md)
-- [How do I write my own custom generator?]()
-- [Understanding `generator.fbs`]()
-- [Understand `target.fbs`]()
 
 ## Design
 
