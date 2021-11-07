@@ -65,7 +65,9 @@ int main(int argc, char **argv) {
   reg.RunBuild();
 
   // - Clang Compile Commands
-  plugin::ClangCompileCommands({&g_cpptarget, &m_cpptarget}).Generate();
+  plugin::ClangCompileCommands(
+      {&g_cpptarget, &m_cpptarget, &g_ctarget, &m_ctarget})
+      .Generate();
 
   // - Plugin Graph
   std::string output = reg.GetTaskflow().dump();
