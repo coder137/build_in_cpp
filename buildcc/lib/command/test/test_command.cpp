@@ -47,6 +47,20 @@ TEST(CommandTestGroup, Construct_BadArguments) {
   CHECK_THROWS(std::exception, command.Construct("{}", {{nullptr, "hi"}}));
 }
 
+TEST(CommandTestGroup, GetDefaultValueByKey) {
+  buildcc::Command command;
+  command.AddDefaultArgument("key", "value");
+  const std::string &value = command.GetDefaultValueByKey("key");
+
+  STRCMP_EQUAL(value.c_str(), "value");
+}
+
+TEST(CommandTestGroup, GetDefaultValueByKey_BadKey) {
+  buildcc::Command command;
+  command.AddDefaultArgument("key", "value");
+  CHECK_THROWS(std::exception, command.GetDefaultValueByKey("bad_key"));
+}
+
 int main(int ac, char **av) {
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
