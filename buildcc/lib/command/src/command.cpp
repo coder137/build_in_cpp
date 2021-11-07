@@ -26,16 +26,17 @@
 
 namespace buildcc {
 
-void Command::AddDefaultArgument(const char *key, const std::string &value) {
+void Command::AddDefaultArgument(const std::string &key,
+                                 const std::string &value) {
   default_values_.emplace(key, value);
 }
 
 void Command::AddDefaultArguments(
-    const std::unordered_map<const char *, std::string> &arguments) {
+    const std::unordered_map<std::string, std::string> &arguments) {
   default_values_.insert(arguments.begin(), arguments.end());
 }
 
-const std::string &Command::GetDefaultValueByKey(const char *key) const {
+const std::string &Command::GetDefaultValueByKey(const std::string &key) const {
   const auto iter = default_values_.find(key);
   env::assert_fatal(!(iter == default_values_.end()),
                     fmt::format("Could not find value for '{}'", key));
@@ -48,10 +49,8 @@ std::string Command::Construct(
   // Construct your arguments
   fmt::dynamic_format_arg_store<fmt::format_context> store;
   std::for_each(default_values_.cbegin(), default_values_.cend(),
-                [&store](const std::pair<const char *, std::string> &p) {
-                  env::assert_fatal(p.first != NULL,
-                                    "Default Argument must not be NULL");
-                  store.push_back(fmt::arg(p.first, p.second));
+                [&store](const std::pair<std::string, std::string> &p) {
+                  store.push_back(fmt::arg(p.first.c_str(), p.second));
                 });
 
   std::for_each(arguments.cbegin(), arguments.cend(),
