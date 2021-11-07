@@ -63,6 +63,9 @@ Build C, C++ and ASM files in C++
 **Taskflow dependency for hybrid/pch example**
 ![Hybrid PCH example](example/hybrid/pch/graph.PNG)
 
+**Taskflow dependency for hybrid/dep_chaining example**
+![Hybrid Dep Chain example](example/hybrid/dep_chaining/graph.PNG)
+
 # Software Architecture
 
 ### Interface lib dependencies
