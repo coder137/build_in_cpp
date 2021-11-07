@@ -36,12 +36,6 @@ TEST(CommandTestGroup, Construct_MultipleArgs) {
   STRCMP_EQUAL(s.c_str(), "hello world from coder137");
 }
 
-TEST(CommandTestGroup, BadDefaultArguments) {
-  buildcc::Command command;
-  command.AddDefaultArguments({{nullptr, "hi"}});
-  CHECK_THROWS(std::exception, command.Construct("{}"));
-}
-
 TEST(CommandTestGroup, Construct_BadArguments) {
   buildcc::Command command;
   CHECK_THROWS(std::exception, command.Construct("{}", {{nullptr, "hi"}}));
