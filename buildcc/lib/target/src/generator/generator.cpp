@@ -69,6 +69,11 @@ void Generator::Build() {
   GenerateTask();
 }
 
+const std::string &
+Generator::GetFileByIdentifier(const char *file_identifier) const {
+  return command_.GetDefaultValueByKey(file_identifier);
+}
+
 // PRIVATE
 
 void Generator::Initialize() {

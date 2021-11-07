@@ -73,6 +73,8 @@ public:
 
   const std::string &GetName() { return name_; }
 
+  const std::string &GetFileByIdentifier(const char *file_identifier) const;
+
 private:
   void Initialize();
 
