@@ -95,6 +95,11 @@ jobs:
         run: |
           cmake --build . --target run_hybrid_pch_example_win
 
+      - name: Hybrid Dep Chaining Target Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+        run: |
+          cmake --build . --target run_hybrid_depchaining_example_win
+
   build_clang:
     name: Clang single and interface Lib
     # The CMake configure and build commands are platform agnostic and should work equally
@@ -174,3 +179,8 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
         run: |
           cmake --build . --target run_hybrid_pch_example_win
+
+      - name: Hybrid Dep Chaining Target Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
+        run: |
+          cmake --build . --target run_hybrid_depchaining_example_win
