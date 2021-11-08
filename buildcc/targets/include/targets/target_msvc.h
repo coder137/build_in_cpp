@@ -97,12 +97,9 @@ inline void DefaultMsvcOptions(base::Target &target) {
   target.AddCppCompileFlag("/nologo");
   target.AddCppCompileFlag("/EHsc"); // TODO, Might need to remove this
   target.AddLinkFlag("/nologo");
-  target.AddPchObjectFlag(
-      fmt::format("/Yu{}", target.GetPchHeaderPath().string()));
-  target.AddPchObjectFlag(
-      fmt::format("/FI{}", target.GetPchHeaderPath().string()));
-  target.AddPchObjectFlag(
-      fmt::format("/Fp{}", target.GetPchCompilePath().string()));
+  target.AddPchObjectFlag(fmt::format("/Yu{}", target.GetPchHeaderPath()));
+  target.AddPchObjectFlag(fmt::format("/FI{}", target.GetPchHeaderPath()));
+  target.AddPchObjectFlag(fmt::format("/Fp{}", target.GetPchCompilePath()));
 }
 
 class ExecutableTarget_msvc : public base::Target {
