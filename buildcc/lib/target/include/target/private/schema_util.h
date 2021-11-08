@@ -91,8 +91,8 @@ CreateFbsVectorPath(flatbuffers::FlatBufferBuilder &builder,
                     const buildcc::internal::path_unordered_set &pathlist) {
   std::vector<flatbuffers::Offset<fbs::Path>> paths;
   for (const auto &p : pathlist) {
-    auto fbs_file = fbs::CreatePathDirect(
-        builder, p.GetPathname().string().c_str(), p.GetLastWriteTimestamp());
+    auto fbs_file = fbs::CreatePathDirect(builder, p.GetPathAsString().c_str(),
+                                          p.GetLastWriteTimestamp());
     paths.push_back(fbs_file);
   }
   return paths;
@@ -118,7 +118,7 @@ CreateFbsVectorString(flatbuffers::FlatBufferBuilder &builder,
   std::transform(
       fslist.begin(), fslist.end(), std::back_inserter(strs),
       [&](const fs::path &p) -> flatbuffers::Offset<flatbuffers::String> {
-        return builder.CreateString(p.string());
+        return builder.CreateString(fmt::format("{}", p));
       });
   return strs;
 }
