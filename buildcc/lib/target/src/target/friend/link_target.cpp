@@ -33,8 +33,7 @@ void LinkTarget::CacheLinkCommand() {
   const std::string aggregated_compiled_sources =
       internal::aggregate(target_.compile_object_.GetCompiledSources());
 
-  const std::string output_target =
-      internal::Path::CreateNewPath(output_).GetPathAsString();
+  const std::string output_target = fmt::format("{}", output_);
 
   const auto &storer = target_.storer_;
   command_ = target_.command_.Construct(

@@ -40,12 +40,8 @@ void CompileObject::CacheCompileCommands() {
     const fs::path &absolute_current_source = object_iter.first;
 
     const std::string output =
-        internal::Path::CreateNewPath(
-            GetObjectData(absolute_current_source).output)
-            .GetPathAsString();
-    const std::string input =
-        internal::Path::CreateNewPath(absolute_current_source)
-            .GetPathAsString();
+        fmt::format("{}", GetObjectData(absolute_current_source).output);
+    const std::string input = fmt::format("{}", absolute_current_source);
 
     const auto type = target_.ext_.GetType(absolute_current_source);
     const std::string selected_aggregated_compile_flags =
