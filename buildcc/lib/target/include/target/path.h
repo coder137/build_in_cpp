@@ -187,10 +187,6 @@ inline std::string path_as_string(const fs::path &p) {
   return internal::Path::CreateNewPath(p).GetPathAsString();
 }
 
-inline std::string path_as_string_for_display(const fs::path &p) {
-  return internal::Path::CreateNewPath(p).GetPathAsStringForDisplay();
-}
-
 } // namespace buildcc
 
 // FMT specialization
