@@ -41,8 +41,8 @@ void CompilePch::Task() {
 
     // For Graph generation
     for (const auto &p : target_.GetCurrentPchFiles()) {
-      std::string name = internal::path_as_string(
-          p.lexically_relative(env::get_project_root_dir()));
+      std::string name =
+          fmt::format("{}", p.lexically_relative(env::get_project_root_dir()));
       subflow.placeholder().name(name);
     }
   });
@@ -57,8 +57,8 @@ void CompileObject::Task() {
     BuildObjectCompile(source_files, dummy_source_files);
 
     for (const auto &s : source_files) {
-      std::string name = internal::path_as_string(
-          s.lexically_relative(env::get_project_root_dir()));
+      std::string name =
+          fmt::format("{}", s.lexically_relative(env::get_project_root_dir()));
       (void)subflow
           .emplace([this, s]() {
             bool success = Command::Execute(GetObjectData(s).command);
@@ -69,8 +69,8 @@ void CompileObject::Task() {
 
     // For graph generation
     for (const auto &ds : dummy_source_files) {
-      std::string name = internal::path_as_string(
-          ds.lexically_relative(env::get_project_root_dir()));
+      std::string name =
+          fmt::format("{}", ds.lexically_relative(env::get_project_root_dir()));
       (void)subflow.placeholder().name(name);
     }
   });

@@ -33,19 +33,6 @@ namespace fs = std::filesystem;
 
 namespace buildcc::internal {
 
-inline std::string quote(const std::string &str) {
-  if (str.find(" ") == std::string::npos) {
-    return str;
-  }
-  return fmt::format("\"{}\"", str);
-}
-
-inline std::string path_as_string(const fs::path &path) {
-  std::string pstr = fs::path(path).make_preferred().string();
-  std::replace(pstr.begin(), pstr.end(), '\\', '/');
-  return quote(pstr);
-}
-
 class Path {
 public:
   /**
@@ -86,7 +73,7 @@ public:
   // Getters
   std::uint64_t GetLastWriteTimestamp() const { return last_write_timestamp_; }
   const fs::path &GetPathname() const { return pathname_; }
-  std::string GetPathAsString() const { return path_as_string(GetPathname()); }
+  std::string GetPathAsString() const { return ConvertPathAsString(); }
 
   // Used during find operation
   bool operator==(const Path &p) const {
@@ -101,6 +88,19 @@ private:
   explicit Path(const fs::path &pathname, std::uint64_t last_write_timestamp)
       : pathname_(pathname), last_write_timestamp_(last_write_timestamp) {
     pathname_.make_preferred();
+  }
+
+  std::string Quote(const std::string &str) const {
+    if (str.find(" ") == std::string::npos) {
+      return str;
+    }
+    return fmt::format("\"{}\"", str);
+  }
+
+  std::string ConvertPathAsString() const {
+    std::string pstr = pathname_.string();
+    std::replace(pstr.begin(), pstr.end(), '\\', '/');
+    return Quote(pstr);
   }
 
 private:
@@ -162,5 +162,24 @@ private:
 };
 
 } // namespace buildcc::internal
+
+// FMT specialization
+
+namespace fmt {
+
+template <> struct formatter<fs::path> : formatter<std::string> {
+  auto format(const fs::path &p, format_context &ctx) {
+    return formatter<std::string>::format(
+        buildcc::internal::Path::CreateNewPath(p).GetPathAsString(), ctx);
+  }
+};
+
+template <> struct formatter<buildcc::internal::Path> : formatter<std::string> {
+  auto format(const buildcc::internal::Path &p, format_context &ctx) {
+    return formatter<std::string>::format(p.GetPathAsString(), ctx);
+  }
+};
+
+} // namespace fmt
 
 #endif

@@ -67,15 +67,15 @@ void Generator::GenerateTask() {
     command_task.name(kCommandTaskName);
 
     for (const auto &i : current_input_files_.user) {
-      std::string name = internal::path_as_string(
-          i.lexically_relative(env::get_project_root_dir()));
+      std::string name =
+          fmt::format("{}", i.lexically_relative(env::get_project_root_dir()));
       tf::Task task = subflow.placeholder().name(name);
       task.precede(command_task);
     }
 
     for (const auto &o : current_output_files_) {
-      std::string name = internal::path_as_string(
-          o.lexically_relative(env::get_project_root_dir()));
+      std::string name =
+          fmt::format("{}", o.lexically_relative(env::get_project_root_dir()));
       tf::Task task = subflow.placeholder().name(name);
       task.succeed(command_task);
     }

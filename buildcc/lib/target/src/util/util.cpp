@@ -27,10 +27,9 @@ namespace buildcc::internal {
 
 std::string aggregate(const buildcc::internal::fs_unordered_set &paths) {
   std::vector<std::string> agg;
-  std::transform(paths.begin(), paths.end(), std::back_inserter(agg),
-                 [](const fs::path &p) -> std::string {
-                   return internal::path_as_string(p);
-                 });
+  std::transform(
+      paths.begin(), paths.end(), std::back_inserter(agg),
+      [](const fs::path &p) -> std::string { return fmt::format("{}", p); });
   return aggregate(agg);
 }
 
@@ -39,8 +38,7 @@ std::string aggregate_with_prefix(const std::string &prefix,
   std::vector<std::string> agg;
   std::transform(dirs.begin(), dirs.end(), std::back_inserter(agg),
                  [&](const fs::path &dir) -> std::string {
-                   return fmt::format("{}{}", prefix,
-                                      internal::path_as_string(dir));
+                   return fmt::format("{}{}", prefix, fmt::format("{}", dir));
                  });
   return aggregate(agg);
 }
