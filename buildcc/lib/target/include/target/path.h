@@ -74,8 +74,22 @@ public:
   std::uint64_t GetLastWriteTimestamp() const { return last_write_timestamp_; }
   const fs::path &GetPathname() const { return pathname_; }
 
-  std::string GetPathAsString() const { return ConvertPathToString(); }
-  std::string GetPathAsStringForCLI() const {
+  /**
+   * @brief Get fs::path as std::string while keeping the preferred os
+   * path delimiters
+   * '\\' for windows and '/' for linux
+   *
+   * @return std::string
+   */
+  std::string GetPathAsString() const { return GetPathname().string(); }
+
+  /**
+   * @brief Get fs::path as std::string for display
+   * Converts '\\' to '/' for conformity
+   *
+   * @return std::string
+   */
+  std::string GetPathAsStringForDisplay() const {
     return Quote(ConvertPathToString());
   }
 
