@@ -50,7 +50,7 @@ public:
             .time_since_epoch()
             .count();
     env::assert_fatal(errcode.value() == 0,
-                      fmt::format("{} not found", pathname.string()));
+                      fmt::format("{} not found", pathname));
 
     return Path(pathname, last_write_timestamp);
   }
