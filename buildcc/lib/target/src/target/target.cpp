@@ -56,9 +56,8 @@ void Target::Initialize() {
 
   // String updates
   unique_id_ = fmt::format("[{}] {}", toolchain_.GetName(), name_);
-  std::string path =
-      GetTargetPath().lexically_relative(env::get_project_build_dir()).string();
-  std::replace(path.begin(), path.end(), '\\', '/');
+  std::string path = internal::path_as_string(
+      GetTargetPath().lexically_relative(env::get_project_build_dir()));
   tf_.name(path);
 }
 
