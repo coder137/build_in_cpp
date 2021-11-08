@@ -181,6 +181,18 @@ private:
 
 } // namespace buildcc::internal
 
+namespace buildcc {
+
+inline std::string path_as_string(const fs::path &p) {
+  return internal::Path::CreateNewPath(p).GetPathAsString();
+}
+
+inline std::string path_as_string_for_display(const fs::path &p) {
+  return internal::Path::CreateNewPath(p).GetPathAsStringForDisplay();
+}
+
+} // namespace buildcc
+
 // FMT specialization
 
 namespace fmt {
@@ -188,13 +200,14 @@ namespace fmt {
 template <> struct formatter<fs::path> : formatter<std::string> {
   auto format(const fs::path &p, format_context &ctx) {
     return formatter<std::string>::format(
-        buildcc::internal::Path::CreateNewPath(p).GetPathAsString(), ctx);
+        buildcc::internal::Path::CreateNewPath(p).GetPathAsStringForDisplay(),
+        ctx);
   }
 };
 
 template <> struct formatter<buildcc::internal::Path> : formatter<std::string> {
   auto format(const buildcc::internal::Path &p, format_context &ctx) {
-    return formatter<std::string>::format(p.GetPathAsString(), ctx);
+    return formatter<std::string>::format(p.GetPathAsStringForDisplay(), ctx);
   }
 };
 

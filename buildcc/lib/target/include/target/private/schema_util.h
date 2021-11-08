@@ -118,7 +118,7 @@ CreateFbsVectorString(flatbuffers::FlatBufferBuilder &builder,
   std::transform(
       fslist.begin(), fslist.end(), std::back_inserter(strs),
       [&](const fs::path &p) -> flatbuffers::Offset<flatbuffers::String> {
-        return builder.CreateString(fmt::format("{}", p));
+        return builder.CreateString(path_as_string(p));
       });
   return strs;
 }
