@@ -132,7 +132,7 @@ void Register::TestInfo::TestRunner() const {
                 fmt::format("Testing \'{}\'", target_.GetUniqueId()));
   Command command;
   command.AddDefaultArguments({
-      {"executable", target_.GetTargetPath().string()},
+      {"executable", fmt::format("{}", target_.GetTargetPath())},
   });
   const std::string test_command = command.Construct(command_, arguments_);
 
