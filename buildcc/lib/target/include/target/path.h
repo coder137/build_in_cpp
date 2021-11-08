@@ -191,22 +191,13 @@ inline std::string path_as_string(const fs::path &p) {
 
 // FMT specialization
 
-namespace fmt {
-
-template <> struct formatter<fs::path> : formatter<std::string> {
-  auto format(const fs::path &p, format_context &ctx) {
+template <> struct fmt::formatter<fs::path> : formatter<std::string> {
+  template <typename FormatContext>
+  auto format(const fs::path &p, FormatContext &ctx) {
     return formatter<std::string>::format(
         buildcc::internal::Path::CreateNewPath(p).GetPathAsStringForDisplay(),
         ctx);
   }
 };
-
-template <> struct formatter<buildcc::internal::Path> : formatter<std::string> {
-  auto format(const buildcc::internal::Path &p, format_context &ctx) {
-    return formatter<std::string>::format(p.GetPathAsStringForDisplay(), ctx);
-  }
-};
-
-} // namespace fmt
 
 #endif
