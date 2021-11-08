@@ -25,6 +25,19 @@
 // third party
 #include "fmt/format.h"
 
+namespace {
+
+// clang-format off
+constexpr const char *const clang_compile_command_format =
+R"({{
+  "directory": "{directory}",
+  "command": "{command}",
+  "file": "{file}"
+}})";
+// clang-format on
+
+} // namespace
+
 namespace buildcc::plugin {
 
 void ClangCompileCommands::AddTarget(const base::Target *target) {
@@ -43,39 +56,28 @@ void ClangCompileCommands::Generate() {
   }
   env::log_trace("ClangCompileCommands", "Generate -> true");
 
-  // clang-format off
-  constexpr const char *const clang_compile_command_format = 
-R"({{
-    "directory": "{directory}",
-    "command": "{command}",
-    "file": "{file}"
-  }})";
- //clang-format on
-
   std::vector<std::string> compile_command_list;
 
   for (const auto *t : targets_) {
     const auto &source_files = t->GetCurrentSourceFiles();
-    for (const auto &f : source_files) {
+    for (const auto &source : source_files) {
       // DONE, Get source list name
       // DONE, Get std::vector<std::string> CompileCommand
       // DONE, Get intermediate directory from env
-      std::string file = f.string();
-      std::string command = t->GetCompileCommand(file);
-      std::string directory = env::get_project_build_dir().string();
-
-      std::replace(file.begin(), file.end(), '\\', '/');
-      std::replace(command.begin(), command.end(), '\\', '/');
-      std::replace(directory.begin(), directory.end(), '\\', '/');
+      std::string sf = internal::path_as_string(source);
+      std::string command = t->GetCompileCommand(source);
+      std::string directory =
+          internal::path_as_string(env::get_project_build_dir());
 
       std::string temp = fmt::format(
           clang_compile_command_format, fmt::arg("directory", directory),
-          fmt::arg("command", command), fmt::arg("file", file));
+          fmt::arg("command", command), fmt::arg("file", sf));
       compile_command_list.push_back(temp);
     }
   }
 
-  std::string compile_commands = fmt::format("[\n{}\n]", fmt::join(compile_command_list, ",\n"));
+  std::string compile_commands =
+      fmt::format("[\n{}\n]", fmt::join(compile_command_list, ",\n"));
 
   // DONE, Convert to json
   // DONE, Save file
