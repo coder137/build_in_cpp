@@ -22,22 +22,17 @@
 #include "target_gcc.h"
 #include "target_msvc.h"
 
-namespace {
-
-constexpr std::initializer_list<buildcc::base::Target::CopyOption>
-    kGenericTargetCopyOptions = {
-        buildcc::base::Target::CopyOption::CommonCompileFlags,
-        buildcc::base::Target::CopyOption::PchCompileFlags,
-        buildcc::base::Target::CopyOption::PchObjectFlags,
-        buildcc::base::Target::CopyOption::AsmCompileFlags,
-        buildcc::base::Target::CopyOption::CCompileFlags,
-        buildcc::base::Target::CopyOption::CppCompileFlags,
-        buildcc::base::Target::CopyOption::LinkFlags,
-};
-
-}
-
 namespace buildcc {
+
+static std::initializer_list<base::Target::CopyOption> kGenericCopyOptions = {
+    base::Target::CopyOption::CommonCompileFlags,
+    base::Target::CopyOption::PchCompileFlags,
+    base::Target::CopyOption::PchObjectFlags,
+    base::Target::CopyOption::AsmCompileFlags,
+    base::Target::CopyOption::CCompileFlags,
+    base::Target::CopyOption::CppCompileFlags,
+    base::Target::CopyOption::LinkFlags,
+};
 
 class GenericConfig {
 public:
@@ -152,13 +147,13 @@ public:
       CopyTarget(
           *this,
           ExecutableTarget_gcc(name, toolchain, target_path_relative_to_root),
-          kGenericTargetCopyOptions);
+          kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Msvc:
       CopyTarget(
           *this,
           ExecutableTarget_msvc(name, toolchain, target_path_relative_to_root),
-          kGenericTargetCopyOptions);
+          kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Clang:
     case base::Toolchain::Id::MinGW:
@@ -184,13 +179,13 @@ public:
       CopyTarget(
           *this,
           StaticTarget_gcc(name, toolchain, target_path_relative_to_root),
-          kGenericTargetCopyOptions);
+          kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Msvc:
       CopyTarget(
           *this,
           StaticTarget_msvc(name, toolchain, target_path_relative_to_root),
-          kGenericTargetCopyOptions);
+          kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Clang:
     case base::Toolchain::Id::MinGW:
@@ -215,13 +210,13 @@ public:
       CopyTarget(
           *this,
           DynamicTarget_gcc(name, toolchain, target_path_relative_to_root),
-          kGenericTargetCopyOptions);
+          kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Msvc:
       CopyTarget(
           *this,
           DynamicTarget_msvc(name, toolchain, target_path_relative_to_root),
-          kGenericTargetCopyOptions);
+          kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Clang:
     case base::Toolchain::Id::MinGW:
@@ -247,20 +242,20 @@ public:
       CopyTarget(*this,
                  ExecutableTarget_generic(name, toolchain,
                                           target_path_relative_to_root),
-                 kGenericTargetCopyOptions);
+                 kGenericCopyOptions);
       break;
     case base::Target::Type::StaticLibrary:
 
       CopyTarget(
           *this,
           StaticTarget_generic(name, toolchain, target_path_relative_to_root),
-          kGenericTargetCopyOptions);
+          kGenericCopyOptions);
       break;
     case base::Target::Type::DynamicLibrary:
       CopyTarget(
           *this,
           DynamicTarget_generic(name, toolchain, target_path_relative_to_root),
-          kGenericTargetCopyOptions);
+          kGenericCopyOptions);
       break;
     default:
       env::assert_fatal<false>("Compiler ID not supported");
