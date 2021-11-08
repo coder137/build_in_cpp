@@ -73,7 +73,11 @@ public:
   // Getters
   std::uint64_t GetLastWriteTimestamp() const { return last_write_timestamp_; }
   const fs::path &GetPathname() const { return pathname_; }
-  std::string GetPathAsString() const { return ConvertPathAsString(); }
+
+  std::string GetPathAsString() const { return ConvertPathToString(); }
+  std::string GetPathAsStringForCLI() const {
+    return Quote(ConvertPathToString());
+  }
 
   // Used during find operation
   bool operator==(const Path &p) const {
@@ -97,10 +101,10 @@ private:
     return fmt::format("\"{}\"", str);
   }
 
-  std::string ConvertPathAsString() const {
+  std::string ConvertPathToString() const {
     std::string pstr = pathname_.string();
     std::replace(pstr.begin(), pstr.end(), '\\', '/');
-    return Quote(pstr);
+    return pstr;
   }
 
 private:
