@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
     fs::path copy_from_path;
     fs::path copy_to_path;
     if (toolchain.GetId() == base::Toolchain::Id::Msvc) {
-      copy_from_path = foolib_target.GetTargetPath().string() + ".dll";
+      copy_from_path = path_as_string(foolib_target.GetTargetPath()) + ".dll";
       copy_to_path = generic_target.GetTargetBuildDir() /
                      (foolib_target.GetName() + ".dll");
     } else {
@@ -112,8 +112,7 @@ int main(int argc, char **argv) {
 }
 
 static void clean_cb() {
-  env::log_info(
-      EXE, fmt::format("Cleaning {}", env::get_project_build_dir().string()));
+  env::log_info(EXE, fmt::format("Cleaning {}", env::get_project_build_dir()));
   fs::remove_all(env::get_project_build_dir());
 }
 

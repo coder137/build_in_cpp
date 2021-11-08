@@ -69,8 +69,7 @@ int main(int argc, char **argv) {
 }
 
 static void clean_cb() {
-  env::log_info(
-      EXE, fmt::format("Cleaning {}", env::get_project_build_dir().string()));
+  env::log_info(EXE, fmt::format("Cleaning {}", env::get_project_build_dir()));
   fs::remove_all(env::get_project_build_dir());
 }
 
