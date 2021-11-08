@@ -30,7 +30,7 @@ void Target::AddHeaderAbsolute(const fs::path &absolute_filepath) {
   const auto file_ext_type = ext_.GetType(absolute_filepath);
   env::assert_fatal(FileExt::IsValidHeader(file_ext_type),
                     fmt::format("{} does not have a valid header extension",
-                                absolute_filepath.string()));
+                                absolute_filepath));
   storer_.current_header_files.user.insert(absolute_filepath);
 }
 
@@ -55,7 +55,7 @@ void Target::GlobHeadersAbsolute(const fs::path &absolute_path) {
   for (const auto &p : fs::directory_iterator(absolute_path)) {
     const auto file_ext_type = ext_.GetType(p.path());
     if (FileExt::IsValidHeader(file_ext_type)) {
-      env::log_trace(name_, fmt::format("Added header {}", p.path().string()));
+      env::log_trace(name_, fmt::format("Added header {}", p.path()));
       AddHeaderAbsolute(p.path());
     }
   }

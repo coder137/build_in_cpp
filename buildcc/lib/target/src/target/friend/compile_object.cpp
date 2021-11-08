@@ -71,7 +71,7 @@ const CompileObject::ObjectData &
 CompileObject::GetObjectData(const fs::path &absolute_source) const {
   const auto fiter = object_files_.find(absolute_source);
   env::assert_fatal(fiter != object_files_.end(),
-                    fmt::format("{} not found", absolute_source.string()));
+                    fmt::format("{} not found", absolute_source));
   return object_files_.at(absolute_source);
 }
 

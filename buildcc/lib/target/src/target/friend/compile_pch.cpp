@@ -43,7 +43,7 @@ void AggregateToFile(const fs::path &filename,
                      const buildcc::internal::fs_unordered_set &header_files) {
   std::string aggregated_includes;
   for (const auto &hf : header_files) {
-    std::string temp = fmt::format("#include \"{}\"\r\n", hf.string());
+    std::string temp = fmt::format("#include \"{}\"\r\n", hf);
     aggregated_includes.append(temp);
   }
 
@@ -52,8 +52,8 @@ void AggregateToFile(const fs::path &filename,
       kFormat, {
                    {"aggregated_includes", aggregated_includes},
                });
-  bool success = buildcc::env::SaveFile(filename.string().c_str(),
-                                        constructed_output, false);
+  bool success = buildcc::env::SaveFile(
+      buildcc::path_as_string(filename).c_str(), constructed_output, false);
   buildcc::env::assert_fatal(success, "Could not save pch file");
 }
 
