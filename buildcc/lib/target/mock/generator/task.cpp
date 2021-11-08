@@ -29,7 +29,7 @@ void Generator::GenerateTask() {
   }
 
   if (dirty_) {
-    Store();
+    env::assert_fatal(Store(), fmt::format("Store failed for {}", name_));
   }
 }
 

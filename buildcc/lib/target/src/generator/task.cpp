@@ -38,7 +38,7 @@ void Generator::GenerateTask() {
 
   tf::Task postgenerate_task = tf_.emplace([this]() {
     if (dirty_) {
-      Store();
+      env::assert_fatal(Store(), fmt::format("Store failed for {}", name_));
     }
   });
   postgenerate_task.name(kPostGenerateTaskName);
