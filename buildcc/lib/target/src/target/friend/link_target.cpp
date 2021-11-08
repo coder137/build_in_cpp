@@ -33,8 +33,7 @@ void LinkTarget::CacheLinkCommand() {
   const std::string aggregated_compiled_sources =
       internal::aggregate(target_.compile_object_.GetCompiledSources());
 
-  const std::string output_target =
-      internal::Path::CreateNewPath(output_).GetPathAsString();
+  const std::string output_target = fmt::format("{}", output_);
 
   const auto &storer = target_.storer_;
   command_ = target_.command_.Construct(
@@ -86,7 +85,8 @@ void LinkTarget::BuildLink() {
   if (target_.dirty_) {
     bool success = Command::Execute(command_);
     env::assert_fatal(success, "Failed to link target");
-    target_.Store();
+    env::assert_fatal(target_.Store(),
+                      fmt::format("Store failed for {}", target_.GetName()));
     target_.state_.build = true;
   }
 }

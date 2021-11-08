@@ -33,13 +33,6 @@ namespace fs = std::filesystem;
 
 namespace buildcc::internal {
 
-inline std::string quote(const std::string &str) {
-  if (str.find(" ") == std::string::npos) {
-    return str;
-  }
-  return fmt::format("\"{}\"", str);
-}
-
 class Path {
 public:
   /**
@@ -57,7 +50,7 @@ public:
             .time_since_epoch()
             .count();
     env::assert_fatal(errcode.value() == 0,
-                      fmt::format("{} not found", pathname.string()));
+                      fmt::format("{} not found", pathname));
 
     return Path(pathname, last_write_timestamp);
   }
@@ -80,7 +73,25 @@ public:
   // Getters
   std::uint64_t GetLastWriteTimestamp() const { return last_write_timestamp_; }
   const fs::path &GetPathname() const { return pathname_; }
-  std::string GetPathAsString() const { return quote(GetPathname().string()); }
+
+  /**
+   * @brief Get fs::path as std::string while keeping the preferred os
+   * path delimiters
+   * '\\' for windows and '/' for linux
+   *
+   * @return std::string
+   */
+  std::string GetPathAsString() const { return GetPathname().string(); }
+
+  /**
+   * @brief Get fs::path as std::string for display
+   * Converts '\\' to '/' for conformity
+   *
+   * @return std::string
+   */
+  std::string GetPathAsStringForDisplay() const {
+    return Quote(ConvertPathToString());
+  }
 
   // Used during find operation
   bool operator==(const Path &p) const {
@@ -95,6 +106,19 @@ private:
   explicit Path(const fs::path &pathname, std::uint64_t last_write_timestamp)
       : pathname_(pathname), last_write_timestamp_(last_write_timestamp) {
     pathname_.make_preferred();
+  }
+
+  std::string Quote(const std::string &str) const {
+    if (str.find(" ") == std::string::npos) {
+      return str;
+    }
+    return fmt::format("\"{}\"", str);
+  }
+
+  std::string ConvertPathToString() const {
+    std::string pstr = pathname_.string();
+    std::replace(pstr.begin(), pstr.end(), '\\', '/');
+    return pstr;
   }
 
 private:
@@ -156,5 +180,24 @@ private:
 };
 
 } // namespace buildcc::internal
+
+namespace buildcc {
+
+inline std::string path_as_string(const fs::path &p) {
+  return internal::Path::CreateNewPath(p).GetPathAsString();
+}
+
+} // namespace buildcc
+
+// FMT specialization
+
+template <> struct fmt::formatter<fs::path> : formatter<std::string> {
+  template <typename FormatContext>
+  auto format(const fs::path &p, FormatContext &ctx) {
+    return formatter<std::string>::format(
+        buildcc::internal::Path::CreateNewPath(p).GetPathAsStringForDisplay(),
+        ctx);
+  }
+};
 
 #endif

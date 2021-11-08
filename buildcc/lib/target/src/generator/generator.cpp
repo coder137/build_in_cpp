@@ -85,8 +85,8 @@ void Generator::Initialize() {
   //
   fs::create_directories(generator_build_dir_);
   command_.AddDefaultArguments({
-      {"gen_root_dir", generator_root_dir_.string()},
-      {"gen_build_dir", generator_build_dir_.string()},
+      {"gen_root_dir", path_as_string(generator_root_dir_)},
+      {"gen_build_dir", path_as_string(generator_build_dir_)},
   });
 
   //

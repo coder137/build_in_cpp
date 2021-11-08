@@ -23,13 +23,13 @@ void Generator::GenerateTask() {
 
   // Generate the output file
   for (const auto &output_file : current_output_files_) {
-    std::string file = output_file.string();
+    std::string file = path_as_string(output_file);
     bool success = env::SaveFile(file.c_str(), "", false);
     env::assert_fatal(success, fmt::format("{} failed", file));
   }
 
   if (dirty_) {
-    Store();
+    env::assert_fatal(Store(), fmt::format("Store failed for {}", name_));
   }
 }
 

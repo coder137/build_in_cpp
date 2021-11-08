@@ -31,7 +31,7 @@ void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
   const auto file_ext_type = ext_.GetType(absolute_input_filepath);
   env::assert_fatal(FileExt::IsValidSource(file_ext_type),
                     fmt::format("{} does not have a valid source extension",
-                                absolute_input_filepath.string()));
+                                absolute_input_filepath));
   ext_.SetSourceState(file_ext_type);
 
   const fs::path absolute_source =
@@ -102,7 +102,7 @@ Target::ConstructObjectPath(const fs::path &absolute_source_file) const {
                     "AddSourceAbsolute(abs_source_input, abs_obj_output) or "
                     "GlobSourceAbsolute(abs_source_input, abs_obj_output) "
                     "API if possible.",
-                    absolute_source_file.string(), relative.string()));
+                    absolute_source_file, relative));
     std::replace(relstr.begin(), relstr.end(), '.', '_');
     relative = relstr;
   }

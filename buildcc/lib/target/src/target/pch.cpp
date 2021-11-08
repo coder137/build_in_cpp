@@ -23,7 +23,7 @@ void Target::AddPchAbsolute(const fs::path &absolute_filepath) {
   const auto file_ext_type = ext_.GetType(absolute_filepath);
   env::assert_fatal(FileExt::IsValidHeader(file_ext_type),
                     fmt::format("{} does not have a valid header extension",
-                                absolute_filepath.string()));
+                                absolute_filepath));
   state_.contains_pch = true;
 
   const fs::path absolute_pch = fs::path(absolute_filepath).make_preferred();

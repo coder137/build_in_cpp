@@ -86,9 +86,9 @@ private:
 };
 
 inline void DefaultGccOptions(base::Target &target) {
-  target.AddPchObjectFlag(fmt::format(
-      "-include {}",
-      fs::path(target.GetPchCompilePath()).replace_extension("").string()));
+  target.AddPchObjectFlag(
+      fmt::format("-include {}",
+                  fs::path(target.GetPchCompilePath()).replace_extension("")));
   target.AddPchObjectFlag("-H");
 }
 

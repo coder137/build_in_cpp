@@ -29,9 +29,7 @@ std::string aggregate(const buildcc::internal::fs_unordered_set &paths) {
   std::vector<std::string> agg;
   std::transform(
       paths.begin(), paths.end(), std::back_inserter(agg),
-      [](const fs::path &p) -> std::string {
-        return buildcc::internal::Path::CreateNewPath(p).GetPathAsString();
-      });
+      [](const fs::path &p) -> std::string { return fmt::format("{}", p); });
   return aggregate(agg);
 }
 
@@ -40,7 +38,7 @@ std::string aggregate_with_prefix(const std::string &prefix,
   std::vector<std::string> agg;
   std::transform(dirs.begin(), dirs.end(), std::back_inserter(agg),
                  [&](const fs::path &dir) -> std::string {
-                   return fmt::format("{}{}", prefix, quote(dir.string()));
+                   return fmt::format("{}{}", prefix, fmt::format("{}", dir));
                  });
   return aggregate(agg);
 }

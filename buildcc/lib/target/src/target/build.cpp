@@ -85,7 +85,7 @@ void Target::Build() {
     command_.AddDefaultArguments({
         {kPchCompileFlags, internal::aggregate(GetCurrentPchCompileFlags())},
         {kPchObjectFlags, internal::aggregate(GetCurrentPchObjectFlags())},
-        {kPchObjectOutput, compile_pch_.GetObjectPath().string()},
+        {kPchObjectOutput, fmt::format("{}", compile_pch_.GetObjectPath())},
     });
 
     compile_pch_.CacheCompileCommand();

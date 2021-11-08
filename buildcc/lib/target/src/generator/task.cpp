@@ -38,7 +38,7 @@ void Generator::GenerateTask() {
 
   tf::Task postgenerate_task = tf_.emplace([this]() {
     if (dirty_) {
-      Store();
+      env::assert_fatal(Store(), fmt::format("Store failed for {}", name_));
     }
   });
   postgenerate_task.name(kPostGenerateTaskName);
@@ -68,16 +68,14 @@ void Generator::GenerateTask() {
 
     for (const auto &i : current_input_files_.user) {
       std::string name =
-          i.lexically_relative(env::get_project_root_dir()).string();
-      std::replace(name.begin(), name.end(), '\\', '/');
+          fmt::format("{}", i.lexically_relative(env::get_project_root_dir()));
       tf::Task task = subflow.placeholder().name(name);
       task.precede(command_task);
     }
 
     for (const auto &o : current_output_files_) {
       std::string name =
-          o.lexically_relative(env::get_project_root_dir()).string();
-      std::replace(name.begin(), name.end(), '\\', '/');
+          fmt::format("{}", o.lexically_relative(env::get_project_root_dir()));
       tf::Task task = subflow.placeholder().name(name);
       task.succeed(command_task);
     }
