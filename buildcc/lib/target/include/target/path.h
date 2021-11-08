@@ -40,6 +40,12 @@ inline std::string quote(const std::string &str) {
   return fmt::format("\"{}\"", str);
 }
 
+inline std::string path_as_string(const fs::path &path) {
+  std::string pstr = fs::path(path).make_preferred().string();
+  std::replace(pstr.begin(), pstr.end(), '\\', '/');
+  return quote(pstr);
+}
+
 class Path {
 public:
   /**
@@ -80,7 +86,7 @@ public:
   // Getters
   std::uint64_t GetLastWriteTimestamp() const { return last_write_timestamp_; }
   const fs::path &GetPathname() const { return pathname_; }
-  std::string GetPathAsString() const { return quote(GetPathname().string()); }
+  std::string GetPathAsString() const { return path_as_string(GetPathname()); }
 
   // Used during find operation
   bool operator==(const Path &p) const {
