@@ -169,7 +169,7 @@ public:
   // Setters
 
   // * Sources
-  void AddSource(const fs::path &filename,
+  void AddSource(const fs::path &relative_filename,
                  const fs::path &relative_to_target_path = "");
   void GlobSources(const fs::path &relative_to_target_path);
 
