@@ -128,22 +128,17 @@ private:
 
 class ExecutableTarget_generic : public base::Target {
 public:
-  ExecutableTarget_generic(
-      const std::string &name, const base::Toolchain &toolchain,
-      const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::Target::Type::Executable, toolchain,
-               target_path_relative_to_root,
+  ExecutableTarget_generic(const std::string &name,
+                           const base::Toolchain &toolchain, const Env &env)
+      : Target(name, base::Target::Type::Executable, toolchain, env,
                ConfigInterface<GenericConfig, base::Toolchain::Id>::Executable(
                    toolchain.GetId())) {
-
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
-      Copy(ExecutableTarget_gcc(name, toolchain, target_path_relative_to_root),
-           kGenericCopyOptions);
+      Copy(ExecutableTarget_gcc(name, toolchain, env), kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Msvc:
-      Copy(ExecutableTarget_msvc(name, toolchain, target_path_relative_to_root),
-           kGenericCopyOptions);
+      Copy(ExecutableTarget_msvc(name, toolchain, env), kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Clang:
     case base::Toolchain::Id::MinGW:
@@ -157,21 +152,17 @@ public:
 
 class StaticTarget_generic : public base::Target {
 public:
-  StaticTarget_generic(
-      const std::string &name, const base::Toolchain &toolchain,
-      const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::Target::Type::StaticLibrary, toolchain,
-               target_path_relative_to_root,
+  StaticTarget_generic(const std::string &name,
+                       const base::Toolchain &toolchain, const Env &env)
+      : Target(name, base::Target::Type::StaticLibrary, toolchain, env,
                ConfigInterface<GenericConfig, base::Toolchain::Id>::StaticLib(
                    toolchain.GetId())) {
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
-      Copy(StaticTarget_gcc(name, toolchain, target_path_relative_to_root),
-           kGenericCopyOptions);
+      Copy(StaticTarget_gcc(name, toolchain, env), kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Msvc:
-      Copy(StaticTarget_msvc(name, toolchain, target_path_relative_to_root),
-           kGenericCopyOptions);
+      Copy(StaticTarget_msvc(name, toolchain, env), kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Clang:
     case base::Toolchain::Id::MinGW:
@@ -184,21 +175,17 @@ public:
 
 class DynamicTarget_generic : public base::Target {
 public:
-  DynamicTarget_generic(
-      const std::string &name, const base::Toolchain &toolchain,
-      const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::Target::Type::DynamicLibrary, toolchain,
-               target_path_relative_to_root,
+  DynamicTarget_generic(const std::string &name,
+                        const base::Toolchain &toolchain, const Env &env)
+      : Target(name, base::Target::Type::DynamicLibrary, toolchain, env,
                ConfigInterface<GenericConfig, base::Toolchain::Id>::DynamicLib(
                    toolchain.GetId())) {
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
-      Copy(DynamicTarget_gcc(name, toolchain, target_path_relative_to_root),
-           kGenericCopyOptions);
+      Copy(DynamicTarget_gcc(name, toolchain, env), kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Msvc:
-      Copy(DynamicTarget_msvc(name, toolchain, target_path_relative_to_root),
-           kGenericCopyOptions);
+      Copy(DynamicTarget_msvc(name, toolchain, env), kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Clang:
     case base::Toolchain::Id::MinGW:
@@ -209,31 +196,25 @@ public:
   }
 };
 
-// TODO, Add Target Config
 class Target_generic : public base::Target {
 public:
   Target_generic(const std::string &name, base::Target::Type type,
-                 const base::Toolchain &toolchain,
-                 const std::filesystem::path &target_path_relative_to_root)
+                 const base::Toolchain &toolchain, const Env &env)
       : Target(
-            name, type, toolchain, target_path_relative_to_root,
+            name, type, toolchain, env,
             ConfigInterface<GenericConfig, base::Target::Type,
                             base::Toolchain::Id>::Generic(type,
                                                           toolchain.GetId())) {
     switch (type) {
     case base::Target::Type::Executable:
-      Copy(ExecutableTarget_generic(name, toolchain,
-                                    target_path_relative_to_root),
-           kGenericCopyOptions);
+      Copy(ExecutableTarget_generic(name, toolchain, env), kGenericCopyOptions);
       break;
     case base::Target::Type::StaticLibrary:
 
-      Copy(StaticTarget_generic(name, toolchain, target_path_relative_to_root),
-           kGenericCopyOptions);
+      Copy(StaticTarget_generic(name, toolchain, env), kGenericCopyOptions);
       break;
     case base::Target::Type::DynamicLibrary:
-      Copy(DynamicTarget_generic(name, toolchain, target_path_relative_to_root),
-           kGenericCopyOptions);
+      Copy(DynamicTarget_generic(name, toolchain, env), kGenericCopyOptions);
       break;
     default:
       env::assert_fatal<false>("Compiler ID not supported");
