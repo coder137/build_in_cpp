@@ -105,33 +105,31 @@ inline void DefaultMsvcOptions(base::Target &target) {
 class ExecutableTarget_msvc : public base::Target {
 public:
   ExecutableTarget_msvc(
-      const std::string &name, const base::Toolchain &toolchain,
-      const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::Target::Type::Executable, toolchain,
-               target_path_relative_to_root,
-               ConfigInterface<MsvcConfig>::Executable()) {
+      const std::string &name, const base::Toolchain &toolchain, const Env &env,
+      const Config &config = ConfigInterface<MsvcConfig>::Executable())
+      : Target(name, base::Target::Type::Executable, toolchain, env, config) {
     DefaultMsvcOptions(*this);
   }
 };
 
 class StaticTarget_msvc : public base::Target {
 public:
-  StaticTarget_msvc(const std::string &name, const base::Toolchain &toolchain,
-                    const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::Target::Type::StaticLibrary, toolchain,
-               target_path_relative_to_root,
-               ConfigInterface<MsvcConfig>::StaticLib()) {
+  StaticTarget_msvc(
+      const std::string &name, const base::Toolchain &toolchain, const Env &env,
+      const Config &config = ConfigInterface<MsvcConfig>::StaticLib())
+      : Target(name, base::Target::Type::StaticLibrary, toolchain, env,
+               config) {
     DefaultMsvcOptions(*this);
   }
 };
 
 class DynamicTarget_msvc : public base::Target {
 public:
-  DynamicTarget_msvc(const std::string &name, const base::Toolchain &toolchain,
-                     const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::Target::Type::DynamicLibrary, toolchain,
-               target_path_relative_to_root,
-               ConfigInterface<MsvcConfig>::DynamicLib()) {
+  DynamicTarget_msvc(
+      const std::string &name, const base::Toolchain &toolchain, const Env &env,
+      const Config &config = ConfigInterface<MsvcConfig>::DynamicLib())
+      : Target(name, base::Target::Type::DynamicLibrary, toolchain, env,
+               config) {
     DefaultMsvcOptions(*this);
   }
 };
