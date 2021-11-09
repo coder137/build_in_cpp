@@ -126,12 +126,6 @@ private:
   }
 };
 
-inline void
-CopyTarget(base::Target &dest, base::Target &&src,
-           std::initializer_list<base::Target::CopyOption> options) {
-  dest.Copy(src, options);
-}
-
 class ExecutableTarget_generic : public base::Target {
 public:
   ExecutableTarget_generic(
@@ -144,16 +138,12 @@ public:
 
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
-      CopyTarget(
-          *this,
-          ExecutableTarget_gcc(name, toolchain, target_path_relative_to_root),
-          kGenericCopyOptions);
+      Copy(ExecutableTarget_gcc(name, toolchain, target_path_relative_to_root),
+           kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Msvc:
-      CopyTarget(
-          *this,
-          ExecutableTarget_msvc(name, toolchain, target_path_relative_to_root),
-          kGenericCopyOptions);
+      Copy(ExecutableTarget_msvc(name, toolchain, target_path_relative_to_root),
+           kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Clang:
     case base::Toolchain::Id::MinGW:
@@ -176,16 +166,12 @@ public:
                    toolchain.GetId())) {
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
-      CopyTarget(
-          *this,
-          StaticTarget_gcc(name, toolchain, target_path_relative_to_root),
-          kGenericCopyOptions);
+      Copy(StaticTarget_gcc(name, toolchain, target_path_relative_to_root),
+           kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Msvc:
-      CopyTarget(
-          *this,
-          StaticTarget_msvc(name, toolchain, target_path_relative_to_root),
-          kGenericCopyOptions);
+      Copy(StaticTarget_msvc(name, toolchain, target_path_relative_to_root),
+           kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Clang:
     case base::Toolchain::Id::MinGW:
@@ -207,16 +193,12 @@ public:
                    toolchain.GetId())) {
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
-      CopyTarget(
-          *this,
-          DynamicTarget_gcc(name, toolchain, target_path_relative_to_root),
-          kGenericCopyOptions);
+      Copy(DynamicTarget_gcc(name, toolchain, target_path_relative_to_root),
+           kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Msvc:
-      CopyTarget(
-          *this,
-          DynamicTarget_msvc(name, toolchain, target_path_relative_to_root),
-          kGenericCopyOptions);
+      Copy(DynamicTarget_msvc(name, toolchain, target_path_relative_to_root),
+           kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Clang:
     case base::Toolchain::Id::MinGW:
@@ -227,6 +209,7 @@ public:
   }
 };
 
+// TODO, Add Target Config
 class Target_generic : public base::Target {
 public:
   Target_generic(const std::string &name, base::Target::Type type,
@@ -239,23 +222,18 @@ public:
                                                           toolchain.GetId())) {
     switch (type) {
     case base::Target::Type::Executable:
-      CopyTarget(*this,
-                 ExecutableTarget_generic(name, toolchain,
-                                          target_path_relative_to_root),
-                 kGenericCopyOptions);
+      Copy(ExecutableTarget_generic(name, toolchain,
+                                    target_path_relative_to_root),
+           kGenericCopyOptions);
       break;
     case base::Target::Type::StaticLibrary:
 
-      CopyTarget(
-          *this,
-          StaticTarget_generic(name, toolchain, target_path_relative_to_root),
-          kGenericCopyOptions);
+      Copy(StaticTarget_generic(name, toolchain, target_path_relative_to_root),
+           kGenericCopyOptions);
       break;
     case base::Target::Type::DynamicLibrary:
-      CopyTarget(
-          *this,
-          DynamicTarget_generic(name, toolchain, target_path_relative_to_root),
-          kGenericCopyOptions);
+      Copy(DynamicTarget_generic(name, toolchain, target_path_relative_to_root),
+           kGenericCopyOptions);
       break;
     default:
       env::assert_fatal<false>("Compiler ID not supported");
