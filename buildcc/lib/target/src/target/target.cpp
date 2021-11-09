@@ -52,7 +52,7 @@ void Target::Initialize() {
       env::is_init(),
       "Environment is not initialized. Use the buildcc::env::init API");
   env::assert_fatal(IsValidTargetType(type_), "Invalid Target Type");
-  fs::create_directories(target_build_dir_);
+  fs::create_directories(GetTargetBuildDir());
 
   // String updates
   unique_id_ = fmt::format("[{}] {}", toolchain_.GetName(), name_);
