@@ -58,7 +58,7 @@ public:
                             kGccExecutableLinkCommand);
   }
   static base::Target::Config StaticLib() {
-    return DefaultGccConfig(kGccDynamicLibExt, kGccGenericCompileCommand,
+    return DefaultGccConfig(kGccStaticLibExt, kGccGenericCompileCommand,
                             kGccDynamicLibLinkCommand);
   }
   static base::Target ::Config DynamicLib() {
@@ -95,33 +95,31 @@ inline void DefaultGccOptions(base::Target &target) {
 class ExecutableTarget_gcc : public base::Target {
 public:
   ExecutableTarget_gcc(
-      const std::string &name, const base::Toolchain &toolchain,
-      const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::Target::Type::Executable, toolchain,
-               target_path_relative_to_root,
-               ConfigInterface<GccConfig>::Executable()) {
+      const std::string &name, const base::Toolchain &toolchain, const Env &env,
+      const Config &config = ConfigInterface<GccConfig>::Executable())
+      : Target(name, base::Target::Type::Executable, toolchain, env, config) {
     DefaultGccOptions(*this);
   }
 };
 
 class StaticTarget_gcc : public base::Target {
 public:
-  StaticTarget_gcc(const std::string &name, const base::Toolchain &toolchain,
-                   const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::Target::Type::StaticLibrary, toolchain,
-               target_path_relative_to_root,
-               ConfigInterface<GccConfig>::StaticLib()) {
+  StaticTarget_gcc(
+      const std::string &name, const base::Toolchain &toolchain, const Env &env,
+      const Config &config = ConfigInterface<GccConfig>::StaticLib())
+      : Target(name, base::Target::Type::StaticLibrary, toolchain, env,
+               config) {
     DefaultGccOptions(*this);
   }
 };
 
 class DynamicTarget_gcc : public base::Target {
 public:
-  DynamicTarget_gcc(const std::string &name, const base::Toolchain &toolchain,
-                    const std::filesystem::path &target_path_relative_to_root)
-      : Target(name, base::Target::Type::DynamicLibrary, toolchain,
-               target_path_relative_to_root,
-               ConfigInterface<GccConfig>::DynamicLib()) {
+  DynamicTarget_gcc(
+      const std::string &name, const base::Toolchain &toolchain, const Env &env,
+      const Config &config = ConfigInterface<GccConfig>::DynamicLib())
+      : Target(name, base::Target::Type::DynamicLibrary, toolchain, env,
+               config) {
     AddCommonCompileFlag("-fpic");
     DefaultGccOptions(*this);
   }

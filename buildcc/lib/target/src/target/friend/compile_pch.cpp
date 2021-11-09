@@ -111,7 +111,7 @@ void CompilePch::BuildCompile() {
 }
 
 fs::path CompilePch::ConstructHeaderPath() const {
-  return target_.target_build_dir_ /
+  return target_.GetTargetBuildDir() /
          fmt::format("buildcc_pch{}", target_.GetConfig().pch_header_ext);
 }
 
