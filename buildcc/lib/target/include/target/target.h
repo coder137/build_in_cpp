@@ -122,17 +122,37 @@ public:
     bool lock{false};
   };
 
+  struct Env {
+    // * NOTE, This has only been added for implicit conversion
+    // TODO, Make the constructors below explicit
+    // TODO, Remove this constructor
+    Env(const char *target_relative_to_env_root)
+        : target_root_dir(env::get_project_root_dir() /
+                          target_relative_to_env_root),
+          target_build_dir(env::get_project_build_dir()), relative(true) {}
+
+    Env(const fs::path &target_relative_to_env_root)
+        : target_root_dir(env::get_project_root_dir() /
+                          target_relative_to_env_root),
+          target_build_dir(env::get_project_build_dir()), relative(true) {}
+    Env(const fs::path &absolute_target_root,
+        const fs::path &absolute_target_build)
+        : target_root_dir(absolute_target_root),
+          target_build_dir(absolute_target_build), relative(false) {}
+
+    fs::path target_root_dir;
+    fs::path target_build_dir;
+    bool relative{false};
+  };
+
 public:
   explicit Target(const std::string &name, Type type,
-                  const Toolchain &toolchain,
-                  const fs::path &target_path_relative_to_root,
+                  const Toolchain &toolchain, const Env &env,
                   const Config &config = {})
       : name_(name), type_(type), toolchain_(toolchain), config_(config),
-        target_root_dir_(env::get_project_root_dir() /
-                         target_path_relative_to_root),
-        target_build_dir_(env::get_project_build_dir() / toolchain.GetName() /
-                          name),
-        loader_(name, target_build_dir_), ext_(*this), compile_pch_(*this),
+        env_(env.target_root_dir,
+             env.target_build_dir / toolchain.GetName() / name),
+        loader_(name, env_.target_build_dir), ext_(*this), compile_pch_(*this),
         compile_object_(*this), link_target_(*this) {
     Initialize();
   }
@@ -149,7 +169,7 @@ public:
   // Setters
 
   // * Sources
-  void AddSource(const fs::path &relative_filename,
+  void AddSource(const fs::path &filename,
                  const fs::path &relative_to_target_path = "");
   void GlobSources(const fs::path &relative_to_target_path);
 
@@ -231,8 +251,8 @@ public:
   const std::string &GetName() const { return name_; }
   const Toolchain &GetToolchain() const { return toolchain_; }
   Target::Type GetType() const { return type_; }
-  const fs::path &GetTargetRootDir() const { return target_root_dir_; }
-  const fs::path &GetTargetBuildDir() const { return target_build_dir_; }
+  const fs::path &GetTargetRootDir() const { return env_.target_root_dir; }
+  const fs::path &GetTargetBuildDir() const { return env_.target_build_dir; }
   const Config &GetConfig() const { return config_; }
 
   //
@@ -363,8 +383,7 @@ private:
   const Toolchain &toolchain_;
   Config config_;
 
-  fs::path target_root_dir_;
-  fs::path target_build_dir_;
+  Env env_;
   internal::TargetLoader loader_;
 
   // Friend
