@@ -4,7 +4,7 @@ build_dir = "_internal_linux"
 loglevel = "trace"
 
 # Project
-clean = false
+clean = true
 
 # Toolchain
 [toolchain.gcc]

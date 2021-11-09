@@ -24,6 +24,16 @@
 
 namespace buildcc {
 
+static std::initializer_list<base::Target::CopyOption> kGenericCopyOptions = {
+    base::Target::CopyOption::CommonCompileFlags,
+    base::Target::CopyOption::PchCompileFlags,
+    base::Target::CopyOption::PchObjectFlags,
+    base::Target::CopyOption::AsmCompileFlags,
+    base::Target::CopyOption::CCompileFlags,
+    base::Target::CopyOption::CppCompileFlags,
+    base::Target::CopyOption::LinkFlags,
+};
+
 class GenericConfig {
 public:
   static base::Target::Config Generic(base::Target::Type type,
@@ -116,6 +126,12 @@ private:
   }
 };
 
+inline void
+CopyTarget(base::Target &dest, base::Target &&src,
+           std::initializer_list<base::Target::CopyOption> options) {
+  dest.Copy(src, options);
+}
+
 class ExecutableTarget_generic : public base::Target {
 public:
   ExecutableTarget_generic(
@@ -125,33 +141,26 @@ public:
                target_path_relative_to_root,
                ConfigInterface<GenericConfig, base::Toolchain::Id>::Executable(
                    toolchain.GetId())) {
-    std::unique_ptr<base::Target> target;
+
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
-      target = std::make_unique<ExecutableTarget_gcc>(
-          name, toolchain, target_path_relative_to_root);
+      CopyTarget(
+          *this,
+          ExecutableTarget_gcc(name, toolchain, target_path_relative_to_root),
+          kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Msvc:
-      target = std::make_unique<ExecutableTarget_msvc>(
-          name, toolchain, target_path_relative_to_root);
+      CopyTarget(
+          *this,
+          ExecutableTarget_msvc(name, toolchain, target_path_relative_to_root),
+          kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Clang:
     case base::Toolchain::Id::MinGW:
     default:
-      env::assert_fatal(false, "Compiler ID not supported");
+      env::assert_fatal<false>("Compiler ID not supported");
       break;
     }
-
-    // Copy these parameters
-    Copy(*target, {
-                      base::Target::CopyOption::CommonCompileFlags,
-                      base::Target::CopyOption::PchCompileFlags,
-                      base::Target::CopyOption::PchObjectFlags,
-                      base::Target::CopyOption::AsmCompileFlags,
-                      base::Target::CopyOption::CCompileFlags,
-                      base::Target::CopyOption::CppCompileFlags,
-                      base::Target::CopyOption::LinkFlags,
-                  });
   }
   ~ExecutableTarget_generic() {}
 };
@@ -165,32 +174,25 @@ public:
                target_path_relative_to_root,
                ConfigInterface<GenericConfig, base::Toolchain::Id>::StaticLib(
                    toolchain.GetId())) {
-    std::unique_ptr<base::Target> target;
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
-      target = std::make_unique<StaticTarget_gcc>(name, toolchain,
-                                                  target_path_relative_to_root);
+      CopyTarget(
+          *this,
+          StaticTarget_gcc(name, toolchain, target_path_relative_to_root),
+          kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Msvc:
-      target = std::make_unique<StaticTarget_msvc>(
-          name, toolchain, target_path_relative_to_root);
+      CopyTarget(
+          *this,
+          StaticTarget_msvc(name, toolchain, target_path_relative_to_root),
+          kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Clang:
     case base::Toolchain::Id::MinGW:
     default:
-      env::assert_fatal(false, "Compiler ID not supported");
+      env::assert_fatal<false>("Compiler ID not supported");
       break;
     }
-    // Copy these parameters
-    Copy(*target, {
-                      base::Target::CopyOption::CommonCompileFlags,
-                      base::Target::CopyOption::PchCompileFlags,
-                      base::Target::CopyOption::PchObjectFlags,
-                      base::Target::CopyOption::AsmCompileFlags,
-                      base::Target::CopyOption::CCompileFlags,
-                      base::Target::CopyOption::CppCompileFlags,
-                      base::Target::CopyOption::LinkFlags,
-                  });
   }
 };
 
@@ -203,32 +205,25 @@ public:
                target_path_relative_to_root,
                ConfigInterface<GenericConfig, base::Toolchain::Id>::DynamicLib(
                    toolchain.GetId())) {
-    std::unique_ptr<base::Target> target;
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
-      target = std::make_unique<DynamicTarget_gcc>(
-          name, toolchain, target_path_relative_to_root);
+      CopyTarget(
+          *this,
+          DynamicTarget_gcc(name, toolchain, target_path_relative_to_root),
+          kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Msvc:
-      target = std::make_unique<DynamicTarget_msvc>(
-          name, toolchain, target_path_relative_to_root);
+      CopyTarget(
+          *this,
+          DynamicTarget_msvc(name, toolchain, target_path_relative_to_root),
+          kGenericCopyOptions);
       break;
     case base::Toolchain::Id::Clang:
     case base::Toolchain::Id::MinGW:
     default:
-      env::assert_fatal(false, "Compiler ID not supported");
+      env::assert_fatal<false>("Compiler ID not supported");
       break;
     }
-    // Copy these parameters
-    Copy(*target, {
-                      base::Target::CopyOption::CommonCompileFlags,
-                      base::Target::CopyOption::PchCompileFlags,
-                      base::Target::CopyOption::PchObjectFlags,
-                      base::Target::CopyOption::AsmCompileFlags,
-                      base::Target::CopyOption::CCompileFlags,
-                      base::Target::CopyOption::CppCompileFlags,
-                      base::Target::CopyOption::LinkFlags,
-                  });
   }
 };
 
@@ -242,34 +237,30 @@ public:
             ConfigInterface<GenericConfig, base::Target::Type,
                             base::Toolchain::Id>::Generic(type,
                                                           toolchain.GetId())) {
-    std::unique_ptr<base::Target> target;
     switch (type) {
     case base::Target::Type::Executable:
-      target = std::make_unique<ExecutableTarget_generic>(
-          name, toolchain, target_path_relative_to_root);
+      CopyTarget(*this,
+                 ExecutableTarget_generic(name, toolchain,
+                                          target_path_relative_to_root),
+                 kGenericCopyOptions);
       break;
     case base::Target::Type::StaticLibrary:
-      target = std::make_unique<StaticTarget_generic>(
-          name, toolchain, target_path_relative_to_root);
+
+      CopyTarget(
+          *this,
+          StaticTarget_generic(name, toolchain, target_path_relative_to_root),
+          kGenericCopyOptions);
       break;
     case base::Target::Type::DynamicLibrary:
-      target = std::make_unique<DynamicTarget_generic>(
-          name, toolchain, target_path_relative_to_root);
+      CopyTarget(
+          *this,
+          DynamicTarget_generic(name, toolchain, target_path_relative_to_root),
+          kGenericCopyOptions);
       break;
     default:
-      env::assert_fatal(false, "Compiler ID not supported");
+      env::assert_fatal<false>("Compiler ID not supported");
       break;
     }
-    // Copy these parameters
-    Copy(*target, {
-                      base::Target::CopyOption::CommonCompileFlags,
-                      base::Target::CopyOption::PchCompileFlags,
-                      base::Target::CopyOption::PchObjectFlags,
-                      base::Target::CopyOption::AsmCompileFlags,
-                      base::Target::CopyOption::CCompileFlags,
-                      base::Target::CopyOption::CppCompileFlags,
-                      base::Target::CopyOption::LinkFlags,
-                  });
   }
 };
 
