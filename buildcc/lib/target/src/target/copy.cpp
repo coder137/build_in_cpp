@@ -79,9 +79,8 @@ void Target::Copy(const Target &target,
               [&](const auto &f) { AddLinkDependency(f); });
       break;
     case CopyOption::SourceFiles:
-      CopyVar(target.compile_object_.GetObjectDataMap(), [&](const auto &m) {
-        AddSourceAbsolute(m.first, m.second.output);
-      });
+      CopyVar(target.storer_.current_source_files.user,
+              [&](const auto &f) { AddSourceAbsolute(f); });
       break;
     case CopyOption::HeaderFiles:
       CopyVar(target.storer_.current_header_files.user,
