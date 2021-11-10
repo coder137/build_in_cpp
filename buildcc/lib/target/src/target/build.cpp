@@ -99,6 +99,18 @@ void Target::Build() {
   }
 
   // Compile Command
+
+  // Relate input source files with output object files
+  for (const auto &abs_source : storer_.current_source_files.user) {
+    // Set state
+    const auto file_ext_type = ext_.GetType(abs_source);
+    ext_.SetSourceState(file_ext_type);
+
+    // Relate input source with output object
+    const auto abs_object = ConstructObjectPath(abs_source);
+    fs::create_directories(abs_object.parent_path());
+    compile_object_.AddObjectData(abs_source, abs_object);
+  }
   compile_object_.CacheCompileCommands();
   compile_object_.Task();
 

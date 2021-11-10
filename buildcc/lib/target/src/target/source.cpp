@@ -25,36 +25,23 @@
 namespace buildcc::base {
 
 // Public
-void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath,
-                               const fs::path &absolute_output_filepath) {
+void Target::AddSourceAbsolute(const fs::path &absolute_input_filepath) {
   LockedAfterBuild();
   const auto file_ext_type = ext_.GetType(absolute_input_filepath);
   env::assert_fatal(FileExt::IsValidSource(file_ext_type),
                     fmt::format("{} does not have a valid source extension",
                                 absolute_input_filepath));
-  ext_.SetSourceState(file_ext_type);
 
   const fs::path absolute_source =
       fs::path(absolute_input_filepath).make_preferred();
   storer_.current_source_files.user.insert(absolute_source);
-
-  // Relate input source files with output object files
-  const auto absolute_compiled_source =
-      fs::path(absolute_output_filepath).make_preferred();
-  fs::create_directories(absolute_compiled_source.parent_path());
-
-  compile_object_.AddObjectData(absolute_source, absolute_compiled_source);
 }
 
-void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path,
-                                 const fs::path &absolute_output_path) {
+void Target::GlobSourcesAbsolute(const fs::path &absolute_input_path) {
   for (const auto &p : fs::directory_iterator(absolute_input_path)) {
     const auto file_ext_type = ext_.GetType(p.path());
     if (FileExt::IsValidSource(file_ext_type)) {
-      fs::path absolute_output_source =
-          absolute_output_path /
-          fmt::format("{}{}", p.path().filename().string(), config_.obj_ext);
-      AddSourceAbsolute(p.path(), absolute_output_source);
+      AddSourceAbsolute(p.path());
     }
   }
 }
@@ -67,7 +54,7 @@ void Target::AddSource(const fs::path &relative_filename,
   fs::path absolute_source =
       GetTargetRootDir() / relative_to_target_path / relative_filename;
 
-  AddSourceAbsolute(absolute_source, ConstructObjectPath(absolute_source));
+  AddSourceAbsolute(absolute_source);
 }
 
 void Target::GlobSources(const fs::path &relative_to_target_path) {
@@ -78,7 +65,7 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
   for (const auto &p : fs::directory_iterator(absolute_input_path)) {
     const auto file_ext_type = ext_.GetType(p.path());
     if (FileExt::IsValidSource(file_ext_type)) {
-      AddSourceAbsolute(p.path(), ConstructObjectPath(p.path()));
+      AddSourceAbsolute(p.path());
     }
   }
 }
