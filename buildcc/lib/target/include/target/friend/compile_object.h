@@ -44,8 +44,7 @@ public:
 public:
   CompileObject(Target &target) : target_(target) {}
 
-  void AddObjectData(const fs::path &absolute_source_path,
-                     const fs::path &absolute_object_path);
+  void AddObjectData(const fs::path &absolute_source_path);
 
   void CacheCompileCommands();
   void Task();
@@ -59,6 +58,8 @@ public:
   tf::Task &GetTask() { return compile_task_; }
 
 private:
+  fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
+
   void BuildObjectCompile(std::vector<fs::path> &source_files,
                           std::vector<fs::path> &dummy_source_files);
 

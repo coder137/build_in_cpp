@@ -369,9 +369,6 @@ private:
   void FlagChanged();
   void ExternalLibChanged();
 
-  // Construct
-  fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
-
   void TaskDeps();
 
 private:
