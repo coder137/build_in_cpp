@@ -70,35 +70,28 @@ void Target::GlobSources(const fs::path &relative_to_target_path) {
   }
 }
 
-fs::path
-Target::ConstructObjectPath(const fs::path &absolute_source_file) const {
-  // Compute the relative compiled source path
-  fs::path relative =
-      absolute_source_file.lexically_relative(env::get_project_root_dir());
+// fs::path
+// Target::ConstructObjectPath(const fs::path &absolute_source_file) const {
+//   // Compute the relative compiled source path
+//   fs::path relative =
+//       absolute_source_file.lexically_relative(GetTargetRootDir());
 
-  // - Check if out of root
-  // - Convert .. to __
-  // NOTE, Similar to how CMake handles out of root files
-  std::string relstr = relative.string();
-  if (relstr.find("..") != std::string::npos) {
-    // TODO, If unnecessary, remove this warning
-    env::log_warning(
-        name_,
-        fmt::format("Out of project root path detected for {} -> "
-                    "{}.\nConverting .. to __ but it is recommended to use the "
-                    "AddSourceAbsolute(abs_source_input, abs_obj_output) or "
-                    "GlobSourceAbsolute(abs_source_input, abs_obj_output) "
-                    "API if possible.",
-                    absolute_source_file, relative));
-    std::replace(relstr.begin(), relstr.end(), '.', '_');
-    relative = relstr;
-  }
+//   // TODO, Add path replacement strategy on relative
 
-  // Compute relative object path
-  fs::path absolute_compiled_source = GetTargetBuildDir() / relative;
-  absolute_compiled_source.replace_filename(fmt::format(
-      "{}{}", absolute_source_file.filename().string(), config_.obj_ext));
-  return absolute_compiled_source;
-}
+//   // - Check if out of root
+//   // - Convert .. to __
+//   // NOTE, Similar to how CMake handles out of root files
+//   std::string relstr = relative.string();
+//   if (relstr.find("..") != std::string::npos) {
+//     std::replace(relstr.begin(), relstr.end(), '.', '_');
+//     relative = relstr;
+//   }
+
+//   // Compute relative object path
+//   fs::path absolute_compiled_source = GetTargetBuildDir() / relative;
+//   absolute_compiled_source.replace_filename(fmt::format(
+//       "{}{}", absolute_source_file.filename().string(), config_.obj_ext));
+//   return absolute_compiled_source;
+// }
 
 } // namespace buildcc::base

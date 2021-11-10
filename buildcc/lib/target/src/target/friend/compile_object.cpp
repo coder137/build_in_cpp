@@ -29,8 +29,11 @@ constexpr const char *const kInput = "input";
 
 namespace buildcc::base {
 
-void CompileObject::AddObjectData(const fs::path &absolute_source_path,
-                                  const fs::path &absolute_object_path) {
+void CompileObject::AddObjectData(const fs::path &absolute_source_path) {
+  const fs::path absolute_object_path =
+      ConstructObjectPath(absolute_source_path);
+  fs::create_directories(absolute_object_path.parent_path());
+
   object_files_.emplace(absolute_source_path,
                         ObjectData(absolute_object_path, ""));
 }
@@ -73,6 +76,45 @@ CompileObject::GetObjectData(const fs::path &absolute_source) const {
   env::assert_fatal(fiter != object_files_.end(),
                     fmt::format("{} not found", absolute_source));
   return object_files_.at(absolute_source);
+}
+
+// PRIVATE
+
+// Scenarios
+// - {target_root_dir} / source -> {target_build_dir} / source.compiled
+// - {target_root_dir} / folder / source -> {target_build_dir} / folder /
+// source.compiled
+// - {target_root_dir} / .. / source -> {target_build_dir} / __ /
+// source.compiled
+// TODO, Path replacement strategy
+// NOTE, Replace part of the `relative path` with a path of users choice
+// - Add `folder/nested` -> FOLDER_NESTED
+// - {target_root_dir} / random / folder / nested / source -> {target_build_dir}
+// / random / FOLDER_NESTED / source.compiled
+fs::path
+CompileObject::ConstructObjectPath(const fs::path &absolute_source_file) const {
+
+  // Compute the relative compiled source path
+  fs::path relative =
+      absolute_source_file.lexically_relative(target_.GetTargetRootDir());
+
+  // TODO, Add path replacement strategy on relative
+
+  // - Check if out of root
+  // - Convert .. to __
+  // NOTE, Similar to how CMake handles out of root files
+  std::string relstr = relative.string();
+  if (relstr.find("..") != std::string::npos) {
+    std::replace(relstr.begin(), relstr.end(), '.', '_');
+    relative = relstr;
+  }
+
+  // Compute relative object path
+  fs::path absolute_compiled_source = target_.GetTargetBuildDir() / relative;
+  absolute_compiled_source.replace_filename(
+      fmt::format("{}{}", absolute_source_file.filename().string(),
+                  target_.GetConfig().obj_ext));
+  return absolute_compiled_source;
 }
 
 void CompileObject::BuildObjectCompile(

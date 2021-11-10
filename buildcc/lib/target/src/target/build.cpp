@@ -107,9 +107,7 @@ void Target::Build() {
     ext_.SetSourceState(file_ext_type);
 
     // Relate input source with output object
-    const auto abs_object = ConstructObjectPath(abs_source);
-    fs::create_directories(abs_object.parent_path());
-    compile_object_.AddObjectData(abs_source, abs_object);
+    compile_object_.AddObjectData(abs_source);
   }
   compile_object_.CacheCompileCommands();
   compile_object_.Task();
