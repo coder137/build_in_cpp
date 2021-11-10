@@ -73,10 +73,8 @@ TEST(TargetTestSourceOutOfRootGroup, GlobAbsolute_OutOfRootSource) {
   {
     buildcc::base::Target simple(
         OUTOFROOT, buildcc::base::Target::Type::Executable, gcc, "");
-    simple.GlobSourcesAbsolute(fs::path(BUILD_SCRIPT_SOURCE) / "data",
-                               target_source_intermediate_path /
-                                   simple.GetName() /
-                                   "OUT_OF_SOURCE"); // 6 files detected
+    simple.GlobSourcesAbsolute(fs::path(BUILD_SCRIPT_SOURCE) /
+                               "data"); // 6 files detected
     buildcc::m::CommandExpect_Execute(6, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
