@@ -15,6 +15,7 @@
  */
 
 #include "env/assert_fatal.h"
+#include "env/logging.h"
 #include "target/target.h"
 #include <algorithm>
 
@@ -35,11 +36,13 @@ namespace buildcc::base {
 // NOTE, std::move performs a copy when `const Target &`
 void Target::Copy(const Target &target,
                   std::initializer_list<CopyOption> options) {
+  env::log_trace(__FUNCTION__, "Copy by copy");
   SpecializedCopy<const Target &>(target, options);
 }
 
 // NOTE, std::move performs a move when `Target &&`
 void Target::Copy(Target &&target, std::initializer_list<CopyOption> options) {
+  env::log_trace(__FUNCTION__, "Copy by move");
   SpecializedCopy<Target &&>(std::move(target), options);
 }
 
