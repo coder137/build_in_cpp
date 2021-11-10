@@ -175,10 +175,8 @@ public:
 
   // Use these APIs for out of project root builds
   // Manually specify input and output
-  void AddSourceAbsolute(const fs::path &absolute_input_filepath,
-                         const fs::path &absolute_output_filepath);
-  void GlobSourcesAbsolute(const fs::path &absolute_input_path,
-                           const fs::path &absolute_output_path);
+  void AddSourceAbsolute(const fs::path &absolute_input_filepath);
+  void GlobSourcesAbsolute(const fs::path &absolute_input_path);
 
   // * Headers
   void AddHeader(const fs::path &relative_filename,
@@ -371,9 +369,6 @@ private:
   void FlagChanged();
   void ExternalLibChanged();
 
-  // Construct
-  fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
-
   void TaskDeps();
 
 private:
@@ -382,7 +377,6 @@ private:
   Type type_;
   const Toolchain &toolchain_;
   Config config_;
-
   Env env_;
   internal::TargetLoader loader_;
 

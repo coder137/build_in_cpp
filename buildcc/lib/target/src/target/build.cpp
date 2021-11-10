@@ -57,7 +57,18 @@ void Target::Build() {
   LockedAfterBuild();
   Lock();
 
-  // Taskflow updates
+  // Source - Object relation
+  // Source state
+  for (const auto &abs_source : storer_.current_source_files.user) {
+    // Set state
+    const auto file_ext_type = ext_.GetType(abs_source);
+    ext_.SetSourceState(file_ext_type);
+
+    // Relate input source with output object
+    compile_object_.AddObjectData(abs_source);
+  }
+
+  // Target default arguments
   command_.AddDefaultArguments({
       {kIncludeDirs, internal::aggregate_with_prefix(config_.prefix_include_dir,
                                                      GetCurrentIncludeDirs())},
