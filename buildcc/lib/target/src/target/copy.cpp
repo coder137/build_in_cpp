@@ -36,7 +36,7 @@ namespace buildcc::base {
 // NOTE, std::move performs a copy when `const Target &`
 void Target::Copy(const Target &target,
                   std::initializer_list<CopyOption> options) {
-  env::log_trace(__FUNCTION__, "Copy by copy");
+  env::log_trace(__FUNCTION__, "Copy by const ref");
   SpecializedCopy<const Target &>(target, options);
 }
 
