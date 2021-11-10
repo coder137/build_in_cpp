@@ -162,6 +162,7 @@ public:
 
   // Features
   void Copy(const Target &target, std::initializer_list<CopyOption> options);
+  void Copy(Target &&target, std::initializer_list<CopyOption> options);
 
   // Builders
   void Build() override;
@@ -368,6 +369,9 @@ private:
   void DirChanged();
   void FlagChanged();
   void ExternalLibChanged();
+
+  template <typename T>
+  void SpecializedCopy(T target, std::initializer_list<CopyOption> options);
 
   void TaskDeps();
 
