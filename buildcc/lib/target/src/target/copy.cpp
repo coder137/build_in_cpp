@@ -15,6 +15,7 @@
  */
 
 #include "env/assert_fatal.h"
+#include "env/logging.h"
 #include "target/target.h"
 #include <algorithm>
 
@@ -35,75 +36,89 @@ namespace buildcc::base {
 // NOTE, std::move performs a copy when `const Target &`
 void Target::Copy(const Target &target,
                   std::initializer_list<CopyOption> options) {
+  env::log_trace(__FUNCTION__, "Copy by const ref");
+  SpecializedCopy<const Target &>(target, options);
+}
+
+// NOTE, std::move performs a move when `Target &&`
+void Target::Copy(Target &&target, std::initializer_list<CopyOption> options) {
+  env::log_trace(__FUNCTION__, "Copy by move");
+  SpecializedCopy<Target &&>(std::move(target), options);
+}
+
+// PRIVATE
+
+template <typename T>
+void Target::SpecializedCopy(T target,
+                             std::initializer_list<CopyOption> options) {
   LockedAfterBuild();
   for (const CopyOption o : options) {
     switch (o) {
     case CopyOption::PreprocessorFlags:
-      CopyVar(target.storer_.current_preprocessor_flags,
-              [&](const auto &f) { AddPreprocessorFlag(f); });
+      storer_.current_preprocessor_flags =
+          std::move(target.storer_.current_preprocessor_flags);
       break;
     case CopyOption::CommonCompileFlags:
-      CopyVar(target.storer_.current_common_compile_flags,
-              [&](const auto &f) { AddCommonCompileFlag(f); });
+      storer_.current_common_compile_flags =
+          std::move(target.storer_.current_common_compile_flags);
       break;
     case CopyOption::PchCompileFlags:
-      CopyVar(target.storer_.current_pch_compile_flags,
-              [&](const auto &f) { AddPchCompileFlag(f); });
+      storer_.current_pch_compile_flags =
+          std::move(target.storer_.current_pch_compile_flags);
       break;
     case CopyOption::PchObjectFlags:
-      CopyVar(target.storer_.current_pch_object_flags,
-              [&](const auto &f) { AddPchObjectFlag(f); });
+      storer_.current_pch_object_flags =
+          std::move(target.storer_.current_pch_object_flags);
       break;
     case CopyOption::AsmCompileFlags:
-      CopyVar(target.storer_.current_asm_compile_flags,
-              [&](const auto &f) { AddAsmCompileFlag(f); });
+      storer_.current_asm_compile_flags =
+          std::move(target.storer_.current_asm_compile_flags);
       break;
     case CopyOption::CCompileFlags:
-      CopyVar(target.storer_.current_c_compile_flags,
-              [&](const auto &f) { AddCCompileFlag(f); });
+      storer_.current_c_compile_flags =
+          std::move(target.storer_.current_c_compile_flags);
       break;
     case CopyOption::CppCompileFlags:
-      CopyVar(target.storer_.current_cpp_compile_flags,
-              [&](const auto &f) { AddCppCompileFlag(f); });
+      storer_.current_cpp_compile_flags =
+          std::move(target.storer_.current_cpp_compile_flags);
       break;
     case CopyOption::LinkFlags:
-      CopyVar(target.storer_.current_link_flags,
-              [&](const auto &f) { AddLinkFlag(f); });
+      storer_.current_link_flags = std::move(target.storer_.current_link_flags);
       break;
     case CopyOption::CompileDependencies:
-      CopyVar(target.storer_.current_compile_dependencies.user,
-              [&](const auto &f) { AddCompileDependency(f); });
+      storer_.current_compile_dependencies.user =
+          std::move(target.storer_.current_compile_dependencies.user);
       break;
     case CopyOption::LinkDependencies:
-      CopyVar(target.storer_.current_link_dependencies.user,
-              [&](const auto &f) { AddLinkDependency(f); });
+      storer_.current_link_dependencies.user =
+          std::move(target.storer_.current_link_dependencies.user);
       break;
     case CopyOption::SourceFiles:
-      CopyVar(target.storer_.current_source_files.user,
-              [&](const auto &f) { AddSourceAbsolute(f); });
+      storer_.current_source_files.user =
+          std::move(target.storer_.current_source_files.user);
       break;
     case CopyOption::HeaderFiles:
-      CopyVar(target.storer_.current_header_files.user,
-              [&](const auto &f) { AddHeaderAbsolute(f); });
+      storer_.current_header_files.user =
+          std::move(target.storer_.current_header_files.user);
       break;
     case CopyOption::PchFiles:
-      CopyVar(target.storer_.current_pch_files.user,
-              [&](const auto &f) { AddPchAbsolute(f); });
+      storer_.current_pch_files.user =
+          std::move(target.storer_.current_pch_files.user);
       break;
     case CopyOption::LibDeps:
-      storer_.current_lib_deps.user = target.storer_.current_lib_deps.user;
+      storer_.current_lib_deps.user =
+          std::move(target.storer_.current_lib_deps.user);
       break;
     case CopyOption::IncludeDirs:
-      CopyVar(target.storer_.current_include_dirs,
-              [&](const auto &dir) { AddIncludeDirAbsolute(dir); });
+      storer_.current_include_dirs =
+          std::move(target.storer_.current_include_dirs);
       break;
     case CopyOption::LibDirs:
-      CopyVar(target.storer_.current_lib_dirs,
-              [&](const auto &dir) { AddLibDir(dir); });
+      storer_.current_lib_dirs = std::move(target.storer_.current_lib_dirs);
       break;
     case CopyOption::ExternalLibDeps:
-      CopyVar(target.storer_.current_external_lib_deps,
-              [&](const auto &f) { AddLibDep(f); });
+      storer_.current_external_lib_deps =
+          std::move(target.storer_.current_external_lib_deps);
       break;
     default:
       env::assert_fatal<false>("Invalid Option added");

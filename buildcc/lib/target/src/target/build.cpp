@@ -57,6 +57,11 @@ void Target::Build() {
   LockedAfterBuild();
   Lock();
 
+  // PCH state
+  if (!storer_.current_pch_files.user.empty()) {
+    state_.contains_pch = true;
+  }
+
   // Source - Object relation
   // Source state
   for (const auto &abs_source : storer_.current_source_files.user) {
