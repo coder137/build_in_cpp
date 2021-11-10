@@ -1,7 +1,7 @@
 # Root
 root_dir = ""
 build_dir = "_internal_generic"
-loglevel = "debug"
+loglevel = "trace"
 
 # Project
 clean = true
