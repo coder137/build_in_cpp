@@ -34,7 +34,7 @@ static std::initializer_list<base::Target::CopyOption> kGenericCopyOptions = {
     base::Target::CopyOption::LinkFlags,
 };
 
-class GenericConfig {
+class GenericConfig : ConfigInterface<GenericConfig> {
 public:
   static base::Target::Config Generic(base::Target::Type type,
                                       base::Toolchain::Id id) {
@@ -131,8 +131,7 @@ public:
   ExecutableTarget_generic(const std::string &name,
                            const base::Toolchain &toolchain, const Env &env)
       : Target(name, base::Target::Type::Executable, toolchain, env,
-               ConfigInterface<GenericConfig, base::Toolchain::Id>::Executable(
-                   toolchain.GetId())) {
+               GenericConfig::Executable(toolchain.GetId())) {
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
       Copy(ExecutableTarget_gcc(name, toolchain, env), kGenericCopyOptions);
@@ -155,8 +154,7 @@ public:
   StaticTarget_generic(const std::string &name,
                        const base::Toolchain &toolchain, const Env &env)
       : Target(name, base::Target::Type::StaticLibrary, toolchain, env,
-               ConfigInterface<GenericConfig, base::Toolchain::Id>::StaticLib(
-                   toolchain.GetId())) {
+               GenericConfig::StaticLib(toolchain.GetId())) {
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
       Copy(StaticTarget_gcc(name, toolchain, env), kGenericCopyOptions);
@@ -178,8 +176,7 @@ public:
   DynamicTarget_generic(const std::string &name,
                         const base::Toolchain &toolchain, const Env &env)
       : Target(name, base::Target::Type::DynamicLibrary, toolchain, env,
-               ConfigInterface<GenericConfig, base::Toolchain::Id>::DynamicLib(
-                   toolchain.GetId())) {
+               GenericConfig::DynamicLib(toolchain.GetId())) {
     switch (toolchain.GetId()) {
     case base::Toolchain::Id::Gcc:
       Copy(DynamicTarget_gcc(name, toolchain, env), kGenericCopyOptions);
@@ -200,11 +197,8 @@ class Target_generic : public base::Target {
 public:
   Target_generic(const std::string &name, base::Target::Type type,
                  const base::Toolchain &toolchain, const Env &env)
-      : Target(
-            name, type, toolchain, env,
-            ConfigInterface<GenericConfig, base::Target::Type,
-                            base::Toolchain::Id>::Generic(type,
-                                                          toolchain.GetId())) {
+      : Target(name, type, toolchain, env,
+               GenericConfig::Generic(type, toolchain.GetId())) {
     switch (type) {
     case base::Target::Type::Executable:
       Copy(ExecutableTarget_generic(name, toolchain, env), kGenericCopyOptions);
