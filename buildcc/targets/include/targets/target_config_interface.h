@@ -48,9 +48,9 @@ namespace buildcc {
 // NOTE: This implementation has been kept to show current limitations
 // class ConfigInterface {
 // public:
-//   virtual base::Target::Config Executable() const = 0;
-//   virtual base::Target::Config StaticLib() const = 0;
-//   virtual base::Target ::Config DynamicLib() const = 0;
+//   virtual TargetConfig Executable() const = 0;
+//   virtual TargetConfig StaticLib() const = 0;
+//   virtual TargetConfig DynamicLib() const = 0;
 // };
 
 // * Instead of Dynamic Polymorphism we use Static Polymorphism using Templates
@@ -60,23 +60,19 @@ namespace buildcc {
 // For example, GccConfig :: public ConfigInterface<GccConfig>
 template <typename T> class ConfigInterface {
 public:
-  template <typename... Args>
-  static base::Target::Config Generic(Args &&...args) {
+  template <typename... Args> static TargetConfig Generic(Args &&...args) {
     return T::Generic(std::forward<Args>(args)...);
   }
 
-  template <typename... Args>
-  static base::Target::Config Executable(Args &&...args) {
+  template <typename... Args> static TargetConfig Executable(Args &&...args) {
     return T::Executable(std::forward<Args>(args)...);
   }
 
-  template <typename... Args>
-  static base::Target::Config StaticLib(Args &&...args) {
+  template <typename... Args> static TargetConfig StaticLib(Args &&...args) {
     return T::StaticLib(std::forward<Args>(args)...);
   }
 
-  template <typename... Args>
-  static base::Target ::Config DynamicLib(Args &&...args) {
+  template <typename... Args> static TargetConfig DynamicLib(Args &&...args) {
     return T::DynamicLib(std::forward<Args>(args)...);
   }
 
