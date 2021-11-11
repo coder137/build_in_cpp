@@ -20,34 +20,32 @@
 #include <algorithm>
 #include <optional>
 
+#include "target/target.h"
 #include "target_gcc.h"
 #include "target_msvc.h"
+#include "toolchain/toolchain.h"
 
 namespace buildcc {
 
-static std::initializer_list<base::Target::CopyOption> kGenericCopyOptions = {
-    base::Target::CopyOption::CommonCompileFlags,
-    base::Target::CopyOption::PchCompileFlags,
-    base::Target::CopyOption::PchObjectFlags,
-    base::Target::CopyOption::AsmCompileFlags,
-    base::Target::CopyOption::CCompileFlags,
-    base::Target::CopyOption::CppCompileFlags,
-    base::Target::CopyOption::LinkFlags,
+static std::initializer_list<TargetCopyOption> kGenericCopyOptions = {
+    TargetCopyOption::CommonCompileFlags, TargetCopyOption::PchCompileFlags,
+    TargetCopyOption::PchObjectFlags,     TargetCopyOption::AsmCompileFlags,
+    TargetCopyOption::CCompileFlags,      TargetCopyOption::CppCompileFlags,
+    TargetCopyOption::LinkFlags,
 };
 
 class GenericConfig : ConfigInterface<GenericConfig> {
 public:
-  static base::Target::Config Generic(base::Target::Type type,
-                                      base::Toolchain::Id id) {
-    base::Target::Config config;
+  static TargetConfig Generic(TargetType type, ToolchainId id) {
+    TargetConfig config;
     switch (type) {
-    case base::Target::Type::Executable:
+    case TargetType::Executable:
       config = Executable(id);
       break;
-    case base::Target::Type::StaticLibrary:
+    case TargetType::StaticLibrary:
       config = StaticLib(id);
       break;
-    case base::Target::Type::DynamicLibrary:
+    case TargetType::DynamicLibrary:
       config = DynamicLib(id);
       break;
     default:
@@ -58,28 +56,28 @@ public:
     return config;
   }
 
-  static base::Target::Config Executable(base::Toolchain::Id id) {
+  static TargetConfig Executable(ToolchainId id) {
     return DefaultGenericExecutable(id);
   }
-  static base::Target::Config StaticLib(base::Toolchain::Id id) {
+  static TargetConfig StaticLib(ToolchainId id) {
     return DefaultGenericStaticLib(id);
   }
-  static base::Target::Config DynamicLib(base::Toolchain::Id id) {
+  static TargetConfig DynamicLib(ToolchainId id) {
     return DefaultGenericDynamicLib(id);
   }
 
 private:
-  static base::Target::Config DefaultGenericExecutable(base::Toolchain::Id id) {
-    base::Target::Config config;
+  static TargetConfig DefaultGenericExecutable(ToolchainId id) {
+    TargetConfig config;
     switch (id) {
-    case base::Toolchain::Id::Gcc:
+    case ToolchainId::Gcc:
       config = GccConfig::Executable();
       break;
-    case base::Toolchain::Id::Msvc:
+    case ToolchainId::Msvc:
       config = MsvcConfig::Executable();
       break;
-    case base::Toolchain::Id::Clang:
-    case base::Toolchain::Id::MinGW:
+    case ToolchainId::Clang:
+    case ToolchainId::MinGW:
     default:
       env::assert_fatal<false>("Compiler ID not supported");
       break;
@@ -88,17 +86,17 @@ private:
     return config;
   }
 
-  static base::Target::Config DefaultGenericStaticLib(base::Toolchain::Id id) {
-    base::Target::Config config;
+  static TargetConfig DefaultGenericStaticLib(ToolchainId id) {
+    TargetConfig config;
     switch (id) {
-    case base::Toolchain::Id::Gcc:
+    case ToolchainId::Gcc:
       config = GccConfig::StaticLib();
       break;
-    case base::Toolchain::Id::Msvc:
+    case ToolchainId::Msvc:
       config = MsvcConfig::StaticLib();
       break;
-    case base::Toolchain::Id::Clang:
-    case base::Toolchain::Id::MinGW:
+    case ToolchainId::Clang:
+    case ToolchainId::MinGW:
     default:
       env::assert_fatal<false>("Compiler ID not supported");
       break;
@@ -107,17 +105,17 @@ private:
     return config;
   }
 
-  static base::Target::Config DefaultGenericDynamicLib(base::Toolchain::Id id) {
-    base::Target::Config config;
+  static TargetConfig DefaultGenericDynamicLib(ToolchainId id) {
+    TargetConfig config;
     switch (id) {
-    case base::Toolchain::Id::Gcc:
+    case ToolchainId::Gcc:
       config = GccConfig::DynamicLib();
       break;
-    case base::Toolchain::Id::Msvc:
+    case ToolchainId::Msvc:
       config = MsvcConfig::DynamicLib();
       break;
-    case base::Toolchain::Id::Clang:
-    case base::Toolchain::Id::MinGW:
+    case ToolchainId::Clang:
+    case ToolchainId::MinGW:
     default:
       env::assert_fatal<false>("Compiler ID not supported");
       break;
@@ -127,22 +125,22 @@ private:
   }
 };
 
-class ExecutableTarget_generic : public base::Target {
+class ExecutableTarget_generic : public BaseTarget {
 public:
   ExecutableTarget_generic(const std::string &name,
-                           const base::Toolchain &toolchain, const Env &env,
+                           const BaseToolchain &toolchain, const Env &env,
                            const std::optional<Config> &config = {})
-      : Target(name, base::Target::Type::Executable, toolchain, env,
+      : Target(name, TargetType::Executable, toolchain, env,
                config.value_or(GenericConfig::Executable(toolchain.GetId()))) {
     switch (toolchain.GetId()) {
-    case base::Toolchain::Id::Gcc:
+    case ToolchainId::Gcc:
       Copy(ExecutableTarget_gcc(name, toolchain, env), kGenericCopyOptions);
       break;
-    case base::Toolchain::Id::Msvc:
+    case ToolchainId::Msvc:
       Copy(ExecutableTarget_msvc(name, toolchain, env), kGenericCopyOptions);
       break;
-    case base::Toolchain::Id::Clang:
-    case base::Toolchain::Id::MinGW:
+    case ToolchainId::Clang:
+    case ToolchainId::MinGW:
     default:
       env::assert_fatal<false>("Compiler ID not supported");
       break;
@@ -151,22 +149,21 @@ public:
   ~ExecutableTarget_generic() {}
 };
 
-class StaticTarget_generic : public base::Target {
+class StaticTarget_generic : public BaseTarget {
 public:
-  StaticTarget_generic(const std::string &name,
-                       const base::Toolchain &toolchain, const Env &env,
-                       const std::optional<Config> &config = {})
-      : Target(name, base::Target::Type::StaticLibrary, toolchain, env,
+  StaticTarget_generic(const std::string &name, const BaseToolchain &toolchain,
+                       const Env &env, const std::optional<Config> &config = {})
+      : Target(name, TargetType::StaticLibrary, toolchain, env,
                config.value_or(GenericConfig::StaticLib(toolchain.GetId()))) {
     switch (toolchain.GetId()) {
-    case base::Toolchain::Id::Gcc:
+    case ToolchainId::Gcc:
       Copy(StaticTarget_gcc(name, toolchain, env), kGenericCopyOptions);
       break;
-    case base::Toolchain::Id::Msvc:
+    case ToolchainId::Msvc:
       Copy(StaticTarget_msvc(name, toolchain, env), kGenericCopyOptions);
       break;
-    case base::Toolchain::Id::Clang:
-    case base::Toolchain::Id::MinGW:
+    case ToolchainId::Clang:
+    case ToolchainId::MinGW:
     default:
       env::assert_fatal<false>("Compiler ID not supported");
       break;
@@ -174,22 +171,22 @@ public:
   }
 };
 
-class DynamicTarget_generic : public base::Target {
+class DynamicTarget_generic : public BaseTarget {
 public:
-  DynamicTarget_generic(const std::string &name,
-                        const base::Toolchain &toolchain, const Env &env,
+  DynamicTarget_generic(const std::string &name, const BaseToolchain &toolchain,
+                        const Env &env,
                         const std::optional<Config> &config = {})
-      : Target(name, base::Target::Type::DynamicLibrary, toolchain, env,
+      : Target(name, TargetType::DynamicLibrary, toolchain, env,
                config.value_or(GenericConfig::DynamicLib(toolchain.GetId()))) {
     switch (toolchain.GetId()) {
-    case base::Toolchain::Id::Gcc:
+    case ToolchainId::Gcc:
       Copy(DynamicTarget_gcc(name, toolchain, env), kGenericCopyOptions);
       break;
-    case base::Toolchain::Id::Msvc:
+    case ToolchainId::Msvc:
       Copy(DynamicTarget_msvc(name, toolchain, env), kGenericCopyOptions);
       break;
-    case base::Toolchain::Id::Clang:
-    case base::Toolchain::Id::MinGW:
+    case ToolchainId::Clang:
+    case ToolchainId::MinGW:
     default:
       env::assert_fatal<false>("Compiler ID not supported");
       break;
@@ -197,23 +194,23 @@ public:
   }
 };
 
-class Target_generic : public base::Target {
+class Target_generic : public BaseTarget {
 public:
-  Target_generic(const std::string &name, base::Target::Type type,
-                 const base::Toolchain &toolchain, const Env &env,
+  Target_generic(const std::string &name, TargetType type,
+                 const BaseToolchain &toolchain, const Env &env,
                  const std::optional<Config> &config = {})
       : Target(
             name, type, toolchain, env,
             config.value_or(GenericConfig::Generic(type, toolchain.GetId()))) {
     switch (type) {
-    case base::Target::Type::Executable:
+    case TargetType::Executable:
       Copy(ExecutableTarget_generic(name, toolchain, env), kGenericCopyOptions);
       break;
-    case base::Target::Type::StaticLibrary:
+    case TargetType::StaticLibrary:
 
       Copy(StaticTarget_generic(name, toolchain, env), kGenericCopyOptions);
       break;
-    case base::Target::Type::DynamicLibrary:
+    case TargetType::DynamicLibrary:
       Copy(DynamicTarget_generic(name, toolchain, env), kGenericCopyOptions);
       break;
     default:
