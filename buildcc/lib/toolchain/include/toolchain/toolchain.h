@@ -70,8 +70,9 @@ private:
 
 namespace buildcc {
 
+typedef base::Toolchain::Id ToolchainId;
 typedef base::Toolchain BaseToolchain;
 
-}
+} // namespace buildcc
 
 #endif
