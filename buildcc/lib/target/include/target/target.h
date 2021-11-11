@@ -170,14 +170,11 @@ public:
   // Setters
 
   // * Sources
-  void AddSource(const fs::path &relative_filename,
+  void AddSource(const fs::path &relative_source,
                  const fs::path &relative_to_target_path = "");
-  void GlobSources(const fs::path &relative_to_target_path);
-
-  // Use these APIs for out of project root builds
-  // Manually specify input and output
-  void AddSourceAbsolute(const fs::path &absolute_input_filepath);
-  void GlobSourcesAbsolute(const fs::path &absolute_input_path);
+  void GlobSources(const fs::path &relative_to_target_path = "");
+  void AddSourceAbsolute(const fs::path &absolute_source);
+  void GlobSourcesAbsolute(const fs::path &absolute_source_dir);
 
   // * Headers
   void AddHeader(const fs::path &relative_filename,
