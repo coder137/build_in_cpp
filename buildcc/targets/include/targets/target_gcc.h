@@ -19,7 +19,7 @@
 
 #include "target/target.h"
 
-#include "targets/target_config_interface.h"
+#include "target_config_interface.h"
 
 // TODO, Combine all of these into Target_gcc
 namespace buildcc {
@@ -51,7 +51,7 @@ constexpr const char *const kGccStaticLibLinkCommand =
 constexpr const char *const kGccDynamicLibLinkCommand =
     "{cpp_compiler} -shared {link_flags} {compiled_sources} -o {output}";
 
-class GccConfig {
+class GccConfig : ConfigInterface<GccConfig> {
 public:
   static base::Target::Config Executable() {
     return DefaultGccConfig(kGccExecutableExt, kGccGenericCompileCommand,
@@ -94,9 +94,9 @@ inline void DefaultGccOptions(base::Target &target) {
 
 class ExecutableTarget_gcc : public base::Target {
 public:
-  ExecutableTarget_gcc(
-      const std::string &name, const base::Toolchain &toolchain, const Env &env,
-      const Config &config = ConfigInterface<GccConfig>::Executable())
+  ExecutableTarget_gcc(const std::string &name,
+                       const base::Toolchain &toolchain, const Env &env,
+                       const Config &config = GccConfig::Executable())
       : Target(name, base::Target::Type::Executable, toolchain, env, config) {
     DefaultGccOptions(*this);
   }
@@ -104,9 +104,9 @@ public:
 
 class StaticTarget_gcc : public base::Target {
 public:
-  StaticTarget_gcc(
-      const std::string &name, const base::Toolchain &toolchain, const Env &env,
-      const Config &config = ConfigInterface<GccConfig>::StaticLib())
+  StaticTarget_gcc(const std::string &name, const base::Toolchain &toolchain,
+                   const Env &env,
+                   const Config &config = GccConfig::StaticLib())
       : Target(name, base::Target::Type::StaticLibrary, toolchain, env,
                config) {
     DefaultGccOptions(*this);
@@ -115,9 +115,9 @@ public:
 
 class DynamicTarget_gcc : public base::Target {
 public:
-  DynamicTarget_gcc(
-      const std::string &name, const base::Toolchain &toolchain, const Env &env,
-      const Config &config = ConfigInterface<GccConfig>::DynamicLib())
+  DynamicTarget_gcc(const std::string &name, const base::Toolchain &toolchain,
+                    const Env &env,
+                    const Config &config = GccConfig::DynamicLib())
       : Target(name, base::Target::Type::DynamicLibrary, toolchain, env,
                config) {
     AddCommonCompileFlag("-fpic");
