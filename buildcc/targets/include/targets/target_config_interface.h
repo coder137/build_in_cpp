@@ -53,28 +53,30 @@ namespace buildcc {
 //   virtual base::Target ::Config DynamicLib() const = 0;
 // };
 
-// * Instead of Dynamic Polymorphism
+// * Instead of Dynamic Polymorphism we use Static Polymorphism using Templates
 
-// NOTE, For Compile Time Polymorphism using CRTP
+// CRTP Static Polymorphism interface
+// NOTE, Every specialized `<Toolchain>Config` should derive from this
+// For example, GccConfig :: public ConfigInterface<GccConfig>
 template <typename T> class ConfigInterface {
 public:
   template <typename... Args>
-  static base::Target::Config Generic(Args... args) {
+  static base::Target::Config Generic(Args &&...args) {
     return T::Generic(std::forward<Args>(args)...);
   }
 
   template <typename... Args>
-  static base::Target::Config Executable(Args... args) {
+  static base::Target::Config Executable(Args &&...args) {
     return T::Executable(std::forward<Args>(args)...);
   }
 
   template <typename... Args>
-  static base::Target::Config StaticLib(Args... args) {
+  static base::Target::Config StaticLib(Args &&...args) {
     return T::StaticLib(std::forward<Args>(args)...);
   }
 
   template <typename... Args>
-  static base::Target ::Config DynamicLib(Args... args) {
+  static base::Target ::Config DynamicLib(Args &&...args) {
     return T::DynamicLib(std::forward<Args>(args)...);
   }
 
