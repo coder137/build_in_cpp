@@ -53,25 +53,24 @@ constexpr const char *const kGccDynamicLibLinkCommand =
 
 class GccConfig : ConfigInterface<GccConfig> {
 public:
-  static base::Target::Config Executable() {
+  static TargetConfig Executable() {
     return DefaultGccConfig(kGccExecutableExt, kGccGenericCompileCommand,
                             kGccExecutableLinkCommand);
   }
-  static base::Target::Config StaticLib() {
+  static TargetConfig StaticLib() {
     return DefaultGccConfig(kGccStaticLibExt, kGccGenericCompileCommand,
                             kGccDynamicLibLinkCommand);
   }
-  static base::Target ::Config DynamicLib() {
+  static TargetConfig DynamicLib() {
     return DefaultGccConfig(kGccDynamicLibExt, kGccGenericCompileCommand,
                             kGccDynamicLibLinkCommand);
   }
 
 private:
-  static base::Target::Config
-  DefaultGccConfig(const std::string &target_ext,
-                   const std::string &compile_command,
-                   const std::string &link_command) {
-    base::Target::Config config;
+  static TargetConfig DefaultGccConfig(const std::string &target_ext,
+                                       const std::string &compile_command,
+                                       const std::string &link_command) {
+    TargetConfig config;
     config.target_ext = target_ext;
     config.obj_ext = kGccObjExt;
     config.pch_header_ext = kGccPchHeaderExt;
@@ -85,41 +84,39 @@ private:
   }
 };
 
-inline void DefaultGccOptions(base::Target &target) {
+inline void DefaultGccOptions(BaseTarget &target) {
   target.AddPchObjectFlag(
       fmt::format("-include {}",
                   fs::path(target.GetPchCompilePath()).replace_extension("")));
   target.AddPchObjectFlag("-H");
 }
 
-class ExecutableTarget_gcc : public base::Target {
+class ExecutableTarget_gcc : public BaseTarget {
 public:
-  ExecutableTarget_gcc(const std::string &name,
-                       const base::Toolchain &toolchain, const Env &env,
+  ExecutableTarget_gcc(const std::string &name, const BaseToolchain &toolchain,
+                       const Env &env,
                        const Config &config = GccConfig::Executable())
-      : Target(name, base::Target::Type::Executable, toolchain, env, config) {
+      : Target(name, BaseTarget::Type::Executable, toolchain, env, config) {
     DefaultGccOptions(*this);
   }
 };
 
-class StaticTarget_gcc : public base::Target {
+class StaticTarget_gcc : public BaseTarget {
 public:
-  StaticTarget_gcc(const std::string &name, const base::Toolchain &toolchain,
+  StaticTarget_gcc(const std::string &name, const BaseToolchain &toolchain,
                    const Env &env,
                    const Config &config = GccConfig::StaticLib())
-      : Target(name, base::Target::Type::StaticLibrary, toolchain, env,
-               config) {
+      : Target(name, BaseTarget::Type::StaticLibrary, toolchain, env, config) {
     DefaultGccOptions(*this);
   }
 };
 
-class DynamicTarget_gcc : public base::Target {
+class DynamicTarget_gcc : public BaseTarget {
 public:
-  DynamicTarget_gcc(const std::string &name, const base::Toolchain &toolchain,
+  DynamicTarget_gcc(const std::string &name, const BaseToolchain &toolchain,
                     const Env &env,
                     const Config &config = GccConfig::DynamicLib())
-      : Target(name, base::Target::Type::DynamicLibrary, toolchain, env,
-               config) {
+      : Target(name, BaseTarget::Type::DynamicLibrary, toolchain, env, config) {
     AddCommonCompileFlag("-fpic");
     DefaultGccOptions(*this);
   }
