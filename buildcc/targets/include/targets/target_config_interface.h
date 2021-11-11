@@ -53,21 +53,31 @@ namespace buildcc {
 //   virtual base::Target ::Config DynamicLib() const = 0;
 // };
 
-// Compile-Time interface check
-template <typename T, typename... Args> class ConfigInterface {
+// * Instead of Dynamic Polymorphism
+
+// NOTE, For Compile Time Polymorphism using CRTP
+template <typename T> class ConfigInterface {
 public:
+  template <typename... Args>
   static base::Target::Config Generic(Args... args) {
     return T::Generic(std::forward<Args>(args)...);
   }
+
+  template <typename... Args>
   static base::Target::Config Executable(Args... args) {
     return T::Executable(std::forward<Args>(args)...);
   }
+
+  template <typename... Args>
   static base::Target::Config StaticLib(Args... args) {
     return T::StaticLib(std::forward<Args>(args)...);
   }
+
+  template <typename... Args>
   static base::Target ::Config DynamicLib(Args... args) {
     return T::DynamicLib(std::forward<Args>(args)...);
   }
+
   // TODO, Add more functions according to `Target::Type`
 };
 
