@@ -21,7 +21,7 @@
 
 namespace buildcc {
 
-typedef base::Target Target_custom;
+typedef BaseTarget Target_custom;
 
 } // namespace buildcc
 

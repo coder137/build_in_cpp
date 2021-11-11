@@ -19,7 +19,7 @@
 
 #include "target/target.h"
 
-#include "targets/target_config_interface.h"
+#include "target_config_interface.h"
 
 // TODO, Combine all of these into Target_msvc
 namespace buildcc {
@@ -58,27 +58,26 @@ constexpr const char *const kMsvcDynamicLibLinkCommand =
     "{linker} /DLL {link_flags} /OUT:{output}.dll /IMPLIB:{output} "
     "{compiled_sources} {pch_object_output}";
 
-class MsvcConfig {
+class MsvcConfig : ConfigInterface<MsvcConfig> {
 public:
-  static base::Target::Config Executable() {
+  static TargetConfig Executable() {
     return DefaultMsvcConfig(kMsvcExecutableExt, kMsvcCompileCommand,
                              kMsvcExecutableLinkCommand);
   }
-  static base::Target::Config StaticLib() {
+  static TargetConfig StaticLib() {
     return DefaultMsvcConfig(kMsvcStaticLibExt, kMsvcCompileCommand,
                              kMsvcStaticLibLinkCommand);
   }
-  static base::Target ::Config DynamicLib() {
+  static TargetConfig DynamicLib() {
     return DefaultMsvcConfig(kMsvcDynamicLibExt, kMsvcCompileCommand,
                              kMsvcDynamicLibLinkCommand);
   }
 
 private:
-  static base::Target::Config
-  DefaultMsvcConfig(const std::string &target_ext,
-                    const std::string &compile_command,
-                    const std::string &link_command) {
-    base::Target::Config config;
+  static TargetConfig DefaultMsvcConfig(const std::string &target_ext,
+                                        const std::string &compile_command,
+                                        const std::string &link_command) {
+    TargetConfig config;
     config.target_ext = target_ext;
     config.obj_ext = kMsvcObjExt;
     config.pch_header_ext = kMsvcPchHeaderExt;
@@ -92,7 +91,7 @@ private:
   }
 };
 
-inline void DefaultMsvcOptions(base::Target &target) {
+inline void DefaultMsvcOptions(BaseTarget &target) {
   target.AddCCompileFlag("/nologo");
   target.AddCppCompileFlag("/nologo");
   target.AddCppCompileFlag("/EHsc"); // TODO, Might need to remove this
@@ -102,34 +101,32 @@ inline void DefaultMsvcOptions(base::Target &target) {
   target.AddPchObjectFlag(fmt::format("/Fp{}", target.GetPchCompilePath()));
 }
 
-class ExecutableTarget_msvc : public base::Target {
+class ExecutableTarget_msvc : public BaseTarget {
 public:
-  ExecutableTarget_msvc(
-      const std::string &name, const base::Toolchain &toolchain, const Env &env,
-      const Config &config = ConfigInterface<MsvcConfig>::Executable())
-      : Target(name, base::Target::Type::Executable, toolchain, env, config) {
+  ExecutableTarget_msvc(const std::string &name, const BaseToolchain &toolchain,
+                        const Env &env,
+                        const Config &config = MsvcConfig::Executable())
+      : Target(name, BaseTarget::Type::Executable, toolchain, env, config) {
     DefaultMsvcOptions(*this);
   }
 };
 
-class StaticTarget_msvc : public base::Target {
+class StaticTarget_msvc : public BaseTarget {
 public:
-  StaticTarget_msvc(
-      const std::string &name, const base::Toolchain &toolchain, const Env &env,
-      const Config &config = ConfigInterface<MsvcConfig>::StaticLib())
-      : Target(name, base::Target::Type::StaticLibrary, toolchain, env,
-               config) {
+  StaticTarget_msvc(const std::string &name, const BaseToolchain &toolchain,
+                    const Env &env,
+                    const Config &config = MsvcConfig::StaticLib())
+      : Target(name, BaseTarget::Type::StaticLibrary, toolchain, env, config) {
     DefaultMsvcOptions(*this);
   }
 };
 
-class DynamicTarget_msvc : public base::Target {
+class DynamicTarget_msvc : public BaseTarget {
 public:
-  DynamicTarget_msvc(
-      const std::string &name, const base::Toolchain &toolchain, const Env &env,
-      const Config &config = ConfigInterface<MsvcConfig>::DynamicLib())
-      : Target(name, base::Target::Type::DynamicLibrary, toolchain, env,
-               config) {
+  DynamicTarget_msvc(const std::string &name, const BaseToolchain &toolchain,
+                     const Env &env,
+                     const Config &config = MsvcConfig::DynamicLib())
+      : Target(name, BaseTarget::Type::DynamicLibrary, toolchain, env, config) {
     DefaultMsvcOptions(*this);
   }
 };

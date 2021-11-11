@@ -399,4 +399,15 @@ private:
 
 } // namespace buildcc::base
 
+namespace buildcc {
+
+typedef base::Target::Type TargetType;
+typedef base::Target::CopyOption TargetCopyOption;
+typedef base::Target::Config TargetConfig;
+typedef base::Target::State TargetState;
+typedef base::Target::Env TargetEnv;
+typedef base::Target BaseTarget;
+
+} // namespace buildcc
+
 #endif
