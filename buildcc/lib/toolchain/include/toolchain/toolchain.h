@@ -68,4 +68,10 @@ private:
 
 } // namespace buildcc::base
 
+namespace buildcc {
+
+typedef base::Toolchain BaseToolchain;
+
+}
+
 #endif
