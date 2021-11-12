@@ -16,6 +16,7 @@
 
 #include "target/friend/file_extension.h"
 
+#include "env/assert_fatal.h"
 #include "target/target.h"
 
 namespace buildcc::base {
@@ -90,6 +91,37 @@ std::optional<std::string> FileExt::GetCompiler(FileExt::Type type) const {
     break;
   }
   return {};
+}
+
+void FileExt::ThrowOnInvalidFileExt(const fs::path &filepath,
+                                    Type expectation) const {
+  const FileExt::Type type = GetType(filepath);
+  env::assert_fatal(type == expectation,
+                    fmt::format("{} is not a valid file extension type of {}",
+                                filepath, expectation));
+}
+
+std::string FileExt::ToString(Type type) {
+  std::string str;
+  switch (type) {
+  case Type::Asm:
+    str = "Type::Asm";
+    break;
+  case Type::C:
+    str = "Type::C";
+    break;
+  case Type::Cpp:
+    str = "Type::Cpp";
+    break;
+  case Type::Header:
+    str = "Type::Header";
+    break;
+  case Type::Invalid:
+  default:
+    str = "Type::Invalid";
+    break;
+  }
+  return str;
 }
 
 bool FileExt::IsValidSource(Type type) {

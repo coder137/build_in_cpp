@@ -20,6 +20,8 @@
 #include <filesystem>
 #include <optional>
 
+#include "fmt/format.h"
+
 namespace fs = std::filesystem;
 
 namespace buildcc::base {
@@ -48,6 +50,9 @@ public:
   std::optional<std::string> GetCompileFlags(Type type) const;
   std::optional<std::string> GetCompiler(Type type) const;
 
+  void ThrowOnInvalidFileExt(const fs::path &filepath, Type expectation) const;
+
+  static std::string ToString(Type type);
   static bool IsValidSource(Type type);
   static bool IsValidHeader(Type type);
 
@@ -56,5 +61,16 @@ private:
 };
 
 } // namespace buildcc::base
+
+// FMT specialization
+
+template <>
+struct fmt::formatter<buildcc::base::FileExt::Type> : formatter<std::string> {
+  template <typename FormatContext>
+  auto format(buildcc::base::FileExt::Type type, FormatContext &ctx) {
+    return formatter<std::string>::format(
+        buildcc::base::FileExt::ToString(type), ctx);
+  }
+};
 
 #endif
