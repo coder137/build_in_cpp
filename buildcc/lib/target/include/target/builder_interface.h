@@ -18,6 +18,7 @@
 #define TARGET_BUILDER_INTERFACE_H_
 
 #include <algorithm>
+#include <functional>
 #include <unordered_set>
 
 #include "target/path.h"
