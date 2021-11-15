@@ -1,4 +1,3 @@
-#include "target/friend/file_extension.h"
 #include "target/target.h"
 
 #include "env/env.h"
@@ -8,7 +7,6 @@
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/Utest.h"
-#include <unordered_map>
 
 // clang-format off
 TEST_GROUP(TargetFileExtensionTestGroup)
@@ -96,26 +94,23 @@ TEST(TargetFileExtensionTestGroup, GetCompiler) {
 
 TEST(TargetFileExtensionTestGroup, GetCompileFlags) {
   constexpr const char *const NAME = "GetCompileFlags.exe";
+  buildcc::base::Target target(NAME, buildcc::base::Target::Type::Executable,
+                               gcc, "data");
 
-  const std::unordered_map<buildcc::base::FileExt::Type, std::string>
-      relational_data{
-          {buildcc::base::FileExt::Type::Asm, "ASM"},
-          {buildcc::base::FileExt::Type::C, "C"},
-          {buildcc::base::FileExt::Type::Cpp, "CPP"},
-      };
+  // Use config defaults and test
+  buildcc::base::FileExt ext(target);
 
-  buildcc::base::FileExt::GetCompileFlags(buildcc::base::FileExt::Type::Asm,
-                                          relational_data);
+  ext.GetCompileFlags(buildcc::base::FileExt::Type::Asm).value();
+  ext.GetCompileFlags(buildcc::base::FileExt::Type::C).value();
+  ext.GetCompileFlags(buildcc::base::FileExt::Type::Cpp).value();
 
-  CHECK_THROWS(std::exception,
-               buildcc::base::FileExt::GetCompileFlags(
-                   buildcc::base::FileExt::Type::Header, relational_data)
-                   .value());
+  CHECK_THROWS(
+      std::exception,
+      ext.GetCompileFlags(buildcc::base::FileExt::Type::Header).value());
 
-  CHECK_THROWS(std::exception,
-               buildcc::base::FileExt::GetCompileFlags(
-                   buildcc::base::FileExt::Type::Invalid, relational_data)
-                   .value());
+  CHECK_THROWS(
+      std::exception,
+      ext.GetCompileFlags(buildcc::base::FileExt::Type::Invalid).value());
 }
 
 TEST(TargetFileExtensionTestGroup, SetSourceState) {

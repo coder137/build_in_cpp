@@ -18,11 +18,9 @@
 
 #include "env/assert_fatal.h"
 #include "target/target.h"
-#include "target/target_storer.h"
 
 namespace buildcc::base {
 
-// TODO, Refactor this to static
 void FileExt::SetSourceState(Type type) {
   switch (type) {
   case FileExt::Type::Asm:
@@ -40,8 +38,6 @@ void FileExt::SetSourceState(Type type) {
 }
 
 // Getters
-// TODO, Make this static
-// TODO, Pass in the Config class
 FileExt::Type FileExt::GetType(const fs::path &filepath) const {
   if (!filepath.has_extension()) {
     return FileExt::Type::Invalid;
@@ -63,17 +59,23 @@ FileExt::Type FileExt::GetType(const fs::path &filepath) const {
   return type;
 }
 
-std::optional<std::string> FileExt::GetCompileFlags(
-    FileExt::Type type,
-    const std::unordered_map<Type, std::string> &relational_data) {
-  const auto iter = relational_data.find(type);
-  if (iter == relational_data.end()) {
-    return {};
+std::optional<std::string> FileExt::GetCompileFlags(FileExt::Type type) const {
+  switch (type) {
+  case FileExt::Type::Asm:
+    return internal::aggregate(target_.GetCurrentAsmCompileFlags());
+    break;
+  case FileExt::Type::C:
+    return internal::aggregate(target_.GetCurrentCCompileFlags());
+    break;
+  case FileExt::Type::Cpp:
+    return internal::aggregate(target_.GetCurrentCppCompileFlags());
+    break;
+  default:
+    break;
   }
-  return iter->second;
+  return {};
 }
 
-// TODO, Make this static
 std::optional<std::string> FileExt::GetCompiler(FileExt::Type type) const {
   switch (type) {
   case FileExt::Type::Asm:
@@ -89,6 +91,14 @@ std::optional<std::string> FileExt::GetCompiler(FileExt::Type type) const {
     break;
   }
   return {};
+}
+
+void FileExt::ThrowOnInvalidFileExt(const fs::path &filepath,
+                                    Type expectation) const {
+  const FileExt::Type type = GetType(filepath);
+  env::assert_fatal(type == expectation,
+                    fmt::format("{} is not a valid file extension type of {}",
+                                filepath, expectation));
 }
 
 std::string FileExt::ToString(Type type) {
