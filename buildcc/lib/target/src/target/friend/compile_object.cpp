@@ -48,9 +48,19 @@ void CompileObject::CacheCompileCommands() {
 
     const auto type = target_.ext_.GetType(absolute_current_source);
     const std::string selected_aggregated_compile_flags =
-        target_.ext_.GetCompileFlags(type).value_or("");
+        FileExt::GetCompileFlags(
+            type,
+            {
+                {FileExt::Type::Asm,
+                 internal::aggregate(target_.GetCurrentAsmCompileFlags())},
+                {FileExt::Type::C,
+                 internal::aggregate(target_.GetCurrentCCompileFlags())},
+                {FileExt::Type::Cpp,
+                 internal::aggregate(target_.GetCurrentCppCompileFlags())},
+            })
+            .value_or("");
     const std::string selected_compiler =
-        target_.ext_.GetCompiler(type).value_or("");
+        FileExt::GetCompiler(type, target_.GetToolchain()).value_or("");
     object_iter.second.command = target_.command_.Construct(
         target_.GetConfig().compile_command,
         {
@@ -87,10 +97,11 @@ CompileObject::GetObjectData(const fs::path &absolute_source) const {
 // - {target_root_dir} / .. / source -> {target_build_dir} / __ /
 // source.compiled
 // TODO, Path replacement strategy
-// NOTE, Replace part of the `relative path` with a path of users choice
+// NOTE, This should be prompted for `out of source` files
+// Replace part of the `relative path` with a path of users choice
 // - Add `folder/nested` -> FOLDER_NESTED
-// - {target_root_dir} / random / folder / nested / source -> {target_build_dir}
-// / random / FOLDER_NESTED / source.compiled
+// - {target_root_dir} / random / folder / nested / source ->
+// {target_build_dir} / random / FOLDER_NESTED / source.compiled
 fs::path
 CompileObject::ConstructObjectPath(const fs::path &absolute_source_file) const {
 
@@ -99,21 +110,23 @@ CompileObject::ConstructObjectPath(const fs::path &absolute_source_file) const {
       absolute_source_file.lexically_relative(target_.GetTargetRootDir());
 
   // TODO, Add path replacement strategy on relative
+  // AddPathReplacement, enum (SOURCE, PCH, TARGET)
 
   // - Check if out of root
   // - Convert .. to __
   // NOTE, Similar to how CMake handles out of root files
   std::string relstr = relative.string();
   if (relstr.find("..") != std::string::npos) {
+    // TODO, Prompt Path replacement
     std::replace(relstr.begin(), relstr.end(), '.', '_');
     relative = relstr;
   }
 
   // Compute relative object path
   fs::path absolute_compiled_source = target_.GetTargetBuildDir() / relative;
-  absolute_compiled_source.replace_filename(
-      fmt::format("{}{}", absolute_source_file.filename().string(),
-                  target_.GetConfig().obj_ext));
+  absolute_compiled_source.replace_filename(absolute_source_file.filename())
+      .replace_extension(target_.GetConfig().obj_ext);
+  absolute_compiled_source.make_preferred();
   return absolute_compiled_source;
 }
 
