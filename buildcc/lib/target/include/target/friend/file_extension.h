@@ -21,7 +21,7 @@
 #include <optional>
 #include <unordered_map>
 
-#include "toolchain/toolchain.h"
+#include "target/target_storer.h"
 
 #include "fmt/format.h"
 
@@ -53,8 +53,8 @@ public:
   static std::optional<std::string>
   GetCompileFlags(Type type,
                   const std::unordered_map<Type, std::string> &relational_data);
-  static std::optional<std::string>
-  GetCompiler(Type type, const base::Toolchain &toolchain);
+
+  std::optional<std::string> GetCompiler(Type type) const;
 
   static std::string ToString(Type type);
   static bool IsValidSource(Type type);
