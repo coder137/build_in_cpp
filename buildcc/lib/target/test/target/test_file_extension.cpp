@@ -70,33 +70,33 @@ TEST(TargetFileExtensionTestGroup, GetType) {
 }
 
 TEST(TargetFileExtensionTestGroup, GetCompiler) {
-  constexpr const char *const NAME = "GetCompiler.exe";
-  buildcc::base::Target target(NAME, buildcc::base::Target::Type::Executable,
-                               gcc, "data");
-
-  // Use config defaults and test
-  buildcc::base::FileExt ext(target);
   std::string compiler;
 
-  compiler = ext.GetCompiler(buildcc::base::FileExt::Type::Asm).value();
+  compiler = buildcc::base::FileExt::GetCompiler(
+                 buildcc::base::FileExt::Type::Asm, gcc)
+                 .value();
   STRCMP_EQUAL(compiler.c_str(), "as");
 
-  compiler = ext.GetCompiler(buildcc::base::FileExt::Type::C).value();
+  compiler =
+      buildcc::base::FileExt::GetCompiler(buildcc::base::FileExt::Type::C, gcc)
+          .value();
   STRCMP_EQUAL(compiler.c_str(), "gcc");
 
-  compiler = ext.GetCompiler(buildcc::base::FileExt::Type::Cpp).value();
+  compiler = buildcc::base::FileExt::GetCompiler(
+                 buildcc::base::FileExt::Type::Cpp, gcc)
+                 .value();
   STRCMP_EQUAL(compiler.c_str(), "g++");
 
-  CHECK_THROWS(std::exception,
-               ext.GetCompiler(buildcc::base::FileExt::Type::Header).value());
+  CHECK_THROWS(std::exception, buildcc::base::FileExt::GetCompiler(
+                                   buildcc::base::FileExt::Type::Header, gcc)
+                                   .value());
 
-  CHECK_THROWS(std::exception,
-               ext.GetCompiler(buildcc::base::FileExt::Type::Invalid).value());
+  CHECK_THROWS(std::exception, buildcc::base::FileExt::GetCompiler(
+                                   buildcc::base::FileExt::Type::Invalid, gcc)
+                                   .value());
 }
 
 TEST(TargetFileExtensionTestGroup, GetCompileFlags) {
-  constexpr const char *const NAME = "GetCompileFlags.exe";
-
   const std::unordered_map<buildcc::base::FileExt::Type, std::string>
       relational_data{
           {buildcc::base::FileExt::Type::Asm, "ASM"},

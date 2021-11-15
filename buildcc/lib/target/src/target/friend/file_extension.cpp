@@ -19,6 +19,7 @@
 #include "env/assert_fatal.h"
 #include "target/target.h"
 #include "target/target_storer.h"
+#include "toolchain/toolchain.h"
 
 namespace buildcc::base {
 
@@ -73,17 +74,18 @@ std::optional<std::string> FileExt::GetCompileFlags(
   return iter->second;
 }
 
-// TODO, Make this static
-std::optional<std::string> FileExt::GetCompiler(FileExt::Type type) const {
+std::optional<std::string>
+FileExt::GetCompiler(FileExt::Type type, const base::Toolchain &toolchain) {
+
   switch (type) {
   case FileExt::Type::Asm:
-    return target_.GetToolchain().GetAsmCompiler();
+    return toolchain.GetAsmCompiler();
     break;
   case FileExt::Type::C:
-    return target_.GetToolchain().GetCCompiler();
+    return toolchain.GetCCompiler();
     break;
   case FileExt::Type::Cpp:
-    return target_.GetToolchain().GetCppCompiler();
+    return toolchain.GetCppCompiler();
     break;
   default:
     break;
