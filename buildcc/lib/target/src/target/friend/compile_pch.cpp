@@ -138,17 +138,7 @@ std::string CompilePch::ConstructCompileCommand() const {
   const FileExt::Type file_ext_type =
       target_.GetState().contains_cpp ? FileExt::Type::Cpp : FileExt::Type::C;
   const std::string compile_flags =
-      FileExt::GetCompileFlags(
-          file_ext_type,
-          {
-              {FileExt::Type::Asm,
-               internal::aggregate(target_.GetCurrentAsmCompileFlags())},
-              {FileExt::Type::C,
-               internal::aggregate(target_.GetCurrentCCompileFlags())},
-              {FileExt::Type::Cpp,
-               internal::aggregate(target_.GetCurrentCppCompileFlags())},
-          })
-          .value_or("");
+      target_.ext_.GetCompileFlags(file_ext_type).value_or("");
   const std::string pch_compile_path = fmt::format("{}", compile_path_);
   const std::string pch_header_path = fmt::format("{}", header_path_);
   const std::string pch_source_path = fmt::format("{}", source_path_);
