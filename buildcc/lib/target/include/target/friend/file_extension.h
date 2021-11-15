@@ -19,6 +19,9 @@
 
 #include <filesystem>
 #include <optional>
+#include <unordered_map>
+
+#include "target/target_storer.h"
 
 #include "fmt/format.h"
 
@@ -47,10 +50,11 @@ public:
   // Getters
   Type GetType(const fs::path &filepath) const;
 
-  std::optional<std::string> GetCompileFlags(Type type) const;
-  std::optional<std::string> GetCompiler(Type type) const;
+  static std::optional<std::string>
+  GetCompileFlags(Type type,
+                  const std::unordered_map<Type, std::string> &relational_data);
 
-  void ThrowOnInvalidFileExt(const fs::path &filepath, Type expectation) const;
+  std::optional<std::string> GetCompiler(Type type) const;
 
   static std::string ToString(Type type);
   static bool IsValidSource(Type type);
