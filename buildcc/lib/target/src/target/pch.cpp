@@ -19,7 +19,7 @@
 namespace buildcc::base {
 
 void Target::AddPchAbsolute(const fs::path &absolute_filepath) {
-  LockedAfterBuild();
+  state_.ExpectsUnlock();
   env::assert_fatal(config_.IsValidHeader(absolute_filepath),
                     fmt::format("{} does not have a valid header extension",
                                 absolute_filepath));

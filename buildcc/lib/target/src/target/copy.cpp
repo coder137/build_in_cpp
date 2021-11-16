@@ -51,7 +51,7 @@ void Target::Copy(Target &&target, std::initializer_list<CopyOption> options) {
 template <typename T>
 void Target::SpecializedCopy(T target,
                              std::initializer_list<CopyOption> options) {
-  LockedAfterBuild();
+  state_.ExpectsUnlock();
   for (const CopyOption o : options) {
     switch (o) {
     case CopyOption::PreprocessorFlags:

@@ -54,8 +54,8 @@ namespace buildcc::base {
 void Target::Build() {
   env::log_trace(name_, __FUNCTION__);
 
-  LockedAfterBuild();
-  Lock();
+  state_.ExpectsUnlock();
+  state_.Lock();
 
   // PCH state
   if (!storer_.current_pch_files.user.empty()) {
@@ -125,20 +125,6 @@ void Target::Build() {
 
   // Target dependencies
   TaskDeps();
-}
-
-// Private
-
-void Target::Lock() { state_.lock = true; }
-
-void Target::LockedAfterBuild() const {
-  env::assert_fatal(!state_.lock,
-                    "Cannot use this function after Target::Build");
-}
-
-void Target::UnlockedAfterBuild() const {
-  env::assert_fatal(state_.lock,
-                    "Cannot use this function before Target::Build");
 }
 
 } // namespace buildcc::base
