@@ -29,6 +29,8 @@ struct TargetState {
   void ExpectsUnlock() const;
   void ExpectsLock() const;
 
+  // TODO, Make these private getters
+  // TODO, Make a setter for pch
   bool contains_pch{false};
   bool contains_asm{false};
   bool contains_c{false};
