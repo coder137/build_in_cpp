@@ -8,6 +8,10 @@ namespace buildcc::base {
 struct TargetState {
 
   void SetSourceState(TargetFileExt file_extension);
+  void Lock();
+
+  void ExpectsUnlock() const;
+  void ExpectsLock() const;
 
   bool contains_pch{false};
   bool contains_asm{false};

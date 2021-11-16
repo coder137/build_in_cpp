@@ -19,11 +19,11 @@
 namespace buildcc::base {
 
 void Target::AddCompileDependencyAbsolute(const fs::path &absolute_path) {
-  LockedAfterBuild();
+  state_.ExpectsUnlock();
   storer_.current_compile_dependencies.user.insert(absolute_path);
 }
 void Target::AddLinkDependencyAbsolute(const fs::path &absolute_path) {
-  LockedAfterBuild();
+  state_.ExpectsUnlock();
   storer_.current_link_dependencies.user.insert(absolute_path);
 }
 

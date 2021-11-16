@@ -16,6 +16,8 @@
 
 #include "target/common/target_state.h"
 
+#include "env/assert_fatal.h"
+
 namespace buildcc::base {
 
 void TargetState::SetSourceState(TargetFileExt file_extension) {
@@ -34,6 +36,16 @@ void TargetState::SetSourceState(TargetFileExt file_extension) {
   default:
     break;
   }
+}
+
+void TargetState::Lock() { lock = true; }
+
+void TargetState::ExpectsUnlock() const {
+  env::assert_fatal(!lock, "Cannot use this function when lock == true");
+}
+
+void TargetState::ExpectsLock() const {
+  env::assert_fatal(lock, "Cannot use this function when lock == false");
 }
 
 } // namespace buildcc::base

@@ -275,19 +275,19 @@ public:
     return storer_.current_link_dependencies.user;
   }
 
-  // Getters (UnlockedAfterBuild)
+  // Getters (state_.ExpectsLock)
 
   const std::string &GetCompileCommand(const fs::path &source) const {
-    UnlockedAfterBuild();
+    state_.ExpectsLock();
     return compile_object_.GetObjectData(source).command;
   }
   const std::string &GetLinkCommand() const {
-    UnlockedAfterBuild();
+    state_.ExpectsLock();
     return link_target_.GetCommand();
   }
 
   tf::Taskflow &GetTaskflow() {
-    UnlockedAfterBuild();
+    state_.ExpectsLock();
     return tf_;
   }
 
@@ -300,16 +300,6 @@ private:
 
 private:
   void Initialize();
-
-  // Sets lock_ == true
-  // NOTE: There is no Unlock function
-  void Lock();
-
-  // Expects lock_ == false
-  void LockedAfterBuild() const;
-
-  // Expects lock_ == true
-  void UnlockedAfterBuild() const;
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,

@@ -26,7 +26,7 @@ namespace buildcc::base {
 
 // Public
 void Target::AddSourceAbsolute(const fs::path &absolute_source) {
-  LockedAfterBuild();
+  state_.ExpectsUnlock();
   env::assert_fatal(config_.IsValidSource(absolute_source),
                     fmt::format("{} does not have a valid source extension",
                                 absolute_source));

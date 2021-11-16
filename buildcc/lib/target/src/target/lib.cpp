@@ -32,21 +32,21 @@ void Target::AddLibDir(const fs::path &relative_lib_dir) {
 void Target::AddLibDirAbsolute(const fs::path &absolute_lib_dir) {
   env::log_trace(name_, __FUNCTION__);
 
-  LockedAfterBuild();
+  state_.ExpectsUnlock();
   storer_.current_lib_dirs.insert(absolute_lib_dir);
 }
 
 void Target::AddLibDep(const Target &lib_dep) {
   env::log_trace(name_, __FUNCTION__);
 
-  LockedAfterBuild();
+  state_.ExpectsUnlock();
   storer_.current_lib_deps.user.insert(lib_dep.GetTargetPath());
 }
 
 void Target::AddLibDep(const std::string &lib_dep) {
   env::log_trace(name_, __FUNCTION__);
 
-  LockedAfterBuild();
+  state_.ExpectsUnlock();
   storer_.current_external_lib_deps.insert(lib_dep);
 }
 
