@@ -94,7 +94,7 @@ inline void DefaultGccOptions(BaseTarget &target) {
 class ExecutableTarget_gcc : public BaseTarget {
 public:
   ExecutableTarget_gcc(const std::string &name, const BaseToolchain &toolchain,
-                       const Env &env,
+                       const TargetEnv &env,
                        const TargetConfig &config = GccConfig::Executable())
       : Target(name, BaseTarget::Type::Executable, toolchain, env, config) {
     DefaultGccOptions(*this);
@@ -104,7 +104,7 @@ public:
 class StaticTarget_gcc : public BaseTarget {
 public:
   StaticTarget_gcc(const std::string &name, const BaseToolchain &toolchain,
-                   const Env &env,
+                   const TargetEnv &env,
                    const TargetConfig &config = GccConfig::StaticLib())
       : Target(name, BaseTarget::Type::StaticLibrary, toolchain, env, config) {
     DefaultGccOptions(*this);
@@ -114,7 +114,7 @@ public:
 class DynamicTarget_gcc : public BaseTarget {
 public:
   DynamicTarget_gcc(const std::string &name, const BaseToolchain &toolchain,
-                    const Env &env,
+                    const TargetEnv &env,
                     const TargetConfig &config = GccConfig::DynamicLib())
       : Target(name, BaseTarget::Type::DynamicLibrary, toolchain, env, config) {
     AddCommonCompileFlag("-fpic");
