@@ -100,8 +100,8 @@ TEST(RegisterTestGroup, Register_Build) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::base::Toolchain toolchain(buildcc::base::Toolchain::Id::Gcc, "", "",
                                      "", "", "", "");
-  buildcc::base::Target target(
-      "dummyT", buildcc::base::Target::Type::Executable, toolchain, "");
+  buildcc::base::Target target("dummyT", buildcc::base::TargetType::Executable,
+                               toolchain, "");
 
   {
     buildcc::Args::ToolchainState state{false, false};
@@ -148,10 +148,10 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::base::Toolchain toolchain(buildcc::base::Toolchain::Id::Gcc, "", "",
                                      "", "", "", "");
-  buildcc::base::Target target(
-      "dummyT", buildcc::base::Target::Type::Executable, toolchain, "");
+  buildcc::base::Target target("dummyT", buildcc::base::TargetType::Executable,
+                               toolchain, "");
   buildcc::base::Target dependency(
-      "depT", buildcc::base::Target::Type::Executable, toolchain, "");
+      "depT", buildcc::base::TargetType::Executable, toolchain, "");
 
   // 4 options
   // T -> Target
@@ -232,10 +232,10 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::base::Toolchain toolchain(buildcc::base::Toolchain::Id::Gcc, "", "",
                                      "", "", "", "");
-  buildcc::base::Target target(
-      "dummyT", buildcc::base::Target::Type::Executable, toolchain, "");
+  buildcc::base::Target target("dummyT", buildcc::base::TargetType::Executable,
+                               toolchain, "");
   buildcc::base::Target dependency(
-      "depT", buildcc::base::Target::Type::Executable, toolchain, "");
+      "depT", buildcc::base::TargetType::Executable, toolchain, "");
 
   // 4 options
   // T -> Target
@@ -329,12 +329,12 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::base::Toolchain toolchain(buildcc::base::Toolchain::Id::Gcc, "", "",
                                      "", "", "", "");
-  buildcc::base::Target target(
-      "dummyT", buildcc::base::Target::Type::Executable, toolchain, "");
+  buildcc::base::Target target("dummyT", buildcc::base::TargetType::Executable,
+                               toolchain, "");
   buildcc::base::Target dependency(
-      "depT", buildcc::base::Target::Type::Executable, toolchain, "");
+      "depT", buildcc::base::TargetType::Executable, toolchain, "");
   buildcc::base::Target dependency2(
-      "dep2T", buildcc::base::Target::Type::Executable, toolchain, "");
+      "dep2T", buildcc::base::TargetType::Executable, toolchain, "");
 
   buildcc::Args::ToolchainState trueState{true, true};
 
@@ -405,12 +405,12 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::base::Toolchain toolchain(buildcc::base::Toolchain::Id::Gcc, "", "",
                                      "", "", "", "");
-  buildcc::base::Target target(
-      "dummyT", buildcc::base::Target::Type::Executable, toolchain, "");
+  buildcc::base::Target target("dummyT", buildcc::base::TargetType::Executable,
+                               toolchain, "");
   buildcc::base::Target dependency(
-      "depT", buildcc::base::Target::Type::Executable, toolchain, "");
+      "depT", buildcc::base::TargetType::Executable, toolchain, "");
   buildcc::base::Target dependency2(
-      "dep2T", buildcc::base::Target::Type::Executable, toolchain, "");
+      "dep2T", buildcc::base::TargetType::Executable, toolchain, "");
 
   buildcc::Args::ToolchainState trueState{true, true};
 
@@ -481,10 +481,10 @@ TEST(RegisterTestGroup, Register_Test) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::base::Toolchain toolchain(buildcc::base::Toolchain::Id::Gcc, "", "",
                                      "", "", "", "");
-  buildcc::base::Target target(
-      "dummyT", buildcc::base::Target::Type::Executable, toolchain, "");
+  buildcc::base::Target target("dummyT", buildcc::base::TargetType::Executable,
+                               toolchain, "");
   buildcc::base::Target dependency(
-      "depT", buildcc::base::Target::Type::Executable, toolchain, "");
+      "depT", buildcc::base::TargetType::Executable, toolchain, "");
 
   // 4 states between build and test
   // FF
