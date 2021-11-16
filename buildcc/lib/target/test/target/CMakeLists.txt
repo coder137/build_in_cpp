@@ -34,6 +34,17 @@ add_test(NAME test_generator COMMAND test_generator
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+# Target friend
+
+add_executable(test_compile_object
+    test_compile_object.cpp
+)
+target_link_libraries(test_compile_object PRIVATE target_interface)
+
+add_test(NAME test_compile_object COMMAND test_compile_object
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 # Target
 
 # Test base target
