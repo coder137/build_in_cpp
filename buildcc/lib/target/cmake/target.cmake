@@ -25,11 +25,9 @@ set(TARGET_SRCS
     include/target/generator.h
 
     # Target friend
-    src/target/friend/file_extension.cpp
     src/target/friend/compile_pch.cpp
     src/target/friend/compile_object.cpp
     src/target/friend/link_target.cpp
-    include/target/friend/file_extension.h
     include/target/friend/compile_pch.h
     include/target/friend/compile_object.h
     include/target/friend/link_target.h

@@ -16,7 +16,6 @@ add_library(mock_target STATIC
     mock/generator/recheck_states.cpp
 
     # Target friend
-    src/target/friend/file_extension.cpp
     src/target/friend/compile_pch.cpp
     src/target/friend/compile_object.cpp
     src/target/friend/link_target.cpp

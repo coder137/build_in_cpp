@@ -37,7 +37,6 @@
 // Friend
 #include "target/friend/compile_object.h"
 #include "target/friend/compile_pch.h"
-#include "target/friend/file_extension.h"
 #include "target/friend/link_target.h"
 
 // Internal
@@ -120,7 +119,7 @@ public:
       : name_(name), type_(type), toolchain_(toolchain), config_(config),
         env_(env.target_root_dir,
              env.target_build_dir / toolchain.GetName() / name),
-        loader_(name, env_.target_build_dir), ext_(*this), compile_pch_(*this),
+        loader_(name, env_.target_build_dir), compile_pch_(*this),
         compile_object_(*this), link_target_(*this) {
     Initialize();
   }
@@ -187,6 +186,10 @@ public:
   void AddLinkDependencyAbsolute(const fs::path &absolute_path);
 
   // TODO, Add more setters
+
+  //
+  std::optional<std::string> SelectCompileFlags(TargetFileExt ext) const;
+  std::optional<std::string> SelectCompiler(TargetFileExt ext) const;
 
   // Getters (GENERIC)
 
@@ -291,7 +294,6 @@ public:
   // TODO, Add more getters
 
 private:
-  friend class FileExt;
   friend class CompilePch;
   friend class CompileObject;
   friend class LinkTarget;
@@ -350,7 +352,6 @@ private:
   internal::TargetLoader loader_;
 
   // Friend
-  FileExt ext_;
   CompilePch compile_pch_;
   CompileObject compile_object_;
   LinkTarget link_target_;

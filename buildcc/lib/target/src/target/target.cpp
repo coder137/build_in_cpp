@@ -89,4 +89,39 @@ void Target::RecheckExternalLib(
                  std::bind(&Target::ExternalLibChanged, this));
 }
 
+std::optional<std::string>
+Target::SelectCompileFlags(TargetFileExt type) const {
+  switch (type) {
+  case TargetFileExt::Asm:
+    return internal::aggregate(GetCurrentAsmCompileFlags());
+    break;
+  case TargetFileExt::C:
+    return internal::aggregate(GetCurrentCCompileFlags());
+    break;
+  case TargetFileExt::Cpp:
+    return internal::aggregate(GetCurrentCppCompileFlags());
+    break;
+  default:
+    break;
+  }
+  return {};
+}
+
+std::optional<std::string> Target::SelectCompiler(TargetFileExt type) const {
+  switch (type) {
+  case TargetFileExt::Asm:
+    return GetToolchain().GetAsmCompiler();
+    break;
+  case TargetFileExt::C:
+    return GetToolchain().GetCCompiler();
+    break;
+  case TargetFileExt::Cpp:
+    return GetToolchain().GetCppCompiler();
+    break;
+  default:
+    break;
+  }
+  return {};
+}
+
 } // namespace buildcc::base

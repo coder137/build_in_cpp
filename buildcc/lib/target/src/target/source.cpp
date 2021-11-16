@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#include "target/friend/file_extension.h"
 #include "target/target.h"
 
 #include "target/util.h"
