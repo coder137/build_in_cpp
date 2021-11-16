@@ -16,6 +16,14 @@ target_link_libraries(test_builder_interface PRIVATE target_interface)
 
 add_test(NAME test_builder_interface COMMAND test_builder_interface)
 
+# Common
+add_executable(test_target_config
+    test_target_config.cpp
+)
+target_link_libraries(test_target_config PRIVATE target_interface)
+
+add_test(NAME test_target_config COMMAND test_target_config)
+
 # Generator
 add_executable(test_generator
     test_generator.cpp
