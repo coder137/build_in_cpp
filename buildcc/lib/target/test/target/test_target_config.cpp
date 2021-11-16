@@ -31,6 +31,9 @@ TEST(TargetConfigTestGroup, GetFileExt) {
 
   ext = target_config.GetFileExt("file.invalid");
   CHECK(ext == buildcc::base::TargetFileExt::Invalid);
+
+  ext = target_config.GetFileExt("random/directory");
+  CHECK(ext == buildcc::base::TargetFileExt::Invalid);
 }
 
 int main(int ac, char **av) {
