@@ -18,7 +18,7 @@
 
 namespace buildcc::base {
 
-TargetFileExt TargetConfig::GetFileType(const fs::path &filepath) {
+TargetFileExt TargetConfig::GetFileExt(const fs::path &filepath) {
   if (!filepath.has_extension()) {
     return TargetFileExt::Invalid;
   }

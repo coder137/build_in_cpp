@@ -30,7 +30,7 @@ namespace buildcc::base {
 struct TargetConfig {
   TargetConfig() {}
 
-  TargetFileExt GetFileType(const fs::path &filepath);
+  TargetFileExt GetFileExt(const fs::path &filepath);
   bool IsValidSource(const fs::path &filepath);
   bool IsValidHeader(const fs::path &filepath);
 

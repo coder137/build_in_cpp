@@ -66,7 +66,7 @@ void Target::Build() {
   // Source state
   for (const auto &abs_source : storer_.current_source_files.user) {
     // Set state
-    state_.SetSourceState(config_.GetFileType(abs_source));
+    state_.SetSourceState(config_.GetFileExt(abs_source));
 
     // Relate input source with output object
     compile_object_.AddObjectData(abs_source);
