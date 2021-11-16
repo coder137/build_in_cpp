@@ -30,6 +30,9 @@
 // Interface
 #include "target/builder_interface.h"
 
+// Common
+#include "target/common/target_config.h"
+
 // Friend
 #include "target/friend/compile_object.h"
 #include "target/friend/compile_pch.h"
@@ -56,6 +59,7 @@ namespace buildcc::base {
 // of the inheritance pattern
 // NOTE, base::Target is meant to be a blank slate which can be customized by
 // the specialized target-toolchain classes
+// TODO, Shift all of the classes inside the class to their own files
 class Target : public BuilderInterface {
 
 public:
@@ -86,32 +90,7 @@ public:
   };
 
   // Defaults set for the GCC compiler
-  struct Config {
-    Config() {}
-
-    std::string target_ext{""};
-    std::string obj_ext{".o"};
-    std::string pch_header_ext{".h"};
-    std::string pch_compile_ext{".gch"};
-
-    std::string prefix_include_dir{"-I"};
-    std::string prefix_lib_dir{"-L"};
-
-    std::string pch_command{"{compiler} {preprocessor_flags} {include_dirs} "
-                            "{common_compile_flags} {pch_compile_flags} "
-                            "{compile_flags} -o {output} -c {input}"};
-    std::string compile_command{
-        "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
-        "{pch_object_flags} {compile_flags} -o {output} -c {input}"};
-    std::string link_command{
-        "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
-        "{lib_dirs} {lib_deps}"};
-
-    std::unordered_set<std::string> valid_c_ext{".c"};
-    std::unordered_set<std::string> valid_cpp_ext{".cpp", ".cxx", ".cc"};
-    std::unordered_set<std::string> valid_asm_ext{".s", ".S", ".asm"};
-    std::unordered_set<std::string> valid_header_ext{".h", ".hpp"};
-  };
+  // TODO, Make this external
 
   struct State {
     bool contains_pch{false};
@@ -148,7 +127,7 @@ public:
 public:
   explicit Target(const std::string &name, Type type,
                   const Toolchain &toolchain, const Env &env,
-                  const Config &config = {})
+                  const TargetConfig &config = {})
       : name_(name), type_(type), toolchain_(toolchain), config_(config),
         env_(env.target_root_dir,
              env.target_build_dir / toolchain.GetName() / name),
@@ -249,7 +228,7 @@ public:
   Target::Type GetType() const { return type_; }
   const fs::path &GetTargetRootDir() const { return env_.target_root_dir; }
   const fs::path &GetTargetBuildDir() const { return env_.target_build_dir; }
-  const Config &GetConfig() const { return config_; }
+  const TargetConfig &GetConfig() const { return config_; }
 
   //
   const internal::fs_unordered_set &GetCurrentSourceFiles() const {
@@ -377,7 +356,7 @@ private:
   std::string name_;
   Type type_;
   const Toolchain &toolchain_;
-  Config config_;
+  TargetConfig config_;
   Env env_;
   internal::TargetLoader loader_;
 
@@ -396,11 +375,12 @@ private:
 
 } // namespace buildcc::base
 
+// TODO, Make all of these external and remove this namespace
 namespace buildcc {
 
 typedef base::Target::Type TargetType;
 typedef base::Target::CopyOption TargetCopyOption;
-typedef base::Target::Config TargetConfig;
+typedef base::TargetConfig TargetConfig;
 typedef base::Target::State TargetState;
 typedef base::Target::Env TargetEnv;
 typedef base::Target BaseTarget;
