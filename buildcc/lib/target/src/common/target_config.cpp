@@ -18,6 +18,27 @@
 
 namespace buildcc::base {
 
+TargetFileExt TargetConfig::GetFileType(const fs::path &filepath) {
+  if (!filepath.has_extension()) {
+    return TargetFileExt::Invalid;
+  }
+
+  TargetFileExt type = TargetFileExt::Invalid;
+  const std::string ext = filepath.extension().string();
+
+  if (valid_c_ext.count(ext) == 1) {
+    type = TargetFileExt::C;
+  } else if (valid_cpp_ext.count(ext) == 1) {
+    type = TargetFileExt::Cpp;
+  } else if (valid_asm_ext.count(ext) == 1) {
+    type = TargetFileExt::Asm;
+  } else if (valid_header_ext.count(ext) == 1) {
+    type = TargetFileExt::Header;
+  }
+
+  return type;
+}
+
 bool TargetConfig::IsValidSource(const fs::path &filepath) {
   if (!filepath.has_extension()) {
     return false;

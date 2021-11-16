@@ -21,6 +21,8 @@
 #include <string>
 #include <unordered_set>
 
+#include "target/common/target_file_ext.h"
+
 namespace fs = std::filesystem;
 
 namespace buildcc::base {
@@ -28,6 +30,7 @@ namespace buildcc::base {
 struct TargetConfig {
   TargetConfig() {}
 
+  TargetFileExt GetFileType(const fs::path &filepath);
   bool IsValidSource(const fs::path &filepath);
   bool IsValidHeader(const fs::path &filepath);
 
