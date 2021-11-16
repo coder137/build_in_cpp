@@ -93,14 +93,6 @@ std::optional<std::string> FileExt::GetCompiler(FileExt::Type type) const {
   return {};
 }
 
-void FileExt::ThrowOnInvalidFileExt(const fs::path &filepath,
-                                    Type expectation) const {
-  const FileExt::Type type = GetType(filepath);
-  env::assert_fatal(type == expectation,
-                    fmt::format("{} is not a valid file extension type of {}",
-                                filepath, expectation));
-}
-
 std::string FileExt::ToString(Type type) {
   std::string str;
   switch (type) {
