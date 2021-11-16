@@ -76,7 +76,7 @@ public:
     return T::DynamicLib(std::forward<Args>(args)...);
   }
 
-  // TODO, Add more functions according to `Target::Type`
+  // TODO, Add more functions according to `TargetType`
 };
 
 } // namespace buildcc
