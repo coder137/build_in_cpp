@@ -34,6 +34,7 @@
 #include "target/common/target_config.h"
 #include "target/common/target_env.h"
 #include "target/common/target_state.h"
+#include "target/common/target_type.h"
 
 // Friend
 #include "target/friend/compile_object.h"
@@ -64,12 +65,8 @@ namespace buildcc::base {
 class Target : public BuilderInterface {
 
 public:
-  enum class Type {
-    Executable,
-    StaticLibrary,
-    DynamicLibrary,
-  };
-
+  // NOTE, Use CRTP for this
+  // Similar to adding features
   enum class CopyOption {
     SourceFiles,
     HeaderFiles,
@@ -91,7 +88,7 @@ public:
   };
 
 public:
-  explicit Target(const std::string &name, Type type,
+  explicit Target(const std::string &name, TargetType type,
                   const Toolchain &toolchain, const TargetEnv &env,
                   const TargetConfig &config = {})
       : name_(name), type_(type), toolchain_(toolchain), config_(config),
@@ -195,7 +192,7 @@ public:
   // TODO, Shift getters to source file as well
   const std::string &GetName() const { return name_; }
   const Toolchain &GetToolchain() const { return toolchain_; }
-  Target::Type GetType() const { return type_; }
+  TargetType GetType() const { return type_; }
   const fs::path &GetTargetRootDir() const { return env_.GetTargetRootDir(); }
   const fs::path &GetTargetBuildDir() const { return env_.GetTargetBuildDir(); }
   const TargetConfig &GetConfig() const { return config_; }
@@ -313,7 +310,7 @@ private:
 private:
   // Constructor defined
   std::string name_;
-  Type type_;
+  TargetType type_;
   const Toolchain &toolchain_;
   TargetConfig config_;
   TargetEnv env_;
@@ -336,8 +333,9 @@ private:
 // TODO, Make all of these external and remove this namespace
 namespace buildcc {
 
-typedef base::Target::Type TargetType;
 typedef base::Target::CopyOption TargetCopyOption;
+
+typedef base::TargetType TargetType;
 typedef base::TargetConfig TargetConfig;
 typedef base::TargetState TargetState;
 typedef base::TargetEnv TargetEnv;
