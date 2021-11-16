@@ -22,7 +22,6 @@
 namespace buildcc::base {
 
 struct TargetState {
-
   void SetSourceState(TargetFileExt file_extension);
   void SetPch();
   void SetLock();
@@ -31,6 +30,12 @@ struct TargetState {
   void ExpectsLock() const;
 
   bool ContainsPch() const { return contains_pch_; }
+  // TODO, ContainsAsm
+  // TODO, ContainsC
+  // TODO, ContainsCpp
+
+  // TODO, IsLocked
+  // TODO, IsBuilt
 
   // TODO, Make these private getters
   bool contains_asm{false};
