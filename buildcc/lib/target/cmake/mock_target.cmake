@@ -2,6 +2,10 @@ add_library(mock_target STATIC
     # Utils
     src/util/util.cpp
 
+    # Common
+    src/common/target_config.cpp
+    src/common/target_state.cpp
+
     # Generator
     src/generator/generator_loader.cpp
     src/generator/generator_storer.cpp
@@ -12,7 +16,6 @@ add_library(mock_target STATIC
     mock/generator/recheck_states.cpp
 
     # Target friend
-    src/target/friend/file_extension.cpp
     src/target/friend/compile_pch.cpp
     src/target/friend/compile_object.cpp
     src/target/friend/link_target.cpp

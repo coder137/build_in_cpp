@@ -66,8 +66,7 @@ void Target::Build() {
   // Source state
   for (const auto &abs_source : storer_.current_source_files.user) {
     // Set state
-    const auto file_ext_type = ext_.GetType(abs_source);
-    ext_.SetSourceState(file_ext_type);
+    state_.SetSourceState(config_.GetFileExt(abs_source));
 
     // Relate input source with output object
     compile_object_.AddObjectData(abs_source);
@@ -83,6 +82,8 @@ void Target::Build() {
       {kPreprocessorFlags, internal::aggregate(GetCurrentPreprocessorFlags())},
       {kCommonCompileFlags,
        internal::aggregate(GetCurrentCommonCompileFlags())},
+      //  TODO, Cache more flags here
+      // ASM, C and CPP flags
       {kLinkFlags, internal::aggregate(GetCurrentLinkFlags())},
 
       // Toolchain executables here

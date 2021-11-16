@@ -46,11 +46,11 @@ void CompileObject::CacheCompileCommands() {
         fmt::format("{}", GetObjectData(absolute_current_source).output);
     const std::string input = fmt::format("{}", absolute_current_source);
 
-    const auto type = target_.ext_.GetType(absolute_current_source);
+    const auto type = target_.config_.GetFileExt(absolute_current_source);
     const std::string selected_aggregated_compile_flags =
-        target_.ext_.GetCompileFlags(type).value_or("");
+        target_.SelectCompileFlags(type).value_or("");
     const std::string selected_compiler =
-        target_.ext_.GetCompiler(type).value_or("");
+        target_.SelectCompiler(type).value_or("");
     object_iter.second.command = target_.command_.Construct(
         target_.GetConfig().compile_command,
         {

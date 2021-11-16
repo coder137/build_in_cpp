@@ -16,6 +16,20 @@ target_link_libraries(test_builder_interface PRIVATE target_interface)
 
 add_test(NAME test_builder_interface COMMAND test_builder_interface)
 
+# Common
+add_executable(test_target_config
+    test_target_config.cpp
+)
+target_link_libraries(test_target_config PRIVATE target_interface)
+
+add_executable(test_target_state
+    test_target_state.cpp
+)
+target_link_libraries(test_target_state PRIVATE target_interface)
+
+add_test(NAME test_target_config COMMAND test_target_config)
+add_test(NAME test_target_state COMMAND test_target_state)
+
 # Generator
 add_executable(test_generator
     test_generator.cpp
@@ -28,12 +42,12 @@ add_test(NAME test_generator COMMAND test_generator
 
 # Target friend
 
-add_executable(test_file_extension
-    test_file_extension.cpp
+add_executable(test_compile_object
+    test_compile_object.cpp
 )
-target_link_libraries(test_file_extension PRIVATE target_interface)
+target_link_libraries(test_compile_object PRIVATE target_interface)
 
-add_test(NAME test_file_extension COMMAND test_file_extension
+add_test(NAME test_compile_object COMMAND test_compile_object
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 

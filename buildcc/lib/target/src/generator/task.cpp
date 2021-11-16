@@ -82,24 +82,6 @@ void Generator::GenerateTask() {
   });
   generate_task.name(kGenerateTaskName);
 
-  // tf::Task generate_task;
-  // if (parallel_) {
-  //   generate_task = tf_.for_each(
-  //       current_commands_.cbegin(), current_commands_.cend(),
-  //       [](const std::string &command) {
-  //         bool success = Command::Execute(command);
-  //         env::assert_fatal(success, fmt::format("{} failed", command));
-  //       });
-  // } else {
-  //   generate_task = tf_.emplace([&]() {
-  //     for (const auto &command : current_commands_) {
-  //       bool success = Command::Execute(command);
-  //       env::assert_fatal(success, fmt::format("{} failed", command));
-  //     }
-  //   });
-  // }
-  // generate_task.name(kGenerateTaskName);
-
   pregenerate_task.precede(generate_task);
   generate_task.precede(postgenerate_task);
 }

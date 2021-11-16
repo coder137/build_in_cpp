@@ -105,7 +105,7 @@ class ExecutableTarget_msvc : public BaseTarget {
 public:
   ExecutableTarget_msvc(const std::string &name, const BaseToolchain &toolchain,
                         const Env &env,
-                        const Config &config = MsvcConfig::Executable())
+                        const TargetConfig &config = MsvcConfig::Executable())
       : Target(name, BaseTarget::Type::Executable, toolchain, env, config) {
     DefaultMsvcOptions(*this);
   }
@@ -115,7 +115,7 @@ class StaticTarget_msvc : public BaseTarget {
 public:
   StaticTarget_msvc(const std::string &name, const BaseToolchain &toolchain,
                     const Env &env,
-                    const Config &config = MsvcConfig::StaticLib())
+                    const TargetConfig &config = MsvcConfig::StaticLib())
       : Target(name, BaseTarget::Type::StaticLibrary, toolchain, env, config) {
     DefaultMsvcOptions(*this);
   }
@@ -125,7 +125,7 @@ class DynamicTarget_msvc : public BaseTarget {
 public:
   DynamicTarget_msvc(const std::string &name, const BaseToolchain &toolchain,
                      const Env &env,
-                     const Config &config = MsvcConfig::DynamicLib())
+                     const TargetConfig &config = MsvcConfig::DynamicLib())
       : Target(name, BaseTarget::Type::DynamicLibrary, toolchain, env, config) {
     DefaultMsvcOptions(*this);
   }

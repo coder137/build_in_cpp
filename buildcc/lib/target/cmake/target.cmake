@@ -8,6 +8,13 @@ set(TARGET_SRCS
     include/target/path.h
     include/target/util.h
 
+    # Common
+    src/common/target_config.cpp
+    src/common/target_state.cpp
+    include/target/common/target_file_ext.h
+    include/target/common/target_config.h
+    include/target/common/target_state.h
+
     # Generator
     src/generator/generator_loader.cpp
     src/generator/generator_storer.cpp
@@ -18,11 +25,9 @@ set(TARGET_SRCS
     include/target/generator.h
 
     # Target friend
-    src/target/friend/file_extension.cpp
     src/target/friend/compile_pch.cpp
     src/target/friend/compile_object.cpp
     src/target/friend/link_target.cpp
-    include/target/friend/file_extension.h
     include/target/friend/compile_pch.h
     include/target/friend/compile_object.h
     include/target/friend/link_target.h

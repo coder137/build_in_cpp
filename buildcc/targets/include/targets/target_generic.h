@@ -129,7 +129,7 @@ class ExecutableTarget_generic : public BaseTarget {
 public:
   ExecutableTarget_generic(const std::string &name,
                            const BaseToolchain &toolchain, const Env &env,
-                           const std::optional<Config> &config = {})
+                           const std::optional<TargetConfig> &config = {})
       : Target(name, TargetType::Executable, toolchain, env,
                config.value_or(GenericConfig::Executable(toolchain.GetId()))) {
     switch (toolchain.GetId()) {
@@ -152,7 +152,8 @@ public:
 class StaticTarget_generic : public BaseTarget {
 public:
   StaticTarget_generic(const std::string &name, const BaseToolchain &toolchain,
-                       const Env &env, const std::optional<Config> &config = {})
+                       const Env &env,
+                       const std::optional<TargetConfig> &config = {})
       : Target(name, TargetType::StaticLibrary, toolchain, env,
                config.value_or(GenericConfig::StaticLib(toolchain.GetId()))) {
     switch (toolchain.GetId()) {
@@ -175,7 +176,7 @@ class DynamicTarget_generic : public BaseTarget {
 public:
   DynamicTarget_generic(const std::string &name, const BaseToolchain &toolchain,
                         const Env &env,
-                        const std::optional<Config> &config = {})
+                        const std::optional<TargetConfig> &config = {})
       : Target(name, TargetType::DynamicLibrary, toolchain, env,
                config.value_or(GenericConfig::DynamicLib(toolchain.GetId()))) {
     switch (toolchain.GetId()) {
@@ -198,7 +199,7 @@ class Target_generic : public BaseTarget {
 public:
   Target_generic(const std::string &name, TargetType type,
                  const BaseToolchain &toolchain, const Env &env,
-                 const std::optional<Config> &config = {})
+                 const std::optional<TargetConfig> &config = {})
       : Target(
             name, type, toolchain, env,
             config.value_or(GenericConfig::Generic(type, toolchain.GetId()))) {

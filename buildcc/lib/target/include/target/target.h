@@ -30,10 +30,13 @@
 // Interface
 #include "target/builder_interface.h"
 
+// Common
+#include "target/common/target_config.h"
+#include "target/common/target_state.h"
+
 // Friend
 #include "target/friend/compile_object.h"
 #include "target/friend/compile_pch.h"
-#include "target/friend/file_extension.h"
 #include "target/friend/link_target.h"
 
 // Internal
@@ -56,6 +59,7 @@ namespace buildcc::base {
 // of the inheritance pattern
 // NOTE, base::Target is meant to be a blank slate which can be customized by
 // the specialized target-toolchain classes
+// TODO, Shift all of the classes inside the class to their own files
 class Target : public BuilderInterface {
 
 public:
@@ -85,43 +89,6 @@ public:
     LinkDependencies,
   };
 
-  // Defaults set for the GCC compiler
-  struct Config {
-    Config() {}
-
-    std::string target_ext{""};
-    std::string obj_ext{".o"};
-    std::string pch_header_ext{".h"};
-    std::string pch_compile_ext{".gch"};
-
-    std::string prefix_include_dir{"-I"};
-    std::string prefix_lib_dir{"-L"};
-
-    std::string pch_command{"{compiler} {preprocessor_flags} {include_dirs} "
-                            "{common_compile_flags} {pch_compile_flags} "
-                            "{compile_flags} -o {output} -c {input}"};
-    std::string compile_command{
-        "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
-        "{pch_object_flags} {compile_flags} -o {output} -c {input}"};
-    std::string link_command{
-        "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
-        "{lib_dirs} {lib_deps}"};
-
-    std::unordered_set<std::string> valid_c_ext{".c"};
-    std::unordered_set<std::string> valid_cpp_ext{".cpp", ".cxx", ".cc"};
-    std::unordered_set<std::string> valid_asm_ext{".s", ".S", ".asm"};
-    std::unordered_set<std::string> valid_header_ext{".h", ".hpp"};
-  };
-
-  struct State {
-    bool contains_pch{false};
-    bool contains_asm{false};
-    bool contains_c{false};
-    bool contains_cpp{false};
-    bool build{false};
-    bool lock{false};
-  };
-
   struct Env {
     // * NOTE, This has only been added for implicit conversion
     // TODO, Make the constructors below explicit
@@ -148,11 +115,11 @@ public:
 public:
   explicit Target(const std::string &name, Type type,
                   const Toolchain &toolchain, const Env &env,
-                  const Config &config = {})
+                  const TargetConfig &config = {})
       : name_(name), type_(type), toolchain_(toolchain), config_(config),
         env_(env.target_root_dir,
              env.target_build_dir / toolchain.GetName() / name),
-        loader_(name, env_.target_build_dir), ext_(*this), compile_pch_(*this),
+        loader_(name, env_.target_build_dir), compile_pch_(*this),
         compile_object_(*this), link_target_(*this) {
     Initialize();
   }
@@ -170,14 +137,11 @@ public:
   // Setters
 
   // * Sources
-  void AddSource(const fs::path &relative_filename,
+  void AddSource(const fs::path &relative_source,
                  const fs::path &relative_to_target_path = "");
-  void GlobSources(const fs::path &relative_to_target_path);
-
-  // Use these APIs for out of project root builds
-  // Manually specify input and output
-  void AddSourceAbsolute(const fs::path &absolute_input_filepath);
-  void GlobSourcesAbsolute(const fs::path &absolute_input_path);
+  void GlobSources(const fs::path &relative_to_target_path = "");
+  void AddSourceAbsolute(const fs::path &absolute_source);
+  void GlobSourcesAbsolute(const fs::path &absolute_source_dir);
 
   // * Headers
   void AddHeader(const fs::path &relative_filename,
@@ -223,13 +187,17 @@ public:
 
   // TODO, Add more setters
 
+  //
+  std::optional<std::string> SelectCompileFlags(TargetFileExt ext) const;
+  std::optional<std::string> SelectCompiler(TargetFileExt ext) const;
+
   // Getters (GENERIC)
 
   // Target state
 
   // Set during first build or rebuild
   // lock == true after Build is called
-  const State &GetState() const { return state_; }
+  const TargetState &GetState() const { return state_; }
   bool GetBuildState() const { return state_.build; }
   bool GetLockState() const { return state_.lock; }
 
@@ -252,7 +220,7 @@ public:
   Target::Type GetType() const { return type_; }
   const fs::path &GetTargetRootDir() const { return env_.target_root_dir; }
   const fs::path &GetTargetBuildDir() const { return env_.target_build_dir; }
-  const Config &GetConfig() const { return config_; }
+  const TargetConfig &GetConfig() const { return config_; }
 
   //
   const internal::fs_unordered_set &GetCurrentSourceFiles() const {
@@ -326,7 +294,6 @@ public:
   // TODO, Add more getters
 
 private:
-  friend class FileExt;
   friend class CompilePch;
   friend class CompileObject;
   friend class LinkTarget;
@@ -380,31 +347,31 @@ private:
   std::string name_;
   Type type_;
   const Toolchain &toolchain_;
-  Config config_;
+  TargetConfig config_;
   Env env_;
   internal::TargetLoader loader_;
 
   // Friend
-  FileExt ext_;
   CompilePch compile_pch_;
   CompileObject compile_object_;
   LinkTarget link_target_;
 
   // Used for serialization
   internal::TargetStorer storer_;
-  State state_;
+  TargetState state_;
   Command command_;
   tf::Taskflow tf_;
 };
 
 } // namespace buildcc::base
 
+// TODO, Make all of these external and remove this namespace
 namespace buildcc {
 
 typedef base::Target::Type TargetType;
 typedef base::Target::CopyOption TargetCopyOption;
-typedef base::Target::Config TargetConfig;
-typedef base::Target::State TargetState;
+typedef base::TargetConfig TargetConfig;
+typedef base::TargetState TargetState;
 typedef base::Target::Env TargetEnv;
 typedef base::Target BaseTarget;
 
