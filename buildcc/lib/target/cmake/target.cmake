@@ -11,9 +11,11 @@ set(TARGET_SRCS
     # Common
     src/common/target_config.cpp
     src/common/target_state.cpp
+    src/common/target_env.cpp
     include/target/common/target_file_ext.h
     include/target/common/target_config.h
     include/target/common/target_state.h
+    include/target/common/target_env.h
 
     # Generator
     src/generator/generator_loader.cpp
