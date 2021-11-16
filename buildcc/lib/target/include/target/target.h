@@ -89,9 +89,6 @@ public:
     LinkDependencies,
   };
 
-  // Defaults set for the GCC compiler
-  // TODO, Make this external
-
   struct State {
     bool contains_pch{false};
     bool contains_asm{false};
