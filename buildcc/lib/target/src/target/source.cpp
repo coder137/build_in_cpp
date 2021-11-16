@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include "target/friend/file_extension.h"
 #include "target/target.h"
 
 #include "target/util.h"
@@ -27,8 +28,7 @@ namespace buildcc::base {
 // Public
 void Target::AddSourceAbsolute(const fs::path &absolute_source) {
   LockedAfterBuild();
-  const auto file_ext_type = ext_.GetType(absolute_source);
-  env::assert_fatal(FileExt::IsValidSource(file_ext_type),
+  env::assert_fatal(config_.IsValidSource(absolute_source),
                     fmt::format("{} does not have a valid source extension",
                                 absolute_source));
   storer_.current_source_files.user.emplace(
@@ -37,8 +37,7 @@ void Target::AddSourceAbsolute(const fs::path &absolute_source) {
 
 void Target::GlobSourcesAbsolute(const fs::path &absolute_source_dir) {
   for (const auto &p : fs::directory_iterator(absolute_source_dir)) {
-    const auto file_ext_type = ext_.GetType(p.path());
-    if (FileExt::IsValidSource(file_ext_type)) {
+    if (config_.IsValidSource(p.path())) {
       AddSourceAbsolute(p.path());
     }
   }
@@ -47,22 +46,17 @@ void Target::GlobSourcesAbsolute(const fs::path &absolute_source_dir) {
 void Target::AddSource(const fs::path &relative_source,
                        const std::filesystem::path &relative_to_target_path) {
   env::log_trace(name_, __FUNCTION__);
-
   // Compute the absolute source path
   fs::path absolute_source =
       GetTargetRootDir() / relative_to_target_path / relative_source;
-
   AddSourceAbsolute(absolute_source);
 }
 
 void Target::GlobSources(const fs::path &relative_to_target_path) {
   env::log_trace(name_, __FUNCTION__);
-
   fs::path absolute_input_path = GetTargetRootDir() / relative_to_target_path;
-
   for (const auto &p : fs::directory_iterator(absolute_input_path)) {
-    const auto file_ext_type = ext_.GetType(p.path());
-    if (FileExt::IsValidSource(file_ext_type)) {
+    if (config_.IsValidSource(p.path())) {
       AddSourceAbsolute(p.path());
     }
   }

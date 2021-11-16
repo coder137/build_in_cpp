@@ -27,8 +27,7 @@ namespace buildcc::base {
 
 void Target::AddHeaderAbsolute(const fs::path &absolute_filepath) {
   LockedAfterBuild();
-  const auto file_ext_type = ext_.GetType(absolute_filepath);
-  env::assert_fatal(FileExt::IsValidHeader(file_ext_type),
+  env::assert_fatal(config_.IsValidHeader(absolute_filepath),
                     fmt::format("{} does not have a valid header extension",
                                 absolute_filepath));
   storer_.current_header_files.user.insert(absolute_filepath);
@@ -53,8 +52,7 @@ void Target::GlobHeaders(const fs::path &relative_to_target_path) {
 
 void Target::GlobHeadersAbsolute(const fs::path &absolute_path) {
   for (const auto &p : fs::directory_iterator(absolute_path)) {
-    const auto file_ext_type = ext_.GetType(p.path());
-    if (FileExt::IsValidHeader(file_ext_type)) {
+    if (config_.IsValidHeader(p.path())) {
       env::log_trace(name_, fmt::format("Added header {}", p.path()));
       AddHeaderAbsolute(p.path());
     }

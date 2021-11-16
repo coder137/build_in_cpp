@@ -116,36 +116,4 @@ std::string FileExt::ToString(Type type) {
   return str;
 }
 
-bool FileExt::IsValidSource(Type type) {
-  bool valid = false;
-  switch (type) {
-  case FileExt::Type::Asm:
-  case FileExt::Type::C:
-  case FileExt::Type::Cpp:
-    valid = true;
-    break;
-  case FileExt::Type::Header:
-  default:
-    valid = false;
-    break;
-  }
-  return valid;
-}
-
-bool FileExt::IsValidHeader(Type type) {
-  bool valid = false;
-  switch (type) {
-  case FileExt::Type::Header:
-    valid = true;
-    break;
-  case FileExt::Type::Asm:
-  case FileExt::Type::C:
-  case FileExt::Type::Cpp:
-  default:
-    valid = false;
-    break;
-  }
-  return valid;
-}
-
 } // namespace buildcc::base

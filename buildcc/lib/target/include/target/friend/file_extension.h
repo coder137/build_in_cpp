@@ -51,8 +51,6 @@ public:
   std::optional<std::string> GetCompiler(Type type) const;
 
   static std::string ToString(Type type);
-  static bool IsValidSource(Type type);
-  static bool IsValidHeader(Type type);
 
 private:
   Target &target_;
