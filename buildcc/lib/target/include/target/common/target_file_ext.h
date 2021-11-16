@@ -19,7 +19,7 @@
 
 namespace buildcc::base {
 
-enum TargetFileExt {
+enum class TargetFileExt {
   Asm,
   C,
   Cpp,
