@@ -41,9 +41,6 @@ public:
 public:
   FileExt(Target &target) : target_(target) {}
 
-  // Setters
-  void SetSourceState(Type type);
-
   // Getters
   Type GetType(const fs::path &filepath) const;
 
