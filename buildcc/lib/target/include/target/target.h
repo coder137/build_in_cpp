@@ -32,6 +32,7 @@
 
 // Common
 #include "target/common/target_config.h"
+#include "target/common/target_state.h"
 
 // Friend
 #include "target/friend/compile_object.h"
@@ -87,15 +88,6 @@ public:
     LinkFlags,
     CompileDependencies,
     LinkDependencies,
-  };
-
-  struct State {
-    bool contains_pch{false};
-    bool contains_asm{false};
-    bool contains_c{false};
-    bool contains_cpp{false};
-    bool build{false};
-    bool lock{false};
   };
 
   struct Env {
@@ -202,7 +194,7 @@ public:
 
   // Set during first build or rebuild
   // lock == true after Build is called
-  const State &GetState() const { return state_; }
+  const TargetState &GetState() const { return state_; }
   bool GetBuildState() const { return state_.build; }
   bool GetLockState() const { return state_.lock; }
 
@@ -365,7 +357,7 @@ private:
 
   // Used for serialization
   internal::TargetStorer storer_;
-  State state_;
+  TargetState state_;
   Command command_;
   tf::Taskflow tf_;
 };
@@ -378,7 +370,7 @@ namespace buildcc {
 typedef base::Target::Type TargetType;
 typedef base::Target::CopyOption TargetCopyOption;
 typedef base::TargetConfig TargetConfig;
-typedef base::Target::State TargetState;
+typedef base::TargetState TargetState;
 typedef base::Target::Env TargetEnv;
 typedef base::Target BaseTarget;
 

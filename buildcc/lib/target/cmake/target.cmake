@@ -10,7 +10,10 @@ set(TARGET_SRCS
 
     # Common
     src/common/target_config.cpp
+    src/common/target_state.cpp
+    include/target/common/target_file_ext.h
     include/target/common/target_config.h
+    include/target/common/target_state.h
 
     # Generator
     src/generator/generator_loader.cpp
