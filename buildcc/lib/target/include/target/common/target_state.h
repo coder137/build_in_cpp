@@ -24,19 +24,23 @@ namespace buildcc::base {
 struct TargetState {
 
   void SetSourceState(TargetFileExt file_extension);
-  void Lock();
+  void SetPch();
+  void SetLock();
 
   void ExpectsUnlock() const;
   void ExpectsLock() const;
 
+  bool ContainsPch() const { return contains_pch_; }
+
   // TODO, Make these private getters
-  // TODO, Make a setter for pch
-  bool contains_pch{false};
   bool contains_asm{false};
   bool contains_c{false};
   bool contains_cpp{false};
   bool build{false};
   bool lock{false};
+
+private:
+  bool contains_pch_{false};
 };
 
 } // namespace buildcc::base
