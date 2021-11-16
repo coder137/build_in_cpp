@@ -8,6 +8,10 @@ set(TARGET_SRCS
     include/target/path.h
     include/target/util.h
 
+    # Common
+    src/common/target_config.cpp
+    include/target/common/target_config.h
+
     # Generator
     src/generator/generator_loader.cpp
     src/generator/generator_storer.cpp

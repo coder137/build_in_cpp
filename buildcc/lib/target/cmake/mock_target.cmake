@@ -2,6 +2,9 @@ add_library(mock_target STATIC
     # Utils
     src/util/util.cpp
 
+    # Common
+    src/common/target_config.cpp
+
     # Generator
     src/generator/generator_loader.cpp
     src/generator/generator_storer.cpp
