@@ -10,6 +10,7 @@ add_library(mock_target STATIC
     src/api/copy_api.cpp
     src/api/source_api.cpp
     src/api/include_api.cpp
+    src/api/lib_api.cpp
 
     # Generator
     src/generator/generator_loader.cpp
@@ -31,7 +32,6 @@ add_library(mock_target STATIC
     src/target/target_storer.cpp
 
     src/target/pch.cpp
-    src/target/lib.cpp
     src/target/flags.cpp
     src/target/additional_deps.cpp
 

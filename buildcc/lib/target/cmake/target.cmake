@@ -21,9 +21,11 @@ set(TARGET_SRCS
     src/api/copy_api.cpp
     src/api/source_api.cpp
     src/api/include_api.cpp
+    src/api/lib_api.cpp
     include/target/api/copy_api.h
     include/target/api/source_api.h
     include/target/api/include_api.h
+    include/target/api/lib_api.h
 
     # Generator
     src/generator/generator_loader.cpp
@@ -51,7 +53,6 @@ set(TARGET_SRCS
     include/target/target.h
 
     src/target/pch.cpp
-    src/target/lib.cpp
     src/target/flags.cpp
     src/target/additional_deps.cpp
 

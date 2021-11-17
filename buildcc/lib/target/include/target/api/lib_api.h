@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_API_INCLUDE_API_H_
-#define TARGET_API_INCLUDE_API_H_
+#ifndef TARGET_API_LIB_API_H_
+#define TARGET_API_LIB_API_H_
 
 #include <filesystem>
+#include <string>
 
 namespace fs = std::filesystem;
 
@@ -26,21 +27,15 @@ namespace buildcc::base {
 // Requires
 // - TargetStorer
 // - TargetState
-// - TargetConfig
 // - TargetEnv
-template <typename T> class IncludeApi {
+// T::GetTargetPath
+template <typename T> class LibApi {
 public:
-  void AddHeader(const fs::path &relative_filename,
-                 const fs::path &relative_to_target_path = "");
-  void AddHeaderAbsolute(const fs::path &absolute_filepath);
+  void AddLibDep(const T &lib_dep);
+  void AddLibDep(const std::string &lib_dep);
 
-  void GlobHeaders(const fs::path &relative_to_target_path);
-  void GlobHeadersAbsolute(const fs::path &absolute_path);
-
-  void AddIncludeDir(const fs::path &relative_include_dir,
-                     bool glob_headers = false);
-  void AddIncludeDirAbsolute(const fs::path &absolute_include_dir,
-                             bool glob_headers = false);
+  void AddLibDir(const fs::path &relative_lib_dir);
+  void AddLibDirAbsolute(const fs::path &absolute_lib_dir);
 };
 
 } // namespace buildcc::base

@@ -39,6 +39,7 @@
 // API
 #include "target/api/copy_api.h"
 #include "target/api/include_api.h"
+#include "target/api/lib_api.h"
 #include "target/api/source_api.h"
 
 // Friend
@@ -69,7 +70,8 @@ namespace buildcc::base {
 class Target : public BuilderInterface,
                public CopyApi<Target>,
                public SourceApi<Target>,
-               public IncludeApi<Target> {
+               public IncludeApi<Target>,
+               public LibApi<Target> {
 
 public:
   explicit Target(const std::string &name, TargetType type,
@@ -95,14 +97,6 @@ public:
   void AddPch(const fs::path &relative_filename,
               const fs::path &relative_to_target_path = "");
   void AddPchAbsolute(const fs::path &absolute_filepath);
-
-  // * Include and Lib directory
-  void AddLibDir(const fs::path &relative_lib_dir);
-  void AddLibDirAbsolute(const fs::path &absolute_lib_dir);
-
-  // * Libraries
-  void AddLibDep(const Target &lib_dep);
-  void AddLibDep(const std::string &lib_dep);
 
   // * Flags
   void AddPreprocessorFlag(const std::string &flag);
@@ -236,6 +230,7 @@ private:
   friend class CopyApi<Target>;
   friend class SourceApi<Target>;
   friend class IncludeApi<Target>;
+  friend class LibApi<Target>;
 
 private:
   void Initialize();
