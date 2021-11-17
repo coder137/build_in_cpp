@@ -9,6 +9,7 @@ add_library(mock_target STATIC
     # API
     src/api/copy_api.cpp
     src/api/source_api.cpp
+    src/api/include_api.cpp
 
     # Generator
     src/generator/generator_loader.cpp
