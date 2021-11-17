@@ -14,110 +14,99 @@
  * limitations under the License.
  */
 
-#include "env/assert_fatal.h"
-#include "env/logging.h"
+#include "target/api/copy_api.h"
+
 #include "target/target.h"
-#include <algorithm>
-
-namespace {
-
-template <typename T, typename C> void CopyVar(const T &source, const C &cb) {
-  for (const auto &s : source) {
-    cb(s);
-  }
-}
-
-} // namespace
 
 namespace buildcc::base {
 
-// PUBLIC
-
-// NOTE, std::move performs a copy when `const Target &`
-void Target::Copy(const Target &target,
-                  std::initializer_list<CopyOption> options) {
+template <typename T>
+void CopyApi<T>::Copy(const T &target,
+                      std::initializer_list<CopyOption> options) {
   env::log_trace(__FUNCTION__, "Copy by const ref");
   SpecializedCopy<const Target &>(target, options);
 }
 
-// NOTE, std::move performs a move when `Target &&`
-void Target::Copy(Target &&target, std::initializer_list<CopyOption> options) {
+template <typename T>
+void CopyApi<T>::Copy(T &&target, std::initializer_list<CopyOption> options) {
   env::log_trace(__FUNCTION__, "Copy by move");
   SpecializedCopy<Target &&>(std::move(target), options);
 }
 
-// PRIVATE
-
+// template <typename TargetType>
 template <typename T>
-void Target::SpecializedCopy(T target,
-                             std::initializer_list<CopyOption> options) {
-  state_.ExpectsUnlock();
+template <typename TargetType>
+void CopyApi<T>::SpecializedCopy(TargetType target,
+                                 std::initializer_list<CopyOption> options) {
+  T &t = static_cast<T &>(*this);
+  t.state_.ExpectsUnlock();
   for (const CopyOption o : options) {
     switch (o) {
     case CopyOption::PreprocessorFlags:
-      storer_.current_preprocessor_flags =
+      t.storer_.current_preprocessor_flags =
           std::move(target.storer_.current_preprocessor_flags);
       break;
     case CopyOption::CommonCompileFlags:
-      storer_.current_common_compile_flags =
+      t.storer_.current_common_compile_flags =
           std::move(target.storer_.current_common_compile_flags);
       break;
     case CopyOption::PchCompileFlags:
-      storer_.current_pch_compile_flags =
+      t.storer_.current_pch_compile_flags =
           std::move(target.storer_.current_pch_compile_flags);
       break;
     case CopyOption::PchObjectFlags:
-      storer_.current_pch_object_flags =
+      t.storer_.current_pch_object_flags =
           std::move(target.storer_.current_pch_object_flags);
       break;
     case CopyOption::AsmCompileFlags:
-      storer_.current_asm_compile_flags =
+      t.storer_.current_asm_compile_flags =
           std::move(target.storer_.current_asm_compile_flags);
       break;
     case CopyOption::CCompileFlags:
-      storer_.current_c_compile_flags =
+      t.storer_.current_c_compile_flags =
           std::move(target.storer_.current_c_compile_flags);
       break;
     case CopyOption::CppCompileFlags:
-      storer_.current_cpp_compile_flags =
+      t.storer_.current_cpp_compile_flags =
           std::move(target.storer_.current_cpp_compile_flags);
       break;
     case CopyOption::LinkFlags:
-      storer_.current_link_flags = std::move(target.storer_.current_link_flags);
+      t.storer_.current_link_flags =
+          std::move(target.storer_.current_link_flags);
       break;
     case CopyOption::CompileDependencies:
-      storer_.current_compile_dependencies.user =
+      t.storer_.current_compile_dependencies.user =
           std::move(target.storer_.current_compile_dependencies.user);
       break;
     case CopyOption::LinkDependencies:
-      storer_.current_link_dependencies.user =
+      t.storer_.current_link_dependencies.user =
           std::move(target.storer_.current_link_dependencies.user);
       break;
     case CopyOption::SourceFiles:
-      storer_.current_source_files.user =
+      t.storer_.current_source_files.user =
           std::move(target.storer_.current_source_files.user);
       break;
     case CopyOption::HeaderFiles:
-      storer_.current_header_files.user =
+      t.storer_.current_header_files.user =
           std::move(target.storer_.current_header_files.user);
       break;
     case CopyOption::PchFiles:
-      storer_.current_pch_files.user =
+      t.storer_.current_pch_files.user =
           std::move(target.storer_.current_pch_files.user);
       break;
     case CopyOption::LibDeps:
-      storer_.current_lib_deps.user =
+      t.storer_.current_lib_deps.user =
           std::move(target.storer_.current_lib_deps.user);
       break;
     case CopyOption::IncludeDirs:
-      storer_.current_include_dirs =
+      t.storer_.current_include_dirs =
           std::move(target.storer_.current_include_dirs);
       break;
     case CopyOption::LibDirs:
-      storer_.current_lib_dirs = std::move(target.storer_.current_lib_dirs);
+      t.storer_.current_lib_dirs = std::move(target.storer_.current_lib_dirs);
       break;
     case CopyOption::ExternalLibDeps:
-      storer_.current_external_lib_deps =
+      t.storer_.current_external_lib_deps =
           std::move(target.storer_.current_external_lib_deps);
       break;
     default:
@@ -126,5 +115,7 @@ void Target::SpecializedCopy(T target,
     }
   }
 }
+
+template class CopyApi<Target>;
 
 } // namespace buildcc::base

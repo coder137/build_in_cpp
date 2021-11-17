@@ -46,26 +46,25 @@ TEST(TargetTestCopyGroup, CopyByConstRef) {
   srcTarget.AddCompileDependency("new_source.cpp");
   srcTarget.AddLinkDependency("new_source.cpp");
 
-  destTarget.Copy(srcTarget,
-                  {
-                      buildcc::base::Target::CopyOption::SourceFiles,
-                      buildcc::base::Target::CopyOption::HeaderFiles,
-                      buildcc::base::Target::CopyOption::PchFiles,
-                      buildcc::base::Target::CopyOption::LibDeps,
-                      buildcc::base::Target::CopyOption::IncludeDirs,
-                      buildcc::base::Target::CopyOption::LibDirs,
-                      buildcc::base::Target::CopyOption::ExternalLibDeps,
-                      buildcc::base::Target::CopyOption::PreprocessorFlags,
-                      buildcc::base::Target::CopyOption::CommonCompileFlags,
-                      buildcc::base::Target::CopyOption::PchCompileFlags,
-                      buildcc::base::Target::CopyOption::PchObjectFlags,
-                      buildcc::base::Target::CopyOption::AsmCompileFlags,
-                      buildcc::base::Target::CopyOption::CCompileFlags,
-                      buildcc::base::Target::CopyOption::CppCompileFlags,
-                      buildcc::base::Target::CopyOption::LinkFlags,
-                      buildcc::base::Target::CopyOption::CompileDependencies,
-                      buildcc::base::Target::CopyOption::LinkDependencies,
-                  });
+  destTarget.Copy(srcTarget, {
+                                 buildcc::base::CopyOption::SourceFiles,
+                                 buildcc::base::CopyOption::HeaderFiles,
+                                 buildcc::base::CopyOption::PchFiles,
+                                 buildcc::base::CopyOption::LibDeps,
+                                 buildcc::base::CopyOption::IncludeDirs,
+                                 buildcc::base::CopyOption::LibDirs,
+                                 buildcc::base::CopyOption::ExternalLibDeps,
+                                 buildcc::base::CopyOption::PreprocessorFlags,
+                                 buildcc::base::CopyOption::CommonCompileFlags,
+                                 buildcc::base::CopyOption::PchCompileFlags,
+                                 buildcc::base::CopyOption::PchObjectFlags,
+                                 buildcc::base::CopyOption::AsmCompileFlags,
+                                 buildcc::base::CopyOption::CCompileFlags,
+                                 buildcc::base::CopyOption::CppCompileFlags,
+                                 buildcc::base::CopyOption::LinkFlags,
+                                 buildcc::base::CopyOption::CompileDependencies,
+                                 buildcc::base::CopyOption::LinkDependencies,
+                             });
 
   CHECK_EQUAL(destTarget.GetCurrentSourceFiles().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentHeaderFiles().size(), 1);
@@ -116,23 +115,23 @@ TEST(TargetTestCopyGroup, CopyByMove) {
 
   destTarget.Copy(std::move(srcTarget),
                   {
-                      buildcc::base::Target::CopyOption::SourceFiles,
-                      buildcc::base::Target::CopyOption::HeaderFiles,
-                      buildcc::base::Target::CopyOption::PchFiles,
-                      buildcc::base::Target::CopyOption::LibDeps,
-                      buildcc::base::Target::CopyOption::IncludeDirs,
-                      buildcc::base::Target::CopyOption::LibDirs,
-                      buildcc::base::Target::CopyOption::ExternalLibDeps,
-                      buildcc::base::Target::CopyOption::PreprocessorFlags,
-                      buildcc::base::Target::CopyOption::CommonCompileFlags,
-                      buildcc::base::Target::CopyOption::PchCompileFlags,
-                      buildcc::base::Target::CopyOption::PchObjectFlags,
-                      buildcc::base::Target::CopyOption::AsmCompileFlags,
-                      buildcc::base::Target::CopyOption::CCompileFlags,
-                      buildcc::base::Target::CopyOption::CppCompileFlags,
-                      buildcc::base::Target::CopyOption::LinkFlags,
-                      buildcc::base::Target::CopyOption::CompileDependencies,
-                      buildcc::base::Target::CopyOption::LinkDependencies,
+                      buildcc::base::CopyOption::SourceFiles,
+                      buildcc::base::CopyOption::HeaderFiles,
+                      buildcc::base::CopyOption::PchFiles,
+                      buildcc::base::CopyOption::LibDeps,
+                      buildcc::base::CopyOption::IncludeDirs,
+                      buildcc::base::CopyOption::LibDirs,
+                      buildcc::base::CopyOption::ExternalLibDeps,
+                      buildcc::base::CopyOption::PreprocessorFlags,
+                      buildcc::base::CopyOption::CommonCompileFlags,
+                      buildcc::base::CopyOption::PchCompileFlags,
+                      buildcc::base::CopyOption::PchObjectFlags,
+                      buildcc::base::CopyOption::AsmCompileFlags,
+                      buildcc::base::CopyOption::CCompileFlags,
+                      buildcc::base::CopyOption::CppCompileFlags,
+                      buildcc::base::CopyOption::LinkFlags,
+                      buildcc::base::CopyOption::CompileDependencies,
+                      buildcc::base::CopyOption::LinkDependencies,
                   });
 
   CHECK_EQUAL(destTarget.GetCurrentSourceFiles().size(), 1);
@@ -164,11 +163,10 @@ TEST(TargetTestCopyGroup, CopyCrash) {
   buildcc::base::Target destTarget(
       "destTarget", buildcc::base::TargetType::Executable, gcc, "data");
 
-  CHECK_THROWS(
-      std::exception,
-      destTarget.Copy(srcTarget, {
-                                     (buildcc::base::Target::CopyOption)65535,
-                                 }));
+  CHECK_THROWS(std::exception,
+               destTarget.Copy(srcTarget, {
+                                              (buildcc::base::CopyOption)65535,
+                                          }));
 }
 
 int main(int ac, char **av) {

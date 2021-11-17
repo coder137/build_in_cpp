@@ -36,6 +36,9 @@
 #include "target/common/target_state.h"
 #include "target/common/target_type.h"
 
+// API
+#include "target/api/copy_api.h"
+
 // Friend
 #include "target/friend/compile_object.h"
 #include "target/friend/compile_pch.h"
@@ -61,31 +64,7 @@ namespace buildcc::base {
 // of the inheritance pattern
 // NOTE, base::Target is meant to be a blank slate which can be customized by
 // the specialized target-toolchain classes
-// TODO, Shift all of the classes inside the class to their own files
-class Target : public BuilderInterface {
-
-public:
-  // NOTE, Use CRTP for this
-  // Similar to adding features
-  enum class CopyOption {
-    SourceFiles,
-    HeaderFiles,
-    PchFiles,
-    LibDeps,
-    IncludeDirs,
-    LibDirs,
-    ExternalLibDeps,
-    PreprocessorFlags,
-    CommonCompileFlags,
-    PchCompileFlags,
-    PchObjectFlags,
-    AsmCompileFlags,
-    CCompileFlags,
-    CppCompileFlags,
-    LinkFlags,
-    CompileDependencies,
-    LinkDependencies,
-  };
+class Target : public BuilderInterface, public CopyApi<Target> {
 
 public:
   explicit Target(const std::string &name, TargetType type,
@@ -101,10 +80,6 @@ public:
   virtual ~Target() {}
 
   Target(const Target &target) = delete;
-
-  // Features
-  void Copy(const Target &target, std::initializer_list<CopyOption> options);
-  void Copy(Target &&target, std::initializer_list<CopyOption> options);
 
   // Builders
   void Build() override;
@@ -273,6 +248,8 @@ private:
   friend class CompileObject;
   friend class LinkTarget;
 
+  friend class CopyApi<Target>;
+
 private:
   void Initialize();
 
@@ -302,9 +279,6 @@ private:
   void FlagChanged();
   void ExternalLibChanged();
 
-  template <typename T>
-  void SpecializedCopy(T target, std::initializer_list<CopyOption> options);
-
   void TaskDeps();
 
 private:
@@ -333,12 +307,11 @@ private:
 // TODO, Make all of these external and remove this namespace
 namespace buildcc {
 
-typedef base::Target::CopyOption TargetCopyOption;
-
 typedef base::TargetType TargetType;
-typedef base::TargetConfig TargetConfig;
 typedef base::TargetState TargetState;
+typedef base::TargetConfig TargetConfig;
 typedef base::TargetEnv TargetEnv;
+
 typedef base::Target BaseTarget;
 
 } // namespace buildcc
