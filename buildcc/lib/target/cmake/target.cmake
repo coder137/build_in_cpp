@@ -48,7 +48,6 @@ set(TARGET_SRCS
     include/target/target_storer.h
     include/target/target.h
 
-    src/target/source.cpp
     src/target/include_dir.cpp
     src/target/pch.cpp
     src/target/lib.cpp
