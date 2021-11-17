@@ -28,6 +28,7 @@ namespace buildcc::base {
 // - TargetStorer
 // - TargetState
 // - TargetEnv
+// T::GetTargetPath
 template <typename T> class LibApi {
 public:
   void AddLibDep(const T &lib_dep);
