@@ -24,6 +24,8 @@ namespace fs = std::filesystem;
 
 namespace buildcc::base {
 
+class Target;
+
 // Requires
 // - TargetStorer
 // - TargetState
@@ -31,7 +33,7 @@ namespace buildcc::base {
 // T::GetTargetPath
 template <typename T> class LibApi {
 public:
-  void AddLibDep(const T &lib_dep);
+  void AddLibDep(const Target &lib_dep);
   void AddLibDep(const std::string &lib_dep);
 
   void AddLibDir(const fs::path &relative_lib_dir);
