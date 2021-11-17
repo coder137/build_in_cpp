@@ -18,7 +18,7 @@
 
 namespace buildcc::base {
 
-TargetFileExt TargetConfig::GetFileExt(const fs::path &filepath) {
+TargetFileExt TargetConfig::GetFileExt(const fs::path &filepath) const {
   if (!filepath.has_extension()) {
     return TargetFileExt::Invalid;
   }
@@ -39,7 +39,7 @@ TargetFileExt TargetConfig::GetFileExt(const fs::path &filepath) {
   return type;
 }
 
-bool TargetConfig::IsValidSource(const fs::path &filepath) {
+bool TargetConfig::IsValidSource(const fs::path &filepath) const {
   if (!filepath.has_extension()) {
     return false;
   }
@@ -54,7 +54,7 @@ bool TargetConfig::IsValidSource(const fs::path &filepath) {
   return valid;
 }
 
-bool TargetConfig::IsValidHeader(const fs::path &filepath) {
+bool TargetConfig::IsValidHeader(const fs::path &filepath) const {
   if (!filepath.has_extension()) {
     return {};
   }
