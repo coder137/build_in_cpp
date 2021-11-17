@@ -38,6 +38,7 @@
 
 // API
 #include "target/api/copy_api.h"
+#include "target/api/source_api.h"
 
 // Friend
 #include "target/friend/compile_object.h"
@@ -64,7 +65,9 @@ namespace buildcc::base {
 // of the inheritance pattern
 // NOTE, base::Target is meant to be a blank slate which can be customized by
 // the specialized target-toolchain classes
-class Target : public BuilderInterface, public CopyApi<Target> {
+class Target : public BuilderInterface,
+               public CopyApi<Target>,
+               public SourceApi<Target> {
 
 public:
   explicit Target(const std::string &name, TargetType type,
@@ -85,13 +88,6 @@ public:
   void Build() override;
 
   // Setters
-
-  // * Sources
-  void AddSource(const fs::path &relative_source,
-                 const fs::path &relative_to_target_path = "");
-  void GlobSources(const fs::path &relative_to_target_path = "");
-  void AddSourceAbsolute(const fs::path &absolute_source);
-  void GlobSourcesAbsolute(const fs::path &absolute_source_dir);
 
   // * Headers
   void AddHeader(const fs::path &relative_filename,
@@ -249,6 +245,7 @@ private:
   friend class LinkTarget;
 
   friend class CopyApi<Target>;
+  friend class SourceApi<Target>;
 
 private:
   void Initialize();
