@@ -6,6 +6,9 @@ add_library(mock_target STATIC
     src/common/target_config.cpp
     src/common/target_state.cpp
 
+    # API
+    src/api/copy_api.cpp
+
     # Generator
     src/generator/generator_loader.cpp
     src/generator/generator_storer.cpp

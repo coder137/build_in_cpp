@@ -17,6 +17,10 @@ set(TARGET_SRCS
     include/target/common/target_env.h
     include/target/common/target_type.h
 
+    # API
+    src/api/copy_api.cpp
+    include/target/api/copy_api.h
+
     # Generator
     src/generator/generator_loader.cpp
     src/generator/generator_storer.cpp
