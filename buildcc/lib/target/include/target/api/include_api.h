@@ -23,6 +23,11 @@ namespace fs = std::filesystem;
 
 namespace buildcc::base {
 
+// Requires
+// - TargetStorer
+// - TargetState
+// - TargetConfig
+// - TargetEnv
 template <typename T> class IncludeApi {
 public:
   void AddHeader(const fs::path &relative_filename,
