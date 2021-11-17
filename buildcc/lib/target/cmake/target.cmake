@@ -55,8 +55,6 @@ set(TARGET_SRCS
 
     src/target/recheck_states.cpp
 
-    src/target/copy.cpp
-
     src/target/build.cpp
     src/target/tasks.cpp
 )
