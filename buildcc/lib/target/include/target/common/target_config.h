@@ -34,6 +34,8 @@ struct TargetConfig {
   bool IsValidSource(const fs::path &filepath) const;
   bool IsValidHeader(const fs::path &filepath) const;
 
+  void ExpectsValidSource(const fs::path &filepath) const;
+
   std::string target_ext{""};
   std::string obj_ext{".o"};
   std::string pch_header_ext{".h"};

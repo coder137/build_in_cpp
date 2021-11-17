@@ -14,51 +14,59 @@
  * limitations under the License.
  */
 
+#include "target/api/source_api.h"
+
 #include "target/target.h"
-
-#include "target/util.h"
-
-#include "env/assert_fatal.h"
-
-#include "fmt/format.h"
 
 namespace buildcc::base {
 
-// Public
-void Target::AddSourceAbsolute(const fs::path &absolute_source) {
-  state_.ExpectsUnlock();
-  env::assert_fatal(config_.IsValidSource(absolute_source),
-                    fmt::format("{} does not have a valid source extension",
-                                absolute_source));
-  storer_.current_source_files.user.emplace(
+template <typename T>
+void SourceApi<T>::AddSourceAbsolute(const fs::path &absolute_source) {
+  T &t = static_cast<T &>(*this);
+
+  t.state_.ExpectsUnlock();
+  t.config_.ExpectsValidSource(absolute_source);
+  t.storer_.current_source_files.user.emplace(
       fs::path(absolute_source).make_preferred());
 }
 
-void Target::GlobSourcesAbsolute(const fs::path &absolute_source_dir) {
+template <typename T>
+void SourceApi<T>::GlobSourcesAbsolute(const fs::path &absolute_source_dir) {
+  T &t = static_cast<T &>(*this);
+
   for (const auto &p : fs::directory_iterator(absolute_source_dir)) {
-    if (config_.IsValidSource(p.path())) {
+    if (t.config_.IsValidSource(p.path())) {
       AddSourceAbsolute(p.path());
     }
   }
 }
 
-void Target::AddSource(const fs::path &relative_source,
-                       const std::filesystem::path &relative_to_target_path) {
-  env::log_trace(name_, __FUNCTION__);
+template <typename T>
+void SourceApi<T>::AddSource(
+    const fs::path &relative_source,
+    const std::filesystem::path &relative_to_target_path) {
+  T &t = static_cast<T &>(*this);
+
   // Compute the absolute source path
   fs::path absolute_source =
-      GetTargetRootDir() / relative_to_target_path / relative_source;
+      t.env_.GetTargetRootDir() / relative_to_target_path / relative_source;
   AddSourceAbsolute(absolute_source);
 }
 
-void Target::GlobSources(const fs::path &relative_to_target_path) {
-  env::log_trace(name_, __FUNCTION__);
-  fs::path absolute_input_path = GetTargetRootDir() / relative_to_target_path;
+template <typename T>
+void SourceApi<T>::GlobSources(const fs::path &relative_to_target_path) {
+  T &t = static_cast<T &>(*this);
+
+  fs::path absolute_input_path =
+      t.env_.GetTargetRootDir() / relative_to_target_path;
   for (const auto &p : fs::directory_iterator(absolute_input_path)) {
-    if (config_.IsValidSource(p.path())) {
+    if (t.config_.IsValidSource(p.path())) {
       AddSourceAbsolute(p.path());
     }
   }
 }
+
+//
+template class SourceApi<Target>;
 
 } // namespace buildcc::base

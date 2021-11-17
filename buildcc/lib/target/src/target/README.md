@@ -10,10 +10,24 @@
 - [x] `target_storer.cpp`
   - Store to flatbuffer schema file
 
+## Target API
+
+Check the `include/target/api` and `src/api` folder
+
+- [x] Copy
+  - Copy src target to dest
+  - Selective copy using `std::initializer<CopyOption>` 
+- [x] Source
+- [ ] Header and Include Dir
+- [ ] Lib and Lib Dir
+- [ ] PCH
+- [ ] Flags
+- [ ] Rebuild Deps
+- [ ] Getters
+- [ ] Target Info
+
 ## Inputs to Target
 
-- [x] `source.cpp`
-  - Source File
 - [x] `include_dir.cpp`
   - Include Dir
   - Header File
@@ -60,9 +74,6 @@
 
 ## Action on Target
 
-- [x] `copy.cpp`
-  - Copy src target to dest
-  - Selective copy using `std::initializer<CopyOption>` 
 - [x] `build.cpp`
   - Setup tasks by using the above files
   - [ ] PrecompileHeader (pch) files
