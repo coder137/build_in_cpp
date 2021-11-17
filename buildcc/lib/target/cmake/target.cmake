@@ -19,7 +19,9 @@ set(TARGET_SRCS
 
     # API
     src/api/copy_api.cpp
+    src/api/source_api.cpp
     include/target/api/copy_api.h
+    include/target/api/source_api.h
 
     # Generator
     src/generator/generator_loader.cpp
