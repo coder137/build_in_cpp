@@ -53,7 +53,6 @@ set(TARGET_SRCS
     include/target/target.h
 
     src/target/pch.cpp
-    src/target/lib.cpp
     src/target/flags.cpp
     src/target/additional_deps.cpp
 
