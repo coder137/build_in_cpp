@@ -17,8 +17,11 @@ Check the `include/target/api` and `src/api` folder
 - [x] Copy
   - Copy src target to dest
   - Selective copy using `std::initializer<CopyOption>` 
+  - `copy_api`
 - [x] Source
-- [ ] Header and Include Dir
+  - `source_api` 
+- [x] Header and Include Dir
+  - `include_api` 
 - [ ] Lib and Lib Dir
 - [ ] PCH
 - [ ] Flags
@@ -28,9 +31,6 @@ Check the `include/target/api` and `src/api` folder
 
 ## Inputs to Target
 
-- [x] `include_dir.cpp`
-  - Include Dir
-  - Header File
 - [x] `pch.cpp`
   - Precompile Header files 
 - [x] `lib.cpp`

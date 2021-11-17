@@ -79,4 +79,10 @@ bool TargetConfig::IsValidHeader(const fs::path &filepath) const {
   return valid;
 }
 
+void TargetConfig::ExpectsValidHeader(const fs::path &filepath) const {
+  env::assert_fatal(
+      IsValidHeader(filepath),
+      fmt::format("{} does not have a valid header extension", filepath));
+}
+
 } // namespace buildcc::base

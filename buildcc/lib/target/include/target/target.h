@@ -38,6 +38,7 @@
 
 // API
 #include "target/api/copy_api.h"
+#include "target/api/include_api.h"
 #include "target/api/source_api.h"
 
 // Friend
@@ -67,7 +68,8 @@ namespace buildcc::base {
 // the specialized target-toolchain classes
 class Target : public BuilderInterface,
                public CopyApi<Target>,
-               public SourceApi<Target> {
+               public SourceApi<Target>,
+               public IncludeApi<Target> {
 
 public:
   explicit Target(const std::string &name, TargetType type,
@@ -89,25 +91,12 @@ public:
 
   // Setters
 
-  // * Headers
-  void AddHeader(const fs::path &relative_filename,
-                 const fs::path &relative_to_target_path = "");
-  void AddHeaderAbsolute(const fs::path &absolute_filepath);
-
-  void GlobHeaders(const fs::path &relative_to_target_path);
-  void GlobHeadersAbsolute(const fs::path &absolute_path);
-
   // PCH
   void AddPch(const fs::path &relative_filename,
               const fs::path &relative_to_target_path = "");
   void AddPchAbsolute(const fs::path &absolute_filepath);
 
   // * Include and Lib directory
-  void AddIncludeDir(const fs::path &relative_include_dir,
-                     bool glob_headers = false);
-  void AddIncludeDirAbsolute(const fs::path &absolute_include_dir,
-                             bool glob_headers = false);
-
   void AddLibDir(const fs::path &relative_lib_dir);
   void AddLibDirAbsolute(const fs::path &absolute_lib_dir);
 
@@ -246,6 +235,7 @@ private:
 
   friend class CopyApi<Target>;
   friend class SourceApi<Target>;
+  friend class IncludeApi<Target>;
 
 private:
   void Initialize();

@@ -35,6 +35,7 @@ struct TargetConfig {
   bool IsValidHeader(const fs::path &filepath) const;
 
   void ExpectsValidSource(const fs::path &filepath) const;
+  void ExpectsValidHeader(const fs::path &filepath) const;
 
   std::string target_ext{""};
   std::string obj_ext{".o"};
