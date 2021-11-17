@@ -29,7 +29,7 @@ namespace fbs = schema::internal;
 
 namespace {
 
-fbs::TargetType CreateFbsTargetType(buildcc::base::Target::Type type) {
+fbs::TargetType CreateFbsTargetType(buildcc::base::TargetType type) {
   return (fbs::TargetType)type;
 }
 

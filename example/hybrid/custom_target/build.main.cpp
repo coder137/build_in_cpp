@@ -43,8 +43,8 @@ int main(int argc, char **argv) {
   base::TargetConfig config;
   config.compile_command = target_clang_gnu.compile_command;
   config.link_command = target_clang_gnu.link_command;
-  Target_custom c_foolib("CFoolib.exe", base::Target::Type::Executable, clang,
-                         "", config);
+  Target_custom c_foolib("CFoolib.exe", TargetType::Executable, clang, "",
+                         config);
   reg.Build(toolchain_clang_gnu.state, foolib_build_cb, c_foolib);
 
   // 5.

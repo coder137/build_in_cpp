@@ -32,7 +32,9 @@
 
 // Common
 #include "target/common/target_config.h"
+#include "target/common/target_env.h"
 #include "target/common/target_state.h"
+#include "target/common/target_type.h"
 
 // Friend
 #include "target/friend/compile_object.h"
@@ -63,12 +65,8 @@ namespace buildcc::base {
 class Target : public BuilderInterface {
 
 public:
-  enum class Type {
-    Executable,
-    StaticLibrary,
-    DynamicLibrary,
-  };
-
+  // NOTE, Use CRTP for this
+  // Similar to adding features
   enum class CopyOption {
     SourceFiles,
     HeaderFiles,
@@ -89,37 +87,14 @@ public:
     LinkDependencies,
   };
 
-  struct Env {
-    // * NOTE, This has only been added for implicit conversion
-    // TODO, Make the constructors below explicit
-    // TODO, Remove this constructor
-    Env(const char *target_relative_to_env_root)
-        : target_root_dir(env::get_project_root_dir() /
-                          target_relative_to_env_root),
-          target_build_dir(env::get_project_build_dir()), relative(true) {}
-
-    Env(const fs::path &target_relative_to_env_root)
-        : target_root_dir(env::get_project_root_dir() /
-                          target_relative_to_env_root),
-          target_build_dir(env::get_project_build_dir()), relative(true) {}
-    Env(const fs::path &absolute_target_root,
-        const fs::path &absolute_target_build)
-        : target_root_dir(absolute_target_root),
-          target_build_dir(absolute_target_build), relative(false) {}
-
-    fs::path target_root_dir;
-    fs::path target_build_dir;
-    bool relative{false};
-  };
-
 public:
-  explicit Target(const std::string &name, Type type,
-                  const Toolchain &toolchain, const Env &env,
+  explicit Target(const std::string &name, TargetType type,
+                  const Toolchain &toolchain, const TargetEnv &env,
                   const TargetConfig &config = {})
       : name_(name), type_(type), toolchain_(toolchain), config_(config),
-        env_(env.target_root_dir,
-             env.target_build_dir / toolchain.GetName() / name),
-        loader_(name, env_.target_build_dir), compile_pch_(*this),
+        env_(env.GetTargetRootDir(),
+             env.GetTargetBuildDir() / toolchain.GetName() / name),
+        loader_(name, env_.GetTargetBuildDir()), compile_pch_(*this),
         compile_object_(*this), link_target_(*this) {
     Initialize();
   }
@@ -217,9 +192,9 @@ public:
   // TODO, Shift getters to source file as well
   const std::string &GetName() const { return name_; }
   const Toolchain &GetToolchain() const { return toolchain_; }
-  Target::Type GetType() const { return type_; }
-  const fs::path &GetTargetRootDir() const { return env_.target_root_dir; }
-  const fs::path &GetTargetBuildDir() const { return env_.target_build_dir; }
+  TargetType GetType() const { return type_; }
+  const fs::path &GetTargetRootDir() const { return env_.GetTargetRootDir(); }
+  const fs::path &GetTargetBuildDir() const { return env_.GetTargetBuildDir(); }
   const TargetConfig &GetConfig() const { return config_; }
 
   //
@@ -335,10 +310,10 @@ private:
 private:
   // Constructor defined
   std::string name_;
-  Type type_;
+  TargetType type_;
   const Toolchain &toolchain_;
   TargetConfig config_;
-  Env env_;
+  TargetEnv env_;
   internal::TargetLoader loader_;
 
   // Friend
@@ -358,11 +333,12 @@ private:
 // TODO, Make all of these external and remove this namespace
 namespace buildcc {
 
-typedef base::Target::Type TargetType;
 typedef base::Target::CopyOption TargetCopyOption;
+
+typedef base::TargetType TargetType;
 typedef base::TargetConfig TargetConfig;
 typedef base::TargetState TargetState;
-typedef base::Target::Env TargetEnv;
+typedef base::TargetEnv TargetEnv;
 typedef base::Target BaseTarget;
 
 } // namespace buildcc

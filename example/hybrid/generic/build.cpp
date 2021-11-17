@@ -22,13 +22,13 @@ static void generic_build_cb(base::Target &generic_target,
 int main(int argc, char **argv) {
   // 1. Get arguments
   Args::ToolchainArg custom_toolchain;
-  base::Target::Type default_lib_type{base::Target::Type::StaticLibrary};
+  TargetType default_lib_type{TargetType::StaticLibrary};
   Args args;
 
   try {
-    const std::map<std::string, base::Target::Type> lib_type_map_{
-        {"StaticLib", base::Target::Type::StaticLibrary},
-        {"DynamicLib", base::Target::Type::DynamicLibrary},
+    const std::map<std::string, TargetType> lib_type_map_{
+        {"StaticLib", TargetType::StaticLibrary},
+        {"DynamicLib", TargetType::DynamicLibrary},
     };
 
     args.Ref()
@@ -57,8 +57,8 @@ int main(int argc, char **argv) {
   reg.Build(custom_toolchain.state, foolib_build_cb, foolib_target);
 
   // Target specific settings
-  Target_generic generic_target("generic", base::Target::Type::Executable,
-                                toolchain, "src");
+  Target_generic generic_target("generic", TargetType::Executable, toolchain,
+                                "src");
   reg.Build(custom_toolchain.state, generic_build_cb, generic_target,
             foolib_target);
   reg.Dep(generic_target, foolib_target);
@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
   // For Dynamic Lib we need to handle special cases
   // - MSVC behaviour
   // - Copy to executable location
-  if (default_lib_type == base::Target::Type::DynamicLibrary) {
+  if (default_lib_type == TargetType::DynamicLibrary) {
 
     // MSVC special case
     fs::path copy_from_path;

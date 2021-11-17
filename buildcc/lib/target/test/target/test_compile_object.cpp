@@ -20,7 +20,7 @@ static buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc, "gcc",
 
 TEST(TargetCompileObjectTestGroup, CacheCompileCommand_Invalid) {
   buildcc::base::Target target("CacheCompileCommand_Invalid",
-                               buildcc::base::Target::Type::Executable, gcc,
+                               buildcc::base::TargetType::Executable, gcc,
                                "data");
   buildcc::base::CompileObject object(target);
 

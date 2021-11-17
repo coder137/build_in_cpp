@@ -38,7 +38,9 @@ void TargetState::SetSourceState(TargetFileExt file_extension) {
   }
 }
 
-void TargetState::Lock() { lock = true; }
+void TargetState::SetPch() { contains_pch_ = true; }
+
+void TargetState::SetLock() { lock = true; }
 
 void TargetState::ExpectsUnlock() const {
   env::assert_fatal(!lock, "Cannot use this function when lock == true");

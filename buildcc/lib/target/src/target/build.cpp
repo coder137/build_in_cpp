@@ -55,11 +55,11 @@ void Target::Build() {
   env::log_trace(name_, __FUNCTION__);
 
   state_.ExpectsUnlock();
-  state_.Lock();
+  state_.SetLock();
 
   // PCH state
   if (!storer_.current_pch_files.user.empty()) {
-    state_.contains_pch = true;
+    state_.SetPch();
   }
 
   // Source - Object relation
@@ -98,7 +98,7 @@ void Target::Build() {
   (void)loader_.Load();
 
   // PCH Compile
-  if (GetState().contains_pch) {
+  if (state_.ContainsPch()) {
     command_.AddDefaultArguments({
         {kPchCompileFlags, internal::aggregate(GetCurrentPchCompileFlags())},
         {kPchObjectFlags, internal::aggregate(GetCurrentPchObjectFlags())},

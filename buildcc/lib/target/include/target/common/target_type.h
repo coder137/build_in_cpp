@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_COMMON_TARGET_FILE_EXT_H_
-#define TARGET_COMMON_TARGET_FILE_EXT_H_
+#ifndef TARGET_COMMON_TARGET_TYPE_H_
+#define TARGET_COMMON_TARGET_TYPE_H_
 
 namespace buildcc::base {
 
-enum class TargetFileExt {
-  Asm,
-  C,
-  Cpp,
-  Header,
-  Invalid,
+enum class TargetType {
+  Executable,
+  StaticLibrary,
+  DynamicLibrary,
 };
 
 }

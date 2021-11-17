@@ -30,9 +30,9 @@ namespace buildcc::base {
 struct TargetConfig {
   TargetConfig() {}
 
-  TargetFileExt GetFileExt(const fs::path &filepath);
-  bool IsValidSource(const fs::path &filepath);
-  bool IsValidHeader(const fs::path &filepath);
+  TargetFileExt GetFileExt(const fs::path &filepath) const;
+  bool IsValidSource(const fs::path &filepath) const;
+  bool IsValidHeader(const fs::path &filepath) const;
 
   std::string target_ext{""};
   std::string obj_ext{".o"};

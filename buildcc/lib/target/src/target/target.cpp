@@ -29,11 +29,11 @@ namespace fs = std::filesystem;
 
 namespace {
 
-bool IsValidTargetType(buildcc::base::Target::Type type) {
+bool IsValidTargetType(buildcc::base::TargetType type) {
   switch (type) {
-  case buildcc::base::Target::Type::Executable:
-  case buildcc::base::Target::Type::StaticLibrary:
-  case buildcc::base::Target::Type::DynamicLibrary:
+  case buildcc::base::TargetType::Executable:
+  case buildcc::base::TargetType::StaticLibrary:
+  case buildcc::base::TargetType::DynamicLibrary:
     return true;
     break;
   default:

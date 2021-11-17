@@ -24,9 +24,9 @@ buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc, "gcc", "as",
 
 TEST(TargetTestCopyGroup, CopyByConstRef) {
   buildcc::base::Target srcTarget(
-      "srcTarget", buildcc::base::Target::Type::Executable, gcc, "data");
+      "srcTarget", buildcc::base::TargetType::Executable, gcc, "data");
   buildcc::base::Target destTarget(
-      "destTarget", buildcc::base::Target::Type::Executable, gcc, "data");
+      "destTarget", buildcc::base::TargetType::Executable, gcc, "data");
 
   srcTarget.AddSource("dummy_main.c");
   srcTarget.AddIncludeDir("include", true);
@@ -92,9 +92,9 @@ TEST(TargetTestCopyGroup, CopyByConstRef) {
 
 TEST(TargetTestCopyGroup, CopyByMove) {
   buildcc::base::Target srcTarget(
-      "srcTarget", buildcc::base::Target::Type::Executable, gcc, "data");
+      "srcTarget", buildcc::base::TargetType::Executable, gcc, "data");
   buildcc::base::Target destTarget(
-      "destTarget", buildcc::base::Target::Type::Executable, gcc, "data");
+      "destTarget", buildcc::base::TargetType::Executable, gcc, "data");
 
   srcTarget.AddSource("dummy_main.c");
   srcTarget.AddIncludeDir("include", true);
@@ -160,9 +160,9 @@ TEST(TargetTestCopyGroup, CopyByMove) {
 
 TEST(TargetTestCopyGroup, CopyCrash) {
   buildcc::base::Target srcTarget(
-      "srcTarget", buildcc::base::Target::Type::Executable, gcc, "data");
+      "srcTarget", buildcc::base::TargetType::Executable, gcc, "data");
   buildcc::base::Target destTarget(
-      "destTarget", buildcc::base::Target::Type::Executable, gcc, "data");
+      "destTarget", buildcc::base::TargetType::Executable, gcc, "data");
 
   CHECK_THROWS(
       std::exception,

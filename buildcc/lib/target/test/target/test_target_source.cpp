@@ -38,8 +38,8 @@ static const fs::path target_source_intermediate_path =
 TEST(TargetTestSourceGroup, Target_SourceTypes) {
   constexpr const char *const NAME = "SourceTypes.exe";
   auto intermediate_path = target_source_intermediate_path / NAME;
-  buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
-                               gcc, "data");
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
 
   simple.AddSource("fileext/c_file.c");
   simple.AddSource("fileext/cpp_file1.cpp");
@@ -66,8 +66,8 @@ TEST(TargetTestSourceGroup, Target_AddSource) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
-                               gcc, "data");
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
   simple.AddSource(DUMMY_MAIN);
 }
 
@@ -78,8 +78,8 @@ TEST(TargetTestSourceGroup, Target_GlobSource) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
-                               gcc, "data");
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
   simple.GlobSources("");
   CHECK_EQUAL(simple.GetCurrentSourceFiles().size(), 6);
 }
@@ -94,8 +94,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
-                               gcc, "data");
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
 
   buildcc::m::CommandExpect_Execute(1, true); // compile
   buildcc::m::CommandExpect_Execute(1, true); // link
@@ -127,7 +127,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompileError) {
 
   {
     fs::remove_all(intermediate_path);
-    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
                                  gcc, "data");
 
     simple.AddSource(DUMMY_MAIN);
@@ -137,7 +137,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompileError) {
 
   {
     fs::remove_all(intermediate_path);
-    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
                                  gcc, "data");
 
     simple.AddSource(DUMMY_MAIN);
@@ -168,7 +168,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
       (source_path / NEW_SOURCE).make_preferred().string());
 
   {
-    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
                                  gcc, "data");
 
     // * Test C compile
@@ -191,7 +191,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     CHECK_FALSE(loaded_sources.find(new_source_file) == loaded_sources.end());
   }
   {
-    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
                                  gcc, "data");
     // * Remove C source
     // * Add CPP source
@@ -227,7 +227,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     auto file_path = source_path / NEW_SOURCE;
     buildcc::env::SaveFile(file_path.string().c_str(), std::string{""}, false);
 
-    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
                                  gcc, "data");
     simple.AddSource(DUMMY_MAIN_CPP);
     simple.AddSource(NEW_SOURCE);
@@ -259,7 +259,7 @@ TEST(TargetTestSourceGroup, Target_CompileCommand_Throws) {
   // Delete
   fs::remove_all(intermediate_path);
   {
-    buildcc::base::Target simple(NAME, buildcc::base::Target::Type::Executable,
+    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
                                  gcc, "data");
     simple.AddSource("dummy_main.c");
 
