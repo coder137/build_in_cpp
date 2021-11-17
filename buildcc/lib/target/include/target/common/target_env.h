@@ -30,11 +30,19 @@ public:
   // * NOTE, This has only been added for implicit conversion
   // TODO, Make the constructors below explicit
   // TODO, Remove this constructor
-  TargetEnv(const char *target_relative_to_env_root);
+  TargetEnv(const char *target_relative_to_env_root)
+      : target_root_dir_(env::get_project_root_dir() /
+                         target_relative_to_env_root),
+        target_build_dir_(env::get_project_build_dir()), relative_(true) {}
 
-  TargetEnv(const fs::path &target_relative_to_env_root);
+  TargetEnv(const fs::path &target_relative_to_env_root)
+      : target_root_dir_(env::get_project_root_dir() /
+                         target_relative_to_env_root),
+        target_build_dir_(env::get_project_build_dir()), relative_(true) {}
   TargetEnv(const fs::path &absolute_target_root,
-            const fs::path &absolute_target_build);
+            const fs::path &absolute_target_build)
+      : target_root_dir_(absolute_target_root),
+        target_build_dir_(absolute_target_build), relative_(false) {}
 
   const fs::path &GetTargetRootDir() const { return target_root_dir_; }
   const fs::path &GetTargetBuildDir() const { return target_build_dir_; }
