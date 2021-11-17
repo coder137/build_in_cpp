@@ -16,6 +16,12 @@
 
 #include "target/common/target_config.h"
 
+#include "env/assert_fatal.h"
+
+#include "target/path.h"
+
+#include "fmt/format.h"
+
 namespace buildcc::base {
 
 TargetFileExt TargetConfig::GetFileExt(const fs::path &filepath) const {
@@ -52,6 +58,12 @@ bool TargetConfig::IsValidSource(const fs::path &filepath) const {
     valid = true;
   }
   return valid;
+}
+
+void TargetConfig::ExpectsValidSource(const fs::path &filepath) const {
+  env::assert_fatal(
+      IsValidSource(filepath),
+      fmt::format("{} does not have a valid source extension", filepath));
 }
 
 bool TargetConfig::IsValidHeader(const fs::path &filepath) const {
