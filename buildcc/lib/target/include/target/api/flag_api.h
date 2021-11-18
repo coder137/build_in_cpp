@@ -21,6 +21,9 @@
 
 namespace buildcc::base {
 
+// Requires
+// - TargetStorer
+// - TargetState
 template <typename T> class FlagApi {
 public:
   void AddPreprocessorFlag(const std::string &flag);
