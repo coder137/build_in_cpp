@@ -39,6 +39,29 @@ template <typename T> bool TargetInfoGetter<T>::GetLockState() const {
   return t.state_.lock;
 }
 
+// Target Env
+template <typename T>
+const fs::path &TargetInfoGetter<T>::GetTargetRootDir() const {
+  const T &t = static_cast<const T &>(*this);
+
+  return t.env_.GetTargetRootDir();
+}
+
+template <typename T>
+const fs::path &TargetInfoGetter<T>::GetTargetBuildDir() const {
+  const T &t = static_cast<const T &>(*this);
+
+  return t.env_.GetTargetBuildDir();
+}
+
+// Target Config
+template <typename T>
+const TargetConfig &TargetInfoGetter<T>::GetConfig() const {
+  const T &t = static_cast<const T &>(*this);
+
+  return t.config_;
+}
+
 // Target Storer
 template <typename T>
 const internal::fs_unordered_set &

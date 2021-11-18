@@ -100,9 +100,6 @@ public:
   const std::string &GetName() const { return name_; }
   const Toolchain &GetToolchain() const { return toolchain_; }
   TargetType GetType() const { return type_; }
-  const fs::path &GetTargetRootDir() const { return env_.GetTargetRootDir(); }
-  const fs::path &GetTargetBuildDir() const { return env_.GetTargetBuildDir(); }
-  const TargetConfig &GetConfig() const { return config_; }
 
   //
 

@@ -19,6 +19,7 @@
 
 #include "target/path.h"
 
+#include "target/common/target_config.h"
 #include "target/common/target_state.h"
 
 namespace buildcc::base {
@@ -26,12 +27,21 @@ namespace buildcc::base {
 // Requires
 // - TargetStorer
 // - TargetState
+// - TargetEnv
+// - TargetConfig
 template <typename T> class TargetInfoGetter {
 public:
   // Target State
   const TargetState &GetState() const;
   bool GetBuildState() const;
   bool GetLockState() const;
+
+  // Target Env
+  const fs::path &GetTargetRootDir() const;
+  const fs::path &GetTargetBuildDir() const;
+
+  // Target Config
+  const TargetConfig &GetConfig() const;
 
   // Target Storer
   const internal::fs_unordered_set &GetCurrentSourceFiles() const;
