@@ -40,6 +40,7 @@
 #include "target/api/copy_api.h"
 #include "target/api/include_api.h"
 #include "target/api/lib_api.h"
+#include "target/api/pch_api.h"
 #include "target/api/source_api.h"
 
 // Friend
@@ -71,7 +72,8 @@ class Target : public BuilderInterface,
                public CopyApi<Target>,
                public SourceApi<Target>,
                public IncludeApi<Target>,
-               public LibApi<Target> {
+               public LibApi<Target>,
+               public PchApi<Target> {
 
 public:
   explicit Target(const std::string &name, TargetType type,
@@ -92,11 +94,6 @@ public:
   void Build() override;
 
   // Setters
-
-  // PCH
-  void AddPch(const fs::path &relative_filename,
-              const fs::path &relative_to_target_path = "");
-  void AddPchAbsolute(const fs::path &absolute_filepath);
 
   // * Flags
   void AddPreprocessorFlag(const std::string &flag);
@@ -231,6 +228,7 @@ private:
   friend class SourceApi<Target>;
   friend class IncludeApi<Target>;
   friend class LibApi<Target>;
+  friend class PchApi<Target>;
 
 private:
   void Initialize();
