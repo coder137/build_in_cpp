@@ -38,6 +38,7 @@
 
 // API
 #include "target/api/copy_api.h"
+#include "target/api/deps_api.h"
 #include "target/api/flag_api.h"
 #include "target/api/include_api.h"
 #include "target/api/lib_api.h"
@@ -75,7 +76,8 @@ class Target : public BuilderInterface,
                public IncludeApi<Target>,
                public LibApi<Target>,
                public PchApi<Target>,
-               public FlagApi<Target> {
+               public FlagApi<Target>,
+               public DepsApi<Target> {
 
 public:
   explicit Target(const std::string &name, TargetType type,
@@ -94,14 +96,6 @@ public:
 
   // Builders
   void Build() override;
-
-  // Setters
-
-  // * Rebuild
-  void AddCompileDependency(const fs::path &relative_path);
-  void AddCompileDependencyAbsolute(const fs::path &absolute_path);
-  void AddLinkDependency(const fs::path &relative_path);
-  void AddLinkDependencyAbsolute(const fs::path &absolute_path);
 
   // TODO, Add more setters
 
@@ -222,6 +216,7 @@ private:
   friend class LibApi<Target>;
   friend class PchApi<Target>;
   friend class FlagApi<Target>;
+  friend class DepsApi<Target>;
 
 private:
   void Initialize();
