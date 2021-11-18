@@ -83,11 +83,7 @@ public:
   // Builders
   void Build() override;
 
-  // TODO, Add more setters
-
   // Getters (GENERIC)
-
-  // Target state
 
   // Set during first build or rebuild
   // lock == true after Build is called
@@ -117,57 +113,6 @@ public:
   const TargetConfig &GetConfig() const { return config_; }
 
   //
-  const internal::fs_unordered_set &GetCurrentSourceFiles() const {
-    return storer_.current_source_files.user;
-  }
-  const internal::fs_unordered_set &GetCurrentHeaderFiles() const {
-    return storer_.current_header_files.user;
-  }
-  const internal::fs_unordered_set &GetCurrentPchFiles() const {
-    return storer_.current_pch_files.user;
-  }
-  const internal::fs_unordered_set &GetTargetLibDeps() const {
-    return storer_.current_lib_deps.user;
-  }
-  const std::unordered_set<std::string> &GetCurrentExternalLibDeps() const {
-    return storer_.current_external_lib_deps;
-  }
-  const internal::fs_unordered_set &GetCurrentIncludeDirs() const {
-    return storer_.current_include_dirs;
-  }
-  const internal::fs_unordered_set &GetCurrentLibDirs() const {
-    return storer_.current_lib_dirs;
-  }
-  const std::unordered_set<std::string> &GetCurrentPreprocessorFlags() const {
-    return storer_.current_preprocessor_flags;
-  }
-  const std::unordered_set<std::string> &GetCurrentCommonCompileFlags() const {
-    return storer_.current_common_compile_flags;
-  }
-  const std::unordered_set<std::string> &GetCurrentPchCompileFlags() const {
-    return storer_.current_pch_compile_flags;
-  }
-  const std::unordered_set<std::string> &GetCurrentPchObjectFlags() const {
-    return storer_.current_pch_object_flags;
-  }
-  const std::unordered_set<std::string> &GetCurrentAsmCompileFlags() const {
-    return storer_.current_asm_compile_flags;
-  }
-  const std::unordered_set<std::string> &GetCurrentCCompileFlags() const {
-    return storer_.current_c_compile_flags;
-  }
-  const std::unordered_set<std::string> &GetCurrentCppCompileFlags() const {
-    return storer_.current_cpp_compile_flags;
-  }
-  const std::unordered_set<std::string> &GetCurrentLinkFlags() const {
-    return storer_.current_link_flags;
-  }
-  const internal::fs_unordered_set &GetCurrentCompileDependencies() const {
-    return storer_.current_compile_dependencies.user;
-  }
-  const internal::fs_unordered_set &GetCurrentLinkDependencies() const {
-    return storer_.current_link_dependencies.user;
-  }
 
   // Getters (state_.ExpectsLock)
 

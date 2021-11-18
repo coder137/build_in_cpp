@@ -30,7 +30,10 @@
 #include "target/api/include_api.h"
 #include "target/api/lib_api.h"
 #include "target/api/pch_api.h"
+
 #include "target/api/source_api.h"
+
+#include "target/api/target_info_getter.h"
 
 namespace buildcc::base {
 
@@ -41,19 +44,26 @@ class TargetInfo : public SourceApi<TargetInfo>,
                    public PchApi<TargetInfo>,
                    public FlagApi<TargetInfo>,
                    public DepsApi<TargetInfo>,
-                   public CopyApi<TargetInfo> {
+                   public CopyApi<TargetInfo>,
+                   public TargetInfoGetter<TargetInfo> {
 public:
   TargetInfo(const TargetEnv &env, const TargetConfig &config = TargetConfig())
       : env_(env), config_(config) {}
 
 private:
+  // Inputs
   friend class SourceApi<TargetInfo>;
   friend class IncludeApi<TargetInfo>;
   friend class LibApi<TargetInfo>;
   friend class PchApi<TargetInfo>;
   friend class FlagApi<TargetInfo>;
   friend class DepsApi<TargetInfo>;
+
+  // Feature
   friend class CopyApi<TargetInfo>;
+
+  // Getters
+  friend class TargetInfoGetter<TargetInfo>;
 
 protected:
   TargetEnv env_;
