@@ -20,6 +20,26 @@
 
 namespace buildcc::base {
 
+// Target State
+template <typename T> const TargetState &TargetInfoGetter<T>::GetState() const {
+  const T &t = static_cast<const T &>(*this);
+
+  return t.state_;
+}
+
+template <typename T> bool TargetInfoGetter<T>::GetBuildState() const {
+  const T &t = static_cast<const T &>(*this);
+
+  return t.state_.build;
+}
+
+template <typename T> bool TargetInfoGetter<T>::GetLockState() const {
+  const T &t = static_cast<const T &>(*this);
+
+  return t.state_.lock;
+}
+
+// Target Storer
 template <typename T>
 const internal::fs_unordered_set &
 TargetInfoGetter<T>::GetCurrentSourceFiles() const {

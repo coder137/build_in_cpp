@@ -77,7 +77,6 @@ public:
     Initialize();
   }
   virtual ~Target() {}
-
   Target(const Target &target) = delete;
 
   // Builders
@@ -85,15 +84,8 @@ public:
 
   // Getters (GENERIC)
 
-  // Set during first build or rebuild
-  // lock == true after Build is called
-  const TargetState &GetState() const { return state_; }
-  bool GetBuildState() const { return state_.build; }
-  bool GetLockState() const { return state_.lock; }
-
   // NOTE, We are constructing the path
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
-
   const fs::path &GetTargetPath() const { return link_target_.GetOutput(); }
   const fs::path &GetPchHeaderPath() const {
     return compile_pch_.GetHeaderPath();

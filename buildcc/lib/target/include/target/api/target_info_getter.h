@@ -19,12 +19,21 @@
 
 #include "target/path.h"
 
+#include "target/common/target_state.h"
+
 namespace buildcc::base {
 
 // Requires
 // - TargetStorer
+// - TargetState
 template <typename T> class TargetInfoGetter {
 public:
+  // Target State
+  const TargetState &GetState() const;
+  bool GetBuildState() const;
+  bool GetLockState() const;
+
+  // Target Storere
   const internal::fs_unordered_set &GetCurrentSourceFiles() const;
   const internal::fs_unordered_set &GetCurrentHeaderFiles() const;
   const internal::fs_unordered_set &GetCurrentPchFiles() const;
