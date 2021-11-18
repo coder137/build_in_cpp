@@ -54,7 +54,6 @@ set(TARGET_SRCS
     include/target/target_storer.h
     include/target/target.h
 
-    src/target/pch.cpp
     src/target/flags.cpp
     src/target/additional_deps.cpp
 
