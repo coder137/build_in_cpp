@@ -21,6 +21,7 @@
 
 namespace buildcc::base {
 
+// TODO, Seperate TargetState into lock_ and other internal boolean variables
 struct TargetState {
   void SetSourceState(TargetFileExt file_extension);
   void SetPch();
