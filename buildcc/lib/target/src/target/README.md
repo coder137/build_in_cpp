@@ -26,20 +26,20 @@ Check the `include/target/api` and `src/api` folder
   - `lib_api`
 - [x] PCH
   - `pch_api`
-- [ ] Flags
+- [x] Flags
+  - `flag_api`
+  - PreprocessorFlags
+  - CommonCompileFlags
+  - AsmCompileFlags
+  - CCompileFlags
+  - CppCompileFlag
+  - LinkFlags
 - [ ] Rebuild Deps
 - [ ] Getters
 - [ ] Target Info
 
 ## Inputs to Target
 
-- [x] `flags.cpp`
-  - PreprocessorFlags
-  -  CommonCompileFlags
-  -   AsmCompileFlags
-  -   CCompileFlags
-  -   CppCompileFlag
-  -   LinkFlags
 - [x] `additional_deps.cpp`
   - PreCompileHeader dependencies
   - Compile dependencies

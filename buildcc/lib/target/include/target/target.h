@@ -38,6 +38,7 @@
 
 // API
 #include "target/api/copy_api.h"
+#include "target/api/flag_api.h"
 #include "target/api/include_api.h"
 #include "target/api/lib_api.h"
 #include "target/api/pch_api.h"
@@ -73,7 +74,8 @@ class Target : public BuilderInterface,
                public SourceApi<Target>,
                public IncludeApi<Target>,
                public LibApi<Target>,
-               public PchApi<Target> {
+               public PchApi<Target>,
+               public FlagApi<Target> {
 
 public:
   explicit Target(const std::string &name, TargetType type,
@@ -94,16 +96,6 @@ public:
   void Build() override;
 
   // Setters
-
-  // * Flags
-  void AddPreprocessorFlag(const std::string &flag);
-  void AddCommonCompileFlag(const std::string &flag);
-  void AddPchCompileFlag(const std::string &flag);
-  void AddPchObjectFlag(const std::string &flag);
-  void AddAsmCompileFlag(const std::string &flag);
-  void AddCCompileFlag(const std::string &flag);
-  void AddCppCompileFlag(const std::string &flag);
-  void AddLinkFlag(const std::string &flag);
 
   // * Rebuild
   void AddCompileDependency(const fs::path &relative_path);
@@ -229,6 +221,7 @@ private:
   friend class IncludeApi<Target>;
   friend class LibApi<Target>;
   friend class PchApi<Target>;
+  friend class FlagApi<Target>;
 
 private:
   void Initialize();
