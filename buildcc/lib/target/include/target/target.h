@@ -30,20 +30,11 @@
 // Interface
 #include "target/builder_interface.h"
 
-// Common
-#include "target/common/target_config.h"
-#include "target/common/target_env.h"
-#include "target/common/target_state.h"
-#include "target/common/target_type.h"
-
 // API
-#include "target/api/copy_api.h"
-#include "target/api/deps_api.h"
-#include "target/api/flag_api.h"
-#include "target/api/include_api.h"
-#include "target/api/lib_api.h"
-#include "target/api/pch_api.h"
-#include "target/api/source_api.h"
+#include "target/target_info.h"
+
+// Common
+#include "target/common/target_type.h"
 
 // Friend
 #include "target/friend/compile_object.h"
@@ -70,22 +61,17 @@ namespace buildcc::base {
 // of the inheritance pattern
 // NOTE, base::Target is meant to be a blank slate which can be customized by
 // the specialized target-toolchain classes
-class Target : public BuilderInterface,
-               public CopyApi<Target>,
-               public SourceApi<Target>,
-               public IncludeApi<Target>,
-               public LibApi<Target>,
-               public PchApi<Target>,
-               public FlagApi<Target>,
-               public DepsApi<Target> {
+class Target : public BuilderInterface, public TargetInfo {
 
 public:
   explicit Target(const std::string &name, TargetType type,
                   const Toolchain &toolchain, const TargetEnv &env,
-                  const TargetConfig &config = {})
-      : name_(name), type_(type), toolchain_(toolchain), config_(config),
-        env_(env.GetTargetRootDir(),
-             env.GetTargetBuildDir() / toolchain.GetName() / name),
+                  const TargetConfig &config = TargetConfig())
+      : TargetInfo(
+            TargetEnv(env.GetTargetRootDir(),
+                      env.GetTargetBuildDir() / toolchain.GetName() / name),
+            config),
+        name_(name), type_(type), toolchain_(toolchain),
         loader_(name, env_.GetTargetBuildDir()), compile_pch_(*this),
         compile_object_(*this), link_target_(*this) {
     Initialize();
@@ -98,10 +84,6 @@ public:
   void Build() override;
 
   // TODO, Add more setters
-
-  //
-  std::optional<std::string> SelectCompileFlags(TargetFileExt ext) const;
-  std::optional<std::string> SelectCompiler(TargetFileExt ext) const;
 
   // Getters (GENERIC)
 
@@ -221,6 +203,10 @@ private:
 private:
   void Initialize();
 
+  //
+  std::optional<std::string> SelectCompileFlags(TargetFileExt ext) const;
+  std::optional<std::string> SelectCompiler(TargetFileExt ext) const;
+
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
                     const internal::path_unordered_set &current_path);
@@ -250,12 +236,9 @@ private:
   void TaskDeps();
 
 private:
-  // Constructor defined
   std::string name_;
   TargetType type_;
   const Toolchain &toolchain_;
-  TargetConfig config_;
-  TargetEnv env_;
   internal::TargetLoader loader_;
 
   // Friend
@@ -263,9 +246,7 @@ private:
   CompileObject compile_object_;
   LinkTarget link_target_;
 
-  // Used for serialization
-  internal::TargetStorer storer_;
-  TargetState state_;
+  //
   Command command_;
   tf::Taskflow tf_;
 };
