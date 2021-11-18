@@ -16,7 +16,7 @@
 
 #include "target/api/pch_api.h"
 
-#include "target/target.h"
+#include "target/target_info.h"
 
 namespace buildcc::base {
 
@@ -43,6 +43,6 @@ void PchApi<T>::AddPch(const fs::path &relative_filename,
   AddPchAbsolute(absolute_pch);
 }
 
-template class PchApi<Target>;
+template class PchApi<TargetInfo>;
 
 } // namespace buildcc::base

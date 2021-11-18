@@ -17,6 +17,7 @@
 #include "target/api/lib_api.h"
 
 #include "target/target.h"
+#include "target/target_info.h"
 
 namespace buildcc::base {
 
@@ -50,6 +51,6 @@ template <typename T> void LibApi<T>::AddLibDep(const std::string &lib_dep) {
   t.storer_.current_external_lib_deps.insert(lib_dep);
 }
 
-template class LibApi<Target>;
+template class LibApi<TargetInfo>;
 
 } // namespace buildcc::base

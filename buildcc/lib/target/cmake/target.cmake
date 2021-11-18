@@ -18,20 +18,24 @@ set(TARGET_SRCS
     include/target/common/target_type.h
 
     # API
-    src/api/copy_api.cpp
     src/api/source_api.cpp
     src/api/include_api.cpp
     src/api/lib_api.cpp
     src/api/pch_api.cpp
     src/api/flag_api.cpp
     src/api/deps_api.cpp
-    include/target/api/copy_api.h
     include/target/api/source_api.h
     include/target/api/include_api.h
     include/target/api/lib_api.h
     include/target/api/pch_api.h
     include/target/api/flag_api.h
     include/target/api/deps_api.h
+
+    src/api/copy_api.cpp
+    include/target/api/copy_api.h
+    
+    src/api/target_info_getter.cpp
+    include/target/api/target_info_getter.h
 
     # Generator
     src/generator/generator_loader.cpp

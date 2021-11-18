@@ -16,7 +16,7 @@
 
 #include "target/api/deps_api.h"
 
-#include "target/target.h"
+#include "target/target_info.h"
 
 namespace buildcc::base {
 
@@ -51,6 +51,6 @@ void DepsApi<T>::AddLinkDependency(const fs::path &relative_path) {
   AddLinkDependencyAbsolute(absolute_path);
 }
 
-template class DepsApi<Target>;
+template class DepsApi<TargetInfo>;
 
 } // namespace buildcc::base

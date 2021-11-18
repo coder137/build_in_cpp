@@ -16,7 +16,7 @@
 
 #include "target/api/include_api.h"
 
-#include "target/target.h"
+#include "target/target_info.h"
 
 namespace buildcc::base {
 
@@ -83,6 +83,6 @@ void IncludeApi<T>::AddIncludeDirAbsolute(const fs::path &absolute_include_dir,
   }
 }
 
-template class IncludeApi<Target>;
+template class IncludeApi<TargetInfo>;
 
 } // namespace buildcc::base

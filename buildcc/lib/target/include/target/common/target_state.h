@@ -21,6 +21,11 @@
 
 namespace buildcc::base {
 
+// TODO, Seperate TargetState into lock_ and other internal boolean variables
+// NOTE, This is because apart from lock_ every other parameter is updated
+// during `Target::Build`
+// TargetInfo does not have a `Build` method, it is only meant to hold
+// information
 struct TargetState {
   void SetSourceState(TargetFileExt file_extension);
   void SetPch();
@@ -28,14 +33,9 @@ struct TargetState {
 
   void ExpectsUnlock() const;
   void ExpectsLock() const;
+  // TODO, IsLocked
 
   bool ContainsPch() const { return contains_pch_; }
-  // TODO, ContainsAsm
-  // TODO, ContainsC
-  // TODO, ContainsCpp
-
-  // TODO, IsLocked
-  // TODO, IsBuilt
 
   // TODO, Make these private getters
   bool contains_asm{false};

@@ -30,20 +30,11 @@
 // Interface
 #include "target/builder_interface.h"
 
-// Common
-#include "target/common/target_config.h"
-#include "target/common/target_env.h"
-#include "target/common/target_state.h"
-#include "target/common/target_type.h"
-
 // API
-#include "target/api/copy_api.h"
-#include "target/api/deps_api.h"
-#include "target/api/flag_api.h"
-#include "target/api/include_api.h"
-#include "target/api/lib_api.h"
-#include "target/api/pch_api.h"
-#include "target/api/source_api.h"
+#include "target/target_info.h"
+
+// Common
+#include "target/common/target_type.h"
 
 // Friend
 #include "target/friend/compile_object.h"
@@ -70,52 +61,31 @@ namespace buildcc::base {
 // of the inheritance pattern
 // NOTE, base::Target is meant to be a blank slate which can be customized by
 // the specialized target-toolchain classes
-class Target : public BuilderInterface,
-               public CopyApi<Target>,
-               public SourceApi<Target>,
-               public IncludeApi<Target>,
-               public LibApi<Target>,
-               public PchApi<Target>,
-               public FlagApi<Target>,
-               public DepsApi<Target> {
+class Target : public BuilderInterface, public TargetInfo {
 
 public:
   explicit Target(const std::string &name, TargetType type,
                   const Toolchain &toolchain, const TargetEnv &env,
-                  const TargetConfig &config = {})
-      : name_(name), type_(type), toolchain_(toolchain), config_(config),
-        env_(env.GetTargetRootDir(),
-             env.GetTargetBuildDir() / toolchain.GetName() / name),
+                  const TargetConfig &config = TargetConfig())
+      : TargetInfo(
+            TargetEnv(env.GetTargetRootDir(),
+                      env.GetTargetBuildDir() / toolchain.GetName() / name),
+            config),
+        name_(name), type_(type), toolchain_(toolchain),
         loader_(name, env_.GetTargetBuildDir()), compile_pch_(*this),
         compile_object_(*this), link_target_(*this) {
     Initialize();
   }
   virtual ~Target() {}
-
   Target(const Target &target) = delete;
 
   // Builders
   void Build() override;
 
-  // TODO, Add more setters
-
-  //
-  std::optional<std::string> SelectCompileFlags(TargetFileExt ext) const;
-  std::optional<std::string> SelectCompiler(TargetFileExt ext) const;
-
   // Getters (GENERIC)
-
-  // Target state
-
-  // Set during first build or rebuild
-  // lock == true after Build is called
-  const TargetState &GetState() const { return state_; }
-  bool GetBuildState() const { return state_.build; }
-  bool GetLockState() const { return state_.lock; }
 
   // NOTE, We are constructing the path
   fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
-
   const fs::path &GetTargetPath() const { return link_target_.GetOutput(); }
   const fs::path &GetPchHeaderPath() const {
     return compile_pch_.GetHeaderPath();
@@ -130,62 +100,8 @@ public:
   const std::string &GetName() const { return name_; }
   const Toolchain &GetToolchain() const { return toolchain_; }
   TargetType GetType() const { return type_; }
-  const fs::path &GetTargetRootDir() const { return env_.GetTargetRootDir(); }
-  const fs::path &GetTargetBuildDir() const { return env_.GetTargetBuildDir(); }
-  const TargetConfig &GetConfig() const { return config_; }
 
   //
-  const internal::fs_unordered_set &GetCurrentSourceFiles() const {
-    return storer_.current_source_files.user;
-  }
-  const internal::fs_unordered_set &GetCurrentHeaderFiles() const {
-    return storer_.current_header_files.user;
-  }
-  const internal::fs_unordered_set &GetCurrentPchFiles() const {
-    return storer_.current_pch_files.user;
-  }
-  const internal::fs_unordered_set &GetTargetLibDeps() const {
-    return storer_.current_lib_deps.user;
-  }
-  const std::unordered_set<std::string> &GetCurrentExternalLibDeps() const {
-    return storer_.current_external_lib_deps;
-  }
-  const internal::fs_unordered_set &GetCurrentIncludeDirs() const {
-    return storer_.current_include_dirs;
-  }
-  const internal::fs_unordered_set &GetCurrentLibDirs() const {
-    return storer_.current_lib_dirs;
-  }
-  const std::unordered_set<std::string> &GetCurrentPreprocessorFlags() const {
-    return storer_.current_preprocessor_flags;
-  }
-  const std::unordered_set<std::string> &GetCurrentCommonCompileFlags() const {
-    return storer_.current_common_compile_flags;
-  }
-  const std::unordered_set<std::string> &GetCurrentPchCompileFlags() const {
-    return storer_.current_pch_compile_flags;
-  }
-  const std::unordered_set<std::string> &GetCurrentPchObjectFlags() const {
-    return storer_.current_pch_object_flags;
-  }
-  const std::unordered_set<std::string> &GetCurrentAsmCompileFlags() const {
-    return storer_.current_asm_compile_flags;
-  }
-  const std::unordered_set<std::string> &GetCurrentCCompileFlags() const {
-    return storer_.current_c_compile_flags;
-  }
-  const std::unordered_set<std::string> &GetCurrentCppCompileFlags() const {
-    return storer_.current_cpp_compile_flags;
-  }
-  const std::unordered_set<std::string> &GetCurrentLinkFlags() const {
-    return storer_.current_link_flags;
-  }
-  const internal::fs_unordered_set &GetCurrentCompileDependencies() const {
-    return storer_.current_compile_dependencies.user;
-  }
-  const internal::fs_unordered_set &GetCurrentLinkDependencies() const {
-    return storer_.current_link_dependencies.user;
-  }
 
   // Getters (state_.ExpectsLock)
 
@@ -221,6 +137,10 @@ private:
 private:
   void Initialize();
 
+  //
+  std::optional<std::string> SelectCompileFlags(TargetFileExt ext) const;
+  std::optional<std::string> SelectCompiler(TargetFileExt ext) const;
+
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,
                     const internal::path_unordered_set &current_path);
@@ -235,7 +155,10 @@ private:
   // Fbs
   bool Store() override;
 
-  // Callbacks
+  // Tasks
+  void TaskDeps();
+
+  // Callbacks for unit tests
   void SourceRemoved();
   void SourceAdded();
   void SourceUpdated();
@@ -247,25 +170,18 @@ private:
   void FlagChanged();
   void ExternalLibChanged();
 
-  void TaskDeps();
-
 private:
-  // Constructor defined
   std::string name_;
   TargetType type_;
   const Toolchain &toolchain_;
-  TargetConfig config_;
-  TargetEnv env_;
   internal::TargetLoader loader_;
 
-  // Friend
+  // Friend classes
   CompilePch compile_pch_;
   CompileObject compile_object_;
   LinkTarget link_target_;
 
-  // Used for serialization
-  internal::TargetStorer storer_;
-  TargetState state_;
+  //
   Command command_;
   tf::Taskflow tf_;
 };

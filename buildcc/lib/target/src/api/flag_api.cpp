@@ -16,7 +16,7 @@
 
 #include "target/api/flag_api.h"
 
-#include "target/target.h"
+#include "target/target_info.h"
 
 namespace buildcc::base {
 
@@ -76,6 +76,6 @@ template <typename T> void FlagApi<T>::AddLinkFlag(const std::string &flag) {
   t.storer_.current_link_flags.insert(flag);
 }
 
-template class FlagApi<Target>;
+template class FlagApi<TargetInfo>;
 
 } // namespace buildcc::base
