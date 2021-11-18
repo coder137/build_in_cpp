@@ -23,6 +23,11 @@ namespace fs = std::filesystem;
 
 namespace buildcc::base {
 
+// Requires
+// - TargetStorer
+// - TargetState
+// - TargetConfig
+// - TargetEnv
 template <typename T> class PchApi {
 public:
   void AddPch(const fs::path &relative_filename,
