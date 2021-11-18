@@ -155,7 +155,10 @@ private:
   // Fbs
   bool Store() override;
 
-  // Callbacks
+  // Tasks
+  void TaskDeps();
+
+  // Callbacks for unit tests
   void SourceRemoved();
   void SourceAdded();
   void SourceUpdated();
@@ -167,15 +170,13 @@ private:
   void FlagChanged();
   void ExternalLibChanged();
 
-  void TaskDeps();
-
 private:
   std::string name_;
   TargetType type_;
   const Toolchain &toolchain_;
   internal::TargetLoader loader_;
 
-  // Friend
+  // Friend classes
   CompilePch compile_pch_;
   CompileObject compile_object_;
   LinkTarget link_target_;
