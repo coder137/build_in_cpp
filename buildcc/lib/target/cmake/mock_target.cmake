@@ -11,6 +11,7 @@ add_library(mock_target STATIC
     src/api/source_api.cpp
     src/api/include_api.cpp
     src/api/lib_api.cpp
+    src/api/pch_api.cpp
 
     # Generator
     src/generator/generator_loader.cpp
