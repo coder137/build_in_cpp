@@ -33,7 +33,7 @@ public:
   bool GetBuildState() const;
   bool GetLockState() const;
 
-  // Target Storere
+  // Target Storer
   const internal::fs_unordered_set &GetCurrentSourceFiles() const;
   const internal::fs_unordered_set &GetCurrentHeaderFiles() const;
   const internal::fs_unordered_set &GetCurrentPchFiles() const;
