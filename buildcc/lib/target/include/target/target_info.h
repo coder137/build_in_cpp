@@ -65,4 +65,10 @@ protected:
 
 } // namespace buildcc::base
 
+namespace buildcc {
+
+typedef base::TargetInfo TargetInfo;
+
+}
+
 #endif
