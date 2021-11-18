@@ -56,7 +56,6 @@ set(TARGET_SRCS
     include/target/target_storer.h
     include/target/target.h
 
-    src/target/flags.cpp
     src/target/additional_deps.cpp
 
     src/target/recheck_states.cpp
