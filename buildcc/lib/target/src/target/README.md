@@ -24,7 +24,8 @@ Check the `include/target/api` and `src/api` folder
   - `include_api` 
 - [x] Lib and Lib Dir
   - `lib_api`
-- [ ] PCH
+- [x] PCH
+  - `pch_api`
 - [ ] Flags
 - [ ] Rebuild Deps
 - [ ] Getters
@@ -32,8 +33,6 @@ Check the `include/target/api` and `src/api` folder
 
 ## Inputs to Target
 
-- [x] `pch.cpp`
-  - Precompile Header files 
 - [x] `flags.cpp`
   - PreprocessorFlags
   -  CommonCompileFlags

@@ -14,30 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_API_LIB_API_H_
-#define TARGET_API_LIB_API_H_
+#ifndef TARGET_API_PCH_API_H_
+#define TARGET_API_PCH_API_H_
 
 #include <filesystem>
-#include <string>
 
 namespace fs = std::filesystem;
 
 namespace buildcc::base {
 
-class Target;
-
 // Requires
 // - TargetStorer
 // - TargetState
+// - TargetConfig
 // - TargetEnv
-// T::GetTargetPath
-template <typename T> class LibApi {
+template <typename T> class PchApi {
 public:
-  void AddLibDep(const Target &lib_dep);
-  void AddLibDep(const std::string &lib_dep);
-
-  void AddLibDir(const fs::path &relative_lib_dir);
-  void AddLibDirAbsolute(const fs::path &absolute_lib_dir);
+  void AddPch(const fs::path &relative_filename,
+              const fs::path &relative_to_target_path = "");
+  void AddPchAbsolute(const fs::path &absolute_filepath);
 };
 
 } // namespace buildcc::base

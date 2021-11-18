@@ -14,29 +14,35 @@
  * limitations under the License.
  */
 
+#include "target/api/pch_api.h"
+
 #include "target/target.h"
 
 namespace buildcc::base {
 
-void Target::AddPchAbsolute(const fs::path &absolute_filepath) {
-  state_.ExpectsUnlock();
-  env::assert_fatal(config_.IsValidHeader(absolute_filepath),
-                    fmt::format("{} does not have a valid header extension",
-                                absolute_filepath));
+template <typename T>
+void PchApi<T>::AddPchAbsolute(const fs::path &absolute_filepath) {
+  T &t = static_cast<T &>(*this);
+
+  t.state_.ExpectsUnlock();
+  t.config_.ExpectsValidHeader(absolute_filepath);
 
   const fs::path absolute_pch = fs::path(absolute_filepath).make_preferred();
-  storer_.current_pch_files.user.insert(absolute_pch);
+  t.storer_.current_pch_files.user.insert(absolute_pch);
 }
 
-void Target::AddPch(const fs::path &relative_filename,
-                    const fs::path &relative_to_target_path) {
-  env::log_trace(name_, __FUNCTION__);
+template <typename T>
+void PchApi<T>::AddPch(const fs::path &relative_filename,
+                       const fs::path &relative_to_target_path) {
+  T &t = static_cast<T &>(*this);
 
   // Compute the absolute source path
   fs::path absolute_pch =
-      GetTargetRootDir() / relative_to_target_path / relative_filename;
+      t.env_.GetTargetRootDir() / relative_to_target_path / relative_filename;
 
   AddPchAbsolute(absolute_pch);
 }
+
+template class PchApi<Target>;
 
 } // namespace buildcc::base
