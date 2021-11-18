@@ -16,7 +16,7 @@
 
 #include "target/api/copy_api.h"
 
-#include "target/target.h"
+#include "target/target_info.h"
 
 namespace buildcc::base {
 
@@ -24,13 +24,13 @@ template <typename T>
 void CopyApi<T>::Copy(const T &target,
                       std::initializer_list<CopyOption> options) {
   env::log_trace(__FUNCTION__, "Copy by const ref");
-  SpecializedCopy<const Target &>(target, options);
+  SpecializedCopy<const T &>(target, options);
 }
 
 template <typename T>
 void CopyApi<T>::Copy(T &&target, std::initializer_list<CopyOption> options) {
   env::log_trace(__FUNCTION__, "Copy by move");
-  SpecializedCopy<Target &&>(std::move(target), options);
+  SpecializedCopy<T &&>(std::move(target), options);
 }
 
 // template <typename TargetType>
@@ -116,6 +116,6 @@ void CopyApi<T>::SpecializedCopy(TargetType target,
   }
 }
 
-template class CopyApi<Target>;
+template class CopyApi<TargetInfo>;
 
 } // namespace buildcc::base

@@ -16,7 +16,7 @@
 
 #include "target/api/source_api.h"
 
-#include "target/target.h"
+#include "target/target_info.h"
 
 namespace buildcc::base {
 
@@ -67,6 +67,6 @@ void SourceApi<T>::GlobSources(const fs::path &relative_to_target_path) {
 }
 
 //
-template class SourceApi<Target>;
+template class SourceApi<TargetInfo>;
 
 } // namespace buildcc::base
