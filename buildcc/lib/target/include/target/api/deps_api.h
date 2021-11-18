@@ -14,26 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_API_FLAG_API_H_
-#define TARGET_API_FLAG_API_H_
+#ifndef TARGET_API_DEPS_API_H_
+#define TARGET_API_DEPS_API_H_
 
-#include <string>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 namespace buildcc::base {
 
 // Requires
 // - TargetStorer
 // - TargetState
-template <typename T> class FlagApi {
+// - TargetEnv
+template <typename T> class DepsApi {
 public:
-  void AddPreprocessorFlag(const std::string &flag);
-  void AddCommonCompileFlag(const std::string &flag);
-  void AddPchCompileFlag(const std::string &flag);
-  void AddPchObjectFlag(const std::string &flag);
-  void AddAsmCompileFlag(const std::string &flag);
-  void AddCCompileFlag(const std::string &flag);
-  void AddCppCompileFlag(const std::string &flag);
-  void AddLinkFlag(const std::string &flag);
+  void AddCompileDependency(const fs::path &relative_path);
+  void AddCompileDependencyAbsolute(const fs::path &absolute_path);
+  void AddLinkDependency(const fs::path &relative_path);
+  void AddLinkDependencyAbsolute(const fs::path &absolute_path);
 };
 
 } // namespace buildcc::base
