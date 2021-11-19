@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_BASE_PATH_H_
-#define TARGET_BASE_PATH_H_
+#ifndef TARGET_COMMON_PATH_H_
+#define TARGET_COMMON_PATH_H_
 
 #include <filesystem>
 #include <string>
