@@ -21,7 +21,7 @@
 
 #include <algorithm>
 
-#include "target/path.h"
+#include "target/common/path.h"
 
 namespace fbs = schema::internal;
 

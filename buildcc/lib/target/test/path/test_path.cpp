@@ -1,5 +1,5 @@
 // Internal
-#include "target/path.h"
+#include "target/common/path.h"
 
 #include "env/assert_fatal.h"
 

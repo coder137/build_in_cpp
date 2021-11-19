@@ -28,7 +28,7 @@
 #include <vector>
 
 // Interface
-#include "target/builder_interface.h"
+#include "target/interface/builder_interface.h"
 
 // API
 #include "target/api/target_getter.h"
@@ -43,9 +43,9 @@
 #include "target/friend/link_target.h"
 
 // Internal
-#include "target/path.h"
-#include "target/target_loader.h"
-#include "target/target_storer.h"
+#include "target/base/target_loader.h"
+#include "target/base/target_storer.h"
+#include "target/common/path.h"
 
 // Components
 #include "command/command.h"

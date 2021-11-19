@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_TARGET_LOADER_H_
-#define TARGET_TARGET_LOADER_H_
+#ifndef TARGET_BASE_TARGET_LOADER_H_
+#define TARGET_BASE_TARGET_LOADER_H_
 
-#include "target/loader_interface.h"
+#include "target/interface/loader_interface.h"
 
 #include <string>
 #include <unordered_set>
 
 #include "fmt/format.h"
 
-#include "target/path.h"
+#include "target/common/path.h"
 
 namespace buildcc::internal {
 

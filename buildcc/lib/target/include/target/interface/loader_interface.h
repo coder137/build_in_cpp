@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_UTIL_H_
-#define TARGET_UTIL_H_
+#ifndef TARGET_INTERFACE_LOADER_INTERFACE_H_
+#define TARGET_INTERFACE_LOADER_INTERFACE_H_
 
-#include <string>
-#include <vector>
+#include <filesystem>
 
-#include "target/path.h"
+namespace fs = std::filesystem;
 
 namespace buildcc::internal {
 
-// Aggregates
-template <typename T> std::string aggregate(const T &list) {
-  return fmt::format("{}", fmt::join(list, " "));
-}
+class LoaderInterface {
+public:
+  virtual bool Load() = 0;
 
-std::string aggregate(const buildcc::internal::fs_unordered_set &paths);
+  const fs::path &GetBinaryPath() const { return binary_path_; };
+  bool IsLoaded() const { return loaded_; };
 
-std::string aggregate_with_prefix(const std::string &prefix,
-                                  const fs_unordered_set &dirs);
+protected:
+  bool loaded_{false};
+  fs::path binary_path_;
+};
 
 } // namespace buildcc::internal
 

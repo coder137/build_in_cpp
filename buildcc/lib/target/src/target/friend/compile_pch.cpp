@@ -16,7 +16,7 @@
 
 #include "target/friend/compile_pch.h"
 
-#include "target/path.h"
+#include "target/common/path.h"
 #include "target/target.h"
 
 #include "env/util.h"

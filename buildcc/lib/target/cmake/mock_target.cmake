@@ -1,48 +1,13 @@
 add_library(mock_target STATIC
-    # Utils
-    src/util/util.cpp
-
-    # Common
-    src/common/target_config.cpp
-    src/common/target_state.cpp
-
-    # API
-    src/api/source_api.cpp
-    src/api/include_api.cpp
-    src/api/lib_api.cpp
-    src/api/pch_api.cpp
-    src/api/flag_api.cpp
-    src/api/deps_api.cpp
-
-    src/api/copy_api.cpp
-
-    src/api/target_info_getter.cpp
-    src/api/target_getter.cpp
-
-    # Generator
-    src/generator/generator_loader.cpp
-    src/generator/generator_storer.cpp
-    src/generator/generator.cpp
+    ${COMMON_TARGET_SRCS}
 
     # Generator mocks
     mock/generator/task.cpp
     mock/generator/recheck_states.cpp
 
-    # Target friend
-    src/target/friend/compile_pch.cpp
-    src/target/friend/compile_object.cpp
-    src/target/friend/link_target.cpp
-
-    # Target
-    src/target/target.cpp
-    src/target/target_loader.cpp
-    src/target/target_storer.cpp
-
-    src/target/build.cpp
-
     # Target mocks
-    mock/target/recheck_states.cpp
     mock/target/tasks.cpp
+    mock/target/recheck_states.cpp
 )
 target_include_directories(mock_target PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include

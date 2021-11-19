@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_GENERATOR_LOADER_H_
-#define TARGET_GENERATOR_LOADER_H_
+#ifndef TARGET_BASE_GENERATOR_LOADER_H_
+#define TARGET_BASE_GENERATOR_LOADER_H_
 
-#include "target/loader_interface.h"
+#include "target/interface/loader_interface.h"
 
 #include <string>
 #include <unordered_map>
@@ -25,7 +25,7 @@
 
 #include "fmt/format.h"
 
-#include "target/path.h"
+#include "target/common/path.h"
 
 namespace buildcc::internal {
 
