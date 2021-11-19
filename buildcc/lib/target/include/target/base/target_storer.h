@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_TARGET_STORER_H_
-#define TARGET_TARGET_STORER_H_
+#ifndef TARGET_BASE_TARGET_STORER_H_
+#define TARGET_BASE_TARGET_STORER_H_
 
 #include <unordered_set>
 

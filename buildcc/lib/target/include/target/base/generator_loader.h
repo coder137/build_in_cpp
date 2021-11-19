@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_GENERATOR_LOADER_H_
-#define TARGET_GENERATOR_LOADER_H_
+#ifndef TARGET_BASE_GENERATOR_LOADER_H_
+#define TARGET_BASE_GENERATOR_LOADER_H_
 
 #include "target/interface/loader_interface.h"
 

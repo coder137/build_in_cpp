@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_TARGET_LOADER_H_
-#define TARGET_TARGET_LOADER_H_
+#ifndef TARGET_BASE_TARGET_LOADER_H_
+#define TARGET_BASE_TARGET_LOADER_H_
 
 #include "target/interface/loader_interface.h"
 
