@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "target/generator_loader.h"
+#include "target/base/generator_loader.h"
 
 #include "env/logging.h"
 #include "env/util.h"

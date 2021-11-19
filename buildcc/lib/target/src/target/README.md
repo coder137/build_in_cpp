@@ -5,9 +5,9 @@
   - Common target specific utility functions
   - Assertion functions
   - Validity checks
-- [x] `target_loader.cpp`
+- [x] `base/target_loader.cpp`
   - Load from flatbuffer schema file
-- [x] `target_storer.cpp`
+- [x] `base/target_storer.cpp`
   - Store to flatbuffer schema file
 
 ## Target API

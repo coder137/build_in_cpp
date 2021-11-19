@@ -18,7 +18,7 @@
 
 #include "env/assert_fatal.h"
 
-#include "target/path.h"
+#include "target/base/path.h"
 
 #include "fmt/format.h"
 

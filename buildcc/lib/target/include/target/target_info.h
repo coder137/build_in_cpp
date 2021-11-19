@@ -19,10 +19,10 @@
 
 #include <string>
 
+#include "target/base/target_storer.h"
 #include "target/common/target_config.h"
 #include "target/common/target_env.h"
 #include "target/common/target_state.h"
-#include "target/target_storer.h"
 
 #include "target/api/copy_api.h"
 #include "target/api/deps_api.h"

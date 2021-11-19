@@ -43,9 +43,9 @@
 #include "target/friend/link_target.h"
 
 // Internal
-#include "target/path.h"
-#include "target/target_loader.h"
-#include "target/target_storer.h"
+#include "target/base/path.h"
+#include "target/base/target_loader.h"
+#include "target/base/target_storer.h"
 
 // Components
 #include "command/command.h"

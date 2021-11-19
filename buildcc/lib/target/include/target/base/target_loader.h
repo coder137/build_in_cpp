@@ -24,7 +24,7 @@
 
 #include "fmt/format.h"
 
-#include "target/path.h"
+#include "target/base/path.h"
 
 namespace buildcc::internal {
 

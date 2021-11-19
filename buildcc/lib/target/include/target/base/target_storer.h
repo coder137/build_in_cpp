@@ -19,7 +19,7 @@
 
 #include <unordered_set>
 
-#include "target/path.h"
+#include "target/base/path.h"
 
 namespace buildcc::internal {
 
