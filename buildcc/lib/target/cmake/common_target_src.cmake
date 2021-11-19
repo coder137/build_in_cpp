@@ -65,5 +65,6 @@ set(COMMON_TARGET_SRCS
     # Target
     src/target/target.cpp
     src/target/build.cpp
+    include/target/target_info.h
     include/target/target.h
 )
