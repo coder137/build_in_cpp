@@ -20,10 +20,6 @@
 
 namespace buildcc::base {
 
-template <typename T> std::string TargetGetter<T>::GetTargetInfo() const {
-  return "";
-}
-
 template <typename T> const fs::path &TargetGetter<T>::GetBinaryPath() const {
   const T &t = static_cast<const T &>(*this);
 

@@ -32,8 +32,6 @@ namespace buildcc::base {
 
 template <typename T> class TargetGetter {
 public:
-  std::string GetTargetInfo() const;
-
   const std::string &GetName() const;
   const Toolchain &GetToolchain() const;
   TargetType GetType() const;
