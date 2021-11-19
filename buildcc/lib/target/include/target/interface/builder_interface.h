@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_BUILDER_INTERFACE_H_
-#define TARGET_BUILDER_INTERFACE_H_
+#ifndef TARGET_INTERFACE_BUILDER_INTERFACE_H_
+#define TARGET_INTERFACE_BUILDER_INTERFACE_H_
 
 #include <algorithm>
 #include <functional>
