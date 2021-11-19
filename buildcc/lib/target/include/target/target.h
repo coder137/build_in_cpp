@@ -28,7 +28,7 @@
 #include <vector>
 
 // Interface
-#include "target/builder_interface.h"
+#include "target/interface/builder_interface.h"
 
 // API
 #include "target/api/target_getter.h"

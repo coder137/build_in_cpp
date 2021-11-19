@@ -28,7 +28,7 @@
 
 #include "command/command.h"
 
-#include "target/builder_interface.h"
+#include "target/interface/builder_interface.h"
 
 #include "target/generator_loader.h"
 #include "target/path.h"

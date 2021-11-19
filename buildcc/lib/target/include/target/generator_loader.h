@@ -17,7 +17,7 @@
 #ifndef TARGET_GENERATOR_LOADER_H_
 #define TARGET_GENERATOR_LOADER_H_
 
-#include "target/loader_interface.h"
+#include "target/interface/loader_interface.h"
 
 #include <string>
 #include <unordered_map>
