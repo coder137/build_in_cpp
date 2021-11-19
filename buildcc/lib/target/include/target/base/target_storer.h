@@ -24,10 +24,10 @@
 namespace buildcc::internal {
 
 struct TargetStorer {
-  internal::default_files current_source_files;
-  internal::default_files current_header_files;
-  internal::default_files current_pch_files;
-  internal::default_files current_lib_deps;
+  internal::RelationalPathFiles current_source_files;
+  internal::RelationalPathFiles current_header_files;
+  internal::RelationalPathFiles current_pch_files;
+  internal::RelationalPathFiles current_lib_deps;
 
   internal::fs_unordered_set current_include_dirs;
   internal::fs_unordered_set current_lib_dirs;
@@ -43,8 +43,8 @@ struct TargetStorer {
   std::unordered_set<std::string> current_cpp_compile_flags;
   std::unordered_set<std::string> current_link_flags;
 
-  internal::default_files current_compile_dependencies;
-  internal::default_files current_link_dependencies;
+  internal::RelationalPathFiles current_compile_dependencies;
+  internal::RelationalPathFiles current_link_dependencies;
 };
 
 } // namespace buildcc::internal
