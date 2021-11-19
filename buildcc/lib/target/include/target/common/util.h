@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_UTIL_H_
-#define TARGET_UTIL_H_
+#ifndef TARGET_COMMON_UTIL_H_
+#define TARGET_COMMON_UTIL_H_
 
 #include <string>
 #include <vector>
