@@ -101,6 +101,7 @@ TEST(TargetTestLock, Unlock_APIs) {
   CHECK_THROWS(std::exception,
                exe.GetCompileCommand(exe.GetTargetRootDir() / "dummy_main.c"));
   CHECK_THROWS(std::exception, exe.GetLinkCommand());
+  CHECK_THROWS(std::exception, exe.GetTaskflow());
 
   exe.AddSource("dummy_main.c");
   buildcc::m::CommandExpect_Execute(1, true);
@@ -110,6 +111,7 @@ TEST(TargetTestLock, Unlock_APIs) {
 
   exe.GetCompileCommand(exe.GetTargetRootDir() / "dummy_main.c");
   exe.GetLinkCommand();
+  exe.GetTaskflow();
 }
 
 int main(int ac, char **av) {

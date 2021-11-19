@@ -56,6 +56,12 @@ TEST(TargetPchTestGroup, Target_AddPch_Build) {
   bool exists = fs::exists(target.GetPchHeaderPath());
   CHECK_TRUE(exists);
 
+  // Save file
+  buildcc::env::SaveFile(target.GetPchCompilePath().string().c_str(), "",
+                         false);
+  exists = fs::exists(target.GetPchHeaderPath());
+  CHECK_TRUE(exists);
+
   mock().checkExpectations();
 }
 
