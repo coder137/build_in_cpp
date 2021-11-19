@@ -12,7 +12,7 @@ set(COMMON_TARGET_SRCS
     include/target/common/target_env.h
     include/target/common/target_type.h
 
-    src/util/util.cpp
+    src/common/util.cpp
     include/target/common/util.h
 
     include/target/common/path.h
