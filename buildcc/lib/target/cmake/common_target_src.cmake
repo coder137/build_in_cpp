@@ -1,12 +1,7 @@
 set(COMMON_TARGET_SRCS 
     # Interfaces
-    include/target/loader_interface.h
-    include/target/builder_interface.h
-
-    # Utils
-    src/util/util.cpp
-    include/target/path.h
-    include/target/util.h
+    include/target/interface/loader_interface.h
+    include/target/interface/builder_interface.h
 
     # Common
     src/common/target_config.cpp
@@ -16,6 +11,11 @@ set(COMMON_TARGET_SRCS
     include/target/common/target_state.h
     include/target/common/target_env.h
     include/target/common/target_type.h
+
+    src/util/util.cpp
+    include/target/common/util.h
+
+    include/target/common/path.h
 
     # API
     src/api/source_api.cpp
@@ -39,11 +39,13 @@ set(COMMON_TARGET_SRCS
     include/target/api/target_info_getter.h
     include/target/api/target_getter.h
 
-    # Generator
+    # Base Generator
     src/generator/generator_loader.cpp
     src/generator/generator_storer.cpp
+    include/target/base/generator_loader.h
+
+    # Generator
     src/generator/generator.cpp
-    include/target/generator_loader.h
     include/target/generator.h
 
     # Target friend
@@ -54,13 +56,14 @@ set(COMMON_TARGET_SRCS
     include/target/friend/compile_object.h
     include/target/friend/link_target.h
 
-    # Target
-    src/target/target.cpp
+    # Base Target
     src/target/target_loader.cpp
     src/target/target_storer.cpp
-    include/target/target_loader.h
-    include/target/target_storer.h
-    include/target/target.h
+    include/target/base/target_loader.h
+    include/target/base/target_storer.h
 
+    # Target
+    src/target/target.cpp
     src/target/build.cpp
+    include/target/target.h
 )
