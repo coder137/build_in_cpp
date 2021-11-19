@@ -17,7 +17,7 @@
 #ifndef TARGET_API_TARGET_INFO_GETTER_H_
 #define TARGET_API_TARGET_INFO_GETTER_H_
 
-#include "target/base/path.h"
+#include "target/common/path.h"
 
 #include "target/common/target_config.h"
 #include "target/common/target_state.h"

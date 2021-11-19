@@ -31,7 +31,7 @@
 #include "target/interface/builder_interface.h"
 
 #include "target/base/generator_loader.h"
-#include "target/base/path.h"
+#include "target/common/path.h"
 
 namespace buildcc::base {
 

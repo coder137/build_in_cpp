@@ -21,7 +21,7 @@
 #include <functional>
 #include <unordered_set>
 
-#include "target/base/path.h"
+#include "target/common/path.h"
 #include "target/common/util.h"
 
 namespace buildcc::base {
