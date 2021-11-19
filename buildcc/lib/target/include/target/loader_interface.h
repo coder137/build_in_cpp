@@ -26,12 +26,13 @@ namespace buildcc::internal {
 class LoaderInterface {
 public:
   virtual bool Load() = 0;
-  virtual fs::path GetBinaryPath() const = 0;
 
+  const fs::path &GetBinaryPath() const { return binary_path_; };
   bool IsLoaded() const { return loaded_; };
 
 protected:
   bool loaded_{false};
+  fs::path binary_path_;
 };
 
 } // namespace buildcc::internal

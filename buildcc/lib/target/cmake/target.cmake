@@ -35,7 +35,9 @@ set(TARGET_SRCS
     include/target/api/copy_api.h
     
     src/api/target_info_getter.cpp
+    src/api/target_getter.cpp
     include/target/api/target_info_getter.h
+    include/target/api/target_getter.h
 
     # Generator
     src/generator/generator_loader.cpp

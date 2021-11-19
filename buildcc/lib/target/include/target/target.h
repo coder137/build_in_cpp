@@ -31,6 +31,7 @@
 #include "target/builder_interface.h"
 
 // API
+#include "target/api/target_getter.h"
 #include "target/target_info.h"
 
 // Common
@@ -61,7 +62,9 @@ namespace buildcc::base {
 // of the inheritance pattern
 // NOTE, base::Target is meant to be a blank slate which can be customized by
 // the specialized target-toolchain classes
-class Target : public BuilderInterface, public TargetInfo {
+class Target : public BuilderInterface,
+               public TargetInfo,
+               public TargetGetter<Target> {
 
 public:
   explicit Target(const std::string &name, TargetType type,
@@ -82,57 +85,12 @@ public:
   // Builders
   void Build() override;
 
-  // Getters (GENERIC)
-
-  // NOTE, We are constructing the path
-  fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
-  const fs::path &GetTargetPath() const { return link_target_.GetOutput(); }
-  const fs::path &GetPchHeaderPath() const {
-    return compile_pch_.GetHeaderPath();
-  }
-  const fs::path &GetPchCompilePath() const {
-    return compile_pch_.GetCompilePath();
-  }
-
-  // Const references
-
-  // TODO, Shift getters to source file as well
-  const std::string &GetName() const { return name_; }
-  const Toolchain &GetToolchain() const { return toolchain_; }
-  TargetType GetType() const { return type_; }
-
-  //
-
-  // Getters (state_.ExpectsLock)
-
-  const std::string &GetCompileCommand(const fs::path &source) const {
-    state_.ExpectsLock();
-    return compile_object_.GetObjectData(source).command;
-  }
-  const std::string &GetLinkCommand() const {
-    state_.ExpectsLock();
-    return link_target_.GetCommand();
-  }
-
-  tf::Taskflow &GetTaskflow() {
-    state_.ExpectsLock();
-    return tf_;
-  }
-
-  // TODO, Add more getters
-
 private:
   friend class CompilePch;
   friend class CompileObject;
   friend class LinkTarget;
 
-  friend class CopyApi<Target>;
-  friend class SourceApi<Target>;
-  friend class IncludeApi<Target>;
-  friend class LibApi<Target>;
-  friend class PchApi<Target>;
-  friend class FlagApi<Target>;
-  friend class DepsApi<Target>;
+  friend class TargetGetter<Target>;
 
 private:
   void Initialize();

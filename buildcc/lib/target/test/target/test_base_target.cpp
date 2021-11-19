@@ -64,6 +64,7 @@ TEST(TargetBaseTestGroup, TargetConfig_BadCompileCommand) {
     config.compile_command = "{invalid_compile_string}";
     buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
                                  gcc, "data", config);
+    CHECK(simple.GetType() == buildcc::base::TargetType::Executable);
     simple.AddSource("dummy_main.c");
     CHECK_THROWS(std::exception, simple.Build());
   }

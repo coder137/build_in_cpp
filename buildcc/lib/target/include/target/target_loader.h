@@ -32,6 +32,7 @@ class TargetLoader : public LoaderInterface {
 public:
   explicit TargetLoader(const std::string &name, const fs::path &relative_path)
       : name_(name), relative_path_(relative_path) {
+    binary_path_ = relative_path / fmt::format("{}.bin", name);
     Initialize();
   }
 
@@ -41,10 +42,6 @@ public:
   bool Load() override;
 
   // Getters
-  fs::path GetBinaryPath() const override {
-    return relative_path_ / fmt::format("{}.bin", name_);
-  }
-
   const path_unordered_set &GetLoadedSources() const { return loaded_sources_; }
   const path_unordered_set &GetLoadedHeaders() const { return loaded_headers_; }
   const path_unordered_set &GetLoadedPchs() const { return loaded_pchs_; }
