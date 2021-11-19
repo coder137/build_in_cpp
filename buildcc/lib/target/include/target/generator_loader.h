@@ -32,17 +32,15 @@ namespace buildcc::internal {
 class GeneratorLoader : public LoaderInterface {
 public:
   GeneratorLoader(const std::string &name, const fs::path &absolute_path)
-      : name_(name), path_(absolute_path) {}
+      : name_(name), path_(absolute_path) {
+    binary_path_ = absolute_path / fmt::format("{}.bin", name);
+  }
 
   GeneratorLoader(const GeneratorLoader &loader) = delete;
 
   bool Load() override;
 
   // Getters
-  fs::path GetBinaryPath() const override {
-    return path_ / fmt::format("{}.bin", name_);
-  }
-
   const internal::path_unordered_set &GetLoadedInputFiles() const {
     return loaded_input_files_;
   }
