@@ -17,7 +17,7 @@ add_library(mock_target STATIC
     src/api/copy_api.cpp
 
     src/api/target_info_getter.cpp
-
+    src/api/target_getter.cpp
 
     # Generator
     src/generator/generator_loader.cpp
