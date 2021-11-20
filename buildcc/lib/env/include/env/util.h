@@ -71,7 +71,7 @@ inline bool save_file(const char *name, const std::string &buf, bool binary) {
  * 3: ifs.read -> badbit
  * 4:
  */
-inline bool LoadFile(const char *name, bool binary, std::string *buf) {
+inline bool load_file(const char *name, bool binary, std::string *buf) {
   if (name == nullptr || buf == nullptr) {
     return false;
   }

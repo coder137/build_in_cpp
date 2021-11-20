@@ -91,7 +91,7 @@ TEST(EnvUtilTestGroup, Util_LoadFile_CheckDirectory) {
   constexpr const char *const DIRNAME = "my_random_directory";
   fs::create_directory(DIRNAME);
   std::string str;
-  bool load = buildcc::env::LoadFile(DIRNAME, false, &str);
+  bool load = buildcc::env::load_file(DIRNAME, false, &str);
   std::cout << str << std::endl;
   CHECK_FALSE(load);
 }
@@ -99,7 +99,7 @@ TEST(EnvUtilTestGroup, Util_LoadFile_CheckDirectory) {
 TEST(EnvUtilTestGroup, Util_LoadFile_NullptrName) {
   const char *filename = nullptr;
   std::string str;
-  bool load = buildcc::env::LoadFile(filename, false, &str);
+  bool load = buildcc::env::load_file(filename, false, &str);
   CHECK_FALSE(load);
 }
 
@@ -107,14 +107,14 @@ TEST(EnvUtilTestGroup, Util_LoadFile_NullptrBuf) {
   constexpr const char *const FILENAME = "NullptrBuf.txt";
 
   std::string *str = nullptr;
-  bool load = buildcc::env::LoadFile(FILENAME, false, str);
+  bool load = buildcc::env::load_file(FILENAME, false, str);
   CHECK_FALSE(load);
 }
 
 TEST(EnvUtilTestGroup, Util_LoadFile_NullptrBufAndName) {
   const char *filename = nullptr;
   std::string *str = nullptr;
-  bool load = buildcc::env::LoadFile(filename, false, str);
+  bool load = buildcc::env::load_file(filename, false, str);
   CHECK_FALSE(load);
 }
 
@@ -126,7 +126,7 @@ TEST(EnvUtilTestGroup, Util_LoadFile_ReadBinary) {
   CHECK_TRUE(save);
 
   std::string str;
-  bool load = buildcc::env::LoadFile(FILENAME, true, &str);
+  bool load = buildcc::env::load_file(FILENAME, true, &str);
   MEMCMP_EQUAL(data, str.data(), sizeof(data));
   CHECK_TRUE(load);
 }
@@ -138,7 +138,7 @@ TEST(EnvUtilTestGroup, Util_LoadFile_ReadTxt) {
   CHECK_TRUE(save);
 
   std::string str;
-  bool load = buildcc::env::LoadFile(FILENAME, false, &str);
+  bool load = buildcc::env::load_file(FILENAME, false, &str);
   STRCMP_EQUAL(str.c_str(), "ReadTxt");
   CHECK_TRUE(load);
 }
@@ -155,7 +155,7 @@ TEST(EnvUtilTestGroup, Util_LoadFile_CannotOpen) {
   }
 
   std::string str;
-  bool load = buildcc::env::LoadFile(FILENAME, true, &str);
+  bool load = buildcc::env::load_file(FILENAME, true, &str);
   CHECK_FALSE(load);
 }
 

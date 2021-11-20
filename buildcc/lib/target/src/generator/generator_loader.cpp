@@ -32,7 +32,7 @@ bool GeneratorLoader::Load() {
   auto file_path = GetBinaryPath();
   std::string buffer;
   bool is_loaded =
-      env::LoadFile(path_as_string(file_path).c_str(), true, &buffer);
+      env::load_file(path_as_string(file_path).c_str(), true, &buffer);
   if (!is_loaded) {
     return false;
   }
