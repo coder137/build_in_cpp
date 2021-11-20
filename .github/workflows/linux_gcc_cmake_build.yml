@@ -110,6 +110,11 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
           cmake --build . --target run_hybrid_depchaining_example_linux
+      
+      - name: Hybrid Target Info Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
+        run: |
+          cmake --build . --target run_hybrid_targetinfo_example_linux
 
   build_single:
     name: GCC single lib
@@ -216,6 +221,11 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
           cmake --build . --target run_hybrid_depchaining_example_linux
+
+      - name: Hybrid Target Info Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
+        run: |
+          cmake --build . --target run_hybrid_targetinfo_example_linux
 
   build_interface:
     name: GCC interface lib
