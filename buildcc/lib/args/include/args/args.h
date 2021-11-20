@@ -33,6 +33,10 @@ namespace buildcc {
 
 class Args {
 public:
+  /**
+   * @brief Toolchain State used by the Register module to selectively build or
+   * test targets
+   */
   struct ToolchainState {
     bool build{false};
     bool test{false};
@@ -41,6 +45,12 @@ public:
   // TODO, Rename to Toolchain
   // TODO, Put ToolchainState into Args::Toolchain
   // TODO, Add operator() overload and remove ConstructToolchain
+
+  /**
+   * @brief Toolchain Arg used to receive toolchain information through the
+   * command line
+   * Bundled with Toolchain State
+   */
   struct ToolchainArg {
     ToolchainArg(){};
 
@@ -72,6 +82,8 @@ public:
     std::string linker{""};
   };
 
+  // NOTE, Incomplete without pch_compile_command
+  // TODO, Update this for PCH
   struct TargetArg {
     TargetArg(){};
 
@@ -90,9 +102,19 @@ public:
   const CLI::App &ConstRef() const { return app_; }
 
   // Setters
+
+  /**
+   * @brief Add toolchain with a unique name and description
+   *
+   * @param out Receive the toolchain information through the CLI
+   * @param initial Set the default toolchain information as a fallback
+   */
   void AddToolchain(const std::string &name, const std::string &description,
                     ToolchainArg &out,
                     const ToolchainArg &initial = ToolchainArg());
+
+  // NOTE, Incomplete TargetArg
+  // TODO, Update for pch_compile_command
   void AddTarget(const std::string &name, const std::string &description,
                  TargetArg &out, const TargetArg &initial = TargetArg());
 
