@@ -7,8 +7,6 @@ project(hybrid_targetinfo_example)
 # Bootstrap your build file using CMake
 add_executable(hybrid_targetinfo_example build.cpp)
 target_link_libraries(hybrid_targetinfo_example PRIVATE buildcc)
-# target_compile_options(hybrid_targetinfo_example PRIVATE -Og -g)
-# target_link_options(hybrid_targetinfo_example PRIVATE -g)
 
 # TODO, Add this only if MINGW is used
 # https://github.com/msys2/MINGW-packages/issues/2303
