@@ -260,8 +260,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
   {
     const fs::path absolute_header_path =
         fs::path(BUILD_SCRIPT_SOURCE) / "data" / RELATIVE_HEADER_FILE;
-    buildcc::env::SaveFile(absolute_header_path.string().c_str(),
-                           std::string{""}, false);
+    buildcc::env::save_file(absolute_header_path.string().c_str(),
+                            std::string{""}, false);
 
     buildcc::base::Target add_header(
         NAME, buildcc::base::TargetType::Executable, gcc, "data");

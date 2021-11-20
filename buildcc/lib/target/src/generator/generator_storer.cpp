@@ -45,9 +45,9 @@ bool Generator::Store() {
   fbs::FinishGeneratorBuffer(builder, fbs_generator);
 
   const fs::path file_path = GetBinaryPath();
-  return env::SaveFile(path_as_string(file_path).c_str(),
-                       (const char *)builder.GetBufferPointer(),
-                       builder.GetSize(), true);
+  return env::save_file(path_as_string(file_path).c_str(),
+                        (const char *)builder.GetBufferPointer(),
+                        builder.GetSize(), true);
 }
 
 } // namespace buildcc::base

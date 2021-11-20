@@ -79,7 +79,7 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     foolib.Build();
-    buildcc::env::SaveFile(foolib.GetTargetPath().string().c_str(),
+    buildcc::env::save_file(foolib.GetTargetPath().string().c_str(),
                            std::string{""}, false);
 
     // Executable for static
@@ -131,7 +131,7 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
   buildcc::m::CommandExpect_Execute(1, true);
   foolib.Build();
 
-  buildcc::env::SaveFile(foolib.GetTargetPath().string().c_str(),
+  buildcc::env::save_file(foolib.GetTargetPath().string().c_str(),
                          std::string{""}, false);
 
   // * Initial executable
@@ -194,7 +194,7 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     buildcc::m::CommandExpect_Execute(1, true);
     foolib.Build();
 
-    bool saved = buildcc::env::SaveFile(foolib.GetTargetPath().string().c_str(),
+    bool saved = buildcc::env::save_file(foolib.GetTargetPath().string().c_str(),
                                         std::string{""}, false);
     CHECK_TRUE(saved);
 
@@ -222,9 +222,9 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     buildcc::m::CommandExpect_Execute(1, true);
     foolib.Build();
 
-    // * To make sure that SaveFile is newer
+    // * To make sure that save_file is newer
     sleep(1);
-    bool saved = buildcc::env::SaveFile(foolib.GetTargetPath().string().c_str(),
+    bool saved = buildcc::env::save_file(foolib.GetTargetPath().string().c_str(),
                                         std::string{""}, false);
     CHECK_TRUE(saved);
 

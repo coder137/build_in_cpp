@@ -136,7 +136,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
   }
 
   sleep(1);
-  bool saved = buildcc::env::SaveFile(
+  bool saved = buildcc::env::save_file(
       (buildcc::env::get_project_root_dir() / "new_source.cpp")
           .string()
           .c_str(),

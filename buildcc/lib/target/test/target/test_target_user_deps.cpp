@@ -77,12 +77,12 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_Rebuild) {
   }
 
   {
-    // * To make sure that SaveFile is newer
+    // * To make sure that save_file is newer
     sleep(1);
     const fs::path new_source =
         buildcc::env::get_project_root_dir() / "data" / "new_source.cpp";
     std::string buf{""};
-    buildcc::env::SaveFile(new_source.string().c_str(), buf, false);
+    buildcc::env::save_file(new_source.string().c_str(), buf, false);
   }
 
   {
@@ -114,12 +114,12 @@ TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_Rebuild) {
   }
 
   {
-    // * To make sure that SaveFile is newer
+    // * To make sure that save_file is newer
     sleep(1);
     const fs::path new_source =
         buildcc::env::get_project_root_dir() / "data" / "new_source.cpp";
     std::string buf{""};
-    buildcc::env::SaveFile(new_source.string().c_str(), buf, false);
+    buildcc::env::save_file(new_source.string().c_str(), buf, false);
   }
 
   {
