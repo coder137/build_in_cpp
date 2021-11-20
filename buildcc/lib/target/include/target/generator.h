@@ -57,10 +57,35 @@ public:
   void AddDefaultArguments(
       const std::unordered_map<std::string, std::string> &arguments);
 
+  /**
+   * @brief Add absolute input path pattern to generator
+   * NOTE: We can use {gen_root_dir} and {gen_build_dir} in the
+   * absolute_input_pattern
+   *
+   * If `identifier` is supplied it is added to default arguments as a key
+   * Example: fmt::format("{identifier}") -> "absolute_input_pattern"
+   */
   void AddInput(const std::string &absolute_input_pattern,
                 const char *identifier = nullptr);
+
+  /**
+   * @brief Add absolute output path pattern to generator
+   * NOTE: We can use {gen_root_dir} and {gen_build_dir} in the
+   * absolute_output_pattern
+   *
+   * If `identifier` is supplied it is added to default arguments as a key
+   * Example: fmt::format("{identifier}") -> "absolute_output_pattern"
+   */
   void AddOutput(const std::string &absolute_output_pattern,
                  const char *identifier = nullptr);
+
+  /**
+   * @brief Add a command_pattern that is fed to `Command::Execute` internally
+   * NOTE: The order of all commands are maintained (`std::vector::push_back`)
+   *
+   * If you would like to run the commands in parallel, set parallel == true in
+   * the constructor
+   */
   void AddCommand(
       const std::string &command_pattern,
       const std::unordered_map<const char *, std::string> &arguments = {});
@@ -68,7 +93,7 @@ public:
   void Build() override;
 
   // Getter
-  fs::path GetBinaryPath() const { return loader_.GetBinaryPath(); }
+  const fs::path &GetBinaryPath() const { return loader_.GetBinaryPath(); }
   tf::Taskflow &GetTaskflow() { return tf_; }
 
   const std::string &GetName() { return name_; }
