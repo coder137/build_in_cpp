@@ -29,6 +29,9 @@ namespace buildcc::base {
 // - TargetEnv
 template <typename T> class DepsApi {
 public:
+  // TODO, AddPchDependency
+  // TODO, Rename AddObjectDependency
+  // TODO, Rename AddTargetDependency
   void AddCompileDependency(const fs::path &relative_path);
   void AddCompileDependencyAbsolute(const fs::path &absolute_path);
   void AddLinkDependency(const fs::path &relative_path);
