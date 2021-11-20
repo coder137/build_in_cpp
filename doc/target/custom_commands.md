@@ -42,7 +42,7 @@ See [build.cpp Target::Build API](../../buildcc/lib/target/src/target/build.cpp)
 
 # PCH Specific
 
-See [compile_pch.cpp Target::ConstructPchCompileCommand API](../../buildcc/lib/target/src/target/compile_pch.cpp)
+See [CompilePch::ConstructCompileCommand API](../../buildcc/lib/target/src/target/friend/compile_pch.cpp)
 
 - `compiler`: Selects CPP compiler if project contains CPP source else C compiler
 - `compile_flags`: Selects CPP flags if project contains CPP source else C flags
@@ -52,7 +52,7 @@ See [compile_pch.cpp Target::ConstructPchCompileCommand API](../../buildcc/lib/t
 
 # Compile Specific
 
-See [compile_source.cpp Target::ConstructCompileCommand API](../../buildcc/lib/target/src/target/compile_source.cpp)
+See [CompileObject::CacheCompileCommands API](../../buildcc/lib/target/src/target/friend/compile_object.cpp)
 
 - `compiler`: Automatically chosen amongst ASM, C and C++ toolchain compiler
 - `compile_flags`: Automatically chosen amongst `{c/cpp}_flags`
@@ -61,7 +61,7 @@ See [compile_source.cpp Target::ConstructCompileCommand API](../../buildcc/lib/t
 
 # Links Specific
 
-See [link_target.cpp Target::ConstructLinkCommand API](../../buildcc/lib/target/src/target/link_target.cpp)
+See [LinkTarget::CacheLinkCommand API](../../buildcc/lib/target/src/target/friend/link_target.cpp)
 
 - `output`: Generated target as `Target::GetName()`
 - `compiled_sources`: Aggregated object files
