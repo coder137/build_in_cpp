@@ -34,7 +34,7 @@ public:
   // Target State
   const TargetState &GetState() const;
   bool IsBuilt() const;
-  bool GetLockState() const;
+  bool IsLocked() const;
 
   // Target Env
   const fs::path &GetTargetRootDir() const;

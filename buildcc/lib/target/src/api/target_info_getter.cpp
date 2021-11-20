@@ -33,7 +33,7 @@ template <typename T> bool TargetInfoGetter<T>::IsBuilt() const {
   return t.state_.build;
 }
 
-template <typename T> bool TargetInfoGetter<T>::GetLockState() const {
+template <typename T> bool TargetInfoGetter<T>::IsLocked() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.state_.lock;
