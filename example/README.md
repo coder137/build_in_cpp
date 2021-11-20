@@ -106,6 +106,8 @@ Multi hosts and multi targets
 
 - Tested with **host** windows and linux with **host compilers** gcc, clang and msvc to generate **hybrid targets** using different compilers i.e gcc, clang and msvc
 
+**Current state of examples**
+
 - [x] Simple
   - Similar to Flags example with `Register` and `Args` module 
 - [x] Foolib
