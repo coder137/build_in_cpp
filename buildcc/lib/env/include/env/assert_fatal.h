@@ -29,6 +29,9 @@ namespace buildcc::env {
  */
 [[noreturn]] void assert_handle_fatal();
 
+/**
+ * @brief Compile time expr asserts fatally when false
+ */
 template <bool expr> inline void assert_fatal(const char *message) {
   if constexpr (!expr) {
     env::log_critical("assert", message);
@@ -36,22 +39,34 @@ template <bool expr> inline void assert_fatal(const char *message) {
   }
 }
 
+/**
+ * @brief Compile time expr asserts fatally when false
+ */
 template <bool expr> inline void assert_fatal(const std::string &message) {
   assert_fatal<expr>(message.c_str());
 }
 
+/**
+ * @brief Runtime expr asserts fatally when false
+ */
 inline void assert_fatal(bool expression, const char *message) {
   if (!expression) {
     assert_fatal<false>(message);
   }
 }
 
+/**
+ * @brief Runtime expr asserts fatally when false
+ */
 inline void assert_fatal(bool expression, const std::string &message) {
   assert_fatal(expression, message.c_str());
 }
 
 } // namespace buildcc::env
 
+/**
+ * @brief Runtime expr asserts fatally when false
+ */
 #define ASSERT_FATAL(expr, message)                                            \
   ((expr) ? static_cast<void>(0) : buildcc::env::assert_fatal<false>(message))
 
