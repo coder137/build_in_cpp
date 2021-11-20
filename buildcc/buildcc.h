@@ -32,6 +32,8 @@
 
 // Base
 #include "toolchain/toolchain.h"
+#include "target/generator.h"
+#include "target/target_info.h"
 #include "target/target.h"
 
 // Specialized Toolchain
@@ -50,6 +52,7 @@
 
 // Plugins
 #include "plugins/clang_compile_commands.h"
+#include "plugins/buildcc_find.h"
 
 // BuildCC Modules
 #include "args/args.h"
