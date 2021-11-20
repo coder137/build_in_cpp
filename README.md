@@ -125,20 +125,11 @@ Developers interested in using **_BuildCC_**
 Developers interested in contributing to **_BuildCC_**
 
 - [Project internal information](doc/developer/project_internals.md)
-- Bootstrapping
-- Current code structure
-- Guidelines
 
 # FAQ
 
-## Generator
-
-- How do I use the `base::Generator`
-
 ## Target
 
-- Brief overview of `base::TargetInfo`
-- Brief overview of `base::Target`
 - [How do I supply my own custom `compile_command` and `link_command` to targets?](doc/target/custom_commands.md)
 
 ## Serialization
