@@ -44,7 +44,7 @@ const std::string &Command::GetDefaultValueByKey(const std::string &key) const {
 }
 
 std::string Command::Construct(
-    std::string_view format,
+    const std::string &pattern,
     const std::unordered_map<const char *, std::string> &arguments) const {
   // Construct your arguments
   fmt::dynamic_format_arg_store<fmt::format_context> store;
@@ -61,7 +61,7 @@ std::string Command::Construct(
                 });
 
   // Construct your command
-  return fmt::vformat(format, store);
+  return fmt::vformat(pattern, store);
 }
 
 } // namespace buildcc
