@@ -1,6 +1,4 @@
-# Developer Guide
-
-Developers interested in contributing to **_BuildCC_**
+# Project Internals
 
 ## Build
 
