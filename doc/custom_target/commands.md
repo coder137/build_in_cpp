@@ -19,7 +19,7 @@ config.link_command = "{cpp_compiler} {link_flags} {compiled_sources} -o {output
 
 # General
 
-The following `{}` commands are available to both `pch_command`, `compile_command` and `link_command`
+The following `{}` commands are available to `pch_command`, `compile_command` and `link_command`
 
 See [build.cpp Target::Build API](../../buildcc/lib/target/src/target/build.cpp)
 

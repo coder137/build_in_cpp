@@ -95,9 +95,9 @@ Build C, C++ and ASM files in C++
 
 ## Community Plugin
 
-- `buildcc::base::Target` contains public getters that can be used to construct unique community plugins.
+- `buildcc::base::Generator`, `buildcc::base::TargetInfo` and `buildcc::base::Target` contains public getters that can be used to construct unique community plugins.
 - Common tools and plugins would have first-party support in buildcc.
-- All other tools and plugins can be maintained through individual developers.
+- All other tools and plugins can be maintained by individual developers.
 
 **Current state of BuildCC supported plugins**
 
