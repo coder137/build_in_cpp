@@ -80,7 +80,7 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     buildcc::m::CommandExpect_Execute(1, true);
     foolib.Build();
     buildcc::env::save_file(foolib.GetTargetPath().string().c_str(),
-                           std::string{""}, false);
+                            std::string{""}, false);
 
     // Executable for static
     buildcc::base::Target exe_target(
@@ -100,7 +100,7 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
     foolib.Build();
-    CHECK_FALSE(foolib.GetBuildState());
+    CHECK_FALSE(foolib.IsBuilt());
 
     // Executable for static
     buildcc::base::Target exe_target(
@@ -109,7 +109,7 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
     exe_target.Build();
-    CHECK_FALSE(exe_target.GetBuildState());
+    CHECK_FALSE(exe_target.IsBuilt());
   }
 
   mock().checkExpectations();
@@ -132,7 +132,7 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
   foolib.Build();
 
   buildcc::env::save_file(foolib.GetTargetPath().string().c_str(),
-                         std::string{""}, false);
+                          std::string{""}, false);
 
   // * Initial executable
   // Executable for static
@@ -194,8 +194,8 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     buildcc::m::CommandExpect_Execute(1, true);
     foolib.Build();
 
-    bool saved = buildcc::env::save_file(foolib.GetTargetPath().string().c_str(),
-                                        std::string{""}, false);
+    bool saved = buildcc::env::save_file(
+        foolib.GetTargetPath().string().c_str(), std::string{""}, false);
     CHECK_TRUE(saved);
 
     buildcc::base::Target exe_target(
@@ -224,8 +224,8 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
 
     // * To make sure that save_file is newer
     sleep(1);
-    bool saved = buildcc::env::save_file(foolib.GetTargetPath().string().c_str(),
-                                        std::string{""}, false);
+    bool saved = buildcc::env::save_file(
+        foolib.GetTargetPath().string().c_str(), std::string{""}, false);
     CHECK_TRUE(saved);
 
     buildcc::base::Target exe_target(

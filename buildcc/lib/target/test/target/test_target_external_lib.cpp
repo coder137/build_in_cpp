@@ -48,7 +48,7 @@ TEST(TargetTestExternalLib, TestAddLibDir) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   exe.Build();
-  CHECK_TRUE(exe.GetBuildState());
+  CHECK_TRUE(exe.IsBuilt());
 
   mock().checkExpectations();
 
@@ -75,7 +75,7 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_Simple) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   exe.Build();
-  CHECK_TRUE(exe.GetBuildState());
+  CHECK_TRUE(exe.IsBuilt());
 
   mock().checkExpectations();
 
@@ -103,7 +103,7 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_RebuildChanged) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     exe.Build();
-    CHECK_TRUE(exe.GetBuildState());
+    CHECK_TRUE(exe.IsBuilt());
   }
 
   // Add
@@ -117,7 +117,7 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_RebuildChanged) {
     buildcc::base::m::TargetExpect_ExternalLibChanged(1, &exe);
     buildcc::m::CommandExpect_Execute(1, true);
     exe.Build();
-    CHECK_TRUE(exe.GetBuildState());
+    CHECK_TRUE(exe.IsBuilt());
   }
 
   // Remove
@@ -130,7 +130,7 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_RebuildChanged) {
     buildcc::base::m::TargetExpect_ExternalLibChanged(1, &exe);
     buildcc::m::CommandExpect_Execute(1, true);
     exe.Build();
-    CHECK_TRUE(exe.GetBuildState());
+    CHECK_TRUE(exe.IsBuilt());
   }
 
   mock().checkExpectations();

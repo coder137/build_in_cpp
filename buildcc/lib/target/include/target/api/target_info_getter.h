@@ -33,7 +33,7 @@ template <typename T> class TargetInfoGetter {
 public:
   // Target State
   const TargetState &GetState() const;
-  bool GetBuildState() const;
+  bool IsBuilt() const;
   bool GetLockState() const;
 
   // Target Env
