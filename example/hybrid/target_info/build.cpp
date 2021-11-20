@@ -6,6 +6,7 @@ constexpr const char *const EXE = "build";
 
 // Function Prototypes
 static void clean_cb();
+static void genericadd_ho_cb(TargetInfo &genericadd_ho);
 static void genericadd1_build_cb(BaseTarget &genericadd,
                                  const TargetInfo &genericadd_ho);
 static void genericadd2_build_cb(BaseTarget &genericadd,
@@ -33,7 +34,7 @@ int main(int argc, char **argv) {
 
   // TargetInfo
   TargetInfo genericadd_ho("files");
-  genericadd_ho.AddIncludeDir("include", true);
+  reg.Callback(genericadd_ho_cb, genericadd_ho);
 
   ExecutableTarget_gcc g_genericadd1("generic_add_1", gcc, "files");
   ExecutableTarget_msvc m_genericadd1("generic_add_1", msvc, "files");
@@ -78,6 +79,10 @@ int main(int argc, char **argv) {
 static void clean_cb() {
   env::log_info(EXE, fmt::format("Cleaning {}", env::get_project_build_dir()));
   fs::remove_all(env::get_project_build_dir());
+}
+
+static void genericadd_ho_cb(TargetInfo &genericadd_ho) {
+  genericadd_ho.AddIncludeDir("include", true);
 }
 
 static void genericadd1_build_cb(BaseTarget &genericadd,
