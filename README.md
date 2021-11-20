@@ -143,7 +143,7 @@ Developers interested in contributing to **_BuildCC_**
 
 ## Serialization
 
-- Understanding `path.fbs`
+- [Understanding `path.fbs`](doc/serialization/path_fbs.md)
 - Understanding `generator.fbs`
 - Understanding `target.fbs`
 
