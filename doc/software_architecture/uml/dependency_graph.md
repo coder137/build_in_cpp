@@ -34,6 +34,7 @@ LinkFlags ..> Linker
 LinkDirs ..> Linker
 ObjectFile ..> Linker
 Library ..> Linker
+Modules ..> Linker
 
 Linker ..> Executable
 Linker ..> Library
