@@ -33,11 +33,11 @@ bool Generator::Store() {
   flatbuffers::FlatBufferBuilder builder;
 
   auto fbs_input_files =
-      internal::CreateFbsVectorPath(builder, current_input_files_.internal);
+      internal::create_fbs_vector_path(builder, current_input_files_.internal);
   auto fbs_output_files =
-      internal::CreateFbsVectorString(builder, current_output_files_);
+      internal::create_fbs_vector_string(builder, current_output_files_);
   auto fbs_commands =
-      internal::CreateFbsVectorString(builder, current_commands_);
+      internal::create_fbs_vector_string(builder, current_commands_);
 
   auto fbs_generator =
       fbs::CreateGeneratorDirect(builder, name_.c_str(), &fbs_input_files,
