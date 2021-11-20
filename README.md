@@ -133,12 +133,13 @@ Developers interested in contributing to **_BuildCC_**
 
 ## Generator
 
-- How do I use the `Generator`
+- How do I use the `base::Generator`
 
 ## Target
 
-- Brief overview of `base::TargetInfo` and `base::Target`
-- [How do I supply my own custom `compile_command` and `link_command` to targets?](doc/custom_target/commands.md)
+- Brief overview of `base::TargetInfo`
+- Brief overview of `base::Target`
+- [How do I supply my own custom `compile_command` and `link_command` to targets?](doc/target/custom_commands.md)
 
 ## Serialization
 
