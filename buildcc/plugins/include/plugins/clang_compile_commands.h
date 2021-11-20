@@ -27,8 +27,15 @@ public:
       : targets_(targets) {}
   ClangCompileCommands(const ClangCompileCommands &compile_commands) = delete;
 
+  /**
+   * @brief Add non-null targets
+   */
   void AddTarget(const base::Target *target);
 
+  /**
+   * @brief Generate clang compile commands file in `env::get_project_build_dir`
+   * folder
+   */
   void Generate();
 
 private:
