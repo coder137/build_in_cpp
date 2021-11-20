@@ -72,7 +72,7 @@ Build C, C++ and ASM files in C++
 **Taskflow dependency for hybrid/dep_chaining example**
 ![Hybrid Dep Chain example](example/hybrid/dep_chaining/graph.PNG)
 
-- Chain Generator with Targets for Dependency
+- Chain **Generator** with **Targets** for Dependency
 - 1 C and 1 CPP example for both toolchains
 
 # Software Architecture
@@ -118,22 +118,37 @@ Contains **proof of concept** and **real world** [examples](example/README.md).
 Developers interested in using **_BuildCC_**
 
 - [Installation using CMake](doc/user/installation_using_cmake.md)
+- API List
 
 # Developer Guide
 
 Developers interested in contributing to **_BuildCC_**
 
 - [Project internal information](doc/developer/project_internals.md)
+- Bootstrapping
 - Current code structure
 - Guidelines
 
 # FAQ
 
+## Generator
+
+- How do I use the `Generator`
+
+## Target
+
+- Brief overview of `base::TargetInfo` and `base::Target`
+- [How do I supply my own custom `compile_command` and `link_command` to targets?](doc/custom_target/commands.md)
+
+## Serialization
+
+- Understanding `path.fbs`
+- Understanding `generator.fbs`
+- Understanding `target.fbs`
+
+## Design/Reasoning
+
 - [Why has _this_ third-party library been chosen?](doc/faq/why_this_lib.md)
-- [How do I create my own custom target commands?](doc/custom_target/commands.md)
-
-## Design
-
 - [Why do you track _include directories_ and _header files_?](doc/faq/include_dir_vs_header_files.md)
 
 ## Miscellaneous
