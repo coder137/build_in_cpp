@@ -155,9 +155,9 @@ typedef std::unordered_set<fs::path, PathHash> fs_unordered_set;
 // In this case we opt for runtime (speed) optimization instead of memory
 // optimization by caching the `user` information and `internal` information
 // together
-struct default_files {
-  default_files() {}
-  default_files(const path_unordered_set &i, const fs_unordered_set &u)
+struct RelationalPathFiles {
+  RelationalPathFiles() {}
+  RelationalPathFiles(const path_unordered_set &i, const fs_unordered_set &u)
       : internal(i), user(u) {}
 
   void Convert() {

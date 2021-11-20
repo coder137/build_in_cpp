@@ -36,6 +36,19 @@ public:
 
   void Clean(const std::function<void(void)> &clean_cb);
 
+  template <typename C, typename... Params>
+  void Callback(const C &build_cb, Params &...params) {
+    build_cb(std::forward<Params &>(params)...);
+  }
+
+  template <typename C, typename... Params>
+  void CallbackIf(const Args::ToolchainState &toolchain_state,
+                  const C &build_cb, Params &...params) {
+    if (toolchain_state.build) {
+      Callback(build_cb, std::forward<Params &>(params)...);
+    }
+  }
+
   /**
    * @brief Register the Target to be built
    *
@@ -48,10 +61,13 @@ public:
   void Build(const Args::ToolchainState &toolchain_state, const C &build_cb,
              base::Target &target, Params &...params) {
     tf::Task task;
-    if (toolchain_state.build) {
-      build_cb(target, std::forward<Params &>(params)...);
-      task = BuildTargetTask(target);
-    }
+    CallbackIf(
+        toolchain_state,
+        [&](base::Target &ltarget, Params &...lparams) {
+          build_cb(ltarget, std::forward<Params &>(lparams)...);
+          task = BuildTargetTask(ltarget);
+        },
+        target, std::forward<Params &>(params)...);
     BuildStoreTask(target.GetUniqueId(), task);
   }
 

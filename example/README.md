@@ -120,5 +120,9 @@ Multi hosts and multi targets
   - Precompile header usage with GCC and MSVC compilers 
 - [x] Dependency Chaining
   - Chain `Generators` and `Targets` using the `Register` module 
+- [x] Target Info
+  - Target Info usage to store Target specific information
+  - Example usage for Header Only targets, however it can store information for all Target inputs
+  - Common information used between multiple targets can be stored into a `TargetInfo` instance
 - [ ] Debugging
 - [ ] Cross Compilation with Unit Testing
