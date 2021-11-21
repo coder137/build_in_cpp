@@ -46,7 +46,14 @@ enum class CopyOption {
 // - TargetState
 template <typename T> class CopyApi {
 public:
+  /**
+   * @brief Copy when Target supplied by const reference
+   */
   void Copy(const T &target, std::initializer_list<CopyOption> options);
+
+  /**
+   * @brief Copy when Target supplied by move
+   */
   void Copy(T &&target, std::initializer_list<CopyOption> options);
 
 private:

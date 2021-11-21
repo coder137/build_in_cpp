@@ -34,13 +34,25 @@ public:
   Register(const Args &args) : args_(args) { Initialize(); }
   Register(const Register &) = delete;
 
+  /**
+   * @brief Folders and files that need to be cleaned when `clean == true`
+   */
   void Clean(const std::function<void(void)> &clean_cb);
 
+  /**
+   * @brief Generic register callback with variable arguments
+   * Can be used to organize code into functional chunks
+   */
   template <typename C, typename... Params>
   void Callback(const C &build_cb, Params &...params) {
     build_cb(std::forward<Params &>(params)...);
   }
 
+  /**
+   * @brief Generic register callback that is run when `toolchain_state.build ==
+   * true`
+   * Can be used to add Toolchain-Target specific information
+   */
   template <typename C, typename... Params>
   void CallbackIf(const Args::ToolchainState &toolchain_state,
                   const C &build_cb, Params &...params) {
@@ -51,11 +63,6 @@ public:
 
   /**
    * @brief Register the Target to be built
-   *
-   * @param toolchain_state `build state` registers the target
-   * @param build_cb custom user callback to setup target build requirements
-   * @param target target taskflow is passed to build_cb (passed as reference)
-   * @param params Additional parameters (passed as reference)
    */
   template <typename C, typename... Params>
   void Build(const Args::ToolchainState &toolchain_state, const C &build_cb,
@@ -71,6 +78,9 @@ public:
     BuildStoreTask(target.GetUniqueId(), task);
   }
 
+  /**
+   * @brief Register the generator to be built
+   */
   template <typename C, typename... Params>
   void Build(const C &build_cb, base::Generator &generator, Params &...params) {
     build_cb(generator, std::forward<Params &>(params)...);
@@ -82,10 +92,7 @@ public:
    * @brief Setup dependency between 2 Targets
    * PreReq: Call `Register::Build` before calling `Register::Dep`
    *
-   * @param target
-   * @param dependency
    * Target runs after dependency is built
-   *
    */
   void Dep(const base::BuilderInterface &target,
            const base::BuilderInterface &dependency);
@@ -93,24 +100,28 @@ public:
   /**
    * @brief Register the Target to be run
    * PreReq: Call `Register::Build` before calling `Register::Test`
+   * PreReq: Requires toolchain_state.build && test to be true
    *
-   * @param toolchain_state `build and test state` registers the target for
-   * testing
-   * @param command Command string pattern
-   * `{executable}` is the built executable which is always added to the pattern
-   *
-   * @param target Target added as the `{executable}` argument
-   *
-   * @param arguments Addition arguments to be added to the command string
-   * pattern
+   * Target is added as the `{executable}` argument
    */
   void
   Test(const Args::ToolchainState &toolchain_state, const std::string &command,
        const base::Target &target,
        const std::unordered_map<const char *, std::string> &arguments = {});
 
+  /**
+   * @brief Builds the targets that have been dynamically added through
+   * `Register::Build`
+   */
   void RunBuild();
+
+  /**
+   * @brief Runs the targets that have been dynamically added through
+   * `Register::Test`
+   */
   void RunTest();
+
+  // TODO, Add a function to create Taskflow .dot dump into file or string
 
   // Getters
   const tf::Taskflow &GetTaskflow() const { return build_tf_; }

@@ -57,8 +57,8 @@ TEST(TargetPchTestGroup, Target_AddPch_Build) {
   CHECK_TRUE(exists);
 
   // Save file
-  buildcc::env::SaveFile(target.GetPchCompilePath().string().c_str(), "",
-                         false);
+  buildcc::env::save_file(target.GetPchCompilePath().string().c_str(), "",
+                          false);
   exists = fs::exists(target.GetPchHeaderPath());
   CHECK_TRUE(exists);
 
@@ -127,7 +127,7 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
     sleep(1);
     fs::path filename =
         fs::path(BUILD_SCRIPT_SOURCE) / "data" / "pch/pch_header_1.h";
-    bool save = buildcc::env::SaveFile(filename.string().c_str(), "", false);
+    bool save = buildcc::env::save_file(filename.string().c_str(), "", false);
     CHECK_TRUE(save);
 
     buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable,
@@ -215,7 +215,7 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
     sleep(1);
     fs::path filename =
         fs::path(BUILD_SCRIPT_SOURCE) / "data" / "pch/pch_header_1.h";
-    bool save = buildcc::env::SaveFile(filename.string().c_str(), "", false);
+    bool save = buildcc::env::save_file(filename.string().c_str(), "", false);
     CHECK_TRUE(save);
 
     buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable,

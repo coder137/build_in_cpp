@@ -33,8 +33,8 @@ template <typename T> class TargetInfoGetter {
 public:
   // Target State
   const TargetState &GetState() const;
-  bool GetBuildState() const;
-  bool GetLockState() const;
+  bool IsBuilt() const;
+  bool IsLocked() const;
 
   // Target Env
   const fs::path &GetTargetRootDir() const;

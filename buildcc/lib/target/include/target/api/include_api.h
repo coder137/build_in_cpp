@@ -34,7 +34,7 @@ public:
                  const fs::path &relative_to_target_path = "");
   void AddHeaderAbsolute(const fs::path &absolute_filepath);
 
-  void GlobHeaders(const fs::path &relative_to_target_path);
+  void GlobHeaders(const fs::path &relative_to_target_path = "");
   void GlobHeadersAbsolute(const fs::path &absolute_path);
 
   void AddIncludeDir(const fs::path &relative_include_dir,

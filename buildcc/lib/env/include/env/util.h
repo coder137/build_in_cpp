@@ -45,8 +45,8 @@ namespace buildcc::env {
  * Condition under which code throws and should terminate
  * 1: ofs.write -> badbit
  */
-inline bool SaveFile(const char *name, const char *buf, size_t len,
-                     bool binary) {
+inline bool save_file(const char *name, const char *buf, size_t len,
+                      bool binary) {
   if (buf == nullptr) {
     return false;
   }
@@ -60,8 +60,8 @@ inline bool SaveFile(const char *name, const char *buf, size_t len,
   return !os.bad();
 }
 
-inline bool SaveFile(const char *name, const std::string &buf, bool binary) {
-  return SaveFile(name, buf.c_str(), buf.size(), binary);
+inline bool save_file(const char *name, const std::string &buf, bool binary) {
+  return save_file(name, buf.c_str(), buf.size(), binary);
 }
 
 /**
@@ -71,7 +71,7 @@ inline bool SaveFile(const char *name, const std::string &buf, bool binary) {
  * 3: ifs.read -> badbit
  * 4:
  */
-inline bool LoadFile(const char *name, bool binary, std::string *buf) {
+inline bool load_file(const char *name, bool binary, std::string *buf) {
   if (name == nullptr || buf == nullptr) {
     return false;
   }

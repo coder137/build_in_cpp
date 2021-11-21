@@ -225,7 +225,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     // * Force copy to trigger recompile for NEW_SOURCE
     // *2 Current file is updated
     auto file_path = source_path / NEW_SOURCE;
-    buildcc::env::SaveFile(file_path.string().c_str(), std::string{""}, false);
+    buildcc::env::save_file(file_path.string().c_str(), std::string{""}, false);
 
     buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
                                  gcc, "data");

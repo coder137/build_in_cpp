@@ -32,7 +32,7 @@ bool TargetLoader::Load() {
   auto file_path = GetBinaryPath();
   std::string buffer;
   bool is_loaded =
-      env::LoadFile(path_as_string(file_path).c_str(), true, &buffer);
+      env::load_file(path_as_string(file_path).c_str(), true, &buffer);
   if (!is_loaded) {
     return false;
   }
@@ -48,27 +48,27 @@ bool TargetLoader::Load() {
   // target->name()->c_str();
   // target->type();
 
-  ExtractPath(target->source_files(), loaded_sources_);
-  ExtractPath(target->header_files(), loaded_headers_);
-  ExtractPath(target->pch_files(), loaded_pchs_);
-  ExtractPath(target->lib_deps(), loaded_lib_deps_);
+  extract_path(target->source_files(), loaded_sources_);
+  extract_path(target->header_files(), loaded_headers_);
+  extract_path(target->pch_files(), loaded_pchs_);
+  extract_path(target->lib_deps(), loaded_lib_deps_);
 
-  Extract(target->external_lib_deps(), loaded_external_lib_dirs_);
+  extract(target->external_lib_deps(), loaded_external_lib_dirs_);
 
-  Extract(target->include_dirs(), loaded_include_dirs_);
-  Extract(target->lib_dirs(), loaded_lib_dirs_);
+  extract(target->include_dirs(), loaded_include_dirs_);
+  extract(target->lib_dirs(), loaded_lib_dirs_);
 
-  Extract(target->preprocessor_flags(), loaded_preprocessor_flags_);
-  Extract(target->common_compile_flags(), loaded_common_compile_flags_);
-  Extract(target->pch_compile_flags(), loaded_pch_compile_flags_);
-  Extract(target->pch_object_flags(), loaded_pch_object_flags_);
-  Extract(target->asm_compile_flags(), loaded_asm_compile_flags_);
-  Extract(target->c_compile_flags(), loaded_c_compile_flags_);
-  Extract(target->cpp_compile_flags(), loaded_cpp_compile_flags_);
-  Extract(target->link_flags(), loaded_link_flags_);
+  extract(target->preprocessor_flags(), loaded_preprocessor_flags_);
+  extract(target->common_compile_flags(), loaded_common_compile_flags_);
+  extract(target->pch_compile_flags(), loaded_pch_compile_flags_);
+  extract(target->pch_object_flags(), loaded_pch_object_flags_);
+  extract(target->asm_compile_flags(), loaded_asm_compile_flags_);
+  extract(target->c_compile_flags(), loaded_c_compile_flags_);
+  extract(target->cpp_compile_flags(), loaded_cpp_compile_flags_);
+  extract(target->link_flags(), loaded_link_flags_);
 
-  ExtractPath(target->compile_dependencies(), loaded_compile_dependencies_);
-  ExtractPath(target->link_dependencies(), loaded_link_dependencies_);
+  extract_path(target->compile_dependencies(), loaded_compile_dependencies_);
+  extract_path(target->link_dependencies(), loaded_link_dependencies_);
 
   loaded_ = true;
   return true;

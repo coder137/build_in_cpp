@@ -36,12 +36,32 @@ public:
   const Toolchain &GetToolchain() const;
   TargetType GetType() const;
 
+  /**
+   * @brief Location of generated Target
+   */
   const fs::path &GetTargetPath() const;
+
+  /**
+   * @brief Location of serialized Target data
+   */
   const fs::path &GetBinaryPath() const;
 
+  /**
+   * @brief BuildCC constructed PCH header file
+   * Example:
+   * - {file}.h
+   */
   const fs::path &GetPchHeaderPath() const;
+
+  /**
+   * @brief PCH compiled file
+   * Example:
+   * - {file}.gch for GCC
+   * - {file}.pch for MSVC
+   */
   const fs::path &GetPchCompilePath() const;
 
+  // TODO, Add GetPchCommand if required
   const std::string &GetCompileCommand(const fs::path &source) const;
   const std::string &GetLinkCommand() const;
 

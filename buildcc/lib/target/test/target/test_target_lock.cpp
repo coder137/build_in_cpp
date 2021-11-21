@@ -33,12 +33,12 @@ TEST(TargetTestLock, LockState) {
   buildcc::base::Target exe(NAME, buildcc::base::TargetType::Executable, gcc,
                             "data");
 
-  CHECK_FALSE(exe.GetLockState());
+  CHECK_FALSE(exe.IsLocked());
 
   buildcc::m::CommandExpect_Execute(1, true);
   exe.Build();
 
-  CHECK_TRUE(exe.GetLockState());
+  CHECK_TRUE(exe.IsLocked());
 
   mock().checkExpectations();
 }

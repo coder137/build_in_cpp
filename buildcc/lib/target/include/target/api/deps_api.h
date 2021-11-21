@@ -29,9 +29,32 @@ namespace buildcc::base {
 // - TargetEnv
 template <typename T> class DepsApi {
 public:
+  // TODO, AddPchDependency
+  // TODO, Rename AddObjectDependency
+  // TODO, Rename AddTargetDependency
+
+  /**
+   * @brief Recompile sources to object if compile dependency is removed, added
+   * or newer from the previous build
+   */
   void AddCompileDependency(const fs::path &relative_path);
+
+  /**
+   * @brief Recompile sources to object if compile dependency is removed, added
+   * or newer from the previous build
+   */
   void AddCompileDependencyAbsolute(const fs::path &absolute_path);
+
+  /**
+   * @brief Relink target if link dependency is removed, added or newer from
+   * previous build
+   */
   void AddLinkDependency(const fs::path &relative_path);
+
+  /**
+   * @brief Relink target if link dependency is removed, added or newer from
+   * previous build
+   */
   void AddLinkDependencyAbsolute(const fs::path &absolute_path);
 };
 

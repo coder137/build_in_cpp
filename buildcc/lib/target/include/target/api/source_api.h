@@ -31,7 +31,7 @@ namespace buildcc::base {
 template <typename T> class SourceApi {
 public:
   void AddSourceAbsolute(const fs::path &absolute_source);
-  void GlobSourcesAbsolute(const fs::path &absolute_source_dir = "");
+  void GlobSourcesAbsolute(const fs::path &absolute_source_dir);
 
   void AddSource(const fs::path &relative_source,
                  const fs::path &relative_to_target_path = "");

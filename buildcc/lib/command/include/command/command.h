@@ -18,7 +18,6 @@
 #define COMMAND_COMMAND_H_
 
 #include <string>
-#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -28,14 +27,39 @@ class Command {
 public:
   explicit Command() = default;
 
+  /**
+   * @brief Add key-value pairs that are used by fmt as identifiers
+   * Example: {"key", "value"} -> fmt::format("{key}") -> "value"
+   *
+   * NOTE: These default arguments persist throughout the lifetime of the
+   * Command object
+   */
   void AddDefaultArgument(const std::string &key, const std::string &value);
+
+  /**
+   * @brief Add multiple key-value pairs that are used by fmt as identifiers
+   * Example: {"key", "value"} -> fmt::format("{key}") -> "value"
+   *
+   * NOTE: These default arguments persist throughout the lifetime of the
+   * Command object
+   */
   void AddDefaultArguments(
       const std::unordered_map<std::string, std::string> &arguments);
 
-  std::string Construct(std::string_view format,
+  /**
+   * @brief Construct a specialized string using input pattern and supplied
+   * arguments
+   *
+   * NOTE: These arguments are only valid for the `Construct` function call
+   */
+  std::string Construct(const std::string &pattern,
                         const std::unordered_map<const char *, std::string>
                             &arguments = {}) const;
 
+  /**
+   * @brief Execute a particular command and optionally redirect stdout and
+   * stderr to user supplied dynamic string lists
+   */
   static bool Execute(const std::string &command,
                       std::vector<std::string> *stdout_data = nullptr,
                       std::vector<std::string> *stderr_data = nullptr);
@@ -43,8 +67,7 @@ public:
   /**
    * @brief Get the Default Value By Key object
    * NOTE: Only works when key/value pairs are added to DefaultArgument(s)
-   *
-   * @return const std::string&
+   * Assert Fatal if default value is not found
    */
   const std::string &GetDefaultValueByKey(const std::string &key) const;
 

@@ -27,9 +27,9 @@ namespace fbs = schema::internal;
 
 namespace buildcc::internal {
 
-// Extract APIs for LOAD
+// extract APIs for LOAD
 
-inline void ExtractPath(
+inline void extract_path(
     const flatbuffers::Vector<flatbuffers::Offset<schema::internal::Path>>
         *fbs_paths,
     buildcc::internal::path_unordered_set &out) {
@@ -44,7 +44,7 @@ inline void ExtractPath(
 }
 
 inline void
-Extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
+extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
             *fbs_paths,
         fs_unordered_set &out) {
   if (fbs_paths == nullptr) {
@@ -58,7 +58,7 @@ Extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
 
 template <typename T>
 inline void
-Extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
+extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
             *fbs_paths,
         std::unordered_set<T> &out) {
   if (fbs_paths == nullptr) {
@@ -72,7 +72,7 @@ Extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
 
 template <typename T>
 inline void
-Extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
+extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
             *fbs_paths,
         std::vector<T> &out) {
   if (fbs_paths == nullptr) {
@@ -87,8 +87,8 @@ Extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
 // Create APIs for STORE
 
 inline std::vector<flatbuffers::Offset<fbs::Path>>
-CreateFbsVectorPath(flatbuffers::FlatBufferBuilder &builder,
-                    const buildcc::internal::path_unordered_set &pathlist) {
+create_fbs_vector_path(flatbuffers::FlatBufferBuilder &builder,
+                       const buildcc::internal::path_unordered_set &pathlist) {
   std::vector<flatbuffers::Offset<fbs::Path>> paths;
   for (const auto &p : pathlist) {
     auto fbs_file = fbs::CreatePathDirect(builder, p.GetPathAsString().c_str(),
@@ -100,8 +100,8 @@ CreateFbsVectorPath(flatbuffers::FlatBufferBuilder &builder,
 
 template <typename T>
 inline std::vector<flatbuffers::Offset<flatbuffers::String>>
-CreateFbsVectorString(flatbuffers::FlatBufferBuilder &builder,
-                      const T &strlist) {
+create_fbs_vector_string(flatbuffers::FlatBufferBuilder &builder,
+                         const T &strlist) {
   std::vector<flatbuffers::Offset<flatbuffers::String>> strs;
   std::transform(
       strlist.begin(), strlist.end(), std::back_inserter(strs),
@@ -112,8 +112,8 @@ CreateFbsVectorString(flatbuffers::FlatBufferBuilder &builder,
 }
 
 inline std::vector<flatbuffers::Offset<flatbuffers::String>>
-CreateFbsVectorString(flatbuffers::FlatBufferBuilder &builder,
-                      const buildcc::internal::fs_unordered_set &fslist) {
+create_fbs_vector_string(flatbuffers::FlatBufferBuilder &builder,
+                         const buildcc::internal::fs_unordered_set &fslist) {
   std::vector<flatbuffers::Offset<flatbuffers::String>> strs;
   std::transform(
       fslist.begin(), fslist.end(), std::back_inserter(strs),

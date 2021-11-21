@@ -2,25 +2,23 @@
 # Feature
 
 - [ ] Bootstrapping
-  - [x] Via CMake (Static Library)
-  - [ ] Via CMake (Dynamic Library)
-  - [ ] builcc bootstrap (Executable)
-  - [ ] Via buildcc bootstrap (Static Library)
-  - [ ] Via buildcc bootstrap (Dynamic Library)
-- [ ] Command/Subprocess Redirect stdout and stderr for Subprocess
-- [ ] PrecompileHeader support
+  - CMake is used to create BuildCC
+  - We now create a BuildCC executable that creates BuildCC
+  - [ ] BuildCC bootstrap executable through CMake (Static Libraries during linkage)
+  - [ ] BuildCC bootstrap executable through CMake (Dynamic Libraries during linkage)
+  - [ ] BuildCC bootstrap executable through BuildCC bootstrap executable (similar to the CMake executable)
 - [ ] C++20 module support
   - Understand flags
   - Understand procedure for GCC, MSVC and Clang
+- [ ] Plugin - BuildCCFind
+  - Find executable
+  - Find toolchain
 - [ ] Plugin - ClangFormat
 - [ ] Plugin - Graph Visualizer
 
 # User QOL
 
-- [ ] Getter APIs for Target
 - [ ] Append Setter APIs for Target
-- [ ] `find_program` option in Toolchain
-- [ ] Custom executables stored in Toolchain 
 
 # Developer Tools
 
@@ -36,22 +34,20 @@
     - [x] Clang
     - [ ] MinGW
   - [ ] MacOS
-- [ ] Codecoverage
-  - [x] Codecov
-  - [ ] Coveralls
 - [x] Codacy
 
 # Optimization
 
-- [ ] Aggregated strings stored in Target vs `std::insert` on `std::vector` and `std::unordered_set`
-- [ ] `std::string` vs `std::string_view` usage
-- [ ] C++20 constexpr `std::string` and `std::vector` usage
+- [ ] Speed vs Memory considerations
+  - Currently the project favours speed over memory usage
+- [ ] `std::string` vs `std::string_view` vs `const char *` usage
+  - NOTE, We cannot convert between `std::string_view` and `const char *` which makes it harder to use `std::string_view` for certain APIs
 
 # Tests
 
-- [x] 100% Line Coverage
 - [ ] Improve Branch Coverage
-- [ ] Benchmark example CMake vs BuildCC
+- [ ] Profiling BuildCC using [Tracy](https://github.com/wolfpld/tracy)
+- [ ] Speed comparison between CMake and BuildCC (Release)
 - [ ] Speed profiling `subprocess` vs `std::system` with gprof and qcachegrind
   - NOTE, Since we have Taskflow for parallel programming, we do not need to construct a multi-threaded subprocess.
   - Subprocess should typically replicate `std::system` functionality while offering better security.
@@ -61,3 +57,4 @@
 - [ ] Cross compiling
 - [ ] Debugging using VSCode
 - [ ] Debugging using GDB
+  - Check the [GDBFrontend](https://github.com/rohanrhu/gdb-frontend) project

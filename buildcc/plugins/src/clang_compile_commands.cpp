@@ -47,9 +47,9 @@ void ClangCompileCommands::AddTarget(const base::Target *target) {
 
 void ClangCompileCommands::Generate() {
   // Early terminate if rebuild is not required
-  const bool regenerate = std::any_of(
-      targets_.begin(), targets_.end(),
-      [](const base::Target *target) { return target->GetBuildState(); });
+  const bool regenerate =
+      std::any_of(targets_.begin(), targets_.end(),
+                  [](const base::Target *target) { return target->IsBuilt(); });
   if (!regenerate) {
     env::log_trace("ClangCompileCommands", "Generate -> false");
     return;
@@ -84,7 +84,7 @@ void ClangCompileCommands::Generate() {
       std::filesystem::path(buildcc::env::get_project_build_dir()) /
       "compile_commands.json";
   bool saved =
-      env::SaveFile(path_as_string(file).c_str(), compile_commands, false);
+      env::save_file(path_as_string(file).c_str(), compile_commands, false);
   env::assert_fatal(saved, "Could not save compile_commands.json");
 }
 
