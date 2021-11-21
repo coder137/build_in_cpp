@@ -118,7 +118,6 @@ Contains **proof of concept** and **real world** [examples](example/README.md).
 Developers interested in using **_BuildCC_**
 
 - [Installation using CMake](doc/user/installation_using_cmake.md)
-- API List
 
 # Developer Guide
 
