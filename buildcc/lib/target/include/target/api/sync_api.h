@@ -47,21 +47,34 @@ enum class SyncOption {
 template <typename T> class SyncApi {
 public:
   /**
-   * @brief Copy when Target supplied by const reference
-   * NOTE: Replaces selected storage variables
+   * @brief Copy/Replace selected variables when Target supplied by const
+   * reference
    */
   void Copy(const T &target, std::initializer_list<SyncOption> options);
 
   /**
-   * @brief Copy when Target supplied by move
-   * NOTE: Replaces selected storage variables
+   * @brief Copy/Replace selected variables when Target supplied by move
    */
   void Copy(T &&target, std::initializer_list<SyncOption> options);
+
+  /**
+   * @brief Insert selected variables when Target supplied by const reference
+   */
+  void Insert(const T &target, std::initializer_list<SyncOption> options);
+
+  /**
+   * @brief Insert selected variables when Target supplied by move
+   *
+   */
+  void Insert(T &&target, std::initializer_list<SyncOption> options);
 
 private:
   template <typename TargetType>
   void SpecializedCopy(TargetType target,
                        std::initializer_list<SyncOption> options);
+  template <typename TargetType>
+  void SpecializedInsert(TargetType target,
+                         std::initializer_list<SyncOption> options);
 };
 
 } // namespace buildcc::base
