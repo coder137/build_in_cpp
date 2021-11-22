@@ -22,13 +22,13 @@ namespace buildcc::base {
 
 template <typename T>
 void CopyApi<T>::Copy(const T &target,
-                      std::initializer_list<CopyOption> options) {
+                      std::initializer_list<SyncOption> options) {
   env::log_trace(__FUNCTION__, "Copy by const ref");
   SpecializedCopy<const T &>(target, options);
 }
 
 template <typename T>
-void CopyApi<T>::Copy(T &&target, std::initializer_list<CopyOption> options) {
+void CopyApi<T>::Copy(T &&target, std::initializer_list<SyncOption> options) {
   env::log_trace(__FUNCTION__, "Copy by move");
   SpecializedCopy<T &&>(std::move(target), options);
 }
@@ -37,75 +37,75 @@ void CopyApi<T>::Copy(T &&target, std::initializer_list<CopyOption> options) {
 template <typename T>
 template <typename TargetType>
 void CopyApi<T>::SpecializedCopy(TargetType target,
-                                 std::initializer_list<CopyOption> options) {
+                                 std::initializer_list<SyncOption> options) {
   T &t = static_cast<T &>(*this);
   t.state_.ExpectsUnlock();
-  for (const CopyOption o : options) {
+  for (const SyncOption o : options) {
     switch (o) {
-    case CopyOption::PreprocessorFlags:
+    case SyncOption::PreprocessorFlags:
       t.storer_.current_preprocessor_flags =
           std::move(target.storer_.current_preprocessor_flags);
       break;
-    case CopyOption::CommonCompileFlags:
+    case SyncOption::CommonCompileFlags:
       t.storer_.current_common_compile_flags =
           std::move(target.storer_.current_common_compile_flags);
       break;
-    case CopyOption::PchCompileFlags:
+    case SyncOption::PchCompileFlags:
       t.storer_.current_pch_compile_flags =
           std::move(target.storer_.current_pch_compile_flags);
       break;
-    case CopyOption::PchObjectFlags:
+    case SyncOption::PchObjectFlags:
       t.storer_.current_pch_object_flags =
           std::move(target.storer_.current_pch_object_flags);
       break;
-    case CopyOption::AsmCompileFlags:
+    case SyncOption::AsmCompileFlags:
       t.storer_.current_asm_compile_flags =
           std::move(target.storer_.current_asm_compile_flags);
       break;
-    case CopyOption::CCompileFlags:
+    case SyncOption::CCompileFlags:
       t.storer_.current_c_compile_flags =
           std::move(target.storer_.current_c_compile_flags);
       break;
-    case CopyOption::CppCompileFlags:
+    case SyncOption::CppCompileFlags:
       t.storer_.current_cpp_compile_flags =
           std::move(target.storer_.current_cpp_compile_flags);
       break;
-    case CopyOption::LinkFlags:
+    case SyncOption::LinkFlags:
       t.storer_.current_link_flags =
           std::move(target.storer_.current_link_flags);
       break;
-    case CopyOption::CompileDependencies:
+    case SyncOption::CompileDependencies:
       t.storer_.current_compile_dependencies.user =
           std::move(target.storer_.current_compile_dependencies.user);
       break;
-    case CopyOption::LinkDependencies:
+    case SyncOption::LinkDependencies:
       t.storer_.current_link_dependencies.user =
           std::move(target.storer_.current_link_dependencies.user);
       break;
-    case CopyOption::SourceFiles:
+    case SyncOption::SourceFiles:
       t.storer_.current_source_files.user =
           std::move(target.storer_.current_source_files.user);
       break;
-    case CopyOption::HeaderFiles:
+    case SyncOption::HeaderFiles:
       t.storer_.current_header_files.user =
           std::move(target.storer_.current_header_files.user);
       break;
-    case CopyOption::PchFiles:
+    case SyncOption::PchFiles:
       t.storer_.current_pch_files.user =
           std::move(target.storer_.current_pch_files.user);
       break;
-    case CopyOption::LibDeps:
+    case SyncOption::LibDeps:
       t.storer_.current_lib_deps.user =
           std::move(target.storer_.current_lib_deps.user);
       break;
-    case CopyOption::IncludeDirs:
+    case SyncOption::IncludeDirs:
       t.storer_.current_include_dirs =
           std::move(target.storer_.current_include_dirs);
       break;
-    case CopyOption::LibDirs:
+    case SyncOption::LibDirs:
       t.storer_.current_lib_dirs = std::move(target.storer_.current_lib_dirs);
       break;
-    case CopyOption::ExternalLibDeps:
+    case SyncOption::ExternalLibDeps:
       t.storer_.current_external_lib_deps =
           std::move(target.storer_.current_external_lib_deps);
       break;

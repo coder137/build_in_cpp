@@ -21,7 +21,7 @@
 
 namespace buildcc::base {
 
-enum class CopyOption {
+enum class SyncOption {
   SourceFiles,
   HeaderFiles,
   PchFiles,
@@ -49,24 +49,24 @@ public:
   /**
    * @brief Copy when Target supplied by const reference
    */
-  void Copy(const T &target, std::initializer_list<CopyOption> options);
+  void Copy(const T &target, std::initializer_list<SyncOption> options);
 
   /**
    * @brief Copy when Target supplied by move
    */
-  void Copy(T &&target, std::initializer_list<CopyOption> options);
+  void Copy(T &&target, std::initializer_list<SyncOption> options);
 
 private:
   template <typename TargetType>
   void SpecializedCopy(TargetType target,
-                       std::initializer_list<CopyOption> options);
+                       std::initializer_list<SyncOption> options);
 };
 
 } // namespace buildcc::base
 
 namespace buildcc {
 
-typedef base::CopyOption CopyOption;
+typedef base::SyncOption SyncOption;
 
 }
 
