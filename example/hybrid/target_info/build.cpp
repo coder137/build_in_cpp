@@ -89,8 +89,8 @@ static void genericadd1_build_cb(BaseTarget &genericadd,
                                  const TargetInfo &genericadd_ho) {
   genericadd.AddSource("src/main1.cpp");
   genericadd.Copy(genericadd_ho, {
-                                     CopyOption::IncludeDirs,
-                                     CopyOption::HeaderFiles,
+                                     SyncOption::IncludeDirs,
+                                     SyncOption::HeaderFiles,
                                  });
   genericadd.Build();
 }
@@ -99,7 +99,7 @@ static void genericadd2_build_cb(BaseTarget &genericadd,
                                  const TargetInfo &genericadd_ho) {
   genericadd.AddSource("src/main2.cpp");
   genericadd.Copy(genericadd_ho, {
-                                     CopyOption::IncludeDirs,
+                                     SyncOption::IncludeDirs,
                                      CopyOption::HeaderFiles,
                                  });
   genericadd.Build();
