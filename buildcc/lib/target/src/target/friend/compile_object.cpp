@@ -80,13 +80,23 @@ CompileObject::GetObjectData(const fs::path &absolute_source) const {
 
 // PRIVATE
 
+// NOTE: If RELATIVE TargetEnv supplied
+// {target_root_dir} => `env::get_project_root_dir()` /
+// `target_relative_to_root`
+// {target_build_dir} => `env::get_project_build_dir()` / `toolchain.GetName()`
+// / `name`
+
 // Scenarios
 // - {target_root_dir} / source -> {target_build_dir} / source.compiled
 // - {target_root_dir} / folder / source -> {target_build_dir} / folder /
 // source.compiled
 // - {target_root_dir} / .. / source -> {target_build_dir} / __ /
-// source.compiled
-// TODO, Path replacement strategy
+// source.compiled -> Warning
+// Prompt using TargetEnv(abs_root, abs_build)
+// - {target_absolute_root_dir} / FOOLIB / source -> {target_absolute_build_dir}
+// / FOOLIB / source
+
+// TODO, Discuss PathReplacementStrategy API (Grey areas?)
 // NOTE, Replace part of the `relative path` with a path of users choice
 // - Add `folder/nested` -> FOLDER_NESTED
 // - {target_root_dir} / random / folder / nested / source -> {target_build_dir}
@@ -105,6 +115,12 @@ CompileObject::ConstructObjectPath(const fs::path &absolute_source_file) const {
   // NOTE, Similar to how CMake handles out of root files
   std::string relstr = relative.string();
   if (relstr.find("..") != std::string::npos) {
+    env::log_warning(__FUNCTION__,
+                     fmt::format("Out of Root Source detected '{}'. Use "
+                                 "TargetEnv to supply absolute target root "
+                                 "path -> absolute target build path. By "
+                                 "default converts '..' to '__'",
+                                 relstr));
     std::replace(relstr.begin(), relstr.end(), '.', '_');
     relative = relstr;
   }
