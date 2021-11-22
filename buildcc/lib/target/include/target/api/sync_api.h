@@ -48,11 +48,13 @@ template <typename T> class SyncApi {
 public:
   /**
    * @brief Copy when Target supplied by const reference
+   * NOTE: Replaces selected storage variables
    */
   void Copy(const T &target, std::initializer_list<SyncOption> options);
 
   /**
    * @brief Copy when Target supplied by move
+   * NOTE: Replaces selected storage variables
    */
   void Copy(T &&target, std::initializer_list<SyncOption> options);
 
