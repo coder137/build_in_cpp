@@ -100,7 +100,7 @@ static void genericadd2_build_cb(BaseTarget &genericadd,
   genericadd.AddSource("src/main2.cpp");
   genericadd.Copy(genericadd_ho, {
                                      SyncOption::IncludeDirs,
-                                     CopyOption::HeaderFiles,
+                                     SyncOption::HeaderFiles,
                                  });
   genericadd.Build();
 }
