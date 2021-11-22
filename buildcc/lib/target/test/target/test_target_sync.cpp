@@ -12,7 +12,7 @@
 #include "CppUTestExt/MockSupport.h"
 
 // clang-format off
-TEST_GROUP(TargetTestCopyGroup)
+TEST_GROUP(TargetTestSyncGroup)
 {
     void teardown() {
     }
@@ -22,7 +22,7 @@ TEST_GROUP(TargetTestCopyGroup)
 buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc, "gcc", "as",
                              "gcc", "g++", "ar", "ldd");
 
-TEST(TargetTestCopyGroup, CopyByConstRef) {
+TEST(TargetTestSyncGroup, CopyByConstRef) {
   buildcc::base::Target srcTarget(
       "srcTarget", buildcc::base::TargetType::Executable, gcc, "data");
   buildcc::base::Target destTarget(
@@ -89,7 +89,7 @@ TEST(TargetTestCopyGroup, CopyByConstRef) {
   CHECK_EQUAL(destTarget.GetCurrentLinkDependencies().size(), 1);
 }
 
-TEST(TargetTestCopyGroup, CopyByMove) {
+TEST(TargetTestSyncGroup, CopyByMove) {
   buildcc::base::Target srcTarget(
       "srcTarget", buildcc::base::TargetType::Executable, gcc, "data");
   buildcc::base::Target destTarget(
@@ -157,7 +157,7 @@ TEST(TargetTestCopyGroup, CopyByMove) {
   CHECK_EQUAL(destTarget.GetCurrentLinkDependencies().size(), 1);
 }
 
-TEST(TargetTestCopyGroup, CopyCrash) {
+TEST(TargetTestSyncGroup, CopyCrash) {
   buildcc::base::Target srcTarget(
       "srcTarget", buildcc::base::TargetType::Executable, gcc, "data");
   buildcc::base::Target destTarget(
