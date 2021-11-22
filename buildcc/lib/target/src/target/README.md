@@ -16,7 +16,7 @@ Check the `include/target/api` and `src/api` folder
 
 - [x] Copy
   - Copy src target to dest
-  - Selective copy using `std::initializer<CopyOption>` 
+  - Selective copy using `std::initializer<SyncOption>` 
   - `copy_api`
 - [x] Source
   - `source_api` 
