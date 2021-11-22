@@ -44,7 +44,7 @@ enum class SyncOption {
 // Requires
 // - TargetStorer
 // - TargetState
-template <typename T> class CopyApi {
+template <typename T> class SyncApi {
 public:
   /**
    * @brief Copy when Target supplied by const reference

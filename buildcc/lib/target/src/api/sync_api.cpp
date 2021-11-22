@@ -21,14 +21,14 @@
 namespace buildcc::base {
 
 template <typename T>
-void CopyApi<T>::Copy(const T &target,
+void SyncApi<T>::Copy(const T &target,
                       std::initializer_list<SyncOption> options) {
   env::log_trace(__FUNCTION__, "Copy by const ref");
   SpecializedCopy<const T &>(target, options);
 }
 
 template <typename T>
-void CopyApi<T>::Copy(T &&target, std::initializer_list<SyncOption> options) {
+void SyncApi<T>::Copy(T &&target, std::initializer_list<SyncOption> options) {
   env::log_trace(__FUNCTION__, "Copy by move");
   SpecializedCopy<T &&>(std::move(target), options);
 }
@@ -36,7 +36,7 @@ void CopyApi<T>::Copy(T &&target, std::initializer_list<SyncOption> options) {
 // template <typename TargetType>
 template <typename T>
 template <typename TargetType>
-void CopyApi<T>::SpecializedCopy(TargetType target,
+void SyncApi<T>::SpecializedCopy(TargetType target,
                                  std::initializer_list<SyncOption> options) {
   T &t = static_cast<T &>(*this);
   t.state_.ExpectsUnlock();
@@ -116,6 +116,6 @@ void CopyApi<T>::SpecializedCopy(TargetType target,
   }
 }
 
-template class CopyApi<TargetInfo>;
+template class SyncApi<TargetInfo>;
 
 } // namespace buildcc::base
