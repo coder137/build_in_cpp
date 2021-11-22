@@ -132,4 +132,4 @@ add_test(NAME test_target_flags COMMAND test_target_flags)
 add_test(NAME test_target_user_deps COMMAND test_target_user_deps)
 add_test(NAME test_target_lock COMMAND test_target_lock)
 
-add_test(NAME test_target_copy COMMAND test_target_copy)
+add_test(NAME test_target_sync COMMAND test_target_sync)
