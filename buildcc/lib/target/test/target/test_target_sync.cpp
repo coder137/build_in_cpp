@@ -170,7 +170,7 @@ TEST(TargetTestSyncGroup, CopyCrash) {
 }
 
 int main(int ac, char **av) {
-  buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_TARGET_COPY_INTERMEDIATE_DIR);
+  buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_TARGET_SYNC_INTERMEDIATE_DIR);
   fs::remove_all(buildcc::env::get_project_build_dir());
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
