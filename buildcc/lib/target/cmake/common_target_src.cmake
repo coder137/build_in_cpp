@@ -31,8 +31,8 @@ set(COMMON_TARGET_SRCS
     include/target/api/flag_api.h
     include/target/api/deps_api.h
 
-    src/api/copy_api.cpp
-    include/target/api/copy_api.h
+    src/api/sync_api.cpp
+    include/target/api/sync_api.h
     
     src/api/target_info_getter.cpp
     src/api/target_getter.cpp

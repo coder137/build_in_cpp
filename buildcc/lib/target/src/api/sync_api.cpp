@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "target/api/copy_api.h"
+#include "target/api/sync_api.h"
 
 #include "target/target_info.h"
 
