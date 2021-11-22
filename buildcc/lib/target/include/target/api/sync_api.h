@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_API_COPY_API_H_
-#define TARGET_API_COPY_API_H_
+#ifndef TARGET_API_SYNC_API_H_
+#define TARGET_API_SYNC_API_H_
 
 #include <initializer_list>
 
