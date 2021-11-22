@@ -59,7 +59,7 @@ public:
   }
   static TargetConfig StaticLib() {
     return DefaultGccConfig(kGccStaticLibExt, kGccGenericCompileCommand,
-                            kGccDynamicLibLinkCommand);
+                            kGccStaticLibLinkCommand);
   }
   static TargetConfig DynamicLib() {
     return DefaultGccConfig(kGccDynamicLibExt, kGccGenericCompileCommand,

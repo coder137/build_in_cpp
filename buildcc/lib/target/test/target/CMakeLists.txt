@@ -114,10 +114,10 @@ add_executable(test_target_lock
 )
 target_link_libraries(test_target_lock PRIVATE target_interface)
 
-add_executable(test_target_copy
-    test_target_copy.cpp
+add_executable(test_target_sync
+    test_target_sync.cpp
 )
-target_link_libraries(test_target_copy PRIVATE target_interface)
+target_link_libraries(test_target_sync PRIVATE target_interface)
 
 # Tests
 add_test(NAME test_base_target COMMAND test_base_target)
@@ -132,4 +132,4 @@ add_test(NAME test_target_flags COMMAND test_target_flags)
 add_test(NAME test_target_user_deps COMMAND test_target_user_deps)
 add_test(NAME test_target_lock COMMAND test_target_lock)
 
-add_test(NAME test_target_copy COMMAND test_target_copy)
+add_test(NAME test_target_sync COMMAND test_target_sync)

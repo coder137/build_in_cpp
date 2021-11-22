@@ -24,12 +24,12 @@
 #include "target/common/target_env.h"
 #include "target/common/target_state.h"
 
-#include "target/api/copy_api.h"
 #include "target/api/deps_api.h"
 #include "target/api/flag_api.h"
 #include "target/api/include_api.h"
 #include "target/api/lib_api.h"
 #include "target/api/pch_api.h"
+#include "target/api/sync_api.h"
 
 #include "target/api/source_api.h"
 
@@ -47,7 +47,7 @@ class TargetInfo : public SourceApi<TargetInfo>,
                    public PchApi<TargetInfo>,
                    public FlagApi<TargetInfo>,
                    public DepsApi<TargetInfo>,
-                   public CopyApi<TargetInfo>,
+                   public SyncApi<TargetInfo>,
                    public TargetInfoGetter<TargetInfo> {
 public:
   TargetInfo(const TargetEnv &env, const TargetConfig &config = TargetConfig())
@@ -63,7 +63,7 @@ private:
   friend class DepsApi<TargetInfo>;
 
   // Feature
-  friend class CopyApi<TargetInfo>;
+  friend class SyncApi<TargetInfo>;
 
   // Getters
   friend class TargetInfoGetter<TargetInfo>;

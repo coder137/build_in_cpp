@@ -19,4 +19,4 @@ inline constexpr char const * BUILD_TARGET_USER_DEPS_INTERMEDIATE_DIR = "@CMAKE_
 
 inline constexpr char const * BUILD_TARGET_LOCK_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_lock";
 
-inline constexpr char const * BUILD_TARGET_COPY_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_copy";
+inline constexpr char const * BUILD_TARGET_SYNC_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_sync";

@@ -27,11 +27,11 @@
 
 namespace buildcc {
 
-static std::initializer_list<CopyOption> kGenericCopyOptions = {
-    CopyOption::CommonCompileFlags, CopyOption::PchCompileFlags,
-    CopyOption::PchObjectFlags,     CopyOption::AsmCompileFlags,
-    CopyOption::CCompileFlags,      CopyOption::CppCompileFlags,
-    CopyOption::LinkFlags,
+static std::initializer_list<SyncOption> kGenericCopyOptions = {
+    SyncOption::CommonCompileFlags, SyncOption::PchCompileFlags,
+    SyncOption::PchObjectFlags,     SyncOption::AsmCompileFlags,
+    SyncOption::CCompileFlags,      SyncOption::CppCompileFlags,
+    SyncOption::LinkFlags,
 };
 
 class GenericConfig : ConfigInterface<GenericConfig> {
