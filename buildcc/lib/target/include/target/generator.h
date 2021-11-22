@@ -138,4 +138,10 @@ private:
 
 } // namespace buildcc::base
 
+namespace buildcc {
+
+typedef base::Generator BaseGenerator;
+
+}
+
 #endif
