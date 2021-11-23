@@ -87,10 +87,9 @@ void Register::Dep(const base::BuilderInterface &target,
   target_iter->second.succeed(dep_iter->second);
 }
 
-void Register::Test(
-    const Args::ToolchainState &toolchain_state, const std::string &command,
-    const base::Target &target,
-    const std::unordered_map<const char *, std::string> &arguments) {
+void Register::Test(const Args::ToolchainState &toolchain_state,
+                    const std::string &command, const base::Target &target,
+                    const TestConfig &config) {
   if (!(toolchain_state.build && toolchain_state.test)) {
     return;
   }
@@ -101,7 +100,7 @@ void Register::Test(
       "Call Register::Build API on target before Register::Test API");
 
   const bool added =
-      tests_.emplace(target.GetUniqueId(), TestInfo(target, command, arguments))
+      tests_.emplace(target.GetUniqueId(), TestInfo(target, command, config))
           .second;
   env::assert_fatal(
       added, fmt::format("Could not register test {}", target.GetName()));
@@ -127,28 +126,29 @@ void Register::Env() {
 
 //
 
-void Register::TestInfo::TestRunner() const {
+void TestInfo::TestRunner() const {
   env::log_info(__FUNCTION__,
                 fmt::format("Testing \'{}\'", target_.GetUniqueId()));
   Command command;
   command.AddDefaultArguments({
       {"executable", fmt::format("{}", target_.GetTargetPath())},
   });
-  const std::string test_command = command.Construct(command_, arguments_);
+  const std::string test_command =
+      command.Construct(command_, config_.GetArguments());
 
-  std::vector<std::string> stdout_data;
-  std::vector<std::string> stderr_data;
-  const bool success =
-      Command::Execute(test_command, &stdout_data, &stderr_data);
-  (void)success;
+  // std::vector<std::string> stdout_data;
+  // std::vector<std::string> stderr_data;
+  const bool success = Command::Execute(
+      test_command, config_.GetWorkingDirectory(), nullptr, nullptr);
+  env::assert_fatal(success,
+                    fmt::format("Could not run {}", target_.GetUniqueId()));
 
   // TODO, Add options for test verboseness
   // For now just print it out
-  env::log_info("", target_.GetUniqueId());
-  std::for_each(stdout_data.cbegin(), stdout_data.cend(),
-                [](const auto &str) { env::log_info("STDOUT", str); });
-  std::for_each(stderr_data.cbegin(), stderr_data.cend(),
-                [](const auto &str) { env::log_info("STDERR", str); });
+  // std::for_each(stdout_data.cbegin(), stdout_data.cend(),
+  //               [](const auto &str) { env::log_info("STDOUT", str); });
+  // std::for_each(stderr_data.cbegin(), stderr_data.cend(),
+  //               [](const auto &str) { env::log_info("STDERR", str); });
 }
 
 } // namespace buildcc
