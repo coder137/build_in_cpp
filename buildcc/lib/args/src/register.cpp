@@ -144,12 +144,16 @@ void TestInfo::TestRunner() const {
   std::vector<std::string> *redirect_stderr{nullptr};
   switch (config_.GetTestOutput().GetType()) {
   case TestOutput::Type::DefaultBehaviour:
+    (void)test_redirect_stdout;
+    (void)test_redirect_stderr;
     break;
   case TestOutput::Type::TestPrintOnStderr:
     redirect_stderr = &test_redirect_stderr;
+    (void)test_redirect_stdout;
     break;
   case TestOutput::Type::TestPrintOnStdout:
     redirect_stdout = &test_redirect_stdout;
+    (void)test_redirect_stderr;
     break;
   case TestOutput::Type::TestPrintOnStderrAndStdout:
     redirect_stdout = &test_redirect_stdout;
@@ -158,8 +162,12 @@ void TestInfo::TestRunner() const {
   case TestOutput::Type::UserRedirect:
     redirect_stdout = config_.GetTestOutput().GetRedirectStdoutToUser();
     redirect_stderr = config_.GetTestOutput().GetRedirectStderrToUser();
+    (void)test_redirect_stdout;
+    (void)test_redirect_stderr;
     break;
   default:
+    (void)test_redirect_stdout;
+    (void)test_redirect_stderr;
     env::assert_fatal<false>("Invalid TestOutput::Type");
     break;
   };
