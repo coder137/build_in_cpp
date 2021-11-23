@@ -136,19 +136,59 @@ void TestInfo::TestRunner() const {
   const std::string test_command =
       command.Construct(command_, config_.GetArguments());
 
-  // std::vector<std::string> stdout_data;
-  // std::vector<std::string> stderr_data;
-  const bool success = Command::Execute(
-      test_command, config_.GetWorkingDirectory(), nullptr, nullptr);
+  // TODO, Shift this to a function
+  std::vector<std::string> test_redirect_stdout;
+  std::vector<std::string> test_redirect_stderr;
+
+  std::vector<std::string> *redirect_stdout{nullptr};
+  std::vector<std::string> *redirect_stderr{nullptr};
+  switch (config_.GetTestOutput().GetType()) {
+  case TestOutput::Type::DefaultBehaviour:
+    break;
+  case TestOutput::Type::TestPrintOnStderr:
+    redirect_stderr = &test_redirect_stderr;
+    break;
+  case TestOutput::Type::TestPrintOnStdout:
+    redirect_stdout = &test_redirect_stdout;
+    break;
+  case TestOutput::Type::TestPrintOnStderrAndStdout:
+    redirect_stdout = &test_redirect_stdout;
+    redirect_stderr = &test_redirect_stderr;
+    break;
+  case TestOutput::Type::UserRedirect:
+    redirect_stdout = config_.GetTestOutput().GetRedirectStdoutToUser();
+    redirect_stderr = config_.GetTestOutput().GetRedirectStderrToUser();
+    break;
+  default:
+    env::assert_fatal<false>("Invalid TestOutput::Type");
+    break;
+  };
+
+  const bool success =
+      Command::Execute(test_command, config_.GetWorkingDirectory(),
+                       redirect_stdout, redirect_stderr);
   env::assert_fatal(success,
                     fmt::format("Could not run {}", target_.GetUniqueId()));
 
-  // TODO, Add options for test verboseness
-  // For now just print it out
-  // std::for_each(stdout_data.cbegin(), stdout_data.cend(),
-  //               [](const auto &str) { env::log_info("STDOUT", str); });
-  // std::for_each(stderr_data.cbegin(), stderr_data.cend(),
-  //               [](const auto &str) { env::log_info("STDERR", str); });
+  // Print
+  switch (config_.GetTestOutput().GetType()) {
+  case TestOutput::Type::TestPrintOnStderr:
+    env::log_info(fmt::format("STDERR: {}", target_.GetUniqueId()),
+                  internal::aggregate(*redirect_stderr));
+    break;
+  case TestOutput::Type::TestPrintOnStdout:
+    env::log_info(fmt::format("STDOUT: {}", target_.GetUniqueId()),
+                  internal::aggregate(*redirect_stdout));
+    break;
+  case TestOutput::Type::TestPrintOnStderrAndStdout:
+    env::log_info(fmt::format("STDOUT: {}", target_.GetUniqueId()),
+                  internal::aggregate(*redirect_stdout));
+    env::log_info(fmt::format("STDERR: {}", target_.GetUniqueId()),
+                  internal::aggregate(*redirect_stderr));
+    break;
+  default:
+    break;
+  }
 }
 
 } // namespace buildcc

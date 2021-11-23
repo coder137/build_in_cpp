@@ -24,12 +24,44 @@
 
 namespace buildcc {
 
+struct TestOutput {
+  enum class Type {
+    DefaultBehaviour,  // Do not redirect to user or tests, default printed on
+                       // console
+    TestPrintOnStderr, // Test only redirects stderr and prints
+    TestPrintOnStdout, // Test only redirects stdout and prints
+    TestPrintOnStderrAndStdout, // Test redirects both and prints
+    UserRedirect,               // Redirects to user
+  };
+
+  TestOutput(Type output_type = Type::TestPrintOnStderrAndStdout,
+             std::vector<std::string> *redirect_stdout = nullptr,
+             std::vector<std::string> *redirect_stderr = nullptr)
+      : type_(output_type), redirect_stdout_to_user_(redirect_stdout),
+        redirect_stderr_to_user_(redirect_stderr) {}
+
+  Type GetType() const { return type_; }
+  std::vector<std::string> *GetRedirectStdoutToUser() const {
+    return redirect_stdout_to_user_;
+  }
+  std::vector<std::string> *GetRedirectStderrToUser() const {
+    return redirect_stderr_to_user_;
+  }
+
+private:
+  Type type_;
+  std::vector<std::string> *redirect_stdout_to_user_;
+  std::vector<std::string> *redirect_stderr_to_user_;
+};
+
 struct TestConfig {
 public:
   TestConfig(
       const std::unordered_map<const char *, std::string> &arguments = {},
-      const std::optional<fs::path> &working_directory = {})
-      : arguments_(arguments), working_directory_(working_directory) {}
+      const std::optional<fs::path> &working_directory = {},
+      const TestOutput &output = TestOutput())
+      : arguments_(arguments), working_directory_(working_directory),
+        output_(output) {}
 
   const std::unordered_map<const char *, std::string> &GetArguments() const {
     return arguments_;
@@ -37,10 +69,12 @@ public:
   const std::optional<fs::path> &GetWorkingDirectory() const {
     return working_directory_;
   }
+  const TestOutput &GetTestOutput() const { return output_; }
 
 private:
   std::unordered_map<const char *, std::string> arguments_;
   std::optional<fs::path> working_directory_{};
+  TestOutput output_;
 };
 
 struct TestInfo {
