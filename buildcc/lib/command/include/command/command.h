@@ -64,6 +64,8 @@ public:
    * @brief Execute a particular command and optionally redirect stdout and
    * stderr to user supplied dynamic string lists
    */
+  // TODO, Update this to get an integer exit code number instead of boolean
+  // value
   static bool Execute(const std::string &command,
                       const std::optional<fs::path> &working_directory = {},
                       std::vector<std::string> *stdout_data = nullptr,
