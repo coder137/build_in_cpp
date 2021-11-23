@@ -17,9 +17,13 @@
 #ifndef COMMAND_COMMAND_H_
 #define COMMAND_COMMAND_H_
 
+#include <filesystem>
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>
+
+namespace fs = std::filesystem;
 
 namespace buildcc {
 
@@ -61,6 +65,7 @@ public:
    * stderr to user supplied dynamic string lists
    */
   static bool Execute(const std::string &command,
+                      const std::optional<fs::path> &working_directory = {},
                       std::vector<std::string> *stdout_data = nullptr,
                       std::vector<std::string> *stderr_data = nullptr);
 
