@@ -539,6 +539,141 @@ TEST(RegisterTestGroup, Register_Test) {
   mock().checkExpectations();
 }
 
+TEST(RegisterTestGroup, Register_TestWithOutput) {
+  // Arguments
+  std::vector<const char *> av{
+      "",
+      "--config",
+      "configs/basic_parse.toml",
+  };
+  int argc = av.size();
+
+  buildcc::Args args;
+  buildcc::Args::ToolchainArg gcc_toolchain;
+  buildcc::Args::ToolchainArg msvc_toolchain;
+  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  args.Parse(argc, av.data());
+
+  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
+  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(args.Clean());
+
+  // Make dummy toolchain and target
+  buildcc::env::init(fs::current_path(), fs::current_path());
+  buildcc::base::Toolchain toolchain(buildcc::base::Toolchain::Id::Gcc, "", "",
+                                     "", "", "", "");
+  buildcc::base::Target target("dummyT", buildcc::base::TargetType::Executable,
+                               toolchain, "");
+  buildcc::base::Target dependency(
+      "depT", buildcc::base::TargetType::Executable, toolchain, "");
+
+  buildcc::Args::ToolchainState stateSuccess{true, true};
+
+  // TestOutput::Type::DefaultBehaviour
+  {
+    buildcc::Register reg(args);
+    mock().expectNCalls(1, "BuildTask_dummyT");
+    reg.Build(
+        stateSuccess, [](buildcc::base::Target &target) { (void)target; },
+        target);
+    reg.Test(
+        stateSuccess, "{executable}", target,
+        buildcc::TestConfig(
+            {}, {},
+            buildcc::TestOutput(buildcc::TestOutput::Type::DefaultBehaviour)));
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    reg.RunTest();
+  }
+
+  // TestOutput::Type::TestPrintOnStderr
+  {
+    buildcc::Register reg(args);
+    mock().expectNCalls(1, "BuildTask_dummyT");
+    reg.Build(
+        stateSuccess, [](buildcc::base::Target &target) { (void)target; },
+        target);
+    reg.Test(
+        stateSuccess, "{executable}", target,
+        buildcc::TestConfig(
+            {}, {},
+            buildcc::TestOutput(buildcc::TestOutput::Type::TestPrintOnStderr)));
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    reg.RunTest();
+  }
+
+  // TestOutput::Type::TestPrintOnStdout
+  {
+    buildcc::Register reg(args);
+    mock().expectNCalls(1, "BuildTask_dummyT");
+    reg.Build(
+        stateSuccess, [](buildcc::base::Target &target) { (void)target; },
+        target);
+    reg.Test(
+        stateSuccess, "{executable}", target,
+        buildcc::TestConfig(
+            {}, {},
+            buildcc::TestOutput(buildcc::TestOutput::Type::TestPrintOnStdout)));
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    reg.RunTest();
+  }
+
+  // TestOutput::Type::TestPrintOnStderrAndStdout
+  {
+    buildcc::Register reg(args);
+    mock().expectNCalls(1, "BuildTask_dummyT");
+    reg.Build(
+        stateSuccess, [](buildcc::base::Target &target) { (void)target; },
+        target);
+    reg.Test(stateSuccess, "{executable}", target,
+             buildcc::TestConfig(
+                 {}, {},
+                 buildcc::TestOutput(
+                     buildcc::TestOutput::Type::TestPrintOnStderrAndStdout)));
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    reg.RunTest();
+  }
+
+  // TestOutput::Type::UserRedirect
+  {
+    buildcc::Register reg(args);
+    mock().expectNCalls(1, "BuildTask_dummyT");
+    reg.Build(
+        stateSuccess, [](buildcc::base::Target &target) { (void)target; },
+        target);
+    reg.Test(stateSuccess, "{executable}", target,
+             buildcc::TestConfig(
+                 {}, {},
+                 buildcc::TestOutput(buildcc::TestOutput::Type::UserRedirect,
+                                     nullptr, nullptr)));
+
+    buildcc::m::CommandExpect_Execute(1, true);
+    reg.RunTest();
+  }
+
+  // TestOutput::Type::UserRedirect
+  {
+    buildcc::Register reg(args);
+    mock().expectNCalls(1, "BuildTask_dummyT");
+    reg.Build(
+        stateSuccess, [](buildcc::base::Target &target) { (void)target; },
+        target);
+    reg.Test(
+        stateSuccess, "{executable}", target,
+        buildcc::TestConfig(
+            {}, {}, buildcc::TestOutput(buildcc::TestOutput::Type(65535))));
+    CHECK_THROWS(std::exception, reg.RunTest());
+  }
+
+  buildcc::env::deinit();
+  mock().checkExpectations();
+}
+
 int main(int ac, char **av) {
   MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
   return CommandLineTestRunner::RunAllTests(ac, av);

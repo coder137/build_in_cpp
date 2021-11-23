@@ -25,6 +25,8 @@
 #include "target/generator.h"
 #include "target/target.h"
 
+#include "args/register/test_info.h"
+
 #include "taskflow/taskflow.hpp"
 
 namespace buildcc {
@@ -104,10 +106,9 @@ public:
    *
    * Target is added as the `{executable}` argument
    */
-  void
-  Test(const Args::ToolchainState &toolchain_state, const std::string &command,
-       const base::Target &target,
-       const std::unordered_map<const char *, std::string> &arguments = {});
+  void Test(const Args::ToolchainState &toolchain_state,
+            const std::string &command, const base::Target &target,
+            const TestConfig &config = TestConfig());
 
   /**
    * @brief Builds the targets that have been dynamically added through
@@ -127,19 +128,6 @@ public:
   const tf::Taskflow &GetTaskflow() const { return build_tf_; }
 
 private:
-  struct TestInfo {
-    TestInfo(const base::Target &target, const std::string &command,
-             const std::unordered_map<const char *, std::string> &arguments)
-        : target_(target), command_(command), arguments_(arguments) {}
-
-    void TestRunner() const;
-
-  private:
-    const base::Target &target_;
-    std::string command_;
-    std::unordered_map<const char *, std::string> arguments_;
-  };
-
 private:
   void Initialize();
 

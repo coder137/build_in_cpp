@@ -19,15 +19,30 @@
 #include "fmt/format.h"
 
 #include "env/assert_fatal.h"
+#include "env/host_os.h"
 #include "env/logging.h"
 
 #include "process.hpp"
 
 namespace tpl = TinyProcessLib;
 
+namespace {
+
+tpl::Process::string_type
+get_working_directory(const std::optional<fs::path> &working_directory) {
+#ifdef UNICODE
+  return working_directory.value_or(tpl::Process::string_type()).wstring();
+#else
+  return working_directory.value_or(tpl::Process::string_type()).string();
+#endif
+}
+
+} // namespace
+
 namespace buildcc {
 
 bool Command::Execute(const std::string &command,
+                      const std::optional<fs::path> &working_directory,
                       std::vector<std::string> *stdout_data,
                       std::vector<std::string> *stderr_data) {
   env::assert_fatal(!command.empty(), "Empty command");
@@ -43,7 +58,7 @@ bool Command::Execute(const std::string &command,
         stderr_data->emplace_back(std::string(bytes, n));
       };
 
-  tpl::Process process(command, tpl::Process::string_type(),
+  tpl::Process process(command, get_working_directory(working_directory),
                        stdout_data == nullptr ? nullptr : stdout_func,
                        stderr_data == nullptr ? nullptr : stderr_func);
   return process.get_exit_status() == 0;
