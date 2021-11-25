@@ -7,6 +7,8 @@ namespace buildcc {
 
 namespace base::m {
 
+void TargetRunner(Target &target);
+
 void TargetExpect_SourceRemoved(unsigned int calls, Target *target);
 void TargetExpect_SourceAdded(unsigned int calls, Target *target);
 void TargetExpect_SourceUpdated(unsigned int calls, Target *target);
