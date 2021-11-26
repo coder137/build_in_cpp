@@ -16,15 +16,22 @@
 
 #include "env/private/task_state.h"
 
+#include <mutex>
+
 namespace {
 
+std::mutex current_state_mutex;
 buildcc::env::TaskState current_state{buildcc::env::TaskState::SUCCESS};
 
-}
+} // namespace
 
 namespace buildcc::env {
 
-void set_task_state(TaskState state) { current_state = state; }
+void set_task_state(TaskState state) {
+  std::lock_guard<std::mutex> guard(current_state_mutex);
+  current_state = state;
+}
+
 bool is_task_state_success() {
   if (current_state == TaskState::SUCCESS) {
     return true;
