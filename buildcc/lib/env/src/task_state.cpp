@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "env/private/task_state.h"
+#include "env/task_state.h"
 
 #include <mutex>
 
