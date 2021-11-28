@@ -12,6 +12,8 @@ if (${TESTING})
     )
     target_link_libraries(mock_env PUBLIC
         fmt::fmt-header-only
+        Taskflow
+
         CppUTest
         CppUTestExt
         gcov
@@ -23,7 +25,11 @@ if (${TESTING})
     add_executable(test_env_util test/test_env_util.cpp)
     target_link_libraries(test_env_util PRIVATE mock_env)
 
+    add_executable(test_task_state test/test_task_state.cpp)
+    target_link_libraries(test_task_state PRIVATE mock_env)
+
     add_test(NAME test_env_util COMMAND test_env_util)
+    add_test(NAME test_task_state COMMAND test_task_state)
 endif()
 
 set(ENV_SRCS
