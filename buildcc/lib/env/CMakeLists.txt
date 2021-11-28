@@ -5,7 +5,7 @@ if (${TESTING})
         mock/assert_fatal.cpp
 
         src/env.cpp
-        src/private/task_state.cpp
+        src/task_state.cpp
     )
     target_include_directories(mock_env PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -37,8 +37,8 @@ set(ENV_SRCS
     include/env/host_compiler.h
     include/env/util.h
 
-    src/private/task_state.cpp
-    include/env/private/task_state.h
+    src/task_state.cpp
+    include/env/task_state.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})
