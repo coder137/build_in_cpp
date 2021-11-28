@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef ENV_PRIVATE_TASK_STATE_H_
-#define ENV_PRIVATE_TASK_STATE_H_
+#ifndef ENV_TASK_STATE_H_
+#define ENV_TASK_STATE_H_
 
 namespace buildcc::env {
 
