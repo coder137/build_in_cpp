@@ -43,12 +43,14 @@ public:
    * @param pathname
    * @return Path
    */
+  // TODO, Discuss if we should return `std::optional` instead of asserting
   static Path CreateExistingPath(const fs::path &pathname) {
     std::error_code errcode;
     uint64_t last_write_timestamp =
         std::filesystem::last_write_time(pathname, errcode)
             .time_since_epoch()
             .count();
+    // TODO, Discuss if we should replace this with `env::assert_throw`
     env::assert_fatal(errcode.value() == 0,
                       fmt::format("{} not found", pathname));
 
@@ -160,6 +162,10 @@ struct RelationalPathFiles {
   RelationalPathFiles(const path_unordered_set &i, const fs_unordered_set &u)
       : internal(i), user(u) {}
 
+  /**
+   * @brief Convert from fs_unordered_set to path_unordered_set
+   * Can assert fatal if file does not exist when calling `CreateExistingPath`
+   */
   void Convert() {
     if (done_once) {
       return;
