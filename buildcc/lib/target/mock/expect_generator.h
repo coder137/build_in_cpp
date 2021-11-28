@@ -5,6 +5,8 @@
 
 namespace buildcc::base::m {
 
+void GeneratorRunner(Generator &generator);
+
 void GeneratorExpect_InputRemoved(unsigned int calls, Generator *generator);
 void GeneratorExpect_InputAdded(unsigned int calls, Generator *generator);
 void GeneratorExpect_InputUpdated(unsigned int calls, Generator *generator);

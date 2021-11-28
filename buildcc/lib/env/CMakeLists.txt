@@ -3,13 +3,17 @@ if (${TESTING})
     add_library(mock_env STATIC
         mock/logging.cpp
         mock/assert_fatal.cpp
+
         src/env.cpp
+        src/task_state.cpp
     )
     target_include_directories(mock_env PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR}/include
     )
     target_link_libraries(mock_env PUBLIC
         fmt::fmt-header-only
+        Taskflow
+
         CppUTest
         CppUTestExt
         gcov
@@ -21,7 +25,11 @@ if (${TESTING})
     add_executable(test_env_util test/test_env_util.cpp)
     target_link_libraries(test_env_util PRIVATE mock_env)
 
+    add_executable(test_task_state test/test_task_state.cpp)
+    target_link_libraries(test_task_state PRIVATE mock_env)
+
     add_test(NAME test_env_util COMMAND test_env_util)
+    add_test(NAME test_task_state COMMAND test_task_state)
 endif()
 
 set(ENV_SRCS
@@ -34,6 +42,9 @@ set(ENV_SRCS
     include/env/host_os.h
     include/env/host_compiler.h
     include/env/util.h
+
+    src/task_state.cpp
+    include/env/task_state.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})

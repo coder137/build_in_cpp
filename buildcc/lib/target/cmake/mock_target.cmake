@@ -3,10 +3,12 @@ add_library(mock_target STATIC
 
     # Generator mocks
     mock/generator/task.cpp
+    mock/generator/runner.cpp
     mock/generator/recheck_states.cpp
 
     # Target mocks
     mock/target/tasks.cpp
+    mock/target/runner.cpp
     mock/target/recheck_states.cpp
 )
 target_include_directories(mock_target PUBLIC

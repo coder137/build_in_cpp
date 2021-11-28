@@ -89,9 +89,15 @@ Build C, C++ and ASM files in C++
 
 ## Dependency Chart
 
-![Depedency Chart](doc/software_architecture/uml/dependency_graph.png)
+![Dependency Chart](doc/software_architecture/uml/dependency_graph.png)
 
-- See also [how to create uml diagrams using VSCode](doc/software_architecture/create_uml_diagrams.md)
+## State Diagram 
+
+### [Generator State Diagram](doc/software_architecture/uml/generator_tasks.png)
+
+### [Target State Diagram](doc/software_architecture/uml/target_tasks.png)
+
+> See also [how to create uml diagrams using VSCode](doc/software_architecture/create_uml_diagrams.md)
 
 ## Community Plugin
 

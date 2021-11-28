@@ -1,43 +1,49 @@
 @startuml
 
+[*] --> Compile
+Compile --> Link
+Link --> [*]
 
-usecase IncludeDirs
-usecase PreprocessorFlags
-usecase CompilerFlags
+state Compile {
+SourceFile --> Compiler
+HeaderFile --> Compiler
+IncludeDirs --> Compiler
+PreprocessorFlags --> Compiler
+CompilerFlags --> Compiler
 
-usecase LinkFlags
-usecase LinkDirs
+Compiler --> ObjectFile
+Compiler --> PrecompileHeader
 
-file SourceFile
-file HeaderFile
-file ObjectFile
-file PrecompileHeader
-file Executable
-file Library
-file Modules
+PrecompileHeader --> ObjectFile
 
-queue Compiler
-queue Linker
+SourceFile : Path + Timestamp
+HeaderFile : Path + Timestamp
+IncludeDirs : Path
+PreprocessorFlags : String
+CompilerFlags : String
+Compiler : Toolchain
+PrecompileHeader : Path
+ObjectFile : Path
+}
 
-HeaderFile ..> Compiler 
-IncludeDirs ..> Compiler
-PreprocessorFlags ..> Compiler
-CompilerFlags ..> Compiler
-SourceFile ..> Compiler
+Compile : {1 ... N}
 
-Compiler ..> ObjectFile
-Compiler ..> PrecompileHeader
+state Link {
+Library --> Linker
+Module --> Linker
+LinkDirs --> Linker
+LinkFlags --> Linker
 
-PrecompileHeader ..> ObjectFile
+Linker --> Executable
+Linker --> Library
+Linker --> Module
 
-LinkFlags ..> Linker
-LinkDirs ..> Linker
-ObjectFile ..> Linker
-Library ..> Linker
-Modules ..> Linker
-
-Linker ..> Executable
-Linker ..> Library
-Linker ..> Modules
+Library : Path + Timestamp
+Module : Path + Timestamp
+Executable : Path + Timestamp
+Linker : Toolchain
+LinkDirs : Path
+LinkFlags : String
+}
 
 @enduml
