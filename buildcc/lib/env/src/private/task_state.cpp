@@ -32,11 +32,6 @@ void set_task_state(TaskState state) {
   current_state = state;
 }
 
-bool is_task_state_success() {
-  if (current_state == TaskState::SUCCESS) {
-    return true;
-  }
-  return false;
-}
+TaskState get_task_state() { return current_state; }
 
 } // namespace buildcc::env

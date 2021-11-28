@@ -26,8 +26,7 @@ enum class TaskState {
 };
 
 void set_task_state(TaskState state);
-
-bool is_task_state_success();
+TaskState get_task_state();
 
 } // namespace buildcc::env
 
