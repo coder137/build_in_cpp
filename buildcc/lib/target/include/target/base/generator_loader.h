@@ -41,15 +41,15 @@ public:
   bool Load() override;
 
   // Getters
-  const internal::path_unordered_set &GetLoadedInputFiles() const {
+  const internal::path_unordered_set &GetLoadedInputFiles() const noexcept {
     return loaded_input_files_;
   }
 
-  const internal::fs_unordered_set &GetLoadedOutputFiles() const {
+  const internal::fs_unordered_set &GetLoadedOutputFiles() const noexcept {
     return loaded_output_files_;
   }
 
-  const std::vector<std::string> &GetLoadedCommands() const {
+  const std::vector<std::string> &GetLoadedCommands() const noexcept {
     return loaded_commands_;
   }
 
