@@ -24,7 +24,7 @@
 #include <unordered_set>
 
 // Env
-#include "env/assert_fatal.h"
+#include "env/assert_throw.h"
 
 // Third party
 #include "fmt/format.h"
@@ -50,8 +50,7 @@ public:
         std::filesystem::last_write_time(pathname, errcode)
             .time_since_epoch()
             .count();
-    // TODO, Discuss if we should replace this with `env::assert_throw`
-    env::assert_fatal(errcode.value() == 0,
+    env::assert_throw(errcode.value() == 0,
                       fmt::format("{} not found", pathname));
 
     return Path(pathname, last_write_timestamp);
@@ -164,7 +163,7 @@ struct RelationalPathFiles {
 
   /**
    * @brief Convert from fs_unordered_set to path_unordered_set
-   * Can assert fatal if file does not exist when calling `CreateExistingPath`
+   * Can assert throw if file does not exist when calling `CreateExistingPath`
    */
   void Convert() {
     if (done_once) {
