@@ -36,9 +36,6 @@ void Generator::GenerateTask() {
       break;
     default:
       task_state_ = env::TaskState::FAILURE;
-      // Update input path for failure
-      // NOTE, Nothing changes
-      current_input_files_.internal = loader_.GetLoadedInputFiles();
       break;
     }
     return static_cast<int>(task_state_);
@@ -49,9 +46,13 @@ void Generator::GenerateTask() {
     Convert();
     BuildGenerate();
 
-    auto run_command = [](const std::string &command) {
-      bool success = Command::Execute(command);
-      env::assert_fatal(success, fmt::format("{} failed", command));
+    auto run_command = [this](const std::string &command) {
+      try {
+        bool success = Command::Execute(command);
+        env::assert_throw(success, fmt::format("{} failed", command));
+      } catch (const std::exception &e) {
+        task_state_ = env::TaskState::FAILURE;
+      }
     };
 
     tf::Task command_task;
@@ -89,12 +90,26 @@ void Generator::GenerateTask() {
   generate_task.name(kGenerateTaskName);
 
   tf::Task end_task = tf_.emplace([this]() {
-    // TODO, Update the Store API
-    if (dirty_) {
-      env::assert_fatal(Store(), fmt::format("Store failed for {}", name_));
+    // Set the current schema parameters to the old parameters
+    if (task_state_ != env::TaskState::SUCCESS) {
+      current_input_files_.internal = loader_.GetLoadedInputFiles();
+      current_output_files_ = loader_.GetLoadedOutputFiles();
+      current_commands_ = loader_.GetLoadedCommands();
+      dirty_ = true;
     }
 
-    // TODO, Update if failure
+    if (dirty_) {
+      try {
+        env::assert_throw(Store(), fmt::format("Store failed for {}", name_));
+      } catch (const std::exception &e) {
+        task_state_ = env::TaskState::FAILURE;
+      }
+    }
+
+    // Update Env task state when NOT SUCCESS only
+    if (task_state_ != env::TaskState::SUCCESS) {
+      env::set_task_state(task_state_);
+    }
   });
   end_task.name(kEndGeneratorTaskName);
 
