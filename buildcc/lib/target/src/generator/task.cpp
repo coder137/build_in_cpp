@@ -49,20 +49,20 @@ void Generator::GenerateTask() {
     Convert();
     BuildGenerate();
 
+    auto run_command = [](const std::string &command) {
+      bool success = Command::Execute(command);
+      env::assert_fatal(success, fmt::format("{} failed", command));
+    };
+
     tf::Task command_task;
     if (dirty_) {
       if (parallel_) {
-        command_task = subflow.for_each(
-            current_commands_.cbegin(), current_commands_.cend(),
-            [](const std::string &command) {
-              bool success = Command::Execute(command);
-              env::assert_fatal(success, fmt::format("{} failed", command));
-            });
+        command_task = subflow.for_each(current_commands_.cbegin(),
+                                        current_commands_.cend(), run_command);
       } else {
         command_task = subflow.emplace([&]() {
           for (const auto &command : current_commands_) {
-            bool success = Command::Execute(command);
-            env::assert_fatal(success, fmt::format("{} failed", command));
+            run_command(command);
           }
         });
       }
