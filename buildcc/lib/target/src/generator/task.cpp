@@ -42,14 +42,17 @@ void Generator::GenerateTask() {
   });
   start_task.name(kStartGeneratorTaskName);
 
-  tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
+  tf::Task pregenerate_task = tf_.emplace([&]() {
     try {
       Convert();
       BuildGenerate();
     } catch (...) {
       task_state_ = env::TaskState::FAILURE;
     }
+    return static_cast<int>(task_state_);
+  });
 
+  tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
     auto run_command = [this](const std::string &command) {
       try {
         bool success = Command::Execute(command);
@@ -60,7 +63,7 @@ void Generator::GenerateTask() {
     };
 
     tf::Task command_task;
-    if (dirty_ && (task_state_ == env::TaskState::SUCCESS)) {
+    if (dirty_) {
       if (parallel_) {
         command_task = subflow.for_each(current_commands_.cbegin(),
                                         current_commands_.cend(), run_command);
@@ -100,11 +103,13 @@ void Generator::GenerateTask() {
 
     // NOTE, Only store if the above state is marked dirty_ AND task_state_ ==
     // SUCCESS
-    if (dirty_ && (task_state_ == env::TaskState::SUCCESS)) {
-      try {
-        env::assert_throw(Store(), fmt::format("Store failed for {}", name_));
-      } catch (...) {
-        task_state_ = env::TaskState::FAILURE;
+    if (task_state_ == env::TaskState::SUCCESS) {
+      if (dirty_) {
+        try {
+          env::assert_throw(Store(), fmt::format("Store failed for {}", name_));
+        } catch (...) {
+          task_state_ = env::TaskState::FAILURE;
+        }
       }
     }
 
@@ -116,7 +121,8 @@ void Generator::GenerateTask() {
   end_task.name(kEndGeneratorTaskName);
 
   // Dependencies
-  start_task.precede(generate_task, end_task);
+  start_task.precede(pregenerate_task, end_task);
+  pregenerate_task.precede(generate_task, end_task);
   generate_task.precede(end_task);
 }
 
