@@ -98,6 +98,7 @@ public:
   tf::Taskflow &GetTaskflow() { return tf_; }
 
   const std::string &GetName() { return name_; }
+  env::TaskState GetTaskState() { return task_state_; }
 
   const std::string &
   GetValueByIdentifier(const std::string &file_identifier) const;
