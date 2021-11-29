@@ -20,6 +20,7 @@
 
 namespace {
 constexpr const char *const kStartGeneratorTaskName = "Start Generator";
+constexpr const char *const kPreGenerateTaskName = "PreGenerate";
 constexpr const char *const kEndGeneratorTaskName = "End Generator";
 
 constexpr const char *const kCommandTaskName = "Command";
@@ -51,6 +52,7 @@ void Generator::GenerateTask() {
     }
     return static_cast<int>(task_state_);
   });
+  pregenerate_task.name(kPreGenerateTaskName);
 
   tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
     auto run_command = [this](const std::string &command) {
@@ -58,6 +60,7 @@ void Generator::GenerateTask() {
         bool success = Command::Execute(command);
         env::assert_throw(success, fmt::format("{} failed", command));
       } catch (...) {
+        std::lock_guard<std::mutex> guard(task_state_mutex_);
         task_state_ = env::TaskState::FAILURE;
       }
     };
@@ -68,7 +71,7 @@ void Generator::GenerateTask() {
         command_task = subflow.for_each(current_commands_.cbegin(),
                                         current_commands_.cend(), run_command);
       } else {
-        command_task = subflow.emplace([&]() {
+        command_task = subflow.emplace([&, run_command]() {
           for (const auto &command : current_commands_) {
             run_command(command);
           }
