@@ -28,6 +28,10 @@ buildcc::env::TaskState current_state{buildcc::env::TaskState::SUCCESS};
 namespace buildcc::env {
 
 void set_task_state(TaskState state) {
+  // NOTE, `Avoid resetting` if same state is provided
+  if (state == get_task_state()) {
+    return;
+  }
   std::lock_guard<std::mutex> guard(current_state_mutex);
   current_state = state;
 }

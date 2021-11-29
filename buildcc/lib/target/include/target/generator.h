@@ -18,6 +18,7 @@
 #define TARGET_GENERATOR_H_
 
 #include <functional>
+#include <mutex>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -25,6 +26,7 @@
 #include "taskflow/taskflow.hpp"
 
 #include "env/env.h"
+#include "env/task_state.h"
 
 #include "command/command.h"
 
@@ -97,6 +99,7 @@ public:
   tf::Taskflow &GetTaskflow() { return tf_; }
 
   const std::string &GetName() { return name_; }
+  env::TaskState GetTaskState() { return task_state_; }
 
   const std::string &
   GetValueByIdentifier(const std::string &file_identifier) const;
@@ -132,6 +135,8 @@ private:
   bool parallel_{false};
 
   // Internal
+  std::mutex task_state_mutex_;
+  env::TaskState task_state_{env::TaskState::SUCCESS};
   Command command_;
   tf::Taskflow tf_;
 };

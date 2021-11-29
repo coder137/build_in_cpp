@@ -42,6 +42,27 @@ TEST(GeneratorTestGroup, Generator_Build) {
 
   buildcc::m::CommandExpect_Execute(1, true);
   generator.Build();
+  buildcc::base::m::GeneratorRunner(generator);
+
+  mock().checkExpectations();
+}
+
+TEST(GeneratorTestGroup, Generator_BuildParallel) {
+  constexpr const char *const NAME = "BuildParallel";
+  buildcc::base::Generator generator(NAME, "", true);
+
+  generator.AddDefaultArguments({
+      {"compiler", "gcc"},
+  });
+
+  generator.AddInput("{gen_root_dir}/dummy_main.c");
+  generator.AddOutput("{gen_build_dir}/dummy_main.exe");
+  generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
+                       "{gen_root_dir}/dummy_main.c");
+
+  buildcc::m::CommandExpect_Execute(1, true);
+  generator.Build();
+  buildcc::base::m::GeneratorRunner(generator);
 
   mock().checkExpectations();
 }
@@ -60,6 +81,7 @@ TEST(GeneratorTestGroup, Generator_Identifier) {
 
   buildcc::m::CommandExpect_Execute(1, true);
   generator.Build();
+  buildcc::base::m::GeneratorRunner(generator);
 
   mock().checkExpectations();
 }
@@ -78,6 +100,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   {
@@ -91,6 +114,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
                          });
 
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -108,6 +132,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   // Removed
@@ -120,6 +145,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
     buildcc::base::m::GeneratorExpect_InputRemoved(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   // Added
@@ -133,6 +159,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
     buildcc::base::m::GeneratorExpect_InputAdded(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   sleep(1);
@@ -153,6 +180,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
     buildcc::base::m::GeneratorExpect_InputUpdated(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -172,6 +200,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   {
@@ -186,6 +215,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
     buildcc::base::m::GeneratorExpect_OutputChanged(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   {
@@ -201,6 +231,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
     buildcc::base::m::GeneratorExpect_OutputChanged(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -220,6 +251,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   {
@@ -234,6 +266,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
     buildcc::base::m::GeneratorExpect_CommandChanged(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   {
@@ -246,6 +279,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
     buildcc::base::m::GeneratorExpect_CommandChanged(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -261,6 +295,101 @@ TEST(GeneratorTestGroup, Generator_AddDefaultArguments) {
   const std::string &value = generator.GetValueByIdentifier("key");
   STRCMP_EQUAL(value.c_str(), "value");
   STRCMP_EQUAL(generator.GetName().c_str(), "AddDefaultArgument");
+}
+
+// FAILURE STATES
+
+TEST(GeneratorTestGroup, Generator_FailedEnvTaskState) {
+  buildcc::env::set_task_state(buildcc::env::TaskState::FAILURE);
+
+  constexpr const char *const NAME = "FailedEnvTaskState";
+  buildcc::base::Generator generator(NAME, "", true);
+
+  generator.AddDefaultArguments({
+      {"compiler", "gcc"},
+  });
+
+  generator.AddInput("{gen_root_dir}/dummy_main.c");
+  generator.AddOutput("{gen_build_dir}/dummy_main.exe");
+  generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
+                       "{gen_root_dir}/dummy_main.c");
+
+  generator.Build();
+  buildcc::base::m::GeneratorRunner(generator);
+
+  mock().checkExpectations();
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+}
+
+TEST(GeneratorTestGroup, Generator_FailedGenerateConvert) {
+  constexpr const char *const NAME = "FailedGenerateConvert";
+  buildcc::base::Generator generator(NAME, "", false);
+
+  generator.AddDefaultArguments({
+      {"compiler", "gcc"},
+  });
+
+  generator.AddInput("{gen_root_dir}/this_file_does_not_exist.c");
+  generator.AddOutput("{gen_build_dir}/dummy_main.exe");
+  generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
+                       "{gen_root_dir}/dummy_main.c");
+
+  generator.Build();
+  buildcc::base::m::GeneratorRunner(generator);
+
+  mock().checkExpectations();
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+}
+
+TEST(GeneratorTestGroup, Generator_FailedGenerateCommand) {
+  constexpr const char *const NAME = "FailedGenerateCommand";
+  buildcc::base::Generator generator(NAME, "", false);
+
+  generator.AddDefaultArguments({
+      {"compiler", "gcc"},
+  });
+
+  generator.AddInput("{gen_root_dir}/dummy_main.c");
+  generator.AddOutput("{gen_build_dir}/dummy_main.exe");
+  generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
+                       "{gen_root_dir}/dummy_main.c");
+
+  buildcc::m::CommandExpect_Execute(1, false);
+  generator.Build();
+  buildcc::base::m::GeneratorRunner(generator);
+
+  mock().checkExpectations();
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+}
+
+TEST(GeneratorTestGroup, Generator_FailedStore) {
+  constexpr const char *const NAME = "FailedStore";
+  const fs::path test_build_dir = buildcc::env::get_project_build_dir() / NAME;
+
+  buildcc::base::Generator generator(NAME, "", false);
+  fs::remove_all(test_build_dir);
+
+  generator.AddDefaultArguments({
+      {"compiler", "gcc"},
+  });
+
+  generator.AddInput("{gen_root_dir}/dummy_main.c");
+  generator.AddOutput("{gen_build_dir}/dummy_main.exe");
+  generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
+                       "{gen_root_dir}/dummy_main.c");
+
+  buildcc::m::CommandExpect_Execute(1, true);
+  generator.Build();
+  buildcc::base::m::GeneratorRunner(generator);
+
+  CHECK(generator.GetTaskState() == buildcc::env::TaskState::FAILURE);
+
+  mock().checkExpectations();
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
 }
 
 int main(int ac, char **av) {

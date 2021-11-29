@@ -37,6 +37,7 @@ set(ENV_SRCS
     src/assert_fatal.cpp
     src/logging.cpp
     include/env/assert_fatal.h
+    include/env/assert_throw.h
     include/env/env.h
     include/env/logging.h
     include/env/host_os.h

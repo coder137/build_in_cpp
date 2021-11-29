@@ -24,7 +24,7 @@
 #include <unordered_set>
 
 // Env
-#include "env/assert_fatal.h"
+#include "env/assert_throw.h"
 
 // Third party
 #include "fmt/format.h"
@@ -43,13 +43,14 @@ public:
    * @param pathname
    * @return Path
    */
+  // TODO, Discuss if we should return `std::optional` instead of asserting
   static Path CreateExistingPath(const fs::path &pathname) {
     std::error_code errcode;
     uint64_t last_write_timestamp =
         std::filesystem::last_write_time(pathname, errcode)
             .time_since_epoch()
             .count();
-    env::assert_fatal(errcode.value() == 0,
+    env::assert_throw(errcode.value() == 0,
                       fmt::format("{} not found", pathname));
 
     return Path(pathname, last_write_timestamp);
@@ -66,13 +67,15 @@ public:
    * @param pathname
    * @return Path
    */
-  static Path CreateNewPath(const fs::path &pathname) noexcept {
+  static Path CreateNewPath(const fs::path &pathname) {
     return Path(pathname, 0);
   }
 
   // Getters
-  std::uint64_t GetLastWriteTimestamp() const { return last_write_timestamp_; }
-  const fs::path &GetPathname() const { return pathname_; }
+  std::uint64_t GetLastWriteTimestamp() const noexcept {
+    return last_write_timestamp_;
+  }
+  const fs::path &GetPathname() const noexcept { return pathname_; }
 
   /**
    * @brief Get fs::path as std::string while keeping the preferred os
@@ -160,6 +163,10 @@ struct RelationalPathFiles {
   RelationalPathFiles(const path_unordered_set &i, const fs_unordered_set &u)
       : internal(i), user(u) {}
 
+  /**
+   * @brief Convert from fs_unordered_set to path_unordered_set
+   * Can assert throw if file does not exist when calling `CreateExistingPath`
+   */
   void Convert() {
     if (done_once) {
       return;

@@ -19,45 +19,61 @@
 #include "command/command.h"
 
 namespace {
-constexpr const char *const kCommandTaskName = "Command";
+constexpr const char *const kStartGeneratorTaskName = "Start Generator";
 constexpr const char *const kPreGenerateTaskName = "PreGenerate";
+constexpr const char *const kEndGeneratorTaskName = "End Generator";
+
+constexpr const char *const kCommandTaskName = "Command";
 constexpr const char *const kGenerateTaskName = "Generate";
-constexpr const char *const kPostGenerateTaskName = "PostGenerate";
 
 } // namespace
 
 namespace buildcc::base {
 
 void Generator::GenerateTask() {
+  tf::Task start_task = tf_.emplace([this]() {
+    switch (env::get_task_state()) {
+    case env::TaskState::SUCCESS:
+      break;
+    default:
+      task_state_ = env::TaskState::FAILURE;
+      break;
+    }
+    return static_cast<int>(task_state_);
+  });
+  start_task.name(kStartGeneratorTaskName);
 
-  tf::Task pregenerate_task = tf_.emplace([this]() {
-    Convert();
-    BuildGenerate();
+  tf::Task pregenerate_task = tf_.emplace([&]() {
+    try {
+      Convert();
+      BuildGenerate();
+    } catch (...) {
+      task_state_ = env::TaskState::FAILURE;
+    }
+    return static_cast<int>(task_state_);
   });
   pregenerate_task.name(kPreGenerateTaskName);
 
-  tf::Task postgenerate_task = tf_.emplace([this]() {
-    if (dirty_) {
-      env::assert_fatal(Store(), fmt::format("Store failed for {}", name_));
-    }
-  });
-  postgenerate_task.name(kPostGenerateTaskName);
-
   tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
+    auto run_command = [this](const std::string &command) {
+      try {
+        bool success = Command::Execute(command);
+        env::assert_throw(success, fmt::format("{} failed", command));
+      } catch (...) {
+        std::lock_guard<std::mutex> guard(task_state_mutex_);
+        task_state_ = env::TaskState::FAILURE;
+      }
+    };
+
     tf::Task command_task;
     if (dirty_) {
       if (parallel_) {
-        command_task = subflow.for_each(
-            current_commands_.cbegin(), current_commands_.cend(),
-            [](const std::string &command) {
-              bool success = Command::Execute(command);
-              env::assert_fatal(success, fmt::format("{} failed", command));
-            });
+        command_task = subflow.for_each(current_commands_.cbegin(),
+                                        current_commands_.cend(), run_command);
       } else {
-        command_task = subflow.emplace([&]() {
+        command_task = subflow.emplace([&, run_command]() {
           for (const auto &command : current_commands_) {
-            bool success = Command::Execute(command);
-            env::assert_fatal(success, fmt::format("{} failed", command));
+            run_command(command);
           }
         });
       }
@@ -66,6 +82,7 @@ void Generator::GenerateTask() {
     }
     command_task.name(kCommandTaskName);
 
+    // Graph Generation
     for (const auto &i : current_input_files_.user) {
       std::string name =
           fmt::format("{}", i.lexically_relative(env::get_project_root_dir()));
@@ -82,8 +99,34 @@ void Generator::GenerateTask() {
   });
   generate_task.name(kGenerateTaskName);
 
-  pregenerate_task.precede(generate_task);
-  generate_task.precede(postgenerate_task);
+  tf::Task end_task = tf_.emplace([this]() {
+    // task_state_ != env::TaskState::SUCCESS
+    // We do not need to Store, leave the serialized store with the previous
+    // values
+
+    // NOTE, Only store if the above state is marked dirty_ AND task_state_ ==
+    // SUCCESS
+    if (task_state_ == env::TaskState::SUCCESS) {
+      if (dirty_) {
+        try {
+          env::assert_throw(Store(), fmt::format("Store failed for {}", name_));
+        } catch (...) {
+          task_state_ = env::TaskState::FAILURE;
+        }
+      }
+    }
+
+    // Update Env task state when NOT SUCCESS only
+    if (task_state_ != env::TaskState::SUCCESS) {
+      env::set_task_state(task_state_);
+    }
+  });
+  end_task.name(kEndGeneratorTaskName);
+
+  // Dependencies
+  start_task.precede(pregenerate_task, end_task);
+  pregenerate_task.precede(generate_task, end_task);
+  generate_task.precede(end_task);
 }
 
 } // namespace buildcc::base

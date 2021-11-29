@@ -28,7 +28,7 @@ public:
   virtual bool Load() = 0;
 
   const fs::path &GetBinaryPath() const { return binary_path_; };
-  bool IsLoaded() const { return loaded_; };
+  bool IsLoaded() const noexcept { return loaded_; };
 
 protected:
   bool loaded_{false};
