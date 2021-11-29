@@ -47,6 +47,26 @@ TEST(GeneratorTestGroup, Generator_Build) {
   mock().checkExpectations();
 }
 
+TEST(GeneratorTestGroup, Generator_BuildParallel) {
+  constexpr const char *const NAME = "BuildParallel";
+  buildcc::base::Generator generator(NAME, "", true);
+
+  generator.AddDefaultArguments({
+      {"compiler", "gcc"},
+  });
+
+  generator.AddInput("{gen_root_dir}/dummy_main.c");
+  generator.AddOutput("{gen_build_dir}/dummy_main.exe");
+  generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
+                       "{gen_root_dir}/dummy_main.c");
+
+  buildcc::m::CommandExpect_Execute(1, true);
+  generator.Build();
+  buildcc::base::m::GeneratorRunner(generator);
+
+  mock().checkExpectations();
+}
+
 TEST(GeneratorTestGroup, Generator_Identifier) {
   constexpr const char *const NAME = "Identifier";
   buildcc::base::Generator generator(NAME, "");
@@ -275,6 +295,32 @@ TEST(GeneratorTestGroup, Generator_AddDefaultArguments) {
   const std::string &value = generator.GetValueByIdentifier("key");
   STRCMP_EQUAL(value.c_str(), "value");
   STRCMP_EQUAL(generator.GetName().c_str(), "AddDefaultArgument");
+}
+
+// FAILURE STATES
+
+TEST(GeneratorTestGroup, Generator_FailedEnvTaskState) {
+  buildcc::env::set_task_state(buildcc::env::TaskState::FAILURE);
+
+  constexpr const char *const NAME = "FailedEnvTaskState";
+  buildcc::base::Generator generator(NAME, "", true);
+
+  generator.AddDefaultArguments({
+      {"compiler", "gcc"},
+  });
+
+  generator.AddInput("{gen_root_dir}/dummy_main.c");
+  generator.AddOutput("{gen_build_dir}/dummy_main.exe");
+  generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
+                       "{gen_root_dir}/dummy_main.c");
+
+  // buildcc::m::CommandExpect_Execute(1, true);
+  generator.Build();
+  buildcc::base::m::GeneratorRunner(generator);
+
+  mock().checkExpectations();
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
 }
 
 int main(int ac, char **av) {
