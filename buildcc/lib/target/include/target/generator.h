@@ -18,6 +18,7 @@
 #define TARGET_GENERATOR_H_
 
 #include <functional>
+#include <mutex>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -134,6 +135,7 @@ private:
   bool parallel_{false};
 
   // Internal
+  std::mutex task_state_mutex_;
   env::TaskState task_state_{env::TaskState::SUCCESS};
   Command command_;
   tf::Taskflow tf_;
