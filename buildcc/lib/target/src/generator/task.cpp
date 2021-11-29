@@ -90,15 +90,13 @@ void Generator::GenerateTask() {
   generate_task.name(kGenerateTaskName);
 
   tf::Task end_task = tf_.emplace([this]() {
-    // Set the current schema parameters to the old parameters
-    if (task_state_ != env::TaskState::SUCCESS) {
-      current_input_files_.internal = loader_.GetLoadedInputFiles();
-      current_output_files_ = loader_.GetLoadedOutputFiles();
-      current_commands_ = loader_.GetLoadedCommands();
-      dirty_ = true;
-    }
+    // task_state_ != env::TaskState::SUCCESS
+    // We do not need to Store, leave the serialized store with the previous
+    // values
 
-    if (dirty_) {
+    // NOTE, Only store if the above state is marked dirty_ AND task_state_ ==
+    // SUCCESS
+    if (dirty_ && (task_state_ == env::TaskState::SUCCESS)) {
       try {
         env::assert_throw(Store(), fmt::format("Store failed for {}", name_));
       } catch (const std::exception &e) {
