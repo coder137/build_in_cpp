@@ -43,8 +43,12 @@ void Generator::GenerateTask() {
   start_task.name(kStartGeneratorTaskName);
 
   tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
-    Convert();
-    BuildGenerate();
+    try {
+      Convert();
+      BuildGenerate();
+    } catch (const std::exception &e) {
+      task_state_ = env::TaskState::FAILURE;
+    }
 
     auto run_command = [this](const std::string &command) {
       try {
@@ -56,7 +60,7 @@ void Generator::GenerateTask() {
     };
 
     tf::Task command_task;
-    if (dirty_) {
+    if (dirty_ && (task_state_ == env::TaskState::SUCCESS)) {
       if (parallel_) {
         command_task = subflow.for_each(current_commands_.cbegin(),
                                         current_commands_.cend(), run_command);
