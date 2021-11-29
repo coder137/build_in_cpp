@@ -46,7 +46,7 @@ void Generator::GenerateTask() {
     try {
       Convert();
       BuildGenerate();
-    } catch (const std::exception &e) {
+    } catch (...) {
       task_state_ = env::TaskState::FAILURE;
     }
 
@@ -54,7 +54,7 @@ void Generator::GenerateTask() {
       try {
         bool success = Command::Execute(command);
         env::assert_throw(success, fmt::format("{} failed", command));
-      } catch (const std::exception &e) {
+      } catch (...) {
         task_state_ = env::TaskState::FAILURE;
       }
     };
@@ -103,7 +103,7 @@ void Generator::GenerateTask() {
     if (dirty_ && (task_state_ == env::TaskState::SUCCESS)) {
       try {
         env::assert_throw(Store(), fmt::format("Store failed for {}", name_));
-      } catch (const std::exception &e) {
+      } catch (...) {
         task_state_ = env::TaskState::FAILURE;
       }
     }
