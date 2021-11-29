@@ -19,6 +19,9 @@
 #include "command/command.h"
 
 namespace {
+constexpr const char *const kStartGeneratorTaskName = "Start Generator";
+constexpr const char *const kEndGeneratorTaskName = "End Generator";
+
 constexpr const char *const kCommandTaskName = "Command";
 constexpr const char *const kGenerateTaskName = "Generate";
 
@@ -33,11 +36,14 @@ void Generator::GenerateTask() {
       break;
     default:
       task_state_ = env::TaskState::FAILURE;
+      // Update input path for failure
+      // NOTE, Nothing changes
+      current_input_files_.internal = loader_.GetLoadedInputFiles();
       break;
     }
     return static_cast<int>(task_state_);
   });
-  start_task.name("Start Generator");
+  start_task.name(kStartGeneratorTaskName);
 
   tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
     Convert();
@@ -90,7 +96,7 @@ void Generator::GenerateTask() {
 
     // TODO, Update if failure
   });
-  end_task.name("End Generator");
+  end_task.name(kEndGeneratorTaskName);
 
   // Dependencies
   start_task.precede(generate_task, end_task);
