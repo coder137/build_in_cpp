@@ -42,6 +42,7 @@ TEST(GeneratorTestGroup, Generator_Build) {
 
   buildcc::m::CommandExpect_Execute(1, true);
   generator.Build();
+  buildcc::base::m::GeneratorRunner(generator);
 
   mock().checkExpectations();
 }
@@ -60,6 +61,7 @@ TEST(GeneratorTestGroup, Generator_Identifier) {
 
   buildcc::m::CommandExpect_Execute(1, true);
   generator.Build();
+  buildcc::base::m::GeneratorRunner(generator);
 
   mock().checkExpectations();
 }
@@ -78,6 +80,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   {
@@ -91,6 +94,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
                          });
 
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -108,6 +112,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   // Removed
@@ -120,6 +125,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
     buildcc::base::m::GeneratorExpect_InputRemoved(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   // Added
@@ -133,6 +139,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
     buildcc::base::m::GeneratorExpect_InputAdded(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   sleep(1);
@@ -153,6 +160,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
     buildcc::base::m::GeneratorExpect_InputUpdated(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -172,6 +180,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   {
@@ -186,6 +195,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
     buildcc::base::m::GeneratorExpect_OutputChanged(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   {
@@ -201,6 +211,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
     buildcc::base::m::GeneratorExpect_OutputChanged(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -220,6 +231,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
 
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   {
@@ -234,6 +246,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
     buildcc::base::m::GeneratorExpect_CommandChanged(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   {
@@ -246,6 +259,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
     buildcc::base::m::GeneratorExpect_CommandChanged(1, &generator);
     buildcc::m::CommandExpect_Execute(1, true);
     generator.Build();
+    buildcc::base::m::GeneratorRunner(generator);
   }
 
   mock().checkExpectations();
