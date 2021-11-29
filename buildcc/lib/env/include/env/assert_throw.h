@@ -59,4 +59,10 @@ inline void assert_throw(bool expression, const std::string &message) {
 
 } // namespace buildcc::env
 
+/**
+ * @brief Runtime expr asserts fatally when false
+ */
+#define ASSERT_THROW(expr, message)                                            \
+  ((expr) ? static_cast<void>(0) : buildcc::env::assert_throw<false>(message))
+
 #endif
