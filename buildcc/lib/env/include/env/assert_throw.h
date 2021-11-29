@@ -19,6 +19,8 @@
 
 #include <string>
 
+#include "logging.h"
+
 namespace buildcc::env {
 
 /**
