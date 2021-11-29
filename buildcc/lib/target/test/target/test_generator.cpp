@@ -343,6 +343,28 @@ TEST(GeneratorTestGroup, Generator_FailedGenerateConvert) {
   buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
 }
 
+TEST(GeneratorTestGroup, Generator_FailedGenerateCommand) {
+  constexpr const char *const NAME = "FailedGenerateCommand";
+  buildcc::base::Generator generator(NAME, "", false);
+
+  generator.AddDefaultArguments({
+      {"compiler", "gcc"},
+  });
+
+  generator.AddInput("{gen_root_dir}/dummy_main.c");
+  generator.AddOutput("{gen_build_dir}/dummy_main.exe");
+  generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
+                       "{gen_root_dir}/dummy_main.c");
+
+  buildcc::m::CommandExpect_Execute(1, false);
+  generator.Build();
+  buildcc::base::m::GeneratorRunner(generator);
+
+  mock().checkExpectations();
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+}
+
 int main(int ac, char **av) {
   fs::remove_all(BUILD_DIR);
   buildcc::env::init(fs::current_path() / "data", BUILD_DIR);
