@@ -18,6 +18,8 @@
 
 #include "target/target_info.h"
 
+#include "env/assert_fatal.h"
+
 namespace buildcc::base {
 
 template <typename T>
