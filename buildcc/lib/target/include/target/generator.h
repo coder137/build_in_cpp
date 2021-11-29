@@ -25,6 +25,7 @@
 #include "taskflow/taskflow.hpp"
 
 #include "env/env.h"
+#include "env/task_state.h"
 
 #include "command/command.h"
 
@@ -132,6 +133,7 @@ private:
   bool parallel_{false};
 
   // Internal
+  env::TaskState task_state_{env::TaskState::SUCCESS};
   Command command_;
   tf::Taskflow tf_;
 };
