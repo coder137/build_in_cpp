@@ -67,13 +67,15 @@ public:
    * @param pathname
    * @return Path
    */
-  static Path CreateNewPath(const fs::path &pathname) noexcept {
+  static Path CreateNewPath(const fs::path &pathname) {
     return Path(pathname, 0);
   }
 
   // Getters
-  std::uint64_t GetLastWriteTimestamp() const { return last_write_timestamp_; }
-  const fs::path &GetPathname() const { return pathname_; }
+  std::uint64_t GetLastWriteTimestamp() const noexcept {
+    return last_write_timestamp_;
+  }
+  const fs::path &GetPathname() const noexcept { return pathname_; }
 
   /**
    * @brief Get fs::path as std::string while keeping the preferred os
