@@ -35,9 +35,67 @@ constexpr const char *const kLinkTaskName = "Target";
 
 namespace buildcc::base {
 
+void Target::StartTask() {
+  // Return 0 for success
+  // Return 1 for failure
+  target_start_task_ = tf_.emplace([&]() {
+                            // NOTE, Consider making this a bool value if
+                            // required
+                            switch (env::get_task_state()) {
+                            case env::TaskState::SUCCESS:
+                              break;
+                            default:
+                              task_state_ = env::TaskState::FAILURE;
+                              break;
+                            };
+                            return static_cast<int>(task_state_);
+                          })
+                           .name("Start Target");
+}
+
+void Target::EndTask() {
+  target_end_task_ = tf_.emplace([&]() {
+                          if (task_state_ != env::TaskState::SUCCESS) {
+                            env::set_task_state(task_state_);
+                          }
+                        })
+                         .name("End Target");
+}
+
+tf::Task Target::CheckStateTask() {
+  // NOTE, For now we only have 2 states
+  // 0 -> SUCCESS
+  // 1 -> FAILURE
+  // * When more states are added make sure to handle them explicitly in switch
+  // case blocks
+  return tf_.emplace([&]() { return static_cast<int>(task_state_); })
+      .name("Check Target");
+}
+
+void Target::TaskDeps() {
+  if (state_.ContainsPch()) {
+    target_start_task_.precede(compile_pch_.GetTask(), target_end_task_);
+    tf::Task pch_check_state_task = CheckStateTask();
+    compile_pch_.GetTask().precede(pch_check_state_task);
+    pch_check_state_task.precede(compile_object_.GetTask(), target_end_task_);
+  } else {
+    target_start_task_.precede(compile_object_.GetTask(), target_end_task_);
+  }
+
+  tf::Task object_check_state_task = CheckStateTask();
+  compile_object_.GetTask().precede(object_check_state_task);
+  object_check_state_task.precede(link_target_.GetTask(), target_end_task_);
+  link_target_.GetTask().precede(target_end_task_);
+}
+
+// TODO, Shift this to its own source file
 void CompilePch::Task() {
   task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
-    BuildCompile();
+    try {
+      BuildCompile();
+    } catch (...) {
+      target_.task_state_ = env::TaskState::FAILURE;
+    }
 
     // For Graph generation
     for (const auto &p : target_.GetCurrentPchFiles()) {
@@ -49,6 +107,7 @@ void CompilePch::Task() {
   task_.name(kPchTaskName);
 }
 
+// TODO, Shift this to its own source file
 void CompileObject::Task() {
   compile_task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
     std::vector<fs::path> source_files;
@@ -77,17 +136,10 @@ void CompileObject::Task() {
   compile_task_.name(kCompileTaskName);
 }
 
+// TODO, Shift this to its own source file
 void LinkTarget::Task() {
   task_ = target_.tf_.emplace([&]() { BuildLink(); });
   task_.name(kLinkTaskName);
-}
-
-void Target::TaskDeps() {
-  // NOTE, PCH may not be used
-  if (!compile_pch_.GetTask().empty()) {
-    compile_object_.GetTask().succeed(compile_pch_.GetTask());
-  }
-  link_target_.GetTask().succeed(compile_object_.GetTask());
 }
 
 } // namespace buildcc::base

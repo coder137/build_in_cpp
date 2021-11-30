@@ -47,9 +47,12 @@
 #include "target/base/target_storer.h"
 #include "target/common/path.h"
 
+// Env
+#include "env/env.h"
+#include "env/task_state.h"
+
 // Components
 #include "command/command.h"
-#include "env/env.h"
 #include "toolchain/toolchain.h"
 
 // Third Party
@@ -82,6 +85,9 @@ public:
   // Builders
   void Build() override;
 
+  // Getters
+  env::TaskState GetTaskState() const { return task_state_; }
+
 private:
   friend class CompilePch;
   friend class CompileObject;
@@ -111,6 +117,9 @@ private:
   bool Store() override;
 
   // Tasks
+  void StartTask();
+  void EndTask();
+  tf::Task CheckStateTask();
   void TaskDeps();
 
   // Callbacks for unit tests
@@ -135,6 +144,11 @@ private:
   CompilePch compile_pch_;
   CompileObject compile_object_;
   LinkTarget link_target_;
+
+  // Task states
+  tf::Task target_start_task_;
+  tf::Task target_end_task_;
+  env::TaskState task_state_{env::TaskState::SUCCESS};
 
   //
   Command command_;

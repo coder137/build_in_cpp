@@ -97,6 +97,10 @@ void Target::Build() {
   // Load the serialized file
   (void)loader_.Load();
 
+  // Target State Tasks
+  StartTask();
+  EndTask();
+
   // PCH Compile
   if (state_.ContainsPch()) {
     command_.AddDefaultArguments({
