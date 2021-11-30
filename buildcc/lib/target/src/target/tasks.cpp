@@ -45,9 +45,6 @@ void Target::StartTask() {
   // Return 0 for success
   // Return 1 for failure
   target_start_task_ = tf_.emplace([&]() {
-    pch_files_ = loader_.GetLoadedPchs();
-    source_files_ = loader_.GetLoadedSources();
-
     switch (env::get_task_state()) {
     case env::TaskState::SUCCESS:
       break;
@@ -127,18 +124,15 @@ void CompileObject::Task() {
                     Command::Execute(GetObjectData(s.GetPathname()).command);
                 env::assert_throw(success, "Could not compile source");
 
+                // NOTE, If conmpilation success we update the source files
                 std::lock_guard<std::mutex> guard(
                     target_.update_path_file_mutex_);
                 target_.source_files_.insert(s);
               } catch (...) {
                 target_.SetTaskStateFailure();
 
-                std::lock_guard<std::mutex> guard(
-                    target_.update_path_file_mutex_);
-                auto iter = target_.loader_.GetLoadedSources().find(s);
-                if (iter != target_.loader_.GetLoadedSources().end()) {
-                  target_.source_files_.insert(*iter);
-                }
+                // NOTE, If compilation failure, we do not need to update the
+                // source files
               }
             })
             .name(name);
