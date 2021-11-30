@@ -125,12 +125,14 @@ void CompileObject::Task() {
                     Command::Execute(GetObjectData(s.GetPathname()).command);
                 env::assert_throw(success, "Could not compile source");
 
-                // TODO, Mutex lock this
+                std::lock_guard<std::mutex> guard(
+                    target_.update_path_file_mutex_);
                 target_.source_files_.insert(s);
               } catch (...) {
                 target_.SetTaskStateFailure();
 
-                // TODO, Mutex lock this
+                std::lock_guard<std::mutex> guard(
+                    target_.update_path_file_mutex_);
                 auto iter = target_.loader_.GetLoadedSources().find(s);
                 if (iter != target_.loader_.GetLoadedSources().end()) {
                   target_.source_files_.insert(*iter);
@@ -176,6 +178,8 @@ void Target::EndTask() {
   target_end_task_ = tf_.emplace([&]() {
     if (dirty_) {
       try {
+        storer_.current_pch_files.internal = pch_files_;
+        storer_.current_source_files.internal = source_files_;
         env::assert_throw(Store(),
                           fmt::format("Store failed for {}", GetName()));
         state_.build = true;
