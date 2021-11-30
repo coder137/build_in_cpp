@@ -18,7 +18,6 @@
 
 #include <algorithm>
 
-#include "env/assert_fatal.h"
 #include "env/logging.h"
 
 #include "target/common/util.h"
@@ -113,17 +112,34 @@ void CompileObject::Task() {
     std::vector<fs::path> source_files;
     std::vector<fs::path> dummy_source_files;
 
-    BuildObjectCompile(source_files, dummy_source_files);
+    try {
+      BuildObjectCompile(source_files, dummy_source_files);
 
-    for (const auto &s : source_files) {
-      std::string name =
-          fmt::format("{}", s.lexically_relative(env::get_project_root_dir()));
-      (void)subflow
-          .emplace([this, s]() {
-            bool success = Command::Execute(GetObjectData(s).command);
-            env::assert_fatal(success, "Could not compile source");
-          })
-          .name(name);
+      for (const auto &s : source_files) {
+        std::string name = fmt::format(
+            "{}", s.lexically_relative(env::get_project_root_dir()));
+        (void)subflow
+            .emplace([this, s]() {
+              try {
+                bool success = Command::Execute(GetObjectData(s).command);
+                env::assert_throw(success, "Could not compile source");
+              } catch (...) {
+                // TODO, Make a function for this
+                std::lock_guard<std::mutex> guard(target_.task_state_mutex_);
+                target_.task_state_ = env::TaskState::FAILURE;
+              }
+            })
+            .name(name);
+      }
+    } catch (...) {
+      target_.task_state_ = env::TaskState::FAILURE;
+
+      // For graph generation
+      for (const auto &s : source_files) {
+        std::string name = fmt::format(
+            "{}", s.lexically_relative(env::get_project_root_dir()));
+        (void)subflow.placeholder().name(name);
+      }
     }
 
     // For graph generation
