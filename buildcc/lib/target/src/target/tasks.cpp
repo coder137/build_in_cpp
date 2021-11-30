@@ -26,6 +26,10 @@
 
 namespace {
 
+constexpr const char *const kStartTaskName = "Start Target";
+constexpr const char *const kEndTaskName = "End Target";
+constexpr const char *const kCheckTaskName = "Check Target";
+
 constexpr const char *const kPchTaskName = "Pch";
 constexpr const char *const kCompileTaskName = "Objects";
 constexpr const char *const kLinkTaskName = "Target";
@@ -54,7 +58,7 @@ void Target::StartTask() {
     };
     return GetTaskStateAsInt();
   });
-  target_start_task_.name("Start Target");
+  target_start_task_.name(kStartTaskName);
 }
 
 tf::Task Target::CheckStateTask() {
@@ -63,7 +67,7 @@ tf::Task Target::CheckStateTask() {
   // 1 -> FAILURE
   // * When more states are added make sure to handle them explicitly
   return tf_.emplace([&]() { return GetTaskStateAsInt(); })
-      .name("Check Target");
+      .name(kCheckTaskName);
 }
 
 void Target::TaskDeps() {
@@ -184,7 +188,7 @@ void Target::EndTask() {
       env::set_task_state(GetTaskState());
     }
   });
-  target_end_task_.name("End Target");
+  target_end_task_.name(kEndTaskName);
 }
 
 } // namespace buildcc::base
