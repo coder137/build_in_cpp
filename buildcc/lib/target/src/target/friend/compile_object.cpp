@@ -134,8 +134,8 @@ CompileObject::ConstructObjectPath(const fs::path &absolute_source_file) const {
 }
 
 void CompileObject::BuildObjectCompile(
-    std::vector<fs::path> &source_files,
-    std::vector<fs::path> &dummy_source_files) {
+    std::vector<internal::Path> &source_files,
+    std::vector<internal::Path> &dummy_source_files) {
   PreObjectCompile();
 
   const auto &loader = target_.loader_;
@@ -184,19 +184,16 @@ void CompileObject::PreObjectCompile() {
   storer.current_compile_dependencies.Convert();
 }
 
-void CompileObject::CompileSources(std::vector<fs::path> &source_files) {
+void CompileObject::CompileSources(std::vector<internal::Path> &source_files) {
   const auto &storer = target_.storer_;
-  std::transform(storer.current_source_files.internal.begin(),
-                 storer.current_source_files.internal.end(),
-                 std::back_inserter(source_files),
-                 [](const buildcc::internal::Path &p) -> fs::path {
-                   return p.GetPathname();
-                 });
+  source_files =
+      std::vector<internal::Path>(storer.current_source_files.internal.begin(),
+                                  storer.current_source_files.internal.end());
 }
 
 void CompileObject::RecompileSources(
-    std::vector<fs::path> &source_files,
-    std::vector<fs::path> &dummy_source_files) {
+    std::vector<internal::Path> &source_files,
+    std::vector<internal::Path> &dummy_source_files) {
   const auto &loader = target_.loader_;
   const auto &storer = target_.storer_;
 
@@ -216,27 +213,27 @@ void CompileObject::RecompileSources(
   }
 
   for (const auto &current_file : storer.current_source_files.internal) {
-    const auto &current_source = current_file.GetPathname();
+    // const auto &current_source = current_file.GetPathname();
 
     // Find current_file in the loaded sources
     auto iter = previous_source_files.find(current_file);
 
     if (iter == previous_source_files.end()) {
       // *1 New source file added to build
-      source_files.push_back(current_source);
+      source_files.push_back(current_file);
       target_.dirty_ = true;
       target_.SourceAdded();
     } else {
       // *2 Current file is updated
       if (current_file.GetLastWriteTimestamp() >
           iter->GetLastWriteTimestamp()) {
-        source_files.push_back(current_source);
+        source_files.push_back(current_file);
         target_.dirty_ = true;
         target_.SourceUpdated();
       } else {
         // ELSE
         // *3 Do nothing
-        dummy_source_files.push_back(current_source);
+        dummy_source_files.push_back(current_file);
       }
     }
   }

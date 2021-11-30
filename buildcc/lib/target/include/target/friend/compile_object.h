@@ -60,14 +60,14 @@ public:
 private:
   fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
 
-  void BuildObjectCompile(std::vector<fs::path> &source_files,
-                          std::vector<fs::path> &dummy_source_files);
+  void BuildObjectCompile(std::vector<internal::Path> &source_files,
+                          std::vector<internal::Path> &dummy_source_files);
 
   void PreObjectCompile();
 
-  void CompileSources(std::vector<fs::path> &source_files);
-  void RecompileSources(std::vector<fs::path> &source_files,
-                        std::vector<fs::path> &dummy_source_files);
+  void CompileSources(std::vector<internal::Path> &source_files);
+  void RecompileSources(std::vector<internal::Path> &source_files,
+                        std::vector<internal::Path> &dummy_source_files);
 
 private:
   Target &target_;
