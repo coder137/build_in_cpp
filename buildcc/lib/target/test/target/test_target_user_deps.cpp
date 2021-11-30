@@ -45,6 +45,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_NoChange) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   compileDep.Build();
+  buildcc::base::m::TargetRunner(compileDep);
 
   mock().checkExpectations();
 }
@@ -59,6 +60,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_NoChange) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   linkDep.Build();
+  buildcc::base::m::TargetRunner(linkDep);
 
   mock().checkExpectations();
 }
@@ -74,6 +76,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_Rebuild) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     compileDep.Build();
+    buildcc::base::m::TargetRunner(compileDep);
   }
 
   {
@@ -95,6 +98,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_Rebuild) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     compileDep.Build();
+    buildcc::base::m::TargetRunner(compileDep);
   }
 
   mock().checkExpectations();
@@ -111,6 +115,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_Rebuild) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     linkDep.Build();
+    buildcc::base::m::TargetRunner(linkDep);
   }
 
   {
@@ -131,6 +136,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_Rebuild) {
     buildcc::base::m::TargetExpect_PathUpdated(1, &linkDep); // Only link
     buildcc::m::CommandExpect_Execute(1, true);
     linkDep.Build();
+    buildcc::base::m::TargetRunner(linkDep);
   }
 
   mock().checkExpectations();

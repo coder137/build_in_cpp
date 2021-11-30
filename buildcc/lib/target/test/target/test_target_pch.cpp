@@ -53,6 +53,7 @@ TEST(TargetPchTestGroup, Target_AddPch_Build) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   target.Build();
+  buildcc::base::m::TargetRunner(target);
   bool exists = fs::exists(target.GetPchHeaderPath());
   CHECK_TRUE(exists);
 
@@ -77,6 +78,7 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     target.Build();
+    buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
     CHECK_TRUE(exists);
   }
@@ -89,6 +91,7 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
     target.AddPch("pch/pch_header_2.h");
 
     target.Build();
+    buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
     CHECK_TRUE(exists);
   }
@@ -103,6 +106,7 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     target.Build();
+    buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
     CHECK_TRUE(exists);
   }
@@ -118,6 +122,7 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     target.Build();
+    buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
     CHECK_TRUE(exists);
   }
@@ -139,6 +144,7 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     target.Build();
+    buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
     CHECK_TRUE(exists);
   }
@@ -160,6 +166,7 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     target.Build();
+    buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
     CHECK_TRUE(exists);
   }
@@ -173,6 +180,7 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
     target.AddSource("dummy_main.cpp");
 
     target.Build();
+    buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
     CHECK_TRUE(exists);
   }
@@ -189,6 +197,7 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     target.Build();
+    buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
     CHECK_TRUE(exists);
   }
@@ -206,6 +215,7 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     target.Build();
+    buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
     CHECK_TRUE(exists);
   }
@@ -229,6 +239,7 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
     buildcc::m::CommandExpect_Execute(1, true);
     buildcc::m::CommandExpect_Execute(1, true);
     target.Build();
+    buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
     CHECK_TRUE(exists);
   }
@@ -248,6 +259,7 @@ TEST(TargetPchTestGroup, Target_AddPchCompileFlag_Build) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   target.Build();
+  buildcc::base::m::TargetRunner(target);
   bool exists = fs::exists(target.GetPchHeaderPath());
   CHECK_TRUE(exists);
   CHECK_EQUAL(target.GetCurrentPchCompileFlags().size(), 1);
@@ -267,6 +279,7 @@ TEST(TargetPchTestGroup, Target_AddPchObjectFlag_Build) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   target.Build();
+  buildcc::base::m::TargetRunner(target);
   bool exists = fs::exists(target.GetPchHeaderPath());
   CHECK_TRUE(exists);
   CHECK_EQUAL(target.GetCurrentPchObjectFlags().size(), 1);

@@ -113,6 +113,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     buildcc::m::CommandExpect_Execute(2, true);
     buildcc::m::CommandExpect_Execute(1, true);
     include_compile.Build();
+    buildcc::base::m::TargetRunner(include_compile);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
@@ -144,6 +145,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     buildcc::m::CommandExpect_Execute(2, true);
     buildcc::m::CommandExpect_Execute(1, true);
     include_compile.Build();
+    buildcc::base::m::TargetRunner(include_compile);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
@@ -172,6 +174,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     buildcc::m::CommandExpect_Execute(2, true);
     buildcc::m::CommandExpect_Execute(1, true);
     include_compile.Build();
+    buildcc::base::m::TargetRunner(include_compile);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
@@ -224,6 +227,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     buildcc::m::CommandExpect_Execute(2, true);
     buildcc::m::CommandExpect_Execute(1, true);
     add_header.Build();
+    buildcc::base::m::TargetRunner(add_header);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
@@ -246,6 +250,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     buildcc::m::CommandExpect_Execute(2, true);
     buildcc::m::CommandExpect_Execute(1, true);
     add_header.Build();
+    buildcc::base::m::TargetRunner(add_header);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
@@ -274,6 +279,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     buildcc::m::CommandExpect_Execute(2, true);
     buildcc::m::CommandExpect_Execute(1, true);
     add_header.Build();
+    buildcc::base::m::TargetRunner(add_header);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
@@ -295,6 +301,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     buildcc::m::CommandExpect_Execute(2, true);
     buildcc::m::CommandExpect_Execute(1, true);
     add_header.Build();
+    buildcc::base::m::TargetRunner(add_header);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
