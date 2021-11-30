@@ -45,6 +45,15 @@ void Target::SetTaskStateFailure() {
   }
 }
 
+tf::Task Target::CheckStateTask() {
+  // NOTE, For now we only have 2 states
+  // 0 -> SUCCESS
+  // 1 -> FAILURE
+  // * When more states are added make sure to handle them explicitly
+  return tf_.emplace([&]() { return GetTaskStateAsInt(); })
+      .name(kCheckTaskName);
+}
+
 void Target::StartTask() {
   // Return 0 for success
   // Return 1 for failure
@@ -61,32 +70,6 @@ void Target::StartTask() {
   target_start_task_.name(kStartTaskName);
 }
 
-tf::Task Target::CheckStateTask() {
-  // NOTE, For now we only have 2 states
-  // 0 -> SUCCESS
-  // 1 -> FAILURE
-  // * When more states are added make sure to handle them explicitly
-  return tf_.emplace([&]() { return GetTaskStateAsInt(); })
-      .name(kCheckTaskName);
-}
-
-void Target::TaskDeps() {
-  if (state_.ContainsPch()) {
-    target_start_task_.precede(compile_pch_.GetTask(), target_end_task_);
-    tf::Task pch_check_state_task = CheckStateTask();
-    compile_pch_.GetTask().precede(pch_check_state_task);
-    pch_check_state_task.precede(compile_object_.GetTask(), target_end_task_);
-  } else {
-    target_start_task_.precede(compile_object_.GetTask(), target_end_task_);
-  }
-
-  tf::Task object_check_state_task = CheckStateTask();
-  compile_object_.GetTask().precede(object_check_state_task);
-  object_check_state_task.precede(link_target_.GetTask(), target_end_task_);
-  link_target_.GetTask().precede(target_end_task_);
-}
-
-// TODO, Shift this to its own source file
 void CompilePch::Task() {
   task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
     try {
@@ -106,7 +89,6 @@ void CompilePch::Task() {
   task_.name(kPchTaskName);
 }
 
-// TODO, Shift this to its own source file
 void CompileObject::Task() {
   compile_task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
     std::vector<internal::Path> source_files;
@@ -157,7 +139,6 @@ void CompileObject::Task() {
   compile_task_.name(kCompileTaskName);
 }
 
-// TODO, Shift this to its own source file
 void LinkTarget::Task() {
   task_ = target_.tf_.emplace([&]() {
     try {
@@ -189,6 +170,22 @@ void Target::EndTask() {
     }
   });
   target_end_task_.name(kEndTaskName);
+}
+
+void Target::TaskDeps() {
+  if (state_.ContainsPch()) {
+    target_start_task_.precede(compile_pch_.GetTask(), target_end_task_);
+    tf::Task pch_check_state_task = CheckStateTask();
+    compile_pch_.GetTask().precede(pch_check_state_task);
+    pch_check_state_task.precede(compile_object_.GetTask(), target_end_task_);
+  } else {
+    target_start_task_.precede(compile_object_.GetTask(), target_end_task_);
+  }
+
+  tf::Task object_check_state_task = CheckStateTask();
+  compile_object_.GetTask().precede(object_check_state_task);
+  object_check_state_task.precede(link_target_.GetTask(), target_end_task_);
+  link_target_.GetTask().precede(target_end_task_);
 }
 
 } // namespace buildcc::base
