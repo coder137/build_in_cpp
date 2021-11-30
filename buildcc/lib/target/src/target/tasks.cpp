@@ -114,6 +114,8 @@ void CompileObject::Task() {
     try {
       BuildObjectCompile(source_files, dummy_source_files);
       target_.source_files_.clear();
+      target_.source_files_.insert(dummy_source_files.begin(),
+                                   dummy_source_files.end());
 
       for (const auto &s : source_files) {
         std::string name = fmt::format("{}", s.GetPathname().lexically_relative(
