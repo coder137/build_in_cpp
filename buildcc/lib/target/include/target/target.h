@@ -157,6 +157,9 @@ private:
   std::mutex task_state_mutex_;
   env::TaskState task_state_{env::TaskState::SUCCESS};
 
+  internal::path_unordered_set pch_files_;
+  internal::path_unordered_set source_files_;
+
   //
   Command command_;
   tf::Taskflow tf_;

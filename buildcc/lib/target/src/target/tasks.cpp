@@ -45,6 +45,9 @@ void Target::StartTask() {
   // Return 0 for success
   // Return 1 for failure
   target_start_task_ = tf_.emplace([&]() {
+    pch_files_ = loader_.GetLoadedPchs();
+    source_files_ = loader_.GetLoadedSources();
+
     switch (env::get_task_state()) {
     case env::TaskState::SUCCESS:
       break;
@@ -87,6 +90,7 @@ void CompilePch::Task() {
   task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
     try {
       BuildCompile();
+      target_.pch_files_ = target_.storer_.current_pch_files.internal;
     } catch (...) {
       target_.SetTaskStateFailure();
     }
@@ -109,6 +113,7 @@ void CompileObject::Task() {
 
     try {
       BuildObjectCompile(source_files, dummy_source_files);
+      target_.source_files_.clear();
 
       for (const auto &s : source_files) {
         std::string name = fmt::format("{}", s.GetPathname().lexically_relative(
@@ -120,16 +125,17 @@ void CompileObject::Task() {
                     Command::Execute(GetObjectData(s.GetPathname()).command);
                 env::assert_throw(success, "Could not compile source");
 
-                // internal::Path current_source = s;
+                // TODO, Mutex lock this
+                target_.source_files_.insert(s);
               } catch (...) {
                 target_.SetTaskStateFailure();
 
-                // internal::Path loaded_source =
-                //     *(target_.loader_.GetLoadedSources().find(s));
+                // TODO, Mutex lock this
+                auto iter = target_.loader_.GetLoadedSources().find(s);
+                if (iter != target_.loader_.GetLoadedSources().end()) {
+                  target_.source_files_.insert(*iter);
+                }
               }
-
-              // TODO, Add which sources have been built from current_source
-              // TODO, Add which sources have not been built from loaded_source
             })
             .name(name);
       }
@@ -156,7 +162,13 @@ void CompileObject::Task() {
 
 // TODO, Shift this to its own source file
 void LinkTarget::Task() {
-  task_ = target_.tf_.emplace([&]() { BuildLink(); });
+  task_ = target_.tf_.emplace([&]() {
+    try {
+      BuildLink();
+    } catch (...) {
+      target_.SetTaskStateFailure();
+    }
+  });
   task_.name(kLinkTaskName);
 }
 
