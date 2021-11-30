@@ -42,7 +42,20 @@ TEST(TargetTestFailureStates, StartTaskEnvFailure) {
   CHECK(simple.GetTaskState() == buildcc::env::TaskState::FAILURE);
 }
 
-TEST(TargetTestFailureStates, CompilePchFailure) {}
+TEST(TargetTestFailureStates, CompilePchFailure) {
+  constexpr const char *const NAME = "CompilePchFailure.exe";
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
+
+  simple.AddSource("dummy_main.cpp");
+  simple.AddPch("include/include_header.h");
+  simple.Build();
+
+  buildcc::m::CommandExpect_Execute(1, false); // PCH compile
+  buildcc::base::m::TargetRunner(simple);
+
+  CHECK(simple.GetTaskState() == buildcc::env::TaskState::FAILURE);
+}
 
 TEST(TargetTestFailureStates, CompileObjectFailure) {
   constexpr const char *const NAME = "CompileObjectFailure.exe";
@@ -52,9 +65,10 @@ TEST(TargetTestFailureStates, CompileObjectFailure) {
 
   simple.AddSource("dummy_main.cpp");
   simple.AddSource("dummy_main.c");
+  simple.Build();
+
   buildcc::m::CommandExpect_Execute(1, false); // compile
   buildcc::m::CommandExpect_Execute(1, true);  // compile
-  simple.Build();
   buildcc::base::m::TargetRunner(simple);
 
   CHECK(simple.GetTaskState() == buildcc::env::TaskState::FAILURE);
@@ -67,9 +81,10 @@ TEST(TargetTestFailureStates, LinkTargetFailure) {
                                "data");
 
   simple.AddSource("dummy_main.cpp");
+  simple.Build();
+
   buildcc::m::CommandExpect_Execute(1, true);  // compile
   buildcc::m::CommandExpect_Execute(1, false); // link
-  simple.Build();
   buildcc::base::m::TargetRunner(simple);
 
   CHECK(simple.GetTaskState() == buildcc::env::TaskState::FAILURE);
