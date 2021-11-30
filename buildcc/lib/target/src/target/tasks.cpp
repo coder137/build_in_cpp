@@ -98,7 +98,7 @@ void CompilePch::Task() {
     try {
       BuildCompile();
     } catch (...) {
-      target_.task_state_ = env::TaskState::FAILURE;
+      target_.SetTaskStateFailure();
     }
 
     // For Graph generation
@@ -129,15 +129,13 @@ void CompileObject::Task() {
                 bool success = Command::Execute(GetObjectData(s).command);
                 env::assert_throw(success, "Could not compile source");
               } catch (...) {
-                // TODO, Make a function for this
-                std::lock_guard<std::mutex> guard(target_.task_state_mutex_);
-                target_.task_state_ = env::TaskState::FAILURE;
+                target_.SetTaskStateFailure();
               }
             })
             .name(name);
       }
     } catch (...) {
-      target_.task_state_ = env::TaskState::FAILURE;
+      target_.SetTaskStateFailure();
 
       // For graph generation
       for (const auto &s : source_files) {
