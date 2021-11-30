@@ -124,14 +124,15 @@ void CompileObject::Task() {
                     Command::Execute(GetObjectData(s.GetPathname()).command);
                 env::assert_throw(success, "Could not compile source");
 
-                // NOTE, If conmpilation success we update the source files
+                // NOTE, If conmpilation is successful we update the source
+                // files
                 std::lock_guard<std::mutex> guard(
                     target_.update_path_file_mutex_);
                 target_.source_files_.insert(s);
               } catch (...) {
                 target_.SetTaskStateFailure();
 
-                // NOTE, If compilation failure, we do not need to update the
+                // NOTE, If compilation fails, we do not need to update the
                 // source files
               }
             })
