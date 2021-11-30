@@ -162,6 +162,16 @@ void LinkTarget::Task() {
 
 void Target::EndTask() {
   target_end_task_ = tf_.emplace([&]() {
+    if (dirty_) {
+      try {
+        env::assert_throw(Store(),
+                          fmt::format("Store failed for {}", GetName()));
+        state_.build = true;
+      } catch (...) {
+        SetTaskStateFailure();
+      }
+    }
+
     // Update env task state
     if (task_state_ != env::TaskState::SUCCESS) {
       env::set_task_state(GetTaskState());
