@@ -84,10 +84,7 @@ void LinkTarget::BuildLink() {
 
   if (target_.dirty_) {
     bool success = Command::Execute(command_);
-    env::assert_fatal(success, "Failed to link target");
-    env::assert_fatal(target_.Store(),
-                      fmt::format("Store failed for {}", target_.GetName()));
-    target_.state_.build = true;
+    env::assert_throw(success, "Failed to link target");
   }
 }
 
