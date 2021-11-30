@@ -34,40 +34,45 @@ constexpr const char *const kLinkTaskName = "Target";
 
 namespace buildcc::base {
 
+void Target::SetTaskStateFailure() {
+  if (task_state_ != env::TaskState::FAILURE) {
+    std::lock_guard<std::mutex> guard(task_state_mutex_);
+    task_state_ = env::TaskState::FAILURE;
+  }
+}
+
 void Target::StartTask() {
   // Return 0 for success
   // Return 1 for failure
   target_start_task_ = tf_.emplace([&]() {
-                            // NOTE, Consider making this a bool value if
-                            // required
-                            switch (env::get_task_state()) {
-                            case env::TaskState::SUCCESS:
-                              break;
-                            default:
-                              task_state_ = env::TaskState::FAILURE;
-                              break;
-                            };
-                            return static_cast<int>(task_state_);
-                          })
-                           .name("Start Target");
+    switch (env::get_task_state()) {
+    case env::TaskState::SUCCESS:
+      break;
+    default:
+      SetTaskStateFailure();
+      break;
+    };
+    return GetTaskStateAsInt();
+  });
+  target_start_task_.name("Start Target");
 }
 
 void Target::EndTask() {
   target_end_task_ = tf_.emplace([&]() {
-                          if (task_state_ != env::TaskState::SUCCESS) {
-                            env::set_task_state(task_state_);
-                          }
-                        })
-                         .name("End Target");
+    // Update env task state
+    if (task_state_ != env::TaskState::SUCCESS) {
+      env::set_task_state(GetTaskState());
+    }
+  });
+  target_end_task_.name("End Target");
 }
 
 tf::Task Target::CheckStateTask() {
   // NOTE, For now we only have 2 states
   // 0 -> SUCCESS
   // 1 -> FAILURE
-  // * When more states are added make sure to handle them explicitly in switch
-  // case blocks
-  return tf_.emplace([&]() { return static_cast<int>(task_state_); })
+  // * When more states are added make sure to handle them explicitly
+  return tf_.emplace([&]() { return GetTaskStateAsInt(); })
       .name("Check Target");
 }
 

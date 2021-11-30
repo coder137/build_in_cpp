@@ -86,7 +86,7 @@ public:
   void Build() override;
 
   // Getters
-  env::TaskState GetTaskState() const { return task_state_; }
+  env::TaskState GetTaskState() const noexcept { return task_state_; }
 
 private:
   friend class CompilePch;
@@ -117,6 +117,9 @@ private:
   bool Store() override;
 
   // Tasks
+  void SetTaskStateFailure();
+  int GetTaskStateAsInt() const noexcept { static_cast<int>(task_state_); }
+
   void StartTask();
   void EndTask();
   tf::Task CheckStateTask();
