@@ -118,7 +118,9 @@ private:
 
   // Tasks
   void SetTaskStateFailure();
-  int GetTaskStateAsInt() const noexcept { static_cast<int>(task_state_); }
+  int GetTaskStateAsInt() const noexcept {
+    return static_cast<int>(task_state_);
+  }
 
   void StartTask();
   void EndTask();
