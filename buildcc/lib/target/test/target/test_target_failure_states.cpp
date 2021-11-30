@@ -32,62 +32,75 @@ TEST(TargetTestFailureStates, StartTaskEnvFailure) {
   buildcc::env::set_task_state(buildcc::env::TaskState::FAILURE);
 
   constexpr const char *const NAME = "StartTaskEnvFailure.exe";
-  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+  buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable, gcc,
                                "data");
 
-  simple.AddSource("dummy_main.cpp");
-  simple.Build();
-  buildcc::base::m::TargetRunner(simple);
+  target.AddSource("dummy_main.cpp");
+  target.Build();
+  buildcc::base::m::TargetRunner(target);
 
-  CHECK(simple.GetTaskState() == buildcc::env::TaskState::FAILURE);
+  CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
 }
 
 TEST(TargetTestFailureStates, CompilePchFailure) {
   constexpr const char *const NAME = "CompilePchFailure.exe";
-  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+  buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable, gcc,
                                "data");
 
-  simple.AddSource("dummy_main.cpp");
-  simple.AddPch("include/include_header.h");
-  simple.Build();
+  target.AddSource("dummy_main.cpp");
+  target.AddPch("include/include_header.h");
+  target.Build();
 
   buildcc::m::CommandExpect_Execute(1, false); // PCH compile
-  buildcc::base::m::TargetRunner(simple);
+  buildcc::base::m::TargetRunner(target);
 
-  CHECK(simple.GetTaskState() == buildcc::env::TaskState::FAILURE);
+  CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
 }
 
 TEST(TargetTestFailureStates, CompileObjectFailure) {
   constexpr const char *const NAME = "CompileObjectFailure.exe";
 
-  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+  buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable, gcc,
                                "data");
 
-  simple.AddSource("dummy_main.cpp");
-  simple.AddSource("dummy_main.c");
-  simple.Build();
+  target.AddSource("dummy_main.cpp");
+  target.AddSource("dummy_main.c");
+  target.Build();
 
   buildcc::m::CommandExpect_Execute(1, false); // compile
   buildcc::m::CommandExpect_Execute(1, true);  // compile
-  buildcc::base::m::TargetRunner(simple);
+  buildcc::base::m::TargetRunner(target);
 
-  CHECK(simple.GetTaskState() == buildcc::env::TaskState::FAILURE);
+  CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
+}
+
+TEST(TargetTestFailureStates, CompileObject_FileNotFoundFailure) {
+  constexpr const char *const NAME = "CompileObject_FileNotFoundFailure.exe";
+
+  buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
+
+  target.AddSource("file_not_present.cpp");
+  target.Build();
+  buildcc::base::m::TargetRunner(target);
+
+  CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
 }
 
 TEST(TargetTestFailureStates, LinkTargetFailure) {
   constexpr const char *const NAME = "LinkTargetFailure.exe";
 
-  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+  buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable, gcc,
                                "data");
 
-  simple.AddSource("dummy_main.cpp");
-  simple.Build();
+  target.AddSource("dummy_main.cpp");
+  target.Build();
 
   buildcc::m::CommandExpect_Execute(1, true);  // compile
   buildcc::m::CommandExpect_Execute(1, false); // link
-  buildcc::base::m::TargetRunner(simple);
+  buildcc::base::m::TargetRunner(target);
 
-  CHECK(simple.GetTaskState() == buildcc::env::TaskState::FAILURE);
+  CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
 }
 
 int main(int ac, char **av) {
