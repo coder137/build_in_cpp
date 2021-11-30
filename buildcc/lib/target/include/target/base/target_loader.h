@@ -42,49 +42,65 @@ public:
   bool Load() override;
 
   // Getters
-  const path_unordered_set &GetLoadedSources() const { return loaded_sources_; }
-  const path_unordered_set &GetLoadedHeaders() const { return loaded_headers_; }
-  const path_unordered_set &GetLoadedPchs() const { return loaded_pchs_; }
-  const path_unordered_set &GetLoadedLibDeps() const {
+  const path_unordered_set &GetLoadedSources() const noexcept {
+    return loaded_sources_;
+  }
+  const path_unordered_set &GetLoadedHeaders() const noexcept {
+    return loaded_headers_;
+  }
+  const path_unordered_set &GetLoadedPchs() const noexcept {
+    return loaded_pchs_;
+  }
+  const path_unordered_set &GetLoadedLibDeps() const noexcept {
     return loaded_lib_deps_;
   }
-  const std::unordered_set<std::string> &GetLoadedExternalLibDeps() const {
+  const std::unordered_set<std::string> &
+  GetLoadedExternalLibDeps() const noexcept {
     return loaded_external_lib_dirs_;
   }
 
-  const fs_unordered_set &GetLoadedIncludeDirs() const {
+  const fs_unordered_set &GetLoadedIncludeDirs() const noexcept {
     return loaded_include_dirs_;
   }
-  const fs_unordered_set &GetLoadedLibDirs() const { return loaded_lib_dirs_; }
-  const std::unordered_set<std::string> &GetLoadedPreprocessorFlags() const {
+  const fs_unordered_set &GetLoadedLibDirs() const noexcept {
+    return loaded_lib_dirs_;
+  }
+  const std::unordered_set<std::string> &
+  GetLoadedPreprocessorFlags() const noexcept {
     return loaded_preprocessor_flags_;
   }
-  const std::unordered_set<std::string> &GetLoadedCommonCompileFlags() const {
+  const std::unordered_set<std::string> &
+  GetLoadedCommonCompileFlags() const noexcept {
     return loaded_common_compile_flags_;
   }
-  const std::unordered_set<std::string> &GetLoadedPchCompileFlags() const {
+  const std::unordered_set<std::string> &
+  GetLoadedPchCompileFlags() const noexcept {
     return loaded_pch_compile_flags_;
   }
-  const std::unordered_set<std::string> &GetLoadedPchObjectFlags() const {
+  const std::unordered_set<std::string> &
+  GetLoadedPchObjectFlags() const noexcept {
     return loaded_pch_object_flags_;
   }
-  const std::unordered_set<std::string> &GetLoadedAsmCompileFlags() const {
+  const std::unordered_set<std::string> &
+  GetLoadedAsmCompileFlags() const noexcept {
     return loaded_asm_compile_flags_;
   }
-  const std::unordered_set<std::string> &GetLoadedCCompileFlags() const {
+  const std::unordered_set<std::string> &
+  GetLoadedCCompileFlags() const noexcept {
     return loaded_c_compile_flags_;
   }
-  const std::unordered_set<std::string> &GetLoadedCppCompileFlags() const {
+  const std::unordered_set<std::string> &
+  GetLoadedCppCompileFlags() const noexcept {
     return loaded_cpp_compile_flags_;
   }
-  const std::unordered_set<std::string> &GetLoadedLinkFlags() const {
+  const std::unordered_set<std::string> &GetLoadedLinkFlags() const noexcept {
     return loaded_link_flags_;
   }
 
-  const path_unordered_set &GetLoadedCompileDependencies() const {
+  const path_unordered_set &GetLoadedCompileDependencies() const noexcept {
     return loaded_compile_dependencies_;
   }
-  const path_unordered_set &GetLoadedLinkDependencies() const {
+  const path_unordered_set &GetLoadedLinkDependencies() const noexcept {
     return loaded_link_dependencies_;
   }
 
