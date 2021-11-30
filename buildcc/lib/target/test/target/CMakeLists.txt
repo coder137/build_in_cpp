@@ -119,6 +119,11 @@ add_executable(test_target_sync
 )
 target_link_libraries(test_target_sync PRIVATE target_interface)
 
+add_executable(test_target_failure_states
+    test_target_failure_states.cpp
+)
+target_link_libraries(test_target_failure_states PRIVATE target_interface)
+
 # Tests
 add_test(NAME test_base_target COMMAND test_base_target)
 add_test(NAME test_target_pch COMMAND test_target_pch)
@@ -133,3 +138,5 @@ add_test(NAME test_target_user_deps COMMAND test_target_user_deps)
 add_test(NAME test_target_lock COMMAND test_target_lock)
 
 add_test(NAME test_target_sync COMMAND test_target_sync)
+
+add_test(NAME test_target_failure_states COMMAND test_target_failure_states)

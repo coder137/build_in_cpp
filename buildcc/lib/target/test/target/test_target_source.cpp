@@ -119,46 +119,6 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
   CHECK_FALSE(loaded_sources.find(dummy_file) == loaded_sources.end());
 }
 
-// TODO, Shift this to failure_state tests
-TEST(TargetTestSourceGroup, Target_Build_SourceCompileError) {
-  constexpr const char *const NAME = "CompileError.exe";
-  constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
-
-  auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
-  auto intermediate_path = target_source_intermediate_path / NAME;
-
-  // Delete
-
-  {
-    fs::remove_all(intermediate_path);
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
-
-    simple.AddSource(DUMMY_MAIN);
-    buildcc::m::CommandExpect_Execute(1, false); // compile
-    simple.Build();
-    buildcc::base::m::TargetRunner(simple);
-    CHECK(simple.GetTaskState() == buildcc::env::TaskState::FAILURE);
-    buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
-  }
-
-  {
-    fs::remove_all(intermediate_path);
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
-
-    simple.AddSource(DUMMY_MAIN);
-    buildcc::m::CommandExpect_Execute(1, true);  // compile
-    buildcc::m::CommandExpect_Execute(1, false); // link
-    simple.Build();
-    buildcc::base::m::TargetRunner(simple);
-    CHECK(simple.GetTaskState() == buildcc::env::TaskState::FAILURE);
-    buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
-  }
-
-  mock().checkExpectations();
-}
-
 TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
   constexpr const char *const NAME = "Recompile.exe";
   constexpr const char *const DUMMY_MAIN_CPP = "dummy_main.cpp";
