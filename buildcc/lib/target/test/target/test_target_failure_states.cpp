@@ -121,6 +121,44 @@ TEST(TargetTestFailureStates, EndTaskStoreFailure) {
   CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
 }
 
+// TODO, Test failure rebuilds!
+// Every failure state during rebuild should re-run!
+
+TEST(TargetTestFailureStates, StartTaskEnvFailure_Rebuild) {
+  // env state is failure so target fails
+
+  // during rebuild, this target must run!
+}
+
+TEST(TargetTestFailureStates, CompilePchFailure_Rebuild) {
+  // Pch fails to compile during first run
+
+  // during rebuild, this must run!
+  // must move to compile object stage
+  // must move to link target stage
+}
+
+TEST(TargetTestFailureStates, CompileObjectFailure_Rebuild) {
+  // Compile object fails during first run
+
+  // during rebuild this must run the ones that were NOT build before
+  // for example
+  // a.cpp -> BUILT
+  // b.cpp -> FAILS
+
+  // rerun
+  // a.cpp -> no need to compile again!
+  // b.cpp -> REBUILD
+
+  // must move to link target stage
+}
+
+TEST(TargetTestFailureStates, LinkTargetFailure_Rebuild) {
+  // Link target fails during first run
+
+  // during rebuild this must try to relink!
+}
+
 int main(int ac, char **av) {
   buildcc::env::init(BUILD_SCRIPT_SOURCE,
                      BUILD_TARGET_FAILURE_STATES_BUILD_DIR);
