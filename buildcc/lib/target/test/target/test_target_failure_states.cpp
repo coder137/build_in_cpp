@@ -28,17 +28,25 @@ TEST_GROUP(TargetTestFailureStates)
 buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc, "gcc", "as",
                              "gcc", "g++", "ar", "ld");
 
-TEST(TargetTestFailureStates, StartTaskEnvFailure) {}
+TEST(TargetTestFailureStates, StartTaskEnvFailure) {
+  buildcc::env::set_task_state(buildcc::env::TaskState::FAILURE);
+
+  constexpr const char *const NAME = "StartTaskEnvFailure.exe";
+  buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
+
+  simple.AddSource("dummy_main.cpp");
+  simple.Build();
+  buildcc::base::m::TargetRunner(simple);
+
+  CHECK(simple.GetTaskState() == buildcc::env::TaskState::FAILURE);
+}
 
 TEST(TargetTestFailureStates, CompilePchFailure) {}
 
 TEST(TargetTestFailureStates, CompileObjectFailure) {
   constexpr const char *const NAME = "CompileObjectFailure.exe";
-  constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
 
-  auto intermediate_path = buildcc::env::get_project_build_dir() / NAME;
-
-  fs::remove_all(intermediate_path);
   buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
                                "data");
 
@@ -54,12 +62,11 @@ TEST(TargetTestFailureStates, CompileObjectFailure) {
 
 TEST(TargetTestFailureStates, LinkTargetFailure) {
   constexpr const char *const NAME = "LinkTargetFailure.exe";
-  constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
 
   buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
                                "data");
 
-  simple.AddSource(DUMMY_MAIN);
+  simple.AddSource("dummy_main.cpp");
   buildcc::m::CommandExpect_Execute(1, true);  // compile
   buildcc::m::CommandExpect_Execute(1, false); // link
   simple.Build();
