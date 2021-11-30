@@ -136,23 +136,17 @@ void CompileObject::Task() {
               }
             })
             .name(name);
+
+        // For graph generation
+        for (const auto &ds : dummy_source_files) {
+          std::string name = fmt::format(
+              "{}",
+              ds.GetPathname().lexically_relative(env::get_project_root_dir()));
+          (void)subflow.placeholder().name(name);
+        }
       }
     } catch (...) {
       target_.SetTaskStateFailure();
-
-      // For graph generation
-      for (const auto &s : source_files) {
-        std::string name = fmt::format("{}", s.GetPathname().lexically_relative(
-                                                 env::get_project_root_dir()));
-        (void)subflow.placeholder().name(name);
-      }
-    }
-
-    // For graph generation
-    for (const auto &ds : dummy_source_files) {
-      std::string name = fmt::format("{}", ds.GetPathname().lexically_relative(
-                                               env::get_project_root_dir()));
-      (void)subflow.placeholder().name(name);
     }
   });
   compile_task_.name(kCompileTaskName);
