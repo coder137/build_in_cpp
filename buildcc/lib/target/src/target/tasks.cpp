@@ -57,16 +57,6 @@ void Target::StartTask() {
   target_start_task_.name("Start Target");
 }
 
-void Target::EndTask() {
-  target_end_task_ = tf_.emplace([&]() {
-    // Update env task state
-    if (task_state_ != env::TaskState::SUCCESS) {
-      env::set_task_state(GetTaskState());
-    }
-  });
-  target_end_task_.name("End Target");
-}
-
 tf::Task Target::CheckStateTask() {
   // NOTE, For now we only have 2 states
   // 0 -> SUCCESS
@@ -114,23 +104,32 @@ void CompilePch::Task() {
 // TODO, Shift this to its own source file
 void CompileObject::Task() {
   compile_task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
-    std::vector<fs::path> source_files;
-    std::vector<fs::path> dummy_source_files;
+    std::vector<internal::Path> source_files;
+    std::vector<internal::Path> dummy_source_files;
 
     try {
       BuildObjectCompile(source_files, dummy_source_files);
 
       for (const auto &s : source_files) {
-        std::string name = fmt::format(
-            "{}", s.lexically_relative(env::get_project_root_dir()));
+        std::string name = fmt::format("{}", s.GetPathname().lexically_relative(
+                                                 env::get_project_root_dir()));
         (void)subflow
             .emplace([this, s]() {
               try {
-                bool success = Command::Execute(GetObjectData(s).command);
+                bool success =
+                    Command::Execute(GetObjectData(s.GetPathname()).command);
                 env::assert_throw(success, "Could not compile source");
+
+                // internal::Path current_source = s;
               } catch (...) {
                 target_.SetTaskStateFailure();
+
+                // internal::Path loaded_source =
+                //     *(target_.loader_.GetLoadedSources().find(s));
               }
+
+              // TODO, Add which sources have been built from current_source
+              // TODO, Add which sources have not been built from loaded_source
             })
             .name(name);
       }
@@ -139,16 +138,16 @@ void CompileObject::Task() {
 
       // For graph generation
       for (const auto &s : source_files) {
-        std::string name = fmt::format(
-            "{}", s.lexically_relative(env::get_project_root_dir()));
+        std::string name = fmt::format("{}", s.GetPathname().lexically_relative(
+                                                 env::get_project_root_dir()));
         (void)subflow.placeholder().name(name);
       }
     }
 
     // For graph generation
     for (const auto &ds : dummy_source_files) {
-      std::string name =
-          fmt::format("{}", ds.lexically_relative(env::get_project_root_dir()));
+      std::string name = fmt::format("{}", ds.GetPathname().lexically_relative(
+                                               env::get_project_root_dir()));
       (void)subflow.placeholder().name(name);
     }
   });
@@ -159,6 +158,16 @@ void CompileObject::Task() {
 void LinkTarget::Task() {
   task_ = target_.tf_.emplace([&]() { BuildLink(); });
   task_.name(kLinkTaskName);
+}
+
+void Target::EndTask() {
+  target_end_task_ = tf_.emplace([&]() {
+    // Update env task state
+    if (task_state_ != env::TaskState::SUCCESS) {
+      env::set_task_state(GetTaskState());
+    }
+  });
+  target_end_task_.name("End Target");
 }
 
 } // namespace buildcc::base
