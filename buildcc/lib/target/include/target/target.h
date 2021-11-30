@@ -20,9 +20,9 @@
 #include <filesystem>
 #include <functional>
 #include <initializer_list>
+#include <mutex>
 #include <optional>
 #include <string>
-#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -148,6 +148,8 @@ private:
   // Task states
   tf::Task target_start_task_;
   tf::Task target_end_task_;
+
+  std::mutex task_state_mutex_;
   env::TaskState task_state_{env::TaskState::SUCCESS};
 
   //
