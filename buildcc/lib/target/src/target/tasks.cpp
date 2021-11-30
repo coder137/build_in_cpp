@@ -39,10 +39,8 @@ constexpr const char *const kLinkTaskName = "Target";
 namespace buildcc::base {
 
 void Target::SetTaskStateFailure() {
-  if (task_state_ != env::TaskState::FAILURE) {
-    std::lock_guard<std::mutex> guard(task_state_mutex_);
-    task_state_ = env::TaskState::FAILURE;
-  }
+  std::lock_guard<std::mutex> guard(task_state_mutex_);
+  task_state_ = env::TaskState::FAILURE;
 }
 
 tf::Task Target::CheckStateTask() {
