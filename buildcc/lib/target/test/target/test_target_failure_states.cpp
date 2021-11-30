@@ -103,6 +103,24 @@ TEST(TargetTestFailureStates, LinkTargetFailure) {
   CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
 }
 
+TEST(TargetTestFailureStates, EndTaskStoreFailure) {
+  constexpr const char *const NAME = "EndTaskStoreFailure.exe";
+
+  buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable, gcc,
+                               "data");
+
+  target.AddSource("dummy_main.cpp");
+  target.Build();
+  fs::remove_all(
+      target.GetTargetBuildDir()); // removing this path causes store failure
+
+  buildcc::m::CommandExpect_Execute(1, true); // compile
+  buildcc::m::CommandExpect_Execute(1, true); // link
+  buildcc::base::m::TargetRunner(target);
+
+  CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
+}
+
 int main(int ac, char **av) {
   buildcc::env::init(BUILD_SCRIPT_SOURCE,
                      BUILD_TARGET_FAILURE_STATES_BUILD_DIR);
