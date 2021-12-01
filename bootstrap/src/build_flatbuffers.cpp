@@ -59,8 +59,8 @@ const std::vector<std::string> kFlatcGccCppCompileFlags{
 };
 
 const std::vector<std::string> kFlatcMsvcCppCompileFlags{
-    "/MP",         "/MT",          "/GS",        "/fp:precise",
-    "/Zc:wchar_t", "/Zc:forScope", "/Zc:inline", "/GR",
+    "/MP",         "/MT",         "/GS",          "/GR",
+    "/fp:precise", "/Zc:wchar_t", "/Zc:forScope", "/Zc:inline",
 };
 
 } // namespace
