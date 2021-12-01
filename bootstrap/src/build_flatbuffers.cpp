@@ -72,7 +72,7 @@ const std::vector<std::string> kFlatcCppCompileFlags{
 
 namespace buildcc {
 
-void flatc_cb(BaseTarget &target) {
+void build_flatc_exe_cb(BaseTarget &target) {
   std::for_each(kFlatcSources.cbegin(), kFlatcSources.cend(),
                 [&](const auto &s) { target.AddSource(s, "src"); });
   target.GlobSources("grpc/src/compiler");

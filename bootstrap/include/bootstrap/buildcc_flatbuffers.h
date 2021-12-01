@@ -18,6 +18,6 @@
 
 namespace buildcc {
 
-void flatc_cb(BaseTarget &target);
+void build_flatc_exe_cb(BaseTarget &target);
 
 }

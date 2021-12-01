@@ -54,7 +54,7 @@ int main(int argc, char **argv) noexcept {
 
   // Flatc Executable
   ExecutableTarget_generic flatc_exe("flatc", gcc, "third_party/flatbuffers");
-  reg.Build(arg_gcc.state, flatc_cb, flatc_exe);
+  reg.Build(arg_gcc.state, build_flatc_exe_cb, flatc_exe);
 
   // Schema
   base::Generator schema_gen("schema_gen", "buildcc/schema");
