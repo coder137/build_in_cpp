@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include "bootstrap/buildcc_cli11.h"
+
 namespace buildcc {
 
 void cli11_ho_cb(TargetInfo &info) {
