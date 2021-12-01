@@ -95,6 +95,9 @@ void CompilePch::BuildCompile() {
                          target_.GetCurrentPchCompileFlags());
     target_.RecheckPaths(loader.GetLoadedPchs(),
                          target_.storer_.current_pch_files.internal);
+    if (!loader.GetLoadedPchCompiled()) {
+      target_.dirty_ = true;
+    }
   }
 
   if (target_.dirty_) {
@@ -107,6 +110,7 @@ void CompilePch::BuildCompile() {
     }
     bool success = Command::Execute(command_);
     env::assert_throw(success, "Failed to compile pch");
+    target_.storer_.pch_compiled = true;
   }
 }
 
