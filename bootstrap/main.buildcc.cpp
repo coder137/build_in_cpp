@@ -85,9 +85,9 @@ int main(int argc, char **argv) {
   // TODO, Make this a generic selection between StaticTarget and DynamicTarget
   StaticTarget_generic buildcc_lib("libbuildcc", toolchain, "buildcc");
   reg.CallbackIf(arg_toolchain.state, global_flags_cb, buildcc_lib, toolchain);
-  reg.Build(arg_toolchain.state, buildcc_use_existing_targets_cb, buildcc_lib,
-            schema_gen, flatbuffers_ho_lib, fmt_ho_lib, spdlog_ho_lib,
-            cli11_ho_lib, taskflow_ho_lib, tpl_lib);
+  reg.Build(arg_toolchain.state, buildcc_cb, buildcc_lib, schema_gen,
+            flatbuffers_ho_lib, fmt_ho_lib, spdlog_ho_lib, cli11_ho_lib,
+            taskflow_ho_lib, tpl_lib);
   reg.Dep(buildcc_lib, schema_gen);
   reg.Dep(buildcc_lib, tpl_lib);
 
