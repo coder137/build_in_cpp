@@ -99,45 +99,9 @@ int main(int argc, char **argv) noexcept {
             buildcc_hybrid_simple_example, buildcc_lib);
   reg.Dep(buildcc_hybrid_simple_example, buildcc_lib);
 
-  // reg.Test(arg_gcc.state, "{executable} --help",
-  // buildcc_hybrid_simple_example,
-  //          {
-  //              {"example_folder",
-  //               buildcc_hybrid_simple_example.GetTargetRootDir().string()},
-  //          });
-  reg.Test(arg_gcc.state,
-           "{executable} --config {example_folder}/build_linux.toml",
-           buildcc_hybrid_simple_example,
-           TestConfig(
-               {
-                   {"example_folder",
-                    buildcc_hybrid_simple_example.GetTargetRootDir().string()},
-               },
-               buildcc_hybrid_simple_example.GetTargetRootDir()));
-
-  // ExecutableTarget_generic tpl_io_test("tpl_io_test", gcc,
-  //                                      "third_party/tiny-process-library");
-  // reg.Build(
-  //     arg_gcc.state,
-  //     [](BaseTarget &target, const BaseTarget &tpl_lib) {
-  //       // target.AddSource("tests/io_test.cpp");
-  //       target.AddSource("tests/multithread_test.cpp");
-
-  //       for (const auto &idir : tpl_lib.GetCurrentIncludeDirs()) {
-  //         target.AddIncludeDir(idir);
-  //       }
-  //       target.AddLibDep(tpl_lib);
-  //       target.Build();
-  //     },
-  //     tpl_io_test, tpl_lib);
-  // reg.Dep(tpl_io_test, tpl_lib);
-  // reg.Test(arg_gcc.state, "{executable}", tpl_io_test);
-
   reg.RunBuild();
 
-  // fs::current_path(buildcc_hybrid_simple_example.GetTargetRootDir());
   reg.RunTest();
-  // fs::current_path(env::get_project_root_dir());
 
   // - Clang Compile Commands
   plugin::ClangCompileCommands({&buildcc_lib}).Generate();
@@ -146,8 +110,6 @@ int main(int argc, char **argv) noexcept {
   std::string output = reg.GetTaskflow().dump();
   const bool saved = env::save_file("graph.dot", output, false);
   env::assert_fatal(saved, "Could not save graph.dot file");
-
-  return 0;
 
   return 0;
 }
