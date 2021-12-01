@@ -108,9 +108,9 @@ void CompileObject::Task() {
 
     try {
       BuildObjectCompile(source_files, dummy_source_files);
-      target_.source_files_.clear();
-      target_.source_files_.insert(dummy_source_files.begin(),
-                                   dummy_source_files.end());
+      target_.compiled_source_files_.clear();
+      target_.compiled_source_files_.insert(dummy_source_files.begin(),
+                                            dummy_source_files.end());
 
       for (const auto &s : source_files) {
         std::string name = fmt::format("{}", s.GetPathname().lexically_relative(
@@ -126,7 +126,7 @@ void CompileObject::Task() {
                 // files
                 std::lock_guard<std::mutex> guard(
                     target_.update_path_file_mutex_);
-                target_.source_files_.insert(s);
+                target_.compiled_source_files_.insert(s);
               } catch (...) {
                 target_.SetTaskStateFailure();
 
@@ -171,7 +171,7 @@ void Target::EndTask() {
     if (dirty_) {
       try {
         storer_.current_pch_files.internal = pch_files_;
-        storer_.current_source_files.internal = source_files_;
+        storer_.current_source_files.internal = compiled_source_files_;
         env::assert_throw(Store(),
                           fmt::format("Store failed for {}", GetName()));
         state_.build = true;

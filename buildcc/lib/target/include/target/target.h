@@ -160,7 +160,7 @@ private:
   // TODO, Find alternatives for this
   std::mutex update_path_file_mutex_;
   internal::path_unordered_set pch_files_;
-  internal::path_unordered_set source_files_;
+  internal::path_unordered_set compiled_source_files_;
 
   //
   Command command_;
