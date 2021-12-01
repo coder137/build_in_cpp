@@ -72,15 +72,10 @@ include(cmake/tool/doxygen.cmake)
 
 # Libraries
 include(cmake/target/flatbuffers.cmake)
-
 include(cmake/target/fmt.cmake)
-
 include(cmake/target/spdlog.cmake)
-
 include(cmake/target/cli11.cmake)
-
 include(cmake/target/taskflow.cmake)
-
 include(cmake/target/tpl.cmake)
 
 if (${TESTING})
