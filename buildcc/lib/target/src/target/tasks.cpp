@@ -124,7 +124,7 @@ void CompileObject::Task() {
                 // NOTE, If conmpilation is successful we update the source
                 // files
                 std::lock_guard<std::mutex> guard(
-                    target_.update_path_file_mutex_);
+                    target_.compiled_source_files_mutex_);
                 target_.compiled_source_files_.insert(s);
               } catch (...) {
                 target_.SetTaskStateFailure();
@@ -134,14 +134,14 @@ void CompileObject::Task() {
               }
             })
             .name(name);
+      }
 
-        // For graph generation
-        for (const auto &ds : selected_dummy_source_files) {
-          std::string name = fmt::format(
-              "{}",
-              ds.GetPathname().lexically_relative(env::get_project_root_dir()));
-          (void)subflow.placeholder().name(name);
-        }
+      // For graph generation
+      for (const auto &ds : selected_dummy_source_files) {
+        std::string name = fmt::format(
+            "{}",
+            ds.GetPathname().lexically_relative(env::get_project_root_dir()));
+        (void)subflow.placeholder().name(name);
       }
     } catch (...) {
       target_.SetTaskStateFailure();
