@@ -18,7 +18,7 @@
 
 namespace buildcc {
 
-static void tpl_cb(BaseTarget &target) {
+void tpl_cb(BaseTarget &target) {
   target.AddSource("process.cpp");
   target.AddIncludeDir("");
   target.AddHeader("process.hpp");
