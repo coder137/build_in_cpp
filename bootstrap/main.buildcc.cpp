@@ -223,26 +223,44 @@ static void buildcc_cb(BaseTarget &target, const base::Generator &schema_gen,
   target.AddLibDep(tpl);
   target.Insert(tpl, kInsertOptions);
 
-  // TODO, ADD GCC flags
-  // TODO, ADD MSVC flags
   if constexpr (env::is_win()) {
-    if (target.GetToolchain().GetId() == ToolchainId::Gcc) {
+    // TODO, Clang
+    switch (target.GetToolchain().GetId()) {
+    case ToolchainId::Gcc:
+    case ToolchainId::MinGW: {
+      target.AddPreprocessorFlag("-DFMT_HEADER_ONLY=1");
+      target.AddPreprocessorFlag("-DSPDLOG_FMT_EXTERNAL");
+      target.AddCppCompileFlag("-std=c++17");
+      target.AddCppCompileFlag("-Wall");
+      target.AddCppCompileFlag("-Wextra");
+      // For MINGW
       target.AddLinkFlag("-Wl,--allow-multiple-definition");
+    } break;
+    case ToolchainId::Msvc: {
+      target.AddPreprocessorFlag("/DFMT_HEADER_ONLY=1");
+      target.AddPreprocessorFlag("/DSPDLOG_FMT_EXTERNAL");
+      target.AddCppCompileFlag("/std:c++17");
+    } break;
+    default:
+      break;
     }
   }
 
-  switch (target.GetToolchain().GetId()) {
-  case ToolchainId::Gcc: {
-    target.AddPreprocessorFlag("-DFMT_HEADER_ONLY=1");
-    target.AddPreprocessorFlag("-DSPDLOG_FMT_EXTERNAL");
-    target.AddCppCompileFlag("-std=c++17");
-    target.AddCppCompileFlag("-Wall");
-    target.AddCppCompileFlag("-Wextra");
-  } break;
-  case ToolchainId::Msvc: {
-  } break;
-  default:
-    break;
+  if constexpr (env::is_linux()) {
+    // TODO, Clang
+    switch (target.GetToolchain().GetId()) {
+    case ToolchainId::Gcc: {
+      target.AddPreprocessorFlag("-DFMT_HEADER_ONLY=1");
+      target.AddPreprocessorFlag("-DSPDLOG_FMT_EXTERNAL");
+      target.AddCppCompileFlag("-std=c++17");
+      target.AddCppCompileFlag("-Wall");
+      target.AddCppCompileFlag("-Wextra");
+      target.AddLinkFlag("-Wl,--allow-multiple-definition");
+      target.AddLibDep("-lpthread");
+    } break;
+    default:
+      break;
+    }
   }
 
   target.Build();
@@ -257,6 +275,7 @@ static void hybrid_simple_example_cb(BaseTarget &target,
                                 SyncOption::HeaderFiles,
                                 SyncOption::IncludeDirs,
                                 SyncOption::LibDeps,
+                                SyncOption::ExternalLibDeps,
                             });
   target.AddSource("build.cpp");
   target.AddLibDep(libbuildcc);
