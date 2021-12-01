@@ -1,14 +1,25 @@
+/*
+ * Copyright 2021 Niket Naidu. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 #include "buildcc.h"
-#include "env/host_compiler.h"
-#include "env/host_os.h"
-#include "target/generator.h"
-#include "targets/target_generic.h"
 
 using namespace buildcc;
 
 static void clean_cb();
 
-static void flatc_cb(BaseTarget &target);
 static void schema_gen_cb(base::Generator &generator,
                           const BaseTarget &flatc_exe);
 
