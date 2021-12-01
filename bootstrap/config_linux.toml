@@ -4,6 +4,14 @@ build_dir="../_build_bootstrap"
 loglevel="trace"
 clean=false
 
-[toolchain.gcc]
+[toolchain.custom]
 build = true
 test = true
+
+id = "gcc"
+name = "gcc"
+asm_compiler = "as"
+c_compiler = "gcc"
+cpp_compiler = "g++"
+archiver = "ar"
+linker = "ld"
