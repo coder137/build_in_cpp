@@ -16,12 +16,12 @@
 
 #include "buildcc.h"
 
-#include "bootstrap/buildcc_cli11.h"
-#include "bootstrap/buildcc_flatbuffers.h"
-#include "bootstrap/buildcc_fmtlib.h"
-#include "bootstrap/buildcc_spdlog.h"
-#include "bootstrap/buildcc_taskflow.h"
-#include "bootstrap/buildcc_tpl.h"
+#include "bootstrap/build_cli11.h"
+#include "bootstrap/build_flatbuffers.h"
+#include "bootstrap/build_fmtlib.h"
+#include "bootstrap/build_spdlog.h"
+#include "bootstrap/build_taskflow.h"
+#include "bootstrap/build_tpl.h"
 
 using namespace buildcc;
 
