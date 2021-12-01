@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-#ifndef BOOTSTRAP_BUILDCC_FLATBUFFERS_H_
-#define BOOTSTRAP_BUILDCC_FLATBUFFERS_H_
+#ifndef BOOTSTRAP_BUILD_SPDLOG_H_
+#define BOOTSTRAP_BUILD_SPDLOG_H_
 
 #include "buildcc.h"
 
 namespace buildcc {
 
-void build_flatc_exe_cb(BaseTarget &target);
-void flatbuffers_ho_cb(TargetInfo &info);
+void spdlog_ho_cb(TargetInfo &info);
 
 } // namespace buildcc
 

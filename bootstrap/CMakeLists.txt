@@ -2,12 +2,12 @@ add_executable(buildcc_lib_bootstrap
     main.buildcc.cpp
 )
 target_sources(buildcc_lib_bootstrap PRIVATE
-    src/buildcc_flatbuffers.cpp
-    src/buildcc_cli11.cpp
-    src/buildcc_fmtlib.cpp
-    src/buildcc_spdlog.cpp
-    src/buildcc_taskflow.cpp
-    src/buildcc_tpl.cpp
+    src/build_flatbuffers.cpp
+    src/build_cli11.cpp
+    src/build_fmtlib.cpp
+    src/build_spdlog.cpp
+    src/build_taskflow.cpp
+    src/build_tpl.cpp
 )
 target_include_directories(buildcc_lib_bootstrap PRIVATE
     include

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-#ifndef BOOTSTRAP_BUILDCC_FMTLIB_H_
-#define BOOTSTRAP_BUILDCC_FMTLIB_H_
+#ifndef BOOTSTRAP_BUILD_TPL_H_
+#define BOOTSTRAP_BUILD_TPL_H_
 
 #include "buildcc.h"
 
 namespace buildcc {
 
-void fmt_ho_cb(TargetInfo &info);
+void tpl_cb(BaseTarget &target);
 
 } // namespace buildcc
 

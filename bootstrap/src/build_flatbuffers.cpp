@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "bootstrap/buildcc_flatbuffers.h"
+#include "bootstrap/build_flatbuffers.h"
 
 namespace {
 

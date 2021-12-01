@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-#include "bootstrap/buildcc_fmtlib.h"
+#ifndef BOOTSTRAP_BUILD_FMTLIB_H_
+#define BOOTSTRAP_BUILD_FMTLIB_H_
+
+#include "buildcc.h"
 
 namespace buildcc {
 
-void fmt_ho_cb(TargetInfo &info) {
-  info.AddIncludeDir("include");
-  info.GlobHeaders("include/fmt");
-}
+void fmt_ho_cb(TargetInfo &info);
 
 } // namespace buildcc
+
+#endif

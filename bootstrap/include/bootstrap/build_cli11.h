@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef BOOTSTRAP_BUILDCC_CLI11_H_
-#define BOOTSTRAP_BUILDCC_CLI11_H_
+#ifndef BOOTSTRAP_BUILD_CLI11_H_
+#define BOOTSTRAP_BUILD_CLI11_H_
 
 #include "buildcc.h"
 

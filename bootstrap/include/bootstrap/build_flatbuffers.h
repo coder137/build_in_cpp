@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-#include "bootstrap/buildcc_taskflow.h"
+#ifndef BOOTSTRAP_BUILD_FLATBUFFERS_H_
+#define BOOTSTRAP_BUILD_FLATBUFFERS_H_
+
+#include "buildcc.h"
 
 namespace buildcc {
 
-void taskflow_ho_cb(TargetInfo &info) {
-  info.AddIncludeDir("");
-  info.GlobHeaders("taskflow");
-  info.GlobHeaders("taskflow/core");
-  info.GlobHeaders("taskflow/core/algorithm");
-  // TODO, Track more header files
-}
+void build_flatc_exe_cb(BaseTarget &target);
+void flatbuffers_ho_cb(TargetInfo &info);
 
 } // namespace buildcc
+
+#endif

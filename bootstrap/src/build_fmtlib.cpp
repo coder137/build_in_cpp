@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef BOOTSTRAP_BUILDCC_SPDLOG_H_
-#define BOOTSTRAP_BUILDCC_SPDLOG_H_
-
-#include "buildcc.h"
+#include "bootstrap/build_fmtlib.h"
 
 namespace buildcc {
 
-void spdlog_ho_cb(TargetInfo &info);
+void fmt_ho_cb(TargetInfo &info) {
+  info.AddIncludeDir("include");
+  info.GlobHeaders("include/fmt");
+}
 
 } // namespace buildcc
-
-#endif

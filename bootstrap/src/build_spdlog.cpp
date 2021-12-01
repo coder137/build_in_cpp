@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "bootstrap/buildcc_spdlog.h"
+#include "bootstrap/build_spdlog.h"
 
 namespace buildcc {
 

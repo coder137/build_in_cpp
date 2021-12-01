@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-#ifndef BOOTSTRAP_BUILDCC_TPL_H_
-#define BOOTSTRAP_BUILDCC_TPL_H_
-
-#include "buildcc.h"
+#include "bootstrap/build_cli11.h"
 
 namespace buildcc {
 
-void tpl_cb(BaseTarget &target);
+void cli11_ho_cb(TargetInfo &info) {
+  info.AddIncludeDir("include");
+  info.GlobHeaders("include/CLI");
+  // TODO, Add PCH
+}
 
 } // namespace buildcc
-
-#endif

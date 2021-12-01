@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-#include "bootstrap/buildcc_cli11.h"
+#include "bootstrap/build_tpl.h"
 
 namespace buildcc {
 
-void cli11_ho_cb(TargetInfo &info) {
-  info.AddIncludeDir("include");
-  info.GlobHeaders("include/CLI");
-  // TODO, Add PCH
+void tpl_cb(BaseTarget &target) {
+  target.AddSource("process.cpp");
+  target.AddIncludeDir("");
+  target.AddHeader("process.hpp");
+
+  if constexpr (env::is_win()) {
+    target.AddSource("process_win.cpp");
+  } else {
+    target.AddSource("process_unix.cpp");
+  }
+
+  target.Build();
 }
 
 } // namespace buildcc

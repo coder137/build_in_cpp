@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-#include "bootstrap/buildcc_tpl.h"
+#include "bootstrap/build_taskflow.h"
 
 namespace buildcc {
 
-void tpl_cb(BaseTarget &target) {
-  target.AddSource("process.cpp");
-  target.AddIncludeDir("");
-  target.AddHeader("process.hpp");
-
-  if constexpr (env::is_win()) {
-    target.AddSource("process_win.cpp");
-  } else {
-    target.AddSource("process_unix.cpp");
-  }
-
-  target.Build();
+void taskflow_ho_cb(TargetInfo &info) {
+  info.AddIncludeDir("");
+  info.GlobHeaders("taskflow");
+  info.GlobHeaders("taskflow/core");
+  info.GlobHeaders("taskflow/core/algorithm");
+  // TODO, Track more header files
 }
 
 } // namespace buildcc
