@@ -27,6 +27,9 @@ using namespace buildcc;
 
 static void clean_cb();
 
+static void global_flags_cb(TargetInfo &global_info,
+                            const BaseToolchain &toolchain);
+
 static void schema_gen_cb(base::Generator &generator,
                           const BaseTarget &flatc_exe);
 
@@ -84,10 +87,12 @@ int main(int argc, char **argv) {
   // TODO, Make this a generic selection between StaticTarget and DynamicTarget
   StaticTarget_generic tpl_lib("libtpl", toolchain,
                                "third_party/tiny-process-library");
+  reg.CallbackIf(arg_toolchain.state, global_flags_cb, tpl_lib, toolchain);
   reg.Build(arg_toolchain.state, tpl_cb, tpl_lib);
 
   // TODO, Make this a generic selection between StaticTarget and DynamicTarget
   StaticTarget_generic buildcc_lib("libbuildcc", toolchain, "buildcc");
+  reg.CallbackIf(arg_toolchain.state, global_flags_cb, buildcc_lib, toolchain);
   reg.Build(arg_toolchain.state, buildcc_cb, buildcc_lib, schema_gen,
             flatbuffers_ho_lib, fmt_ho_lib, spdlog_ho_lib, cli11_ho_lib,
             taskflow_ho_lib, tpl_lib);
@@ -116,6 +121,25 @@ int main(int argc, char **argv) {
 }
 
 static void clean_cb() {}
+
+static void global_flags_cb(TargetInfo &global_info,
+                            const BaseToolchain &toolchain) {
+  // TODO, Clang
+  switch (toolchain.GetId()) {
+  case ToolchainId::Gcc:
+  case ToolchainId::MinGW:
+    global_info.AddCppCompileFlag("-std=c++17");
+    global_info.AddCppCompileFlag("-Os");
+    global_info.AddCppCompileFlag("-Wall");
+    global_info.AddCppCompileFlag("-Wextra");
+    break;
+  case ToolchainId::Msvc:
+    global_info.AddCppCompileFlag("/std:c++17");
+    global_info.AddCppCompileFlag("/Ot");
+  default:
+    break;
+  }
+}
 
 static void schema_gen_cb(base::Generator &generator,
                           const BaseTarget &flatc_exe) {
@@ -230,16 +254,12 @@ static void buildcc_cb(BaseTarget &target, const base::Generator &schema_gen,
     case ToolchainId::MinGW: {
       target.AddPreprocessorFlag("-DFMT_HEADER_ONLY=1");
       target.AddPreprocessorFlag("-DSPDLOG_FMT_EXTERNAL");
-      target.AddCppCompileFlag("-std=c++17");
-      target.AddCppCompileFlag("-Wall");
-      target.AddCppCompileFlag("-Wextra");
       // For MINGW
       target.AddLinkFlag("-Wl,--allow-multiple-definition");
     } break;
     case ToolchainId::Msvc: {
       target.AddPreprocessorFlag("/DFMT_HEADER_ONLY=1");
       target.AddPreprocessorFlag("/DSPDLOG_FMT_EXTERNAL");
-      target.AddCppCompileFlag("/std:c++17");
     } break;
     default:
       break;
@@ -252,16 +272,14 @@ static void buildcc_cb(BaseTarget &target, const base::Generator &schema_gen,
     case ToolchainId::Gcc: {
       target.AddPreprocessorFlag("-DFMT_HEADER_ONLY=1");
       target.AddPreprocessorFlag("-DSPDLOG_FMT_EXTERNAL");
-      target.AddCppCompileFlag("-std=c++17");
-      target.AddCppCompileFlag("-Wall");
-      target.AddCppCompileFlag("-Wextra");
-      target.AddLinkFlag("-Wl,--allow-multiple-definition");
       target.AddLibDep("-lpthread");
     } break;
     default:
       break;
     }
   }
+
+  // TODO, Other OS's
 
   target.Build();
 }

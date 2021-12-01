@@ -23,36 +23,10 @@ void tpl_cb(BaseTarget &target) {
   target.AddIncludeDir("");
   target.AddHeader("process.hpp");
 
-  // MinGW (GCC), MSVC, Clang
   if constexpr (env::is_win()) {
     target.AddSource("process_win.cpp");
-    // TODO, Clang
-    switch (target.GetToolchain().GetId()) {
-    case ToolchainId::Gcc:
-    case ToolchainId::MinGW:
-      target.AddCppCompileFlag("-std=c++17");
-      target.AddCppCompileFlag("-Wall");
-      target.AddCppCompileFlag("-Wextra");
-      break;
-    case ToolchainId::Msvc:
-      target.AddCppCompileFlag("/std:c++17");
-    default:
-      break;
-    }
-  }
-
-  if constexpr (env::is_linux()) {
+  } else {
     target.AddSource("process_unix.cpp");
-    // TODO, Clang
-    switch (target.GetToolchain().GetId()) {
-    case ToolchainId::Gcc:
-      target.AddCppCompileFlag("-std=c++17");
-      target.AddCppCompileFlag("-Wall");
-      target.AddCppCompileFlag("-Wextra");
-      break;
-    default:
-      break;
-    }
   }
 
   target.Build();
