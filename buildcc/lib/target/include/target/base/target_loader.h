@@ -104,6 +104,7 @@ public:
     return loaded_link_dependencies_;
   }
 
+  bool GetLoadedPchCompiled() const noexcept { return loaded_pch_compiled_; }
   bool GetLoadedTargetLinked() const noexcept { return loaded_target_linked_; }
 
 private:
@@ -135,6 +136,7 @@ private:
   path_unordered_set loaded_compile_dependencies_;
   path_unordered_set loaded_link_dependencies_;
 
+  bool loaded_pch_compiled_{false};
   bool loaded_target_linked_{false};
 };
 
