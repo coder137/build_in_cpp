@@ -35,20 +35,21 @@ static void hybrid_simple_example_cb(BaseTarget &target,
 
 int main(int argc, char **argv) {
   Args args;
-  Args::ToolchainArg arg_toolchain;
-  args.AddToolchain("custom", "Host Toolchain", arg_toolchain);
+  Args::ToolchainArg custom_toolchain_arg;
+  args.AddToolchain("custom", "Host Toolchain", custom_toolchain_arg);
   args.Parse(argc, argv);
 
   Register reg(args);
   reg.Clean(clean_cb);
 
-  BaseToolchain toolchain = arg_toolchain.ConstructToolchain();
+  BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
 
   // Flatc Executable
   ExecutableTarget_generic flatc_exe("flatc", toolchain,
                                      "third_party/flatbuffers");
-  reg.CallbackIf(arg_toolchain.state, global_flags_cb, flatc_exe, toolchain);
-  reg.Build(arg_toolchain.state, build_flatc_exe_cb, flatc_exe);
+  reg.CallbackIf(custom_toolchain_arg.state, global_flags_cb, flatc_exe,
+                 toolchain);
+  reg.Build(custom_toolchain_arg.state, build_flatc_exe_cb, flatc_exe);
 
   // Schema
   BaseGenerator schema_gen("schema_gen", "buildcc/schema");
@@ -79,13 +80,15 @@ int main(int argc, char **argv) {
   // TODO, Make this a generic selection between StaticTarget and DynamicTarget
   StaticTarget_generic tpl_lib("libtpl", toolchain,
                                "third_party/tiny-process-library");
-  reg.CallbackIf(arg_toolchain.state, global_flags_cb, tpl_lib, toolchain);
-  reg.Build(arg_toolchain.state, tpl_cb, tpl_lib);
+  reg.CallbackIf(custom_toolchain_arg.state, global_flags_cb, tpl_lib,
+                 toolchain);
+  reg.Build(custom_toolchain_arg.state, tpl_cb, tpl_lib);
 
   // TODO, Make this a generic selection between StaticTarget and DynamicTarget
   StaticTarget_generic buildcc_lib("libbuildcc", toolchain, "buildcc");
-  reg.CallbackIf(arg_toolchain.state, global_flags_cb, buildcc_lib, toolchain);
-  reg.Build(arg_toolchain.state, buildcc_cb, buildcc_lib, schema_gen,
+  reg.CallbackIf(custom_toolchain_arg.state, global_flags_cb, buildcc_lib,
+                 toolchain);
+  reg.Build(custom_toolchain_arg.state, buildcc_cb, buildcc_lib, schema_gen,
             flatbuffers_ho_lib, fmt_ho_lib, spdlog_ho_lib, cli11_ho_lib,
             taskflow_ho_lib, tpl_lib);
   reg.Dep(buildcc_lib, schema_gen);
@@ -93,7 +96,7 @@ int main(int argc, char **argv) {
 
   ExecutableTarget_generic buildcc_hybrid_simple_example(
       "buildcc_hybrid_simple_example", toolchain, "example/hybrid/simple");
-  reg.Build(arg_toolchain.state, hybrid_simple_example_cb,
+  reg.Build(custom_toolchain_arg.state, hybrid_simple_example_cb,
             buildcc_hybrid_simple_example, buildcc_lib);
   reg.Dep(buildcc_hybrid_simple_example, buildcc_lib);
 
