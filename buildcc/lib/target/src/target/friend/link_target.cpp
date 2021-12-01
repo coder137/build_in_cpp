@@ -72,22 +72,27 @@ void LinkTarget::BuildLink() {
   const auto &loader = target_.loader_;
   const auto &storer = target_.storer_;
 
-  target_.RecheckFlags(loader.GetLoadedLinkFlags(),
-                       target_.GetCurrentLinkFlags());
-  target_.RecheckDirs(loader.GetLoadedLibDirs(), target_.GetCurrentLibDirs());
-  target_.RecheckExternalLib(loader.GetLoadedExternalLibDeps(),
-                             storer.current_external_lib_deps);
-  target_.RecheckPaths(loader.GetLoadedLinkDependencies(),
-                       storer.current_link_dependencies.internal);
-  target_.RecheckPaths(loader.GetLoadedLibDeps(),
-                       storer.current_lib_deps.internal);
+  if (!loader.IsLoaded()) {
+    target_.dirty_ = true;
+  } else {
+    target_.RecheckFlags(loader.GetLoadedLinkFlags(),
+                         target_.GetCurrentLinkFlags());
+    target_.RecheckDirs(loader.GetLoadedLibDirs(), target_.GetCurrentLibDirs());
+    target_.RecheckExternalLib(loader.GetLoadedExternalLibDeps(),
+                               storer.current_external_lib_deps);
+    target_.RecheckPaths(loader.GetLoadedLinkDependencies(),
+                         storer.current_link_dependencies.internal);
+    target_.RecheckPaths(loader.GetLoadedLibDeps(),
+                         storer.current_lib_deps.internal);
+    if (!loader.GetLoadedTargetLinked()) {
+      target_.dirty_ = true;
+    }
+  }
 
   if (target_.dirty_) {
     bool success = Command::Execute(command_);
-    env::assert_fatal(success, "Failed to link target");
-    env::assert_fatal(target_.Store(),
-                      fmt::format("Store failed for {}", target_.GetName()));
-    target_.state_.build = true;
+    env::assert_throw(success, "Failed to link target");
+    target_.storer_.target_linked = true;
   }
 }
 

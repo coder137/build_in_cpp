@@ -88,8 +88,6 @@ TEST(TargetBaseTestGroup, TargetConfig_BadLinkCommand) {
     buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
                                  gcc, "data", config);
     simple.AddSource("dummy_main.c");
-
-    buildcc::m::CommandExpect_Execute(1, true);
     CHECK_THROWS(std::exception, simple.Build());
   }
 

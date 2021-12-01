@@ -7,7 +7,7 @@ add_library(mock_target STATIC
     mock/generator/recheck_states.cpp
 
     # Target mocks
-    mock/target/tasks.cpp
+    src/target/tasks.cpp
     mock/target/runner.cpp
     mock/target/recheck_states.cpp
 )

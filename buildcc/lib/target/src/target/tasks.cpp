@@ -18,7 +18,6 @@
 
 #include <algorithm>
 
-#include "env/assert_fatal.h"
 #include "env/logging.h"
 
 #include "target/common/util.h"
@@ -26,6 +25,10 @@
 #include "fmt/format.h"
 
 namespace {
+
+constexpr const char *const kStartTaskName = "Start Target";
+constexpr const char *const kEndTaskName = "End Target";
+constexpr const char *const kCheckTaskName = "Check Target";
 
 constexpr const char *const kPchTaskName = "Pch";
 constexpr const char *const kCompileTaskName = "Objects";
@@ -35,9 +38,47 @@ constexpr const char *const kLinkTaskName = "Target";
 
 namespace buildcc::base {
 
+void Target::SetTaskStateFailure() {
+  std::lock_guard<std::mutex> guard(task_state_mutex_);
+  task_state_ = env::TaskState::FAILURE;
+}
+
+tf::Task Target::CheckStateTask() {
+  // NOTE, For now we only have 2 states
+  // 0 -> SUCCESS
+  // 1 -> FAILURE
+  // * When more states are added make sure to handle them explicitly
+  return tf_.emplace([&]() { return GetTaskStateAsInt(); })
+      .name(kCheckTaskName);
+}
+
+void Target::StartTask() {
+  // Return 0 for success
+  // Return 1 for failure
+  target_start_task_ = tf_.emplace([&]() {
+    switch (env::get_task_state()) {
+    case env::TaskState::SUCCESS:
+      break;
+    default:
+      SetTaskStateFailure();
+      break;
+    };
+    return GetTaskStateAsInt();
+  });
+  target_start_task_.name(kStartTaskName);
+}
+
+// 1. User adds/removes/updates pch_headers
+// 2. `BuildCompile` aggregates pch_headers to a single `buildcc_header` and
+// compiles
+// 3. Successfully compiled sources are added to `compiled_pch_files_`
 void CompilePch::Task() {
   task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
-    BuildCompile();
+    try {
+      BuildCompile();
+    } catch (...) {
+      target_.SetTaskStateFailure();
+    }
 
     // For Graph generation
     for (const auto &p : target_.GetCurrentPchFiles()) {
@@ -49,45 +90,116 @@ void CompilePch::Task() {
   task_.name(kPchTaskName);
 }
 
+// 1. User adds/removes/updates sources (user_source_files)
+// 2. `BuildObjectCompile` populates `selected_source_files` that need to be
+// compiled
+// 3. Successfully compiled sources are added to `compiled_source_files_`
+// * `selected_source_files` can be a subset of `user_source_files`
+// * `compiled_source_files` can be a subset of `selected_source_files`
+// NOTE, We do not use state here since we are compiling every source file
+// individually
+// We would need to store `source_file : object_file : state` in our
+// serialization schema
 void CompileObject::Task() {
   compile_task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
-    std::vector<fs::path> source_files;
-    std::vector<fs::path> dummy_source_files;
+    std::vector<internal::Path> selected_source_files;
+    std::vector<internal::Path> selected_dummy_source_files;
 
-    BuildObjectCompile(source_files, dummy_source_files);
+    try {
+      BuildObjectCompile(selected_source_files, selected_dummy_source_files);
+      target_.compiled_source_files_.clear();
+      target_.compiled_source_files_.insert(selected_dummy_source_files.begin(),
+                                            selected_dummy_source_files.end());
 
-    for (const auto &s : source_files) {
-      std::string name =
-          fmt::format("{}", s.lexically_relative(env::get_project_root_dir()));
-      (void)subflow
-          .emplace([this, s]() {
-            bool success = Command::Execute(GetObjectData(s).command);
-            env::assert_fatal(success, "Could not compile source");
-          })
-          .name(name);
-    }
+      for (const auto &s : selected_source_files) {
+        std::string name = fmt::format("{}", s.GetPathname().lexically_relative(
+                                                 env::get_project_root_dir()));
+        (void)subflow
+            .emplace([this, s]() {
+              try {
+                bool success =
+                    Command::Execute(GetObjectData(s.GetPathname()).command);
+                env::assert_throw(success, "Could not compile source");
 
-    // For graph generation
-    for (const auto &ds : dummy_source_files) {
-      std::string name =
-          fmt::format("{}", ds.lexically_relative(env::get_project_root_dir()));
-      (void)subflow.placeholder().name(name);
+                // NOTE, If conmpilation is successful we update the source
+                // files
+                std::lock_guard<std::mutex> guard(
+                    target_.compiled_source_files_mutex_);
+                target_.compiled_source_files_.insert(s);
+              } catch (...) {
+                target_.SetTaskStateFailure();
+
+                // NOTE, If compilation fails, we do not need to update the
+                // source files
+              }
+            })
+            .name(name);
+      }
+
+      // For graph generation
+      for (const auto &ds : selected_dummy_source_files) {
+        std::string name = fmt::format(
+            "{}",
+            ds.GetPathname().lexically_relative(env::get_project_root_dir()));
+        (void)subflow.placeholder().name(name);
+      }
+    } catch (...) {
+      target_.SetTaskStateFailure();
     }
   });
   compile_task_.name(kCompileTaskName);
 }
 
+// 1. Receives object list from compile stage (not serialized)
+// 2. `BuildLink` links compiled objects and other user supplied parameters to
+// the required target
+// 3. Successfully linking the target sets link state
 void LinkTarget::Task() {
-  task_ = target_.tf_.emplace([&]() { BuildLink(); });
+  task_ = target_.tf_.emplace([&]() {
+    try {
+      BuildLink();
+    } catch (...) {
+      target_.SetTaskStateFailure();
+    }
+  });
   task_.name(kLinkTaskName);
 }
 
+void Target::EndTask() {
+  target_end_task_ = tf_.emplace([&]() {
+    if (dirty_) {
+      try {
+        storer_.current_source_files.internal = compiled_source_files_;
+        env::assert_throw(Store(),
+                          fmt::format("Store failed for {}", GetName()));
+        state_.build = true;
+      } catch (...) {
+        SetTaskStateFailure();
+      }
+    }
+
+    // Update env task state
+    if (task_state_ != env::TaskState::SUCCESS) {
+      env::set_task_state(GetTaskState());
+    }
+  });
+  target_end_task_.name(kEndTaskName);
+}
+
 void Target::TaskDeps() {
-  // NOTE, PCH may not be used
-  if (!compile_pch_.GetTask().empty()) {
-    compile_object_.GetTask().succeed(compile_pch_.GetTask());
+  if (state_.ContainsPch()) {
+    target_start_task_.precede(compile_pch_.GetTask(), target_end_task_);
+    tf::Task pch_check_state_task = CheckStateTask();
+    compile_pch_.GetTask().precede(pch_check_state_task);
+    pch_check_state_task.precede(compile_object_.GetTask(), target_end_task_);
+  } else {
+    target_start_task_.precede(compile_object_.GetTask(), target_end_task_);
   }
-  link_target_.GetTask().succeed(compile_object_.GetTask());
+
+  tf::Task object_check_state_task = CheckStateTask();
+  compile_object_.GetTask().precede(object_check_state_task);
+  object_check_state_task.precede(link_target_.GetTask(), target_end_task_);
+  link_target_.GetTask().precede(target_end_task_);
 }
 
 } // namespace buildcc::base

@@ -45,6 +45,7 @@ TEST(TargetTestSourceOutOfRootGroup, Add_OutOfRootSource) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   simple.Build();
+  buildcc::base::m::TargetRunner(simple);
 }
 
 TEST(TargetTestSourceOutOfRootGroup, Glob_OutOfRootSource) {
@@ -61,6 +62,7 @@ TEST(TargetTestSourceOutOfRootGroup, Glob_OutOfRootSource) {
     buildcc::m::CommandExpect_Execute(6, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    buildcc::base::m::TargetRunner(simple);
   }
 
   mock().checkExpectations();
@@ -78,6 +80,7 @@ TEST(TargetTestSourceOutOfRootGroup, GlobAbsolute_OutOfRootSource) {
     buildcc::m::CommandExpect_Execute(6, true);
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    buildcc::base::m::TargetRunner(simple);
   }
   mock().checkExpectations();
 }

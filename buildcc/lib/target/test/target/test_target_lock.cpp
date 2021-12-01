@@ -1,6 +1,7 @@
 #include "constants.h"
 
 #include "expect_command.h"
+#include "expect_target.h"
 
 #include "target/target.h"
 
@@ -37,6 +38,7 @@ TEST(TargetTestLock, LockState) {
 
   buildcc::m::CommandExpect_Execute(1, true);
   exe.Build();
+  buildcc::base::m::TargetRunner(exe);
 
   CHECK_TRUE(exe.IsLocked());
 
@@ -50,6 +52,7 @@ TEST(TargetTestLock, Lock_Build) {
 
   buildcc::m::CommandExpect_Execute(1, true);
   exe.Build();
+  buildcc::base::m::TargetRunner(exe);
 
   CHECK_THROWS(std::exception, exe.Build());
 
@@ -63,6 +66,7 @@ TEST(TargetTestLock, Lock_APIs) {
 
   buildcc::m::CommandExpect_Execute(1, true);
   exe.Build();
+  buildcc::base::m::TargetRunner(exe);
 
   mock().checkExpectations();
 
@@ -107,6 +111,7 @@ TEST(TargetTestLock, Unlock_APIs) {
   buildcc::m::CommandExpect_Execute(1, true);
   buildcc::m::CommandExpect_Execute(1, true);
   exe.Build();
+  buildcc::base::m::TargetRunner(exe);
   mock().checkExpectations();
 
   exe.GetCompileCommand(exe.GetTargetRootDir() / "dummy_main.c");

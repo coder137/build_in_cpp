@@ -20,7 +20,6 @@
 
 namespace {
 constexpr const char *const kStartGeneratorTaskName = "Start Generator";
-constexpr const char *const kPreGenerateTaskName = "PreGenerate";
 constexpr const char *const kEndGeneratorTaskName = "End Generator";
 
 constexpr const char *const kCommandTaskName = "Command";
@@ -34,6 +33,12 @@ void Generator::GenerateTask() {
   tf::Task start_task = tf_.emplace([this]() {
     switch (env::get_task_state()) {
     case env::TaskState::SUCCESS:
+      try {
+        Convert();
+        BuildGenerate();
+      } catch (...) {
+        task_state_ = env::TaskState::FAILURE;
+      }
       break;
     default:
       task_state_ = env::TaskState::FAILURE;
@@ -42,17 +47,6 @@ void Generator::GenerateTask() {
     return static_cast<int>(task_state_);
   });
   start_task.name(kStartGeneratorTaskName);
-
-  tf::Task pregenerate_task = tf_.emplace([&]() {
-    try {
-      Convert();
-      BuildGenerate();
-    } catch (...) {
-      task_state_ = env::TaskState::FAILURE;
-    }
-    return static_cast<int>(task_state_);
-  });
-  pregenerate_task.name(kPreGenerateTaskName);
 
   tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
     auto run_command = [this](const std::string &command) {
@@ -124,8 +118,7 @@ void Generator::GenerateTask() {
   end_task.name(kEndGeneratorTaskName);
 
   // Dependencies
-  start_task.precede(pregenerate_task, end_task);
-  pregenerate_task.precede(generate_task, end_task);
+  start_task.precede(generate_task, end_task);
   generate_task.precede(end_task);
 }
 

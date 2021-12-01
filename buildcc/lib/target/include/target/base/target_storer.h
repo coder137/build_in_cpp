@@ -45,6 +45,9 @@ struct TargetStorer {
 
   internal::RelationalPathFiles current_compile_dependencies;
   internal::RelationalPathFiles current_link_dependencies;
+
+  bool pch_compiled{false};
+  bool target_linked{false};
 };
 
 } // namespace buildcc::internal

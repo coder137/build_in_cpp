@@ -97,11 +97,14 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
   buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
                                "data");
 
-  buildcc::m::CommandExpect_Execute(1, true); // compile
-  buildcc::m::CommandExpect_Execute(1, true); // link
-
   simple.AddSource(DUMMY_MAIN);
   simple.Build();
+
+  buildcc::m::CommandExpect_Execute(1, true); // compile
+  buildcc::m::CommandExpect_Execute(1, true); // link
+  buildcc::base::m::TargetRunner(simple);
+
+  CHECK(simple.GetTaskState() == buildcc::env::TaskState::SUCCESS);
 
   mock().checkExpectations();
 
@@ -114,39 +117,6 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
   auto dummy_file = buildcc::internal::Path::CreateExistingPath(
       (source_path / DUMMY_MAIN).make_preferred().string());
   CHECK_FALSE(loaded_sources.find(dummy_file) == loaded_sources.end());
-}
-
-TEST(TargetTestSourceGroup, Target_Build_SourceCompileError) {
-  constexpr const char *const NAME = "CompileError.exe";
-  constexpr const char *const DUMMY_MAIN = "dummy_main.cpp";
-
-  auto source_path = fs::path(BUILD_SCRIPT_SOURCE) / "data";
-  auto intermediate_path = target_source_intermediate_path / NAME;
-
-  // Delete
-
-  {
-    fs::remove_all(intermediate_path);
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
-
-    simple.AddSource(DUMMY_MAIN);
-    buildcc::m::CommandExpect_Execute(1, false); // compile
-    CHECK_THROWS(std::exception, simple.Build());
-  }
-
-  {
-    fs::remove_all(intermediate_path);
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
-
-    simple.AddSource(DUMMY_MAIN);
-    buildcc::m::CommandExpect_Execute(1, true);  // compile
-    buildcc::m::CommandExpect_Execute(1, false); // compile
-    CHECK_THROWS(std::exception, simple.Build());
-  }
-
-  mock().checkExpectations();
 }
 
 TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
@@ -179,6 +149,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     buildcc::m::CommandExpect_Execute(1, true); // compile
     buildcc::m::CommandExpect_Execute(1, true); // link
     simple.Build();
+    buildcc::base::m::TargetRunner(simple);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
@@ -209,6 +180,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
 
     // Run the second Build to test Recompile
     simple.Build();
+    buildcc::base::m::TargetRunner(simple);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
@@ -238,6 +210,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
 
     buildcc::m::CommandExpect_Execute(1, true);
     simple.Build();
+    buildcc::base::m::TargetRunner(simple);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();

@@ -20,9 +20,9 @@
 #include <filesystem>
 #include <functional>
 #include <initializer_list>
+#include <mutex>
 #include <optional>
 #include <string>
-#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -47,9 +47,12 @@
 #include "target/base/target_storer.h"
 #include "target/common/path.h"
 
+// Env
+#include "env/env.h"
+#include "env/task_state.h"
+
 // Components
 #include "command/command.h"
-#include "env/env.h"
 #include "toolchain/toolchain.h"
 
 // Third Party
@@ -82,6 +85,9 @@ public:
   // Builders
   void Build() override;
 
+  // Getters
+  env::TaskState GetTaskState() const noexcept { return task_state_; }
+
 private:
   friend class CompilePch;
   friend class CompileObject;
@@ -111,6 +117,14 @@ private:
   bool Store() override;
 
   // Tasks
+  void SetTaskStateFailure();
+  int GetTaskStateAsInt() const noexcept {
+    return static_cast<int>(task_state_);
+  }
+
+  void StartTask();
+  void EndTask();
+  tf::Task CheckStateTask();
   void TaskDeps();
 
   // Callbacks for unit tests
@@ -135,6 +149,16 @@ private:
   CompilePch compile_pch_;
   CompileObject compile_object_;
   LinkTarget link_target_;
+
+  // Task states
+  tf::Task target_start_task_;
+  tf::Task target_end_task_;
+
+  std::mutex task_state_mutex_;
+  env::TaskState task_state_{env::TaskState::SUCCESS};
+
+  std::mutex compiled_source_files_mutex_;
+  internal::path_unordered_set compiled_source_files_;
 
   //
   Command command_;
