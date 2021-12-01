@@ -49,7 +49,7 @@ const std::vector<std::string> kFlatcPreprocessorFlags{
     "-DNDEBUG",
 };
 
-const std::vector<std::string> kFlatcCppCompileFlags{
+const std::vector<std::string> kFlatcGccCppCompileFlags{
     "-std=c++17",
     "-Os",
     "-Wall",
@@ -66,6 +66,13 @@ const std::vector<std::string> kFlatcCppCompileFlags{
     "-fsigned-char",
     "-Wold-style-cast",
     "-Winvalid-pch",
+};
+
+// TODO, Understand these options
+const std::vector<std::string> kFlatcMsvcCppCompileFlags{
+    "/std:c++17",   "/W4",        "/WX", "/MP",         "/O2",
+    "/Ob2",         "/MT",        "/GS", "/fp:precise", "/Zc:wchar_t",
+    "/Zc:forScope", "/Zc:inline", "/GR",
 };
 
 } // namespace
@@ -87,8 +94,35 @@ void build_flatc_exe_cb(BaseTarget &target) {
                 kFlatcPreprocessorFlags.cend(),
                 [&](const auto &f) { target.AddPreprocessorFlag(f); });
 
-  std::for_each(kFlatcCppCompileFlags.cbegin(), kFlatcCppCompileFlags.cend(),
-                [&](const auto &f) { target.AddCppCompileFlag(f); });
+  if constexpr (env::is_win()) {
+    switch (target.GetToolchain().GetId()) {
+    case ToolchainId::Gcc:
+    case ToolchainId::MinGW:
+      std::for_each(kFlatcGccCppCompileFlags.cbegin(),
+                    kFlatcGccCppCompileFlags.cend(),
+                    [&](const auto &f) { target.AddCppCompileFlag(f); });
+      break;
+    case ToolchainId::Msvc:
+      std::for_each(kFlatcMsvcCppCompileFlags.cbegin(),
+                    kFlatcMsvcCppCompileFlags.cend(),
+                    [&](const auto &f) { target.AddCppCompileFlag(f); });
+      break;
+    default:
+      break;
+    }
+  }
+
+  if constexpr (env::is_linux()) {
+    switch (target.GetToolchain().GetId()) {
+    case ToolchainId::Gcc:
+      std::for_each(kFlatcGccCppCompileFlags.cbegin(),
+                    kFlatcGccCppCompileFlags.cend(),
+                    [&](const auto &f) { target.AddCppCompileFlag(f); });
+      break;
+    default:
+      break;
+    }
+  }
 
   // TODO, Add PCH
 
