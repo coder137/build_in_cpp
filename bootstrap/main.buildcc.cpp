@@ -127,6 +127,7 @@ static void global_flags_cb(TargetInfo &global_info,
     global_info.AddCppCompileFlag("-Werror");
     break;
   case ToolchainId::Msvc:
+    global_info.AddPreprocessorFlag("/D_CRT_SECURE_NO_WARNINGS");
     global_info.AddCppCompileFlag("/std:c++17");
     global_info.AddCppCompileFlag("/Ot");
     global_info.AddCppCompileFlag("/W4");
