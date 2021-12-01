@@ -24,9 +24,11 @@ enum TargetType : byte {
 
 // TODO, Check if Toolchain needs to be added to Target
 table Target {
+    // Metadata
     name:string (key);
     type:TargetType;
 
+    // Input
     // Files
     source_files:[Path];
     header_files:[Path];
@@ -53,6 +55,14 @@ table Target {
     // Additional dependencies
     compile_dependencies:[Path];
     link_dependencies:[Path];
+
+    // Output
+    // Does not need to be stored
+
+    // State
+    // pch_compiled:bool;
+    // object_compiled:[bool];
+    target_linked:bool;
 }
 
 root_type Target;
