@@ -102,16 +102,16 @@ void CompilePch::Task() {
 // serialization schema
 void CompileObject::Task() {
   compile_task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
-    std::vector<internal::Path> source_files;
-    std::vector<internal::Path> dummy_source_files;
+    std::vector<internal::Path> selected_source_files;
+    std::vector<internal::Path> selected_dummy_source_files;
 
     try {
-      BuildObjectCompile(source_files, dummy_source_files);
+      BuildObjectCompile(selected_source_files, selected_dummy_source_files);
       target_.compiled_source_files_.clear();
-      target_.compiled_source_files_.insert(dummy_source_files.begin(),
-                                            dummy_source_files.end());
+      target_.compiled_source_files_.insert(selected_dummy_source_files.begin(),
+                                            selected_dummy_source_files.end());
 
-      for (const auto &s : source_files) {
+      for (const auto &s : selected_source_files) {
         std::string name = fmt::format("{}", s.GetPathname().lexically_relative(
                                                  env::get_project_root_dir()));
         (void)subflow
@@ -136,7 +136,7 @@ void CompileObject::Task() {
             .name(name);
 
         // For graph generation
-        for (const auto &ds : dummy_source_files) {
+        for (const auto &ds : selected_dummy_source_files) {
           std::string name = fmt::format(
               "{}",
               ds.GetPathname().lexically_relative(env::get_project_root_dir()));
