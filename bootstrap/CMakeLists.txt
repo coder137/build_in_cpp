@@ -4,6 +4,7 @@ add_executable(buildcc_lib_bootstrap
 target_sources(buildcc_lib_bootstrap PRIVATE
     src/buildcc_flatbuffers.cpp
     src/buildcc_cli11.cpp
+    src/buildcc_fmtlib.cpp
 )
 target_include_directories(buildcc_lib_bootstrap PRIVATE
     include
