@@ -16,6 +16,8 @@
 
 #include "buildcc.h"
 
+#include "bootstrap/buildcc_flatbuffers.h"
+
 using namespace buildcc;
 
 static void clean_cb();
@@ -153,77 +155,6 @@ int main(int argc, char **argv) noexcept {
 }
 
 static void clean_cb() {}
-
-static void flatc_cb(BaseTarget &target) {
-  std::vector<std::string> sources{
-      "code_generators.cpp",
-      "flatc_main.cpp",
-      "flatc.cpp",
-      "idl_gen_cpp.cpp",
-      "idl_gen_csharp.cpp",
-      "idl_gen_dart.cpp",
-      "idl_gen_fbs.cpp",
-      "idl_gen_go.cpp",
-      "idl_gen_grpc.cpp",
-      "idl_gen_java.cpp",
-      "idl_gen_json_schema.cpp",
-      "idl_gen_kotlin.cpp",
-      "idl_gen_lobster.cpp",
-      "idl_gen_lua.cpp",
-      "idl_gen_php.cpp",
-      "idl_gen_python.cpp",
-      "idl_gen_rust.cpp",
-      "idl_gen_swift.cpp",
-      "idl_gen_text.cpp",
-      "idl_gen_ts.cpp",
-      "idl_parser.cpp",
-      "reflection.cpp",
-      "util.cpp",
-  };
-  std::for_each(sources.cbegin(), sources.cend(),
-                [&](const auto &s) { target.AddSource(s, "src"); });
-  target.GlobSources("grpc/src/compiler");
-
-  target.AddIncludeDir("include");
-  target.AddIncludeDir("grpc");
-
-  target.GlobHeaders("include/flatbuffers");
-  target.GlobHeaders("grpc/src/compiler");
-
-  std::vector<std::string> preprocessor_flags{
-      "-DFLATBUFFERS_LOCALE_INDEPENDENT=0",
-      "-DNDEBUG",
-  };
-
-  std::for_each(preprocessor_flags.cbegin(), preprocessor_flags.cend(),
-                [&](const auto &f) { target.AddPreprocessorFlag(f); });
-
-  std::vector<std::string> cpp_compile_flags{
-      "-std=c++17",
-      "-Os",
-      "-Wall",
-      "-pedantic",
-      "-Werror",
-      "-Wextra",
-      "-Werror=shadow",
-      "-faligned-new",
-      "-Werror=implicit-fallthrough=2",
-      "-Wunused-result",
-      "-Werror=unused-result",
-      "-Wunused-parameter",
-      "-Werror=unused-parameter",
-      "-fsigned-char",
-      "-Wold-style-cast",
-      "-Winvalid-pch",
-  };
-
-  std::for_each(cpp_compile_flags.cbegin(), cpp_compile_flags.cend(),
-                [&](const auto &f) { target.AddCppCompileFlag(f); });
-
-  // TODO, PCH here
-
-  target.Build();
-}
 
 static void schema_gen_cb(base::Generator &generator,
                           const BaseTarget &flatc_exe) {

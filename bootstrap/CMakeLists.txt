@@ -1,7 +1,14 @@
 add_executable(buildcc_lib_bootstrap
     main.buildcc.cpp
 )
+target_sources(buildcc_lib_bootstrap PRIVATE
+    src/build_flatbuffers.cpp
+)
+target_include_directories(buildcc_lib_bootstrap PRIVATE
+    include
+)
 target_link_libraries(buildcc_lib_bootstrap PRIVATE buildcc)
+
 # TODO, Add this only if MINGW is used
 # https://github.com/msys2/MINGW-packages/issues/2303
 # Similar issue when adding the Taskflow library
