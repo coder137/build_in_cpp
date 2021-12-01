@@ -56,6 +56,7 @@ int main(int argc, char **argv) {
   // Flatc Executable
   ExecutableTarget_generic flatc_exe("flatc", toolchain,
                                      "third_party/flatbuffers");
+  reg.CallbackIf(arg_toolchain.state, global_flags_cb, flatc_exe, toolchain);
   reg.Build(arg_toolchain.state, build_flatc_exe_cb, flatc_exe);
 
   // Schema
@@ -132,10 +133,13 @@ static void global_flags_cb(TargetInfo &global_info,
     global_info.AddCppCompileFlag("-Os");
     global_info.AddCppCompileFlag("-Wall");
     global_info.AddCppCompileFlag("-Wextra");
+    global_info.AddCppCompileFlag("-Werror");
     break;
   case ToolchainId::Msvc:
     global_info.AddCppCompileFlag("/std:c++17");
     global_info.AddCppCompileFlag("/Ot");
+    global_info.AddCppCompileFlag("/W4");
+    global_info.AddCppCompileFlag("/WX");
   default:
     break;
   }

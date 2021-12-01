@@ -50,27 +50,16 @@ const std::vector<std::string> kFlatcPreprocessorFlags{
 };
 
 const std::vector<std::string> kFlatcGccCppCompileFlags{
-    "-std=c++17",
-    "-Os",
-    "-Wall",
-    "-pedantic",
-    "-Werror",
-    "-Wextra",
-    "-Werror=shadow",
-    "-faligned-new",
-    "-Werror=implicit-fallthrough=2",
-    "-Wunused-result",
-    "-Werror=unused-result",
-    "-Wunused-parameter",
-    "-Werror=unused-parameter",
-    "-fsigned-char",
-    "-Wold-style-cast",
+    "-pedantic",          "-Werror=shadow",
+    "-faligned-new",      "-Werror=implicit-fallthrough=2",
+    "-Wunused-result",    "-Werror=unused-result",
+    "-Wunused-parameter", "-Werror=unused-parameter",
+    "-fsigned-char",      "-Wold-style-cast",
     "-Winvalid-pch",
 };
 
 const std::vector<std::string> kFlatcMsvcCppCompileFlags{
-    "/std:c++17",  "/W4",          "/WX",        "/MP",
-    "/Ot",         "/MT",          "/GS",        "/fp:precise",
+    "/MP",         "/MT",          "/GS",        "/fp:precise",
     "/Zc:wchar_t", "/Zc:forScope", "/Zc:inline", "/GR",
 };
 
