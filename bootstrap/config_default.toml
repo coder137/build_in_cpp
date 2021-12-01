@@ -3,15 +3,3 @@ build_dir="../_build_bootstrap"
 
 loglevel="trace"
 clean=false
-
-# [toolchain.custom]
-# build = true
-# test = true
-
-# id = "msvc"
-# name = "msvc"
-# asm_compiler = "cl"
-# c_compiler = "cl"
-# cpp_compiler = "cl"
-# archiver = "lib"
-# linker = "link"
