@@ -68,11 +68,10 @@ const std::vector<std::string> kFlatcGccCppCompileFlags{
     "-Winvalid-pch",
 };
 
-// TODO, Understand these options
 const std::vector<std::string> kFlatcMsvcCppCompileFlags{
-    "/std:c++17",   "/W4",        "/WX", "/MP",         "/O2",
-    "/Ob2",         "/MT",        "/GS", "/fp:precise", "/Zc:wchar_t",
-    "/Zc:forScope", "/Zc:inline", "/GR",
+    "/std:c++17",  "/W4",          "/WX",        "/MP",
+    "/Ot",         "/MT",          "/GS",        "/fp:precise",
+    "/Zc:wchar_t", "/Zc:forScope", "/Zc:inline", "/GR",
 };
 
 } // namespace
