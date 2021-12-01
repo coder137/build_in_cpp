@@ -26,7 +26,6 @@ void tpl_cb(BaseTarget &target) {
   // MinGW (GCC), MSVC, Clang
   if constexpr (env::is_win()) {
     target.AddSource("process_win.cpp");
-    // TODO, MSVC
     // TODO, Clang
     switch (target.GetToolchain().GetId()) {
     case ToolchainId::Gcc:
@@ -35,19 +34,25 @@ void tpl_cb(BaseTarget &target) {
       target.AddCppCompileFlag("-Wall");
       target.AddCppCompileFlag("-Wextra");
       break;
+    case ToolchainId::Msvc:
+      target.AddCppCompileFlag("/std:c++17");
     default:
       break;
     }
   }
 
   if constexpr (env::is_linux()) {
-    // TODO, GCC
+    target.AddSource("process_unix.cpp");
     // TODO, Clang
-  }
-
-  // LOG DUMP
-  for (const auto &d : target.GetCurrentSourceFiles()) {
-    env::log_info(__FUNCTION__, d.string());
+    switch (target.GetToolchain().GetId()) {
+    case ToolchainId::Gcc:
+      target.AddCppCompileFlag("-std=c++17");
+      target.AddCppCompileFlag("-Wall");
+      target.AddCppCompileFlag("-Wextra");
+      break;
+    default:
+      break;
+    }
   }
 
   target.Build();
