@@ -3,6 +3,7 @@ add_executable(buildcc_lib_bootstrap
 )
 target_sources(buildcc_lib_bootstrap PRIVATE
     src/build_flatbuffers.cpp
+    src/buildcc_cli11.cpp
 )
 target_include_directories(buildcc_lib_bootstrap PRIVATE
     include
