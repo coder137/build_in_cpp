@@ -57,24 +57,6 @@ Build C, C++ and ASM files in C++
   - Users can define their own custom arguments.
   - Argument passing has been made easy using the `buildcc::Args` module.
 
-**Taskflow dependency for hybrid/simple example**
-![Hybrid Simple example](example/hybrid/simple/graph.PNG)
-
-- Build GCC and MSVC Targets simultaneously
-- 1 C and 1 CPP example for both toolchains
-
-**Taskflow dependency for hybrid/pch example**
-![Hybrid PCH example](example/hybrid/pch/graph.PNG)
-
-- Activate PCH for GCC and MSVC Targets
-- 1 C and 1 CPP example for both toolchains
-
-**Taskflow dependency for hybrid/dep_chaining example**
-![Hybrid Dep Chain example](example/hybrid/dep_chaining/graph.PNG)
-
-- Chain **Generator** with **Targets** for Dependency
-- 1 C and 1 CPP example for both toolchains
-
 # Software Architecture
 
 ### Interface lib dependencies
@@ -118,6 +100,26 @@ Build C, C++ and ASM files in C++
 # Examples
 
 Contains **proof of concept** and **real world** [examples](example/README.md).
+
+## Visual hybrid example graphs
+
+**Taskflow dependency for hybrid/simple example**
+![Hybrid Simple example](example/hybrid/simple/graph.PNG)
+
+- Build GCC and MSVC Targets simultaneously
+- 1 C and 1 CPP example for both toolchains
+
+**Taskflow dependency for hybrid/pch example**
+![Hybrid PCH example](example/hybrid/pch/graph.PNG)
+
+- Activate PCH for GCC and MSVC Targets
+- 1 C and 1 CPP example for both toolchains
+
+**Taskflow dependency for hybrid/dep_chaining example**
+![Hybrid Dep Chain example](example/hybrid/dep_chaining/graph.PNG)
+
+- Chain **Generator** with **Targets** for Dependency
+- 1 C and 1 CPP example for both toolchains
 
 # User Guide
 
