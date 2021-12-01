@@ -60,8 +60,7 @@ table Target {
     // Does not need to be stored
 
     // State
-    // pch_compiled:bool;
-    // object_compiled:[bool];
+    pch_compiled:bool;
     target_linked:bool;
 }
 
