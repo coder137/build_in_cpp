@@ -70,6 +70,8 @@ bool TargetLoader::Load() {
   extract_path(target->compile_dependencies(), loaded_compile_dependencies_);
   extract_path(target->link_dependencies(), loaded_link_dependencies_);
 
+  loaded_target_linked_ = target->target_linked();
+
   loaded_ = true;
   return true;
 }

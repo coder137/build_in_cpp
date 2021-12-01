@@ -104,6 +104,8 @@ public:
     return loaded_link_dependencies_;
   }
 
+  bool GetLoadedTargetLinked() const noexcept { return loaded_target_linked_; }
+
 private:
   void Initialize();
 
@@ -132,6 +134,8 @@ private:
 
   path_unordered_set loaded_compile_dependencies_;
   path_unordered_set loaded_link_dependencies_;
+
+  bool loaded_target_linked_{false};
 };
 
 } // namespace buildcc::internal

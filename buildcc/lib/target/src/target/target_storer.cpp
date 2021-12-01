@@ -89,7 +89,8 @@ bool Target::Store() {
       &fbs_include_dirs, &fbs_lib_dirs, &fbs_preprocessor_flags,
       &fbs_common_compile_flags, &fbs_pch_compile_flags, &fbs_pch_object_flags,
       &fbs_asm_compile_flags, &fbs_c_compile_flags, &fbs_cpp_compile_flags,
-      &fbs_link_flags, &fbs_compile_dependencies, &fbs_link_dependencies);
+      &fbs_link_flags, &fbs_compile_dependencies, &fbs_link_dependencies,
+      storer_.target_linked);
   fbs::FinishTargetBuffer(builder, fbs_target);
 
   auto file_path = GetBinaryPath();
