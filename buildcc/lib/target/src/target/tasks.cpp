@@ -68,6 +68,10 @@ void Target::StartTask() {
   target_start_task_.name(kStartTaskName);
 }
 
+// 1. User adds/removes/updates pch_headers
+// 2. `BuildCompile` aggregates pch_headers to a single `buildcc_header` and
+// compiles
+// 3. Successfully compiled sources are added to `compiled_pch_files_`
 void CompilePch::Task() {
   task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
     try {
@@ -87,6 +91,16 @@ void CompilePch::Task() {
   task_.name(kPchTaskName);
 }
 
+// 1. User adds/removes/updates sources (user_source_files)
+// 2. `BuildObjectCompile` populates `selected_source_files` that need to be
+// compiled
+// 3. Successfully compiled sources are added to `compiled_source_files_`
+// * `selected_source_files` can be a subset of `user_source_files`
+// * `compiled_source_files` can be a subset of `selected_source_files`
+// NOTE, We do not use state here since we are compiling every source file
+// individually
+// We would need to store `source_file : object_file : state` in our
+// serialization schema
 void CompileObject::Task() {
   compile_task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
     std::vector<internal::Path> source_files;
@@ -137,6 +151,10 @@ void CompileObject::Task() {
   compile_task_.name(kCompileTaskName);
 }
 
+// 1. Receives object list from compile stage (not serialized)
+// 2. `BuildLink` links compiled objects and other user supplied parameters to
+// the required target
+// 3. Successfully linking the target sets link state
 void LinkTarget::Task() {
   task_ = target_.tf_.emplace([&]() {
     try {
