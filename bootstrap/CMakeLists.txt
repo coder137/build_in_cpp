@@ -6,6 +6,7 @@ target_sources(buildcc_lib_bootstrap PRIVATE
     src/buildcc_cli11.cpp
     src/buildcc_fmtlib.cpp
     src/buildcc_spdlog.cpp
+    src/buildcc_taskflow.cpp
 )
 target_include_directories(buildcc_lib_bootstrap PRIVATE
     include
