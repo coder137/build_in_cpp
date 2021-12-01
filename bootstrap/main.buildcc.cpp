@@ -25,7 +25,6 @@ static void clean_cb();
 static void schema_gen_cb(base::Generator &generator,
                           const BaseTarget &flatc_exe);
 
-static void flatbuffers_ho_cb(TargetInfo &info);
 static void cli11_ho_cb(TargetInfo &info);
 static void fmt_ho_cb(TargetInfo &info);
 static void spdlog_ho_cb(TargetInfo &info);
@@ -175,12 +174,6 @@ static void schema_gen_cb(base::Generator &generator,
       "--cpp {path_fbs} {generator_fbs} {target_fbs}");
 
   generator.Build();
-}
-
-static void flatbuffers_ho_cb(TargetInfo &info) {
-  info.AddIncludeDir("include");
-  info.GlobHeaders("include/flatbuffers");
-  // TODO, Add PCH
 }
 
 static void cli11_ho_cb(TargetInfo &info) {

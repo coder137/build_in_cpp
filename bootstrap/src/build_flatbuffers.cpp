@@ -90,9 +90,15 @@ void build_flatc_exe_cb(BaseTarget &target) {
   std::for_each(kFlatcCppCompileFlags.cbegin(), kFlatcCppCompileFlags.cend(),
                 [&](const auto &f) { target.AddCppCompileFlag(f); });
 
-  // TODO, PCH here
+  // TODO, Add PCH
 
   target.Build();
+}
+
+void flatbuffers_ho_cb(TargetInfo &info) {
+  info.AddIncludeDir("include");
+  info.GlobHeaders("include/flatbuffers");
+  // TODO, Add PCH
 }
 
 } // namespace buildcc

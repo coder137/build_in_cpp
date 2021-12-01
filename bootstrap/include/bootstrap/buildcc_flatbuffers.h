@@ -19,5 +19,6 @@
 namespace buildcc {
 
 void build_flatc_exe_cb(BaseTarget &target);
+void flatbuffers_ho_cb(TargetInfo &info);
 
-}
+} // namespace buildcc
