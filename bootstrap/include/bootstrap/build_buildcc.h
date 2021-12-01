@@ -21,14 +21,13 @@
 
 namespace buildcc {
 
-// TODO, Remove schema_gen
-void buildcc_use_existing_cb(
+void schema_gen_cb(base::Generator &generator, const BaseTarget &flatc_exe);
+
+void buildcc_use_existing_targets_cb(
     BaseTarget &target, const base::Generator &schema_gen,
     const TargetInfo &flatbuffers_ho, const TargetInfo &fmt_ho,
     const TargetInfo &spdlog_ho, const TargetInfo &cli11_ho,
     const TargetInfo &taskflow_ho, const BaseTarget &tpl);
-
-void buildcc_cb(BaseTarget &target);
 
 } // namespace buildcc
 
