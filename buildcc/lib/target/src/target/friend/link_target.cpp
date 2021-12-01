@@ -72,15 +72,19 @@ void LinkTarget::BuildLink() {
   const auto &loader = target_.loader_;
   const auto &storer = target_.storer_;
 
-  target_.RecheckFlags(loader.GetLoadedLinkFlags(),
-                       target_.GetCurrentLinkFlags());
-  target_.RecheckDirs(loader.GetLoadedLibDirs(), target_.GetCurrentLibDirs());
-  target_.RecheckExternalLib(loader.GetLoadedExternalLibDeps(),
-                             storer.current_external_lib_deps);
-  target_.RecheckPaths(loader.GetLoadedLinkDependencies(),
-                       storer.current_link_dependencies.internal);
-  target_.RecheckPaths(loader.GetLoadedLibDeps(),
-                       storer.current_lib_deps.internal);
+  if (!loader.IsLoaded()) {
+    target_.dirty_ = true;
+  } else {
+    target_.RecheckFlags(loader.GetLoadedLinkFlags(),
+                         target_.GetCurrentLinkFlags());
+    target_.RecheckDirs(loader.GetLoadedLibDirs(), target_.GetCurrentLibDirs());
+    target_.RecheckExternalLib(loader.GetLoadedExternalLibDeps(),
+                               storer.current_external_lib_deps);
+    target_.RecheckPaths(loader.GetLoadedLinkDependencies(),
+                         storer.current_link_dependencies.internal);
+    target_.RecheckPaths(loader.GetLoadedLibDeps(),
+                         storer.current_lib_deps.internal);
+  }
 
   if (target_.dirty_) {
     bool success = Command::Execute(command_);
