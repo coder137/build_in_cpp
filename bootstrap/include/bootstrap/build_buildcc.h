@@ -21,10 +21,10 @@
 
 namespace buildcc {
 
-void schema_gen_cb(base::Generator &generator, const BaseTarget &flatc_exe);
+void schema_gen_cb(BaseGenerator &generator, const BaseTarget &flatc_exe);
 
 void buildcc_use_existing_targets_cb(
-    BaseTarget &target, const base::Generator &schema_gen,
+    BaseTarget &target, const BaseGenerator &schema_gen,
     const TargetInfo &flatbuffers_ho, const TargetInfo &fmt_ho,
     const TargetInfo &spdlog_ho, const TargetInfo &cli11_ho,
     const TargetInfo &taskflow_ho, const BaseTarget &tpl);

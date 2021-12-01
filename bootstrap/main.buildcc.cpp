@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
   reg.Build(arg_toolchain.state, build_flatc_exe_cb, flatc_exe);
 
   // Schema
-  base::Generator schema_gen("schema_gen", "buildcc/schema");
+  BaseGenerator schema_gen("schema_gen", "buildcc/schema");
   reg.Build(schema_gen_cb, schema_gen, flatc_exe);
   reg.Dep(schema_gen, flatc_exe);
 
