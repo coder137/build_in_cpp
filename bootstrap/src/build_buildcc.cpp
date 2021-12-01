@@ -38,11 +38,10 @@ void schema_gen_cb(BaseGenerator &generator, const BaseTarget &flatc_exe) {
   generator.Build();
 }
 
-void buildcc_use_existing_targets_cb(
-    BaseTarget &target, const BaseGenerator &schema_gen,
-    const TargetInfo &flatbuffers_ho, const TargetInfo &fmt_ho,
-    const TargetInfo &spdlog_ho, const TargetInfo &cli11_ho,
-    const TargetInfo &taskflow_ho, const BaseTarget &tpl) {
+void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
+                const TargetInfo &flatbuffers_ho, const TargetInfo &fmt_ho,
+                const TargetInfo &spdlog_ho, const TargetInfo &cli11_ho,
+                const TargetInfo &taskflow_ho, const BaseTarget &tpl) {
   // NOTE, Build as single lib
   target.AddIncludeDir("", true);
   const std::string &schema_build_dir =
