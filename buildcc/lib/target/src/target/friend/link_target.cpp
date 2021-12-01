@@ -84,11 +84,15 @@ void LinkTarget::BuildLink() {
                          storer.current_link_dependencies.internal);
     target_.RecheckPaths(loader.GetLoadedLibDeps(),
                          storer.current_lib_deps.internal);
+    if (!loader.GetLoadedTargetLinked()) {
+      target_.dirty_ = true;
+    }
   }
 
   if (target_.dirty_) {
     bool success = Command::Execute(command_);
     env::assert_throw(success, "Failed to link target");
+    target_.storer_.target_linked = true;
   }
 }
 
