@@ -1,0 +1,9 @@
+root_dir=".."
+build_dir="../_build_bootstrap"
+
+loglevel="trace"
+clean=false
+
+[toolchain.gcc]
+build = true
+test = true
