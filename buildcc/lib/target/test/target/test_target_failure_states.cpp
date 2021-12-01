@@ -194,7 +194,6 @@ TEST(TargetTestFailureStates, CompilePchFailure_Rebuild) {
     target.Build();
 
     buildcc::m::CommandExpect_Execute(1, true); // PCH compile
-    buildcc::base::m::TargetExpect_PathAdded(1, &target);
     buildcc::m::CommandExpect_Execute(1, true); // Object compile
     buildcc::m::CommandExpect_Execute(1, true); // Link target
 

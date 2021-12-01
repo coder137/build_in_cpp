@@ -76,7 +76,6 @@ void CompilePch::Task() {
   task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
     try {
       BuildCompile();
-      target_.pch_files_ = target_.storer_.current_pch_files.internal;
     } catch (...) {
       target_.SetTaskStateFailure();
     }
@@ -170,7 +169,6 @@ void Target::EndTask() {
   target_end_task_ = tf_.emplace([&]() {
     if (dirty_) {
       try {
-        storer_.current_pch_files.internal = pch_files_;
         storer_.current_source_files.internal = compiled_source_files_;
         env::assert_throw(Store(),
                           fmt::format("Store failed for {}", GetName()));
