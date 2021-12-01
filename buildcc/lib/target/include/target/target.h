@@ -157,8 +157,7 @@ private:
   std::mutex task_state_mutex_;
   env::TaskState task_state_{env::TaskState::SUCCESS};
 
-  // TODO, Find alternatives for this
-  std::mutex update_path_file_mutex_;
+  std::mutex compiled_source_files_mutex_;
   internal::path_unordered_set compiled_source_files_;
 
   //
