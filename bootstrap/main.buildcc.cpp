@@ -119,23 +119,27 @@ static void setup_buildcc_cb(PersistentStorage &storage, Register &reg,
   reg.Dep(schema_gen, flatc_exe);
 
   // Flatbuffers HO lib
-  TargetInfo flatbuffers_ho_lib("third_party/flatbuffers");
+  TargetInfo &flatbuffers_ho_lib =
+      storage.Add<TargetInfo>("flatbuffers_ho", "third_party/flatbuffers");
   reg.Callback(flatbuffers_ho_cb, flatbuffers_ho_lib);
 
   // CLI11 HO lib
-  TargetInfo cli11_ho_lib("third_party/CLI11");
+  TargetInfo &cli11_ho_lib =
+      storage.Add<TargetInfo>("cli11_ho", "third_party/CLI11");
   reg.Callback(cli11_ho_cb, cli11_ho_lib);
 
   // fmt HO lib
-  TargetInfo fmt_ho_lib("third_party/fmt");
+  TargetInfo &fmt_ho_lib = storage.Add<TargetInfo>("fmt_ho", "third_party/fmt");
   reg.Callback(fmt_ho_cb, fmt_ho_lib);
 
   // spdlog HO lib
-  TargetInfo spdlog_ho_lib("third_party/spdlog");
+  TargetInfo &spdlog_ho_lib =
+      storage.Add<TargetInfo>("spdlog_ho", "third_party/spdlog");
   reg.Callback(spdlog_ho_cb, spdlog_ho_lib);
 
   // taskflow HO lib
-  TargetInfo taskflow_ho_lib("third_party/taskflow");
+  TargetInfo &taskflow_ho_lib =
+      storage.Add<TargetInfo>("taskflow_ho", "third_party/taskflow");
   reg.Callback(taskflow_ho_cb, taskflow_ho_lib);
 
   // Tiny-process-library lib
