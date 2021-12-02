@@ -60,7 +60,7 @@ public:
   }
 
   template <typename T> const T &ConstRef(const std::string &identifier) const {
-    return Get<T>(identifier);
+    return Ref<T>(identifier);
   }
 
 private:
