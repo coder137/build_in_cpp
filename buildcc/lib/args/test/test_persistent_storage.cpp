@@ -48,5 +48,6 @@ TEST(PersistentStorageTestGroup, IncorrectUsage) {
 }
 
 int main(int ac, char **av) {
+  buildcc::env::init(fs::current_path(), fs::current_path());
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
