@@ -57,5 +57,6 @@
 // BuildCC Modules
 #include "args/args.h"
 #include "args/register.h"
+#include "args/persistent_storage.h"
 
 #endif

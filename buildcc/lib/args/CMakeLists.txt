@@ -55,6 +55,7 @@ set(ARGS_SRCS
     src/tasks.cpp
     include/args/args.h
     include/args/register.h
+    include/args/persistent_storage.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})
