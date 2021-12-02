@@ -33,6 +33,9 @@ static void global_flags_cb(TargetInfo &global_info,
 static void hybrid_simple_example_cb(BaseTarget &target,
                                      const BaseTarget &libbuildcc);
 
+void setup_buildcc_cb(PersistentStorage &storage, Register &reg,
+                      const Args::ToolchainArg &custom_toolchain_arg);
+
 int main(int argc, char **argv) {
   Args args;
   Args::ToolchainArg custom_toolchain_arg;
@@ -44,55 +47,11 @@ int main(int argc, char **argv) {
 
   BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
 
-  // Flatc Executable
-  ExecutableTarget_generic flatc_exe("flatc", toolchain,
-                                     "third_party/flatbuffers");
-  reg.CallbackIf(custom_toolchain_arg.state, global_flags_cb, flatc_exe,
-                 toolchain);
-  reg.Build(custom_toolchain_arg.state, build_flatc_exe_cb, flatc_exe);
+  PersistentStorage storage;
+  setup_buildcc_cb(storage, reg, custom_toolchain_arg);
 
-  // Schema
-  BaseGenerator schema_gen("schema_gen", "buildcc/schema");
-  reg.Build(schema_gen_cb, schema_gen, flatc_exe);
-  reg.Dep(schema_gen, flatc_exe);
-
-  // Flatbuffers HO lib
-  TargetInfo flatbuffers_ho_lib("third_party/flatbuffers");
-  reg.Callback(flatbuffers_ho_cb, flatbuffers_ho_lib);
-
-  // CLI11 HO lib
-  TargetInfo cli11_ho_lib("third_party/CLI11");
-  reg.Callback(cli11_ho_cb, cli11_ho_lib);
-
-  // fmt HO lib
-  TargetInfo fmt_ho_lib("third_party/fmt");
-  reg.Callback(fmt_ho_cb, fmt_ho_lib);
-
-  // spdlog HO lib
-  TargetInfo spdlog_ho_lib("third_party/spdlog");
-  reg.Callback(spdlog_ho_cb, spdlog_ho_lib);
-
-  // taskflow HO lib
-  TargetInfo taskflow_ho_lib("third_party/taskflow");
-  reg.Callback(taskflow_ho_cb, taskflow_ho_lib);
-
-  // Tiny-process-library lib
-  // TODO, Make this a generic selection between StaticTarget and DynamicTarget
-  StaticTarget_generic tpl_lib("libtpl", toolchain,
-                               "third_party/tiny-process-library");
-  reg.CallbackIf(custom_toolchain_arg.state, global_flags_cb, tpl_lib,
-                 toolchain);
-  reg.Build(custom_toolchain_arg.state, tpl_cb, tpl_lib);
-
-  // TODO, Make this a generic selection between StaticTarget and DynamicTarget
-  StaticTarget_generic buildcc_lib("libbuildcc", toolchain, "buildcc");
-  reg.CallbackIf(custom_toolchain_arg.state, global_flags_cb, buildcc_lib,
-                 toolchain);
-  reg.Build(custom_toolchain_arg.state, buildcc_cb, buildcc_lib, schema_gen,
-            flatbuffers_ho_lib, fmt_ho_lib, spdlog_ho_lib, cli11_ho_lib,
-            taskflow_ho_lib, tpl_lib);
-  reg.Dep(buildcc_lib, schema_gen);
-  reg.Dep(buildcc_lib, tpl_lib);
+  const StaticTarget_generic &buildcc_lib =
+      storage.ConstRef<StaticTarget_generic>("libbuildcc");
 
   ExecutableTarget_generic buildcc_hybrid_simple_example(
       "buildcc_hybrid_simple_example", toolchain, "example/hybrid/simple");
@@ -138,6 +97,64 @@ static void global_flags_cb(TargetInfo &global_info,
   default:
     break;
   }
+}
+
+void setup_buildcc_cb(PersistentStorage &storage, Register &reg,
+                      const Args::ToolchainArg &custom_toolchain_arg) {
+
+  BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
+
+  // Flatc Executable
+  ExecutableTarget_generic &flatc_exe = storage.Add<ExecutableTarget_generic>(
+      "flatc", "flatc", toolchain, "third_party/flatbuffers");
+  reg.CallbackIf(custom_toolchain_arg.state, global_flags_cb, flatc_exe,
+                 toolchain);
+  reg.Build(custom_toolchain_arg.state, build_flatc_exe_cb, flatc_exe);
+
+  // Schema
+  BaseGenerator &schema_gen =
+      storage.Add<BaseGenerator>("schema_gen", "schema_gen", "buildcc/schema");
+  reg.Build(schema_gen_cb, schema_gen, flatc_exe);
+  reg.Dep(schema_gen, flatc_exe);
+
+  // Flatbuffers HO lib
+  TargetInfo flatbuffers_ho_lib("third_party/flatbuffers");
+  reg.Callback(flatbuffers_ho_cb, flatbuffers_ho_lib);
+
+  // CLI11 HO lib
+  TargetInfo cli11_ho_lib("third_party/CLI11");
+  reg.Callback(cli11_ho_cb, cli11_ho_lib);
+
+  // fmt HO lib
+  TargetInfo fmt_ho_lib("third_party/fmt");
+  reg.Callback(fmt_ho_cb, fmt_ho_lib);
+
+  // spdlog HO lib
+  TargetInfo spdlog_ho_lib("third_party/spdlog");
+  reg.Callback(spdlog_ho_cb, spdlog_ho_lib);
+
+  // taskflow HO lib
+  TargetInfo taskflow_ho_lib("third_party/taskflow");
+  reg.Callback(taskflow_ho_cb, taskflow_ho_lib);
+
+  // Tiny-process-library lib
+  // TODO, Make this a generic selection between StaticTarget and DynamicTarget
+  StaticTarget_generic &tpl_lib = storage.Add<StaticTarget_generic>(
+      "libtpl", "libtpl", toolchain, "third_party/tiny-process-library");
+  reg.CallbackIf(custom_toolchain_arg.state, global_flags_cb, tpl_lib,
+                 toolchain);
+  reg.Build(custom_toolchain_arg.state, tpl_cb, tpl_lib);
+
+  // TODO, Make this a generic selection between StaticTarget and DynamicTarget
+  StaticTarget_generic &buildcc_lib = storage.Add<StaticTarget_generic>(
+      "libbuildcc", "libbuildcc", toolchain, "buildcc");
+  reg.CallbackIf(custom_toolchain_arg.state, global_flags_cb, buildcc_lib,
+                 toolchain);
+  reg.Build(custom_toolchain_arg.state, buildcc_cb, buildcc_lib, schema_gen,
+            flatbuffers_ho_lib, fmt_ho_lib, spdlog_ho_lib, cli11_ho_lib,
+            taskflow_ho_lib, tpl_lib);
+  reg.Dep(buildcc_lib, schema_gen);
+  reg.Dep(buildcc_lib, tpl_lib);
 }
 
 static void hybrid_simple_example_cb(BaseTarget &target,
