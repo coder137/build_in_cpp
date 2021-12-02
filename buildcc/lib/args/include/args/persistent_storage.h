@@ -40,7 +40,7 @@ public:
   }
 
   template <typename T, typename... Params>
-  void Add(const std::string &identifier, Params &&...params) {
+  T &Add(const std::string &identifier, Params &&...params) {
     T *ptr = new T(std::forward<Params>(params)...);
     env::assert_fatal(ptr != nullptr, "System out of memory");
 
@@ -52,6 +52,7 @@ public:
       Remove<T>(ptr);
     };
     ptrs_.emplace(identifier, metadata);
+    return *ptr;
   }
 
   template <typename T> void Remove(T *ptr) { delete ptr; }
