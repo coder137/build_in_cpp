@@ -66,7 +66,7 @@ public:
           cpp_compiler(initial_cpp_compiler), archiver(initial_archiver),
           linker(initial_linker) {}
 
-    base::Toolchain ConstructToolchain() {
+    base::Toolchain ConstructToolchain() const {
       base::Toolchain toolchain(id, name, asm_compiler, c_compiler,
                                 cpp_compiler, archiver, linker);
       return toolchain;
