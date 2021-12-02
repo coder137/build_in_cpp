@@ -41,16 +41,20 @@ public:
 
   template <typename T, typename... Params>
   void Add(const std::string &identifier, Params &&...params) {
-    T *ptr = new T(std::forward<Params &&>(params)...);
+    T *ptr = new T(std::forward<Params>(params)...);
+    env::assert_fatal(ptr != nullptr, "System out of memory");
+
     PtrMetadata metadata;
     metadata.ptr = (void *)ptr;
     metadata.typeid_name = typeid(T).name();
-    metadata.destructor = [&, identifier]() {
-      env::log_info("Removing", identifier);
-      Remove<T>(identifier);
+    metadata.destructor = [this, identifier, ptr]() {
+      env::log_info("Cleaning", identifier);
+      Remove<T>(ptr);
     };
     ptrs_.emplace(identifier, metadata);
   }
+
+  template <typename T> void Remove(T *ptr) { delete ptr; }
 
   template <typename T> const T &ConstRef(const std::string &identifier) const {
     const PtrMetadata &metadata = ptrs_.at(identifier);
@@ -82,11 +86,6 @@ private:
   };
 
 private:
-  template <typename T> void Remove(const std::string &identifier) {
-    T *ptr = (T *)(ptrs_.at(identifier).ptr);
-    delete ptr;
-  }
-
   std::unordered_map<std::string, PtrMetadata> ptrs_;
 };
 
