@@ -30,11 +30,12 @@ using namespace buildcc;
 static void clean_cb();
 static void global_flags_cb(TargetInfo &global_info,
                             const BaseToolchain &toolchain);
+
+static void setup_buildcc_cb(PersistentStorage &storage, Register &reg,
+                             const Args::ToolchainArg &custom_toolchain_arg);
+
 static void hybrid_simple_example_cb(BaseTarget &target,
                                      const BaseTarget &libbuildcc);
-
-void setup_buildcc_cb(PersistentStorage &storage, Register &reg,
-                      const Args::ToolchainArg &custom_toolchain_arg);
 
 int main(int argc, char **argv) {
   Args args;
@@ -99,8 +100,8 @@ static void global_flags_cb(TargetInfo &global_info,
   }
 }
 
-void setup_buildcc_cb(PersistentStorage &storage, Register &reg,
-                      const Args::ToolchainArg &custom_toolchain_arg) {
+static void setup_buildcc_cb(PersistentStorage &storage, Register &reg,
+                             const Args::ToolchainArg &custom_toolchain_arg) {
 
   BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
 
