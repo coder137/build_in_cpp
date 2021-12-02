@@ -40,10 +40,18 @@ target_link_libraries(test_register PRIVATE
     mock_args
 )
 
+add_executable(test_persistent_storage
+    test/test_persistent_storage.cpp
+)
+target_link_libraries(test_persistent_storage PRIVATE mock_args)
+
 add_test(NAME test_args COMMAND test_args
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
 )
 add_test(NAME test_register COMMAND test_register
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
+)
+add_test(NAME test_persistent_storage COMMAND test_persistent_storage
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
 )
 endif()
