@@ -32,7 +32,8 @@ static void global_flags_cb(TargetInfo &global_info,
                             const BaseToolchain &toolchain);
 
 static void setup_buildcc_cb(PersistentStorage &storage, Register &reg,
-                             const Args::ToolchainArg &custom_toolchain_arg);
+                             const Args::ToolchainArg &custom_toolchain_arg,
+                             const BaseToolchain &toolchain);
 
 static void hybrid_simple_example_cb(BaseTarget &target,
                                      const BaseTarget &libbuildcc);
@@ -49,7 +50,7 @@ int main(int argc, char **argv) {
   BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
 
   PersistentStorage storage;
-  setup_buildcc_cb(storage, reg, custom_toolchain_arg);
+  setup_buildcc_cb(storage, reg, custom_toolchain_arg, toolchain);
 
   const StaticTarget_generic &buildcc_lib =
       storage.ConstRef<StaticTarget_generic>("libbuildcc");
@@ -101,9 +102,8 @@ static void global_flags_cb(TargetInfo &global_info,
 }
 
 static void setup_buildcc_cb(PersistentStorage &storage, Register &reg,
-                             const Args::ToolchainArg &custom_toolchain_arg) {
-
-  BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
+                             const Args::ToolchainArg &custom_toolchain_arg,
+                             const BaseToolchain &toolchain) {
 
   // Flatc Executable
   ExecutableTarget_generic &flatc_exe = storage.Add<ExecutableTarget_generic>(
