@@ -27,7 +27,7 @@ TEST(PersistentStorageTestGroup, BasicUsage) {
                                          "generator_name", "");
 
   // Usage
-  persistent.Ref<buildcc::BaseTarget>("target_identifier").GetName();
+  persistent.ConstRef<buildcc::BaseTarget>("target_identifier").GetName();
   persistent.Ref<buildcc::BaseGenerator>("generator_identifier").GetTaskflow();
 
   // Automatic cleanup here
