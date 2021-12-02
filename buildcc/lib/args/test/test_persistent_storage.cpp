@@ -47,6 +47,13 @@ TEST(PersistentStorageTestGroup, IncorrectUsage) {
                persistent.Ref<buildcc::BaseTarget>("generator_identifier"));
 }
 
+std::string &toReference(std::string *pointer) { return *pointer; }
+
+TEST(PersistentStorageTestGroup, NullptrDelete) {
+  buildcc::PersistentStorage persistent;
+  persistent.Remove<std::string>(nullptr);
+}
+
 int main(int ac, char **av) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   return CommandLineTestRunner::RunAllTests(ac, av);
