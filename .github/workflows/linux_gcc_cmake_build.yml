@@ -63,6 +63,11 @@ jobs:
         run: |
           ctest --preset=${{env.BUILD_DEV_ALL_PRESET}} --parallel 2
 
+      - name: Bootstrap through CMake
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
+        run: |
+          cmake --build . --target run_buildcc_lib_bootstrap_linux_gcc
+
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
@@ -110,7 +115,7 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
           cmake --build . --target run_hybrid_depchaining_example_linux
-      
+
       - name: Hybrid Target Info Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
@@ -173,6 +178,11 @@ jobs:
           cmake --build . --target lcov_coverage
           cat ../codecov.yml | curl --data-binary @- https://codecov.io/validate
           bash <(curl -s https://codecov.io/bash) -f coverage_truncated.info || echo "Codecov did not collect coverage reports"
+
+      - name: Bootstrap through CMake
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
+        run: |
+          cmake --build . --target run_buildcc_lib_bootstrap_linux_gcc
 
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
