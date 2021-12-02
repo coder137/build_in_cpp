@@ -52,17 +52,19 @@ public:
     ptrs_.emplace(identifier, metadata);
   }
 
-  template <typename T> T &Ref(const std::string &identifier) {
-    PtrMetadata &metadata = ptrs_.at(identifier);
+  template <typename T> const T &ConstRef(const std::string &identifier) const {
+    const PtrMetadata &metadata = ptrs_.at(identifier);
     env::assert_fatal(
         typeid(T).name() == metadata.typeid_name,
         fmt::format("Wrong type, expects: {}", metadata.typeid_name));
-    T *p = (T *)metadata.ptr;
+    const T *p = (const T *)metadata.ptr;
     return *p;
   }
 
-  template <typename T> const T &ConstRef(const std::string &identifier) const {
-    return Ref<T>(identifier);
+  // https://stackoverflow.com/questions/123758/how-do-i-remove-code-duplication-between-similar-const-and-non-const-member-func/123995
+  template <typename T> T &Ref(const std::string &identifier) {
+    return const_cast<T &>(
+        static_cast<const PersistentStorage &>(*this).ConstRef<T>(identifier));
   }
 
 private:
