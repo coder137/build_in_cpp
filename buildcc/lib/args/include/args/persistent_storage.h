@@ -24,6 +24,8 @@
 
 #include "env/assert_fatal.h"
 
+#include "fmt/format.h"
+
 namespace buildcc {
 
 class PersistentStorage {
