@@ -47,6 +47,7 @@ public:
         loader_(name, generator_build_dir_), parallel_(parallel) {
     Initialize();
   }
+  virtual ~Generator() {}
   Generator(const Generator &generator) = delete;
 
   /**
@@ -98,8 +99,8 @@ public:
   const fs::path &GetBinaryPath() const { return loader_.GetBinaryPath(); }
   tf::Taskflow &GetTaskflow() { return tf_; }
 
-  const std::string &GetName() { return name_; }
-  env::TaskState GetTaskState() { return task_state_; }
+  const std::string &GetName() const { return name_; }
+  env::TaskState GetTaskState() const { return task_state_; }
 
   const std::string &
   GetValueByIdentifier(const std::string &file_identifier) const;

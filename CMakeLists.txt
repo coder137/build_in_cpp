@@ -17,6 +17,8 @@ option(BUILDCC_FLATBUFFERS_FLATC "Build Flatbuffer::Flatc Compiler" ON)
 option(BUILDCC_BUILD_AS_SINGLE_LIB "Build all internal libs and modules as part of the buildcc library" ON)
 option(BUILDCC_BUILD_AS_INTERFACE "Build all internal libs and modules seperately and link" OFF)
 
+option(BUILDCC_BOOTSTRAP_THROUGH_CMAKE "Bootstrap buildcc through CMake" OFF)
+
 # NOTE, Conflict with Clang-Tidy on certain compilers
 option(BUILDCC_PRECOMPILE_HEADERS "Enable Buildcc precompile headers" OFF)
 option(BUILDCC_EXAMPLES "Enable Buildcc Examples" OFF)
@@ -70,15 +72,10 @@ include(cmake/tool/doxygen.cmake)
 
 # Libraries
 include(cmake/target/flatbuffers.cmake)
-
 include(cmake/target/fmt.cmake)
-
 include(cmake/target/spdlog.cmake)
-
 include(cmake/target/cli11.cmake)
-
 include(cmake/target/taskflow.cmake)
-
 include(cmake/target/tpl.cmake)
 
 if (${TESTING})
@@ -116,4 +113,8 @@ if (${BUILDCC_EXAMPLES})
     add_subdirectory(example/hybrid/pch)
     add_subdirectory(example/hybrid/dep_chaining)
     add_subdirectory(example/hybrid/target_info)
+endif()
+
+if (${BUILDCC_BOOTSTRAP_THROUGH_CMAKE})
+    add_subdirectory(bootstrap)
 endif()

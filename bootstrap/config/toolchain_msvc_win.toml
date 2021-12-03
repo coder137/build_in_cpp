@@ -1,0 +1,11 @@
+[toolchain.custom]
+build = true
+test = true
+
+id = "msvc"
+name = "msvc_x64"
+asm_compiler = "cl"
+c_compiler = "cl"
+cpp_compiler = "cl"
+archiver = "lib"
+linker = "link"

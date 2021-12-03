@@ -50,6 +50,11 @@ jobs:
           cmake --build --list-presets
           cmake --build --preset=${{env.BUILD_MSVC_PRESET}} --config Release --parallel 2
 
+      - name: Bootstrap through CMake
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+        run: |
+          cmake --build . --config Release --target run_buildcc_lib_bootstrap_win_msvc --parallel 2
+
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
@@ -68,42 +73,42 @@ jobs:
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_simple_example_win
+          cmake --build . --config Release --parallel 2 --target run_hybrid_simple_example_win
 
       - name: Hybrid Foolib Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_foolib_example_win
+          cmake --build . --config Release --parallel 2 --target run_hybrid_foolib_example_win
 
       - name: Hybrid External Lib Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_externallib_example_win
+          cmake --build . --config Release --parallel 2 --target run_hybrid_externallib_example_win
 
       - name: Hybrid Custom Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_customtarget_example_win
+          cmake --build . --config Release --parallel 2 --target run_hybrid_customtarget_example_win
 
       - name: Hybrid Generic Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_generic_example
+          cmake --build . --config Release --parallel 2 --target run_hybrid_generic_example
 
       - name: Hybrid PCH Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_pch_example_win
+          cmake --build . --config Release --parallel 2 --target run_hybrid_pch_example_win
 
       - name: Hybrid Dep Chaining Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_depchaining_example_win
+          cmake --build . --config Release --parallel 2 --target run_hybrid_depchaining_example_win
 
       - name: Hybrid Target Info Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_targetinfo_example_win
+          cmake --build . --config Release --parallel 2 --target run_hybrid_targetinfo_example_win
 
   build_clang:
     name: Clang single and interface Lib

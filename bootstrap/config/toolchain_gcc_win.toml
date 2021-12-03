@@ -1,0 +1,11 @@
+[toolchain.custom]
+build = true
+test = true
+
+id = "gcc"
+name = "x86_64-w64-mingw32"
+asm_compiler = "as"
+c_compiler = "gcc"
+cpp_compiler = "g++"
+archiver = "ar"
+linker = "ld"
