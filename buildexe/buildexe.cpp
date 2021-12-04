@@ -29,6 +29,7 @@ user_output_target_cb(BaseTarget &target, const std::vector<std::string> &srcs,
 
 int main(int argc, char **argv) {
   Args args;
+
   ArgToolchain custom_toolchain_arg;
   args.AddToolchain("custom", "Host Toolchain", custom_toolchain_arg);
 
@@ -37,12 +38,12 @@ int main(int argc, char **argv) {
       .add_option("--name", target_name_arg, "Provide Target name")
       ->required();
 
+  TargetType target_type_arg;
   const std::unordered_map<const char *, TargetType> kTargetTypeMap{
       {"executable", TargetType::Executable},
       {"staticLibrary", TargetType::StaticLibrary},
       {"dynamicLibrary", TargetType::DynamicLibrary},
   };
-  TargetType target_type_arg;
   args.Ref()
       .add_option("--type", target_type_arg, "Provide Target Type")
       ->transform(CLI::CheckedTransformer(kTargetTypeMap, CLI::ignore_case))
