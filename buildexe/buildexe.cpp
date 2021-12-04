@@ -20,6 +20,11 @@ using namespace buildcc;
 
 constexpr const char *const kTag = "BuildExe";
 
+enum class BuildExeMode {
+  Immediate,
+  Script,
+};
+
 struct ArgTargetInfo {
   std::string name;
   TargetType type;
@@ -31,6 +36,17 @@ struct ArgTargetStorer {
   std::vector<fs::path> include_dirs;
 };
 
+static const std::unordered_map<const char *, TargetType> kTargetTypeMap{
+    {"executable", TargetType::Executable},
+    {"staticLibrary", TargetType::StaticLibrary},
+    {"dynamicLibrary", TargetType::DynamicLibrary},
+};
+
+static const std::unordered_map<const char *, BuildExeMode> kBuildExeModeMap{
+    {"immediate", BuildExeMode::Immediate},
+    {"script", BuildExeMode::Script},
+};
+
 static void clean_cb();
 
 static void setup_arg_target_info(Args &args, ArgTargetInfo &out);
@@ -39,11 +55,18 @@ static void setup_arg_target_storer(Args &args, ArgTargetStorer &out);
 static void user_output_target_cb(BaseTarget &target,
                                   const ArgTargetStorer &storer);
 
+// TODO, Add BuildExeMode::Script usage
 int main(int argc, char **argv) {
   Args args;
 
   ArgToolchain custom_toolchain_arg;
   args.AddToolchain("custom", "Host Toolchain", custom_toolchain_arg);
+
+  BuildExeMode mode;
+  args.Ref()
+      .add_option("--mode", mode, "Provide BuildExe run mode")
+      ->transform(CLI::CheckedTransformer(kTargetTypeMap, CLI::ignore_case))
+      ->required();
 
   ArgTargetInfo out_targetinfo;
   setup_arg_target_info(args, out_targetinfo);
@@ -70,6 +93,11 @@ int main(int argc, char **argv) {
   Target_generic user_output_target(out_targetinfo.name, out_targetinfo.type,
                                     toolchain,
                                     TargetEnv(out_targetinfo.relative_to_root));
+  // if (mode == BuildExeMode::Script) {
+  // TODO, Compile BuildCC here (and make persistent)
+  // NOTE, Add to user_output_target
+  //   reg.Callback([&]() { user_output_target.AddLibDep(libbuildcc); });
+  // }
   reg.Build(custom_toolchain_arg.state, user_output_target_cb,
             user_output_target, out_targetstorer);
 
@@ -92,11 +120,6 @@ static void setup_arg_target_info(Args &args, ArgTargetInfo &out) {
 
   app.add_option("--name", out.name, "Provide Target name")->required();
 
-  const std::unordered_map<const char *, TargetType> kTargetTypeMap{
-      {"executable", TargetType::Executable},
-      {"staticLibrary", TargetType::StaticLibrary},
-      {"dynamicLibrary", TargetType::DynamicLibrary},
-  };
   app.add_option("--type", out.type, "Provide Target Type")
       ->transform(CLI::CheckedTransformer(kTargetTypeMap, CLI::ignore_case))
       ->required();
@@ -123,11 +146,6 @@ static void user_output_target_cb(BaseTarget &target,
   for (const auto &i : storer.include_dirs) {
     target.AddIncludeDir(i, true);
   }
-
-  // if (mode == "script") {
-  //   // TODO, Compile buildcc here and add it!
-  //   // target.AddLibDep()
-  // }
 
   // * NOTE, Add your own CPP optimization flags depending on toolchain!
   switch (target.GetToolchain().GetId()) {
