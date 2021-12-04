@@ -31,66 +31,59 @@ namespace fs = std::filesystem;
 
 namespace buildcc {
 
+/**
+ * @brief Toolchain State used by the Register module to selectively build or
+ * test targets
+ */
+struct ArgToolchainState {
+  bool build{false};
+  bool test{false};
+};
+
+/**
+ * @brief Toolchain Arg used to receive toolchain information through the
+ * command line
+ * Bundled with Toolchain State
+ */
+struct ArgToolchain {
+  ArgToolchain(){};
+  ArgToolchain(ToolchainId initial_id, const std::string &initial_name,
+               const std::string &initial_asm_compiler,
+               const std::string &initial_c_compiler,
+               const std::string &initial_cpp_compiler,
+               const std::string &initial_archiver,
+               const std::string &initial_linker)
+      : id(initial_id), name(initial_name), asm_compiler(initial_asm_compiler),
+        c_compiler(initial_c_compiler), cpp_compiler(initial_cpp_compiler),
+        archiver(initial_archiver), linker(initial_linker) {}
+
+  BaseToolchain ConstructToolchain() const {
+    BaseToolchain toolchain(id, name, asm_compiler, c_compiler, cpp_compiler,
+                            archiver, linker);
+    return toolchain;
+  }
+
+  ArgToolchainState state;
+  ToolchainId id{ToolchainId::Undefined};
+  std::string name{""};
+  std::string asm_compiler{""};
+  std::string c_compiler{""};
+  std::string cpp_compiler{""};
+  std::string archiver{""};
+  std::string linker{""};
+};
+
+// NOTE, Incomplete without pch_compile_command
+// TODO, Update this for PCH
+struct ArgTarget {
+  ArgTarget(){};
+
+  std::string compile_command{""};
+  std::string link_command{""};
+};
+
 class Args {
 public:
-  /**
-   * @brief Toolchain State used by the Register module to selectively build or
-   * test targets
-   */
-  struct ToolchainState {
-    bool build{false};
-    bool test{false};
-  };
-
-  // TODO, Rename to Toolchain
-  // TODO, Put ToolchainState into Args::Toolchain
-  // TODO, Add operator() overload and remove ConstructToolchain
-
-  /**
-   * @brief Toolchain Arg used to receive toolchain information through the
-   * command line
-   * Bundled with Toolchain State
-   */
-  struct ToolchainArg {
-    ToolchainArg(){};
-
-    ToolchainArg(base::Toolchain::Id initial_id,
-                 const std::string &initial_name,
-                 const std::string &initial_asm_compiler,
-                 const std::string &initial_c_compiler,
-                 const std::string &initial_cpp_compiler,
-                 const std::string &initial_archiver,
-                 const std::string &initial_linker)
-        : id(initial_id), name(initial_name),
-          asm_compiler(initial_asm_compiler), c_compiler(initial_c_compiler),
-          cpp_compiler(initial_cpp_compiler), archiver(initial_archiver),
-          linker(initial_linker) {}
-
-    base::Toolchain ConstructToolchain() const {
-      base::Toolchain toolchain(id, name, asm_compiler, c_compiler,
-                                cpp_compiler, archiver, linker);
-      return toolchain;
-    }
-
-    ToolchainState state;
-    base::Toolchain::Id id{base::Toolchain::Id::Undefined};
-    std::string name{""};
-    std::string asm_compiler{""};
-    std::string c_compiler{""};
-    std::string cpp_compiler{""};
-    std::string archiver{""};
-    std::string linker{""};
-  };
-
-  // NOTE, Incomplete without pch_compile_command
-  // TODO, Update this for PCH
-  struct TargetArg {
-    TargetArg(){};
-
-    std::string compile_command{""};
-    std::string link_command{""};
-  };
-
 public:
   Args() { Initialize(); }
   Args(const Args &) = delete;
@@ -110,13 +103,13 @@ public:
    * @param initial Set the default toolchain information as a fallback
    */
   void AddToolchain(const std::string &name, const std::string &description,
-                    ToolchainArg &out,
-                    const ToolchainArg &initial = ToolchainArg());
+                    ArgToolchain &out,
+                    const ArgToolchain &initial = ArgToolchain());
 
   // NOTE, Incomplete TargetArg
   // TODO, Update for pch_compile_command
   void AddTarget(const std::string &name, const std::string &description,
-                 TargetArg &out, const TargetArg &initial = TargetArg());
+                 ArgTarget &out, const ArgTarget &initial = ArgTarget());
 
   // Getters
   bool Clean() const { return clean_; }

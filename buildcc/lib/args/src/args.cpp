@@ -89,7 +89,7 @@ const std::unordered_map<const char *, buildcc::base::Toolchain::Id>
 namespace buildcc {
 
 void Args::AddToolchain(const std::string &name, const std::string &description,
-                        ToolchainArg &out, const ToolchainArg &initial) {
+                        ArgToolchain &out, const ArgToolchain &initial) {
   CLI::App *t_user =
       toolchain_->add_subcommand(name, description)->group(kToolchainGroup);
   t_user->add_flag(kToolchainBuildParam, out.state.build);
@@ -112,7 +112,7 @@ void Args::AddToolchain(const std::string &name, const std::string &description,
 }
 
 void Args::AddTarget(const std::string &name, const std::string &description,
-                     TargetArg &out, const TargetArg &initial) {
+                     ArgTarget &out, const ArgTarget &initial) {
   CLI::App *target_user =
       target_->add_subcommand(name, description)->group(kTargetGroup);
   target_user->add_option(kTargetCompileCommandParam, out.compile_command)
