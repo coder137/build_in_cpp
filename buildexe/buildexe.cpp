@@ -111,6 +111,7 @@ static void setup_arg_target_storer(Args &args, ArgTargetStorer &out) {
 
   app.add_option("--srcs", out.source_files, "Compile source files");
   app.add_option("--includes", out.include_dirs, "Add include paths");
+  // TODO, Add more options here
 }
 
 static void user_output_target_cb(BaseTarget &target,
@@ -123,8 +124,10 @@ static void user_output_target_cb(BaseTarget &target,
     target.AddIncludeDir(i, true);
   }
 
-  // TODO, Compile buildcc here and add it!
-  // target.AddLibDep()
+  // if (mode == "script") {
+  //   // TODO, Compile buildcc here and add it!
+  //   // target.AddLibDep()
+  // }
 
   // * NOTE, Add your own CPP optimization flags depending on toolchain!
   switch (target.GetToolchain().GetId()) {
