@@ -118,3 +118,5 @@ endif()
 if (${BUILDCC_BOOTSTRAP_THROUGH_CMAKE})
     add_subdirectory(bootstrap)
 endif()
+
+add_subdirectory(buildexe)
