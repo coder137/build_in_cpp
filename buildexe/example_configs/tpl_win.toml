@@ -2,23 +2,26 @@ root_dir=".."
 build_dir="../_build_buildexe_tpl"
 
 loglevel="trace"
-clean=false
+clean=true
 
 # TODO, verification
+# [verification]
+# os = ["win", "linux"]
 
-# TODO,
+# BuildExe run mode
+mode = "immediate"
 # mode = "script"
-# mode = "immediate"
 
 # Target information
+# [target.custom]
 name = "libtpl_win"
 type = "staticLibrary"
 relative_to_root = "third_party/tiny-process-library"
 srcs = ["process.cpp", "process_win.cpp"]
 includes = [""]
-
 # GCC
 # cpp_compile_flags = "-std=c++11", -Wall, -Wextra
 
 # MSVC
+
 
