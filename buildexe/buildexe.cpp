@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
   BuildExeMode mode;
   args.Ref()
       .add_option("--mode", mode, "Provide BuildExe run mode")
-      ->transform(CLI::CheckedTransformer(kTargetTypeMap, CLI::ignore_case))
+      ->transform(CLI::CheckedTransformer(kBuildExeModeMap, CLI::ignore_case))
       ->required();
 
   ArgTargetInfo out_targetinfo;
