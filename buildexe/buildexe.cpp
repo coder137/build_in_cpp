@@ -18,6 +18,8 @@
 
 using namespace buildcc;
 
+constexpr const char *const kTag = "BuildExe";
+
 static void clean_cb();
 
 static void
@@ -88,7 +90,10 @@ int main(int argc, char **argv) {
   return 0;
 }
 
-static void clean_cb() {}
+static void clean_cb() {
+  env::log_info(kTag, fmt::format("Cleaning {}", env::get_project_build_dir()));
+  fs::remove_all(env::get_project_build_dir());
+}
 
 static void
 user_output_target_cb(BaseTarget &target, const std::vector<std::string> &srcs,
