@@ -62,6 +62,11 @@ int main(int argc, char **argv) {
   ArgToolchain custom_toolchain_arg;
   args.AddToolchain("custom", "Host Toolchain", custom_toolchain_arg);
 
+  // TODO, Add Verification subcommand here for OS, Compiler etc!
+  // os win, linux considerations
+  // compiler gcc, msvc considerations
+  // arch considerations
+
   BuildExeMode mode;
   args.Ref()
       .add_option("--mode", mode, "Provide BuildExe run mode")
@@ -74,13 +79,11 @@ int main(int argc, char **argv) {
   ArgTargetStorer out_targetstorer;
   setup_arg_target_storer(args, out_targetstorer);
 
-  // std::string core;
-  // args.Ref().add_option("--core", core, "Select core buildcc version");
-
   // TODO, Add base (git cloned raw versions)
   // TODO, Add libraries (compiled version of code! with libs and header
   // linkage options)
   // TODO, Add extension
+
   args.Parse(argc, argv);
 
   Register reg(args);
