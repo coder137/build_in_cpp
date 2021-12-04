@@ -1,8 +1,8 @@
-root_dir=".."
-build_dir="../_build_buildexe_tpl"
+root_dir = ".."
+build_dir = "../_build_buildexe_tpl"
 
-loglevel="trace"
-clean=true
+loglevel = "trace"
+clean = true
 
 # TODO, verification
 # [verification]
