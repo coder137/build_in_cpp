@@ -32,7 +32,7 @@ static void global_flags_cb(TargetInfo &global_info,
                             const BaseToolchain &toolchain);
 
 static void setup_buildcc_cb(PersistentStorage &storage, Register &reg,
-                             const Args::ToolchainArg &custom_toolchain_arg,
+                             const ArgToolchain &custom_toolchain_arg,
                              const BaseToolchain &toolchain);
 
 static void hybrid_simple_example_cb(BaseTarget &target,
@@ -40,7 +40,7 @@ static void hybrid_simple_example_cb(BaseTarget &target,
 
 int main(int argc, char **argv) {
   Args args;
-  Args::ToolchainArg custom_toolchain_arg;
+  ArgToolchain custom_toolchain_arg;
   args.AddToolchain("custom", "Host Toolchain", custom_toolchain_arg);
   args.Parse(argc, argv);
 
@@ -102,7 +102,7 @@ static void global_flags_cb(TargetInfo &global_info,
 }
 
 static void setup_buildcc_cb(PersistentStorage &storage, Register &reg,
-                             const Args::ToolchainArg &custom_toolchain_arg,
+                             const ArgToolchain &custom_toolchain_arg,
                              const BaseToolchain &toolchain) {
 
   // Flatc Executable
