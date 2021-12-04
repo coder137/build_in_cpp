@@ -20,8 +20,6 @@ using namespace buildcc;
 
 static void clean_cb();
 
-static void args_setup(Args &args);
-
 static void
 user_output_target_cb(BaseTarget &target, const std::vector<std::string> &srcs,
                       const std::vector<std::string> &includes,
@@ -74,9 +72,8 @@ int main(int argc, char **argv) {
   Register reg(args);
   reg.Clean(clean_cb);
 
+  // Build
   BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
-
-  // TODO, See if you need to add a TargetEnv option!
   Target_generic user_output_target(target_name_arg, target_type_arg, toolchain,
                                     TargetEnv(target_relative_to_root_arg));
   reg.Build(custom_toolchain_arg.state, user_output_target_cb,
@@ -90,8 +87,6 @@ int main(int argc, char **argv) {
 
   return 0;
 }
-
-static void args_setup(Args &args) {}
 
 static void clean_cb() {}
 
