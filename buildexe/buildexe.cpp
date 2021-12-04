@@ -27,33 +27,22 @@ user_output_target_cb(BaseTarget &target, const std::vector<std::string> &srcs,
                       const std::vector<std::string> &includes,
                       const std::vector<std::string> &external_libs);
 
+struct ArgTargetInfo {
+  std::string name;
+  TargetType type;
+  fs::path relative_to_root;
+};
+
+static void setup_arg_target_info(Args &args, ArgTargetInfo &out);
+
 int main(int argc, char **argv) {
   Args args;
 
   ArgToolchain custom_toolchain_arg;
   args.AddToolchain("custom", "Host Toolchain", custom_toolchain_arg);
 
-  std::string target_name_arg;
-  args.Ref()
-      .add_option("--name", target_name_arg, "Provide Target name")
-      ->required();
-
-  TargetType target_type_arg;
-  const std::unordered_map<const char *, TargetType> kTargetTypeMap{
-      {"executable", TargetType::Executable},
-      {"staticLibrary", TargetType::StaticLibrary},
-      {"dynamicLibrary", TargetType::DynamicLibrary},
-  };
-  args.Ref()
-      .add_option("--type", target_type_arg, "Provide Target Type")
-      ->transform(CLI::CheckedTransformer(kTargetTypeMap, CLI::ignore_case))
-      ->required();
-
-  std::string target_relative_to_root_arg;
-  args.Ref()
-      .add_option("--relative_to_root", target_relative_to_root_arg,
-                  "Provide Target relative to root")
-      ->required();
+  ArgTargetInfo out_targetinfo;
+  setup_arg_target_info(args, out_targetinfo);
 
   std::vector<std::string> srcs;
   std::vector<std::string> includes;
@@ -76,8 +65,11 @@ int main(int argc, char **argv) {
 
   // Build
   BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
-  Target_generic user_output_target(target_name_arg, target_type_arg, toolchain,
-                                    TargetEnv(target_relative_to_root_arg));
+  // TODO, Verify toolchain by compiling a dummy program
+
+  Target_generic user_output_target(out_targetinfo.name, out_targetinfo.type,
+                                    toolchain,
+                                    TargetEnv(out_targetinfo.relative_to_root));
   reg.Build(custom_toolchain_arg.state, user_output_target_cb,
             user_output_target, srcs, includes, external_libs);
 
@@ -93,6 +85,25 @@ int main(int argc, char **argv) {
 static void clean_cb() {
   env::log_info(kTag, fmt::format("Cleaning {}", env::get_project_build_dir()));
   fs::remove_all(env::get_project_build_dir());
+}
+
+static void setup_arg_target_info(Args &args, ArgTargetInfo &out) {
+  args.Ref().add_option("--name", out.name, "Provide Target name")->required();
+
+  const std::unordered_map<const char *, TargetType> kTargetTypeMap{
+      {"executable", TargetType::Executable},
+      {"staticLibrary", TargetType::StaticLibrary},
+      {"dynamicLibrary", TargetType::DynamicLibrary},
+  };
+  args.Ref()
+      .add_option("--type", out.type, "Provide Target Type")
+      ->transform(CLI::CheckedTransformer(kTargetTypeMap, CLI::ignore_case))
+      ->required();
+
+  args.Ref()
+      .add_option("--relative_to_root", out.relative_to_root,
+                  "Provide Target relative to root")
+      ->required();
 }
 
 static void
