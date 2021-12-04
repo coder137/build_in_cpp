@@ -115,6 +115,7 @@ static void clean_cb() {
   fs::remove_all(env::get_project_build_dir());
 }
 
+// TODO, Add subcommand [build.info]
 static void setup_arg_target_info(Args &args, ArgTargetInfo &out) {
   auto &app = args.Ref();
 
@@ -129,6 +130,8 @@ static void setup_arg_target_info(Args &args, ArgTargetInfo &out) {
       ->required();
 }
 
+// TODO, Add subcommand [build.inputs]
+// TODO, Add group, group by sources, headers, inncludes on CLI
 static void setup_arg_target_storer(Args &args, ArgTargetStorer &out) {
   auto &app = args.Ref();
 

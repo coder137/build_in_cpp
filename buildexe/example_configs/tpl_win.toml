@@ -13,7 +13,7 @@ mode = "immediate"
 # mode = "script"
 
 # Target information
-# [target.custom]
+# [build.info]
 name = "libtpl_win"
 type = "staticLibrary"
 relative_to_root = "third_party/tiny-process-library"
