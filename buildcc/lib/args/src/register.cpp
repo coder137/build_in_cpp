@@ -87,7 +87,7 @@ void Register::Dep(const base::BuilderInterface &target,
   target_iter->second.succeed(dep_iter->second);
 }
 
-void Register::Test(const Args::ToolchainState &toolchain_state,
+void Register::Test(const ArgToolchainState &toolchain_state,
                     const std::string &command, const base::Target &target,
                     const TestConfig &config) {
   if (!(toolchain_state.build && toolchain_state.test)) {

@@ -21,7 +21,7 @@ static void generic_build_cb(base::Target &generic_target,
 
 int main(int argc, char **argv) {
   // 1. Get arguments
-  Args::ToolchainArg custom_toolchain;
+  ArgToolchain custom_toolchain;
   TargetType default_lib_type{TargetType::StaticLibrary};
   Args args;
 

@@ -54,7 +54,7 @@ TEST(ArgsTestGroup, Args_CustomToolchain) {
   int argc = av.size();
 
   buildcc::Args args;
-  buildcc::Args::ToolchainArg gcc_toolchain;
+  buildcc::ArgToolchain gcc_toolchain;
   args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
   args.Parse(argc, av.data());
 
@@ -88,8 +88,8 @@ TEST(ArgsTestGroup, Args_MultipleCustomToolchain) {
   int argc = av.size();
 
   buildcc::Args args;
-  buildcc::Args::ToolchainArg gcc_toolchain;
-  buildcc::Args::ToolchainArg msvc_toolchain;
+  buildcc::ArgToolchain gcc_toolchain;
+  buildcc::ArgToolchain msvc_toolchain;
   args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
   args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
   args.Parse(argc, av.data());
@@ -126,8 +126,8 @@ TEST(ArgsTestGroup, Args_MultipleCustomToolchain) {
 
 TEST(ArgsTestGroup, Args_DuplicateCustomToolchain) {
   buildcc::Args args;
-  buildcc::Args::ToolchainArg gcc_toolchain;
-  buildcc::Args::ToolchainArg other_gcc_toolchain;
+  buildcc::ArgToolchain gcc_toolchain;
+  buildcc::ArgToolchain other_gcc_toolchain;
   args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
 
   // CLI11 Throws an exception when multiple toolchains with same name are added
@@ -151,8 +151,8 @@ TEST(ArgsTestGroup, Args_CustomTarget) {
   int argc = av.size();
 
   buildcc::Args args;
-  buildcc::Args::ToolchainArg gcc_toolchain;
-  buildcc::Args::TargetArg gcc_target;
+  buildcc::ArgToolchain gcc_toolchain;
+  buildcc::ArgTarget gcc_target;
   args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
   args.AddTarget("gcc", "Generic gcc target", gcc_target);
   args.Parse(argc, av.data());
@@ -199,12 +199,12 @@ TEST(ArgsTestGroup, Args_MultipleCustomTarget) {
   int argc = av.size();
 
   buildcc::Args args;
-  buildcc::Args::ToolchainArg gcc_toolchain;
-  buildcc::Args::TargetArg gcc_target;
+  buildcc::ArgToolchain gcc_toolchain;
+  buildcc::ArgTarget gcc_target;
   args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
   args.AddTarget("gcc", "Generic gcc target", gcc_target);
-  buildcc::Args::ToolchainArg msvc_toolchain;
-  buildcc::Args::TargetArg msvc_target;
+  buildcc::ArgToolchain msvc_toolchain;
+  buildcc::ArgTarget msvc_target;
   args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
   args.AddTarget("msvc", "Generic msvc target", msvc_target);
   args.Parse(argc, av.data());

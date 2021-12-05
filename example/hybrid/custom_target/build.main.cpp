@@ -10,10 +10,10 @@ static constexpr std::string_view EXE = "build";
 int main(int argc, char **argv) {
   // 1. Get arguments
   Args args;
-  Args::ToolchainArg arg_gcc;
-  Args::ToolchainArg arg_msvc;
-  Args::ToolchainArg toolchain_clang_gnu;
-  Args::TargetArg target_clang_gnu;
+  ArgToolchain arg_gcc;
+  ArgToolchain arg_msvc;
+  ArgToolchain toolchain_clang_gnu;
+  ArgTarget target_clang_gnu;
   args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
   args.AddToolchain("msvc", "Generic msvc toolchain", arg_msvc);
   args.AddToolchain("clang_gnu", "Clang GNU toolchain", toolchain_clang_gnu);

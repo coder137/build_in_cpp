@@ -68,6 +68,11 @@ jobs:
         run: |
           cmake --build . --target run_buildcc_lib_bootstrap_linux_gcc
 
+      - name: BuildExe IM example tiny-process-library
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
+        run: |
+          cmake --build . --target run_buildexe_im_tpl_linux_gcc
+
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
@@ -183,6 +188,11 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
           cmake --build . --target run_buildcc_lib_bootstrap_linux_gcc
+
+      - name: BuildExe IM example tiny-process-library
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
+        run: |
+          cmake --build . --target run_buildexe_im_tpl_linux_gcc
 
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}

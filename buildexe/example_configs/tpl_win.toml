@@ -1,0 +1,26 @@
+root_dir = ".."
+build_dir = "../_build_buildexe_tpl"
+
+loglevel = "trace"
+clean = true
+
+# TODO, verification
+# [verification]
+# os = ["win", "linux"]
+
+# BuildExe run mode
+mode = "immediate"
+# mode = "script"
+
+# Target information
+# [build.info]
+name = "libtpl_win"
+type = "staticLibrary"
+relative_to_root = "third_party/tiny-process-library"
+
+# [build.inputs]
+srcs = ["process.cpp", "process_win.cpp"]
+includes = [""]
+common_compile_flags = ["/std:c++17", "/Ot"]
+cpp_compile_flags = ["-W4", "-WX"]
+

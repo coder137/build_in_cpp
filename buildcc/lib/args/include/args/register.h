@@ -56,8 +56,8 @@ public:
    * Can be used to add Toolchain-Target specific information
    */
   template <typename C, typename... Params>
-  void CallbackIf(const Args::ToolchainState &toolchain_state,
-                  const C &build_cb, Params &...params) {
+  void CallbackIf(const ArgToolchainState &toolchain_state, const C &build_cb,
+                  Params &...params) {
     if (toolchain_state.build) {
       Callback(build_cb, std::forward<Params &>(params)...);
     }
@@ -67,7 +67,7 @@ public:
    * @brief Register the Target to be built
    */
   template <typename C, typename... Params>
-  void Build(const Args::ToolchainState &toolchain_state, const C &build_cb,
+  void Build(const ArgToolchainState &toolchain_state, const C &build_cb,
              base::Target &target, Params &...params) {
     tf::Task task;
     CallbackIf(
@@ -106,7 +106,7 @@ public:
    *
    * Target is added as the `{executable}` argument
    */
-  void Test(const Args::ToolchainState &toolchain_state,
+  void Test(const ArgToolchainState &toolchain_state,
             const std::string &command, const base::Target &target,
             const TestConfig &config = TestConfig());
 

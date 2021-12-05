@@ -85,8 +85,8 @@ TEST(RegisterTestGroup, Register_Build) {
   int argc = av.size();
 
   buildcc::Args args;
-  buildcc::Args::ToolchainArg gcc_toolchain;
-  buildcc::Args::ToolchainArg msvc_toolchain;
+  buildcc::ArgToolchain gcc_toolchain;
+  buildcc::ArgToolchain msvc_toolchain;
   args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
   args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
   args.Parse(argc, av.data());
@@ -104,7 +104,7 @@ TEST(RegisterTestGroup, Register_Build) {
                                toolchain, "");
 
   {
-    buildcc::Args::ToolchainState state{false, false};
+    buildcc::ArgToolchainState state{false, false};
 
     buildcc::Register reg(args);
     reg.Build(
@@ -112,7 +112,7 @@ TEST(RegisterTestGroup, Register_Build) {
   }
 
   {
-    buildcc::Args::ToolchainState state{true, true};
+    buildcc::ArgToolchainState state{true, true};
 
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
@@ -133,8 +133,8 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
   int argc = av.size();
 
   buildcc::Args args;
-  buildcc::Args::ToolchainArg gcc_toolchain;
-  buildcc::Args::ToolchainArg msvc_toolchain;
+  buildcc::ArgToolchain gcc_toolchain;
+  buildcc::ArgToolchain msvc_toolchain;
   args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
   args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
   args.Parse(argc, av.data());
@@ -160,8 +160,8 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
   // T0D1 -> Throw
   // T1D0 -> Throw
   // T1D1 -> This is the only condition for success
-  // buildcc::Args::ToolchainState falseState{false, false};
-  buildcc::Args::ToolchainState trueState{true, true};
+  // buildcc::ArgToolchainState falseState{false, false};
+  buildcc::ArgToolchainState trueState{true, true};
 
   // T0D0
   {
@@ -217,8 +217,8 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
   int argc = av.size();
 
   buildcc::Args args;
-  buildcc::Args::ToolchainArg gcc_toolchain;
-  buildcc::Args::ToolchainArg msvc_toolchain;
+  buildcc::ArgToolchain gcc_toolchain;
+  buildcc::ArgToolchain msvc_toolchain;
   args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
   args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
   args.Parse(argc, av.data());
@@ -244,8 +244,8 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
   // T0D1 -> Ignore
   // T1D0 -> Ignore
   // T1D1 -> This is the only condition for success
-  buildcc::Args::ToolchainState falseState{false, false};
-  buildcc::Args::ToolchainState trueState{true, true};
+  buildcc::ArgToolchainState falseState{false, false};
+  buildcc::ArgToolchainState trueState{true, true};
 
   // T0D0
   {
@@ -314,8 +314,8 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
   int argc = av.size();
 
   buildcc::Args args;
-  buildcc::Args::ToolchainArg gcc_toolchain;
-  buildcc::Args::ToolchainArg msvc_toolchain;
+  buildcc::ArgToolchain gcc_toolchain;
+  buildcc::ArgToolchain msvc_toolchain;
   args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
   args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
   args.Parse(argc, av.data());
@@ -336,7 +336,7 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
   buildcc::base::Target dependency2(
       "dep2T", buildcc::base::TargetType::Executable, toolchain, "");
 
-  buildcc::Args::ToolchainState trueState{true, true};
+  buildcc::ArgToolchainState trueState{true, true};
 
   // Duplicate dependency with 2 Targets
   {
@@ -390,8 +390,8 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
   int argc = av.size();
 
   buildcc::Args args;
-  buildcc::Args::ToolchainArg gcc_toolchain;
-  buildcc::Args::ToolchainArg msvc_toolchain;
+  buildcc::ArgToolchain gcc_toolchain;
+  buildcc::ArgToolchain msvc_toolchain;
   args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
   args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
   args.Parse(argc, av.data());
@@ -412,7 +412,7 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
   buildcc::base::Target dependency2(
       "dep2T", buildcc::base::TargetType::Executable, toolchain, "");
 
-  buildcc::Args::ToolchainState trueState{true, true};
+  buildcc::ArgToolchainState trueState{true, true};
 
   // Immediate cyclic depdendency
   {
@@ -466,8 +466,8 @@ TEST(RegisterTestGroup, Register_Test) {
   int argc = av.size();
 
   buildcc::Args args;
-  buildcc::Args::ToolchainArg gcc_toolchain;
-  buildcc::Args::ToolchainArg msvc_toolchain;
+  buildcc::ArgToolchain gcc_toolchain;
+  buildcc::ArgToolchain msvc_toolchain;
   args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
   args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
   args.Parse(argc, av.data());
@@ -491,10 +491,10 @@ TEST(RegisterTestGroup, Register_Test) {
   // TF
   // FT
   // TT -> only success case
-  buildcc::Args::ToolchainState stateFail{false, false};
-  buildcc::Args::ToolchainState state1{true, false};
-  buildcc::Args::ToolchainState state2{false, true};
-  buildcc::Args::ToolchainState stateSuccess{true, true};
+  buildcc::ArgToolchainState stateFail{false, false};
+  buildcc::ArgToolchainState state1{true, false};
+  buildcc::ArgToolchainState state2{false, true};
+  buildcc::ArgToolchainState stateSuccess{true, true};
 
   // FF
   {
@@ -549,8 +549,8 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
   int argc = av.size();
 
   buildcc::Args args;
-  buildcc::Args::ToolchainArg gcc_toolchain;
-  buildcc::Args::ToolchainArg msvc_toolchain;
+  buildcc::ArgToolchain gcc_toolchain;
+  buildcc::ArgToolchain msvc_toolchain;
   args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
   args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
   args.Parse(argc, av.data());
@@ -569,7 +569,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
   buildcc::base::Target dependency(
       "depT", buildcc::base::TargetType::Executable, toolchain, "");
 
-  buildcc::Args::ToolchainState stateSuccess{true, true};
+  buildcc::ArgToolchainState stateSuccess{true, true};
 
   // TestOutput::Type::DefaultBehaviour
   {
