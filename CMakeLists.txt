@@ -17,6 +17,7 @@ option(BUILDCC_FLATBUFFERS_FLATC "Build Flatbuffer::Flatc Compiler" ON)
 option(BUILDCC_BUILD_AS_SINGLE_LIB "Build all internal libs and modules as part of the buildcc library" ON)
 option(BUILDCC_BUILD_AS_INTERFACE "Build all internal libs and modules seperately and link" OFF)
 
+option(BUILDCC_BUILDEXE "Standalone builcc buildsystem executable" ON)
 option(BUILDCC_BOOTSTRAP_THROUGH_CMAKE "Bootstrap buildcc through CMake" OFF)
 
 # NOTE, Conflict with Clang-Tidy on certain compilers
@@ -115,8 +116,10 @@ if (${BUILDCC_EXAMPLES})
     add_subdirectory(example/hybrid/target_info)
 endif()
 
+if (${BUILDCC_BUILDEXE})
+    add_subdirectory(buildexe)
+endif()
+
 if (${BUILDCC_BOOTSTRAP_THROUGH_CMAKE})
     add_subdirectory(bootstrap)
 endif()
-
-add_subdirectory(buildexe)
