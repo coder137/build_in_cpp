@@ -159,6 +159,28 @@ TEST(EnvUtilTestGroup, Util_LoadFile_CannotOpen) {
   CHECK_FALSE(load);
 }
 
+TEST(EnvUtilTestGroup, Util_Split) {
+  {
+    std::vector<std::string> paths = buildcc::env::split("", ':');
+    CHECK_EQUAL(paths.size(), 0);
+  }
+
+  {
+    std::vector<std::string> paths = buildcc::env::split("path1", ':');
+    CHECK_EQUAL(paths.size(), 1);
+    STRCMP_EQUAL(paths[0].c_str(), "path1");
+  }
+
+  {
+    std::vector<std::string> paths =
+        buildcc::env::split("path1:path2:path3", ':');
+    CHECK_EQUAL(paths.size(), 3);
+    STRCMP_EQUAL(paths[0].c_str(), "path1");
+    STRCMP_EQUAL(paths[1].c_str(), "path2");
+    STRCMP_EQUAL(paths[2].c_str(), "path3");
+  }
+}
+
 int main(int ac, char **av) {
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

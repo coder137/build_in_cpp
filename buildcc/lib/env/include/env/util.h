@@ -36,6 +36,7 @@
 #include <filesystem>
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 namespace fs = std::filesystem;
 
@@ -104,6 +105,19 @@ inline bool load_file(const char *name, bool binary, std::string *buf) {
     *buf = oss.str();
   }
   return !ifs.bad();
+}
+
+// TODO, Shift this to a common apis folder or something
+// https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+inline std::vector<std::string> split(const std::string &s, char delim) {
+  std::vector<std::string> result;
+  std::stringstream ss(s);
+  std::string item;
+  while (getline(ss, item, delim)) {
+    result.push_back(item);
+  }
+
+  return result;
 }
 
 } // namespace buildcc::env
