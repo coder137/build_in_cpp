@@ -40,9 +40,11 @@ set(ENV_SRCS
     include/env/assert_throw.h
     include/env/env.h
     include/env/logging.h
+    include/env/util.h
+
     include/env/host_os.h
     include/env/host_compiler.h
-    include/env/util.h
+    include/env/host_os_util.h
 
     src/task_state.cpp
     include/env/task_state.h
