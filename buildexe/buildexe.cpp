@@ -31,7 +31,7 @@ struct ArgTargetInfo {
   fs::path relative_to_root;
 };
 
-struct ArgTargetStorer {
+struct ArgTargetInputs {
   std::vector<fs::path> source_files;
   std::vector<fs::path> include_dirs;
 };
@@ -50,10 +50,10 @@ static const std::unordered_map<const char *, BuildExeMode> kBuildExeModeMap{
 static void clean_cb();
 
 static void setup_arg_target_info(Args &args, ArgTargetInfo &out);
-static void setup_arg_target_storer(Args &args, ArgTargetStorer &out);
+static void setup_arg_target_storer(Args &args, ArgTargetInputs &out);
 
 static void user_output_target_cb(BaseTarget &target,
-                                  const ArgTargetStorer &storer);
+                                  const ArgTargetInputs &storer);
 
 // TODO, Add BuildExeMode::Script usage
 int main(int argc, char **argv) {
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
   ArgTargetInfo out_targetinfo;
   setup_arg_target_info(args, out_targetinfo);
 
-  ArgTargetStorer out_targetstorer;
+  ArgTargetInputs out_targetstorer;
   setup_arg_target_storer(args, out_targetstorer);
 
   // TODO, Add base (git cloned raw versions)
@@ -135,7 +135,7 @@ static void setup_arg_target_info(Args &args, ArgTargetInfo &out) {
 
 // TODO, Add subcommand [build.inputs]
 // TODO, Add group, group by sources, headers, inncludes on CLI
-static void setup_arg_target_storer(Args &args, ArgTargetStorer &out) {
+static void setup_arg_target_storer(Args &args, ArgTargetInputs &out) {
   auto &app = args.Ref();
 
   app.add_option("--srcs", out.source_files, "Compile source files");
@@ -144,7 +144,7 @@ static void setup_arg_target_storer(Args &args, ArgTargetStorer &out) {
 }
 
 static void user_output_target_cb(BaseTarget &target,
-                                  const ArgTargetStorer &storer) {
+                                  const ArgTargetInputs &storer) {
   for (const auto &s : storer.source_files) {
     target.AddSource(s);
   }
