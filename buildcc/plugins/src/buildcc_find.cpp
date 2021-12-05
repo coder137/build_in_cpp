@@ -20,6 +20,7 @@
 #include <cstring>
 #include <regex>
 
+#include "env/host_os_util.h"
 #include "env/logging.h"
 
 #include "target/common/path.h"
@@ -31,25 +32,6 @@ constexpr const char *const kOsNotSupported =
     "Search functionality does not support this operating system. Raise an "
     "issue at https://github.com/coder137/build_in_cpp outlining your OS and "
     "usecase";
-
-// Windows
-constexpr const char *const kWinEnvDelim = ";";
-
-// Linux
-constexpr const char *const kLinuxEnvDelim = ":";
-
-// TODO, Add Environment Variable delimiters for more operating systems
-// ; for windows
-// : for linux
-constexpr char const *GetEnvVarDelim() {
-  if constexpr (buildcc::env::is_win()) {
-    return kWinEnvDelim;
-  } else if constexpr (buildcc::env::is_linux()) {
-    return kLinuxEnvDelim;
-  }
-
-  return nullptr;
-}
 
 std::vector<fs::path> SplitEnv(const char *env_ptr, const char *delim) {
   std::vector<fs::path> env_paths;
@@ -75,7 +57,7 @@ std::vector<fs::path> SearchEnv(const std::string &host_env_var,
   }
 
   std::vector<fs::path> env_paths;
-  constexpr const char *const kDelim = GetEnvVarDelim();
+  constexpr const char *const kDelim = buildcc::env::get_os_envvar_delim();
   if constexpr (kDelim == nullptr) {
     buildcc::env::log_critical(__FUNCTION__, kOsNotSupported);
     return {};
