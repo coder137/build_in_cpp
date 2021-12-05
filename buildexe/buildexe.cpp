@@ -32,8 +32,21 @@ struct ArgTargetInfo {
 };
 
 struct ArgTargetInputs {
+  // Sources
   std::vector<fs::path> source_files;
   std::vector<fs::path> include_dirs;
+
+  // External libs
+  std::vector<fs::path> lib_dirs;
+  std::vector<std::string> external_lib_deps;
+
+  // Flags
+  std::vector<std::string> preprocessor_flags;
+  std::vector<std::string> common_compile_flags;
+  std::vector<std::string> asm_compile_flags;
+  std::vector<std::string> c_compile_flags;
+  std::vector<std::string> cpp_compile_flags;
+  std::vector<std::string> link_flags;
 };
 
 static const std::unordered_map<const char *, TargetType> kTargetTypeMap{
@@ -50,10 +63,10 @@ static const std::unordered_map<const char *, BuildExeMode> kBuildExeModeMap{
 static void clean_cb();
 
 static void setup_arg_target_info(Args &args, ArgTargetInfo &out);
-static void setup_arg_target_storer(Args &args, ArgTargetInputs &out);
+static void setup_arg_target_inputs(Args &args, ArgTargetInputs &out);
 
 static void user_output_target_cb(BaseTarget &target,
-                                  const ArgTargetInputs &storer);
+                                  const ArgTargetInputs &inputs);
 
 // TODO, Add BuildExeMode::Script usage
 int main(int argc, char **argv) {
@@ -76,8 +89,8 @@ int main(int argc, char **argv) {
   ArgTargetInfo out_targetinfo;
   setup_arg_target_info(args, out_targetinfo);
 
-  ArgTargetInputs out_targetstorer;
-  setup_arg_target_storer(args, out_targetstorer);
+  ArgTargetInputs out_targetinputs;
+  setup_arg_target_inputs(args, out_targetinputs);
 
   // TODO, Add base (git cloned raw versions)
   // TODO, Add libraries (compiled version of code! with libs and header
@@ -102,7 +115,7 @@ int main(int argc, char **argv) {
   //   reg.Callback([&]() { user_output_target.AddLibDep(libbuildcc); });
   // }
   reg.Build(custom_toolchain_arg.state, user_output_target_cb,
-            user_output_target, out_targetstorer);
+            user_output_target, out_targetinputs);
 
   // Runners
   reg.RunBuild();
@@ -135,36 +148,62 @@ static void setup_arg_target_info(Args &args, ArgTargetInfo &out) {
 
 // TODO, Add subcommand [build.inputs]
 // TODO, Add group, group by sources, headers, inncludes on CLI
-static void setup_arg_target_storer(Args &args, ArgTargetInputs &out) {
+static void setup_arg_target_inputs(Args &args, ArgTargetInputs &out) {
   auto &app = args.Ref();
 
-  app.add_option("--srcs", out.source_files, "Compile source files");
-  app.add_option("--includes", out.include_dirs, "Add include paths");
-  // TODO, Add more options here
+  app.add_option("--srcs", out.source_files, "Provide source files");
+  app.add_option("--includes", out.include_dirs, "Provide include dirs");
+
+  app.add_option("--lib_dirs", out.lib_dirs, "Provide lib dirs");
+  app.add_option("--external_libs", out.external_lib_deps,
+                 "Provide external libs");
+
+  app.add_option("--preprocessor_flags", out.preprocessor_flags,
+                 "Provide Preprocessor flags");
+  app.add_option("--common_compile_flags", out.common_compile_flags,
+                 "Provide CommonCompile Flags");
+  app.add_option("--asm_compile_flags", out.asm_compile_flags,
+                 "Provide AsmCompile Flags");
+  app.add_option("--c_compile_flags", out.c_compile_flags,
+                 "Provide CCompile Flags");
+  app.add_option("--cpp_compile_flags", out.cpp_compile_flags,
+                 "Provide CppCompile Flags");
+  app.add_option("--link_flags", out.link_flags, "Provide Link Flags");
 }
 
 static void user_output_target_cb(BaseTarget &target,
-                                  const ArgTargetInputs &storer) {
-  for (const auto &s : storer.source_files) {
+                                  const ArgTargetInputs &inputs) {
+  for (const auto &s : inputs.source_files) {
     target.AddSource(s);
   }
-
-  for (const auto &i : storer.include_dirs) {
-    target.AddIncludeDir(i, true);
+  for (const auto &i : inputs.include_dirs) {
+    target.AddIncludeDir(i);
   }
 
-  // * NOTE, Add your own CPP optimization flags depending on toolchain!
-  switch (target.GetToolchain().GetId()) {
-  case ToolchainId::Gcc:
-    target.AddCppCompileFlag("-std=c++17");
-    target.AddCppCompileFlag("-Os");
-    break;
-  case ToolchainId::Msvc:
-    target.AddCppCompileFlag("/std:c++17");
-    target.AddCppCompileFlag("/Ot");
-    break;
-  default:
-    env::assert_fatal<false>("ToolchainId not currently supported");
+  for (const auto &l : inputs.lib_dirs) {
+    target.AddLibDir(l);
+  }
+  for (const auto &el : inputs.external_lib_deps) {
+    target.AddLibDep(el);
+  }
+
+  for (const auto &flag : inputs.preprocessor_flags) {
+    target.AddPreprocessorFlag(flag);
+  }
+  for (const auto &flag : inputs.common_compile_flags) {
+    target.AddCommonCompileFlag(flag);
+  }
+  for (const auto &flag : inputs.asm_compile_flags) {
+    target.AddAsmCompileFlag(flag);
+  }
+  for (const auto &flag : inputs.c_compile_flags) {
+    target.AddCCompileFlag(flag);
+  }
+  for (const auto &flag : inputs.cpp_compile_flags) {
+    target.AddCppCompileFlag(flag);
+  }
+  for (const auto &flag : inputs.link_flags) {
+    target.AddLinkFlag(flag);
   }
 
   target.Build();

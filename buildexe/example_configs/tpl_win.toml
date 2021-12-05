@@ -17,11 +17,10 @@ mode = "immediate"
 name = "libtpl_win"
 type = "staticLibrary"
 relative_to_root = "third_party/tiny-process-library"
+
+# [build.inputs]
 srcs = ["process.cpp", "process_win.cpp"]
 includes = [""]
-# GCC
-# cpp_compile_flags = "-std=c++11", -Wall, -Wextra
-
-# MSVC
-
+common_compile_flags = ["/std:c++17", "/Ot"]
+cpp_compile_flags = ["-W4", "-WX"]
 
