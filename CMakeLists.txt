@@ -11,18 +11,18 @@ project(BuildCC
 )
 
 # User options
-option(BUILDCC_INSTALL "Enable Buildcc Installation" ON)
+option(BUILDCC_INSTALL "Enable BuildCC Installation" ON)
 option(BUILDCC_FLATBUFFERS_FLATC "Build Flatbuffer::Flatc Compiler" ON)
 
 option(BUILDCC_BUILD_AS_SINGLE_LIB "Build all internal libs and modules as part of the buildcc library" ON)
 option(BUILDCC_BUILD_AS_INTERFACE "Build all internal libs and modules seperately and link" OFF)
 
-option(BUILDCC_BUILDEXE "Standalone builcc buildsystem executable" ON)
+option(BUILDCC_BUILDEXE "Standalone BuildCC buildsystem executable" ON)
 option(BUILDCC_BOOTSTRAP_THROUGH_CMAKE "Bootstrap buildcc through CMake" OFF)
 
 # NOTE, Conflict with Clang-Tidy on certain compilers
-option(BUILDCC_PRECOMPILE_HEADERS "Enable Buildcc precompile headers" OFF)
-option(BUILDCC_EXAMPLES "Enable Buildcc Examples" OFF)
+option(BUILDCC_PRECOMPILE_HEADERS "Enable BuildCC precompile headers" OFF)
+option(BUILDCC_EXAMPLES "Enable BuildCC Examples" OFF)
 
 # Dev options
 option(BUILDCC_TESTING "Enable BuildCC Testing" OFF)
