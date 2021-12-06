@@ -133,11 +133,16 @@ public:
         "OS not supported");
 
     matcher_.clear();
-    matcher_.insert(fmt::format("{}{}", t.GetAsmCompiler(), os_executable_ext));
-    matcher_.insert(fmt::format("{}{}", t.GetCCompiler(), os_executable_ext));
-    matcher_.insert(fmt::format("{}{}", t.GetCppCompiler(), os_executable_ext));
-    matcher_.insert(fmt::format("{}{}", t.GetArchiver(), os_executable_ext));
-    matcher_.insert(fmt::format("{}{}", t.GetLinker(), os_executable_ext));
+    matcher_.insert(
+        fmt::format("{}{}", toolchain_.GetAsmCompiler(), os_executable_ext));
+    matcher_.insert(
+        fmt::format("{}{}", toolchain_.GetCCompiler(), os_executable_ext));
+    matcher_.insert(
+        fmt::format("{}{}", toolchain_.GetCppCompiler(), os_executable_ext));
+    matcher_.insert(
+        fmt::format("{}{}", toolchain_.GetArchiver(), os_executable_ext));
+    matcher_.insert(
+        fmt::format("{}{}", toolchain_.GetLinker(), os_executable_ext));
   }
 
   void Check(const std::string &filename) { matcher_.erase(filename); }
