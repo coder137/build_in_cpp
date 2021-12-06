@@ -57,15 +57,12 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     )
     target_compile_options(command PRIVATE ${BUILD_COMPILE_FLAGS})
     target_link_options(command PRIVATE ${BUILD_LINK_FLAGS})
-
-
-    # Command install
-    if (${BUILDCC_INSTALL})
-        install(TARGETS command DESTINATION lib EXPORT commandConfig)
-        install(EXPORT commandConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/command")
-    endif()
 endif()
 
 if (${BUILDCC_INSTALL})
+    if(${BUILDCC_BUILD_AS_INTERFACE})
+        install(TARGETS command DESTINATION lib EXPORT commandConfig)
+        install(EXPORT commandConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/command")
+    endif()
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
 endif()
