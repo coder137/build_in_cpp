@@ -1,5 +1,7 @@
 #include "toolchain/toolchain.h"
 
+#include "env/host_os.h"
+
 #include "expect_command.h"
 
 #include "mock_command_copier.h"
@@ -29,6 +31,12 @@ TEST(ToolchainTestGroup, VerifyToolchain) {
   std::vector<std::string> arch_stdout_data{"arch"};
   buildcc::m::CommandExpect_Execute(1, true, &version_stdout_data);
   buildcc::m::CommandExpect_Execute(1, true, &arch_stdout_data);
+
+  // On linux we have the path symlinked to /usr/bin and /usr dirs
+  if constexpr (buildcc::env::is_linux()) {
+    buildcc::m::CommandExpect_Execute(1, true, &version_stdout_data);
+    buildcc::m::CommandExpect_Execute(1, true, &arch_stdout_data);
+  }
 
   std::vector<buildcc::base::VerifiedToolchain> verified_toolchains =
       gcc.Verify();
