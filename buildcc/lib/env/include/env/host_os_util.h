@@ -41,9 +41,9 @@ inline constexpr char const *get_os_envvar_delim() {
   } else if constexpr (is_linux() || is_unix() || is_mac()) {
     return kUnixEnvDelim;
   }
-  env::log_critical(__FUNCTION__,
-                    "Unknown operating system, returning nullptr. Raise an "
-                    "issue at http://github.com/coder137/build_in_cpp");
+  log_critical(__FUNCTION__,
+               "Unknown operating system, returning nullptr. Raise an "
+               "issue at http://github.com/coder137/build_in_cpp");
   return nullptr;
 }
 
@@ -60,13 +60,13 @@ constexpr const char *const kUnixExecutableExt = "";
 inline constexpr const char *get_os_executable_extension() {
   if constexpr (is_win()) {
     return kWinExecutableExt;
-  } else if constexpr (env::is_linux() || env::is_unix()) {
+  } else if constexpr (is_linux() || is_unix() || is_mac()) {
     return kUnixExecutableExt;
   }
 
-  env::log_critical(__FUNCTION__,
-                    "Unknown operating system, returning nullptr. Raise an "
-                    "issue at http://github.com/coder137/build_in_cpp");
+  log_critical(__FUNCTION__,
+               "Unknown operating system, returning nullptr. Raise an "
+               "issue at http://github.com/coder137/build_in_cpp");
   return nullptr;
 }
 
