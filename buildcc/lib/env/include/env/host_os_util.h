@@ -20,6 +20,7 @@
 #include "host_os.h"
 #include "logging.h"
 
+// https://askubuntu.com/questions/156392/what-is-the-equivalent-of-an-exe-file
 namespace buildcc::env {
 
 // OS Path delimiters
@@ -27,7 +28,7 @@ constexpr const char *const kWinEnvDelim = ";";
 constexpr const char *const kUnixEnvDelim = ":";
 
 /**
- * @brief Get the OS EnvVariable delimiter
+ * @brief Get the OS environment variable delimiter
  * ; for windows
  * : for linux, unix and mac
  *
@@ -40,6 +41,29 @@ inline constexpr char const *get_os_envvar_delim() {
   } else if constexpr (is_linux() || is_unix() || is_mac()) {
     return kUnixEnvDelim;
   }
+  env::log_critical(__FUNCTION__,
+                    "Unknown operating system, returning nullptr. Raise an "
+                    "issue at http://github.com/coder137/build_in_cpp");
+  return nullptr;
+}
+
+// OS executable extensions
+constexpr const char *const kWinExecutableExt = ".exe";
+constexpr const char *const kUnixExecutableExt = "";
+
+/**
+ * @brief Get the OS executable extension
+ *
+ * @return constexpr const char*  for supported operating systems
+ * @return nullptr otherwise with a critical message to raise an issue
+ */
+inline constexpr const char *get_os_executable_extension() {
+  if constexpr (is_win()) {
+    return kWinExecutableExt;
+  } else if constexpr (env::is_linux() || env::is_unix()) {
+    return kUnixExecutableExt;
+  }
+
   env::log_critical(__FUNCTION__,
                     "Unknown operating system, returning nullptr. Raise an "
                     "issue at http://github.com/coder137/build_in_cpp");
