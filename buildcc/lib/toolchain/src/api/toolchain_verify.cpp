@@ -121,6 +121,33 @@ std::string GetCompilerArchitecture(const fs::path &absolute_path,
   return target_arch;
 }
 
+class ToolchainMatcher {
+public:
+  ToolchainMatcher(const buildcc::base::Toolchain &toolchain)
+      : toolchain_(toolchain) {}
+
+  void FillWithToolchainFilenames() {
+    constexpr const char *os_executable_ext =
+        env::get_os_executable_extension();
+    env::assert_fatal<os_executable_ext != nullptr>("OS not supported");
+
+    matcher.clear();
+    matcher.insert(fmt::format("{}{}", t.GetAsmCompiler(), os_executable_ext));
+    matcher.insert(fmt::format("{}{}", t.GetCCompiler(), os_executable_ext));
+    matcher.insert(fmt::format("{}{}", t.GetCppCompiler(), os_executable_ext));
+    matcher.insert(fmt::format("{}{}", t.GetArchiver(), os_executable_ext));
+    matcher.insert(fmt::format("{}{}", t.GetLinker(), os_executable_ext));
+  }
+
+  void Check(const std::string &filename) { matcher_.erase(filename); }
+  bool Found() { return matcher_.empty(); }
+
+private:
+  const buildcc::base::Toolchain &toolchain_;
+
+  std::unordered_set<std::string> matcher_;
+};
+
 } // namespace
 
 namespace buildcc::base {
@@ -128,10 +155,11 @@ namespace buildcc::base {
 template <typename T>
 std::vector<VerifiedToolchain>
 ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
+  // TODO, Convert this to fs::path eventually
   std::unordered_set<std::string> absolute_search_paths{
       config.absolute_search_paths.begin(), config.absolute_search_paths.end()};
 
-  // Check Path
+  // Parse config envs
   for (const std::string &env_var : config.env_vars) {
     std::vector<std::string> paths = ParseEnvVarToPaths(env_var);
     for (const auto &p : paths) {
@@ -139,45 +167,30 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
     }
   }
 
-  // iterate over absolute paths
-  // find
   std::vector<VerifiedToolchain> verified_toolchains;
-
   const T &t = static_cast<const T &>(*this);
-  std::unordered_set<std::string> matcher;
 
-  constexpr const char *os_executable_ext = env::get_os_executable_extension();
-  env::assert_fatal<os_executable_ext != nullptr>("OS not supported");
-  const auto fill_matcher_with_toolchain_executables = [&]() {
-    matcher.clear();
-    matcher.insert(fmt::format("{}{}", t.GetAsmCompiler(), os_executable_ext));
-    matcher.insert(fmt::format("{}{}", t.GetCCompiler(), os_executable_ext));
-    matcher.insert(fmt::format("{}{}", t.GetCppCompiler(), os_executable_ext));
-    matcher.insert(fmt::format("{}{}", t.GetArchiver(), os_executable_ext));
-    matcher.insert(fmt::format("{}{}", t.GetLinker(), os_executable_ext));
-  };
-  const auto find_and_delete_on_matcher = [&](const std::string &filename) {
-    matcher.erase(filename);
-  };
-  fill_matcher_with_toolchain_executables();
-
+  ToolchainMatcher matcher(t);
+  matcher.FillWithToolchainFilenames();
+  // Iterate over absolute search paths
+  // [Verification] Match ALL toolchains PER directory
   for (const std::string &pstr : absolute_search_paths) {
     fs::path p{pstr};
     if (!fs::exists(p)) {
       continue;
     }
+
+    // For each directory, Check if ALL toolchain filenames are found
     for (const auto &dir_iter : fs::directory_iterator(p)) {
       if (!dir_iter.is_regular_file()) {
         continue;
       }
       const auto &filename = dir_iter.path().filename().string();
-      // matcher filename with matcher
-      // Delete matchered
-      find_and_delete_on_matcher(filename);
+      matcher.Check(filename);
     }
 
-    // Check if its present here
-    if (matcher.empty()) {
+    // Store verified toolchain path if found
+    if (matcher.Found()) {
       env::log_info(__FUNCTION__, fmt::format("Found: {}", p.string()));
 
       VerifiedToolchain vt;
@@ -187,8 +200,8 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
       verified_toolchains.push_back(vt);
     }
 
-    //
-    fill_matcher_with_toolchain_executables();
+    // Reset
+    matcher.FillWithToolchainFilenames();
   }
 
   return verified_toolchains;
