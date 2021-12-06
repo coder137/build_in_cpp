@@ -23,11 +23,6 @@ public:
   }
 };
 
-inline void InstallVectorStringCopier() {
-  VectorStringCopier copier;
-  mock().installCopier("vector_string", copier);
-}
-
 } // namespace buildcc::m
 
 #endif

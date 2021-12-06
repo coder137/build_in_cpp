@@ -7,7 +7,6 @@
 namespace buildcc {
 
 static constexpr const char *const EXECUTE_FUNCTION = "execute";
-static constexpr const char *const VECTOR_STRING = "vector_string";
 static constexpr const char *const STDOUT_DATA_STRING = "stdout_data";
 static constexpr const char *const STDERR_DATA_STRING = "stderr_data";
 
@@ -20,12 +19,12 @@ bool Command::Execute(const std::string &command,
   (void)working_directory;
   auto &actualcall = mock().actualCall(EXECUTE_FUNCTION);
   if (stdout_data != nullptr) {
-    actualcall.withOutputParameterOfType(VECTOR_STRING, STDOUT_DATA_STRING,
-                                         (void *)stdout_data);
+    actualcall.withOutputParameterOfType(
+        TEST_VECTOR_STRING_TYPE, STDOUT_DATA_STRING, (void *)stdout_data);
   }
   if (stderr_data != nullptr) {
-    actualcall.withOutputParameterOfType(VECTOR_STRING, STDERR_DATA_STRING,
-                                         (void *)stderr_data);
+    actualcall.withOutputParameterOfType(
+        TEST_VECTOR_STRING_TYPE, STDERR_DATA_STRING, (void *)stderr_data);
   }
   return actualcall.returnBoolValue();
 }
@@ -38,11 +37,11 @@ void CommandExpect_Execute(unsigned int calls, bool expectation,
   auto &expectedcall = mock().expectNCalls(calls, EXECUTE_FUNCTION);
   if (stdout_data != nullptr) {
     expectedcall.withOutputParameterOfTypeReturning(
-        VECTOR_STRING, STDOUT_DATA_STRING, (void *)stdout_data);
+        TEST_VECTOR_STRING_TYPE, STDOUT_DATA_STRING, (void *)stdout_data);
   }
   if (stderr_data != nullptr) {
     expectedcall.withOutputParameterOfTypeReturning(
-        VECTOR_STRING, STDERR_DATA_STRING, (void *)stderr_data);
+        TEST_VECTOR_STRING_TYPE, STDERR_DATA_STRING, (void *)stderr_data);
   }
   expectedcall.andReturnValue(expectation);
 }

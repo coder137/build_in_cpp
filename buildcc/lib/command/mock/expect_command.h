@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+constexpr const char *const TEST_VECTOR_STRING_TYPE = "vector_string";
+
 namespace buildcc::m {
 
 void CommandExpect_Execute(unsigned int calls, bool expectation,
