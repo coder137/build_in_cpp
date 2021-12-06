@@ -128,15 +128,16 @@ public:
 
   void FillWithToolchainFilenames() {
     constexpr const char *os_executable_ext =
-        env::get_os_executable_extension();
-    env::assert_fatal<os_executable_ext != nullptr>("OS not supported");
+        buildcc::env::get_os_executable_extension();
+    buildcc::env::assert_fatal<os_executable_ext != nullptr>(
+        "OS not supported");
 
-    matcher.clear();
-    matcher.insert(fmt::format("{}{}", t.GetAsmCompiler(), os_executable_ext));
-    matcher.insert(fmt::format("{}{}", t.GetCCompiler(), os_executable_ext));
-    matcher.insert(fmt::format("{}{}", t.GetCppCompiler(), os_executable_ext));
-    matcher.insert(fmt::format("{}{}", t.GetArchiver(), os_executable_ext));
-    matcher.insert(fmt::format("{}{}", t.GetLinker(), os_executable_ext));
+    matcher_.clear();
+    matcher_.insert(fmt::format("{}{}", t.GetAsmCompiler(), os_executable_ext));
+    matcher_.insert(fmt::format("{}{}", t.GetCCompiler(), os_executable_ext));
+    matcher_.insert(fmt::format("{}{}", t.GetCppCompiler(), os_executable_ext));
+    matcher_.insert(fmt::format("{}{}", t.GetArchiver(), os_executable_ext));
+    matcher_.insert(fmt::format("{}{}", t.GetLinker(), os_executable_ext));
   }
 
   void Check(const std::string &filename) { matcher_.erase(filename); }
