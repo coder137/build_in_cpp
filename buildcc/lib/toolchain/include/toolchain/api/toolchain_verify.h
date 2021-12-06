@@ -31,14 +31,17 @@ namespace buildcc::base {
 /**
  * @param absolute_search_paths absolute_search_paths expect directories that
  * are iterated for exact toolchain matches
- * @param env_paths env_paths are split by `os delim`, converted to paths and
- * searched similarly to absolute_search_paths
+ * @param env_vars env_vars contain paths that are seperated by OS delimiter.
+ * These are converted to paths and searched similarly to absolute_search_paths
+ * NOTE: env_vars must contain single absolute paths or multiple absolute paths
+ * seperated by OS delimiter
+ *
  * Example: [Windows]   "absolute_path_1;absolute_path_2;..."
  * Example: [Linux]     "absolute_path_1:absolute_path_2:..."
  */
 struct VerifyToolchainConfig {
   std::vector<std::string> absolute_search_paths;
-  std::vector<std::string> env_paths;
+  std::vector<std::string> env_vars{"PATH"};
 };
 
 /**

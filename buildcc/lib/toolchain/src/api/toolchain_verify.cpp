@@ -29,6 +29,18 @@
 #include "command/command.h"
 
 namespace {
+std::vector<std::string> ParseEnvVarToPaths(const std::string &env_var) {
+  const char *path_env = getenv(env_var.c_str());
+  buildcc::env::assert_fatal(
+      path_env != nullptr,
+      fmt::format("Environment variable '{}' not present", env_var));
+
+  std::vector<std::string> paths =
+      buildcc::env::split(path_env, buildcc::env::get_os_envvar_delim()[0]);
+
+  return paths;
+}
+
 std::string GetCompilerVersion(const fs::path &absolute_path,
                                const buildcc::base::Toolchain &toolchain) {
   buildcc::Command command;
@@ -114,22 +126,15 @@ namespace buildcc::base {
 template <typename T>
 std::vector<VerifiedToolchain>
 ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
-  (void)config;
-  std::unordered_set<std::string> absolute_search_paths;
+  std::unordered_set<std::string> absolute_search_paths{
+      config.absolute_search_paths.begin(), config.absolute_search_paths.end()};
 
   // Check Path
-  const char *path_env = getenv("PATH");
-  env::assert_fatal(path_env != nullptr,
-                    "PATH environment variable not present");
-
-  // Get env paths
-  // split
-  std::vector<std::string> paths =
-      env::split(path_env, env::get_os_envvar_delim()[0]);
-
-  // Add to absolute_paths
-  for (const auto &pstr : paths) {
-    absolute_search_paths.insert(pstr);
+  for (const std::string &env_var : config.env_vars) {
+    std::vector<std::string> paths = ParseEnvVarToPaths(env_var);
+    for (const auto &p : paths) {
+      absolute_search_paths.insert(p);
+    }
   }
 
   // iterate over absolute paths
