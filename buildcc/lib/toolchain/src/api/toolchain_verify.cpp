@@ -35,8 +35,8 @@ std::vector<std::string> ParseEnvVarToPaths(const std::string &env_var) {
       path_env != nullptr,
       fmt::format("Environment variable '{}' not present", env_var));
 
-  const char *os_env_delim = buildcc::env::get_os_envvar_delim();
-  buildcc::env::assert_fatal(os_env_delim != nullptr, "OS not supported");
+  constexpr const char *os_env_delim = buildcc::env::get_os_envvar_delim();
+  buildcc::env::assert_fatal<os_env_delim != nullptr>("OS not supported");
   std::vector<std::string> paths =
       buildcc::env::split(path_env, os_env_delim[0]);
 
@@ -144,18 +144,17 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
   std::vector<VerifiedToolchain> verified_toolchains;
 
   const T &t = static_cast<const T &>(*this);
-  std::string ext;
-  if constexpr (env::is_win()) {
-    ext = ".exe";
-  }
   std::unordered_set<std::string> matcher;
+
+  constexpr const char *os_executable_ext = env::get_os_executable_extension();
+  env::assert_fatal<os_executable_ext != nullptr>("OS not supported");
   const auto fill_matcher_with_toolchain_executables = [&]() {
     matcher.clear();
-    matcher.insert(fmt::format("{}{}", t.GetAsmCompiler(), ext));
-    matcher.insert(fmt::format("{}{}", t.GetCCompiler(), ext));
-    matcher.insert(fmt::format("{}{}", t.GetCppCompiler(), ext));
-    matcher.insert(fmt::format("{}{}", t.GetArchiver(), ext));
-    matcher.insert(fmt::format("{}{}", t.GetLinker(), ext));
+    matcher.insert(fmt::format("{}{}", t.GetAsmCompiler(), os_executable_ext));
+    matcher.insert(fmt::format("{}{}", t.GetCCompiler(), os_executable_ext));
+    matcher.insert(fmt::format("{}{}", t.GetCppCompiler(), os_executable_ext));
+    matcher.insert(fmt::format("{}{}", t.GetArchiver(), os_executable_ext));
+    matcher.insert(fmt::format("{}{}", t.GetLinker(), os_executable_ext));
   };
   const auto find_and_delete_on_matcher = [&](const std::string &filename) {
     matcher.erase(filename);
