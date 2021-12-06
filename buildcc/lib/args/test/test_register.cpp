@@ -684,6 +684,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
 
 int main(int ac, char **av) {
   MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
-  buildcc::m::InstallVectorStringCopier();
+  buildcc::m::VectorStringCopier copier;
+  mock().installCopier(TEST_VECTOR_STRING_TYPE, copier);
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
