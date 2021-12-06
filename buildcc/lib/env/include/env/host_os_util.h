@@ -17,11 +17,18 @@
 #ifndef ENV_HOST_OS_UTIL_H_
 #define ENV_HOST_OS_UTIL_H_
 
+#include <stdlib.h>
+
 #include "host_os.h"
 #include "logging.h"
 
 // https://askubuntu.com/questions/156392/what-is-the-equivalent-of-an-exe-file
 namespace buildcc::env {
+
+// Common
+constexpr const char *const kRaiseIssueStr =
+    "Unknown operating system, returning nullptr. Raise an "
+    "issue at http://github.com/coder137/build_in_cpp";
 
 // OS Path delimiters
 constexpr const char *const kWinEnvDelim = ";";
@@ -41,9 +48,7 @@ inline constexpr char const *get_os_envvar_delim() {
   } else if constexpr (is_linux() || is_unix() || is_mac()) {
     return kUnixEnvDelim;
   }
-  log_critical(__FUNCTION__,
-               "Unknown operating system, returning nullptr. Raise an "
-               "issue at http://github.com/coder137/build_in_cpp");
+  log_critical(__FUNCTION__, kRaiseIssueStr);
   return nullptr;
 }
 
@@ -53,6 +58,8 @@ constexpr const char *const kUnixExecutableExt = "";
 
 /**
  * @brief Get the OS executable extension
+ * ".exe" for windows
+ * "" for linux, unix and mac
  *
  * @return constexpr const char*  for supported operating systems
  * @return nullptr otherwise with a critical message to raise an issue
@@ -64,10 +71,28 @@ inline constexpr const char *get_os_executable_extension() {
     return kUnixExecutableExt;
   }
 
-  log_critical(__FUNCTION__,
-               "Unknown operating system, returning nullptr. Raise an "
-               "issue at http://github.com/coder137/build_in_cpp");
+  log_critical(__FUNCTION__, kRaiseIssueStr);
   return nullptr;
+}
+
+/**
+ * @brief Cross platform function to put environment variable data
+ * _putenv for windows
+ * putenv for linux, unix and mac
+ *
+ * @param data `key=value`
+ * @return int Return 0 if successful -1 if failed
+ * @return also returns -1 if Unknown operating system detected
+ */
+inline int os_putenv(const char *data) {
+  if constexpr (is_win()) {
+    return _putenv(data);
+  } else if constexpr (is_linux() || is_unix() || is_mac()) {
+    return putenv(data);
+  }
+
+  log_critical(__FUNCTION__, kRaiseIssueStr);
+  return -1;
 }
 
 } // namespace buildcc::env
