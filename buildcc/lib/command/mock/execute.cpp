@@ -18,8 +18,6 @@ bool Command::Execute(const std::string &command,
                       std::vector<std::string> *stderr_data) {
   (void)command;
   (void)working_directory;
-  (void)stdout_data;
-  (void)stderr_data;
   auto &actualcall = mock().actualCall(EXECUTE_FUNCTION);
   if (stdout_data != nullptr) {
     actualcall.withOutputParameterOfType(VECTOR_STRING, STDOUT_DATA_STRING,
