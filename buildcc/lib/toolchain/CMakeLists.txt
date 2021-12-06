@@ -29,7 +29,9 @@ if (${TESTING})
         mock_toolchain
     )
 
-    add_test(NAME test_toolchain_verify COMMAND test_toolchain_verify)
+    add_test(NAME test_toolchain_verify COMMAND test_toolchain_verify
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
+    )
 endif()
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})

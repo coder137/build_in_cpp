@@ -23,6 +23,7 @@ TEST_GROUP(ToolchainTestGroup)
 };
 // clang-format on
 
+// NOTE, We are mocking the environment instead of actually querying it
 TEST(ToolchainTestGroup, VerifyToolchain) {
   buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc, "gcc", "as",
                                "gcc", "g++", "ar", "ld");
@@ -49,5 +50,19 @@ TEST(ToolchainTestGroup, VerifyToolchain) {
 int main(int ac, char **av) {
   buildcc::m::VectorStringCopier copier;
   mock().installCopier(TEST_VECTOR_STRING_TYPE, copier);
+
+  // NOTE, Check the GCC, MSVC and Clang compilers
+  // Create directory and populate it with gcc and cl executables
+  // Linux
+  // toolchains/gcc
+  // toolchains/clang_linux
+
+  // Windows
+  // toolchains/msvc
+  // toolchains/mingw
+  // TODO, Check executables used in clang_win
+
+  // Linux + Windows + Mac for Cross compilation
+  // toolchains/arm-none-eabi-gcc
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
