@@ -21,10 +21,12 @@
 #include <unordered_map>
 #include <vector>
 
+#include "api/toolchain_verify.h"
+
 namespace buildcc::base {
 
 // Base toolchain class
-class Toolchain {
+class Toolchain : public ToolchainVerify<Toolchain> {
 public:
   enum class Id {
     Gcc = 0,
