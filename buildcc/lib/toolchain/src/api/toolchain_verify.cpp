@@ -35,8 +35,10 @@ std::vector<std::string> ParseEnvVarToPaths(const std::string &env_var) {
       path_env != nullptr,
       fmt::format("Environment variable '{}' not present", env_var));
 
+  const char *os_env_delim = buildcc::env::get_os_envvar_delim();
+  buildcc::env::assert_fatal(os_env_delim != nullptr, "OS not supported");
   std::vector<std::string> paths =
-      buildcc::env::split(path_env, buildcc::env::get_os_envvar_delim()[0]);
+      buildcc::env::split(path_env, os_env_delim[0]);
 
   return paths;
 }
