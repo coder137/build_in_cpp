@@ -92,14 +92,12 @@ int main(int ac, char **av) {
   // Create directory and populate it with gcc and cl executables
   // Linux
   // toolchains/gcc
-  // toolchains/clang_linux
+  // toolchains/clang
 
   // Windows
   // toolchains/msvc
   // toolchains/mingw
-  // TODO, Check executables used in clang_win
+  // TODO, Check executables used in clang
 
-  // Linux + Windows + Mac for Cross compilation
-  // toolchains/arm-none-eabi-gcc
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
