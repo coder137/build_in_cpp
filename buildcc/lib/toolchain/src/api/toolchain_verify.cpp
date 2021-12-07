@@ -61,7 +61,13 @@ std::string GetCompilerVersion(const fs::path &absolute_path,
   };
 
   auto msvc_get_compiler_version = [&]() {
-    // TODO, Read `VSCMD_VER` from ENV Path
+    // Done VSCMD_VER
+    const char *vscmd_version = getenv("VSCMD_VER");
+    buildcc::env::assert_fatal(
+        vscmd_version != nullptr,
+        "Setup Visual Studio build tools. Call `vcvarsall.bat {platform}` to "
+        "setup your target and host");
+    compiler_version = vscmd_version;
   };
 
   switch (toolchain.GetId()) {
@@ -99,9 +105,17 @@ std::string GetCompilerArchitecture(const fs::path &absolute_path,
   };
 
   auto msvc_get_target_arch = [&]() {
-    // TODO, Read `VSCMD_ARG_HOST_ARCH` from env path
-    // TODO, Read `VSCMD_ARG_TGT_ARCH` from env path
-    // TODO, Concat them!
+    // DONE, Read `VSCMD_ARG_HOST_ARCH` from env path
+    // DONE, Read `VSCMD_ARG_TGT_ARCH` from env path
+    const char *vs_host_arch = getenv("VSCMD_ARG_HOST_ARCH");
+    const char *vs_target_arch = getenv("VSCMD_ARG_TGT_ARCH");
+    buildcc::env::assert_fatal(
+        (vs_host_arch != nullptr) && (vs_target_arch != nullptr),
+        "Setup Visual Studio build tools. Call `vcvarsall.bat {platform}` to "
+        "setup your target and host");
+
+    // DONE, Concat them!
+    target_arch = fmt::format("{}_{}", vs_host_arch, vs_target_arch);
   };
 
   switch (toolchain.GetId()) {
