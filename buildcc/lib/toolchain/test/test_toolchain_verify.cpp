@@ -122,6 +122,30 @@ TEST(ToolchainTestGroup, VerifyToolchain_Msvc) {
                "host_arch_tgt_arch");
 }
 
+TEST(ToolchainTestGroup, VerifyToolchain_BadCompilerId) {
+  buildcc::base::Toolchain gcc((buildcc::base::Toolchain::Id)65535, "gcc", "as",
+                               "gcc", "g++", "ar", "ld");
+
+  std::string putenv_str = fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc",
+                                       fs::current_path().string());
+  int put = putenv(putenv_str.data());
+  CHECK_TRUE(put == 0);
+  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
+  CHECK_TRUE(custom_buildcc_path != nullptr);
+  UT_PRINT(custom_buildcc_path);
+
+  buildcc::base::VerifyToolchainConfig config;
+  config.env_vars.clear();
+  config.env_vars.push_back("CUSTOM_BUILDCC_PATH");
+
+  std::vector<buildcc::base::VerifiedToolchain> verified_toolchains =
+      gcc.Verify(config);
+  UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
+  CHECK_TRUE(!verified_toolchains.empty());
+  STRCMP_EQUAL(verified_toolchains[0].compiler_version.c_str(), "");
+  STRCMP_EQUAL(verified_toolchains[0].target_arch.c_str(), "");
+}
+
 int main(int ac, char **av) {
   buildcc::m::VectorStringCopier copier;
   mock().installCopier(TEST_VECTOR_STRING_TYPE, copier);
