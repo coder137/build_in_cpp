@@ -26,7 +26,7 @@ TEST_GROUP(ToolchainTestGroup)
 // clang-format on
 
 // NOTE, We are mocking the environment instead of actually querying it
-TEST(ToolchainTestGroup, VerifyToolchain) {
+TEST(ToolchainTestGroup, VerifyToolchain_Gcc) {
   buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc, "gcc", "as",
                                "gcc", "g++", "ar", "ld");
 
@@ -37,6 +37,35 @@ TEST(ToolchainTestGroup, VerifyToolchain) {
 
   std::string putenv_str = fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc",
                                        fs::current_path().string());
+  int put = putenv(putenv_str.data());
+  CHECK_TRUE(put == 0);
+  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
+  CHECK_TRUE(custom_buildcc_path != nullptr);
+  UT_PRINT(custom_buildcc_path);
+
+  buildcc::base::VerifyToolchainConfig config;
+  config.env_vars.clear();
+  config.env_vars.push_back("CUSTOM_BUILDCC_PATH");
+
+  std::vector<buildcc::base::VerifiedToolchain> verified_toolchains =
+      gcc.Verify(config);
+  UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
+  CHECK_TRUE(!verified_toolchains.empty());
+  STRCMP_EQUAL(verified_toolchains[0].compiler_version.c_str(), "version");
+  STRCMP_EQUAL(verified_toolchains[0].target_arch.c_str(), "arch");
+}
+
+TEST(ToolchainTestGroup, VerifyToolchain_Clang) {
+  buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Clang, "clang",
+                               "llvm-as", "clang", "clang++", "llvm-ar", "lld");
+
+  std::vector<std::string> version_stdout_data{"version"};
+  std::vector<std::string> arch_stdout_data{"arch"};
+  buildcc::m::CommandExpect_Execute(1, true, &version_stdout_data);
+  buildcc::m::CommandExpect_Execute(1, true, &arch_stdout_data);
+
+  std::string putenv_str = fmt::format(
+      "CUSTOM_BUILDCC_PATH={}/toolchains/clang", fs::current_path().string());
   int put = putenv(putenv_str.data());
   CHECK_TRUE(put == 0);
   const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
