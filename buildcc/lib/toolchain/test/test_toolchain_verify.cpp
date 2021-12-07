@@ -146,6 +146,36 @@ TEST(ToolchainTestGroup, VerifyToolchain_BadCompilerId) {
   STRCMP_EQUAL(verified_toolchains[0].target_arch.c_str(), "");
 }
 
+TEST(ToolchainTestGroup, VerifyToolchain_BadAbsolutePath) {
+  buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc, "gcc", "as",
+                               "gcc", "g++", "ar", "ld");
+
+  buildcc::base::VerifyToolchainConfig config;
+  config.env_vars.clear();
+  config.absolute_search_paths.push_back(
+      (fs::current_path() / "does_not_exist").string());
+
+  std::vector<buildcc::base::VerifiedToolchain> verified_toolchains =
+      gcc.Verify(config);
+  UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
+  CHECK_TRUE(verified_toolchains.empty());
+}
+
+TEST(ToolchainTestGroup, VerifyToolchain_PathContainsDir) {
+  buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc, "gcc", "as",
+                               "gcc", "g++", "ar", "ld");
+
+  buildcc::base::VerifyToolchainConfig config;
+  config.env_vars.clear();
+  config.absolute_search_paths.push_back(
+      (fs::current_path() / "toolchains").string());
+
+  std::vector<buildcc::base::VerifiedToolchain> verified_toolchains =
+      gcc.Verify(config);
+  UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
+  CHECK_TRUE(verified_toolchains.empty());
+}
+
 int main(int ac, char **av) {
   buildcc::m::VectorStringCopier copier;
   mock().installCopier(TEST_VECTOR_STRING_TYPE, copier);
