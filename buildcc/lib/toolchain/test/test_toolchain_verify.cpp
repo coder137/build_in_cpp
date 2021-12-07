@@ -92,9 +92,9 @@ TEST(ToolchainTestGroup, VerifyToolchain_Msvc) {
   // VSCMD_VER
   // VSCMD_ARG_HOST_ARCH
   // VSCMD_ARG_TGT_ARCH
-  CHECK_TRUE(putenv("VSCMD_VER=version") == 0);
-  CHECK_TRUE(putenv("VSCMD_ARG_HOST_ARCH=host_arch") == 0);
-  CHECK_TRUE(putenv("VSCMD_ARG_TGT_ARCH=tgt_arch") == 0);
+  CHECK_TRUE(putenv(std::string("VSCMD_VER=version").data()) == 0);
+  CHECK_TRUE(putenv(std::string("VSCMD_ARG_HOST_ARCH=host_arch").data()) == 0);
+  CHECK_TRUE(putenv(std::string("VSCMD_ARG_TGT_ARCH=tgt_arch").data()) == 0);
 
   // MSVC Compiler
   std::string putenv_str = fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/msvc",
