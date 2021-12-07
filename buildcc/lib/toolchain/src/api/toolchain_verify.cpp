@@ -16,6 +16,7 @@
 
 #include "toolchain/api/toolchain_verify.h"
 
+#include <optional>
 #include <unordered_set>
 #include <vector>
 
@@ -65,14 +66,15 @@ std::string GetMsvcCompilerVersion() {
   return vscmd_version;
 }
 
-std::string GetCompilerVersion(const fs::path &absolute_path,
-                               const buildcc::base::Toolchain &toolchain) {
+std::optional<std::string>
+GetCompilerVersion(const fs::path &absolute_path,
+                   const buildcc::base::Toolchain &toolchain) {
   buildcc::Command command;
   command.AddDefaultArgument(
       "compiler",
       (absolute_path / toolchain.GetCppCompiler()).make_preferred().string());
 
-  std::string compiler_version;
+  std::optional<std::string> compiler_version;
   switch (toolchain.GetId()) {
   case buildcc::base::Toolchain::Id::Gcc:
   case buildcc::base::Toolchain::Id::MinGW:
@@ -83,8 +85,9 @@ std::string GetCompilerVersion(const fs::path &absolute_path,
     compiler_version = GetMsvcCompilerVersion();
     break;
   default:
-    buildcc::env::assert_fatal<false>(
-        "GetCompilerVersion not supported on this Compiler");
+    buildcc::env::log_warning(__FUNCTION__,
+                              "Operation not supported on this compiler");
+    compiler_version = {};
     break;
   }
   return compiler_version;
@@ -113,13 +116,14 @@ std::string GetMsvcTargetArchitecture() {
   return fmt::format("{}_{}", vs_host_arch, vs_target_arch);
 }
 
-std::string GetCompilerArchitecture(const fs::path &absolute_path,
-                                    const buildcc::base::Toolchain &toolchain) {
+std::optional<std::string>
+GetCompilerArchitecture(const fs::path &absolute_path,
+                        const buildcc::base::Toolchain &toolchain) {
   buildcc::Command command;
   command.AddDefaultArgument(
       "compiler",
       (absolute_path / toolchain.GetCppCompiler()).make_preferred().string());
-  std::string target_arch;
+  std::optional<std::string> target_arch;
   switch (toolchain.GetId()) {
   case buildcc::base::Toolchain::Id::Gcc:
   case buildcc::base::Toolchain::Id::MinGW:
@@ -130,8 +134,9 @@ std::string GetCompilerArchitecture(const fs::path &absolute_path,
     target_arch = GetMsvcTargetArchitecture();
     break;
   default:
-    buildcc::env::assert_fatal<false>(
-        "GetCompilerArchitecture not supported on this Compiler");
+    buildcc::env::log_warning(__FUNCTION__,
+                              "Operation not supported on this compiler");
+    target_arch = {};
     break;
   }
   return target_arch;
@@ -217,8 +222,8 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
 
       VerifiedToolchain vt;
       vt.path = p;
-      vt.compiler_version = GetCompilerVersion(p, t);
-      vt.target_arch = GetCompilerArchitecture(p, t);
+      vt.compiler_version = GetCompilerVersion(p, t).value_or("");
+      vt.target_arch = GetCompilerArchitecture(p, t).value_or("");
       verified_toolchains.push_back(vt);
     }
 
