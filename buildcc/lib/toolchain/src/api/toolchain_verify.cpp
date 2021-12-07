@@ -29,6 +29,9 @@
 #include "command/command.h"
 
 namespace {
+// Constants
+
+// Functions
 std::vector<std::string> ParseEnvVarToPaths(const std::string &env_var) {
   const char *path_env = getenv(env_var.c_str());
   buildcc::env::assert_fatal(
@@ -87,6 +90,29 @@ std::string GetCompilerVersion(const fs::path &absolute_path,
   return compiler_version;
 }
 
+std::string GetGccTargetArchitecture(const buildcc::Command &command) {
+  std::vector<std::string> stdout_data;
+  bool executed = buildcc::Command::Execute(
+      command.Construct("{compiler} -dumpmachine"), {}, &stdout_data);
+  buildcc::env::assert_fatal(
+      executed, "GetCompilerArchitecture command not executed successfully");
+  return stdout_data.at(0);
+}
+
+std::string GetMsvcTargetArchitecture() {
+  // DONE, Read `VSCMD_ARG_HOST_ARCH` from env path
+  // DONE, Read `VSCMD_ARG_TGT_ARCH` from env path
+  const char *vs_host_arch = getenv("VSCMD_ARG_HOST_ARCH");
+  const char *vs_target_arch = getenv("VSCMD_ARG_TGT_ARCH");
+  buildcc::env::assert_fatal(
+      (vs_host_arch != nullptr) && (vs_target_arch != nullptr),
+      "Setup Visual Studio build tools. Call `vcvarsall.bat {platform}` to "
+      "setup your target and host");
+
+  // DONE, Concat them!
+  return fmt::format("{}_{}", vs_host_arch, vs_target_arch);
+}
+
 std::string GetCompilerArchitecture(const fs::path &absolute_path,
                                     const buildcc::base::Toolchain &toolchain) {
   buildcc::Command command;
@@ -94,38 +120,14 @@ std::string GetCompilerArchitecture(const fs::path &absolute_path,
       "compiler",
       (absolute_path / toolchain.GetCppCompiler()).make_preferred().string());
   std::string target_arch;
-  std::vector<std::string> stdout_data;
-
-  auto gcc_get_target_arch = [&]() {
-    bool executed = buildcc::Command::Execute(
-        command.Construct("{compiler} -dumpmachine"), {}, &stdout_data);
-    buildcc::env::assert_fatal(
-        executed, "GetCompilerArchitecture command not executed successfully");
-    target_arch = stdout_data.at(0);
-  };
-
-  auto msvc_get_target_arch = [&]() {
-    // DONE, Read `VSCMD_ARG_HOST_ARCH` from env path
-    // DONE, Read `VSCMD_ARG_TGT_ARCH` from env path
-    const char *vs_host_arch = getenv("VSCMD_ARG_HOST_ARCH");
-    const char *vs_target_arch = getenv("VSCMD_ARG_TGT_ARCH");
-    buildcc::env::assert_fatal(
-        (vs_host_arch != nullptr) && (vs_target_arch != nullptr),
-        "Setup Visual Studio build tools. Call `vcvarsall.bat {platform}` to "
-        "setup your target and host");
-
-    // DONE, Concat them!
-    target_arch = fmt::format("{}_{}", vs_host_arch, vs_target_arch);
-  };
-
   switch (toolchain.GetId()) {
   case buildcc::base::Toolchain::Id::Gcc:
   case buildcc::base::Toolchain::Id::MinGW:
   case buildcc::base::Toolchain::Id::Clang:
-    gcc_get_target_arch();
+    target_arch = GetGccTargetArchitecture(command);
     break;
   case buildcc::base::Toolchain::Id::Msvc:
-    msvc_get_target_arch();
+    target_arch = GetMsvcTargetArchitecture();
     break;
   default:
     buildcc::env::assert_fatal<false>(
