@@ -137,7 +137,7 @@ std::string GetCompilerArchitecture(const fs::path &absolute_path,
 
 class ToolchainMatcher {
 public:
-  ToolchainMatcher(const buildcc::base::Toolchain &toolchain)
+  explicit ToolchainMatcher(const buildcc::base::Toolchain &toolchain)
       : toolchain_(toolchain) {}
 
   void FillWithToolchainFilenames() {
