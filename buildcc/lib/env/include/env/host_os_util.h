@@ -75,26 +75,6 @@ inline constexpr const char *get_os_executable_extension() {
   return nullptr;
 }
 
-/**
- * @brief Cross platform function to put environment variable data
- * _putenv for windows
- * putenv for linux, unix and mac
- *
- * @param data `key=value`
- * @return int Return 0 if successful -1 if failed
- * @return also returns -1 if Unknown operating system detected
- */
-inline int os_putenv(const char *data) {
-  if constexpr (is_win()) {
-    return _putenv(data);
-  } else if constexpr (is_linux() || is_unix() || is_mac()) {
-    return putenv(data);
-  }
-
-  log_critical(__FUNCTION__, kRaiseIssueStr);
-  return -1;
-}
-
 } // namespace buildcc::env
 
 #endif
