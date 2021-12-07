@@ -43,41 +43,41 @@ std::vector<std::string> ParseEnvVarToPaths(const std::string &env_var) {
   return paths;
 }
 
+std::string GetGccCompilerVersion(const buildcc::Command &command) {
+  std::vector<std::string> stdout_data;
+  bool executed = buildcc::Command::Execute(
+      command.Construct("{compiler} -dumpversion"), {}, &stdout_data);
+  buildcc::env::assert_fatal(
+      executed, "GetCompilerVersion command not executed successfully");
+  return stdout_data.at(0);
+}
+
+std::string GetMsvcCompilerVersion() {
+  // Done VSCMD_VER
+  const char *vscmd_version = getenv("VSCMD_VER");
+  buildcc::env::assert_fatal(
+      vscmd_version != nullptr,
+      "Setup Visual Studio build tools. Call `vcvarsall.bat {platform}` to "
+      "setup your target and host");
+  return vscmd_version;
+}
+
 std::string GetCompilerVersion(const fs::path &absolute_path,
                                const buildcc::base::Toolchain &toolchain) {
   buildcc::Command command;
   command.AddDefaultArgument(
       "compiler",
       (absolute_path / toolchain.GetCppCompiler()).make_preferred().string());
+
   std::string compiler_version;
-  std::vector<std::string> stdout_data;
-
-  auto gcc_get_compiler_version = [&]() {
-    bool executed = buildcc::Command::Execute(
-        command.Construct("{compiler} -dumpversion"), {}, &stdout_data);
-    buildcc::env::assert_fatal(
-        executed, "GetCompilerVersion command not executed successfully");
-    compiler_version = stdout_data.at(0);
-  };
-
-  auto msvc_get_compiler_version = [&]() {
-    // Done VSCMD_VER
-    const char *vscmd_version = getenv("VSCMD_VER");
-    buildcc::env::assert_fatal(
-        vscmd_version != nullptr,
-        "Setup Visual Studio build tools. Call `vcvarsall.bat {platform}` to "
-        "setup your target and host");
-    compiler_version = vscmd_version;
-  };
-
   switch (toolchain.GetId()) {
   case buildcc::base::Toolchain::Id::Gcc:
   case buildcc::base::Toolchain::Id::MinGW:
   case buildcc::base::Toolchain::Id::Clang:
-    gcc_get_compiler_version();
+    compiler_version = GetGccCompilerVersion(command);
     break;
   case buildcc::base::Toolchain::Id::Msvc:
-    msvc_get_compiler_version();
+    compiler_version = GetMsvcCompilerVersion();
     break;
   default:
     buildcc::env::assert_fatal<false>(
