@@ -23,8 +23,6 @@ target_link_libraries(mock_target PUBLIC
     flatbuffers_header_only
     Taskflow
 
-    mock_env
-    mock_command
     mock_toolchain
 
     CppUTest
