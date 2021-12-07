@@ -1,3 +1,5 @@
+#include <cstdlib>
+
 #include "toolchain/toolchain.h"
 
 #include "env/host_os.h"
@@ -33,14 +35,20 @@ TEST(ToolchainTestGroup, VerifyToolchain) {
   buildcc::m::CommandExpect_Execute(1, true, &version_stdout_data);
   buildcc::m::CommandExpect_Execute(1, true, &arch_stdout_data);
 
-  // On linux we have the path symlinked to /usr/bin and /usr dirs
-  if constexpr (buildcc::env::is_linux()) {
-    buildcc::m::CommandExpect_Execute(1, true, &version_stdout_data);
-    buildcc::m::CommandExpect_Execute(1, true, &arch_stdout_data);
-  }
+  std::string putenv_str = fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc",
+                                       fs::current_path().string());
+  int put = putenv(putenv_str.data());
+  CHECK_TRUE(put == 0);
+  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
+  CHECK_TRUE(custom_buildcc_path != nullptr);
+  UT_PRINT(custom_buildcc_path);
+
+  buildcc::base::VerifyToolchainConfig config;
+  config.env_vars.clear();
+  config.env_vars.push_back("CUSTOM_BUILDCC_PATH");
 
   std::vector<buildcc::base::VerifiedToolchain> verified_toolchains =
-      gcc.Verify();
+      gcc.Verify(config);
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_TRUE(!verified_toolchains.empty());
   STRCMP_EQUAL(verified_toolchains[0].compiler_version.c_str(), "version");
