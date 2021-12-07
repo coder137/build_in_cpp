@@ -2,6 +2,8 @@
 
 #include "expect_command.h"
 
+#include "mock_command_copier.h"
+
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
@@ -531,7 +533,9 @@ TEST(RegisterTestGroup, Register_Test) {
         target);
     reg.Test(stateSuccess, "{executable}", target);
 
-    buildcc::m::CommandExpect_Execute(1, true);
+    std::vector<std::string> stdout_data;
+    std::vector<std::string> stderr_data;
+    buildcc::m::CommandExpect_Execute(1, true, &stdout_data, &stderr_data);
     reg.RunTest();
   }
 
@@ -601,7 +605,8 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
             {}, {},
             buildcc::TestOutput(buildcc::TestOutput::Type::TestPrintOnStderr)));
 
-    buildcc::m::CommandExpect_Execute(1, true);
+    std::vector<std::string> stderr_data;
+    buildcc::m::CommandExpect_Execute(1, true, nullptr, &stderr_data);
     reg.RunTest();
   }
 
@@ -618,7 +623,8 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
             {}, {},
             buildcc::TestOutput(buildcc::TestOutput::Type::TestPrintOnStdout)));
 
-    buildcc::m::CommandExpect_Execute(1, true);
+    std::vector<std::string> stdout_data;
+    buildcc::m::CommandExpect_Execute(1, true, &stdout_data, nullptr);
     reg.RunTest();
   }
 
@@ -635,7 +641,9 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
                  buildcc::TestOutput(
                      buildcc::TestOutput::Type::TestPrintOnStderrAndStdout)));
 
-    buildcc::m::CommandExpect_Execute(1, true);
+    std::vector<std::string> stdout_data;
+    std::vector<std::string> stderr_data;
+    buildcc::m::CommandExpect_Execute(1, true, &stdout_data, &stderr_data);
     reg.RunTest();
   }
 
@@ -676,5 +684,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
 
 int main(int ac, char **av) {
   MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
+  buildcc::m::VectorStringCopier copier;
+  mock().installCopier(TEST_VECTOR_STRING_TYPE, copier);
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
