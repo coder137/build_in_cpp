@@ -90,11 +90,15 @@ TEST(ToolchainTestGroup, VerifyToolchain_Msvc) {
                                 "cl", "cl", "cl", "lib", "link");
   // Setup ENV
   // VSCMD_VER
+  std::string vscmd_ver = std::string("VSCMD_VER=version");
   // VSCMD_ARG_HOST_ARCH
+  std::string host_arch = std::string("VSCMD_ARG_HOST_ARCH=host_arch");
   // VSCMD_ARG_TGT_ARCH
-  CHECK_TRUE(putenv(std::string("VSCMD_VER=version").data()) == 0);
-  CHECK_TRUE(putenv(std::string("VSCMD_ARG_HOST_ARCH=host_arch").data()) == 0);
-  CHECK_TRUE(putenv(std::string("VSCMD_ARG_TGT_ARCH=tgt_arch").data()) == 0);
+  std::string tgt_arch = std::string("VSCMD_ARG_TGT_ARCH=tgt_arch");
+
+  CHECK_TRUE(putenv(vscmd_ver.data()) == 0);
+  CHECK_TRUE(putenv(host_arch.data()) == 0);
+  CHECK_TRUE(putenv(tgt_arch.data()) == 0);
 
   // MSVC Compiler
   std::string putenv_str = fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/msvc",
