@@ -110,8 +110,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     // Duplicate include directory
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
 
-    buildcc::m::CommandExpect_Execute(2, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(2, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     include_compile.Build();
     buildcc::base::m::TargetRunner(include_compile);
 
@@ -142,8 +142,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     include_compile.AddIncludeDir("");
 
     buildcc::base::m::TargetExpect_DirChanged(1, &include_compile);
-    buildcc::m::CommandExpect_Execute(2, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(2, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     include_compile.Build();
     buildcc::base::m::TargetRunner(include_compile);
 
@@ -171,8 +171,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
 
     buildcc::base::m::TargetExpect_DirChanged(1, &include_compile);
-    buildcc::m::CommandExpect_Execute(2, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(2, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     include_compile.Build();
     buildcc::base::m::TargetRunner(include_compile);
 
@@ -224,8 +224,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     add_header.AddSource(INCLUDE_HEADER_SOURCE);
     add_header.AddIncludeDir(RELATIVE_INCLUDE_DIR);
 
-    buildcc::m::CommandExpect_Execute(2, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(2, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     add_header.Build();
     buildcc::base::m::TargetRunner(add_header);
 
@@ -247,8 +247,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     add_header.AddIncludeDir(RELATIVE_INCLUDE_DIR);
 
     buildcc::base::m::TargetExpect_PathAdded(1, &add_header);
-    buildcc::m::CommandExpect_Execute(2, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(2, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     add_header.Build();
     buildcc::base::m::TargetRunner(add_header);
 
@@ -276,8 +276,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     add_header.AddIncludeDir(RELATIVE_INCLUDE_DIR);
 
     buildcc::base::m::TargetExpect_PathUpdated(1, &add_header);
-    buildcc::m::CommandExpect_Execute(2, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(2, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     add_header.Build();
     buildcc::base::m::TargetRunner(add_header);
 
@@ -298,8 +298,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     add_header.AddIncludeDir(RELATIVE_INCLUDE_DIR);
 
     buildcc::base::m::TargetExpect_PathRemoved(1, &add_header);
-    buildcc::m::CommandExpect_Execute(2, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(2, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     add_header.Build();
     buildcc::base::m::TargetRunner(add_header);
 

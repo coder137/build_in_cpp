@@ -100,8 +100,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
   simple.AddSource(DUMMY_MAIN);
   simple.Build();
 
-  buildcc::m::CommandExpect_Execute(1, true); // compile
-  buildcc::m::CommandExpect_Execute(1, true); // link
+  buildcc::env::m::CommandExpect_Execute(1, true); // compile
+  buildcc::env::m::CommandExpect_Execute(1, true); // link
   buildcc::base::m::TargetRunner(simple);
 
   CHECK(simple.GetTaskState() == buildcc::env::TaskState::SUCCESS);
@@ -145,9 +145,9 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     simple.AddSource(DUMMY_MAIN_C);
     simple.AddSource(NEW_SOURCE);
 
-    buildcc::m::CommandExpect_Execute(1, true); // compile
-    buildcc::m::CommandExpect_Execute(1, true); // compile
-    buildcc::m::CommandExpect_Execute(1, true); // link
+    buildcc::env::m::CommandExpect_Execute(1, true); // compile
+    buildcc::env::m::CommandExpect_Execute(1, true); // compile
+    buildcc::env::m::CommandExpect_Execute(1, true); // link
     simple.Build();
     buildcc::base::m::TargetRunner(simple);
 
@@ -172,11 +172,11 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     buildcc::base::m::TargetExpect_SourceRemoved(1, &simple);
 
     // Added and compiled
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::base::m::TargetExpect_SourceAdded(1, &simple);
 
     // Rebuild target
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
 
     // Run the second Build to test Recompile
     simple.Build();
@@ -205,10 +205,10 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     simple.AddSource(NEW_SOURCE);
     // Run the second Build to test Recompile
 
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::base::m::TargetExpect_SourceUpdated(1, &simple);
 
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
     buildcc::base::m::TargetRunner(simple);
 

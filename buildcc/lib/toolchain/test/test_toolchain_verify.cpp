@@ -32,8 +32,8 @@ TEST(ToolchainTestGroup, VerifyToolchain_Gcc) {
 
   std::vector<std::string> version_stdout_data{"version"};
   std::vector<std::string> arch_stdout_data{"arch"};
-  buildcc::m::CommandExpect_Execute(1, true, &version_stdout_data);
-  buildcc::m::CommandExpect_Execute(1, true, &arch_stdout_data);
+  buildcc::env::m::CommandExpect_Execute(1, true, &version_stdout_data);
+  buildcc::env::m::CommandExpect_Execute(1, true, &arch_stdout_data);
 
   std::string putenv_str = fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc",
                                        fs::current_path().string());
@@ -62,8 +62,8 @@ TEST(ToolchainTestGroup, VerifyToolchain_Clang) {
 
   std::vector<std::string> version_stdout_data{"version"};
   std::vector<std::string> arch_stdout_data{"arch"};
-  buildcc::m::CommandExpect_Execute(1, true, &version_stdout_data);
-  buildcc::m::CommandExpect_Execute(1, true, &arch_stdout_data);
+  buildcc::env::m::CommandExpect_Execute(1, true, &version_stdout_data);
+  buildcc::env::m::CommandExpect_Execute(1, true, &arch_stdout_data);
 
   std::string putenv_str = fmt::format(
       "CUSTOM_BUILDCC_PATH={}/toolchains/clang", fs::current_path().string());
@@ -177,7 +177,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_PathContainsDir) {
 }
 
 int main(int ac, char **av) {
-  buildcc::m::VectorStringCopier copier;
+  buildcc::env::m::VectorStringCopier copier;
   mock().installCopier(TEST_VECTOR_STRING_TYPE, copier);
 
   // NOTE, Check the GCC, MSVC and Clang compilers

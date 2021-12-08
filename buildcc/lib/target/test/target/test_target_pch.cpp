@@ -50,8 +50,8 @@ TEST(TargetPchTestGroup, Target_AddPch_Build) {
   target.AddPch("pch/pch_header_1.h");
   target.AddPch("pch/pch_header_2.h");
 
-  buildcc::m::CommandExpect_Execute(1, true);
-  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
   target.Build();
   buildcc::base::m::TargetRunner(target);
   bool exists = fs::exists(target.GetPchHeaderPath());
@@ -75,8 +75,8 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
     target.AddPch("pch/pch_header_1.h");
     target.AddPch("pch/pch_header_2.h");
 
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     target.Build();
     buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
@@ -103,8 +103,8 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
     target.AddPch("pch/pch_header_1.h");
 
     buildcc::base::m::TargetExpect_PathRemoved(1, &target);
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     target.Build();
     buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
@@ -119,8 +119,8 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
     target.AddPch("pch/pch_header_2.h");
 
     buildcc::base::m::TargetExpect_PathAdded(1, &target);
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     target.Build();
     buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
@@ -141,8 +141,8 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
     target.AddPch("pch/pch_header_2.h");
 
     buildcc::base::m::TargetExpect_PathUpdated(1, &target);
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     target.Build();
     buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
@@ -162,9 +162,9 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
     target.AddPch("pch/pch_header_2.h");
     target.AddSource("dummy_main.cpp");
 
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     target.Build();
     buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
@@ -193,9 +193,9 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
     target.AddSource("dummy_main.cpp");
 
     buildcc::base::m::TargetExpect_PathRemoved(1, &target);
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     target.Build();
     buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
@@ -211,9 +211,9 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
     target.AddSource("dummy_main.cpp");
 
     buildcc::base::m::TargetExpect_PathAdded(1, &target);
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     target.Build();
     buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
@@ -235,9 +235,9 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
     target.AddSource("dummy_main.cpp");
 
     buildcc::base::m::TargetExpect_PathUpdated(1, &target);
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     target.Build();
     buildcc::base::m::TargetRunner(target);
     bool exists = fs::exists(target.GetPchHeaderPath());
@@ -256,8 +256,8 @@ TEST(TargetPchTestGroup, Target_AddPchCompileFlag_Build) {
   target.AddPch("pch/pch_header_1.h");
   target.AddPch("pch/pch_header_2.h");
 
-  buildcc::m::CommandExpect_Execute(1, true);
-  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
   target.Build();
   buildcc::base::m::TargetRunner(target);
   bool exists = fs::exists(target.GetPchHeaderPath());
@@ -276,8 +276,8 @@ TEST(TargetPchTestGroup, Target_AddPchObjectFlag_Build) {
   target.AddPch("pch/pch_header_1.h");
   target.AddPch("pch/pch_header_2.h");
 
-  buildcc::m::CommandExpect_Execute(1, true);
-  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
   target.Build();
   buildcc::base::m::TargetRunner(target);
   bool exists = fs::exists(target.GetPchHeaderPath());
