@@ -16,6 +16,7 @@
 
 #include "args/register.h"
 #include "env/logging.h"
+#include "env/util.h"
 
 namespace buildcc {
 
@@ -33,6 +34,8 @@ void Register::RunBuild() {
                                           executor_.num_workers()));
   executor_.run(build_tf_);
   executor_.wait_for_all();
+  env::assert_fatal(env::get_task_state() == env::TaskState::SUCCESS,
+                    "Task state is not successful!");
 }
 
 void Register::RunTest() {
