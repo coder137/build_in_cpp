@@ -6,9 +6,13 @@ if (${TESTING})
 
         src/env.cpp
         src/task_state.cpp
+
+        src/command.cpp
+        mock/execute.cpp
     )
     target_include_directories(mock_env PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/mock
     )
     target_link_libraries(mock_env PUBLIC
         fmt::fmt-header-only
@@ -28,8 +32,12 @@ if (${TESTING})
     add_executable(test_task_state test/test_task_state.cpp)
     target_link_libraries(test_task_state PRIVATE mock_env)
 
+    add_executable(test_command test/test_command.cpp)
+    target_link_libraries(test_command PRIVATE mock_env)
+
     add_test(NAME test_env_util COMMAND test_env_util)
     add_test(NAME test_task_state COMMAND test_task_state)
+    add_test(NAME test_command COMMAND test_command)
 endif()
 
 set(ENV_SRCS
@@ -48,6 +56,10 @@ set(ENV_SRCS
 
     src/task_state.cpp
     include/env/task_state.h
+
+    src/command.cpp
+    src/execute.cpp
+    include/env/command.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})
@@ -75,14 +87,12 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     target_link_libraries(env PRIVATE
         spdlog::spdlog_header_only
     )
-
-    # Env install
-    if (${BUILDCC_INSTALL})
-        install(TARGETS env DESTINATION lib EXPORT envConfig)
-        install(EXPORT envConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/env")
-    endif()
 endif()
 
 if (${BUILDCC_INSTALL})
+    if (${BUILDCC_BUILD_AS_INTERFACE})
+        install(TARGETS env DESTINATION lib EXPORT envConfig)
+        install(EXPORT envConfig DESTINATION "${BUILDCC_INSTALL_LIB_PREFIX}/env")
+    endif()
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION "${BUILDCC_INSTALL_HEADER_PREFIX}")
 endif()

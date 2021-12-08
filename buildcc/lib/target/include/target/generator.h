@@ -28,7 +28,7 @@
 #include "env/env.h"
 #include "env/task_state.h"
 
-#include "command/command.h"
+#include "env/command.h"
 
 #include "target/interface/builder_interface.h"
 

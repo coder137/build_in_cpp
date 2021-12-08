@@ -27,7 +27,7 @@
 #include "env/host_os_util.h"
 #include "env/util.h"
 
-#include "command/command.h"
+#include "env/command.h"
 
 namespace {
 // Constants

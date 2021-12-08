@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "command/command.h"
+#include "env/command.h"
 
 #include "fmt/format.h"
 

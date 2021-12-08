@@ -16,7 +16,7 @@
 
 #include "target/generator.h"
 
-#include "command/command.h"
+#include "env/command.h"
 
 namespace {
 constexpr const char *const kStartGeneratorTaskName = "Start Generator";

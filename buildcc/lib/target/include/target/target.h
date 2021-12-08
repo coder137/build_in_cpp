@@ -52,7 +52,7 @@
 #include "env/task_state.h"
 
 // Components
-#include "command/command.h"
+#include "env/command.h"
 #include "toolchain/toolchain.h"
 
 // Third Party
