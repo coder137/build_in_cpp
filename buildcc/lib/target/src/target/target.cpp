@@ -89,9 +89,8 @@ void Target::RecheckExternalLib(
                  std::bind(&Target::ExternalLibChanged, this));
 }
 
-std::optional<std::string>
-Target::SelectCompileFlags(TargetFileExt type) const {
-  switch (type) {
+std::optional<std::string> Target::SelectCompileFlags(TargetFileExt ext) const {
+  switch (ext) {
   case TargetFileExt::Asm:
     return internal::aggregate(GetCurrentAsmCompileFlags());
     break;
