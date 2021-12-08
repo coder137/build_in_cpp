@@ -129,7 +129,7 @@ void Register::Env() {
 void TestInfo::TestRunner() const {
   env::log_info(__FUNCTION__,
                 fmt::format("Testing \'{}\'", target_.GetUniqueId()));
-  Command command;
+  env::Command command;
   command.AddDefaultArguments({
       {"executable", fmt::format("{}", target_.GetTargetPath())},
   });
@@ -173,8 +173,8 @@ void TestInfo::TestRunner() const {
   };
 
   const bool success =
-      Command::Execute(test_command, config_.GetWorkingDirectory(),
-                       redirect_stdout, redirect_stderr);
+      env::Command::Execute(test_command, config_.GetWorkingDirectory(),
+                            redirect_stdout, redirect_stderr);
   env::assert_fatal(success,
                     fmt::format("Could not run {}", target_.GetUniqueId()));
 

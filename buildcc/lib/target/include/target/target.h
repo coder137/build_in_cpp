@@ -161,7 +161,7 @@ private:
   internal::path_unordered_set compiled_source_files_;
 
   //
-  Command command_;
+  env::Command command_;
   tf::Taskflow tf_;
 };
 

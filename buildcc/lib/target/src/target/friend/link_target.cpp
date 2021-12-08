@@ -90,7 +90,7 @@ void LinkTarget::BuildLink() {
   }
 
   if (target_.dirty_) {
-    bool success = Command::Execute(command_);
+    bool success = env::Command::Execute(command_);
     env::assert_throw(success, "Failed to link target");
     target_.storer_.target_linked = true;
   }
