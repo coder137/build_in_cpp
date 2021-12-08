@@ -47,9 +47,9 @@ std::vector<std::string> ParseEnvVarToPaths(const std::string &env_var) {
   return paths;
 }
 
-std::string GetGccCompilerVersion(const buildcc::Command &command) {
+std::string GetGccCompilerVersion(const buildcc::env::Command &command) {
   std::vector<std::string> stdout_data;
-  bool executed = buildcc::Command::Execute(
+  bool executed = buildcc::env::Command::Execute(
       command.Construct("{compiler} -dumpversion"), {}, &stdout_data);
   buildcc::env::assert_fatal(
       executed, "GetCompilerVersion command not executed successfully");
@@ -69,7 +69,7 @@ std::string GetMsvcCompilerVersion() {
 std::optional<std::string>
 GetCompilerVersion(const fs::path &absolute_path,
                    const buildcc::base::Toolchain &toolchain) {
-  buildcc::Command command;
+  buildcc::env::Command command;
   command.AddDefaultArgument(
       "compiler",
       (absolute_path / toolchain.GetCppCompiler()).make_preferred().string());
@@ -93,9 +93,9 @@ GetCompilerVersion(const fs::path &absolute_path,
   return compiler_version;
 }
 
-std::string GetGccTargetArchitecture(const buildcc::Command &command) {
+std::string GetGccTargetArchitecture(const buildcc::env::Command &command) {
   std::vector<std::string> stdout_data;
-  bool executed = buildcc::Command::Execute(
+  bool executed = buildcc::env::Command::Execute(
       command.Construct("{compiler} -dumpmachine"), {}, &stdout_data);
   buildcc::env::assert_fatal(
       executed, "GetCompilerArchitecture command not executed successfully");
@@ -119,7 +119,7 @@ std::string GetMsvcTargetArchitecture() {
 std::optional<std::string>
 GetCompilerArchitecture(const fs::path &absolute_path,
                         const buildcc::base::Toolchain &toolchain) {
-  buildcc::Command command;
+  buildcc::env::Command command;
   command.AddDefaultArgument(
       "compiler",
       (absolute_path / toolchain.GetCppCompiler()).make_preferred().string());

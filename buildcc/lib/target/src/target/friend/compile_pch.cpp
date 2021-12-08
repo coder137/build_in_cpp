@@ -47,7 +47,7 @@ void AggregateToFile(const fs::path &filename,
     aggregated_includes.append(temp);
   }
 
-  buildcc::Command command;
+  buildcc::env::Command command;
   std::string constructed_output = command.Construct(
       kFormat, {
                    {"aggregated_includes", aggregated_includes},
