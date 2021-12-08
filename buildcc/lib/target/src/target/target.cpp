@@ -106,8 +106,8 @@ std::optional<std::string> Target::SelectCompileFlags(TargetFileExt ext) const {
   return {};
 }
 
-std::optional<std::string> Target::SelectCompiler(TargetFileExt type) const {
-  switch (type) {
+std::optional<std::string> Target::SelectCompiler(TargetFileExt ext) const {
+  switch (ext) {
   case TargetFileExt::Asm:
     return GetToolchain().GetAsmCompiler();
     break;
