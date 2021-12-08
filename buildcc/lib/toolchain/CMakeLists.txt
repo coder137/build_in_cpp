@@ -54,7 +54,6 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     )
     target_link_libraries(toolchain PUBLIC 
         env
-        command
     )
 endif()
 
