@@ -65,7 +65,7 @@ void ClangCompileCommands::Generate() {
       // DONE, Get std::vector<std::string> CompileCommand
       // DONE, Get intermediate directory from env
       std::string sf = fmt::format("{}", source);
-      std::string command = t->GetCompileCommand(source);
+      const std::string &command = t->GetCompileCommand(source);
       std::string directory = fmt::format("{}", env::get_project_build_dir());
 
       std::string temp = fmt::format(

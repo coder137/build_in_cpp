@@ -1,12 +1,12 @@
-#ifndef COMMAND_MOCK_MOCK_COMMAND_COPIER_H_
-#define COMMAND_MOCK_MOCK_COMMAND_COPIER_H_
+#ifndef ENV_MOCK_MOCK_COMMAND_COPIER_H_
+#define ENV_MOCK_MOCK_COMMAND_COPIER_H_
 
 #include <string>
 #include <vector>
 
 #include "CppUTestExt/MockSupport.h"
 
-namespace buildcc::m {
+namespace buildcc::env::m {
 
 class VectorStringCopier : public MockNamedValueCopier {
 public:
@@ -23,6 +23,6 @@ public:
   }
 };
 
-} // namespace buildcc::m
+} // namespace buildcc::env::m
 
 #endif

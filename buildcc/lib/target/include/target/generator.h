@@ -28,7 +28,7 @@
 #include "env/env.h"
 #include "env/task_state.h"
 
-#include "command/command.h"
+#include "env/command.h"
 
 #include "target/interface/builder_interface.h"
 
@@ -138,7 +138,7 @@ private:
   // Internal
   std::mutex task_state_mutex_;
   env::TaskState task_state_{env::TaskState::SUCCESS};
-  Command command_;
+  env::Command command_;
   tf::Taskflow tf_;
 };
 

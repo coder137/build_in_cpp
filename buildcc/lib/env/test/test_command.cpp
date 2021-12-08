@@ -1,4 +1,4 @@
-#include "command/command.h"
+#include "env/command.h"
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
@@ -13,18 +13,18 @@ TEST_GROUP(CommandTestGroup)
 // clang-format on
 
 TEST(CommandTestGroup, Construct_InvalidFormat) {
-  buildcc::Command command;
+  buildcc::env::Command command;
   CHECK_THROWS(std::exception, command.Construct("{test}"));
 }
 
 TEST(CommandTestGroup, Construct_Basic) {
-  buildcc::Command command;
+  buildcc::env::Command command;
   std::string s = command.Construct("{}", {{"", "hi"}});
   STRCMP_EQUAL(s.c_str(), "hi");
 }
 
 TEST(CommandTestGroup, Construct_MultipleArgs) {
-  buildcc::Command command;
+  buildcc::env::Command command;
   command.AddDefaultArguments({
       {"h", "hello"},
       {"w", "world"},
@@ -37,12 +37,12 @@ TEST(CommandTestGroup, Construct_MultipleArgs) {
 }
 
 TEST(CommandTestGroup, Construct_BadArguments) {
-  buildcc::Command command;
+  buildcc::env::Command command;
   CHECK_THROWS(std::exception, command.Construct("{}", {{nullptr, "hi"}}));
 }
 
 TEST(CommandTestGroup, GetDefaultValueByKey) {
-  buildcc::Command command;
+  buildcc::env::Command command;
   command.AddDefaultArgument("key", "value");
   const std::string &value = command.GetDefaultValueByKey("key");
 
@@ -50,7 +50,7 @@ TEST(CommandTestGroup, GetDefaultValueByKey) {
 }
 
 TEST(CommandTestGroup, GetDefaultValueByKey_BadKey) {
-  buildcc::Command command;
+  buildcc::env::Command command;
   command.AddDefaultArgument("key", "value");
   CHECK_THROWS(std::exception, command.GetDefaultValueByKey("bad_key"));
 }

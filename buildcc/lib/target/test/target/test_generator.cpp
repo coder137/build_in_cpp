@@ -40,7 +40,7 @@ TEST(GeneratorTestGroup, Generator_Build) {
   generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
                        "{gen_root_dir}/dummy_main.c");
 
-  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
   generator.Build();
   buildcc::base::m::GeneratorRunner(generator);
 
@@ -60,7 +60,7 @@ TEST(GeneratorTestGroup, Generator_BuildParallel) {
   generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
                        "{gen_root_dir}/dummy_main.c");
 
-  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
   generator.Build();
   buildcc::base::m::GeneratorRunner(generator);
 
@@ -79,7 +79,7 @@ TEST(GeneratorTestGroup, Generator_Identifier) {
   generator.AddOutput("{gen_build_dir}/dummy_main.exe", "dummy_main_exe");
   generator.AddCommand("{compiler} -o {dummy_main_exe} {dummy_main_c}");
 
-  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
   generator.Build();
   buildcc::base::m::GeneratorRunner(generator);
 
@@ -98,7 +98,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
                              {"compiler", "gcc"},
                          });
 
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
     buildcc::base::m::GeneratorRunner(generator);
   }
@@ -130,7 +130,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
     generator.AddCommand("gcc -o {gen_build_dir}/new_source.exe "
                          "{gen_root_dir}/new_source.cpp");
 
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
     buildcc::base::m::GeneratorRunner(generator);
   }
@@ -143,7 +143,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
                          "{gen_root_dir}/new_source.cpp");
 
     buildcc::base::m::GeneratorExpect_InputRemoved(1, &generator);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
     buildcc::base::m::GeneratorRunner(generator);
   }
@@ -157,7 +157,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
                          "{gen_root_dir}/new_source.cpp");
 
     buildcc::base::m::GeneratorExpect_InputAdded(1, &generator);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
     buildcc::base::m::GeneratorRunner(generator);
   }
@@ -178,7 +178,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
     generator.AddCommand("gcc -o {gen_build_dir}/new_source.cpp.exe "
                          "{gen_root_dir}/new_source.cpp");
     buildcc::base::m::GeneratorExpect_InputUpdated(1, &generator);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
     buildcc::base::m::GeneratorRunner(generator);
   }
@@ -198,7 +198,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
                              {"compiler", "gcc"},
                          });
 
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
     buildcc::base::m::GeneratorRunner(generator);
   }
@@ -213,7 +213,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
                          });
 
     buildcc::base::m::GeneratorExpect_OutputChanged(1, &generator);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
     buildcc::base::m::GeneratorRunner(generator);
   }
@@ -229,7 +229,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
                          });
 
     buildcc::base::m::GeneratorExpect_OutputChanged(1, &generator);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
     buildcc::base::m::GeneratorRunner(generator);
   }
@@ -249,7 +249,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
                              {"compiler", "gcc"},
                          });
 
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
     buildcc::base::m::GeneratorRunner(generator);
   }
@@ -264,7 +264,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
                          });
 
     buildcc::base::m::GeneratorExpect_CommandChanged(1, &generator);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
     buildcc::base::m::GeneratorRunner(generator);
   }
@@ -277,7 +277,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
                          "{gen_root_dir}/dummy_main.c");
 
     buildcc::base::m::GeneratorExpect_CommandChanged(1, &generator);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
     buildcc::base::m::GeneratorRunner(generator);
   }
@@ -356,7 +356,7 @@ TEST(GeneratorTestGroup, Generator_FailedGenerateCommand) {
   generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
                        "{gen_root_dir}/dummy_main.c");
 
-  buildcc::m::CommandExpect_Execute(1, false);
+  buildcc::env::m::CommandExpect_Execute(1, false);
   generator.Build();
   buildcc::base::m::GeneratorRunner(generator);
 
@@ -381,7 +381,7 @@ TEST(GeneratorTestGroup, Generator_FailedStore) {
   generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
                        "{gen_root_dir}/dummy_main.c");
 
-  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
   generator.Build();
   buildcc::base::m::GeneratorRunner(generator);
 
@@ -429,7 +429,7 @@ TEST(GeneratorTestGroup, FailedEnvTaskState_Rebuild) {
                          "{gen_root_dir}/dummy_main.c");
 
     generator.Build();
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::base::m::GeneratorRunner(generator);
   }
 
@@ -451,7 +451,7 @@ TEST(GeneratorTestGroup, FailedGenerateCommand_Rebuild) {
     generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
                          "{gen_root_dir}/dummy_main.c");
 
-    buildcc::m::CommandExpect_Execute(1, false);
+    buildcc::env::m::CommandExpect_Execute(1, false);
     generator.Build();
     buildcc::base::m::GeneratorRunner(generator);
   }
@@ -472,7 +472,7 @@ TEST(GeneratorTestGroup, FailedGenerateCommand_Rebuild) {
     generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
                          "{gen_root_dir}/dummy_main.c");
 
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
     buildcc::base::m::GeneratorRunner(generator);
   }

@@ -16,7 +16,7 @@
 
 #include "target/generator.h"
 
-#include "command/command.h"
+#include "env/command.h"
 
 namespace {
 constexpr const char *const kStartGeneratorTaskName = "Start Generator";
@@ -51,7 +51,7 @@ void Generator::GenerateTask() {
   tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
     auto run_command = [this](const std::string &command) {
       try {
-        bool success = Command::Execute(command);
+        bool success = env::Command::Execute(command);
         env::assert_throw(success, fmt::format("{} failed", command));
       } catch (...) {
         std::lock_guard<std::mutex> guard(task_state_mutex_);

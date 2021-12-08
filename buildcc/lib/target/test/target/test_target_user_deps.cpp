@@ -42,8 +42,8 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_NoChange) {
   compileDep.AddSource("dummy_main.cpp");
   compileDep.AddCompileDependency("new_source.cpp");
 
-  buildcc::m::CommandExpect_Execute(1, true);
-  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
   compileDep.Build();
   buildcc::base::m::TargetRunner(compileDep);
 
@@ -57,8 +57,8 @@ TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_NoChange) {
   linkDep.AddSource("dummy_main.cpp");
   linkDep.AddLinkDependency("new_source.cpp");
 
-  buildcc::m::CommandExpect_Execute(1, true);
-  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
   linkDep.Build();
   buildcc::base::m::TargetRunner(linkDep);
 
@@ -73,8 +73,8 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_Rebuild) {
     compileDep.AddSource("dummy_main.cpp");
     compileDep.AddCompileDependency("new_source.cpp");
 
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     compileDep.Build();
     buildcc::base::m::TargetRunner(compileDep);
   }
@@ -95,8 +95,8 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_Rebuild) {
     compileDep.AddCompileDependency("new_source.cpp");
 
     buildcc::base::m::TargetExpect_PathUpdated(1, &compileDep);
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     compileDep.Build();
     buildcc::base::m::TargetRunner(compileDep);
   }
@@ -112,8 +112,8 @@ TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_Rebuild) {
     linkDep.AddSource("dummy_main.cpp");
     linkDep.AddLinkDependency("new_source.cpp");
 
-    buildcc::m::CommandExpect_Execute(1, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     linkDep.Build();
     buildcc::base::m::TargetRunner(linkDep);
   }
@@ -134,7 +134,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_Rebuild) {
     linkDep.AddLinkDependency("new_source.cpp");
 
     buildcc::base::m::TargetExpect_PathUpdated(1, &linkDep); // Only link
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     linkDep.Build();
     buildcc::base::m::TargetRunner(linkDep);
   }

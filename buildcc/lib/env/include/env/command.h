@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef COMMAND_COMMAND_H_
-#define COMMAND_COMMAND_H_
+#ifndef ENV_COMMAND_H_
+#define ENV_COMMAND_H_
 
 #include <filesystem>
 #include <optional>
@@ -25,7 +25,7 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc {
+namespace buildcc::env {
 
 class Command {
 public:
@@ -82,6 +82,6 @@ private:
   std::unordered_map<std::string, std::string> default_values_;
 };
 
-} // namespace buildcc
+} // namespace buildcc::env
 
 #endif

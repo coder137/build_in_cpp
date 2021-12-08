@@ -42,8 +42,8 @@ TEST(TargetTestSourceOutOfRootGroup, Add_OutOfRootSource) {
                                gcc, "");
   simple.AddSource("../dummy_main.cpp");
 
-  buildcc::m::CommandExpect_Execute(1, true);
-  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
   simple.Build();
   buildcc::base::m::TargetRunner(simple);
 }
@@ -59,8 +59,8 @@ TEST(TargetTestSourceOutOfRootGroup, Glob_OutOfRootSource) {
     simple.GlobSources(".."); // 6 files detected
     CHECK_EQUAL(6, simple.GetCurrentSourceFiles().size());
 
-    buildcc::m::CommandExpect_Execute(6, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(6, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
     buildcc::base::m::TargetRunner(simple);
   }
@@ -77,8 +77,8 @@ TEST(TargetTestSourceOutOfRootGroup, GlobAbsolute_OutOfRootSource) {
         OUTOFROOT, buildcc::base::TargetType::Executable, gcc, "");
     simple.GlobSourcesAbsolute(fs::path(BUILD_SCRIPT_SOURCE) /
                                "data"); // 6 files detected
-    buildcc::m::CommandExpect_Execute(6, true);
-    buildcc::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(6, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
     buildcc::base::m::TargetRunner(simple);
   }

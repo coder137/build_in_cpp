@@ -51,7 +51,7 @@ TEST(TargetTestFailureStates, CompilePchFailure) {
   target.AddPch("include/include_header.h");
   target.Build();
 
-  buildcc::m::CommandExpect_Execute(1, false); // PCH compile
+  buildcc::env::m::CommandExpect_Execute(1, false); // PCH compile
   buildcc::base::m::TargetRunner(target);
 
   CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
@@ -67,8 +67,8 @@ TEST(TargetTestFailureStates, CompileObjectFailure) {
   target.AddSource("dummy_main.c");
   target.Build();
 
-  buildcc::m::CommandExpect_Execute(1, false); // compile
-  buildcc::m::CommandExpect_Execute(1, true);  // compile
+  buildcc::env::m::CommandExpect_Execute(1, false); // compile
+  buildcc::env::m::CommandExpect_Execute(1, true);  // compile
   buildcc::base::m::TargetRunner(target);
 
   CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
@@ -96,8 +96,8 @@ TEST(TargetTestFailureStates, LinkTargetFailure) {
   target.AddSource("dummy_main.cpp");
   target.Build();
 
-  buildcc::m::CommandExpect_Execute(1, true);  // compile
-  buildcc::m::CommandExpect_Execute(1, false); // link
+  buildcc::env::m::CommandExpect_Execute(1, true);  // compile
+  buildcc::env::m::CommandExpect_Execute(1, false); // link
   buildcc::base::m::TargetRunner(target);
 
   CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
@@ -114,8 +114,8 @@ TEST(TargetTestFailureStates, EndTaskStoreFailure) {
   fs::remove_all(
       target.GetTargetBuildDir()); // removing this path causes store failure
 
-  buildcc::m::CommandExpect_Execute(1, true); // compile
-  buildcc::m::CommandExpect_Execute(1, true); // link
+  buildcc::env::m::CommandExpect_Execute(1, true); // compile
+  buildcc::env::m::CommandExpect_Execute(1, true); // link
   buildcc::base::m::TargetRunner(target);
 
   CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
@@ -152,8 +152,8 @@ TEST(TargetTestFailureStates, StartTaskEnvFailure_Rebuild) {
     target.AddSource("dummy_main.cpp");
     target.Build();
 
-    buildcc::m::CommandExpect_Execute(1, true); // compile
-    buildcc::m::CommandExpect_Execute(1, true); // link
+    buildcc::env::m::CommandExpect_Execute(1, true); // compile
+    buildcc::env::m::CommandExpect_Execute(1, true); // link
     buildcc::base::m::TargetRunner(target);
 
     CHECK(target.GetTaskState() == buildcc::env::TaskState::SUCCESS);
@@ -173,7 +173,7 @@ TEST(TargetTestFailureStates, CompilePchFailure_Rebuild) {
     target.AddPch("include/include_header.h");
     target.Build();
 
-    buildcc::m::CommandExpect_Execute(1, false); // PCH compile
+    buildcc::env::m::CommandExpect_Execute(1, false); // PCH compile
     buildcc::base::m::TargetRunner(target);
 
     CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
@@ -193,9 +193,9 @@ TEST(TargetTestFailureStates, CompilePchFailure_Rebuild) {
     target.AddPch("include/include_header.h");
     target.Build();
 
-    buildcc::m::CommandExpect_Execute(1, true); // PCH compile
-    buildcc::m::CommandExpect_Execute(1, true); // Object compile
-    buildcc::m::CommandExpect_Execute(1, true); // Link target
+    buildcc::env::m::CommandExpect_Execute(1, true); // PCH compile
+    buildcc::env::m::CommandExpect_Execute(1, true); // Object compile
+    buildcc::env::m::CommandExpect_Execute(1, true); // Link target
 
     buildcc::base::m::TargetRunner(target);
 
@@ -216,8 +216,8 @@ TEST(TargetTestFailureStates, CompileObjectFailure_Rebuild) {
     target.AddSource("dummy_main.c");
     target.Build();
 
-    buildcc::m::CommandExpect_Execute(1, false); // compile
-    buildcc::m::CommandExpect_Execute(1, true);  // compile
+    buildcc::env::m::CommandExpect_Execute(1, false); // compile
+    buildcc::env::m::CommandExpect_Execute(1, true);  // compile
     buildcc::base::m::TargetRunner(target);
 
     CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
@@ -246,9 +246,9 @@ TEST(TargetTestFailureStates, CompileObjectFailure_Rebuild) {
 
     // NOTE, The other one does not compile since it already compiled
     // successfully earlier!
-    buildcc::m::CommandExpect_Execute(1, true); // compile
+    buildcc::env::m::CommandExpect_Execute(1, true); // compile
     buildcc::base::m::TargetExpect_SourceAdded(1, &target);
-    buildcc::m::CommandExpect_Execute(1, true); // link
+    buildcc::env::m::CommandExpect_Execute(1, true); // link
     buildcc::base::m::TargetRunner(target);
 
     CHECK(target.GetTaskState() == buildcc::env::TaskState::SUCCESS);
@@ -266,8 +266,8 @@ TEST(TargetTestFailureStates, LinkTargetFailure_Rebuild) {
     target.AddSource("dummy_main.cpp");
     target.Build();
 
-    buildcc::m::CommandExpect_Execute(1, true);  // compile
-    buildcc::m::CommandExpect_Execute(1, false); // link
+    buildcc::env::m::CommandExpect_Execute(1, true);  // compile
+    buildcc::env::m::CommandExpect_Execute(1, false); // link
     buildcc::base::m::TargetRunner(target);
 
     CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
@@ -285,7 +285,7 @@ TEST(TargetTestFailureStates, LinkTargetFailure_Rebuild) {
     target.Build();
 
     // we do not recompile
-    buildcc::m::CommandExpect_Execute(1, true); // link
+    buildcc::env::m::CommandExpect_Execute(1, true); // link
     buildcc::base::m::TargetRunner(target);
 
     CHECK(target.GetTaskState() == buildcc::env::TaskState::SUCCESS);

@@ -26,9 +26,7 @@
 #include "env/host_os.h"
 #include "env/host_compiler.h"
 #include "env/util.h"
-
-// 
-#include "command/command.h"
+#include "env/command.h"
 
 // Base
 #include "toolchain/toolchain.h"

@@ -15,7 +15,6 @@ if (${TESTING})
     target_link_options(mock_toolchain PUBLIC ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS})
     target_link_libraries(mock_toolchain PUBLIC
         mock_env
-        mock_command
 
         CppUTest
         CppUTestExt
@@ -55,7 +54,6 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     )
     target_link_libraries(toolchain PUBLIC 
         env
-        command
     )
 endif()
 

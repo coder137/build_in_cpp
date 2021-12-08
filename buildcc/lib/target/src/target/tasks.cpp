@@ -117,8 +117,8 @@ void CompileObject::Task() {
         (void)subflow
             .emplace([this, s]() {
               try {
-                bool success =
-                    Command::Execute(GetObjectData(s.GetPathname()).command);
+                bool success = env::Command::Execute(
+                    GetObjectData(s.GetPathname()).command);
                 env::assert_throw(success, "Could not compile source");
 
                 // NOTE, If conmpilation is successful we update the source

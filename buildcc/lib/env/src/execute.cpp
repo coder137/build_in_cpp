@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "command/command.h"
+#include "env/command.h"
 
 #include "fmt/format.h"
 
@@ -39,7 +39,7 @@ get_working_directory(const std::optional<fs::path> &working_directory) {
 
 } // namespace
 
-namespace buildcc {
+namespace buildcc::env {
 
 bool Command::Execute(const std::string &command,
                       const std::optional<fs::path> &working_directory,
@@ -64,4 +64,4 @@ bool Command::Execute(const std::string &command,
   return process.get_exit_status() == 0;
 }
 
-} // namespace buildcc
+} // namespace buildcc::env

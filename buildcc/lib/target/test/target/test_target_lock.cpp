@@ -36,7 +36,7 @@ TEST(TargetTestLock, LockState) {
 
   CHECK_FALSE(exe.IsLocked());
 
-  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
   exe.Build();
   buildcc::base::m::TargetRunner(exe);
 
@@ -50,7 +50,7 @@ TEST(TargetTestLock, Lock_Build) {
   buildcc::base::Target exe(NAME, buildcc::base::TargetType::Executable, gcc,
                             "data");
 
-  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
   exe.Build();
   buildcc::base::m::TargetRunner(exe);
 
@@ -64,7 +64,7 @@ TEST(TargetTestLock, Lock_APIs) {
   buildcc::base::Target exe(NAME, buildcc::base::TargetType::Executable, gcc,
                             "data");
 
-  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
   exe.Build();
   buildcc::base::m::TargetRunner(exe);
 
@@ -108,8 +108,8 @@ TEST(TargetTestLock, Unlock_APIs) {
   CHECK_THROWS(std::exception, exe.GetTaskflow());
 
   exe.AddSource("dummy_main.c");
-  buildcc::m::CommandExpect_Execute(1, true);
-  buildcc::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
+  buildcc::env::m::CommandExpect_Execute(1, true);
   exe.Build();
   buildcc::base::m::TargetRunner(exe);
   mock().checkExpectations();

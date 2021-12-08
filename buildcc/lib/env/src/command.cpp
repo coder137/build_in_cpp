@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "command/command.h"
+#include "env/command.h"
 
 #include <algorithm>
 
@@ -24,7 +24,7 @@
 #include "env/assert_fatal.h"
 #include "env/logging.h"
 
-namespace buildcc {
+namespace buildcc::env {
 
 void Command::AddDefaultArgument(const std::string &key,
                                  const std::string &value) {
@@ -64,4 +64,4 @@ std::string Command::Construct(
   return fmt::vformat(pattern, store);
 }
 
-} // namespace buildcc
+} // namespace buildcc::env
