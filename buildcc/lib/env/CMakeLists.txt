@@ -86,6 +86,7 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     target_link_options(env PRIVATE ${BUILD_LINK_FLAGS})
     target_link_libraries(env PRIVATE
         spdlog::spdlog_header_only
+        tiny-process-library::tiny-process-library
     )
 endif()
 
