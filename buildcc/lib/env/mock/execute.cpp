@@ -4,7 +4,7 @@
 
 #include "CppUTestExt/MockSupport.h"
 
-namespace buildcc {
+namespace buildcc::env {
 
 static constexpr const char *const EXECUTE_FUNCTION = "execute";
 static constexpr const char *const STDOUT_DATA_STRING = "stdout_data";
@@ -48,4 +48,4 @@ void CommandExpect_Execute(unsigned int calls, bool expectation,
 
 } // namespace m
 
-} // namespace buildcc
+} // namespace buildcc::env

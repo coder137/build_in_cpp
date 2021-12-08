@@ -25,7 +25,7 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc {
+namespace buildcc::env {
 
 class Command {
 public:
@@ -82,6 +82,6 @@ private:
   std::unordered_map<std::string, std::string> default_values_;
 };
 
-} // namespace buildcc
+} // namespace buildcc::env
 
 #endif
