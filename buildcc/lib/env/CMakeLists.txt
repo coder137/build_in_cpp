@@ -12,7 +12,7 @@ if (${TESTING})
     )
     target_include_directories(mock_env PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/mock
+        ${CMAKE_CURRENT_SOURCE_DIR}/mock/include
     )
     target_link_libraries(mock_env PUBLIC
         fmt::fmt-header-only
