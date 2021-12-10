@@ -58,7 +58,7 @@ jobs:
       - name: BuildExe IM example tiny-process-library
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --target run_buildexe_im_tpl_win_msvc
+          cmake --build . --config Release --target run_buildexe_im_tpl_win_msvc
 
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
