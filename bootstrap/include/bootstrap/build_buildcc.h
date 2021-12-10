@@ -67,6 +67,9 @@ public:
   void Setup(const ArgToolchainState &state);
 
   // Getters
+  StaticTarget_generic &GetTpl() {
+    return storage_.Ref<StaticTarget_generic>(kTplLibName);
+  }
   StaticTarget_generic &GetBuildcc() {
     return storage_.Ref<StaticTarget_generic>(kBuildccLibName);
   }
