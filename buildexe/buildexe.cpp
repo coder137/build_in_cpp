@@ -122,8 +122,7 @@ int main(int argc, char **argv) {
             verified_toolchains.size()));
   }
 
-  // TODO, Print them by indexes here
-  // TODO, Add verified toolchain to `fmt::format` specialization
+  // Print
   int counter = 1;
   for (const auto &vt : verified_toolchains) {
     std::string info = fmt::format("{}. : {}", counter, vt.ToString());
