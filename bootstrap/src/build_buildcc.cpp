@@ -179,14 +179,14 @@ static void global_flags_cb(TargetInfo &global_info,
 }
 
 // TODO, Remove magic strings
-// TODO, Replace Callback with CallbackIf
+// TODO, Replace CallbackIf state, with CallbackIf
 void BuildBuildCC::Setup(const ArgToolchainState &state) {
   auto &flatc_exe = storage_.Add<ExecutableTarget_generic>(
       "flatc", "flatc", toolchain_,
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "flatbuffers",
                 env_.GetTargetBuildDir()));
 
-  reg_.Callback(global_flags_cb, flatc_exe, toolchain_);
+  reg_.CallbackIf(state, global_flags_cb, flatc_exe, toolchain_);
   reg_.Build(state, build_flatc_exe_cb, flatc_exe);
 
   // Schema
@@ -202,32 +202,32 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
       "flatbuffers_ho",
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "flatbuffers",
                 env_.GetTargetBuildDir()));
-  reg_.Callback(flatbuffers_ho_cb, flatbuffers_ho_lib);
+  reg_.CallbackIf(state, flatbuffers_ho_cb, flatbuffers_ho_lib);
 
   // CLI11 HO lib
   auto &cli11_ho_lib = storage_.Add<TargetInfo>(
       "cli11_ho", TargetEnv(env_.GetTargetRootDir() / "third_party" / "CLI11",
                             env_.GetTargetBuildDir()));
-  reg_.Callback(cli11_ho_cb, cli11_ho_lib);
+  reg_.CallbackIf(state, cli11_ho_cb, cli11_ho_lib);
 
   // fmt HO lib
   auto &fmt_ho_lib = storage_.Add<TargetInfo>(
       "fmt_ho", TargetEnv(env_.GetTargetRootDir() / "third_party" / "fmt",
                           env_.GetTargetBuildDir()));
-  reg_.Callback(fmt_ho_cb, fmt_ho_lib);
+  reg_.CallbackIf(state, fmt_ho_cb, fmt_ho_lib);
 
   // spdlog HO lib
   auto &spdlog_ho_lib = storage_.Add<TargetInfo>(
       "spdlog_ho", TargetEnv(env_.GetTargetRootDir() / "third_party" / "spdlog",
                              env_.GetTargetBuildDir()));
-  reg_.Callback(spdlog_ho_cb, spdlog_ho_lib);
+  reg_.CallbackIf(state, spdlog_ho_cb, spdlog_ho_lib);
 
   // taskflow HO lib
   auto &taskflow_ho_lib = storage_.Add<TargetInfo>(
       "taskflow_ho",
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "taskflow",
                 env_.GetTargetBuildDir()));
-  reg_.Callback(taskflow_ho_cb, taskflow_ho_lib);
+  reg_.CallbackIf(state, taskflow_ho_cb, taskflow_ho_lib);
 
   // Tiny-process-library lib
   // TODO, Make this a generic selection between StaticTarget and
