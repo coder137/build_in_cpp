@@ -41,6 +41,24 @@ void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
  */
 class BuildBuildCC {
 public:
+  // TargetInfo / Header Only
+  static constexpr const char *const kFlatbuffersHoName = "flatbuffers_ho";
+  static constexpr const char *const kCli11HoName = "cli11_ho";
+  static constexpr const char *const kFmtHoName = "fmtlib_ho";
+  static constexpr const char *const kSpdlogHoName = "spdlog_ho";
+  static constexpr const char *const kTaskflowHoName = "taskflow_ho";
+
+  // Executable
+  static constexpr const char *const kFlatcExeName = "flatc";
+
+  // Generator
+  static constexpr const char *const kSchemaGenName = "schema_gen";
+
+  // Libraries
+  static constexpr const char *const kTplLibName = "libtpl";
+  static constexpr const char *const kBuildccLibName = "libbuildcc";
+
+public:
   BuildBuildCC(Register &reg, const BaseToolchain &toolchain,
                const TargetEnv &env)
       : reg_(reg), toolchain_(toolchain), env_(env) {}
@@ -50,7 +68,7 @@ public:
 
   // Getters
   StaticTarget_generic &GetBuildcc() {
-    return storage_.Ref<StaticTarget_generic>("libbuildcc");
+    return storage_.Ref<StaticTarget_generic>(kBuildccLibName);
   }
 
 private:

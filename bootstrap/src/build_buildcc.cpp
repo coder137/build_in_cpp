@@ -154,7 +154,8 @@ void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
   target.Build();
 }
 
-// TODO, Update this
+// TODO, Shift this inside BuildBuildcc class if required
+// TODO, Add this to options
 static void global_flags_cb(TargetInfo &global_info,
                             const BaseToolchain &toolchain) {
   // TODO, Clang
@@ -178,11 +179,9 @@ static void global_flags_cb(TargetInfo &global_info,
   }
 }
 
-// TODO, Remove magic strings
-// TODO, Replace CallbackIf state, with CallbackIf
 void BuildBuildCC::Setup(const ArgToolchainState &state) {
   auto &flatc_exe = storage_.Add<ExecutableTarget_generic>(
-      "flatc", "flatc", toolchain_,
+      kFlatcExeName, kFlatcExeName, toolchain_,
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "flatbuffers",
                 env_.GetTargetBuildDir()));
 
@@ -191,7 +190,7 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
 
   // Schema
   auto &schema_gen = storage_.Add<BaseGenerator>(
-      "schema_gen", "schema_gen",
+      kSchemaGenName, kSchemaGenName,
       TargetEnv(env_.GetTargetRootDir() / "buildcc" / "schema",
                 env_.GetTargetBuildDir() / toolchain_.GetName()));
   reg_.Build(schema_gen_cb, schema_gen, flatc_exe);
@@ -199,32 +198,33 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
 
   // Flatbuffers HO lib
   auto &flatbuffers_ho_lib = storage_.Add<TargetInfo>(
-      "flatbuffers_ho",
+      kFlatbuffersHoName,
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "flatbuffers",
                 env_.GetTargetBuildDir()));
   reg_.CallbackIf(state, flatbuffers_ho_cb, flatbuffers_ho_lib);
 
   // CLI11 HO lib
   auto &cli11_ho_lib = storage_.Add<TargetInfo>(
-      "cli11_ho", TargetEnv(env_.GetTargetRootDir() / "third_party" / "CLI11",
-                            env_.GetTargetBuildDir()));
+      kCli11HoName, TargetEnv(env_.GetTargetRootDir() / "third_party" / "CLI11",
+                              env_.GetTargetBuildDir()));
   reg_.CallbackIf(state, cli11_ho_cb, cli11_ho_lib);
 
   // fmt HO lib
   auto &fmt_ho_lib = storage_.Add<TargetInfo>(
-      "fmt_ho", TargetEnv(env_.GetTargetRootDir() / "third_party" / "fmt",
-                          env_.GetTargetBuildDir()));
+      kFmtHoName, TargetEnv(env_.GetTargetRootDir() / "third_party" / "fmt",
+                            env_.GetTargetBuildDir()));
   reg_.CallbackIf(state, fmt_ho_cb, fmt_ho_lib);
 
   // spdlog HO lib
   auto &spdlog_ho_lib = storage_.Add<TargetInfo>(
-      "spdlog_ho", TargetEnv(env_.GetTargetRootDir() / "third_party" / "spdlog",
-                             env_.GetTargetBuildDir()));
+      kSpdlogHoName,
+      TargetEnv(env_.GetTargetRootDir() / "third_party" / "spdlog",
+                env_.GetTargetBuildDir()));
   reg_.CallbackIf(state, spdlog_ho_cb, spdlog_ho_lib);
 
   // taskflow HO lib
   auto &taskflow_ho_lib = storage_.Add<TargetInfo>(
-      "taskflow_ho",
+      kTaskflowHoName,
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "taskflow",
                 env_.GetTargetBuildDir()));
   reg_.CallbackIf(state, taskflow_ho_cb, taskflow_ho_lib);
@@ -233,7 +233,7 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
   // TODO, Make this a generic selection between StaticTarget and
   // DynamicTarget
   auto &tpl_lib = storage_.Add<StaticTarget_generic>(
-      "libtpl", "libtpl", toolchain_,
+      kTplLibName, kTplLibName, toolchain_,
       TargetEnv(env_.GetTargetRootDir() / "third_party" /
                     "tiny-process-library",
                 env_.GetTargetBuildDir()));
@@ -243,7 +243,7 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
   // TODO, Make this a generic selection between StaticTarget and
   // DynamicTarget
   auto &buildcc_lib = storage_.Add<StaticTarget_generic>(
-      "libbuildcc", "libbuildcc", toolchain_,
+      kBuildccLibName, kBuildccLibName, toolchain_,
       TargetEnv(env_.GetTargetRootDir() / "buildcc", env_.GetTargetBuildDir()));
   reg_.CallbackIf(state, global_flags_cb, buildcc_lib, toolchain_);
   reg_.Build(state, buildcc_cb, buildcc_lib, schema_gen, flatbuffers_ho_lib,
