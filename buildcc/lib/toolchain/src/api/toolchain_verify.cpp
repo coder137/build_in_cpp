@@ -222,8 +222,8 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
 
       VerifiedToolchain vt;
       vt.path = p;
-      vt.compiler_version = GetCompilerVersion(p, t).value_or("");
-      vt.target_arch = GetCompilerArchitecture(p, t).value_or("");
+      vt.compiler_version = env::trim(GetCompilerVersion(p, t).value_or(""));
+      vt.target_arch = env::trim(GetCompilerArchitecture(p, t).value_or(""));
       verified_toolchains.push_back(vt);
     }
 
