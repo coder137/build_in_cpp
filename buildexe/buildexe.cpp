@@ -57,6 +57,10 @@ struct ArgTargetInputs {
   std::vector<std::string> link_flags;
 };
 
+struct ArgScriptInfo {
+  std::vector<std::string> configs;
+};
+
 static const std::unordered_map<const char *, TargetType> kTargetTypeMap{
     {"executable", TargetType::Executable},
     {"staticLibrary", TargetType::StaticLibrary},
@@ -72,6 +76,8 @@ static void clean_cb();
 
 static void setup_arg_target_info(Args &args, ArgTargetInfo &out);
 static void setup_arg_target_inputs(Args &args, ArgTargetInputs &out);
+static void setup_arg_script_mode(Args &args, ArgScriptInfo &out);
+
 static void host_toolchain_verify(const BaseToolchain &toolchain);
 
 static fs::path get_env_buildcc_home();
@@ -103,6 +109,11 @@ int main(int argc, char **argv) {
 
   ArgTargetInputs out_targetinputs;
   setup_arg_target_inputs(args, out_targetinputs);
+
+  ArgScriptInfo out_scriptinfo;
+  setup_arg_script_mode(args, out_scriptinfo);
+
+  // script mode specific arguments
 
   // TODO, Add buildcc (git cloned)
   // TODO, Add libraries (git cloned)
@@ -190,6 +201,26 @@ int main(int argc, char **argv) {
   // Runners
   reg.RunBuild();
 
+  // Run
+  if (mode == BuildExeMode::Script) {
+    std::vector<std::string> configs;
+    for (const auto &c : out_scriptinfo.configs) {
+      std::string config = fmt::format("--config {}", c);
+      configs.push_back(config);
+    }
+    std::string aggregated_configs = fmt::format("{}", fmt::join(configs, " "));
+
+    env::Command command;
+    std::string command_str = command.Construct(
+        "{executable} {configs}",
+        {
+            {"executable",
+             fmt::format("{}", user_output_target.GetTargetPath())},
+            {"configs", aggregated_configs},
+        });
+    env::Command::Execute(command_str);
+  }
+
   // - Clang Compile Commands
   plugin::ClangCompileCommands({&user_output_target}).Generate();
 
@@ -239,6 +270,12 @@ static void setup_arg_target_inputs(Args &args, ArgTargetInputs &out) {
   app.add_option("--cpp_compile_flags", out.cpp_compile_flags,
                  "Provide CppCompile Flags");
   app.add_option("--link_flags", out.link_flags, "Provide Link Flags");
+}
+
+static void setup_arg_script_mode(Args &args, ArgScriptInfo &out) {
+  auto *script_args = args.Ref().add_subcommand("script");
+  script_args->add_option("--configs", out.configs,
+                          "Config files for script mode");
 }
 
 static void host_toolchain_verify(const BaseToolchain &toolchain) {
