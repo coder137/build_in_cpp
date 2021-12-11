@@ -60,11 +60,13 @@ jobs:
         run: |
           cmake --build . --config Release --target run_buildexe_im_tpl_msvc_win
 
-      - name: BuildExe SM simple hyrid example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
-        run: |
-          $env:BUILDCC_HOME = "${{github.workspace}}"
-          cmake --build . --config Release --target run_buildexe_sm_simple_msvc_win
+      # - name: TODO, BuildExe SM simple hyrid example
+
+      - name: Upload BuildExe
+        uses: actions/upload-artifact@v2
+        with:
+          name: "BuildExe_Win"
+          path: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}/buildexe/buildexe.exe
 
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
