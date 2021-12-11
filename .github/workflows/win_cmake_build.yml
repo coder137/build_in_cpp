@@ -63,6 +63,7 @@ jobs:
       - name: BuildExe SM simple hyrid example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
+          $env:BUILDCC_HOME = "${{github.workspace}}"
           cmake --build . --config Release --target run_buildexe_sm_simple_msvc_win
 
       - name: Install

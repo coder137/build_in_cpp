@@ -202,6 +202,7 @@ jobs:
       - name: BuildExe SM simple hyrid example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
+          export BUILDCC_HOME="${{github.workspace}}"
           cmake --build . --target run_buildexe_sm_simple_gcc_linux
 
       - name: Install
