@@ -209,11 +209,16 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
 
     // For each directory, Check if ALL toolchain filenames are found
     for (const auto &dir_iter : fs::directory_iterator(p)) {
-      if (!dir_iter.is_regular_file()) {
-        continue;
+      try {
+        if (!dir_iter.is_regular_file()) {
+          continue;
+        }
+        const auto &filename = dir_iter.path().filename().string();
+        matcher.Check(filename);
+      } catch (const std::exception &e) {
+        // NOTE, Certain paths might not be accessible i.e restricted
+        env::log_critical(__FUNCTION__, e.what());
       }
-      const auto &filename = dir_iter.path().filename().string();
-      matcher.Check(filename);
     }
 
     // Store verified toolchain path if found
