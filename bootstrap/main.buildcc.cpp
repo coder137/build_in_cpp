@@ -75,6 +75,7 @@ static void clean_cb() {}
 
 static void hybrid_simple_example_cb(BaseTarget &target,
                                      const BaseTarget &libbuildcc) {
+  target.AddLibDep(libbuildcc);
   target.Insert(libbuildcc, {
                                 SyncOption::PreprocessorFlags,
                                 SyncOption::CppCompileFlags,
@@ -85,6 +86,5 @@ static void hybrid_simple_example_cb(BaseTarget &target,
                                 SyncOption::ExternalLibDeps,
                             });
   target.AddSource("build.cpp");
-  target.AddLibDep(libbuildcc);
   target.Build();
 }
