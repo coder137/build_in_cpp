@@ -16,6 +16,14 @@
 
 #include "buildcc.h"
 
+#include "bootstrap/build_buildcc.h"
+#include "bootstrap/build_cli11.h"
+#include "bootstrap/build_flatbuffers.h"
+#include "bootstrap/build_fmtlib.h"
+#include "bootstrap/build_spdlog.h"
+#include "bootstrap/build_taskflow.h"
+#include "bootstrap/build_tpl.h"
+
 using namespace buildcc;
 
 constexpr const char *const kTag = "BuildExe";
@@ -65,6 +73,8 @@ static void clean_cb();
 static void setup_arg_target_info(Args &args, ArgTargetInfo &out);
 static void setup_arg_target_inputs(Args &args, ArgTargetInputs &out);
 static void host_toolchain_verify(const BaseToolchain &toolchain);
+
+static fs::path get_env_buildcc_home();
 
 static void user_output_target_cb(BaseTarget &target,
                                   const ArgTargetInputs &inputs);
@@ -130,20 +140,52 @@ int main(int argc, char **argv) {
     counter++;
   }
 
+  // TODO, Update Toolchain with VerifiedToolchain
+  // toolchain.UpdateFrom(verified_toolchain);
+
   if (mode == BuildExeMode::Script) {
     host_toolchain_verify(toolchain);
   }
 
+  PersistentStorage storage;
   Target_generic user_output_target(out_targetinfo.name, out_targetinfo.type,
                                     toolchain,
                                     TargetEnv(out_targetinfo.relative_to_root));
-  // if (mode == BuildExeMode::Script) {
-  // TODO, Compile BuildCC here (and make persistent)
-  // NOTE, Add to user_output_target
-  //   reg.Callback([&]() { user_output_target.AddLibDep(libbuildcc); });
-  // }
+  if (mode == BuildExeMode::Script) {
+    // Compile buildcc using the constructed toolchain
+    fs::path buildcc_home = get_env_buildcc_home();
+    auto &buildcc_package = storage.Add<BuildBuildCC>(
+        "BuildccPackage", reg, toolchain,
+        TargetEnv(buildcc_home / "buildcc",
+                  buildcc_home / "buildcc" / "_build_exe"));
+    buildcc_package.Setup(custom_toolchain_arg.state);
+
+    // Add buildcc as a dependency to user_output_target
+    user_output_target.AddLibDep(buildcc_package.GetBuildcc());
+    user_output_target.AddLibDep(buildcc_package.GetTpl());
+    user_output_target.Insert(buildcc_package.GetBuildcc(),
+                              {
+                                  SyncOption::PreprocessorFlags,
+                                  SyncOption::CppCompileFlags,
+                                  SyncOption::IncludeDirs,
+                              });
+    switch (toolchain.GetId()) {
+    case ToolchainId::Gcc:
+    case ToolchainId::MinGW:
+      user_output_target.AddLinkFlag("-Wl,--allow-multiple-definition");
+      break;
+    default:
+      break;
+    }
+  }
+
   reg.Build(custom_toolchain_arg.state, user_output_target_cb,
             user_output_target, out_targetinputs);
+
+  if (mode == BuildExeMode::Script) {
+    auto &buildcc_package = storage.Ref<BuildBuildCC>("BuildccPackage");
+    reg.Dep(user_output_target, buildcc_package.GetBuildcc());
+  }
 
   // Runners
   reg.RunBuild();
@@ -248,6 +290,26 @@ int main() {
       "{executable}", fmt::arg("executable", target.GetTargetPath().string())));
   env::assert_fatal(execute, "Could not execute verification target");
   env::log_info(kTag, "*** Toolchain verification done ***");
+}
+
+static fs::path get_env_buildcc_home() {
+  const char *buildcc_home = getenv("BUILDCC_HOME");
+  env::assert_fatal(buildcc_home != nullptr,
+                    "BUILDCC_HOME environment variable not defined");
+
+  // NOTE, Verify BUILDCC_HOME
+  // auto &buildcc_path = storage.Add<fs::path>("buildcc_path", buildcc_home);
+  fs::path buildcc_home_path{buildcc_home};
+  env::assert_fatal(fs::exists(buildcc_home_path),
+                    "{BUILDCC_HOME} path not found path not found");
+  env::assert_fatal(fs::exists(buildcc_home_path / "buildcc"),
+                    "{BUILDCC_HOME}/buildcc path not found");
+  env::assert_fatal(fs::exists(buildcc_home_path / "libs"),
+                    "{BUILDCC_HOME}/libs path not found");
+  env::assert_fatal(fs::exists(buildcc_home_path / "extensions"),
+                    "{BUILDCC_HOME}/extensions path not found");
+
+  return buildcc_home_path;
 }
 
 static void user_output_target_cb(BaseTarget &target,
