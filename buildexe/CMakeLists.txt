@@ -49,7 +49,7 @@ add_custom_target(run_buildexe_im_tpl_gcc_linux
 add_custom_target(run_buildexe_sm_simple_gcc_win
     COMMAND buildexe --help-all
     COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/sm_simple.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_gcc_win.toml
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../example/hybrid/simple
     VERBATIM USES_TERMINAL
 )
 
@@ -57,6 +57,6 @@ add_custom_target(run_buildexe_sm_simple_gcc_win
 add_custom_target(run_buildexe_sm_simple_gcc_linux
     COMMAND buildexe --help-all
     COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/sm_simple.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_gcc_linux.toml
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../example/hybrid/simple
     VERBATIM USES_TERMINAL
 )
