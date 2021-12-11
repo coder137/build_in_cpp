@@ -71,7 +71,12 @@ jobs:
       - name: BuildExe IM example tiny-process-library
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          cmake --build . --target run_buildexe_im_tpl_linux_gcc
+          cmake --build . --target run_buildexe_im_tpl_gcc_linux
+
+      - name: BuildExe SM simple hyrid example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
+        run: |
+          cmake --build . --target run_buildexe_sm_simple_gcc_linux
 
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
@@ -192,7 +197,12 @@ jobs:
       - name: BuildExe IM example tiny-process-library
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
-          cmake --build . --target run_buildexe_im_tpl_linux_gcc
+          cmake --build . --target run_buildexe_im_tpl_gcc_linux
+
+      - name: BuildExe SM simple hyrid example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
+        run: |
+          cmake --build . --target run_buildexe_sm_simple_gcc_linux
 
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
