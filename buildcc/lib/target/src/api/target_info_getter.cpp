@@ -88,11 +88,10 @@ TargetInfoGetter<T>::GetCurrentPchFiles() const {
 }
 
 template <typename T>
-const internal::fs_unordered_set &
-TargetInfoGetter<T>::GetTargetLibDeps() const {
+const std::vector<fs::path> &TargetInfoGetter<T>::GetTargetLibDeps() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_lib_deps.user;
+  return t.storer_.current_user_lib_deps;
 }
 
 template <typename T>

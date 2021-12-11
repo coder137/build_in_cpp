@@ -41,10 +41,11 @@ void LinkTarget::CacheLinkCommand() {
       {
           {kOutput, output_target},
           {kCompiledSources, aggregated_compiled_sources},
+          // NOTE, This needs to be ORDERED
           {kLibDeps,
            fmt::format("{} {}",
-                       internal::aggregate(storer.current_external_lib_deps),
-                       internal::aggregate(storer.current_lib_deps.user))},
+                       internal::aggregate(storer.current_user_lib_deps),
+                       internal::aggregate(storer.current_external_lib_deps))},
       });
 }
 
@@ -61,7 +62,10 @@ fs::path LinkTarget::ConstructOutputPath() const {
 void LinkTarget::PreLink() {
   auto &storer = target_.storer_;
 
-  storer.current_lib_deps.Convert();
+  for (const auto &p : storer.current_user_lib_deps) {
+    storer.current_internal_lib_deps.emplace(
+        internal::Path::CreateExistingPath(p));
+  }
 
   storer.current_link_dependencies.Convert();
 }
@@ -82,8 +86,10 @@ void LinkTarget::BuildLink() {
                                storer.current_external_lib_deps);
     target_.RecheckPaths(loader.GetLoadedLinkDependencies(),
                          storer.current_link_dependencies.internal);
+
+    //  NOTE, This needs to be UNORDERED
     target_.RecheckPaths(loader.GetLoadedLibDeps(),
-                         storer.current_lib_deps.internal);
+                         storer.current_internal_lib_deps);
     if (!loader.GetLoadedTargetLinked()) {
       target_.dirty_ = true;
     }

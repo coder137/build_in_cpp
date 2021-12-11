@@ -27,11 +27,16 @@ struct TargetStorer {
   internal::RelationalPathFiles current_source_files;
   internal::RelationalPathFiles current_header_files;
   internal::RelationalPathFiles current_pch_files;
-  internal::RelationalPathFiles current_lib_deps;
+
+  // NOTE, Order matters (BuildCC takes care of the order here)
+  std::vector<fs::path> current_user_lib_deps;
+  internal::path_unordered_set current_internal_lib_deps;
 
   internal::fs_unordered_set current_include_dirs;
   internal::fs_unordered_set current_lib_dirs;
 
+  // NOTE, Order matters (user takes care of the order here)
+  // TODO, Update this with vector<std::string> instead to preserve order!
   std::unordered_set<std::string> current_external_lib_deps;
 
   std::unordered_set<std::string> current_preprocessor_flags;

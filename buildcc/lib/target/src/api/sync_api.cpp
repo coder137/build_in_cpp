@@ -97,8 +97,8 @@ void SyncApi<T>::SpecializedCopy(TargetType target,
           std::move(target.storer_.current_pch_files.user);
       break;
     case SyncOption::LibDeps:
-      t.storer_.current_lib_deps.user =
-          std::move(target.storer_.current_lib_deps.user);
+      t.storer_.current_user_lib_deps =
+          std::move(target.storer_.current_user_lib_deps);
       break;
     case SyncOption::IncludeDirs:
       t.storer_.current_include_dirs =
@@ -228,9 +228,10 @@ void SyncApi<T>::SpecializedInsert(TargetType target,
           std::make_move_iterator(target.storer_.current_pch_files.user.end()));
       break;
     case SyncOption::LibDeps:
-      t.storer_.current_lib_deps.user.insert(
-          std::make_move_iterator(target.storer_.current_lib_deps.user.begin()),
-          std::make_move_iterator(target.storer_.current_lib_deps.user.end()));
+      t.storer_.current_user_lib_deps.insert(
+          t.storer_.current_user_lib_deps.end(),
+          std::make_move_iterator(target.storer_.current_user_lib_deps.begin()),
+          std::make_move_iterator(target.storer_.current_user_lib_deps.end()));
       break;
     case SyncOption::IncludeDirs:
       t.storer_.current_include_dirs.insert(
