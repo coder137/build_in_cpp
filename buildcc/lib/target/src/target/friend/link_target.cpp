@@ -43,9 +43,9 @@ void LinkTarget::CacheLinkCommand() {
           {kCompiledSources, aggregated_compiled_sources},
           // NOTE, This needs to be ORDERED
           {kLibDeps,
-           fmt::format("{} {}",
-                       internal::aggregate(storer.current_user_lib_deps),
-                       internal::aggregate(storer.current_external_lib_deps))},
+           fmt::format(
+               "{} {}", internal::aggregate(storer.current_user_lib_deps),
+               internal::aggregate(storer.current_user_external_lib_deps))},
       });
 }
 
@@ -67,6 +67,10 @@ void LinkTarget::PreLink() {
         internal::Path::CreateExistingPath(p));
   }
 
+  storer.current_internal_external_lib_deps.insert(
+      storer.current_user_external_lib_deps.begin(),
+      storer.current_user_external_lib_deps.end());
+
   storer.current_link_dependencies.Convert();
 }
 
@@ -83,7 +87,7 @@ void LinkTarget::BuildLink() {
                          target_.GetCurrentLinkFlags());
     target_.RecheckDirs(loader.GetLoadedLibDirs(), target_.GetCurrentLibDirs());
     target_.RecheckExternalLib(loader.GetLoadedExternalLibDeps(),
-                               storer.current_external_lib_deps);
+                               storer.current_internal_external_lib_deps);
     target_.RecheckPaths(loader.GetLoadedLinkDependencies(),
                          storer.current_link_dependencies.internal);
 

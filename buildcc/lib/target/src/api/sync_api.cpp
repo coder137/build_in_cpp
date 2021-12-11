@@ -108,8 +108,8 @@ void SyncApi<T>::SpecializedCopy(TargetType target,
       t.storer_.current_lib_dirs = std::move(target.storer_.current_lib_dirs);
       break;
     case SyncOption::ExternalLibDeps:
-      t.storer_.current_external_lib_deps =
-          std::move(target.storer_.current_external_lib_deps);
+      t.storer_.current_user_external_lib_deps =
+          std::move(target.storer_.current_user_external_lib_deps);
       break;
     default:
       env::assert_fatal<false>("Invalid Option added");
@@ -244,11 +244,12 @@ void SyncApi<T>::SpecializedInsert(TargetType target,
           std::make_move_iterator(target.storer_.current_lib_dirs.end()));
       break;
     case SyncOption::ExternalLibDeps:
-      t.storer_.current_external_lib_deps.insert(
+      t.storer_.current_user_external_lib_deps.insert(
+          t.storer_.current_user_external_lib_deps.end(),
           std::make_move_iterator(
-              target.storer_.current_external_lib_deps.begin()),
+              target.storer_.current_user_external_lib_deps.begin()),
           std::make_move_iterator(
-              target.storer_.current_external_lib_deps.end()));
+              target.storer_.current_user_external_lib_deps.end()));
       break;
     default:
       env::assert_fatal<false>("Invalid Option added");

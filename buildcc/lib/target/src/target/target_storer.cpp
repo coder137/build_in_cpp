@@ -54,8 +54,9 @@ bool Target::Store() {
   auto fbs_lib_deps = internal::create_fbs_vector_path(
       builder, storer_.current_internal_lib_deps);
 
+  // NOTE, This can be UNORDERED
   auto fbs_external_lib_deps = internal::create_fbs_vector_string(
-      builder, storer_.current_external_lib_deps);
+      builder, storer_.current_internal_external_lib_deps);
 
   auto fbs_include_dirs =
       internal::create_fbs_vector_string(builder, storer_.current_include_dirs);

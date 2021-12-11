@@ -36,8 +36,8 @@ struct TargetStorer {
   internal::fs_unordered_set current_lib_dirs;
 
   // NOTE, Order matters (user takes care of the order here)
-  // TODO, Update this with vector<std::string> instead to preserve order!
-  std::unordered_set<std::string> current_external_lib_deps;
+  std::vector<std::string> current_user_external_lib_deps;
+  std::unordered_set<std::string> current_internal_external_lib_deps;
 
   std::unordered_set<std::string> current_preprocessor_flags;
   std::unordered_set<std::string> current_common_compile_flags;

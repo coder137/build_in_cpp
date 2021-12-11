@@ -95,11 +95,11 @@ const std::vector<fs::path> &TargetInfoGetter<T>::GetTargetLibDeps() const {
 }
 
 template <typename T>
-const std::unordered_set<std::string> &
+const std::vector<std::string> &
 TargetInfoGetter<T>::GetCurrentExternalLibDeps() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_external_lib_deps;
+  return t.storer_.current_user_external_lib_deps;
 }
 
 template <typename T>
