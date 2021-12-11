@@ -173,12 +173,16 @@ int main(int argc, char **argv) {
 
     // Add buildcc as a dependency to user_output_target
     user_output_target.AddLibDep(buildcc_package.GetBuildcc());
-    user_output_target.AddLibDep(buildcc_package.GetTpl());
     user_output_target.Insert(buildcc_package.GetBuildcc(),
                               {
                                   SyncOption::PreprocessorFlags,
                                   SyncOption::CppCompileFlags,
                                   SyncOption::IncludeDirs,
+                                  SyncOption::LinkFlags,
+                                  SyncOption::HeaderFiles,
+                                  SyncOption::IncludeDirs,
+                                  SyncOption::LibDeps,
+                                  SyncOption::ExternalLibDeps,
                               });
     switch (toolchain.GetId()) {
     case ToolchainId::Gcc:
