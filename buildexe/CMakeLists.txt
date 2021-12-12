@@ -38,7 +38,7 @@ add_custom_target(run_buildexe_im_tpl_msvc_win
 )
 
 # [Immediate Mode] Tpl example LINUX GCC
-add_custom_target(run_buildexe_im_tpl_gcc_linux
+add_custom_target(run_buildexe_im_tpl_linux_gcc
     COMMAND buildexe --help-all
     COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/tpl_linux.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_gcc_linux.toml 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
