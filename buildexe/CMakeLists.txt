@@ -40,7 +40,7 @@ add_custom_target(run_buildexe_im_tpl_win_msvc
 # [Immediate Mode] Tpl example LINUX GCC
 add_custom_target(run_buildexe_im_tpl_linux_gcc
     COMMAND buildexe --help-all
-    COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/tpl_linux.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_gcc_linux.toml 
+    COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/tpl_linux.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_linux_gcc.toml 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     VERBATIM USES_TERMINAL
 )
@@ -64,7 +64,7 @@ add_custom_target(run_buildexe_sm_simple_win_msvc
 # [Script Mode] Simple example LINUX GCC
 add_custom_target(run_buildexe_sm_simple_linux_gcc
     COMMAND buildexe --help-all
-    COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/sm_simple_linux.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_gcc_linux.toml
+    COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/sm_simple_linux.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_linux_gcc.toml
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../example/hybrid/simple
     VERBATIM USES_TERMINAL
 )

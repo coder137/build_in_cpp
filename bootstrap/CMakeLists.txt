@@ -27,7 +27,7 @@ endif()
 # Linux GCC
 add_custom_target(run_buildcc_lib_bootstrap_linux_gcc
     COMMAND buildcc_lib_bootstrap --help-all
-    COMMAND buildcc_lib_bootstrap --config ${CMAKE_CURRENT_SOURCE_DIR}/config_default.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/config/toolchain_gcc_linux.toml 
+    COMMAND buildcc_lib_bootstrap --config ${CMAKE_CURRENT_SOURCE_DIR}/config_default.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/config/toolchain_linux_gcc.toml 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     VERBATIM USES_TERMINAL
 )
