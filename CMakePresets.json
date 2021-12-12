@@ -10,7 +10,7 @@
             "name": "gcc_dev_all",
             "displayName": "GCC full build",
             "description": "GCC build with all developer options",
-            "generator": "Ninja",
+            "generator": "Ninja Multi-Config",
             "binaryDir": "${sourceDir}/_build_gcc_dev_all",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
@@ -35,7 +35,7 @@
             "name": "gcc_dev_single",
             "displayName": "GCC single lib build",
             "description": "GCC build for single lib buildcc",
-            "generator": "Ninja",
+            "generator": "Ninja Multi-Config",
             "binaryDir": "${sourceDir}/_build_gcc_dev_single",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
@@ -60,7 +60,7 @@
             "name": "gcc_dev_interface",
             "displayName": "GCC interface lib build",
             "description": "GCC build for interface lib buildcc",
-            "generator": "Ninja",
+            "generator": "Ninja Multi-Config",
             "binaryDir": "${sourceDir}/_build_gcc_dev_interface",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
@@ -85,7 +85,7 @@
             "name": "clang_dev_all",
             "displayName": "Clang all options",
             "description": "Clang build with all developer options",
-            "generator": "Ninja",
+            "generator": "Ninja Multi-Config",
             "binaryDir": "${sourceDir}/_build_clang_dev_all",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
