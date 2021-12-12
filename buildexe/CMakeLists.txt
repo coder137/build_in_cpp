@@ -32,7 +32,7 @@ add_custom_target(run_buildexe_help
 # [Immediate Mode] Tpl example WIN MSVC
 add_custom_target(run_buildexe_im_tpl_win_msvc
     COMMAND buildexe --help-all
-    COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/tpl_win.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_msvc_win.toml 
+    COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/tpl_win.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_win_msvc.toml 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     VERBATIM USES_TERMINAL
 )
@@ -56,7 +56,7 @@ add_custom_target(run_buildexe_sm_simple_win_gcc
 # [Script Mode] Simple example WIN MSVC
 add_custom_target(run_buildexe_sm_simple_win_msvc
     COMMAND buildexe --help-all
-    COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/sm_simple_win.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_msvc_win.toml
+    COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/sm_simple_win.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_win_msvc.toml
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../example/hybrid/simple
     VERBATIM USES_TERMINAL
 )

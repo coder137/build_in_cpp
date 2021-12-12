@@ -43,7 +43,7 @@ add_custom_target(run_buildcc_lib_bootstrap_win_gcc
 # Win MSVC
 add_custom_target(run_buildcc_lib_bootstrap_win_msvc
     COMMAND buildcc_lib_bootstrap --help-all
-    COMMAND buildcc_lib_bootstrap --config ${CMAKE_CURRENT_SOURCE_DIR}/config_default.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/config/toolchain_msvc_win.toml 
+    COMMAND buildcc_lib_bootstrap --config ${CMAKE_CURRENT_SOURCE_DIR}/config_default.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/config/toolchain_win_msvc.toml 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     VERBATIM USES_TERMINAL
 )
