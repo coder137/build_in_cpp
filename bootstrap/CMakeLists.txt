@@ -35,7 +35,7 @@ add_custom_target(run_buildcc_lib_bootstrap_linux_gcc
 # Win GCC/MINGW
 add_custom_target(run_buildcc_lib_bootstrap_win_gcc
     COMMAND buildcc_lib_bootstrap --help-all
-    COMMAND buildcc_lib_bootstrap --config ${CMAKE_CURRENT_SOURCE_DIR}/config_default.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/config/toolchain_gcc_win.toml 
+    COMMAND buildcc_lib_bootstrap --config ${CMAKE_CURRENT_SOURCE_DIR}/config_default.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/config/toolchain_win_gcc.toml 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     VERBATIM USES_TERMINAL
 )

@@ -48,7 +48,7 @@ add_custom_target(run_buildexe_im_tpl_linux_gcc
 # [Script Mode] Simple example WIN GCC
 add_custom_target(run_buildexe_sm_simple_win_gcc
     COMMAND buildexe --help-all
-    COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/sm_simple_linux.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_gcc_win.toml
+    COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/sm_simple_linux.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_win_gcc.toml
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../example/hybrid/simple
     VERBATIM USES_TERMINAL
 )
