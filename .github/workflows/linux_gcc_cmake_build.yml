@@ -53,7 +53,7 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: cmake --build . --target cppcheck_static_analysis
 
-      - name: Build
+      - name: Build Debug
         # Linux has 2 cores
         run: |
           cmake --build --list-presets
@@ -177,7 +177,7 @@ jobs:
         run: |
           ctest --preset=${{env.BUILD_DEV_SINGLE_PRESET}} --parallel 2 -C Debug
 
-      - name: Coveralls
+      - name: Codecov
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
           cmake --build . --target lcov_coverage
