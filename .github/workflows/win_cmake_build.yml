@@ -62,16 +62,22 @@ jobs:
 
       # - name: TODO, BuildExe SM simple hyrid example
 
+      - name: Release Build for Upload
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+        run: |
+          cmake --build . --parallel 2 --config Release
+          cpack -C Release -G ZIP
+
       - name: Upload BuildExe
         uses: actions/upload-artifact@v2
         with:
           name: "BuildExe_Win"
-          path: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}/buildexe/Release/buildexe.exe
+          path: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}/BuildCC-0.1.1-win64.zip
 
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --install .
+          cmake --install . --config Release
 
       - name: AfterInstall Example
         working-directory: ${{github.workspace}}/example/gcc/AfterInstall
