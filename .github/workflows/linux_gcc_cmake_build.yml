@@ -53,15 +53,10 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: cmake --build . --target cppcheck_static_analysis
 
-      - name: Build Debug
-        # Linux has 2 cores
+      - name: Build Release
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          cmake --build --list-presets
-          cmake --build --preset=${{env.BUILD_DEV_ALL_PRESET}} --parallel 2 --config Debug
-
-      - name: Test
-        run: |
-          ctest --preset=${{env.BUILD_DEV_ALL_PRESET}} --parallel 2 -C Debug
+          cmake --build . --parallel 2 --config Release
 
       - name: Bootstrap through CMake
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
@@ -72,6 +67,17 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
           cmake --build . --target run_buildexe_im_tpl_linux_gcc --config Release
+
+      - name: CPack Release
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
+        run: |
+          cpack -C Release -G ZIP
+
+      - name: Upload CPack
+        uses: actions/upload-artifact@v2
+        with:
+          name: "BuildExe_Linux"
+          path: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}/BuildCC-0.1.1-Linux.zip
 
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
@@ -167,14 +173,11 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: cmake --build . --target cppcheck_static_analysis
 
-      - name: Build
+      - name: Build Debug for test
         # Linux has 2 cores
         run: |
           cmake --build --list-presets
           cmake --build --preset=${{env.BUILD_DEV_SINGLE_PRESET}} --parallel 2 --config Debug
-
-      - name: Test
-        run: |
           ctest --preset=${{env.BUILD_DEV_SINGLE_PRESET}} --parallel 2 -C Debug
 
       - name: Codecov
@@ -183,6 +186,10 @@ jobs:
           cmake --build . --target lcov_coverage
           cat ../codecov.yml | curl --data-binary @- https://codecov.io/validate
           bash <(curl -s https://codecov.io/bash) -f coverage_truncated.info || echo "Codecov did not collect coverage reports"
+
+      - name: Build Release for example
+        run: |
+          cmake --build --preset=${{env.BUILD_DEV_SINGLE_PRESET}} --parallel 2 --config Release
 
       - name: Bootstrap through CMake
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
@@ -195,18 +202,6 @@ jobs:
           cmake --build . --target run_buildexe_im_tpl_linux_gcc --config Release
 
       # - name: TODO, BuildExe SM simple hyrid example
-
-      - name: Release Build for Upload
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
-        run: |
-          cmake --build . --parallel 2 --config Release
-          cpack -C Release -G ZIP
-
-      - name: Upload BuildExe
-        uses: actions/upload-artifact@v2
-        with:
-          name: "BuildExe_Linux"
-          path: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}/BuildCC-0.1.1-Linux.zip
 
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
@@ -293,7 +288,7 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_INTERFACE}}
         run: cmake --build . --target cppcheck_static_analysis
 
-      - name: Build
+      - name: Build Debug
         # Linux has 2 cores
         run: |
           cmake --build --list-presets
