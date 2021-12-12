@@ -23,6 +23,12 @@ if (${MINGW})
     target_link_options(buildexe PRIVATE -Wl,--allow-multiple-definition)
 endif()
 
+if (${BUILDCC_INSTALL})
+    install(TARGETS buildexe 
+    CONFIGURATIONS Release
+    RUNTIME DESTINATION bin)
+endif()
+
 add_custom_target(run_buildexe_help
     COMMAND buildexe --help-all
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
