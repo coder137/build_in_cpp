@@ -53,78 +53,83 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: cmake --build . --target cppcheck_static_analysis
 
-      - name: Build
-        # Linux has 2 cores
+      - name: Build Release
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          cmake --build --list-presets
-          cmake --build --preset=${{env.BUILD_DEV_ALL_PRESET}} --parallel 2
-
-      - name: Test
-        run: |
-          ctest --preset=${{env.BUILD_DEV_ALL_PRESET}} --parallel 2
+          cmake --build . --parallel 2 --config Release
 
       - name: Bootstrap through CMake
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          cmake --build . --target run_buildcc_lib_bootstrap_linux_gcc
+          cmake --build . --target run_buildcc_lib_bootstrap_linux_gcc --config Release
 
       - name: BuildExe IM example tiny-process-library
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          cmake --build . --target run_buildexe_im_tpl_gcc_linux
+          cmake --build . --target run_buildexe_im_tpl_linux_gcc --config Release
+
+      - name: CPack Release
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
+        run: |
+          cpack -C Release -G ZIP
+
+      - name: Upload CPack
+        uses: actions/upload-artifact@v2
+        with:
+          name: "BuildExe_Linux"
+          path: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}/BuildCC-0.1.1-Linux.zip
 
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          sudo cmake --install .
+          sudo cmake --install . --config Release
 
       - name: AfterInstall Example
         working-directory: ${{github.workspace}}/example/gcc/AfterInstall
         run: |
-          cmake -B build -G Ninja
-          cmake --build build --parallel 2
-          cd build
-          ./build
+          cmake -B build -G "Ninja Multi-Config"
+          cmake --build build --parallel 2 --config Release
+          ./build/Release/build
 
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_simple_example_linux
+          cmake --build . --target run_hybrid_simple_example_linux --config Release
 
       - name: Hybrid Foolib Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_foolib_example_linux
+          cmake --build . --target run_hybrid_foolib_example_linux --config Release
 
       - name: Hybrid External Lib Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_externallib_example_linux
+          cmake --build . --target run_hybrid_externallib_example_linux --config Release
 
       - name: Hybrid Custom Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_customtarget_example_linux
+          cmake --build . --target run_hybrid_customtarget_example_linux --config Release
 
       - name: Hybrid Generic Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_generic_example
+          cmake --build . --target run_hybrid_generic_example --config Release
 
       - name: Hybrid PCH Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_pch_example_linux
+          cmake --build . --target run_hybrid_pch_example_linux --config Release
 
       - name: Hybrid Dep Chaining Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_depchaining_example_linux
+          cmake --build . --target run_hybrid_depchaining_example_linux --config Release
 
       - name: Hybrid Target Info Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
-          cmake --build . --target run_hybrid_targetinfo_example_linux
+          cmake --build . --target run_hybrid_targetinfo_example_linux --config Release
 
   build_single:
     name: GCC single lib
@@ -167,93 +172,87 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: cmake --build . --target cppcheck_static_analysis
 
-      - name: Build
+      - name: Build Debug for test
         # Linux has 2 cores
         run: |
           cmake --build --list-presets
-          cmake --build --preset=${{env.BUILD_DEV_SINGLE_PRESET}} --parallel 2
+          cmake --build --preset=${{env.BUILD_DEV_SINGLE_PRESET}} --parallel 2 --config Debug
+          ctest --preset=${{env.BUILD_DEV_SINGLE_PRESET}} --parallel 2 -C Debug
 
-      - name: Test
-        run: |
-          ctest --preset=${{env.BUILD_DEV_SINGLE_PRESET}} --parallel 2
-
-      - name: Coveralls
+      - name: Codecov
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
           cmake --build . --target lcov_coverage
           cat ../codecov.yml | curl --data-binary @- https://codecov.io/validate
           bash <(curl -s https://codecov.io/bash) -f coverage_truncated.info || echo "Codecov did not collect coverage reports"
 
+      - name: Build Release for example
+        run: |
+          cmake --build --preset=${{env.BUILD_DEV_SINGLE_PRESET}} --parallel 2 --config Release
+
       - name: Bootstrap through CMake
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
-          cmake --build . --target run_buildcc_lib_bootstrap_linux_gcc
+          cmake --build . --target run_buildcc_lib_bootstrap_linux_gcc --config Release
 
       - name: BuildExe IM example tiny-process-library
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
-          cmake --build . --target run_buildexe_im_tpl_gcc_linux
+          cmake --build . --target run_buildexe_im_tpl_linux_gcc --config Release
 
       # - name: TODO, BuildExe SM simple hyrid example
-
-      - name: Upload BuildExe
-        uses: actions/upload-artifact@v2
-        with:
-          name: "BuildExe_Linux"
-          path: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}/buildexe/buildexe
 
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
-          sudo cmake --install .
+          sudo cmake --install . --config Release
 
       - name: AfterInstall Example
         working-directory: ${{github.workspace}}/example/gcc/AfterInstall
         run: |
-          cmake -B build -G Ninja
-          cmake --build build --parallel 2
-          cd build
-          ./build
+          cmake -B build -G "Ninja Multi-Config"
+          cmake --build build --parallel 2 --config Release
+          ./build/Release/build
 
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
-          cmake --build . --target run_hybrid_simple_example_linux
+          cmake --build . --target run_hybrid_simple_example_linux --config Release
 
       - name: Hybrid Foolib Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
-          cmake --build . --target run_hybrid_foolib_example_linux
+          cmake --build . --target run_hybrid_foolib_example_linux --config Release
 
       - name: Hybrid External Lib Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
-          cmake --build . --target run_hybrid_externallib_example_linux
+          cmake --build . --target run_hybrid_externallib_example_linux --config Release
 
       - name: Hybrid Custom Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
-          cmake --build . --target run_hybrid_customtarget_example_linux
+          cmake --build . --target run_hybrid_customtarget_example_linux --config Release
 
       - name: Hybrid Generic Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
-          cmake --build . --target run_hybrid_generic_example
+          cmake --build . --target run_hybrid_generic_example --config Release
 
       - name: Hybrid PCH Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
-          cmake --build . --target run_hybrid_pch_example_linux
+          cmake --build . --target run_hybrid_pch_example_linux --config Release
 
       - name: Hybrid Dep Chaining Target Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
-          cmake --build . --target run_hybrid_depchaining_example_linux
+          cmake --build . --target run_hybrid_depchaining_example_linux --config Release
 
       - name: Hybrid Target Info Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
-          cmake --build . --target run_hybrid_targetinfo_example_linux
+          cmake --build . --target run_hybrid_targetinfo_example_linux --config Release
 
   build_interface:
     name: GCC interface lib
@@ -287,12 +286,12 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_INTERFACE}}
         run: cmake --build . --target cppcheck_static_analysis
 
-      - name: Build
+      - name: Build Debug
         # Linux has 2 cores
         run: |
           cmake --build --list-presets
-          cmake --build --preset=${{env.BUILD_DEV_INTERFACE_PRESET}} --parallel 2
+          cmake --build --preset=${{env.BUILD_DEV_INTERFACE_PRESET}} --parallel 2 --config Debug
 
       - name: Test
         run: |
-          ctest --preset=${{env.BUILD_DEV_INTERFACE_PRESET}} --parallel 2
+          ctest --preset=${{env.BUILD_DEV_INTERFACE_PRESET}} --parallel 2 -C Debug

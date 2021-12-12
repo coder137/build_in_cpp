@@ -31,8 +31,8 @@ else()
     add_custom_target(lcov_coverage
         COMMAND ${lcov_program} --zerocounters --directory ${CMAKE_SOURCE_DIR} ${LCOV_RC_OPTIONS}
 
-        COMMAND cmake --build ${CMAKE_BINARY_DIR}
-        COMMAND cmake --build ${CMAKE_BINARY_DIR} --target test
+        COMMAND cmake --build ${CMAKE_BINARY_DIR} --config Debug
+        COMMAND cmake --build ${CMAKE_BINARY_DIR} --target test --config Debug
 
         COMMAND ${lcov_program} --capture --directory ${CMAKE_SOURCE_DIR} --output-file ${LCOV_INITIAL_FILE} ${LCOV_RC_OPTIONS}
 
