@@ -30,7 +30,7 @@ add_custom_target(run_buildexe_help
 )
 
 # [Immediate Mode] Tpl example WIN MSVC
-add_custom_target(run_buildexe_im_tpl_msvc_win
+add_custom_target(run_buildexe_im_tpl_win_msvc
     COMMAND buildexe --help-all
     COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/tpl_win.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_msvc_win.toml 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
