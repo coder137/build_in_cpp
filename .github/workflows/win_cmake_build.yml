@@ -62,13 +62,12 @@ jobs:
 
       # - name: TODO, BuildExe SM simple hyrid example
 
-      - name: Release Build for Upload
+      - name: CPack Release
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --parallel 2 --config Release
           cpack -C Release -G ZIP
 
-      - name: Upload BuildExe
+      - name: Upload CPack
         uses: actions/upload-artifact@v2
         with:
           name: "BuildExe_Win"
