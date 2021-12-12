@@ -89,8 +89,7 @@ jobs:
         run: |
           cmake -B build -G "Ninja Multi-Config"
           cmake --build build --parallel 2 --config Release
-          cd build
-          ./build
+          ./build/Release/build
 
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
@@ -213,8 +212,7 @@ jobs:
         run: |
           cmake -B build -G "Ninja Multi-Config"
           cmake --build build --parallel 2 --config Release
-          cd build
-          ./build
+          ./build/Release/build
 
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
