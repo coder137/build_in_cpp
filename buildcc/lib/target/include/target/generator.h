@@ -33,17 +33,18 @@
 #include "target/interface/builder_interface.h"
 
 #include "target/base/generator_loader.h"
+
 #include "target/common/path.h"
+#include "target/common/target_env.h"
 
 namespace buildcc::base {
 
 class Generator : public BuilderInterface {
 public:
-  Generator(const std::string &name,
-            const fs::path &target_path_relative_to_root, bool parallel = false)
-      : name_(name), generator_root_dir_(env::get_project_root_dir() /
-                                         target_path_relative_to_root),
-        generator_build_dir_(env::get_project_build_dir() / name),
+  Generator(const std::string &name, const TargetEnv &env,
+            bool parallel = false)
+      : name_(name), generator_root_dir_(env.GetTargetRootDir()),
+        generator_build_dir_(env.GetTargetBuildDir() / name),
         loader_(name, generator_build_dir_), parallel_(parallel) {
     Initialize();
   }

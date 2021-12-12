@@ -154,4 +154,102 @@ void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
   target.Build();
 }
 
+// TODO, Shift this inside BuildBuildcc class if required
+// TODO, Add this to options
+static void global_flags_cb(TargetInfo &global_info,
+                            const BaseToolchain &toolchain) {
+  // TODO, Clang
+  switch (toolchain.GetId()) {
+  case ToolchainId::Gcc:
+  case ToolchainId::MinGW:
+    global_info.AddCppCompileFlag("-std=c++17");
+    global_info.AddCppCompileFlag("-Os");
+    global_info.AddCppCompileFlag("-Wall");
+    global_info.AddCppCompileFlag("-Wextra");
+    global_info.AddCppCompileFlag("-Werror");
+    break;
+  case ToolchainId::Msvc:
+    global_info.AddPreprocessorFlag("/D_CRT_SECURE_NO_WARNINGS");
+    global_info.AddCppCompileFlag("/std:c++17");
+    global_info.AddCppCompileFlag("/Ot");
+    global_info.AddCppCompileFlag("/W4");
+    global_info.AddCppCompileFlag("/WX");
+  default:
+    break;
+  }
+}
+
+void BuildBuildCC::Setup(const ArgToolchainState &state) {
+  auto &flatc_exe = storage_.Add<ExecutableTarget_generic>(
+      kFlatcExeName, kFlatcExeName, toolchain_,
+      TargetEnv(env_.GetTargetRootDir() / "third_party" / "flatbuffers",
+                env_.GetTargetBuildDir()));
+
+  reg_.CallbackIf(state, global_flags_cb, flatc_exe, toolchain_);
+  reg_.Build(state, build_flatc_exe_cb, flatc_exe);
+
+  // Schema
+  auto &schema_gen = storage_.Add<BaseGenerator>(
+      kSchemaGenName, kSchemaGenName,
+      TargetEnv(env_.GetTargetRootDir() / "buildcc" / "schema",
+                env_.GetTargetBuildDir() / toolchain_.GetName()));
+  reg_.Build(schema_gen_cb, schema_gen, flatc_exe);
+  reg_.Dep(schema_gen, flatc_exe);
+
+  // Flatbuffers HO lib
+  auto &flatbuffers_ho_lib = storage_.Add<TargetInfo>(
+      kFlatbuffersHoName,
+      TargetEnv(env_.GetTargetRootDir() / "third_party" / "flatbuffers",
+                env_.GetTargetBuildDir()));
+  reg_.CallbackIf(state, flatbuffers_ho_cb, flatbuffers_ho_lib);
+
+  // CLI11 HO lib
+  auto &cli11_ho_lib = storage_.Add<TargetInfo>(
+      kCli11HoName, TargetEnv(env_.GetTargetRootDir() / "third_party" / "CLI11",
+                              env_.GetTargetBuildDir()));
+  reg_.CallbackIf(state, cli11_ho_cb, cli11_ho_lib);
+
+  // fmt HO lib
+  auto &fmt_ho_lib = storage_.Add<TargetInfo>(
+      kFmtHoName, TargetEnv(env_.GetTargetRootDir() / "third_party" / "fmt",
+                            env_.GetTargetBuildDir()));
+  reg_.CallbackIf(state, fmt_ho_cb, fmt_ho_lib);
+
+  // spdlog HO lib
+  auto &spdlog_ho_lib = storage_.Add<TargetInfo>(
+      kSpdlogHoName,
+      TargetEnv(env_.GetTargetRootDir() / "third_party" / "spdlog",
+                env_.GetTargetBuildDir()));
+  reg_.CallbackIf(state, spdlog_ho_cb, spdlog_ho_lib);
+
+  // taskflow HO lib
+  auto &taskflow_ho_lib = storage_.Add<TargetInfo>(
+      kTaskflowHoName,
+      TargetEnv(env_.GetTargetRootDir() / "third_party" / "taskflow",
+                env_.GetTargetBuildDir()));
+  reg_.CallbackIf(state, taskflow_ho_cb, taskflow_ho_lib);
+
+  // Tiny-process-library lib
+  // TODO, Make this a generic selection between StaticTarget and
+  // DynamicTarget
+  auto &tpl_lib = storage_.Add<StaticTarget_generic>(
+      kTplLibName, kTplLibName, toolchain_,
+      TargetEnv(env_.GetTargetRootDir() / "third_party" /
+                    "tiny-process-library",
+                env_.GetTargetBuildDir()));
+  reg_.CallbackIf(state, global_flags_cb, tpl_lib, toolchain_);
+  reg_.Build(state, tpl_cb, tpl_lib);
+
+  // TODO, Make this a generic selection between StaticTarget and
+  // DynamicTarget
+  auto &buildcc_lib = storage_.Add<StaticTarget_generic>(
+      kBuildccLibName, kBuildccLibName, toolchain_,
+      TargetEnv(env_.GetTargetRootDir() / "buildcc", env_.GetTargetBuildDir()));
+  reg_.CallbackIf(state, global_flags_cb, buildcc_lib, toolchain_);
+  reg_.Build(state, buildcc_cb, buildcc_lib, schema_gen, flatbuffers_ho_lib,
+             fmt_ho_lib, spdlog_ho_lib, cli11_ho_lib, taskflow_ho_lib, tpl_lib);
+  reg_.Dep(buildcc_lib, schema_gen);
+  reg_.Dep(buildcc_lib, tpl_lib);
+}
+
 } // namespace buildcc

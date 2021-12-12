@@ -20,6 +20,8 @@
 #include <unordered_set>
 #include <vector>
 
+#include <iostream>
+
 #include "toolchain/toolchain.h"
 
 #include "env/assert_fatal.h"
@@ -207,9 +209,16 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
       continue;
     }
 
+    std::error_code ec;
+    auto directory_iterator = fs::directory_iterator(p, ec);
+    if (ec) {
+      continue;
+    }
+
     // For each directory, Check if ALL toolchain filenames are found
-    for (const auto &dir_iter : fs::directory_iterator(p)) {
-      if (!dir_iter.is_regular_file()) {
+    for (const auto &dir_iter : directory_iterator) {
+      bool is_regular_file = dir_iter.is_regular_file(ec);
+      if (!is_regular_file || ec) {
         continue;
       }
       const auto &filename = dir_iter.path().filename().string();
@@ -222,8 +231,8 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
 
       VerifiedToolchain vt;
       vt.path = p;
-      vt.compiler_version = GetCompilerVersion(p, t).value_or("");
-      vt.target_arch = GetCompilerArchitecture(p, t).value_or("");
+      vt.compiler_version = env::trim(GetCompilerVersion(p, t).value_or(""));
+      vt.target_arch = env::trim(GetCompilerArchitecture(p, t).value_or(""));
       verified_toolchains.push_back(vt);
     }
 

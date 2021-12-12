@@ -55,12 +55,7 @@ struct VerifiedToolchain {
   std::string target_arch;
   // TODO, Add more here as needed
 
-  void Print() const {
-    env::log_info(
-        __FUNCTION__,
-        fmt::format("Path: {}, Compiler Version: {}, Target Triple Arch: {}",
-                    path.string(), compiler_version, target_arch));
-  }
+  std::string ToString() const { return fmt::format("{}", *this); }
 };
 
 template <typename T> class ToolchainVerify {
@@ -77,5 +72,23 @@ typedef base::VerifyToolchainConfig VerifyToolchainConfig;
 typedef base::VerifiedToolchain VerifiedToolchain;
 
 } // namespace buildcc
+
+constexpr const char *const kVerifiedToolchainFormat = R"({{
+  "path": "{}",
+  "compiler_version": "{}",
+  "target_arch": "{}"
+}})";
+
+template <>
+struct fmt::formatter<buildcc::base::VerifiedToolchain>
+    : formatter<std::string> {
+  template <typename FormatContext>
+  auto format(const buildcc::base::VerifiedToolchain &vt, FormatContext &ctx) {
+    std::string verified_toolchain_info =
+        fmt::format(kVerifiedToolchainFormat, vt.path.string(),
+                    vt.compiler_version, vt.target_arch);
+    return formatter<std::string>::format(verified_toolchain_info, ctx);
+  }
+};
 
 #endif

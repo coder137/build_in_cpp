@@ -41,14 +41,14 @@ template <typename T> void LibApi<T>::AddLibDep(const Target &lib_dep) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.storer_.current_lib_deps.user.insert(lib_dep.GetTargetPath());
+  t.storer_.current_user_lib_deps.push_back(lib_dep.GetTargetPath());
 }
 
 template <typename T> void LibApi<T>::AddLibDep(const std::string &lib_dep) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.storer_.current_external_lib_deps.insert(lib_dep);
+  t.storer_.current_user_external_lib_deps.push_back(lib_dep);
 }
 
 template class LibApi<TargetInfo>;

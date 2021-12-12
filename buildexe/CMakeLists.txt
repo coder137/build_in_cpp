@@ -1,6 +1,18 @@
 add_executable(buildexe
     buildexe.cpp
 )
+target_sources(buildexe PRIVATE
+    ../bootstrap/src/build_buildcc.cpp
+    ../bootstrap/src/build_cli11.cpp
+    ../bootstrap/src/build_flatbuffers.cpp
+    ../bootstrap/src/build_fmtlib.cpp
+    ../bootstrap/src/build_spdlog.cpp
+    ../bootstrap/src/build_taskflow.cpp
+    ../bootstrap/src/build_tpl.cpp
+)
+target_include_directories(buildexe PRIVATE 
+    ../bootstrap/include
+)
 target_link_libraries(buildexe PRIVATE buildcc)
 
 # TODO, Add this only if MINGW is used
@@ -18,7 +30,7 @@ add_custom_target(run_buildexe_help
 )
 
 # [Immediate Mode] Tpl example WIN MSVC
-add_custom_target(run_buildexe_im_tpl_win_msvc
+add_custom_target(run_buildexe_im_tpl_msvc_win
     COMMAND buildexe --help-all
     COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/tpl_win.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_msvc_win.toml 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
@@ -26,9 +38,33 @@ add_custom_target(run_buildexe_im_tpl_win_msvc
 )
 
 # [Immediate Mode] Tpl example LINUX GCC
-add_custom_target(run_buildexe_im_tpl_linux_gcc
+add_custom_target(run_buildexe_im_tpl_gcc_linux
     COMMAND buildexe --help-all
     COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/tpl_linux.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_gcc_linux.toml 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    VERBATIM USES_TERMINAL
+)
+
+# [Script Mode] Simple example WIN GCC
+add_custom_target(run_buildexe_sm_simple_gcc_win
+    COMMAND buildexe --help-all
+    COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/sm_simple_linux.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_gcc_win.toml
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../example/hybrid/simple
+    VERBATIM USES_TERMINAL
+)
+
+# [Script Mode] Simple example WIN MSVC
+add_custom_target(run_buildexe_sm_simple_msvc_win
+    COMMAND buildexe --help-all
+    COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/sm_simple_win.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_msvc_win.toml
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../example/hybrid/simple
+    VERBATIM USES_TERMINAL
+)
+
+# [Script Mode] Simple example LINUX GCC
+add_custom_target(run_buildexe_sm_simple_gcc_linux
+    COMMAND buildexe --help-all
+    COMMAND buildexe --config ${CMAKE_CURRENT_SOURCE_DIR}/example_configs/sm_simple_linux.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_gcc_linux.toml
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../example/hybrid/simple
     VERBATIM USES_TERMINAL
 )

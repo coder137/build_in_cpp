@@ -58,7 +58,15 @@ jobs:
       - name: BuildExe IM example tiny-process-library
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
-          cmake --build . --target run_buildexe_im_tpl_win_msvc
+          cmake --build . --config Release --target run_buildexe_im_tpl_msvc_win
+
+      # - name: TODO, BuildExe SM simple hyrid example
+
+      - name: Upload BuildExe
+        uses: actions/upload-artifact@v2
+        with:
+          name: "BuildExe_Win"
+          path: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}/buildexe/Release/buildexe.exe
 
       - name: Install
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}

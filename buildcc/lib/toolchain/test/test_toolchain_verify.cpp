@@ -176,6 +176,34 @@ TEST(ToolchainTestGroup, VerifyToolchain_PathContainsDir) {
   CHECK_TRUE(verified_toolchains.empty());
 }
 
+TEST(ToolchainTestGroup, VerifyToolchain_LockedFolder) {
+  std::error_code err;
+  fs::permissions(fs::current_path() / "toolchains" / "gcc", fs::perms::none,
+                  err);
+  if (err) {
+    FAIL_TEST("Could not set file permissions");
+  }
+
+  buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc, "gcc", "as",
+                               "gcc", "g++", "ar", "ld");
+
+  buildcc::base::VerifyToolchainConfig config;
+  config.env_vars.clear();
+  config.absolute_search_paths.push_back(
+      (fs::current_path() / "toolchains" / "gcc").string());
+
+  std::vector<buildcc::base::VerifiedToolchain> verified_toolchains =
+      gcc.Verify(config);
+  UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
+  CHECK_TRUE(verified_toolchains.empty());
+
+  fs::permissions(fs::current_path() / "toolchains" / "gcc", fs::perms::all,
+                  err);
+  if (err) {
+    FAIL_TEST("Could not set file permissions");
+  }
+}
+
 int main(int ac, char **av) {
   buildcc::env::m::VectorStringCopier copier;
   mock().installCopier(TEST_VECTOR_STRING_TYPE, copier);

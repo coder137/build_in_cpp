@@ -1,0 +1,25 @@
+root_dir = ""
+build_dir = "_build_buildexe_simple"
+
+loglevel = "debug"
+clean = false
+
+# TODO, verification
+# [verification]
+# os = ["win", "linux"]
+
+# BuildExe run mode
+# mode = "immediate"
+mode = "script"
+
+# Target information
+# [build.info]
+name = "simple"
+type = "executable"
+relative_to_root = ""
+
+# [build.inputs]
+srcs = ["build.cpp"]
+
+[script]
+configs = ["build_win.toml"]

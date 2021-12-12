@@ -50,11 +50,13 @@ bool Target::Store() {
       builder, storer_.current_header_files.internal);
   auto fbs_pch_files = internal::create_fbs_vector_path(
       builder, storer_.current_pch_files.internal);
+  // NOTE, This can be UNORDERED
   auto fbs_lib_deps = internal::create_fbs_vector_path(
-      builder, storer_.current_lib_deps.internal);
+      builder, storer_.current_internal_lib_deps);
 
+  // NOTE, This can be UNORDERED
   auto fbs_external_lib_deps = internal::create_fbs_vector_string(
-      builder, storer_.current_external_lib_deps);
+      builder, storer_.current_internal_external_lib_deps);
 
   auto fbs_include_dirs =
       internal::create_fbs_vector_string(builder, storer_.current_include_dirs);

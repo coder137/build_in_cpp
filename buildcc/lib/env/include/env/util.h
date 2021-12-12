@@ -33,6 +33,7 @@
 #ifndef ENV_UTIL_H_
 #define ENV_UTIL_H_
 
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <sstream>
@@ -118,6 +119,38 @@ inline std::vector<std::string> split(const std::string &s, char delim) {
   }
 
   return result;
+}
+
+// https://stackoverflow.com/questions/44973435/stdptr-fun-replacement-for-c17/44973498#44973498
+inline std::string ltrim(const std::string &s) {
+  std::string tr{s};
+  // Checks from left (beginning) and finds the `end point` where no `isspace`
+  // char is detected
+  auto l_tr_end = std::find_if(tr.begin(), tr.end(),
+                               [](char c) { return !std::isspace(c); });
+  tr.erase(tr.begin(), l_tr_end);
+  return tr;
+}
+
+inline std::string rtrim(const std::string &s) {
+  std::string tr{s};
+  // Checks from right (ending) and finds the `start point` where no `isspace`
+  // char is detected
+  // Gets the base iterator (which is forward in nature)
+  auto r_tr_begin = std::find_if(tr.rbegin(), tr.rend(), [](char c) {
+                      return !std::isspace(c);
+                    }).base();
+  tr.erase(r_tr_begin, tr.end());
+  return tr;
+}
+
+/**
+ * @brief Trims both left and right part of the string
+ */
+inline std::string trim(const std::string &s) {
+  std::string tr = ltrim(s);
+  tr = rtrim(tr);
+  return tr;
 }
 
 } // namespace buildcc::env
