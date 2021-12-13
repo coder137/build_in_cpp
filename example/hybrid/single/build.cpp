@@ -6,7 +6,7 @@ constexpr const char *const EXE = "build";
 
 // Function Prototypes
 static void clean_cb();
-static void cppflags_build_cb(base::Target &cppflags);
+static void hello_world_build_cb(BaseTarget &target);
 
 int main(int argc, char **argv) {
   // 1. Get arguments
@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
   ExecutableTarget_gcc hello_world("hello_world", gcc, "");
 
   // Select your builds and tests using the .toml files
-  reg.Build(arg_gcc.state, cppflags_build_cb, hello_world);
+  reg.Build(arg_gcc.state, hello_world_build_cb, hello_world);
 
   // 5. Test steps
   reg.Test(arg_gcc.state, "{executable}", hello_world);
@@ -50,8 +50,8 @@ static void clean_cb() {
   fs::remove_all(env::get_project_build_dir());
 }
 
-static void cppflags_build_cb(base::Target &cppflags) {
-  cppflags.AddSource("main.cpp", "src");
+static void hello_world_build_cb(BaseTarget &target) {
+  target.AddSource("main.cpp", "src");
 
-  cppflags.Build();
+  target.Build();
 }
