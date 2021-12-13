@@ -88,6 +88,11 @@ jobs:
           ls
           .\build.exe
 
+      - name: Hybrid Single Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+        run: |
+          cmake --build . --config Release --parallel 2 --target run_hybrid_single_example
+
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
@@ -177,6 +182,11 @@ jobs:
           cd build/Release
           ls
           .\build.exe
+
+      - name: Hybrid Single Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
+        run: |
+          cmake --build . --target run_hybrid_single_example --config Release
 
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
