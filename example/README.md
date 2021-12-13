@@ -108,6 +108,8 @@ Multi hosts and multi targets
 
 **Current state of examples**
 
+- [x] Single
+  - Compile a single source with `Register` and `Args` module
 - [x] Simple
   - Similar to Flags example with `Register` and `Args` module 
 - [x] Foolib
