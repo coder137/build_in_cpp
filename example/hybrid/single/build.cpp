@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
   // 4. Build steps
   // Explicit toolchain - target pairs
   Toolchain_gcc gcc;
-  ExecutableTarget_gcc hello_world("hello_world", gcc, "files");
+  ExecutableTarget_gcc hello_world("hello_world", gcc, "");
 
   // Select your builds and tests using the .toml files
   reg.Build(arg_gcc.state, cppflags_build_cb, hello_world);
