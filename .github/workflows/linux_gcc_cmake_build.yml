@@ -91,6 +91,11 @@ jobs:
           cmake --build build --parallel 2 --config Release
           ./build/Release/build
 
+      - name: Hybrid Single Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
+        run: |
+          cmake --build . --target run_hybrid_single_example --config Release
+
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
@@ -213,6 +218,11 @@ jobs:
           cmake -B build -G "Ninja Multi-Config"
           cmake --build build --parallel 2 --config Release
           ./build/Release/build
+
+      - name: Hybrid Single Example
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
+        run: |
+          cmake --build . --target run_hybrid_simple_example --config Release
 
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
