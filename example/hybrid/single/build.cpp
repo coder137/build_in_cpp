@@ -25,6 +25,8 @@ int main(int argc, char **argv) {
   // Explicit toolchain - target pairs
   Toolchain_gcc gcc;
   ExecutableTarget_gcc hello_world("hello_world", gcc, "");
+  auto verified_toolchains = gcc.Verify();
+  env::assert_fatal(!verified_toolchains.empty(), "GCC Toolchain not found");
 
   // Select your builds and tests using the .toml files
   reg.Build(arg_gcc.state, hello_world_build_cb, hello_world);
