@@ -106,6 +106,7 @@ if (${BUILDCC_INSTALL})
 endif()
 
 if (${BUILDCC_EXAMPLES})
+    add_subdirectory(example/hybrid)
     add_subdirectory(example/hybrid/simple)
     add_subdirectory(example/hybrid/foolib)
     add_subdirectory(example/hybrid/external_lib)
