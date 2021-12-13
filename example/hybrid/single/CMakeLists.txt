@@ -19,7 +19,7 @@ endif()
 # Run your build file
 add_custom_target(run_hybrid_single_example
     COMMAND hybrid_single_example --help-all
-    COMMAND hybrid_single_example --config ${CMAKE_CURRENT_SOURCE_DIR}/build_win.toml
+    COMMAND hybrid_single_example --config ${CMAKE_CURRENT_SOURCE_DIR}/build.toml
     # COMMAND dot -Tpng graph.dot -o graph.PNG
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS hybrid_single_example buildcc
