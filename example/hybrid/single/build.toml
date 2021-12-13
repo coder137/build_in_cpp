@@ -1,6 +1,6 @@
 # Root
 root_dir = ""
-build_dir = "_internal_linux"
+build_dir = "_build"
 loglevel = "trace"
 
 # Project
