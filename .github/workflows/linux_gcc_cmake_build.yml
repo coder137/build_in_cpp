@@ -222,7 +222,7 @@ jobs:
       - name: Hybrid Single Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
-          cmake --build . --target run_hybrid_simple_example --config Release
+          cmake --build . --target run_hybrid_single_example --config Release
 
       - name: Hybrid Simple Example
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
