@@ -24,13 +24,13 @@ int main(int argc, char **argv) {
   // 4. Build steps
   // Explicit toolchain - target pairs
   Toolchain_gcc gcc;
-  ExecutableTarget_gcc g_cppflags("cppflags", gcc, "files");
+  ExecutableTarget_gcc hello_world("hello_world", gcc, "files");
 
   // Select your builds and tests using the .toml files
-  reg.Build(arg_gcc.state, cppflags_build_cb, g_cppflags);
+  reg.Build(arg_gcc.state, cppflags_build_cb, hello_world);
 
   // 5. Test steps
-  reg.Test(arg_gcc.state, "{executable}", g_cppflags);
+  reg.Test(arg_gcc.state, "{executable}", hello_world);
 
   // 6. Build Target
   reg.RunBuild();
@@ -39,9 +39,8 @@ int main(int argc, char **argv) {
   reg.RunTest();
 
   // 8. Post Build steps
-
   // - Clang Compile Commands
-  plugin::ClangCompileCommands({&g_cppflags}).Generate();
+  plugin::ClangCompileCommands({&hello_world}).Generate();
 
   return 0;
 }
