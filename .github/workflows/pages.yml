@@ -1,0 +1,47 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - main # Set a branch name to trigger deployment
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Setup
+        run: |
+          sudo apt-get install ninja-build doxygen graphviz python3-sphinx
+          pip install breathe sphinx_rtd_theme furo
+
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{github.workspace}}
+        run: |
+          cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILDCC_DOCUMENTATION=ON
+
+      - name: Build
+        working-directory: ${{github.workspace}}
+        shell: bash
+        run: cmake --build build --config $BUILD_TYPE
+
+      - name: Doxygen + Sphinx
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: |
+          cmake --build . --target doxygen_documentation
+          cmake --build . --target sphinx_documentation
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/output
