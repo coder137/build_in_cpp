@@ -12,7 +12,15 @@ Welcome to BuildCC's documentation!
 
    page/user_api
 
+.. toctree::
+   :caption: Architecture
 
+   arch/project_layout
+   arch/software_heirarchy
+   arch/namespaces
+   arch/design_patterns
+   arch/testing
+   arch/outputs
 
 Indices and tables
 ==================
