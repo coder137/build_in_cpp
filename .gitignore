@@ -17,6 +17,7 @@ _deps
 .vs/
 .idea/
 .cache/
+docs/output
 
 # Files
 *.gcov
