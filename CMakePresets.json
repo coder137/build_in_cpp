@@ -27,7 +27,7 @@
                 "BUILDCC_TESTING": true,
                 "BUILDCC_CLANGTIDY": true,
                 "BUILDCC_CPPCHECK": true,
-                "BUILDCC_DOCUMENTATION": true,
+                "BUILDCC_DOCUMENTATION": false,
                 "BUILDCC_NO_DEPRECATED": false
             }
         },
@@ -52,7 +52,7 @@
                 "BUILDCC_TESTING": true,
                 "BUILDCC_CLANGTIDY": true,
                 "BUILDCC_CPPCHECK": true,
-                "BUILDCC_DOCUMENTATION": true,
+                "BUILDCC_DOCUMENTATION": false,
                 "BUILDCC_NO_DEPRECATED": false
             }
         },
@@ -77,7 +77,7 @@
                 "BUILDCC_TESTING": true,
                 "BUILDCC_CLANGTIDY": true,
                 "BUILDCC_CPPCHECK": true,
-                "BUILDCC_DOCUMENTATION": true,
+                "BUILDCC_DOCUMENTATION": false,
                 "BUILDCC_NO_DEPRECATED": false
             }
         },

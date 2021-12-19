@@ -9,16 +9,21 @@ if (${BUILDCC_DOCUMENTATION})
         *test/*
         *mock/*
     )
-    set(DOXYGEN_BUILTIN_STL_SUPPORT YES)
     set(DOXYGEN_EXTRACT_ALL YES)
-    set(DOXYGEN_MARKDOWN_SUPPORT YES)
-    set(DOXYGEN_WARN_IF_UNDOCUMENTED NO)
-    set(DOXYGEN_USE_MDFILE_AS_MAINPAGE ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
+    set(DOXYGEN_WARN_IF_UNDOCUMENTED YES)
+    set(DOXYGEN_GENERATE_XML YES)
     doxygen_add_docs(doxygen_documentation
-        ${CMAKE_CURRENT_SOURCE_DIR}/README.md
-        ${CMAKE_CURRENT_SOURCE_DIR}/TODO.md
-        ${CMAKE_CURRENT_SOURCE_DIR}/example/README.md
         ${CMAKE_CURRENT_SOURCE_DIR}/buildcc
         COMMENT "Doxygen documentation"
+    )
+
+    find_program(sphinx_build
+        NAMES "sphinx-build"
+        REQUIRED
+    )
+    add_custom_target(sphinx_documentation
+    COMMAND ${sphinx_build} -b html -Dbreathe_projects.buildcc_documentation=${CMAKE_CURRENT_BINARY_DIR}/xml . ../output
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/docs/source
+    VERBATIM USES_TERMINAL
     )
 endif()
