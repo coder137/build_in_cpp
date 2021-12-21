@@ -17,4 +17,4 @@ Google Style
 
 ``k[PascalCaseVariableName]`` constexpr variables and enum / enum classes names
 
-.. attention:: If you see any wrong usage please raise an issue
+.. attention:: If you see any wrong usage in the project please raise an issue
