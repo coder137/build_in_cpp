@@ -6,6 +6,9 @@ BuildCC single lib
 
 **BuildCC** sources are compiled into a single library
 
+* The easiest way to use ``BuildCC``
+* After building the project all we need to do is ``-lbuildcc -ltiny-process-library`` or equivalent
+
 .. uml::
    
    rectangle Flatbuffers as flatbuffers
@@ -32,6 +35,7 @@ BuildCC interface lib
 
 * This has been done mainly for unit-testing and mocking segregation
 * It helps to easily architect the ``BuildCC`` library by visualizing internal dependencies
+* Please see :doc:`testing` for more information of how the ``mock_*`` equivalent of these libraries are used
 
 .. uml::
 
