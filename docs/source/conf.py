@@ -10,7 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
+import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
@@ -31,11 +31,15 @@ release = '0.1.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "breathe"
+    "breathe",
+    "sphinxcontrib.plantuml"
 ]
 
 breathe_default_project = "buildcc_documentation"
 breathe_default_members = ("members", "undoc-members")
+
+print(f"Current Dir for plantuml jar file: {os.getcwd()}")
+plantuml = f"java -jar {os.getcwd()}/_plantuml/plantuml-1.2021.16.jar"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
