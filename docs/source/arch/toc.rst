@@ -5,6 +5,7 @@ Architecture
 
    project_layout
    software_heirarchy
+   serialization_schema
    namespaces
    design_patterns
    testing
