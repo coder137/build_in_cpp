@@ -7,7 +7,7 @@ CRTP / Mixins
 `Article by fluentcpp.com on CRTP <https://www.fluentcpp.com/2017/05/16/what-the-crtp-brings-to-code/>`_
 
 * Mixins are a design pattern used to add additional functionality to an existing class
-* In this case, the ``base::TargetInfo`` and the ``base::Target`` class are meant to have a lot of setter APIs for user inputs.
+* In this case, the ``TargetInfo`` and the ``Target`` class are meant to have a lot of setter APIs for user inputs.
 * Adding more APIs to the class makes its difficult to read and maintain.
 * For reference: See :doc:`serialization_schema`
 * For example: In Target ``source_files`` have currently have several APIs
@@ -34,12 +34,12 @@ Friend classes
    * Unit Testing
    * Flexibility / Maintaibility
 * Unit Testing
-   * If these were not friend classes, the functions would've been private in scope within the ``base::Target`` class
+   * If these were not friend classes, the functions would've been private in scope within the ``Target`` class
    * Unit testing these individual private functions would not be possible would public interfaces
-   * By making them friend classes, We can now unit test the public functions and embed this class in a private context with the ``base::Target`` class
+   * By making them friend classes, We can now unit test the public functions and embed this class in a private context with the ``Target`` class
 * Flexibility / Maintaibility
    * Each one of the classes mentioned above have their own information / states / tasks to hold.
-   * Without this segregation all of the member variables, states and tasks would need to be present inside the ``base::Target`` class
+   * Without this segregation all of the member variables, states and tasks would need to be present inside the ``Target`` class
 * Strong Coupling
-   * The 3 friend classes have strong coupling with the ``base::Target`` class since it uses its internal member variables for setting / getting information.
+   * The 3 friend classes have strong coupling with the ``Target`` class since it uses its internal member variables for setting / getting information.
    * The friend class can interact with the parent class and vice versa.
