@@ -2,10 +2,10 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Project Layout" href="../arch/project_layout.html" /><link rel="prev" title="Welcome to BuildCC’s documentation!" href="../index.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Toolchain" href="toolchain.html" /><link rel="prev" title="User API" href="toc.html" />
 
     <meta name="generator" content="sphinx-4.3.2, furo 2021.11.23"/>
-        <title>User API - BuildCC 0.1.1 documentation</title>
+        <title>Environment - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=7f0192ddeb2adecfbaa87ffbcf67d16358b30bc1" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=0af69da206d614734f649b27d4cdc2dd6c31f41d" />
@@ -155,16 +155,29 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">User API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../arch/toc.html">Architecture</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../arch/project_layout.html">Project Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/software_heirarchy.html">Software Heirarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/namespaces.html">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/design_patterns.html">Design Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/outputs.html">Outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/style_guide.html">Style Guide</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Architecture</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../arch/project_layout.html">Project Layout</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../arch/software_heirarchy.html">Software Heirarchy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../arch/namespaces.html">Namespaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../arch/design_patterns.html">Design Patterns</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../arch/testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../arch/outputs.html">Outputs</a></li>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">User API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html">Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generator.html">Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target">Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#specialized-target">Specialized Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="args.html">Args</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register.html">Register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_plugins.html">Supported Plugins</a></li>
+</ul>
+</li>
 </ul>
 
 </div>
@@ -191,12 +204,10 @@
           </label>
         </div>
         <article role="main">
-          <div class="section" id="user-api">
-<h1>User API<a class="headerlink" href="#user-api" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="environment">
-<h2>Environment<a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h2>
+          <div class="section" id="environment">
+<h1>Environment<a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="env-h">
-<h3>env.h<a class="headerlink" href="#env-h" title="Permalink to this headline">¶</a></h3>
+<h2>env.h<a class="headerlink" href="#env-h" title="Permalink to this headline">¶</a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env7is_initEv">
 <span id="_CPPv3N7buildcc3env7is_initEv"></span><span id="_CPPv2N7buildcc3env7is_initEv"></span><span id="buildcc::env::is_init"></span><span class="target" id="namespacebuildcc_1_1env_1affa9153715318ce85197b3259d33b99e"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_init</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env7is_initEv" title="Permalink to this definition">¶</a><br/></dt>
@@ -211,7 +222,7 @@
 <dd></dd></dl>
 </div>
 <div class="section" id="logging-h">
-<h3>logging.h<a class="headerlink" href="#logging-h" title="Permalink to this headline">¶</a></h3>
+<h2>logging.h<a class="headerlink" href="#logging-h" title="Permalink to this headline">¶</a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env9log_traceENSt11string_viewENSt11string_viewE">
 <span id="_CPPv3N7buildcc3env9log_traceENSt11string_viewENSt11string_viewE"></span><span id="_CPPv2N7buildcc3env9log_traceENSt11string_viewENSt11string_viewE"></span><span id="buildcc::env::log_trace__std::string_view.std::string_view"></span><span class="target" id="namespacebuildcc_1_1env_1ac54ba2a32300bb6160fd8278d498895f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">log_trace</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env9log_traceENSt11string_viewENSt11string_viewE" title="Permalink to this definition">¶</a><br/></dt>
@@ -234,83 +245,13 @@
 <dd></dd></dl>
 </div>
 <div class="section" id="assert-fatal-h">
-<h3>assert_fatal.h<a class="headerlink" href="#assert-fatal-h" title="Permalink to this headline">¶</a></h3>
+<h2>assert_fatal.h<a class="headerlink" href="#assert-fatal-h" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="assert-throw-h">
-<h3>assert_throw.h<a class="headerlink" href="#assert-throw-h" title="Permalink to this headline">¶</a></h3>
+<h2>assert_throw.h<a class="headerlink" href="#assert-throw-h" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="command-h">
-<h3>command.h<a class="headerlink" href="#command-h" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="toolchain">
-<h2>Toolchain<a class="headerlink" href="#toolchain" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="toolchain-h">
-<h3>toolchain.h<a class="headerlink" href="#toolchain-h" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="toolchain-verify-h">
-<h3>toolchain_verify.h<a class="headerlink" href="#toolchain-verify-h" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="generator">
-<h2>Generator<a class="headerlink" href="#generator" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="generator-h">
-<h3>generator.h<a class="headerlink" href="#generator-h" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="targetinfo">
-<h2>TargetInfo<a class="headerlink" href="#targetinfo" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="target-info-h">
-<h3>target_info.h<a class="headerlink" href="#target-info-h" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="target">
-<h2>Target<a class="headerlink" href="#target" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="target-h">
-<h3>target.h<a class="headerlink" href="#target-h" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="toolchain-specialized">
-<h2>Toolchain specialized<a class="headerlink" href="#toolchain-specialized" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="toolchain-gcc-h">
-<h3>toolchain_gcc.h<a class="headerlink" href="#toolchain-gcc-h" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="toolchain-msvc-h">
-<h3>toolchain_msvc.h<a class="headerlink" href="#toolchain-msvc-h" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="target-specialized">
-<h2>Target specialized<a class="headerlink" href="#target-specialized" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="target-custom-h">
-<h3>target_custom.h<a class="headerlink" href="#target-custom-h" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="target-gcc-h">
-<h3>target_gcc.h<a class="headerlink" href="#target-gcc-h" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="target-msvc-h">
-<h3>target_msvc.h<a class="headerlink" href="#target-msvc-h" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="target-generic-h">
-<h3>target_generic.h<a class="headerlink" href="#target-generic-h" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="args">
-<h2>Args<a class="headerlink" href="#args" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="args-h">
-<h3>args.h<a class="headerlink" href="#args-h" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="register">
-<h2>Register<a class="headerlink" href="#register" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="register-h">
-<h3>register.h<a class="headerlink" href="#register-h" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="first-party-plugins">
-<h2>First Party Plugins<a class="headerlink" href="#first-party-plugins" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="clang-compile-commands-h">
-<h3>clang_compile_commands.h<a class="headerlink" href="#clang-compile-commands-h" title="Permalink to this headline">¶</a></h3>
-</div>
+<h2>command.h<a class="headerlink" href="#command-h" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -319,23 +260,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../arch/project_layout.html">
+          <a class="next-page" href="toolchain.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Project Layout</div>
+                <div class="title">Toolchain</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../index.html">
+          <a class="prev-page" href="toc.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Home</div>
+                <div class="title">User API</div>
                 
               </div>
             </a>
@@ -345,7 +286,7 @@
               Copyright &#169; 2021, Niket Naidu |
           Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
           <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
-            | <a class="muted-link" href="../_sources/page/user_api.rst.txt"
+            | <a class="muted-link" href="../_sources/user_api/environment.rst.txt"
                rel="nofollow">
               Show Source
             </a>
@@ -365,56 +306,12 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">User API</a><ul>
-<li><a class="reference internal" href="#environment">Environment</a><ul>
+<li><a class="reference internal" href="#">Environment</a><ul>
 <li><a class="reference internal" href="#env-h">env.h</a></li>
 <li><a class="reference internal" href="#logging-h">logging.h</a></li>
 <li><a class="reference internal" href="#assert-fatal-h">assert_fatal.h</a></li>
 <li><a class="reference internal" href="#assert-throw-h">assert_throw.h</a></li>
 <li><a class="reference internal" href="#command-h">command.h</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#toolchain">Toolchain</a><ul>
-<li><a class="reference internal" href="#toolchain-h">toolchain.h</a></li>
-<li><a class="reference internal" href="#toolchain-verify-h">toolchain_verify.h</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#generator">Generator</a><ul>
-<li><a class="reference internal" href="#generator-h">generator.h</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#targetinfo">TargetInfo</a><ul>
-<li><a class="reference internal" href="#target-info-h">target_info.h</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#target">Target</a><ul>
-<li><a class="reference internal" href="#target-h">target.h</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#toolchain-specialized">Toolchain specialized</a><ul>
-<li><a class="reference internal" href="#toolchain-gcc-h">toolchain_gcc.h</a></li>
-<li><a class="reference internal" href="#toolchain-msvc-h">toolchain_msvc.h</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#target-specialized">Target specialized</a><ul>
-<li><a class="reference internal" href="#target-custom-h">target_custom.h</a></li>
-<li><a class="reference internal" href="#target-gcc-h">target_gcc.h</a></li>
-<li><a class="reference internal" href="#target-msvc-h">target_msvc.h</a></li>
-<li><a class="reference internal" href="#target-generic-h">target_generic.h</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#args">Args</a><ul>
-<li><a class="reference internal" href="#args-h">args.h</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#register">Register</a><ul>
-<li><a class="reference internal" href="#register-h">register.h</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#first-party-plugins">First Party Plugins</a><ul>
-<li><a class="reference internal" href="#clang-compile-commands-h">clang_compile_commands.h</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>

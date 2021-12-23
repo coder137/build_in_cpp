@@ -2,10 +2,10 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Style Guide" href="style_guide.html" /><link rel="prev" title="Testing" href="testing.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Project Layout" href="project_layout.html" /><link rel="prev" title="Welcome to BuildCC’s documentation!" href="../index.html" />
 
     <meta name="generator" content="sphinx-4.3.2, furo 2021.11.23"/>
-        <title>Outputs - BuildCC 0.1.1 documentation</title>
+        <title>Architecture - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=7f0192ddeb2adecfbaa87ffbcf67d16358b30bc1" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=0af69da206d614734f649b27d4cdc2dd6c31f41d" />
@@ -155,13 +155,13 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
-<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">Architecture</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Architecture</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="project_layout.html">Project Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="software_heirarchy.html">Software Heirarchy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="namespaces.html">Namespaces</a></li>
 <li class="toctree-l2"><a class="reference internal" href="design_patterns.html">Design Patterns</a></li>
 <li class="toctree-l2"><a class="reference internal" href="testing.html">Testing</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outputs.html">Outputs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="style_guide.html">Style Guide</a></li>
 </ul>
 </li>
@@ -204,8 +204,37 @@
           </label>
         </div>
         <article role="main">
-          <div class="section" id="outputs">
-<h1>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h1>
+          <div class="section" id="architecture">
+<h1>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_layout.html">Project Layout</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="project_layout.html#workspace-root">[workspace root]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_layout.html#bootstrap">bootstrap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_layout.html#buildcc">buildcc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_layout.html#buildexe">buildexe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_layout.html#cmake">cmake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_layout.html#docs">docs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_layout.html#example">example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_layout.html#third-party">third_party</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="software_heirarchy.html">Software Heirarchy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="software_heirarchy.html#buildcc-single-lib">BuildCC single lib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="software_heirarchy.html#buildcc-interface-lib">BuildCC interface lib</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="namespaces.html">Namespaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design_patterns.html">Design Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="outputs.html">Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style_guide.html">Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="style_guide.html#defaults">Defaults</a></li>
+<li class="toctree-l2"><a class="reference internal" href="style_guide.html#google-style">Google Style</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 
         </article>
@@ -213,23 +242,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="style_guide.html">
+          <a class="next-page" href="project_layout.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Style Guide</div>
+                <div class="title">Project Layout</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="testing.html">
+          <a class="prev-page" href="../index.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Testing</div>
+                <div class="title">Home</div>
                 
               </div>
             </a>
@@ -239,7 +268,7 @@
               Copyright &#169; 2021, Niket Naidu |
           Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
           <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
-            | <a class="muted-link" href="../_sources/arch/outputs.rst.txt"
+            | <a class="muted-link" href="../_sources/arch/toc.rst.txt"
                rel="nofollow">
               Show Source
             </a>

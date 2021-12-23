@@ -2,10 +2,10 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Style Guide" href="style_guide.html" /><link rel="prev" title="Testing" href="testing.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Environment" href="environment.html" /><link rel="prev" title="Style Guide" href="../arch/style_guide.html" />
 
     <meta name="generator" content="sphinx-4.3.2, furo 2021.11.23"/>
-        <title>Outputs - BuildCC 0.1.1 documentation</title>
+        <title>User API - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=7f0192ddeb2adecfbaa87ffbcf67d16358b30bc1" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=0af69da206d614734f649b27d4cdc2dd6c31f41d" />
@@ -155,27 +155,27 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
-<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">Architecture</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="project_layout.html">Project Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="software_heirarchy.html">Software Heirarchy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="namespaces.html">Namespaces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="design_patterns.html">Design Patterns</a></li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Outputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="style_guide.html">Style Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../arch/toc.html">Architecture</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../arch/project_layout.html">Project Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/software_heirarchy.html">Software Heirarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/namespaces.html">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/design_patterns.html">Design Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/outputs.html">Outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/style_guide.html">Style Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/environment.html">Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html">Generator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html">TargetInfo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#target">Target</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#specialized-target">Specialized Target</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/args.html">Args</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/register.html">Register</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">User API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html">Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generator.html">Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target">Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#specialized-target">Specialized Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="args.html">Args</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register.html">Register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_plugins.html">Supported Plugins</a></li>
 </ul>
 </li>
 </ul>
@@ -204,8 +204,22 @@
           </label>
         </div>
         <article role="main">
-          <div class="section" id="outputs">
-<h1>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h1>
+          <div class="section" id="user-api">
+<h1>User API<a class="headerlink" href="#user-api" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="environment.html">Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolchain.html">Toolchain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generator.html">Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="target.html">TargetInfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="target.html#target">Target</a></li>
+<li class="toctree-l1"><a class="reference internal" href="target.html#specialized-target">Specialized Target</a></li>
+<li class="toctree-l1"><a class="reference internal" href="args.html">Args</a></li>
+<li class="toctree-l1"><a class="reference internal" href="register.html">Register</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_plugins.html">Supported Plugins</a></li>
+</ul>
+</div>
 </div>
 
         </article>
@@ -213,23 +227,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="style_guide.html">
+          <a class="next-page" href="environment.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Style Guide</div>
+                <div class="title">Environment</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="testing.html">
+          <a class="prev-page" href="../arch/style_guide.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Testing</div>
+                <div class="title">Style Guide</div>
                 
               </div>
             </a>
@@ -239,7 +253,7 @@
               Copyright &#169; 2021, Niket Naidu |
           Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
           <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
-            | <a class="muted-link" href="../_sources/arch/outputs.rst.txt"
+            | <a class="muted-link" href="../_sources/user_api/toc.rst.txt"
                rel="nofollow">
               Show Source
             </a>

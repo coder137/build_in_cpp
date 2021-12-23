@@ -2,7 +2,7 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Software Heirarchy" href="software_heirarchy.html" /><link rel="prev" title="User API" href="../page/user_api.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Software Heirarchy" href="software_heirarchy.html" /><link rel="prev" title="Architecture" href="toc.html" />
 
     <meta name="generator" content="sphinx-4.3.2, furo 2021.11.23"/>
         <title>Project Layout - BuildCC 0.1.1 documentation</title>
@@ -133,7 +133,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -154,17 +154,30 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../page/user_api.html">User API</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Architecture</span></p>
 <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Project Layout</a></li>
-<li class="toctree-l1"><a class="reference internal" href="software_heirarchy.html">Software Heirarchy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="namespaces.html">Namespaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="design_patterns.html">Design Patterns</a></li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="outputs.html">Outputs</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">Architecture</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Project Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="software_heirarchy.html">Software Heirarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="namespaces.html">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design_patterns.html">Design Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outputs.html">Outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="style_guide.html">Style Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html">Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#target">Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#specialized-target">Specialized Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/args.html">Args</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/register.html">Register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
+</ul>
+</li>
 </ul>
 
 </div>
@@ -185,7 +198,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -193,6 +206,209 @@
         <article role="main">
           <div class="section" id="project-layout">
 <h1>Project Layout<a class="headerlink" href="#project-layout" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="workspace-root">
+<h2>[workspace root]<a class="headerlink" href="#workspace-root" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt>.clang-format</dt><dd><ul>
+<li><p>LLVM style clang format</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>.gitmodules</dt><dd><ul>
+<li><p>See <code class="docutils literal notranslate"><span class="pre">third_party</span></code> folder for git submodules</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>CMakeLists.txt</dt><dd><ul>
+<li><p>Main project level CMakeLists</p></li>
+<li><p>Contains all the configurable options for CMake</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>CMakePresets.json</dt><dd><ul>
+<li><p>Default configurable options for different presets / compilers</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>codecov.yml</dt><dd><ul>
+<li><p>Codecov parameters</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>LICENSE</dt><dd><ul>
+<li><p>Apache-2.0 License</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>README.md</dt><dd><ul>
+<li><p>Project outline and details</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>TODO.md</dt><dd><ul>
+<li><p>TODO list for community interactions</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="bootstrap">
+<h2>bootstrap<a class="headerlink" href="#bootstrap" title="Permalink to this headline">¶</a></h2>
+<p>Bootstrap build files to compile the <code class="docutils literal notranslate"><span class="pre">build_in_cpp</span></code> project</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Contains build files for compiling <code class="docutils literal notranslate"><span class="pre">third_party</span></code> libraries</dt><dd><ul>
+<li><p>Most of them are header only</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tiny-process-library</span></code> is the only library that compiles to a static / dynamic library</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>Contains build file for <code class="docutils literal notranslate"><span class="pre">buildcc</span></code> library compilation</p></li>
+</ul>
+</div>
+<div class="section" id="buildcc">
+<h2>buildcc<a class="headerlink" href="#buildcc" title="Permalink to this headline">¶</a></h2>
+<p>Contains the core <code class="docutils literal notranslate"><span class="pre">buildcc</span></code> library</p>
+<ul class="simple">
+<li><p>schema</p></li>
+<li><dl class="simple">
+<dt>lib</dt><dd><ul>
+<li><p>env</p></li>
+<li><p>toolchain</p></li>
+<li><p>target</p></li>
+<li><p>args</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>targets</p></li>
+<li><p>toolchains</p></li>
+<li><p>plugins</p></li>
+</ul>
+</div>
+<div class="section" id="buildexe">
+<h2>buildexe<a class="headerlink" href="#buildexe" title="Permalink to this headline">¶</a></h2>
+<p>Standalone <code class="docutils literal notranslate"><span class="pre">buildcc</span></code> executable for compiling projects in immediate mode or script mode</p>
+</div>
+<div class="section" id="cmake">
+<h2>cmake<a class="headerlink" href="#cmake" title="Permalink to this headline">¶</a></h2>
+<p>Global cmake variables and custom_targets</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>coverage</dt><dd><ul>
+<li><p>gcovr.cmake</p></li>
+<li><p>lcov.cmake</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>flags</dt><dd><ul>
+<li><p>build_flags.cmake</p></li>
+<li><p>test_flags.cmake</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>target</dt><dd><ul>
+<li><p>flatbuffers.cmake</p></li>
+<li><p>fmt.cmake</p></li>
+<li><p>spdlog.cmake</p></li>
+<li><p>tpl.cmake</p></li>
+<li><p>taskflow.cmake</p></li>
+<li><p>cli11.cmake</p></li>
+<li><p>cpputest.cmake</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>tool</dt><dd><ul>
+<li><p>clangtidy.cmake</p></li>
+<li><p>cppcheck.cmake</p></li>
+<li><p>doxygen.cmake</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="docs">
+<h2>docs<a class="headerlink" href="#docs" title="Permalink to this headline">¶</a></h2>
+<p>Project documentation</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>arch</dt><dd><ul>
+<li><p>Project / Software architecture documentation</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>user_api</dt><dd><ul>
+<li><p>User usable APIs</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="example">
+<h2>example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt>gcc</dt><dd><ul>
+<li><p>Lowlevel tests for the GCC compiler</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>msvc</dt><dd><ul>
+<li><p>Lowlevel tests for the MSVC compiler</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>hybrid</dt><dd><ul>
+<li><p>Real world usages with both GCC and MSVC compiler support</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="third-party">
+<h2>third_party<a class="headerlink" href="#third-party" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Flatbuffers</p></li>
+<li><p>Fmtlib</p></li>
+<li><p>Spdlog</p></li>
+<li><p>CLI11</p></li>
+<li><p>Taskflow</p></li>
+<li><p>Tiny Process Library</p></li>
+<li><p>CppUTest</p></li>
+</ul>
+</div>
 </div>
 
         </article>
@@ -209,14 +425,14 @@
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../page/user_api.html">
+          <a class="prev-page" href="toc.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">User API</div>
+                <div class="title">Architecture</div>
                 
               </div>
             </a>
@@ -234,8 +450,34 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Project Layout</a><ul>
+<li><a class="reference internal" href="#workspace-root">[workspace root]</a></li>
+<li><a class="reference internal" href="#bootstrap">bootstrap</a></li>
+<li><a class="reference internal" href="#buildcc">buildcc</a></li>
+<li><a class="reference internal" href="#buildexe">buildexe</a></li>
+<li><a class="reference internal" href="#cmake">cmake</a></li>
+<li><a class="reference internal" href="#docs">docs</a></li>
+<li><a class="reference internal" href="#example">example</a></li>
+<li><a class="reference internal" href="#third-party">third_party</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

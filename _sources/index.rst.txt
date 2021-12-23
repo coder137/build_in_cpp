@@ -7,20 +7,12 @@ Welcome to BuildCC's documentation!
 ===================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents
 
-   page/user_api
+   arch/toc
+   user_api/toc
 
-.. toctree::
-   :caption: Architecture
-
-   arch/project_layout
-   arch/software_heirarchy
-   arch/namespaces
-   arch/design_patterns
-   arch/testing
-   arch/outputs
 
 Indices and tables
 ==================

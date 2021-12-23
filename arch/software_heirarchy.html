@@ -133,7 +133,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -154,17 +154,30 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../page/user_api.html">User API</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Architecture</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="project_layout.html">Project Layout</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Software Heirarchy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="namespaces.html">Namespaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="design_patterns.html">Design Patterns</a></li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="outputs.html">Outputs</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">Architecture</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="project_layout.html">Project Layout</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Software Heirarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="namespaces.html">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design_patterns.html">Design Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outputs.html">Outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="style_guide.html">Style Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html">Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#target">Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#specialized-target">Specialized Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/args.html">Args</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/register.html">Register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
+</ul>
+</li>
 </ul>
 
 </div>
@@ -185,7 +198,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -193,6 +206,81 @@
         <article role="main">
           <div class="section" id="software-heirarchy">
 <h1>Software Heirarchy<a class="headerlink" href="#software-heirarchy" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="buildcc-single-lib">
+<h2>BuildCC single lib<a class="headerlink" href="#buildcc-single-lib" title="Permalink to this headline">¶</a></h2>
+<p><strong>BuildCC</strong> sources are compiled into a single library</p>
+<p class="plantuml">
+<img alt='rectangle Flatbuffers as flatbuffers
+rectangle fmt as fmt
+rectangle spdlog as spdlog
+rectangle Taskflow as taskflow
+rectangle CLI11 as cli11
+rectangle "tiny-process-library" as tpl
+
+rectangle BuildCC as buildcc
+
+flatbuffers -up-&gt; buildcc
+fmt -up-&gt; buildcc
+spdlog -up-&gt; buildcc
+taskflow -up-&gt; buildcc
+cli11 -up-&gt; buildcc
+tpl -up-&gt; buildcc' src="../_images/plantuml-0217fffc78ce874c8847e87d1a5f460f94194815.png"/>
+</p>
+</div>
+<div class="section" id="buildcc-interface-lib">
+<h2>BuildCC interface lib<a class="headerlink" href="#buildcc-interface-lib" title="Permalink to this headline">¶</a></h2>
+<p><strong>BuildCC</strong> is broken up into multiple smaller libraries</p>
+<ul class="simple">
+<li><p>This has been done mainly for unit-testing and mocking segregation</p></li>
+<li><p>It helps to easily architect the <code class="docutils literal notranslate"><span class="pre">BuildCC</span></code> library by visualizing internal dependencies</p></li>
+</ul>
+<p class="plantuml">
+<img alt='rectangle Flatbuffers as flatbuffers #palegreen
+rectangle fmt as fmt #palegreen
+rectangle spdlog as spdlog #palegreen
+rectangle Taskflow as taskflow #palegreen
+rectangle CLI11 as cli11 #palegreen
+rectangle "tiny-process-library" as tpl #palegreen
+
+rectangle Environment as env #aliceblue
+rectangle Toolchain as toolchain #aliceblue
+rectangle Target as target #aliceblue
+rectangle "Toolchain specialized" as toolchain_specialized #aliceblue
+rectangle "Target specialized" as target_specialized #aliceblue
+rectangle Args as args #aliceblue
+rectangle Register as register #aliceblue
+rectangle "Supported Plugins" as plugins #aliceblue
+rectangle BuildCC as buildcc
+
+
+fmt -up-&gt; env
+spdlog .up.&gt; env
+tpl .up.&gt; env
+
+flatbuffers .up.&gt; target
+taskflow -up-&gt; target
+
+cli11 -up-&gt; args
+taskflow -up-&gt; register
+
+env -up-&gt; toolchain
+
+toolchain -up-&gt; target
+toolchain -up-&gt; toolchain_specialized
+
+target -up-&gt; target_specialized
+
+target -up-&gt; args
+target -up-&gt; register
+target -up-&gt; plugins
+
+toolchain_specialized -up-&gt; buildcc
+target_specialized -up-&gt; buildcc
+args -up-&gt; buildcc
+register -up-&gt; buildcc
+plugins -up-&gt; buildcc' src="../_images/plantuml-ea8c5f0829bc754249170b2b7f39d19d63f930bc.png"/>
+</p>
+</div>
 </div>
 
         </article>
@@ -234,8 +322,28 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Software Heirarchy</a><ul>
+<li><a class="reference internal" href="#buildcc-single-lib">BuildCC single lib</a></li>
+<li><a class="reference internal" href="#buildcc-interface-lib">BuildCC interface lib</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
