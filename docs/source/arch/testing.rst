@@ -40,6 +40,29 @@ mock_toolchain
 mock_target
 ^^^^^^^^^^^^
 
+.. doxygenfunction:: GeneratorRunner
+
+.. doxygenfunction:: GeneratorExpect_InputRemoved
+
+.. doxygenfunction:: GeneratorExpect_InputAdded
+
+.. doxygenfunction:: GeneratorExpect_InputUpdated
+
+.. doxygenfunction:: GeneratorExpect_OutputChanged
+
+.. doxygenfunction:: GeneratorExpect_CommandChanged
+
+From the :doc:`serialization_schema` **generator** we can see that our generator has 3 rebuild conditions
+
+* Inputs
+   * Removed state (input file is removed)
+   * Added state (input file is added)
+   * Updated state (input file is updated)
+* Outputs
+   * Changed (output file is added or removed)
+* Commands
+   * Changed (command is added or removed)
+
 Tests
 ------
 
