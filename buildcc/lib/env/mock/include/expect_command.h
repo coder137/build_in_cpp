@@ -14,9 +14,10 @@ namespace buildcc::env::m {
  * @param calls Number of times the actual `Command::Execute` API is called
  * @param expectation Return value of the actual `Command::Execute` API
  * @param stdout_data Data passed into stdout_data is redirected into the
- * actual `Command::Execute` API to check for expectations
+ * actual `Command::Execute` API to check for expectations. See
+ * `VectorStringCopier`
  * @param stderr_data Data passed into stderr_data is redirected into the actual
- * `Command::Execute` API to check for expectations
+ * `Command::Execute` API to check for expectations. See `VectorStringCopier`
  */
 void CommandExpect_Execute(unsigned int calls, bool expectation,
                            std::vector<std::string> *stdout_data = nullptr,
