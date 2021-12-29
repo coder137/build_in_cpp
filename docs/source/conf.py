@@ -40,6 +40,7 @@ breathe_default_members = ("members", "undoc-members")
 
 print(f"Current Dir for plantuml jar file: {os.getcwd()}")
 plantuml = f"java -jar {os.getcwd()}/_plantuml/plantuml-1.2021.16.jar"
+# plantuml_output_format = "svg" #png / svg
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
