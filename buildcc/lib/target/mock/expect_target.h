@@ -7,6 +7,10 @@ namespace buildcc {
 
 namespace base::m {
 
+/**
+ * @brief Runs the target using Taskflow with 1 thread
+ * CppUTest cannot mock with multiple threads
+ */
 void TargetRunner(Target &target);
 
 void TargetExpect_SourceRemoved(unsigned int calls, Target *target);
