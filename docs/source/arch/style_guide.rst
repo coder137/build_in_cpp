@@ -11,7 +11,7 @@ Defaults
 Google Style
 ------------
 
-``[snake_case_variable_name]``` for public member variables
+``[snake_case_variable_name]`` for public member variables
 
 ``[snake_case_variable_name]_`` for private member variables
 
