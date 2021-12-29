@@ -13,6 +13,10 @@ Path
         last_write_timestamp:uint64;
     }
 
+* ``Path`` is used when we want to verify the physical presence of a particular file
+* The ``last_write_timestamp`` is used to check if we need to rebuild the file.
+* However we can use different rebuild strategies in the future. Ex: ``last_write_timestamp:uint64`` can be converted to ``hash:string``
+
 Generator
 ---------
 
@@ -28,6 +32,16 @@ Generator
         commands:[string];
     }
     root_type Generator;
+
+.. uml::
+   
+   start
+   :Inputs;
+   :Commands;
+   :Outputs;
+   stop
+
+
 
 Target
 -------
@@ -84,3 +98,56 @@ Target
         target_linked:bool;
     }
     root_type Target;
+
+
+.. uml::
+   
+   start
+   
+   split
+   :SourceFiles;
+   
+   split again
+   :HeaderFiles;
+   
+   split again
+   :PchFiles;
+   
+   split again
+   :IncludeDirs;
+
+   split again
+   :PreprocessorFlags;
+
+   split again
+   :CompileFlags;
+
+   split again
+   :CompileDependencies;
+   end split
+
+   :Compile;
+
+   split
+   :Objects;
+
+   split again
+   :LibDeps;
+
+   split again
+   :ExternalLibDeps;
+
+   split again
+   :LibDirs;
+
+   split again
+   :LinkFlags;
+
+   split again
+   :LinkDependencies;
+   end split
+
+   :Link;
+
+   :Target;
+   stop
