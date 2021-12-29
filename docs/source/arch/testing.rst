@@ -30,10 +30,12 @@ mock_env
 * All of the logging APIs have been **stubbed** out since they are unnecessary for unit tests and very noisy when getting output
 * A better alternative would be debugging unit tests or adding the CppUTest ``UT_PRINT`` statement instead
 
+.. doxygenclass:: buildcc::env::m::VectorStringCopier
+
 mock_toolchain
 ^^^^^^^^^^^^^^
 
-
+* Does not override any classes / functions
 
 mock_target
 ^^^^^^^^^^^^
