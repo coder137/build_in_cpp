@@ -12,6 +12,7 @@ Welcome to BuildCC's documentation!
 
    intro/toc
    arch/toc
+   getting_started/toc
    user_api/toc
    examples/toc
 
