@@ -102,17 +102,45 @@ Tests
 env
 ^^^^
 
+* test_env_util
+* test_task_state
+* test_command
+
 toolchain
 ^^^^^^^^^^
+
+* test_toolchain_verify
 
 target
 ^^^^^^^
 
+* test_path
+* test_builder_interface
+* test_target_config
+* test_target_state
+* test_generator
+* test_compile_object
+* test_base_target
+* test_target_pch
+* test_target_source
+* test_target_source_out_of_root
+* test_target_include_dir
+* test_target_lib_dep
+* test_target_external_lib
+* test_target_flags
+* test_target_user_deps
+* test_target_lock
+* test_target_sync
+* test_target_failure_states
+
 args
 ^^^^^
 
-register
-^^^^^^^^^^
+* test_args
+* test_register
+* test_persistent_storage
 
 plugins
 ^^^^^^^^
+
+.. note: Incomplete implementation and tests
