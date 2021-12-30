@@ -63,6 +63,32 @@ From the :doc:`serialization_schema` **generator** we can see that our generator
 * Commands
    * Changed (command is added or removed)
 
+.. doxygenfunction:: TargetRunner
+
+.. doxygenfunction:: TargetExpect_SourceRemoved
+
+.. doxygenfunction:: TargetExpect_SourceAdded
+
+.. doxygenfunction:: TargetExpect_SourceUpdated
+
+.. doxygenfunction:: TargetExpect_PathRemoved
+
+.. doxygenfunction:: TargetExpect_PathAdded
+
+.. doxygenfunction:: TargetExpect_PathUpdated
+
+.. doxygenfunction:: TargetExpect_DirChanged
+
+.. doxygenfunction:: TargetExpect_FlagChanged
+
+.. doxygenfunction:: TargetExpect_ExternalLibChanged
+
+From the :doc:`serialization_schema` **target** we can see that our generator has multiple rebuild conditions
+
+Anything associated with ``Path`` has 3 states i.e Added, Removed or Updated
+
+Everything else has only 2 states i.e Added or Removed
+
 Tests
 ------
 
