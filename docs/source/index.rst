@@ -12,6 +12,7 @@ Welcome to BuildCC's documentation!
 
    arch/toc
    user_api/toc
+   examples/toc
 
 
 Indices and tables
