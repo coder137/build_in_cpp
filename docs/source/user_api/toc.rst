@@ -3,7 +3,6 @@ User API
 
 
 .. toctree::
-    :maxdepth: 1
 
     environment
     toolchain
