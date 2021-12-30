@@ -5,10 +5,10 @@ if (${BUILDCC_DOCUMENTATION})
     message("Doxygen Found: ${DOXYGEN_FOUND}")
     message("Doxygen Version: ${DOXYGEN_VERSION}")
 
-    set(DOXYGEN_EXCLUDE_PATTERNS 
-        *test/*
-        *mock/*
-    )
+    # set(DOXYGEN_EXCLUDE_PATTERNS 
+    #     *test/*
+    #     *mock/*
+    # )
     set(DOXYGEN_EXTRACT_ALL YES)
     set(DOXYGEN_WARN_IF_UNDOCUMENTED YES)
     set(DOXYGEN_GENERATE_XML YES)

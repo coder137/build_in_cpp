@@ -5,6 +5,10 @@
 
 namespace buildcc::base::m {
 
+/**
+ * @brief Runs the generator using Taskflow with 1 thread
+ * CppUTest cannot mock with multiple threads
+ */
 void GeneratorRunner(Generator &generator);
 
 void GeneratorExpect_InputRemoved(unsigned int calls, Generator *generator);

@@ -61,8 +61,15 @@ public:
                             &arguments = {}) const;
 
   /**
-   * @brief Execute a particular command and optionally redirect stdout and
-   * stderr to user supplied dynamic string lists
+   * @brief Execute a particular command over a subprocess and optionally
+   * redirect stdout and stderr to user supplied dynamic string lists
+   *
+   * @param command Command is run on the shell
+   * @param working_directory Current working directory
+   * @param stdout_data Redirect stdout to user OR default print to console
+   * @param stderr_data Redirect stderr to user OR default print to console
+   * @return true when exit code = 0
+   * @return false when exit code != 0
    */
   // TODO, Update this to get an integer exit code number instead of boolean
   // value

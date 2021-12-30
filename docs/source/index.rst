@@ -10,8 +10,11 @@ Welcome to BuildCC's documentation!
    :maxdepth: 1
    :caption: Contents
 
+   intro/toc
    arch/toc
+   getting_started/toc
    user_api/toc
+   examples/toc
 
 
 Indices and tables
