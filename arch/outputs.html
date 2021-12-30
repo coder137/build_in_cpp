@@ -133,7 +133,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -155,9 +155,12 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/toc.html">Introduction</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">Architecture</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="project_layout.html">Project Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="software_heirarchy.html">Software Heirarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization_schema.html">Serialization Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmake_boilerplate.html">CMake Boilerplate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="namespaces.html">Namespaces</a></li>
 <li class="toctree-l2"><a class="reference internal" href="design_patterns.html">Design Patterns</a></li>
 <li class="toctree-l2"><a class="reference internal" href="testing.html">Testing</a></li>
@@ -165,6 +168,7 @@
 <li class="toctree-l2"><a class="reference internal" href="style_guide.html">Style Guide</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/environment.html">Environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
@@ -178,6 +182,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/toc.html">Examples</a></li>
 </ul>
 
 </div>
@@ -198,7 +203,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -206,6 +211,63 @@
         <article role="main">
           <div class="section" id="outputs">
 <h1>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="buildcc-library">
+<h2>BuildCC Library<a class="headerlink" href="#buildcc-library" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">build_in_cpp</span></code> project aims to remove DSLs by writing build files in C++.</p>
+<p>However our C++ “script” first needs to be <strong>built (compiled and linked)</strong> then <strong>executed (build targets)</strong>.</p>
+<p>When building (compiling and linking) our C++ “script” we need to link the <code class="docutils literal notranslate"><span class="pre">buildcc</span></code> library as well to provide the “script” with <code class="docutils literal notranslate"><span class="pre">buildcc</span></code> APIs.</p>
+</div>
+<div class="section" id="buildexe-executable">
+<h2>BuildExe Executable<a class="headerlink" href="#buildexe-executable" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">BuildExe</span></code> is a standalone executable similar to <code class="docutils literal notranslate"><span class="pre">make.exe</span></code>.</p>
+<p>As part of the current release <code class="docutils literal notranslate"><span class="pre">BuildExe</span></code> requires the following folder structure.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Proper details of <code class="docutils literal notranslate"><span class="pre">BuildExe</span></code> usage to be added. For now this is in its experimental stage with only support for GCC, MinGW and MSVC compilers.</p>
+</div>
+<p class="plantuml">
+<img alt="@startmindmap
+* ENV[BUILDCC_HOME]
+** buildcc
+** extensions
+** libs
+** host
+@endmindmap" src="../_images/plantuml-c585d7bd336d497ba3d390dbf1921d7b65892f1e.png"/>
+</p>
+<div class="section" id="env-buildcc-home">
+<h3>ENV[BUILDCC_HOME]<a class="headerlink" href="#env-buildcc-home" title="Permalink to this headline">¶</a></h3>
+<p>Create your BUILDCC_HOME directory. For example: <code class="docutils literal notranslate"><span class="pre">C:/BUILDCCHOME</span></code> or <code class="docutils literal notranslate"><span class="pre">local/mnt/BUILDCCHOME</span></code> and add this path to the <strong>environment variable BUILDCC_HOME</strong>.</p>
+</div>
+<div class="section" id="buildcc">
+<h3>buildcc<a class="headerlink" href="#buildcc" title="Permalink to this headline">¶</a></h3>
+<p>This directory contains the git cloned <code class="docutils literal notranslate"><span class="pre">build_in_cpp</span></code> repository</p>
+</div>
+<div class="section" id="extensions">
+<h3>extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h3>
+<p>This directory contains several git cloned second and third party plugins and extensions</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>BuildExe will have the ability to directly use these extensions after specifying them in the .toml file</p>
+</div>
+</div>
+<div class="section" id="libs">
+<h3>libs<a class="headerlink" href="#libs" title="Permalink to this headline">¶</a></h3>
+<p>This directory contains several git cloned libraries that need to be used in your projects or code base once they are specified in your .toml file.</p>
+<p>In this way, the <code class="docutils literal notranslate"><span class="pre">build_in_cpp</span></code> project automatically behaves like a package manager.</p>
+</div>
+<div class="section" id="host">
+<h3>host<a class="headerlink" href="#host" title="Permalink to this headline">¶</a></h3>
+<p>Host toolchain toml files that contain information pertaining to the various host toolchains installed on your operating system.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The goal is to have a standalone executable to detect the host toolchains and automatically generate .toml files for each one of them. Users can then use these host toolchain files for building their “script”</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Consider adding a <strong>cross</strong> folder for cross compiled toolchains are well which cannot be used to build the “script” but instead can be used by the script to build cross compiled targets.</p>
+</div>
+</div>
+</div>
 </div>
 
         </article>
@@ -247,8 +309,35 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Outputs</a><ul>
+<li><a class="reference internal" href="#buildcc-library">BuildCC Library</a></li>
+<li><a class="reference internal" href="#buildexe-executable">BuildExe Executable</a><ul>
+<li><a class="reference internal" href="#env-buildcc-home">ENV[BUILDCC_HOME]</a></li>
+<li><a class="reference internal" href="#buildcc">buildcc</a></li>
+<li><a class="reference internal" href="#extensions">extensions</a></li>
+<li><a class="reference internal" href="#libs">libs</a></li>
+<li><a class="reference internal" href="#host">host</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

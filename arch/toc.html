@@ -2,7 +2,7 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Project Layout" href="project_layout.html" /><link rel="prev" title="Welcome to BuildCC’s documentation!" href="../index.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Project Layout" href="project_layout.html" /><link rel="prev" title="Introduction" href="../intro/toc.html" />
 
     <meta name="generator" content="sphinx-4.3.2, furo 2021.11.23"/>
         <title>Architecture - BuildCC 0.1.1 documentation</title>
@@ -155,9 +155,12 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/toc.html">Introduction</a></li>
 <li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Architecture</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="project_layout.html">Project Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="software_heirarchy.html">Software Heirarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization_schema.html">Serialization Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmake_boilerplate.html">CMake Boilerplate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="namespaces.html">Namespaces</a></li>
 <li class="toctree-l2"><a class="reference internal" href="design_patterns.html">Design Patterns</a></li>
 <li class="toctree-l2"><a class="reference internal" href="testing.html">Testing</a></li>
@@ -165,6 +168,7 @@
 <li class="toctree-l2"><a class="reference internal" href="style_guide.html">Style Guide</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/environment.html">Environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
@@ -178,6 +182,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/toc.html">Examples</a></li>
 </ul>
 
 </div>
@@ -224,10 +229,52 @@
 <li class="toctree-l2"><a class="reference internal" href="software_heirarchy.html#buildcc-interface-lib">BuildCC interface lib</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="namespaces.html">Namespaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="design_patterns.html">Design Patterns</a></li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="outputs.html">Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="serialization_schema.html">Serialization Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="serialization_schema.html#path">Path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization_schema.html#generator">Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization_schema.html#target">Target</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cmake_boilerplate.html">CMake Boilerplate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="namespaces.html">Namespaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespaces.html#user">User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="namespaces.html#developer">Developer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="design_patterns.html">Design Patterns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="design_patterns.html#crtp-mixins">CRTP / Mixins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design_patterns.html#friend-classes">Friend classes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#test-libs">Test libs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#mock-env">mock_env</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#mock-toolchain">mock_toolchain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#mock-target">mock_target</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#tests">Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#env">env</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#toolchain">toolchain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#target">target</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#args">args</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#plugins">plugins</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="outputs.html">Outputs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="outputs.html#buildcc-library">BuildCC Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outputs.html#buildexe-executable">BuildExe Executable</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="outputs.html#env-buildcc-home">ENV[BUILDCC_HOME]</a></li>
+<li class="toctree-l3"><a class="reference internal" href="outputs.html#buildcc">buildcc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="outputs.html#extensions">extensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="outputs.html#libs">libs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="outputs.html#host">host</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="style_guide.html">Style Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="style_guide.html#defaults">Defaults</a></li>
 <li class="toctree-l2"><a class="reference internal" href="style_guide.html#google-style">Google Style</a></li>
@@ -251,14 +298,14 @@
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../index.html">
+          <a class="prev-page" href="../intro/toc.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Home</div>
+                <div class="title">Introduction</div>
                 
               </div>
             </a>

@@ -133,7 +133,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -155,9 +155,12 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/toc.html">Introduction</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">Architecture</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="project_layout.html">Project Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="software_heirarchy.html">Software Heirarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization_schema.html">Serialization Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmake_boilerplate.html">CMake Boilerplate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="namespaces.html">Namespaces</a></li>
 <li class="toctree-l2"><a class="reference internal" href="design_patterns.html">Design Patterns</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Testing</a></li>
@@ -165,6 +168,7 @@
 <li class="toctree-l2"><a class="reference internal" href="style_guide.html">Style Guide</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/environment.html">Environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
@@ -178,6 +182,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/toc.html">Examples</a></li>
 </ul>
 
 </div>
@@ -198,7 +203,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -206,6 +211,253 @@
         <article role="main">
           <div class="section" id="testing">
 <h1>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="test-libs">
+<h2>Test libs<a class="headerlink" href="#test-libs" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mock_env</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mock_toolchain</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mock_target</span></code></p></li>
+</ul>
+<div class="section" id="mock-env">
+<h3>mock_env<a class="headerlink" href="#mock-env" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">assert_handle_fatal</span></code> uses <code class="docutils literal notranslate"><span class="pre">throw</span> <span class="pre">std::exception</span></code> instead of <code class="docutils literal notranslate"><span class="pre">std::terminate</span></code></p></li>
+<li><p>We can now use the CppUTest <code class="docutils literal notranslate"><span class="pre">CHECK_THROWS</span></code> API when a failure occurs</p></li>
+</ul>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env19assert_handle_fatalEv">
+<span id="_CPPv3N7buildcc3env19assert_handle_fatalEv"></span><span id="_CPPv2N7buildcc3env19assert_handle_fatalEv"></span><span id="buildcc::env::assert_handle_fatal"></span><span class="target" id="namespacebuildcc_1_1env_1afd402803a5120a882262c1d705b90f90"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">assert_handle_fatal</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env19assert_handle_fatalEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>During Release -&gt; std::terminate During Unit Test -&gt; throw std::exception. </p>
+</dd></dl>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Command::Execute</span></code> is mocked out to CppUMock <code class="docutils literal notranslate"><span class="pre">.actualCall("execute")</span></code> API</p></li>
+<li><p>We can redirect stdout and stderr through the actual call, with our own information to match expectations using the CppUMock <code class="docutils literal notranslate"><span class="pre">.withOutputParameterOfType</span></code> API</p></li>
+<li><p>Provided with the <code class="docutils literal notranslate"><span class="pre">CommandExpect_Execute</span></code> mocked API</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">command</span></code> and <code class="docutils literal notranslate"><span class="pre">working_directory</span></code> params are not used</p></li>
+</ul>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env7CommandE">
+<span id="_CPPv3N7buildcc3env7CommandE"></span><span id="_CPPv2N7buildcc3env7CommandE"></span><span id="buildcc::env::Command"></span><span class="target" id="classbuildcc_1_1env_1_1Command"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Command</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc3env7CommandE" title="Permalink to this definition">¶</a><br/></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env7Command7ExecuteERKNSt6stringERKNSt8optionalIN2fs4pathEEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE">
+<span id="_CPPv3N7buildcc3env7Command7ExecuteERKNSt6stringERKNSt8optionalIN2fs4pathEEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE"></span><span id="_CPPv2N7buildcc3env7Command7ExecuteERKNSt6stringERKNSt8optionalIN2fs4pathEEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE"></span><span id="buildcc::env::Command::Execute__ssCR.std::optional:fs::path:CR.std::vector:ss:P.std::vector:ss:P"></span><span class="target" id="classbuildcc_1_1env_1_1Command_1a5cf14ba05ef507edce65c484f07a9ee0"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Execute</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">command</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">working_directory</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">stdout_data</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">stderr_data</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env7Command7ExecuteERKNSt6stringERKNSt8optionalIN2fs4pathEEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Execute a particular command over a subprocess and optionally redirect stdout and stderr to user supplied dynamic string lists. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>command</strong> – <a class="reference internal" href="#classbuildcc_1_1env_1_1Command"><span class="std std-ref">Command</span></a> is run on the shell </p></li>
+<li><p><strong>working_directory</strong> – Current working directory </p></li>
+<li><p><strong>stdout_data</strong> – Redirect stdout to user OR default print to console </p></li>
+<li><p><strong>stderr_data</strong> – Redirect stderr to user OR default print to console </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>true when exit code = 0 </p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>false when exit code != 0 </p>
+</dd>
+</dl>
+</dd></dl>
+</div>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env1m21CommandExpect_ExecuteEjbPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE">
+<span id="_CPPv3N7buildcc3env1m21CommandExpect_ExecuteEjbPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE"></span><span id="_CPPv2N7buildcc3env1m21CommandExpect_ExecuteEjbPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE"></span><span id="buildcc::env::m::CommandExpect_Execute__unsigned-i.b.std::vector:ss:P.std::vector:ss:P"></span><span class="target" id="namespacebuildcc_1_1env_1_1m_1abe4ab87661e7af559daa16f99aedc152"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">CommandExpect_Execute</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">expectation</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">stdout_data</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">stderr_data</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env1m21CommandExpect_ExecuteEjbPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p><code class="docutils literal notranslate"><a class="reference internal" href="#classbuildcc_1_1env_1_1Command_1a5cf14ba05ef507edce65c484f07a9ee0"><span class="std std-ref"><span class="pre">Command::Execute</span></span></a></code> expectation API </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>calls</strong> – Number of times the actual <code class="docutils literal notranslate"><a class="reference internal" href="#classbuildcc_1_1env_1_1Command_1a5cf14ba05ef507edce65c484f07a9ee0"><span class="std std-ref"><span class="pre">Command::Execute</span></span></a></code> API is called </p></li>
+<li><p><strong>expectation</strong> – Return value of the actual <code class="docutils literal notranslate"><a class="reference internal" href="#classbuildcc_1_1env_1_1Command_1a5cf14ba05ef507edce65c484f07a9ee0"><span class="std std-ref"><span class="pre">Command::Execute</span></span></a></code> API </p></li>
+<li><p><strong>stdout_data</strong> – Data passed into stdout_data is redirected into the actual <code class="docutils literal notranslate"><a class="reference internal" href="#classbuildcc_1_1env_1_1Command_1a5cf14ba05ef507edce65c484f07a9ee0"><span class="std std-ref"><span class="pre">Command::Execute</span></span></a></code> API to check for expectations. See <code class="docutils literal notranslate"><a class="reference internal" href="#classbuildcc_1_1env_1_1m_1_1VectorStringCopier"><span class="std std-ref"><span class="pre">VectorStringCopier</span></span></a></code> </p></li>
+<li><p><strong>stderr_data</strong> – Data passed into stderr_data is redirected into the actual <code class="docutils literal notranslate"><a class="reference internal" href="#classbuildcc_1_1env_1_1Command_1a5cf14ba05ef507edce65c484f07a9ee0"><span class="std std-ref"><span class="pre">Command::Execute</span></span></a></code> API to check for expectations. See <code class="docutils literal notranslate"><a class="reference internal" href="#classbuildcc_1_1env_1_1m_1_1VectorStringCopier"><span class="std std-ref"><span class="pre">VectorStringCopier</span></span></a></code> </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<ul class="simple">
+<li><p>All of the logging APIs have been <strong>stubbed</strong> out since they are unnecessary for unit tests and very noisy when getting output</p></li>
+<li><p>A better alternative would be debugging unit tests or adding the CppUTest <code class="docutils literal notranslate"><span class="pre">UT_PRINT</span></code> statement instead</p></li>
+</ul>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env1m18VectorStringCopierE">
+<span id="_CPPv3N7buildcc3env1m18VectorStringCopierE"></span><span id="_CPPv2N7buildcc3env1m18VectorStringCopierE"></span><span id="buildcc::env::m::VectorStringCopier"></span><span class="target" id="classbuildcc_1_1env_1_1m_1_1VectorStringCopier"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">VectorStringCopier</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">MockNamedValueCopier</span></span><a class="headerlink" href="#_CPPv4N7buildcc3env1m18VectorStringCopierE" title="Permalink to this definition">¶</a><br/></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env1m18VectorStringCopier4copyEPvPKv">
+<span id="_CPPv3N7buildcc3env1m18VectorStringCopier4copyEPvPKv"></span><span id="_CPPv2N7buildcc3env1m18VectorStringCopier4copyEPvPKv"></span><span id="buildcc::env::m::VectorStringCopier::copy__voidP.voidCP"></span><span class="target" id="classbuildcc_1_1env_1_1m_1_1VectorStringCopier_1a0b8d10bcbfe916711ea40e71091cd30b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">copy</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N7buildcc3env1m18VectorStringCopier4copyEPvPKv" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+</div>
+</dd></dl>
+</div>
+<div class="section" id="mock-toolchain">
+<h3>mock_toolchain<a class="headerlink" href="#mock-toolchain" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Does not override any classes / functions</p></li>
+</ul>
+</div>
+<div class="section" id="mock-target">
+<h3>mock_target<a class="headerlink" href="#mock-target" title="Permalink to this headline">¶</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m15GeneratorRunnerER9Generator">
+<span id="_CPPv3N7buildcc4base1m15GeneratorRunnerER9Generator"></span><span id="_CPPv2N7buildcc4base1m15GeneratorRunnerER9Generator"></span><span id="buildcc::base::m::GeneratorRunner__GeneratorR"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1adf66734bb2474eede1275b69242cffde"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">GeneratorRunner</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Generator</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">generator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m15GeneratorRunnerER9Generator" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Runs the generator using Taskflow with 1 thread CppUTest cannot mock with multiple threads. </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m28GeneratorExpect_InputRemovedEjP9Generator">
+<span id="_CPPv3N7buildcc4base1m28GeneratorExpect_InputRemovedEjP9Generator"></span><span id="_CPPv2N7buildcc4base1m28GeneratorExpect_InputRemovedEjP9Generator"></span><span id="buildcc::base::m::GeneratorExpect_InputRemoved__unsigned-i.GeneratorP"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1ab0e5ae5ea4fd557be88b69d22846d542"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">GeneratorExpect_InputRemoved</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="n"><span class="pre">Generator</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">generator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m28GeneratorExpect_InputRemovedEjP9Generator" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m26GeneratorExpect_InputAddedEjP9Generator">
+<span id="_CPPv3N7buildcc4base1m26GeneratorExpect_InputAddedEjP9Generator"></span><span id="_CPPv2N7buildcc4base1m26GeneratorExpect_InputAddedEjP9Generator"></span><span id="buildcc::base::m::GeneratorExpect_InputAdded__unsigned-i.GeneratorP"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1a8846b554a529c2dad81e192441e8dc9d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">GeneratorExpect_InputAdded</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="n"><span class="pre">Generator</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">generator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m26GeneratorExpect_InputAddedEjP9Generator" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m28GeneratorExpect_InputUpdatedEjP9Generator">
+<span id="_CPPv3N7buildcc4base1m28GeneratorExpect_InputUpdatedEjP9Generator"></span><span id="_CPPv2N7buildcc4base1m28GeneratorExpect_InputUpdatedEjP9Generator"></span><span id="buildcc::base::m::GeneratorExpect_InputUpdated__unsigned-i.GeneratorP"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1a1479508376294a59a646dc7fa6e4990f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">GeneratorExpect_InputUpdated</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="n"><span class="pre">Generator</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">generator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m28GeneratorExpect_InputUpdatedEjP9Generator" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m29GeneratorExpect_OutputChangedEjP9Generator">
+<span id="_CPPv3N7buildcc4base1m29GeneratorExpect_OutputChangedEjP9Generator"></span><span id="_CPPv2N7buildcc4base1m29GeneratorExpect_OutputChangedEjP9Generator"></span><span id="buildcc::base::m::GeneratorExpect_OutputChanged__unsigned-i.GeneratorP"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1a890cd8bbfd05b25246ea0bc4f498d8e8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">GeneratorExpect_OutputChanged</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="n"><span class="pre">Generator</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">generator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m29GeneratorExpect_OutputChangedEjP9Generator" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m30GeneratorExpect_CommandChangedEjP9Generator">
+<span id="_CPPv3N7buildcc4base1m30GeneratorExpect_CommandChangedEjP9Generator"></span><span id="_CPPv2N7buildcc4base1m30GeneratorExpect_CommandChangedEjP9Generator"></span><span id="buildcc::base::m::GeneratorExpect_CommandChanged__unsigned-i.GeneratorP"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1a5f52120b93f0850a1542de3280f3a1d7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">GeneratorExpect_CommandChanged</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="n"><span class="pre">Generator</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">generator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m30GeneratorExpect_CommandChangedEjP9Generator" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<p>From the <a class="reference internal" href="serialization_schema.html"><span class="doc">Serialization Schema</span></a> <strong>generator</strong> we can see that our generator has 3 rebuild conditions</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Inputs</dt><dd><ul>
+<li><p>Removed state (input file is removed)</p></li>
+<li><p>Added state (input file is added)</p></li>
+<li><p>Updated state (input file is updated)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Outputs</dt><dd><ul>
+<li><p>Changed (output file is added or removed)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Commands</dt><dd><ul>
+<li><p>Changed (command is added or removed)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m12TargetRunnerER6Target">
+<span id="_CPPv3N7buildcc4base1m12TargetRunnerER6Target"></span><span id="_CPPv2N7buildcc4base1m12TargetRunnerER6Target"></span><span id="buildcc::base::m::TargetRunner__TargetR"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1a8f0963b0c2382bd212f00b1b4b115cdc"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TargetRunner</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Target</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m12TargetRunnerER6Target" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Runs the target using Taskflow with 1 thread CppUTest cannot mock with multiple threads. </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m26TargetExpect_SourceRemovedEjP6Target">
+<span id="_CPPv3N7buildcc4base1m26TargetExpect_SourceRemovedEjP6Target"></span><span id="_CPPv2N7buildcc4base1m26TargetExpect_SourceRemovedEjP6Target"></span><span id="buildcc::base::m::TargetExpect_SourceRemoved__unsigned-i.TargetP"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1a97b4e287d8e0e83f53f32540dcc3c168"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TargetExpect_SourceRemoved</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="n"><span class="pre">Target</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m26TargetExpect_SourceRemovedEjP6Target" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m24TargetExpect_SourceAddedEjP6Target">
+<span id="_CPPv3N7buildcc4base1m24TargetExpect_SourceAddedEjP6Target"></span><span id="_CPPv2N7buildcc4base1m24TargetExpect_SourceAddedEjP6Target"></span><span id="buildcc::base::m::TargetExpect_SourceAdded__unsigned-i.TargetP"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1a1f99219efea2181314173af4858c9919"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TargetExpect_SourceAdded</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="n"><span class="pre">Target</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m24TargetExpect_SourceAddedEjP6Target" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m26TargetExpect_SourceUpdatedEjP6Target">
+<span id="_CPPv3N7buildcc4base1m26TargetExpect_SourceUpdatedEjP6Target"></span><span id="_CPPv2N7buildcc4base1m26TargetExpect_SourceUpdatedEjP6Target"></span><span id="buildcc::base::m::TargetExpect_SourceUpdated__unsigned-i.TargetP"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1a9fd0b1a77d1bbc2867f23d476b37ab95"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TargetExpect_SourceUpdated</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="n"><span class="pre">Target</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m26TargetExpect_SourceUpdatedEjP6Target" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m24TargetExpect_PathRemovedEjP6Target">
+<span id="_CPPv3N7buildcc4base1m24TargetExpect_PathRemovedEjP6Target"></span><span id="_CPPv2N7buildcc4base1m24TargetExpect_PathRemovedEjP6Target"></span><span id="buildcc::base::m::TargetExpect_PathRemoved__unsigned-i.TargetP"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1a7206f1de11e287c0c7910833f49fe521"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TargetExpect_PathRemoved</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="n"><span class="pre">Target</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m24TargetExpect_PathRemovedEjP6Target" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m22TargetExpect_PathAddedEjP6Target">
+<span id="_CPPv3N7buildcc4base1m22TargetExpect_PathAddedEjP6Target"></span><span id="_CPPv2N7buildcc4base1m22TargetExpect_PathAddedEjP6Target"></span><span id="buildcc::base::m::TargetExpect_PathAdded__unsigned-i.TargetP"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1ab1657decfcab6774e9ec5746d56e0f46"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TargetExpect_PathAdded</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="n"><span class="pre">Target</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m22TargetExpect_PathAddedEjP6Target" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m24TargetExpect_PathUpdatedEjP6Target">
+<span id="_CPPv3N7buildcc4base1m24TargetExpect_PathUpdatedEjP6Target"></span><span id="_CPPv2N7buildcc4base1m24TargetExpect_PathUpdatedEjP6Target"></span><span id="buildcc::base::m::TargetExpect_PathUpdated__unsigned-i.TargetP"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1a22ce566985b268b21fff3470dff5ba0b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TargetExpect_PathUpdated</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="n"><span class="pre">Target</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m24TargetExpect_PathUpdatedEjP6Target" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m23TargetExpect_DirChangedEjP6Target">
+<span id="_CPPv3N7buildcc4base1m23TargetExpect_DirChangedEjP6Target"></span><span id="_CPPv2N7buildcc4base1m23TargetExpect_DirChangedEjP6Target"></span><span id="buildcc::base::m::TargetExpect_DirChanged__unsigned-i.TargetP"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1a64607da6cbbc6299ea4b10416a5bd0f3"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TargetExpect_DirChanged</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="n"><span class="pre">Target</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m23TargetExpect_DirChangedEjP6Target" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m24TargetExpect_FlagChangedEjP6Target">
+<span id="_CPPv3N7buildcc4base1m24TargetExpect_FlagChangedEjP6Target"></span><span id="_CPPv2N7buildcc4base1m24TargetExpect_FlagChangedEjP6Target"></span><span id="buildcc::base::m::TargetExpect_FlagChanged__unsigned-i.TargetP"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1ad877576da7d57cf4b78d152fd5951fdf"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TargetExpect_FlagChanged</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="n"><span class="pre">Target</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m24TargetExpect_FlagChangedEjP6Target" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4base1m31TargetExpect_ExternalLibChangedEjP6Target">
+<span id="_CPPv3N7buildcc4base1m31TargetExpect_ExternalLibChangedEjP6Target"></span><span id="_CPPv2N7buildcc4base1m31TargetExpect_ExternalLibChangedEjP6Target"></span><span id="buildcc::base::m::TargetExpect_ExternalLibChanged__unsigned-i.TargetP"></span><span class="target" id="namespacebuildcc_1_1base_1_1m_1aba13595a33f11d2eb2066bc06886c90d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TargetExpect_ExternalLibChanged</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <span class="n"><span class="pre">Target</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4base1m31TargetExpect_ExternalLibChangedEjP6Target" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<p>From the <a class="reference internal" href="serialization_schema.html"><span class="doc">Serialization Schema</span></a> <strong>target</strong> we can see that our generator has multiple rebuild conditions</p>
+<p>Anything associated with <code class="docutils literal notranslate"><span class="pre">Path</span></code> has 3 states i.e Added, Removed or Updated</p>
+<p>Everything else has only 2 states i.e Added or Removed</p>
+</div>
+</div>
+<div class="section" id="tests">
+<h2>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">env</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">toolchain</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">target</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">register</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plugins</span></code></p></li>
+</ul>
+<div class="section" id="env">
+<h3>env<a class="headerlink" href="#env" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>test_env_util</p></li>
+<li><p>test_task_state</p></li>
+<li><p>test_command</p></li>
+</ul>
+</div>
+<div class="section" id="toolchain">
+<h3>toolchain<a class="headerlink" href="#toolchain" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>test_toolchain_verify</p></li>
+</ul>
+</div>
+<div class="section" id="target">
+<h3>target<a class="headerlink" href="#target" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>test_path</p></li>
+<li><p>test_builder_interface</p></li>
+<li><p>test_target_config</p></li>
+<li><p>test_target_state</p></li>
+<li><p>test_generator</p></li>
+<li><p>test_compile_object</p></li>
+<li><p>test_base_target</p></li>
+<li><p>test_target_pch</p></li>
+<li><p>test_target_source</p></li>
+<li><p>test_target_source_out_of_root</p></li>
+<li><p>test_target_include_dir</p></li>
+<li><p>test_target_lib_dep</p></li>
+<li><p>test_target_external_lib</p></li>
+<li><p>test_target_flags</p></li>
+<li><p>test_target_user_deps</p></li>
+<li><p>test_target_lock</p></li>
+<li><p>test_target_sync</p></li>
+<li><p>test_target_failure_states</p></li>
+</ul>
+</div>
+<div class="section" id="args">
+<h3>args<a class="headerlink" href="#args" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>test_args</p></li>
+<li><p>test_register</p></li>
+<li><p>test_persistent_storage</p></li>
+</ul>
+</div>
+<div class="section" id="plugins">
+<h3>plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
 </div>
 
         </article>
@@ -247,8 +499,40 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Testing</a><ul>
+<li><a class="reference internal" href="#test-libs">Test libs</a><ul>
+<li><a class="reference internal" href="#mock-env">mock_env</a></li>
+<li><a class="reference internal" href="#mock-toolchain">mock_toolchain</a></li>
+<li><a class="reference internal" href="#mock-target">mock_target</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tests">Tests</a><ul>
+<li><a class="reference internal" href="#env">env</a></li>
+<li><a class="reference internal" href="#toolchain">toolchain</a></li>
+<li><a class="reference internal" href="#target">target</a></li>
+<li><a class="reference internal" href="#args">args</a></li>
+<li><a class="reference internal" href="#plugins">plugins</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

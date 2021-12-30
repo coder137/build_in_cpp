@@ -2,7 +2,7 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Design Patterns" href="design_patterns.html" /><link rel="prev" title="Software Heirarchy" href="software_heirarchy.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Design Patterns" href="design_patterns.html" /><link rel="prev" title="CMake Boilerplate" href="cmake_boilerplate.html" />
 
     <meta name="generator" content="sphinx-4.3.2, furo 2021.11.23"/>
         <title>Namespaces - BuildCC 0.1.1 documentation</title>
@@ -133,7 +133,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -155,9 +155,12 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/toc.html">Introduction</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">Architecture</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="project_layout.html">Project Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="software_heirarchy.html">Software Heirarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization_schema.html">Serialization Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmake_boilerplate.html">CMake Boilerplate</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Namespaces</a></li>
 <li class="toctree-l2"><a class="reference internal" href="design_patterns.html">Design Patterns</a></li>
 <li class="toctree-l2"><a class="reference internal" href="testing.html">Testing</a></li>
@@ -165,6 +168,7 @@
 <li class="toctree-l2"><a class="reference internal" href="style_guide.html">Style Guide</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/environment.html">Environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
@@ -178,6 +182,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/toc.html">Examples</a></li>
 </ul>
 
 </div>
@@ -198,7 +203,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -206,6 +211,29 @@
         <article role="main">
           <div class="section" id="namespaces">
 <h1>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="user">
+<h2>User<a class="headerlink" href="#user" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">buildcc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">buildcc::env</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">buildcc::plugin</span></code></p></li>
+</ul>
+<div class="admonition-user-developer-opinion admonition">
+<p class="admonition-title">User/Developer opinion</p>
+<p>Do we need to segregate the <strong>Environment</strong> into its own <code class="docutils literal notranslate"><span class="pre">buildcc::env</span></code> namespace or merge all those APIs into the <code class="docutils literal notranslate"><span class="pre">buildcc</span></code> namespace?</p>
+</div>
+</div>
+<div class="section" id="developer">
+<h2>Developer<a class="headerlink" href="#developer" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">buildcc::base</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">buildcc::internal</span></code></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Consider removing <code class="docutils literal notranslate"><span class="pre">buildcc::base</span></code> since a lot of the APIs are typedef`ed to the <code class="docutils literal notranslate"><span class="pre">buildcc</span></code> namespace</p>
+</div>
+</div>
 </div>
 
         </article>
@@ -222,14 +250,14 @@
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="software_heirarchy.html">
+          <a class="prev-page" href="cmake_boilerplate.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Software Heirarchy</div>
+                <div class="title">CMake Boilerplate</div>
                 
               </div>
             </a>
@@ -247,8 +275,28 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Namespaces</a><ul>
+<li><a class="reference internal" href="#user">User</a></li>
+<li><a class="reference internal" href="#developer">Developer</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

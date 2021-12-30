@@ -133,7 +133,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -155,9 +155,12 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/toc.html">Introduction</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">Architecture</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="project_layout.html">Project Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="software_heirarchy.html">Software Heirarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization_schema.html">Serialization Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmake_boilerplate.html">CMake Boilerplate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="namespaces.html">Namespaces</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Design Patterns</a></li>
 <li class="toctree-l2"><a class="reference internal" href="testing.html">Testing</a></li>
@@ -165,6 +168,7 @@
 <li class="toctree-l2"><a class="reference internal" href="style_guide.html">Style Guide</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/environment.html">Environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
@@ -178,6 +182,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/toc.html">Examples</a></li>
 </ul>
 
 </div>
@@ -198,7 +203,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -206,6 +211,85 @@
         <article role="main">
           <div class="section" id="design-patterns">
 <h1>Design Patterns<a class="headerlink" href="#design-patterns" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="crtp-mixins">
+<h2>CRTP / Mixins<a class="headerlink" href="#crtp-mixins" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://www.fluentcpp.com/2017/05/16/what-the-crtp-brings-to-code/">Article by fluentcpp.com on CRTP</a></p>
+<ul class="simple">
+<li><p>Mixins are a design pattern used to add additional functionality to an existing class</p></li>
+<li><p>In this case, the <code class="docutils literal notranslate"><span class="pre">TargetInfo</span></code> and the <code class="docutils literal notranslate"><span class="pre">Target</span></code> class are meant to have a lot of setter APIs for user inputs.</p></li>
+<li><p>Adding more APIs to the class makes its difficult to read and maintain.</p></li>
+<li><p>For reference: See <a class="reference internal" href="serialization_schema.html"><span class="doc">Serialization Schema</span></a></p></li>
+<li><dl class="simple">
+<dt>For example: In Target <code class="docutils literal notranslate"><span class="pre">source_files</span></code> have currently have several APIs</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">AddSource</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AddSourceAbsolute</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GlobSources</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GlobSourcesAbsolute</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>In the future we might have additional APIs such as</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">AddSources</span></code> that takes an <code class="docutils literal notranslate"><span class="pre">std::initializer_list</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AddSources</span></code> that takes a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">std::unordered_set&lt;&gt;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AddSource(s)ByPattern</span></code> that takes a fmt string like <code class="docutils literal notranslate"><span class="pre">{dir}/source.cpp</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>From our serialization schema we can see that each of these fields could have many APIs associated with them. Having 50+ APIs for different fields in a single header i.e <code class="docutils literal notranslate"><span class="pre">target_info.h</span></code> / <code class="docutils literal notranslate"><span class="pre">target.h</span></code> would not be readible and hard to maintain.</p></li>
+<li><p>The Mixin / CRTP pattern is used to easily add functionality for a particular field in its own header / source file.</p></li>
+</ul>
+</div>
+<div class="section" id="friend-classes">
+<h2>Friend classes<a class="headerlink" href="#friend-classes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Friend classes are used when 2 classes have strong coupling with each other, but still need to maintain flexibility for other purposes. For example: Unit testing.</p></li>
+<li><dl class="simple">
+<dt>In <code class="docutils literal notranslate"><span class="pre">target.h</span></code> we have 3 friend classes (non CRTP based)</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">CompilePch</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CompileObject</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LinkTarget</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>These 3 classes are made friend classes for 2 main purposes</dt><dd><ul>
+<li><p>Unit Testing</p></li>
+<li><p>Flexibility / Maintaibility</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Unit Testing</dt><dd><ul>
+<li><p>If these were not friend classes, the functions would’ve been private in scope within the <code class="docutils literal notranslate"><span class="pre">Target</span></code> class</p></li>
+<li><p>Unit testing these individual private functions would not be possible would public interfaces</p></li>
+<li><p>By making them friend classes, We can now unit test the public functions and embed this class in a private context with the <code class="docutils literal notranslate"><span class="pre">Target</span></code> class</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Flexibility / Maintaibility</dt><dd><ul>
+<li><p>Each one of the classes mentioned above have their own information / states / tasks to hold.</p></li>
+<li><p>Without this segregation all of the member variables, states and tasks would need to be present inside the <code class="docutils literal notranslate"><span class="pre">Target</span></code> class</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Strong Coupling</dt><dd><ul>
+<li><p>The 3 friend classes have strong coupling with the <code class="docutils literal notranslate"><span class="pre">Target</span></code> class since it uses its internal member variables for setting / getting information.</p></li>
+<li><p>The friend class can interact with the parent class and vice versa.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
 </div>
 
         </article>
@@ -247,8 +331,28 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Design Patterns</a><ul>
+<li><a class="reference internal" href="#crtp-mixins">CRTP / Mixins</a></li>
+<li><a class="reference internal" href="#friend-classes">Friend classes</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

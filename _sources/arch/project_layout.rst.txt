@@ -1,6 +1,46 @@
 Project Layout
 ==============
 
+.. uml::
+
+   @startmindmap
+   * [root]
+   ** .clang-format
+   ** .gitmodules
+   ** CMakeLists.txt
+   ** CMakePresets.json
+   ** codecov.yml
+   ** LICENSE
+   ** README.md
+   ** TODO.md
+   * buildcc
+   ** env
+   ** toolchain
+   ** target
+   ** args
+   ** register
+   * bootstrap
+   * buildexe
+   * cmake
+   ** coverage
+   ** flags
+   ** target
+   ** tool
+   * docs
+   * example
+   ** gcc
+   ** msvc
+   ** hybrid
+   * third_party
+   ** CLI11
+   ** cpputest
+   ** flatbuffers
+   ** fmt
+   ** spdlog
+   ** taskflow
+   ** tiny-process-library
+   @endmindmap
+
 [workspace root]
 ----------------
 
