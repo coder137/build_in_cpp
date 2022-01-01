@@ -251,3 +251,8 @@ Use BuildCC with CMake
 
 Plugins
 --------
+
+PrecompileHeader
+----------------
+
+TODO
