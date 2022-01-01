@@ -252,6 +252,15 @@ Use BuildCC with CMake
 Plugins
 --------
 
+Demonstrating BuildCC supported plugin usage
+
+* From the **Flags** example above
+* Add the targets for which you would like to generate the `Clang CompileCommands Database <https://clang.llvm.org/docs/JSONCompilationDatabase.html>`_
+
+.. code-block:: cpp
+
+    plugin::ClangCompileCommands({&cppflags, &cflags}).Generate();
+
 PrecompileHeader
 ----------------
 
