@@ -33,8 +33,8 @@ Generic
 
 Select library type and target-toolchain type at runtime
 
-PCH
------
+PrecompileHeader
+----------------
 
 Precompile header usage with GCC and MSVC compilers 
 
