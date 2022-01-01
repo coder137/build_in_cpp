@@ -17,7 +17,7 @@ int main(void) {
 
   Toolchain_gcc gcc;
 
-  ExecutableTarget_gcc target("Simple.exe", gcc, "");
+  ExecutableTarget_gcc target("Simple", gcc, "");
   target.AddSource("main.cpp");
   target.Build();
 
