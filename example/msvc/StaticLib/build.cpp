@@ -17,12 +17,12 @@ int main(void) {
 
   Toolchain_msvc msvc;
 
-  StaticTarget_msvc statictarget_msvc("librandom.lib", msvc, "");
+  StaticTarget_msvc statictarget_msvc("librandom", msvc, "");
   statictarget_msvc.AddSource("src/random.cpp");
   statictarget_msvc.AddIncludeDir("include", true);
   statictarget_msvc.Build();
 
-  ExecutableTarget_msvc target_msvc("Simple.exe", msvc, "");
+  ExecutableTarget_msvc target_msvc("Simple", msvc, "");
   target_msvc.AddSource("src/main.cpp");
   target_msvc.AddIncludeDir("include", true);
 
