@@ -30,7 +30,7 @@ StaticLib
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 2,6,15
+    :emphasize-lines: 2,6,13
 
     // MSVC specialized Toolchain
     Toolchain_msvc msvc;
@@ -68,7 +68,7 @@ DynamicLib
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 2,6,15
+    :emphasize-lines: 2,6,13
 
     // MSVC specialized Toolchain
     Toolchain_msvc msvc;
