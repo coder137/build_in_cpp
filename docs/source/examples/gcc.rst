@@ -41,7 +41,7 @@ Compile multiple sources with header files
     Toolchain_gcc toolchain;
 
     // GCC specialized targets
-    // Create "Simple" target (meant to use the GCC compiler)
+    // Create "IncludeDir" target (meant to use the GCC compiler)
     // On Windows the equivalent is the MinGW compiler
     ExecutableTarget_gcc target("IncludeDir", gcc, "files");
     target.AddSource("main.cpp", "src");
@@ -57,6 +57,46 @@ Compile multiple sources with header files
 
 StaticLib
 ----------
+
+Compile static library which is used by an executable
+
+.. code-block:: cpp
+    :linenos:
+    :emphasize-lines: 2,7,16
+
+    // GCC specialized toolchain
+    Toolchain_gcc toolchain;
+
+    // GCC specialized targets
+    // Create "librandom.a" target (meant to use the GCC compiler)
+    // On Windows the equivalent is the MinGW compiler
+    StaticTarget_gcc statictarget("librandom", gcc, "files");
+    statictarget.AddSource("src/random.cpp");
+    statictarget.AddHeader("include/random.h");
+    statictarget.AddIncludeDir("include");
+    statictarget.Build();
+
+    // GCC specialized targets
+    // Create "statictest" target (meant to use the GCC compiler)
+    // On Windows the equivalent is the MinGW compiler
+    ExecutableTarget_gcc exetarget("statictest", gcc, "files");
+    exetarget.AddSource("main.cpp", "src");
+    exetarget.AddIncludeDir("include");
+    exetarget.AddLibDep(statictarget);
+    exetarget.Build();
+
+    // Build
+    tf::Executor executor;
+    tf::Taskflow taskflow;
+
+    // Explicitly setup your dependencies
+    tf::Task statictargetTask = taskflow.composed_of(statictarget.GetTaskflow());
+    tf::Task exetargetTask = taskflow.composed_of(exetarget.GetTaskflow());
+    exetargetTask.succeed(statictargetTask);
+
+    // Run
+    executor.run(taskflow);
+    executor.wait_for_all();
 
 DynamicLib
 -----------
