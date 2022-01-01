@@ -15,16 +15,16 @@ Executable
 
     // MSVC specialized targets
     // Creates `Simple.exe`
-    ExecutableTarget_msvc target("Simple", msvc, "");
+    ExecutableTarget_msvc exetarget("Simple", msvc, "");
 
     // Common BaseTarget API
-    target.GlobSources("src");
-    target.AddIncludeDir("include", true);
-    target.Build();
+    exetarget.GlobSources("src");
+    exetarget.AddIncludeDir("include", true);
+    exetarget.Build();
 
     // Build
     tf::Executor executor;
-    executor.run(target.GetTaskflow());
+    executor.run(exetarget.GetTaskflow());
     executor.wait_for_all();
 
 StaticLib
@@ -51,12 +51,25 @@ DynamicLib
 
     // MSVC specialized target
     // Creates `Simple.exe` which uses the above dynamic library
-    ExecutableTarget_msvc target_msvc("Simple", msvc, "");
+    ExecutableTarget_msvc exetarget("Simple", msvc, "");
 
     // Common BaseTarget API
-    target_msvc.AddSource("src/main.cpp");
-    target_msvc.AddIncludeDir("include", true);
-    target_msvc.AddLibDep(dynamictarget);
-    target_msvc.Build();
+    exetarget.AddSource("src/main.cpp");
+    exetarget.AddIncludeDir("include", true);
+    exetarget.AddLibDep(dynamictarget);
+    exetarget.Build();
+
+    // Build
+    tf::Executor executor;
+    tf::Taskflow taskflow;
+
+    // Setup your dependencies explicitly
+    // Here dynamictarget needs to be built before exetarget
+    auto dynamictargetTask = taskflow.composed_of(dynamictarget.GetTaskflow());
+    auto exetargetTask = taskflow.composed_of(exetarget.GetTaskflow());
+    exetargetTask.succeed(dynamictargetTask);
+
+    executor.run(taskflow);
+    executor.wait_for_all();
 
 .. note:: To use the ``DynamicTarget_msvc`` generated library with ``ExecutableTarget_msvc`` we also need to copy the generated ``librandom.lib.dll`` library to the executable directory.
