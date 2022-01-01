@@ -258,6 +258,7 @@ Demonstrating BuildCC supported plugin usage
 * Add the targets for which you would like to generate the `Clang CompileCommands Database <https://clang.llvm.org/docs/JSONCompilationDatabase.html>`_
 
 .. code-block:: cpp
+    :linenos:
 
     plugin::ClangCompileCommands({&cppflags, &cflags}).Generate();
 
