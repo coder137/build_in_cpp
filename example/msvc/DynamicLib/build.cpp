@@ -17,12 +17,12 @@ int main(void) {
 
   Toolchain_msvc msvc;
 
-  DynamicTarget_msvc dynamictarget("librandom.lib", msvc, "");
+  DynamicTarget_msvc dynamictarget("librandom", msvc, "");
   dynamictarget.AddSource("src/random.cpp");
   dynamictarget.AddIncludeDir("include", true);
   dynamictarget.Build();
 
-  ExecutableTarget_msvc target_msvc("Simple.exe", msvc, "");
+  ExecutableTarget_msvc target_msvc("Simple", msvc, "");
   target_msvc.AddSource("src/main.cpp");
   target_msvc.AddIncludeDir("include", true);
 
