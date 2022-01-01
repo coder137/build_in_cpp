@@ -72,4 +72,12 @@ DynamicLib
     executor.run(taskflow);
     executor.wait_for_all();
 
+    // Now that both your targets are built, copy the dynamictarget DLL
+    if (exetarget.IsBuilt()) {
+        fs::copy(dynamictarget.GetDllPath(),
+                exetarget.GetTargetPath().parent_path() /
+                dynamictarget.GetDllPath().filename());
+    }
+
+
 .. note:: To use the ``DynamicTarget_msvc`` generated library with ``ExecutableTarget_msvc`` we also need to copy the generated ``librandom.lib.dll`` library to the executable directory.
