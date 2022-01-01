@@ -6,10 +6,7 @@
 
 using namespace buildcc;
 
-// This example contains both OS Hosts
-// - Windows MSYS GCC 10.2.0
 // - Linux GCC 9.3.0
-// * Comment out one of the examples
 int main(void) {
   // Environment is meant to define
   // 1. Project Root path i.e all files and targets will be added relative to
