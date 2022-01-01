@@ -20,10 +20,6 @@ int main(void) {
   ExecutableTarget_msvc target_msvc("Simple.exe", msvc, "");
   target_msvc.GlobSources("src");
   target_msvc.AddIncludeDir("include", true);
-
-  target_msvc.AddCppCompileFlag("/EHsc");
-  target_msvc.AddCppCompileFlag("/nologo");
-  target_msvc.AddLinkFlag("/nologo");
   target_msvc.Build();
 
   plugin::ClangCompileCommands({&target_msvc}).Generate();
