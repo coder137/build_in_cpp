@@ -111,3 +111,8 @@ DynamicLib
 
 
 .. note:: To use the ``DynamicTarget_msvc`` generated library with ``ExecutableTarget_msvc`` we also need to copy the generated ``librandom.lib.dll`` library to the executable directory.
+
+PrecompileHeader
+-------------------
+
+TODO
