@@ -46,8 +46,9 @@ int main(void) {
   executor.wait_for_all();
 
   if (target_msvc.IsBuilt()) {
-    fs::copy(dynamictarget.GetTargetPath().string() + ".dll",
-             target_msvc.GetTargetPath().parent_path() / "librandom.lib.dll");
+    fs::copy(dynamictarget.GetDllPath(),
+             target_msvc.GetTargetPath().parent_path() /
+                 dynamictarget.GetDllPath().filename());
   }
 
   plugin::ClangCompileCommands({&dynamictarget, &target_msvc}).Generate();
