@@ -22,36 +22,36 @@ int main(void) {
   dynamictarget.AddIncludeDir("include", true);
   dynamictarget.Build();
 
-  ExecutableTarget_msvc target_msvc("Simple", msvc, "");
-  target_msvc.AddSource("src/main.cpp");
-  target_msvc.AddIncludeDir("include", true);
+  ExecutableTarget_msvc exetarget("Simple", msvc, "");
+  exetarget.AddSource("src/main.cpp");
+  exetarget.AddIncludeDir("include", true);
 
   // Method 1
-  target_msvc.AddLibDep(dynamictarget);
+  exetarget.AddLibDep(dynamictarget);
 
   // Method 2
-  // target_msvc.AddLibDep("librandom.lib");
-  // target_msvc.AddLibDir(dynamictarget.GetTargetPath().parent_path());
-  target_msvc.Build();
+  // exetarget.AddLibDep("librandom.lib");
+  // exetarget.AddLibDir(dynamictarget.GetTargetPath().parent_path());
+  exetarget.Build();
 
   // Manually setup your dependencies
   tf::Executor executor;
   tf::Taskflow taskflow;
 
   auto dynamictargetTask = taskflow.composed_of(dynamictarget.GetTaskflow());
-  auto target_msvcTask = taskflow.composed_of(target_msvc.GetTaskflow());
-  target_msvcTask.succeed(dynamictargetTask);
+  auto exetargetTask = taskflow.composed_of(exetarget.GetTaskflow());
+  exetargetTask.succeed(dynamictargetTask);
 
   executor.run(taskflow);
   executor.wait_for_all();
 
-  if (target_msvc.IsBuilt()) {
+  if (exetarget.IsBuilt()) {
     fs::copy(dynamictarget.GetDllPath(),
-             target_msvc.GetTargetPath().parent_path() /
+             exetarget.GetTargetPath().parent_path() /
                  dynamictarget.GetDllPath().filename());
   }
 
-  plugin::ClangCompileCommands({&dynamictarget, &target_msvc}).Generate();
+  plugin::ClangCompileCommands({&dynamictarget, &exetarget}).Generate();
 
   taskflow.dump(std::cout);
 
