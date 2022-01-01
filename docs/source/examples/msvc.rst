@@ -22,6 +22,11 @@ Executable
     target.AddIncludeDir("include", true);
     target.Build();
 
+    // Build
+    tf::Executor executor;
+    executor.run(target.GetTaskflow());
+    executor.wait_for_all();
+
 StaticLib
 ----------
 
