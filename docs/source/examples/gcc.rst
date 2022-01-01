@@ -152,6 +152,51 @@ Compile a dynamic library which is used by an executable
 Flags
 ------
 
+Using **PreprocessorFlags**, **C Compile flags** and **Cpp Compile flags**
+
+.. code-block:: cpp
+    :linenos:
+    :emphasize-lines: 2,7,12,13,14,15,21,23,24,25,26
+
+    // GCC specialized toolchain
+    Toolchain_gcc toolchain;
+
+    // GCC specialized targets
+    // Create "CppFlags" target (meant to use the GCC compiler)
+    // On Windows the equivalent is the MinGW compiler
+    ExecutableTarget_gcc cpptarget("CppFlags", gcc, "files");
+    cpptarget.AddSource("main.cpp", "src");
+    cpptarget.AddSource("src/random.cpp");
+    cpptarget.AddHeader("include/random.h");
+    cpptarget.AddIncludeDir("include");
+    cpptarget.AddPreprocessorFlag("-DRANDOM=1");
+    cpptarget.AddCppCompileFlag("-Wall");
+    cpptarget.AddCppCompileFlag("-Werror");
+    cpptarget.AddLinkFlag("-lm");
+    cpptarget.Build();
+
+    // Gcc specialized targets
+    // Create "CFlags" target (meant to use the GCC compiler)
+    // On Windows the equivalent is the MinGW compiler
+    ExecutableTarget_gcc ctarget("CFlags", gcc, "files");
+    ctarget.AddSource("main.c", "src");
+    ctarget.AddPreprocessorFlag("-DRANDOM=1");
+    ctarget.AddCCompileFlag("-Wall");
+    ctarget.AddCCompileFlag("-Werror");
+    ctarget.AddLinkFlag("-lm");
+    ctarget.Build();
+
+    // Build
+    tf::Executor executor;
+    tf::Taskflow taskflow;
+
+    // There isn't any dependency between the 2 targets
+    taskflow.composed_of(cpptarget.GetTaskflow());
+    taskflow.composed_of(ctarget.GetTaskflow());
+
+    executor.run(taskflow);
+    executor.wait_for_all();
+
 AfterInstall
 -------------
 
