@@ -17,18 +17,18 @@ int main(void) {
 
   Toolchain_msvc msvc;
 
-  ExecutableTarget_msvc target_msvc("Simple", msvc, "");
-  target_msvc.GlobSources("src");
-  target_msvc.AddIncludeDir("include", true);
-  target_msvc.Build();
+  ExecutableTarget_msvc exetarget("Simple", msvc, "");
+  exetarget.GlobSources("src");
+  exetarget.AddIncludeDir("include", true);
+  exetarget.Build();
 
-  plugin::ClangCompileCommands({&target_msvc}).Generate();
+  plugin::ClangCompileCommands({&exetarget}).Generate();
 
   tf::Executor executor;
-  executor.run(target_msvc.GetTaskflow());
+  executor.run(exetarget.GetTaskflow());
   executor.wait_for_all();
 
-  target_msvc.GetTaskflow().dump(std::cout);
+  exetarget.GetTaskflow().dump(std::cout);
 
   return 0;
 }
