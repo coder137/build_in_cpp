@@ -33,7 +33,7 @@ int main(void) {
   target.AddLibDep(dynamictarget);
 
   // * Method 2, External lib
-  // target.AddLibDirAbsolute(dynamictarget.GetTarget());
+  // target.AddLibDirAbsolute(dynamictarget.GetTargetBuildDir());
   // target.AddLibDep("-lrandom");
 
   target.Build();
