@@ -10,7 +10,7 @@ Compile a single source
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 2,7
+    :emphasize-lines: 8
 
     // GCC specialized toolchain
     Toolchain_gcc toolchain;
@@ -35,7 +35,7 @@ Compile multiple sources with header files
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 2,7
+    :emphasize-lines: 12,15
 
     // GCC specialized toolchain
     Toolchain_gcc toolchain;
@@ -46,7 +46,11 @@ Compile multiple sources with header files
     ExecutableTarget_gcc target("IncludeDir", gcc, "files");
     target.AddSource("main.cpp", "src");
     target.AddSource("src/random.cpp");
+
+    // Track header for rebuilds
     target.AddHeader("include/random.h");
+
+    // Add include dir to search paths
     target.AddIncludeDir("include");
     target.Build();
 
@@ -62,7 +66,7 @@ Compile a static library which is used by an executable
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 2,7,16
+    :emphasize-lines: 7
 
     // GCC specialized toolchain
     Toolchain_gcc toolchain;
@@ -105,7 +109,7 @@ Compile a dynamic library which is used by an executable
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 2,7,16
+    :emphasize-lines: 7
 
     // GCC specialized toolchain
     Toolchain_gcc toolchain;
@@ -152,11 +156,11 @@ Compile a dynamic library which is used by an executable
 Flags
 ------
 
-Using **PreprocessorFlags**, **C Compile flags** and **Cpp Compile flags**
+Using **PreprocessorFlags**, **C Compile flags**, **Cpp Compile flags** and **Link flags**
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 2,7,12,13,14,15,21,23,24,25,26
+    :emphasize-lines: 12,13,14,15,23,24,25,26
 
     // GCC specialized toolchain
     Toolchain_gcc toolchain;
