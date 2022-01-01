@@ -6,6 +6,8 @@ Lowlevel GCC Tests
 Simple
 --------
 
+Compile a single source
+
 .. code-block:: cpp
     :linenos:
     :emphasize-lines: 2,7
@@ -20,7 +22,7 @@ Simple
     target.AddSource("main.cpp");
     target.Build();
 
-    // Run
+    // Build
     tf::Executor executor;
     executor.run(target.GetTaskflow());
     executor.wait_for_all();
