@@ -206,5 +206,48 @@ AfterInstall
 
 Use BuildCC with CMake
 
+
+* Install ``BuildCC`` via CMake to your system and add it to **PATH**
+* Use the script below to **compile** your build script to an executable
+* Copy the **Flags** build example
+* Run the executable from your project root directory
+
+.. code-block:: cmake
+
+    # Package dependencies
+    # fmt is imported by spdlog by default
+    find_package(fmt_package NAMES "fmt" REQUIRED)
+    find_package(spdlog_package NAMES "spdlog" REQUIRED)
+    find_package(flatbuffers_header_only_package NAMES "flatbuffers_header_only" REQUIRED)
+    find_package(taskflow_package NAMES "Taskflow" "taskflow" REQUIRED)
+    find_package(CLI11_package NAMES "CLI11" REQUIRED)
+    find_package(tiny_process_library_package NAMES "tiny-process-library" REQUIRED)
+
+    find_package(buildcc_package NAMES "buildcc" REQUIRED)
+
+    message("Find package: ${fmt_package_DIR}")
+    message("Find package: ${spdlog_package_DIR}")
+    message("Find package: ${flatbuffers_header_only_package_DIR}")
+    message("Find package: ${taskflow_package_DIR}")
+    message("Find package: ${CLI11_package_DIR}")
+    message("Find package: ${tiny_process_library_package_DIR}") #
+
+    message("Find package: ${buildcc_package_DIR}")
+
+    # build executable
+    add_executable(build build.cpp)
+    target_include_directories(build PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated)
+    target_link_libraries(build PRIVATE 
+        buildcc
+    )
+    if (${MINGW})
+        message(WARNING "-Wl,--allow-multiple-definition for MINGW")
+        target_link_options(build PRIVATE -Wl,--allow-multiple-definition)
+    endif()
+
+    # Add your constants file for the environment
+    configure_file(constants.h.in ${CMAKE_BINARY_DIR}/generated/constants.h @ONLY)
+
+
 Plugins
 --------
