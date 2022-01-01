@@ -20,9 +20,6 @@ int main(void) {
   StaticTarget_msvc statictarget_msvc("librandom.lib", msvc, "");
   statictarget_msvc.AddSource("src/random.cpp");
   statictarget_msvc.AddIncludeDir("include", true);
-  statictarget_msvc.AddCppCompileFlag("/EHsc");
-  statictarget_msvc.AddCppCompileFlag("/nologo");
-  statictarget_msvc.AddLinkFlag("/nologo");
   statictarget_msvc.Build();
 
   ExecutableTarget_msvc target_msvc("Simple.exe", msvc, "");
@@ -30,19 +27,16 @@ int main(void) {
   target_msvc.AddIncludeDir("include", true);
 
   // Method 1
-  // target_msvc.AddLibDep(statictarget_msvc);
+  target_msvc.AddLibDep(statictarget_msvc);
 
   // Method 2
-  target_msvc.AddLibDep("librandom.lib");
-  target_msvc.AddLibDir(statictarget_msvc.GetTargetPath().parent_path());
-
-  target_msvc.AddCppCompileFlag("/EHsc");
-  target_msvc.AddCppCompileFlag("/nologo");
-  target_msvc.AddLinkFlag("/nologo");
+  // target_msvc.AddLibDep("librandom.lib");
+  // target_msvc.AddLibDir(statictarget_msvc.GetTargetPath().parent_path());
   target_msvc.Build();
 
   plugin::ClangCompileCommands({&target_msvc}).Generate();
 
+  // Manually setup your dependencies
   tf::Executor executor;
   tf::Taskflow taskflow;
   auto statictarget_msvcTask =
