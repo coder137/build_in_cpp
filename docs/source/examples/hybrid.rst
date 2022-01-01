@@ -6,12 +6,12 @@ Real world tests combining multiple compilers
 Single
 -------
 
-Compile a single source with `Register` and `Args` module
+Compile a single source with **Register** and **Args** module
 
 Simple 
 -------
 
-Similar to Flags example with `Register` and `Args` module 
+Similar to Flags example with **Register** and **Args** module 
 
 Foolib
 -------
