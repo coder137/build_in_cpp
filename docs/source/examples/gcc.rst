@@ -58,7 +58,7 @@ Compile multiple sources with header files
 StaticLib
 ----------
 
-Compile static library which is used by an executable
+Compile a static library which is used by an executable
 
 .. code-block:: cpp
     :linenos:
@@ -100,6 +100,8 @@ Compile static library which is used by an executable
 
 DynamicLib
 -----------
+
+Compile a dynamic library which is used by an executable
 
 .. code-block:: cpp
     :linenos:
