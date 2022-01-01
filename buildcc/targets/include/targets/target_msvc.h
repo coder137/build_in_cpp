@@ -126,9 +126,15 @@ public:
   DynamicTarget_msvc(const std::string &name, const BaseToolchain &toolchain,
                      const TargetEnv &env,
                      const TargetConfig &config = MsvcConfig::DynamicLib())
-      : Target(name, TargetType::DynamicLibrary, toolchain, env, config) {
+      : Target(name, TargetType::DynamicLibrary, toolchain, env, config),
+        dll_(fmt::format("{}.dll", GetTargetPath().string())) {
     DefaultMsvcOptions(*this);
   }
+
+  const fs::path &GetDllPath() { return dll_; }
+
+private:
+  fs::path dll_;
 };
 
 } // namespace buildcc
