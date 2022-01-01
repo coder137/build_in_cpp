@@ -15,11 +15,10 @@ int main(void) {
   env::init(BUILD_ROOT, BUILD_INTERMEDIATE_DIR);
   env::set_log_level(env::LogLevel::Trace);
 
-  // CppTarget
-  base::Toolchain gcc(base::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++", "ar",
-                      "ld");
-  ExecutableTarget_gcc cppflags("CppFlags.exe", gcc, "files");
+  Toolchain_gcc gcc;
 
+  // CppTarget
+  ExecutableTarget_gcc cppflags("CppFlags", gcc, "files");
   cppflags.AddSource("main.cpp", "src");
   cppflags.AddSource("src/random.cpp");
   cppflags.AddHeader("include/random.h");
@@ -31,7 +30,7 @@ int main(void) {
   cppflags.Build();
 
   // CTarget
-  ExecutableTarget_gcc cflags("CFlags.exe", gcc, "files");
+  ExecutableTarget_gcc cflags("CFlags", gcc, "files");
   cflags.AddSource("main.c", "src");
   cflags.AddPreprocessorFlag("-DRANDOM=1");
   cflags.AddCCompileFlag("-Wall");
@@ -47,8 +46,7 @@ int main(void) {
   executor.wait_for_all();
 
   // Clang compile command db test
-  plugin::ClangCompileCommands compile_commands({&cppflags, &cflags});
-  compile_commands.Generate();
+  plugin::ClangCompileCommands({&cppflags, &cflags}).Generate();
 
   // Dot Dump
   // TODO, Make this into a plugin
