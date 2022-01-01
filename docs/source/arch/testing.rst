@@ -143,4 +143,4 @@ args
 plugins
 ^^^^^^^^
 
-.. note: Incomplete implementation and tests
+.. note:: Incomplete implementation and tests
