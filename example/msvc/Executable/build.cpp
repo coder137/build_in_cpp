@@ -17,7 +17,7 @@ int main(void) {
 
   Toolchain_msvc msvc;
 
-  ExecutableTarget_msvc target_msvc("Simple.exe", msvc, "");
+  ExecutableTarget_msvc target_msvc("Simple", msvc, "");
   target_msvc.GlobSources("src");
   target_msvc.AddIncludeDir("include", true);
   target_msvc.Build();
