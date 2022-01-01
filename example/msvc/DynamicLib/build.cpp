@@ -20,9 +20,6 @@ int main(void) {
   DynamicTarget_msvc dynamictarget("librandom.lib", msvc, "");
   dynamictarget.AddSource("src/random.cpp");
   dynamictarget.AddIncludeDir("include", true);
-  dynamictarget.AddCppCompileFlag("/EHsc");
-  dynamictarget.AddCppCompileFlag("/nologo");
-  dynamictarget.AddLinkFlag("/nologo");
   dynamictarget.Build();
 
   ExecutableTarget_msvc target_msvc("Simple.exe", msvc, "");
@@ -30,17 +27,14 @@ int main(void) {
   target_msvc.AddIncludeDir("include", true);
 
   // Method 1
-  // target_msvc.AddLibDep(dynamictarget);
+  target_msvc.AddLibDep(dynamictarget);
 
   // Method 2
-  target_msvc.AddLibDep("librandom.lib");
-  target_msvc.AddLibDir(dynamictarget.GetTargetPath().parent_path());
-
-  target_msvc.AddCppCompileFlag("/EHsc");
-  target_msvc.AddCppCompileFlag("/nologo");
-  target_msvc.AddLinkFlag("/nologo");
+  // target_msvc.AddLibDep("librandom.lib");
+  // target_msvc.AddLibDir(dynamictarget.GetTargetPath().parent_path());
   target_msvc.Build();
 
+  // Manually setup your dependencies
   tf::Executor executor;
   tf::Taskflow taskflow;
 
@@ -51,7 +45,7 @@ int main(void) {
   executor.run(taskflow);
   executor.wait_for_all();
 
-  if (target_msvc.FirstBuild() || target_msvc.Rebuild()) {
+  if (target_msvc.IsBuilt()) {
     fs::copy(dynamictarget.GetTargetPath().string() + ".dll",
              target_msvc.GetTargetPath().parent_path() / "librandom.lib.dll");
   }
