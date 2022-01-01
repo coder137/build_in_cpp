@@ -19,13 +19,10 @@ int main(void) {
 
   // CppTarget
   ExecutableTarget_gcc cpptarget("CppFlags", gcc, "files");
-
   cpptarget.AddSource("main.cpp", "src");
   cpptarget.AddSource("src/random.cpp");
-
   cpptarget.AddHeader("include/random.h");
   cpptarget.AddIncludeDir("include");
-
   cpptarget.AddPreprocessorFlag("-DRANDOM=1");
   cpptarget.AddCppCompileFlag("-Wall");
   cpptarget.AddCppCompileFlag("-Werror");
@@ -41,6 +38,7 @@ int main(void) {
   ctarget.AddLinkFlag("-lm");
   ctarget.Build();
 
+  // Run
   tf::Executor executor;
   tf::Taskflow taskflow;
   taskflow.composed_of(cpptarget.GetTaskflow());
