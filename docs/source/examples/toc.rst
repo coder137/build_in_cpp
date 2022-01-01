@@ -6,3 +6,5 @@ Examples
    hybrid
    gcc
    msvc
+   clang
+   mingw
