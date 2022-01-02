@@ -387,7 +387,7 @@ For super customized targets and toolchains
 
 .. code-block:: toml
     :linenos:
-    :emphasize-lines: 4,17
+    :emphasize-lines: 4,18
 
     # See Multiple boilerplate .toml file
 
