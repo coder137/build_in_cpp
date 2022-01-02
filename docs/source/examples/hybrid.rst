@@ -255,6 +255,8 @@ For library developers
     **Solution**: Create Header / Source segregations. For example. ``build.foo.h`` and ``build.foo.cpp``
     End users can now create their own ``build.[project].cpp`` file and compile ``build.foo.cpp`` along with their source and use appropriate APIs are provided by your files.
 
+    Depending on the complexity of your project the library developer can provide multiple APIs with different options that need to be selected at run time / compile time.
+
 build.foo
 ^^^^^^^^^^
 
@@ -287,6 +289,8 @@ build.main
 
 .. code-block:: cpp
     :linenos:
+
+    #include "build.foo.h"
 
     int main(int argc, char ** argv) {
         // Build steps
