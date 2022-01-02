@@ -3,6 +3,58 @@ Hybrid
 
 Real world tests combining multiple compilers
 
+.. note:: In the Hybrid examples we use the **Args** and **Register** module to abstract away ``Taskflow`` and ``CLI11`` APIs. To see the lowlevel usage please see the lowlevel **[compiler]** tests.
+
+Boilerplate
+------------
+
+Minimal C++ script boilerplate
+
+.. code-block:: cpp
+    :linenos:
+
+    // Args module to get data from the command line or .toml file passed in through --config
+    Args args;
+
+    // Register your [toolchain.{name}]
+    // In this case it will be [toolchain.gcc]
+    ArgToolchain arg_gcc;
+    args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
+
+    // Parse the arguments from the command line
+    args.Parse(argc, argv);
+
+    // Register module 
+    Register reg(args);
+    reg.Clean(clean_cb);
+
+    // TODO, Write your target builds here
+    // See examples below
+
+
+Minimal ``config.toml`` file boilerplate
+
+.. code-block:: toml
+    :linenos:
+
+    # Required parameters
+    root_dir = "" # build executable meant to be invoked from the current directory
+    build_dir = "_build" # Creates this directory relative to where you invoke your build executable
+
+    # Optional parameters
+    loglevel = "trace" # trace, debug, info, warning, critical
+    clean = true # calls clean_cb if true, user specifies how their project must be cleaned
+
+    # Toolchain
+    # Valid configurations are
+    # build = false, test = false
+    # build = true, test = false
+    # build = true, test = true
+    [toolchain.gcc]
+    build = true
+    test = true
+
+
 Single
 -------
 
