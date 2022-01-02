@@ -332,6 +332,51 @@ Custom Target
 
 For super customized targets and toolchains 
 
+.. code-block:: cpp
+    :linenos:
+    :emphasize-lines: 12,13,29,33,34,35
+
+    int main(int argc, char ** argv) {
+
+        Args args;
+        ArgToolchain arg_gcc;
+        ArgToolchain arg_msvc;
+        ArgToolchain toolchain_clang_gnu;
+        ArgTarget target_clang_gnu;
+        args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
+        args.AddToolchain("msvc", "Generic msvc toolchain", arg_msvc);
+
+        // Add your custom toolchain - target to the command line
+        args.AddToolchain("clang_gnu", "Clang GNU toolchain", toolchain_clang_gnu);
+        args.AddTarget("clang_gnu", "Clang GNU target", target_clang_gnu);
+
+        args.Parse(argc, argv);
+
+        // Additional boilerplate
+
+        Toolchain_gcc gcc;
+        Toolchain_msvc msvc;
+
+        ExecutableTarget_gcc g_foolib("foolib", gcc, "");
+        ExecutableTarget_msvc m_foolib("foolib", msvc, "");
+
+        reg.Build(arg_gcc.state, foolib_build_cb, g_foolib);
+        reg.Build(arg_msvc.state, foolib_build_cb, m_foolib);
+
+        // Get custom toolchain from the command line
+        BaseToolchain clang = toolchain_clang_gnu.ConstructToolchain();
+
+        // Get compile_command and link_command from the command line
+        TargetConfig config;
+        config.compile_command = target_clang_gnu.compile_command;
+        config.link_command = target_clang_gnu.link_command;
+        Target_custom c_foolib("CFoolib.exe", TargetType::Executable, clang, "", config);
+        reg.Build(toolchain_clang_gnu.state, foolib_build_cb, c_foolib);
+        
+        // Build targets
+        reg.RunBuild();
+    }
+
 Generic
 --------
 
