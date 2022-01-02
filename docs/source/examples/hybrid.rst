@@ -289,6 +289,7 @@ build.main
 
 .. code-block:: cpp
     :linenos:
+    :emphasize-lines: 18
 
     #include "build.foo.h"
 
