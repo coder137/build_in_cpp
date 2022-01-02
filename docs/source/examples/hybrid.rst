@@ -13,23 +13,30 @@ Minimal C++ script boilerplate
 .. code-block:: cpp
     :linenos:
 
-    // Args module to get data from the command line or .toml file passed in through --config
-    Args args;
+    int main(int argc, char ** argv) {
+        // Args module to get data from the command line or .toml file passed in through --config
+        Args args;
 
-    // Register your [toolchain.{name}]
-    // In this case it will be [toolchain.gcc]
-    ArgToolchain arg_gcc;
-    args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
+        // Register your [toolchain.{name}]
+        // In this case it will be [toolchain.gcc]
+        ArgToolchain arg_gcc;
+        args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
 
-    // Parse the arguments from the command line
-    args.Parse(argc, argv);
+        // Parse the arguments from the command line
+        args.Parse(argc, argv);
 
-    // Register module 
-    Register reg(args);
-    reg.Clean(clean_cb);
+        // Register module 
+        Register reg(args);
+        reg.Clean(clean_cb);
 
-    // TODO, Write your target builds here
-    // See examples below
+        // TODO, Write your target builds here
+        // See examples below`
+    }
+
+    static void clean_cb() {
+        env::log_info(EXE, fmt::format("Cleaning {}", env::get_project_build_dir()));
+        fs::remove_all(env::get_project_build_dir());
+    }
 
 
 Minimal ``config.toml`` file boilerplate
@@ -58,12 +65,38 @@ Minimal ``config.toml`` file boilerplate
 Single
 -------
 
-Compile a single source with **Register** and **Args** module
+Compile a single source with a single GCC compiler.
+
+.. code-block:: cpp
+    :linenos:
+
+    int main(int argc, char ** argv) {
+        // See Boilerplate
+
+        Toolchain_gcc gcc;
+        ExecutableTarget_gcc hello_world("hello_world", gcc, "");
+
+        // Select your builds and tests using the .toml files
+        reg.Build(arg_gcc.state, hello_world_build_cb, hello_world);
+        reg.Test(arg_gcc.state, "{executable}", hello_world);
+
+        // Build Target
+        reg.RunBuild();
+
+        // Test Target
+        reg.RunTest();
+    }
+
+    static void hello_world_build_cb(BaseTarget &target) {
+        target.AddSource("main.cpp", "src");
+        target.Build();
+    }
+
 
 Simple 
 -------
 
-Similar to Flags example with **Register** and **Args** module 
+Similar to Flags example for both the GCC and MSVC compiler
 
 Foolib
 -------
