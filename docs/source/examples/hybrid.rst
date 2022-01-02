@@ -257,9 +257,6 @@ For library developers
 
     Depending on the complexity of your project the library developer can provide multiple APIs with different options that need to be selected at run time / compile time.
 
-build.foo
-^^^^^^^^^^
-
 **Header**
 
 .. code-block:: cpp
@@ -284,8 +281,23 @@ build.foo
     }
 
 
-build.main
-^^^^^^^^^^^
+External Lib
+-------------
+
+For end users consuming third party libraries 
+
+.. admonition:: Scenario
+
+    User would like to use the third party library ``Foo`` in their codebase. The ``Foo`` library resides in a different directory as visualized below.
+
+.. uml::
+
+    @startmindmap
+    * [folder]
+    ** external_lib 
+    *** [project_root]
+    ** foolib
+    @endmindmap
 
 .. code-block:: cpp
     :linenos:
@@ -308,15 +320,10 @@ build.main
     }
 
     static void foolib_build_cb(BaseTarget &target) {
-        fooTarget(target, "");
+        fooTarget(target, "../foolib");
         target.AddSource("main.cpp");
         target.Build();
     }
-
-External Lib
--------------
-
-For end users consuming third party libraries 
 
 Custom Target
 ----------------
