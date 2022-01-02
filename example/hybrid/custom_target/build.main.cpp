@@ -3,7 +3,7 @@
 using namespace buildcc;
 
 static void clean_cb();
-static void foolib_build_cb(base::Target &target);
+static void foolib_build_cb(BaseTarget &target);
 
 static constexpr std::string_view EXE = "build";
 
@@ -37,10 +37,10 @@ int main(int argc, char **argv) {
   reg.Build(arg_msvc.state, foolib_build_cb, m_foolib);
 
   // * NOTE, This is how we add our custom toolchain
-  base::Toolchain clang = toolchain_clang_gnu.ConstructToolchain();
+  BaseToolchain clang = toolchain_clang_gnu.ConstructToolchain();
 
   // * M2, Get from Args (see build_linux.toml or build_win.toml files)
-  base::TargetConfig config;
+  TargetConfig config;
   config.compile_command = target_clang_gnu.compile_command;
   config.link_command = target_clang_gnu.link_command;
   Target_custom c_foolib("CFoolib.exe", TargetType::Executable, clang, "",
@@ -61,7 +61,7 @@ static void clean_cb() {
   fs::remove_all(env::get_project_build_dir());
 }
 
-static void foolib_build_cb(base::Target &target) {
+static void foolib_build_cb(BaseTarget &target) {
   target.AddSource("src/foo.cpp");
   target.AddIncludeDir("src", true);
   target.AddSource("main.cpp");
