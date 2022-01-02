@@ -411,11 +411,6 @@ For super customized targets and toolchains
     link_command = "{cpp_compiler} {link_flags} {compiled_sources} -o {output} {lib_dirs} {lib_deps}"
 
 
-Generic
---------
-
-Select library type and target-toolchain type at runtime
-
 PrecompileHeader
 ----------------
 
