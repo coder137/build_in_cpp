@@ -8,8 +8,8 @@ constexpr const char *const EXE = "build";
 
 // Function Prototypes
 static void clean_cb();
-static void cppflags_build_cb(base::Target &cppflags);
-static void cflags_build_cb(base::Target &cflags);
+static void cppflags_build_cb(BaseTarget &cppflags);
+static void cflags_build_cb(BaseTarget &cflags);
 
 int main(int argc, char **argv) {
   // 1. Get arguments
@@ -74,21 +74,21 @@ static void clean_cb() {
   fs::remove_all(env::get_project_build_dir());
 }
 
-static void cppflags_build_cb(base::Target &cppflags) {
+static void cppflags_build_cb(BaseTarget &cppflags) {
   cppflags.AddSource("main.cpp", "src");
   cppflags.AddSource("src/random.cpp");
   cppflags.AddIncludeDir("include", true);
 
   // Toolchain specific code goes here
   switch (cppflags.GetToolchain().GetId()) {
-  case base::Toolchain::Id::Gcc: {
+  case ToolchainId::Gcc: {
     cppflags.AddPreprocessorFlag("-DRANDOM=1");
     cppflags.AddCppCompileFlag("-Wall");
     cppflags.AddCppCompileFlag("-Werror");
     cppflags.AddLinkFlag("-lm");
     break;
   }
-  case base::Toolchain::Id::Msvc: {
+  case ToolchainId::Msvc: {
     cppflags.AddPreprocessorFlag("/DRANDOM=1");
     cppflags.AddCppCompileFlag("/W4");
     break;
@@ -100,19 +100,19 @@ static void cppflags_build_cb(base::Target &cppflags) {
   cppflags.Build();
 }
 
-static void cflags_build_cb(base::Target &cflags) {
+static void cflags_build_cb(BaseTarget &cflags) {
   cflags.AddSource("main.c", "src");
 
   // Toolchain specific code goes here
   switch (cflags.GetToolchain().GetId()) {
-  case base::Toolchain::Id::Gcc: {
+  case ToolchainId::Gcc: {
     cflags.AddPreprocessorFlag("-DRANDOM=1");
     cflags.AddCCompileFlag("-Wall");
     cflags.AddCCompileFlag("-Werror");
     cflags.AddLinkFlag("-lm");
     break;
   }
-  case base::Toolchain::Id::Msvc: {
+  case ToolchainId::Msvc: {
     cflags.AddPreprocessorFlag("/DRANDOM=1");
     cflags.AddCCompileFlag("/W4");
     break;
