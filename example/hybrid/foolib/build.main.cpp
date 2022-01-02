@@ -5,7 +5,7 @@
 using namespace buildcc;
 
 static void clean_cb();
-static void foolib_build_cb(base::Target &target);
+static void foolib_build_cb(BaseTarget &target);
 
 constexpr std::string_view EXE = "build";
 
@@ -48,7 +48,7 @@ static void clean_cb() {
   fs::remove_all(env::get_project_build_dir());
 }
 
-static void foolib_build_cb(base::Target &target) {
+static void foolib_build_cb(BaseTarget &target) {
   fooTarget(target, "");
   target.AddSource("main.cpp");
   target.Build();
