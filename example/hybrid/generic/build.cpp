@@ -15,9 +15,9 @@ constexpr std::string_view EXE = "build";
 
 // Function Prototypes
 static void clean_cb();
-static void foolib_build_cb(base::Target &foolib_target);
-static void generic_build_cb(base::Target &generic_target,
-                             base::Target &foolib_target);
+static void foolib_build_cb(BaseTarget &foolib_target);
+static void generic_build_cb(BaseTarget &generic_target,
+                             BaseTarget &foolib_target);
 
 int main(int argc, char **argv) {
   // 1. Get arguments
@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
 
   // 4. Build steps
   // Toolchain + Generic Target
-  base::Toolchain toolchain = custom_toolchain.ConstructToolchain();
+  BaseToolchain toolchain = custom_toolchain.ConstructToolchain();
   Target_generic foolib_target("libfoo", default_lib_type, toolchain, "");
   reg.Build(custom_toolchain.state, foolib_build_cb, foolib_target);
 
@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
     // MSVC special case
     fs::path copy_from_path;
     fs::path copy_to_path;
-    if (toolchain.GetId() == base::Toolchain::Id::Msvc) {
+    if (toolchain.GetId() == ToolchainId::Msvc) {
       copy_from_path =
           fmt::format("{}.dll", path_as_string(foolib_target.GetTargetPath()));
       copy_to_path =
@@ -119,13 +119,13 @@ static void clean_cb() {
   fs::remove_all(env::get_project_build_dir());
 }
 
-static void foolib_build_cb(base::Target &foolib_target) {
+static void foolib_build_cb(BaseTarget &foolib_target) {
   fooTarget(foolib_target, env::get_project_root_dir() / ".." / "foolib");
   foolib_target.Build();
 }
 
-static void generic_build_cb(base::Target &generic_target,
-                             base::Target &foolib_target) {
+static void generic_build_cb(BaseTarget &generic_target,
+                             BaseTarget &foolib_target) {
   const auto &foolib_include_dirs = foolib_target.GetCurrentIncludeDirs();
   std::for_each(
       foolib_include_dirs.cbegin(), foolib_include_dirs.cend(),
