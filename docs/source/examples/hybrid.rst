@@ -416,6 +416,70 @@ PrecompileHeader
 
 Precompile header usage with GCC and MSVC compilers 
 
+.. code-block:: cpp
+    :linenos:
+    :emphasize-lines: 8,9,10,36,37,38
+
+    // Modified Lowlevel GCC Flags example for PCH
+    
+    static void cppflags_build_cb(BaseTarget &cppflags) {
+    cppflags.AddSource("main.cpp", "src");
+    cppflags.AddSource("random.cpp", "src");
+    cppflags.AddIncludeDir("include", true);
+
+    cppflags.AddPch("pch/pch_cpp.h");
+    cppflags.AddPch("pch/pch_c.h");
+    cppflags.AddIncludeDir("pch", true);
+
+    // Toolchain specific code goes here
+    switch (cppflags.GetToolchain().GetId()) {
+    case ToolchainId::Gcc: {
+        cppflags.AddPreprocessorFlag("-DRANDOM=1");
+        cppflags.AddCppCompileFlag("-Wall");
+        cppflags.AddCppCompileFlag("-Werror");
+        cppflags.AddLinkFlag("-lm");
+        break;
+    }
+    case ToolchainId::Msvc: {
+        cppflags.AddPreprocessorFlag("/DRANDOM=1");
+        cppflags.AddCppCompileFlag("/W4");
+        break;
+    }
+    default:
+        break;
+    }
+
+    cppflags.Build();
+    }
+
+    static void cflags_build_cb(BaseTarget &cflags) {
+    cflags.AddSource("main.c", "src");
+
+    cflags.AddPch("pch/pch_c.h");
+    cflags.AddIncludeDir("pch", false);
+    cflags.AddHeader("pch/pch_c.h");
+
+    // Toolchain specific code goes here
+    switch (cflags.GetToolchain().GetId()) {
+    case ToolchainId::Gcc: {
+        cflags.AddPreprocessorFlag("-DRANDOM=1");
+        cflags.AddCCompileFlag("-Wall");
+        cflags.AddCCompileFlag("-Werror");
+        cflags.AddLinkFlag("-lm");
+        break;
+    }
+    case ToolchainId::Msvc: {
+        cflags.AddPreprocessorFlag("/DRANDOM=1");
+        cflags.AddCCompileFlag("/W4");
+        break;
+    }
+    default:
+        break;
+    }
+
+    cflags.Build();
+    }
+
 Dependency Chaining
 ---------------------
 
