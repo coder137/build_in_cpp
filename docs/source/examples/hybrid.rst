@@ -69,7 +69,7 @@ Compile a single source with a single GCC compiler.
     :linenos:
 
     int main(int argc, char ** argv) {
-        // See Boilerplate
+        // See Single Boilerplate
 
         Toolchain_gcc gcc;
         ExecutableTarget_gcc hello_world("hello_world", gcc, "");
@@ -109,6 +109,7 @@ We are using multiple Toolchain - Target pairs
         ArgToolchain arg_msvc;
         args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
         args.AddToolchain("msvc", "Generic msvc toolchain", arg_msvc);
+        // NOTE, You can add more toolchains here as per your project requirement
 
         // Parse the arguments from the command line
         args.Parse(argc, argv);
@@ -158,6 +159,89 @@ Simple
 -------
 
 Similar to Flags example for both the GCC and MSVC compiler
+
+.. code-block:: cpp
+    :linenos:
+
+    int main(int argc, char ** argv) {
+        // See Multiple Boilerplate
+
+        Toolchain_gcc gcc;
+        Toolchain_msvc msvc;
+
+        ExecutableTarget_gcc g_cppflags("cppflags", gcc, "files");
+        ExecutableTarget_msvc m_cppflags("cppflags", msvc, "files");
+        ExecutableTarget_gcc g_cflags("cflags", gcc, "files");
+        ExecutableTarget_msvc m_cflags("cflags", msvc, "files");
+
+        // Select your builds and tests using the .toml files
+        reg.Build(arg_gcc.state, cppflags_build_cb, g_cppflags);
+        reg.Build(arg_msvc.state, cppflags_build_cb, m_cppflags);
+        reg.Build(arg_gcc.state, cflags_build_cb, g_cflags);
+        reg.Build(arg_msvc.state, cflags_build_cb, m_cflags);
+
+        // Test steps
+        reg.Test(arg_gcc.state, "{executable}", g_cppflags);
+        reg.Test(arg_msvc.state, "{executable}", m_cppflags);
+        reg.Test(arg_gcc.state, "{executable}", g_cflags);
+        reg.Test(arg_msvc.state, "{executable}", m_cflags);
+
+        // Build Target
+        reg.RunBuild();
+
+        // Test Target
+        reg.RunTest();
+    }
+
+    static void cppflags_build_cb(BaseTarget &cppflags) {
+        cppflags.AddSource("main.cpp", "src");
+        cppflags.AddSource("src/random.cpp");
+        cppflags.AddIncludeDir("include", true);
+
+        // Toolchain specific code goes here
+        switch (cppflags.GetToolchain().GetId()) {
+        case ToolchainId::Gcc: {
+            cppflags.AddPreprocessorFlag("-DRANDOM=1");
+            cppflags.AddCppCompileFlag("-Wall");
+            cppflags.AddCppCompileFlag("-Werror");
+            cppflags.AddLinkFlag("-lm");
+            break;
+        }
+        case ToolchainId::Msvc: {
+            cppflags.AddPreprocessorFlag("/DRANDOM=1");
+            cppflags.AddCppCompileFlag("/W4");
+            break;
+        }
+        default:
+            break;
+        }
+
+        cppflags.Build();
+    }
+
+    static void cflags_build_cb(BaseTarget &cflags) {
+        cflags.AddSource("main.c", "src");
+
+        // Toolchain specific code goes here
+        switch (cflags.GetToolchain().GetId()) {
+        case ToolchainId::Gcc: {
+            cflags.AddPreprocessorFlag("-DRANDOM=1");
+            cflags.AddCCompileFlag("-Wall");
+            cflags.AddCCompileFlag("-Werror");
+            cflags.AddLinkFlag("-lm");
+            break;
+        }
+        case ToolchainId::Msvc: {
+            cflags.AddPreprocessorFlag("/DRANDOM=1");
+            cflags.AddCCompileFlag("/W4");
+            break;
+        }
+        default:
+            break;
+        }
+
+        cflags.Build();
+    }
 
 Foolib
 -------
