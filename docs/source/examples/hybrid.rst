@@ -334,7 +334,7 @@ For super customized targets and toolchains
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 12,13,29,33,34,35
+    :emphasize-lines: 12,13,30,34,35,36
 
     int main(int argc, char ** argv) {
 
@@ -354,6 +354,7 @@ For super customized targets and toolchains
 
         // Additional boilerplate
 
+        // Supplied at compile time
         Toolchain_gcc gcc;
         Toolchain_msvc msvc;
 
@@ -363,7 +364,7 @@ For super customized targets and toolchains
         reg.Build(arg_gcc.state, foolib_build_cb, g_foolib);
         reg.Build(arg_msvc.state, foolib_build_cb, m_foolib);
 
-        // Get custom toolchain from the command line
+        // Get custom toolchain from the command line, supplied at run time
         BaseToolchain clang = toolchain_clang_gnu.ConstructToolchain();
 
         // Get compile_command and link_command from the command line
@@ -376,6 +377,39 @@ For super customized targets and toolchains
         // Build targets
         reg.RunBuild();
     }
+
+    static void foolib_build_cb(BaseTarget &target) {
+        target.AddSource("src/foo.cpp");
+        target.AddIncludeDir("src", true);
+        target.AddSource("main.cpp");
+        target.Build();
+    }
+
+.. code-block:: toml
+    :linenos:
+    :emphasize-lines: 4,17
+
+    # See Multiple boilerplate .toml file
+
+    # Custom toolchain added here
+    [toolchain.clang_gnu]
+    build = true
+    test = true
+
+    # Custom toolchain added here, supplied during runtime
+    id = "Clang"
+    name = "clang_gnu"
+    asm_compiler = "llvm-as"
+    c_compiler = "clang"
+    cpp_compiler = "clang++"
+    archiver = "llvm-ar"
+    linker = "ld"
+
+    # Custom target added here
+    [target.clang_gnu]
+    compile_command = "{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o {output} -c {input}"
+    link_command = "{cpp_compiler} {link_flags} {compiled_sources} -o {output} {lib_dirs} {lib_deps}"
+
 
 Generic
 --------
