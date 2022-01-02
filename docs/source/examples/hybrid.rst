@@ -248,6 +248,66 @@ Foolib
 
 For library developers 
 
+.. admonition:: Scenario
+
+    Say suppose you are a library developer who has created an amazing ``Foo`` library. How would you easily specifiy your project build to be used by yourself and end users?
+
+    **Solution**: Create Header / Source segregations. For example. ``build.foo.h`` and ``build.foo.cpp``
+    End users can now create their own ``build.[project].cpp`` file and compile ``build.foo.cpp`` along with their source and use appropriate APIs are provided by your files.
+
+build.foo
+^^^^^^^^^^
+
+**Header**
+
+.. code-block:: cpp
+    :linenos:
+
+    #pragma once
+
+    #include "buildcc.h"
+
+    void fooTarget(buildcc::BaseTarget &target, const fs::path &relative_path);
+
+**Source**
+
+.. code-block:: cpp
+    :linenos:
+
+    #include "build.foo.h"
+
+    void fooTarget(buildcc::BaseTarget &target, const fs::path &relative_path) {
+        target.AddSource(relative_path / "src/foo.cpp");
+        target.AddIncludeDir(relative_path / "src", true);
+    }
+
+
+build.main
+^^^^^^^^^^^
+
+.. code-block:: cpp
+    :linenos:
+
+    int main(int argc, char ** argv) {
+        // Build steps
+        Toolchain_gcc gcc;
+        Toolchain_msvc msvc;
+
+        ExecutableTarget_gcc g_foolib("foolib", gcc, "");
+        ExecutableTarget_msvc m_foolib("foolib", msvc, "");
+
+        reg.Build(arg_gcc.state, foolib_build_cb, g_foolib);
+        reg.Build(arg_msvc.state, foolib_build_cb, m_foolib);
+
+        reg.RunBuild();
+    }
+
+    static void foolib_build_cb(BaseTarget &target) {
+        fooTarget(target, "");
+        target.AddSource("main.cpp");
+        target.Build();
+    }
+
 External Lib
 -------------
 
