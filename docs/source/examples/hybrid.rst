@@ -306,6 +306,8 @@ For end users consuming third party libraries
     #include "build.foo.h"
 
     int main(int argc, char ** argv) {
+        // See Multiple Boilerplate
+
         // Build steps
         Toolchain_gcc gcc;
         Toolchain_msvc msvc;
