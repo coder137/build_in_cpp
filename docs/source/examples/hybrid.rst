@@ -158,7 +158,7 @@ We are using multiple Toolchain - Target pairs
 Simple 
 -------
 
-Similar to Flags example for both the GCC and MSVC compiler
+Similar to lowlevel GCC Flags example for both the GCC and MSVC compiler
 
 .. code-block:: cpp
     :linenos:
