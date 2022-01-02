@@ -43,7 +43,6 @@ int main(int argc, char **argv) {
   reg.Build(arg_msvc.state, cflags_build_cb, m_cflags);
 
   // 5. Test steps
-  // NOTE, For now they are just dummy callbacks
   reg.Test(arg_gcc.state, "{executable}", g_cppflags);
   reg.Test(arg_msvc.state, "{executable}", m_cppflags);
   reg.Test(arg_gcc.state, "{executable}", g_cflags);
