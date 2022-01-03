@@ -93,7 +93,7 @@ const std::vector<fs::path> &TargetInfoGetter<T>::GetLibDeps() const {
 
 template <typename T>
 const std::vector<std::string> &
-TargetInfoGetter<T>::GetCurrentExternalLibDeps() const {
+TargetInfoGetter<T>::GetExternalLibDeps() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_user_external_lib_deps;
