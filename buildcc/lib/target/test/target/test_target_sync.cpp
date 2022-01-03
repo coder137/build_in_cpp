@@ -74,7 +74,7 @@ TEST(TargetTestSyncGroup, CopyByConstRef) {
   CHECK_EQUAL(destTarget.GetExternalLibDeps().size(), 1);
 
   CHECK_EQUAL(destTarget.GetIncludeDirs().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentLibDirs().size(), 1);
+  CHECK_EQUAL(destTarget.GetLibDirs().size(), 1);
 
   CHECK_EQUAL(destTarget.GetCurrentPreprocessorFlags().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentCommonCompileFlags().size(), 1);
@@ -142,7 +142,7 @@ TEST(TargetTestSyncGroup, CopyByMove) {
   CHECK_EQUAL(destTarget.GetExternalLibDeps().size(), 1);
 
   CHECK_EQUAL(destTarget.GetIncludeDirs().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentLibDirs().size(), 1);
+  CHECK_EQUAL(destTarget.GetLibDirs().size(), 1);
 
   CHECK_EQUAL(destTarget.GetCurrentPreprocessorFlags().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentCommonCompileFlags().size(), 1);
@@ -222,7 +222,7 @@ TEST(TargetTestSyncGroup, InsertByConstRef) {
   CHECK_EQUAL(destTarget.GetExternalLibDeps().size(), 1);
 
   CHECK_EQUAL(destTarget.GetIncludeDirs().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentLibDirs().size(), 1);
+  CHECK_EQUAL(destTarget.GetLibDirs().size(), 1);
 
   CHECK_EQUAL(destTarget.GetCurrentPreprocessorFlags().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentCommonCompileFlags().size(), 1);
@@ -290,7 +290,7 @@ TEST(TargetTestSyncGroup, InsertByMove) {
   CHECK_EQUAL(destTarget.GetExternalLibDeps().size(), 1);
 
   CHECK_EQUAL(destTarget.GetIncludeDirs().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentLibDirs().size(), 1);
+  CHECK_EQUAL(destTarget.GetLibDirs().size(), 1);
 
   CHECK_EQUAL(destTarget.GetCurrentPreprocessorFlags().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentCommonCompileFlags().size(), 1);

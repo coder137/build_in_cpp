@@ -107,7 +107,7 @@ const fs_unordered_set &TargetInfoGetter<T>::GetIncludeDirs() const {
 }
 
 template <typename T>
-const fs_unordered_set &TargetInfoGetter<T>::GetCurrentLibDirs() const {
+const fs_unordered_set &TargetInfoGetter<T>::GetLibDirs() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_lib_dirs;

@@ -50,7 +50,7 @@ public:
   const std::vector<fs::path> &GetLibDeps() const;
   const std::vector<std::string> &GetExternalLibDeps() const;
   const fs_unordered_set &GetIncludeDirs() const;
-  const fs_unordered_set &GetCurrentLibDirs() const;
+  const fs_unordered_set &GetLibDirs() const;
   const std::unordered_set<std::string> &GetCurrentPreprocessorFlags() const;
   const std::unordered_set<std::string> &GetCurrentCommonCompileFlags() const;
   const std::unordered_set<std::string> &GetCurrentPchCompileFlags() const;

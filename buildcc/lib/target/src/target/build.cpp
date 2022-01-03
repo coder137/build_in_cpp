@@ -77,7 +77,7 @@ void Target::Build() {
       {kIncludeDirs, internal::aggregate_with_prefix(config_.prefix_include_dir,
                                                      GetIncludeDirs())},
       {kLibDirs, internal::aggregate_with_prefix(config_.prefix_lib_dir,
-                                                 GetCurrentLibDirs())},
+                                                 GetLibDirs())},
 
       {kPreprocessorFlags, internal::aggregate(GetCurrentPreprocessorFlags())},
       {kCommonCompileFlags,
