@@ -85,8 +85,8 @@ TEST(TargetTestSyncGroup, CopyByConstRef) {
   CHECK_EQUAL(destTarget.GetCurrentCppCompileFlags().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentLinkFlags().size(), 1);
 
-  CHECK_EQUAL(destTarget.GetCurrentCompileDependencies().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentLinkDependencies().size(), 1);
+  CHECK_EQUAL(destTarget.GetCompileDependencies().size(), 1);
+  CHECK_EQUAL(destTarget.GetLinkDependencies().size(), 1);
 }
 
 TEST(TargetTestSyncGroup, CopyByMove) {
@@ -153,8 +153,8 @@ TEST(TargetTestSyncGroup, CopyByMove) {
   CHECK_EQUAL(destTarget.GetCurrentCppCompileFlags().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentLinkFlags().size(), 1);
 
-  CHECK_EQUAL(destTarget.GetCurrentCompileDependencies().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentLinkDependencies().size(), 1);
+  CHECK_EQUAL(destTarget.GetCompileDependencies().size(), 1);
+  CHECK_EQUAL(destTarget.GetLinkDependencies().size(), 1);
 }
 
 TEST(TargetTestSyncGroup, CopyCrash) {
@@ -233,8 +233,8 @@ TEST(TargetTestSyncGroup, InsertByConstRef) {
   CHECK_EQUAL(destTarget.GetCurrentCppCompileFlags().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentLinkFlags().size(), 1);
 
-  CHECK_EQUAL(destTarget.GetCurrentCompileDependencies().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentLinkDependencies().size(), 1);
+  CHECK_EQUAL(destTarget.GetCompileDependencies().size(), 1);
+  CHECK_EQUAL(destTarget.GetLinkDependencies().size(), 1);
 }
 
 TEST(TargetTestSyncGroup, InsertByMove) {
@@ -301,8 +301,8 @@ TEST(TargetTestSyncGroup, InsertByMove) {
   CHECK_EQUAL(destTarget.GetCurrentCppCompileFlags().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentLinkFlags().size(), 1);
 
-  CHECK_EQUAL(destTarget.GetCurrentCompileDependencies().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentLinkDependencies().size(), 1);
+  CHECK_EQUAL(destTarget.GetCompileDependencies().size(), 1);
+  CHECK_EQUAL(destTarget.GetLinkDependencies().size(), 1);
 }
 
 TEST(TargetTestSyncGroup, InsertCrash) {

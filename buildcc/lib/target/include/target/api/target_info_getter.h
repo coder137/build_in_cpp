@@ -59,8 +59,8 @@ public:
   const std::unordered_set<std::string> &GetCurrentCCompileFlags() const;
   const std::unordered_set<std::string> &GetCurrentCppCompileFlags() const;
   const std::unordered_set<std::string> &GetCurrentLinkFlags() const;
-  const fs_unordered_set &GetCurrentCompileDependencies() const;
-  const fs_unordered_set &GetCurrentLinkDependencies() const;
+  const fs_unordered_set &GetCompileDependencies() const;
+  const fs_unordered_set &GetLinkDependencies() const;
 };
 
 } // namespace buildcc::base

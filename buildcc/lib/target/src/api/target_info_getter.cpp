@@ -178,16 +178,14 @@ TargetInfoGetter<T>::GetCurrentLinkFlags() const {
 }
 
 template <typename T>
-const fs_unordered_set &
-TargetInfoGetter<T>::GetCurrentCompileDependencies() const {
+const fs_unordered_set &TargetInfoGetter<T>::GetCompileDependencies() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_compile_dependencies.user;
 }
 
 template <typename T>
-const fs_unordered_set &
-TargetInfoGetter<T>::GetCurrentLinkDependencies() const {
+const fs_unordered_set &TargetInfoGetter<T>::GetLinkDependencies() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_link_dependencies.user;
