@@ -2,10 +2,10 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="TargetInfo" href="target.html" /><link rel="prev" title="Toolchain" href="toolchain.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="MinGW" href="mingw.html" /><link rel="prev" title="MSVC" href="msvc.html" />
 
     <meta name="generator" content="sphinx-4.3.2, furo 2022.01.02"/>
-        <title>Generator - BuildCC 0.1.1 documentation</title>
+        <title>Clang - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=fade93df149f7c5fedb3ff897f799dc7d283b420" />
@@ -133,7 +133,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -169,25 +169,25 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a></li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">User API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="environment.html">Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="toolchain.html">Toolchain</a></li>
-<li class="toctree-l2"><a class="reference internal" href="toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Generator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html">TargetInfo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html#target">Target</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html#specialized-target">Specialized Target</a></li>
-<li class="toctree-l2"><a class="reference internal" href="args.html">Args</a></li>
-<li class="toctree-l2"><a class="reference internal" href="register.html">Register</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supported_plugins.html">Supported Plugins</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html">Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#target">Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#specialized-target">Specialized Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/args.html">Args</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/register.html">Register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/toc.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../examples/hybrid.html">Hybrid</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../examples/gcc.html">GCC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../examples/msvc.html">MSVC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../examples/clang.html">Clang</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../examples/mingw.html">MinGW</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hybrid.html">Hybrid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gcc.html">GCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msvc.html">MSVC</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Clang</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mingw.html">MinGW</a></li>
 </ul>
 </li>
 </ul>
@@ -210,17 +210,15 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <div class="section" id="generator">
-<h1>Generator<a class="headerlink" href="#generator" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="generator-h">
-<h2>generator.h<a class="headerlink" href="#generator-h" title="Permalink to this headline">¶</a></h2>
-</div>
+          <div class="section" id="clang">
+<h1>Clang<a class="headerlink" href="#clang" title="Permalink to this headline">¶</a></h1>
+<p>Lowlevel Clang Tests</p>
 </div>
 
         </article>
@@ -228,23 +226,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="target.html">
+          <a class="next-page" href="mingw.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">TargetInfo</div>
+                <div class="title">MinGW</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="toolchain.html">
+          <a class="prev-page" href="msvc.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Toolchain</div>
+                <div class="title">MSVC</div>
                 
               </div>
             </a>
@@ -254,7 +252,7 @@
               Copyright &#169; 2021, Niket Naidu |
           Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
           <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
-            | <a class="muted-link" href="../_sources/user_api/generator.rst.txt"
+            | <a class="muted-link" href="../_sources/examples/clang.rst.txt"
                rel="nofollow">
               Show Source
             </a>
@@ -262,27 +260,8 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            Contents
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Generator</a><ul>
-<li><a class="reference internal" href="#generator-h">generator.h</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

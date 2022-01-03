@@ -2,13 +2,13 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="prev" title="Supported Plugins" href="../user_api/supported_plugins.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Hybrid" href="hybrid.html" /><link rel="prev" title="Supported Plugins" href="../user_api/supported_plugins.html" />
 
-    <meta name="generator" content="sphinx-4.3.2, furo 2021.11.23"/>
+    <meta name="generator" content="sphinx-4.3.2, furo 2022.01.02"/>
         <title>Examples - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=7f0192ddeb2adecfbaa87ffbcf67d16358b30bc1" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=0af69da206d614734f649b27d4cdc2dd6c31f41d" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=fade93df149f7c5fedb3ff897f799dc7d283b420" />
     
     
 
@@ -133,7 +133,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -182,7 +182,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Examples</a></li>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="hybrid.html">Hybrid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gcc.html">GCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msvc.html">MSVC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clang.html">Clang</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mingw.html">MinGW</a></li>
+</ul>
+</li>
 </ul>
 
 </div>
@@ -203,7 +210,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -211,17 +218,42 @@
         <article role="main">
           <div class="section" id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="hybrid">
-<h2>Hybrid<a class="headerlink" href="#hybrid" title="Permalink to this headline">¶</a></h2>
-<p>Real world tests combining multiple compilers</p>
-</div>
-<div class="section" id="gcc">
-<h2>GCC<a class="headerlink" href="#gcc" title="Permalink to this headline">¶</a></h2>
-<p>Lowlevel GCC Tests</p>
-</div>
-<div class="section" id="msvc">
-<h2>MSVC<a class="headerlink" href="#msvc" title="Permalink to this headline">¶</a></h2>
-<p>Lowlevel MSVC Tests</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hybrid.html">Hybrid</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hybrid.html#single-boilerplate">Single Boilerplate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid.html#single">Single</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid.html#multiple-boilerplate">Multiple Boilerplate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid.html#simple">Simple</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid.html#foolib">Foolib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid.html#external-lib">External Lib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid.html#custom-target">Custom Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid.html#precompileheader">PrecompileHeader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid.html#dependency-chaining">Dependency Chaining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid.html#target-info">Target Info</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gcc.html">GCC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gcc.html#simple">Simple</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gcc.html#includedir">IncludeDir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gcc.html#staticlib">StaticLib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gcc.html#dynamiclib">DynamicLib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gcc.html#flags">Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gcc.html#afterinstall">AfterInstall</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gcc.html#plugins">Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gcc.html#precompileheader">PrecompileHeader</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="msvc.html">MSVC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="msvc.html#executable">Executable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msvc.html#staticlib">StaticLib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msvc.html#dynamiclib">DynamicLib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msvc.html#precompileheader">PrecompileHeader</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="clang.html">Clang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mingw.html">MinGW</a></li>
+</ul>
 </div>
 </div>
 
@@ -230,7 +262,15 @@
       <footer>
         
         <div class="related-pages">
-          
+          <a class="next-page" href="hybrid.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Hybrid</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
           <a class="prev-page" href="../user_api/supported_plugins.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
@@ -256,29 +296,8 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            Contents
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Examples</a><ul>
-<li><a class="reference internal" href="#hybrid">Hybrid</a></li>
-<li><a class="reference internal" href="#gcc">GCC</a></li>
-<li><a class="reference internal" href="#msvc">MSVC</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

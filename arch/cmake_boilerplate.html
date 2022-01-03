@@ -4,11 +4,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Namespaces" href="namespaces.html" /><link rel="prev" title="Serialization Schema" href="serialization_schema.html" />
 
-    <meta name="generator" content="sphinx-4.3.2, furo 2021.11.23"/>
+    <meta name="generator" content="sphinx-4.3.2, furo 2022.01.02"/>
         <title>CMake Boilerplate - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=7f0192ddeb2adecfbaa87ffbcf67d16358b30bc1" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=0af69da206d614734f649b27d4cdc2dd6c31f41d" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=fade93df149f7c5fedb3ff897f799dc7d283b420" />
     
     
 
@@ -182,7 +182,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../examples/toc.html">Examples</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/toc.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/hybrid.html">Hybrid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/gcc.html">GCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/msvc.html">MSVC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/clang.html">Clang</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/mingw.html">MinGW</a></li>
+</ul>
+</li>
 </ul>
 
 </div>
@@ -245,102 +252,102 @@ We can then <code class="docutils literal notranslate"><span class="pre">add_sub
 <p><strong>Example: Environment</strong></p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Env test</span>
 <span class="nb">if</span> <span class="p">(</span><span class="o">${</span><span class="nv">TESTING</span><span class="o">}</span><span class="p">)</span>
-    <span class="nb">add_library</span><span class="p">(</span><span class="s">mock_env</span> <span class="s">STATIC</span>
-        <span class="s">mock/logging.cpp</span>
-        <span class="s">mock/assert_fatal.cpp</span>
+<span class="w">    </span><span class="nb">add_library</span><span class="p">(</span><span class="s">mock_env</span><span class="w"> </span><span class="s">STATIC</span>
+<span class="w">        </span><span class="s">mock/logging.cpp</span>
+<span class="w">        </span><span class="s">mock/assert_fatal.cpp</span>
 
-        <span class="s">src/env.cpp</span>
-        <span class="s">src/task_state.cpp</span>
+<span class="w">        </span><span class="s">src/env.cpp</span>
+<span class="w">        </span><span class="s">src/task_state.cpp</span>
 
-        <span class="s">src/command.cpp</span>
-        <span class="s">mock/execute.cpp</span>
-    <span class="p">)</span>
-    <span class="nb">target_include_directories</span><span class="p">(</span><span class="s">mock_env</span> <span class="s">PUBLIC</span>
-        <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/include</span>
-        <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/mock/include</span>
-    <span class="p">)</span>
-    <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">mock_env</span> <span class="s">PUBLIC</span>
-        <span class="s">fmt::fmt-header-only</span>
-        <span class="s">Taskflow</span>
+<span class="w">        </span><span class="s">src/command.cpp</span>
+<span class="w">        </span><span class="s">mock/execute.cpp</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">mock_env</span><span class="w"> </span><span class="s">PUBLIC</span>
+<span class="w">        </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/include</span>
+<span class="w">        </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/mock/include</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">mock_env</span><span class="w"> </span><span class="s">PUBLIC</span>
+<span class="w">        </span><span class="s">fmt::fmt-header-only</span>
+<span class="w">        </span><span class="s">Taskflow</span>
 
-        <span class="s">CppUTest</span>
-        <span class="s">CppUTestExt</span>
-        <span class="s">gcov</span>
-    <span class="p">)</span>
-    <span class="nb">target_compile_options</span><span class="p">(</span><span class="s">mock_env</span> <span class="s">PUBLIC</span> <span class="o">${</span><span class="nv">TEST_COMPILE_FLAGS</span><span class="o">}</span> <span class="o">${</span><span class="nv">BUILD_COMPILE_FLAGS</span><span class="o">}</span><span class="p">)</span>
-    <span class="nb">target_link_options</span><span class="p">(</span><span class="s">mock_env</span> <span class="s">PUBLIC</span> <span class="o">${</span><span class="nv">TEST_LINK_FLAGS</span><span class="o">}</span> <span class="o">${</span><span class="nv">BUILD_LINK_FLAGS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">        </span><span class="s">CppUTest</span>
+<span class="w">        </span><span class="s">CppUTestExt</span>
+<span class="w">        </span><span class="s">gcov</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">mock_env</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">TEST_COMPILE_FLAGS</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">BUILD_COMPILE_FLAGS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_link_options</span><span class="p">(</span><span class="s">mock_env</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">TEST_LINK_FLAGS</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">BUILD_LINK_FLAGS</span><span class="o">}</span><span class="p">)</span>
 
-    <span class="c"># Tests</span>
-    <span class="nb">add_executable</span><span class="p">(</span><span class="s">test_env_util</span> <span class="s">test/test_env_util.cpp</span><span class="p">)</span>
-    <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">test_env_util</span> <span class="s">PRIVATE</span> <span class="s">mock_env</span><span class="p">)</span>
+<span class="w">    </span><span class="c"># Tests</span>
+<span class="w">    </span><span class="nb">add_executable</span><span class="p">(</span><span class="s">test_env_util</span><span class="w"> </span><span class="s">test/test_env_util.cpp</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">test_env_util</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">mock_env</span><span class="p">)</span>
 
-    <span class="nb">add_executable</span><span class="p">(</span><span class="s">test_task_state</span> <span class="s">test/test_task_state.cpp</span><span class="p">)</span>
-    <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">test_task_state</span> <span class="s">PRIVATE</span> <span class="s">mock_env</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">add_executable</span><span class="p">(</span><span class="s">test_task_state</span><span class="w"> </span><span class="s">test/test_task_state.cpp</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">test_task_state</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">mock_env</span><span class="p">)</span>
 
-    <span class="nb">add_executable</span><span class="p">(</span><span class="s">test_command</span> <span class="s">test/test_command.cpp</span><span class="p">)</span>
-    <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">test_command</span> <span class="s">PRIVATE</span> <span class="s">mock_env</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">add_executable</span><span class="p">(</span><span class="s">test_command</span><span class="w"> </span><span class="s">test/test_command.cpp</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">test_command</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">mock_env</span><span class="p">)</span>
 
-    <span class="nb">add_test</span><span class="p">(</span><span class="s">NAME</span> <span class="s">test_env_util</span> <span class="s">COMMAND</span> <span class="s">test_env_util</span><span class="p">)</span>
-    <span class="nb">add_test</span><span class="p">(</span><span class="s">NAME</span> <span class="s">test_task_state</span> <span class="s">COMMAND</span> <span class="s">test_task_state</span><span class="p">)</span>
-    <span class="nb">add_test</span><span class="p">(</span><span class="s">NAME</span> <span class="s">test_command</span> <span class="s">COMMAND</span> <span class="s">test_command</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">add_test</span><span class="p">(</span><span class="s">NAME</span><span class="w"> </span><span class="s">test_env_util</span><span class="w"> </span><span class="s">COMMAND</span><span class="w"> </span><span class="s">test_env_util</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">add_test</span><span class="p">(</span><span class="s">NAME</span><span class="w"> </span><span class="s">test_task_state</span><span class="w"> </span><span class="s">COMMAND</span><span class="w"> </span><span class="s">test_task_state</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">add_test</span><span class="p">(</span><span class="s">NAME</span><span class="w"> </span><span class="s">test_command</span><span class="w"> </span><span class="s">COMMAND</span><span class="w"> </span><span class="s">test_command</span><span class="p">)</span>
 <span class="nb">endif</span><span class="p">()</span>
 
 <span class="nb">set</span><span class="p">(</span><span class="s">ENV_SRCS</span>
-    <span class="s">src/env.cpp</span>
-    <span class="s">src/assert_fatal.cpp</span>
-    <span class="s">src/logging.cpp</span>
-    <span class="s">include/env/assert_fatal.h</span>
-    <span class="s">include/env/assert_throw.h</span>
-    <span class="s">include/env/env.h</span>
-    <span class="s">include/env/logging.h</span>
-    <span class="s">include/env/util.h</span>
+<span class="w">    </span><span class="s">src/env.cpp</span>
+<span class="w">    </span><span class="s">src/assert_fatal.cpp</span>
+<span class="w">    </span><span class="s">src/logging.cpp</span>
+<span class="w">    </span><span class="s">include/env/assert_fatal.h</span>
+<span class="w">    </span><span class="s">include/env/assert_throw.h</span>
+<span class="w">    </span><span class="s">include/env/env.h</span>
+<span class="w">    </span><span class="s">include/env/logging.h</span>
+<span class="w">    </span><span class="s">include/env/util.h</span>
 
-    <span class="s">include/env/host_os.h</span>
-    <span class="s">include/env/host_compiler.h</span>
-    <span class="s">include/env/host_os_util.h</span>
+<span class="w">    </span><span class="s">include/env/host_os.h</span>
+<span class="w">    </span><span class="s">include/env/host_compiler.h</span>
+<span class="w">    </span><span class="s">include/env/host_os_util.h</span>
 
-    <span class="s">src/task_state.cpp</span>
-    <span class="s">include/env/task_state.h</span>
+<span class="w">    </span><span class="s">src/task_state.cpp</span>
+<span class="w">    </span><span class="s">include/env/task_state.h</span>
 
-    <span class="s">src/command.cpp</span>
-    <span class="s">src/execute.cpp</span>
-    <span class="s">include/env/command.h</span>
+<span class="w">    </span><span class="s">src/command.cpp</span>
+<span class="w">    </span><span class="s">src/execute.cpp</span>
+<span class="w">    </span><span class="s">include/env/command.h</span>
 <span class="p">)</span>
 
 <span class="nb">if</span><span class="p">(</span><span class="o">${</span><span class="nv">BUILDCC_BUILD_AS_SINGLE_LIB</span><span class="o">}</span><span class="p">)</span>
-    <span class="nb">target_sources</span><span class="p">(</span><span class="s">buildcc</span> <span class="s">PRIVATE</span>
-        <span class="o">${</span><span class="nv">ENV_SRCS</span><span class="o">}</span>
-    <span class="p">)</span>
-    <span class="nb">target_include_directories</span><span class="p">(</span><span class="s">buildcc</span> <span class="s">PUBLIC</span>
-        <span class="o">$&lt;</span><span class="nv">BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include</span><span class="o">&gt;</span>
-        <span class="o">$&lt;</span><span class="nv">INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}</span><span class="o">&gt;</span>
-    <span class="p">)</span>
+<span class="w">    </span><span class="nb">target_sources</span><span class="p">(</span><span class="s">buildcc</span><span class="w"> </span><span class="s">PRIVATE</span>
+<span class="w">        </span><span class="o">${</span><span class="nv">ENV_SRCS</span><span class="o">}</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">buildcc</span><span class="w"> </span><span class="s">PUBLIC</span>
+<span class="w">        </span><span class="o">$&lt;</span><span class="nv">BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include</span><span class="o">&gt;</span>
+<span class="w">        </span><span class="o">$&lt;</span><span class="nv">INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}</span><span class="o">&gt;</span>
+<span class="w">    </span><span class="p">)</span>
 <span class="nb">endif</span><span class="p">()</span>
 
 <span class="nb">if</span><span class="p">(</span><span class="o">${</span><span class="nv">BUILDCC_BUILD_AS_INTERFACE</span><span class="o">}</span><span class="p">)</span>
-    <span class="nb">m_clangtidy</span><span class="p">(</span><span class="s2">"env"</span><span class="p">)</span>
-    <span class="nb">add_library</span><span class="p">(</span><span class="s">env</span>
-        <span class="o">${</span><span class="nv">ENV_SRCS</span><span class="o">}</span>
-    <span class="p">)</span>
-    <span class="nb">target_include_directories</span><span class="p">(</span><span class="s">env</span> <span class="s">PUBLIC</span>
-        <span class="o">$&lt;</span><span class="nv">BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include</span><span class="o">&gt;</span>
-        <span class="o">$&lt;</span><span class="nv">INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}</span><span class="o">&gt;</span>
-    <span class="p">)</span>
-    <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">env</span> <span class="s">PUBLIC</span> <span class="s">fmt::fmt-header-only</span><span class="p">)</span>
-    <span class="nb">target_compile_options</span><span class="p">(</span><span class="s">env</span> <span class="s">PRIVATE</span> <span class="o">${</span><span class="nv">BUILD_COMPILE_FLAGS</span><span class="o">}</span><span class="p">)</span>
-    <span class="nb">target_link_options</span><span class="p">(</span><span class="s">env</span> <span class="s">PRIVATE</span> <span class="o">${</span><span class="nv">BUILD_LINK_FLAGS</span><span class="o">}</span><span class="p">)</span>
-    <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">env</span> <span class="s">PRIVATE</span>
-        <span class="s">spdlog::spdlog_header_only</span>
-        <span class="s">tiny-process-library::tiny-process-library</span>
-    <span class="p">)</span>
+<span class="w">    </span><span class="nb">m_clangtidy</span><span class="p">(</span><span class="s2">"env"</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">add_library</span><span class="p">(</span><span class="s">env</span>
+<span class="w">        </span><span class="o">${</span><span class="nv">ENV_SRCS</span><span class="o">}</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">env</span><span class="w"> </span><span class="s">PUBLIC</span>
+<span class="w">        </span><span class="o">$&lt;</span><span class="nv">BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include</span><span class="o">&gt;</span>
+<span class="w">        </span><span class="o">$&lt;</span><span class="nv">INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}</span><span class="o">&gt;</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">env</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">fmt::fmt-header-only</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">env</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nv">BUILD_COMPILE_FLAGS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_link_options</span><span class="p">(</span><span class="s">env</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nv">BUILD_LINK_FLAGS</span><span class="o">}</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">env</span><span class="w"> </span><span class="s">PRIVATE</span>
+<span class="w">        </span><span class="s">spdlog::spdlog_header_only</span>
+<span class="w">        </span><span class="s">tiny-process-library::tiny-process-library</span>
+<span class="w">    </span><span class="p">)</span>
 <span class="nb">endif</span><span class="p">()</span>
 
 <span class="nb">if</span> <span class="p">(</span><span class="o">${</span><span class="nv">BUILDCC_INSTALL</span><span class="o">}</span><span class="p">)</span>
-    <span class="nb">if</span> <span class="p">(</span><span class="o">${</span><span class="nv">BUILDCC_BUILD_AS_INTERFACE</span><span class="o">}</span><span class="p">)</span>
-        <span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s">env</span> <span class="s">DESTINATION</span> <span class="s">lib</span> <span class="s">EXPORT</span> <span class="s">envConfig</span><span class="p">)</span>
-        <span class="nb">install</span><span class="p">(</span><span class="s">EXPORT</span> <span class="s">envConfig</span> <span class="s">DESTINATION</span> <span class="s2">"${BUILDCC_INSTALL_LIB_PREFIX}/env"</span><span class="p">)</span>
-    <span class="nb">endif</span><span class="p">()</span>
-    <span class="nb">install</span><span class="p">(</span><span class="s">DIRECTORY</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/include/</span> <span class="s">DESTINATION</span> <span class="s2">"${BUILDCC_INSTALL_HEADER_PREFIX}"</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">if</span> <span class="p">(</span><span class="o">${</span><span class="nv">BUILDCC_BUILD_AS_INTERFACE</span><span class="o">}</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span><span class="w"> </span><span class="s">env</span><span class="w"> </span><span class="s">DESTINATION</span><span class="w"> </span><span class="s">lib</span><span class="w"> </span><span class="s">EXPORT</span><span class="w"> </span><span class="s">envConfig</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">install</span><span class="p">(</span><span class="s">EXPORT</span><span class="w"> </span><span class="s">envConfig</span><span class="w"> </span><span class="s">DESTINATION</span><span class="w"> </span><span class="s2">"${BUILDCC_INSTALL_LIB_PREFIX}/env"</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
+<span class="w">    </span><span class="nb">install</span><span class="p">(</span><span class="s">DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/include/</span><span class="w"> </span><span class="s">DESTINATION</span><span class="w"> </span><span class="s2">"${BUILDCC_INSTALL_HEADER_PREFIX}"</span><span class="p">)</span>
 <span class="nb">endif</span><span class="p">()</span>
 </pre></div>
 </div>

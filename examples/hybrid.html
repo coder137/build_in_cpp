@@ -1,0 +1,817 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="GCC" href="gcc.html" /><link rel="prev" title="Examples" href="toc.html" />
+
+    <meta name="generator" content="sphinx-4.3.2, furo 2022.01.02"/>
+        <title>Hybrid - BuildCC 0.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=fade93df149f7c5fedb3ff897f799dc7d283b420" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  body[data-theme="dark"] {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z" />
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="10" y1="12" x2="20" y2="12" />
+      <line x1="6" y1="18" x2="20" y2="18" />
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">BuildCC 0.1.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">BuildCC 0.1.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/toc.html">Introduction</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../arch/toc.html">Architecture</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../arch/project_layout.html">Project Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/software_heirarchy.html">Software Heirarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/serialization_schema.html">Serialization Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/cmake_boilerplate.html">CMake Boilerplate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/namespaces.html">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/design_patterns.html">Design Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/outputs.html">Outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/style_guide.html">Style Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html">Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#target">Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#specialized-target">Specialized Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/args.html">Args</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/register.html">Register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Hybrid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gcc.html">GCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msvc.html">MSVC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clang.html">Clang</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mingw.html">MinGW</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <div class="section" id="hybrid">
+<h1>Hybrid<a class="headerlink" href="#hybrid" title="Permalink to this headline">¶</a></h1>
+<p>Real world tests combining multiple compilers</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the Hybrid examples we use the <strong>Args</strong> and <strong>Register</strong> module to abstract away <code class="docutils literal notranslate"><span class="pre">Taskflow</span></code> and <code class="docutils literal notranslate"><span class="pre">CLI11</span></code> APIs. To see the lowlevel usage please see the lowlevel <strong>[compiler]</strong> tests.</p>
+</div>
+<div class="section" id="single-boilerplate">
+<h2>Single Boilerplate<a class="headerlink" href="#single-boilerplate" title="Permalink to this headline">¶</a></h2>
+<p>We are only using a single Toolchain - Target pair</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="c1">// Args module to get data from the command line or .toml file passed in through --config</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="n">Args</span><span class="w"> </span><span class="n">args</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="c1">// Register your [toolchain.{name}]</span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="c1">// In this case it will be [toolchain.gcc]</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="n">ArgToolchain</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">AddToolchain</span><span class="p">(</span><span class="s">"gcc"</span><span class="p">,</span><span class="w"> </span><span class="s">"Generic gcc toolchain"</span><span class="p">,</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="w">    </span><span class="c1">// Parse the arguments from the command line</span>
+<span class="linenos">11</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="w">    </span><span class="c1">// Register module</span>
+<span class="linenos">14</span><span class="w">    </span><span class="n">Register</span><span class="w"> </span><span class="n">reg</span><span class="p">(</span><span class="n">args</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">15</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Clean</span><span class="p">(</span><span class="n">clean_cb</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="w">    </span><span class="c1">// TODO, Write your target builds here</span>
+<span class="linenos">18</span><span class="w">    </span><span class="c1">// See examples below</span>
+<span class="linenos">19</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">clean_cb</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">22</span><span class="w">    </span><span class="n">env</span><span class="o">::</span><span class="n">log_info</span><span class="p">(</span><span class="n">EXE</span><span class="p">,</span><span class="w"> </span><span class="n">fmt</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">"Cleaning {}"</span><span class="p">,</span><span class="w"> </span><span class="n">env</span><span class="o">::</span><span class="n">get_project_build_dir</span><span class="p">()));</span><span class="w"></span>
+<span class="linenos">23</span><span class="w">    </span><span class="n">fs</span><span class="o">::</span><span class="n">remove_all</span><span class="p">(</span><span class="n">env</span><span class="o">::</span><span class="n">get_project_build_dir</span><span class="p">());</span><span class="w"></span>
+<span class="linenos">24</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># Required parameters</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"> </span><span class="c1"># build executable meant to be invoked from the current directory</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"_build"</span><span class="w"> </span><span class="c1"># Creates this directory relative to where you invoke your build executable</span><span class="w"></span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># Optional parameters</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"trace"</span><span class="w"> </span><span class="c1"># trace, debug, info, warning, critical</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="n">clean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="w"> </span><span class="c1"># calls clean_cb if true, user specifies how their project must be cleaned</span><span class="w"></span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="c1"># Toolchain</span><span class="w"></span>
+<span class="linenos">10</span><span class="c1"># Valid configurations are</span><span class="w"></span>
+<span class="linenos">11</span><span class="c1"># build = false, test = false</span><span class="w"></span>
+<span class="linenos">12</span><span class="c1"># build = true, test = false</span><span class="w"></span>
+<span class="linenos">13</span><span class="c1"># build = true, test = true</span><span class="w"></span>
+<span class="linenos">14</span><span class="k">[toolchain.gcc]</span><span class="w"></span>
+<span class="linenos">15</span><span class="n">build</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="linenos">16</span><span class="n">test</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="single">
+<h2>Single<a class="headerlink" href="#single" title="Permalink to this headline">¶</a></h2>
+<p>Compile a single source with a single GCC compiler.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="c1">// See Single Boilerplate</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="n">Toolchain_gcc</span><span class="w"> </span><span class="n">gcc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">hello_world</span><span class="p">(</span><span class="s">"hello_world"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="c1">// Select your builds and tests using the .toml files</span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_gcc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">hello_world_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">hello_world</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Test</span><span class="p">(</span><span class="n">arg_gcc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="s">"{executable}"</span><span class="p">,</span><span class="w"> </span><span class="n">hello_world</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="w">    </span><span class="c1">// Build Target</span>
+<span class="linenos">12</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">RunBuild</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">13</span>
+<span class="linenos">14</span><span class="w">    </span><span class="c1">// Test Target</span>
+<span class="linenos">15</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">RunTest</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">16</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">hello_world_build_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="n">target</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">19</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"main.cpp"</span><span class="p">,</span><span class="w"> </span><span class="s">"src"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">20</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">21</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="multiple-boilerplate">
+<h2>Multiple Boilerplate<a class="headerlink" href="#multiple-boilerplate" title="Permalink to this headline">¶</a></h2>
+<p>We are using multiple Toolchain - Target pairs</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="c1">// Args module to get data from the command line or .toml file passed in through --config</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="n">Args</span><span class="w"> </span><span class="n">args</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="c1">// Register your [toolchain.{name}]</span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="c1">// In this case it will be [toolchain.gcc] and [toolchain.msvc]</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="n">ArgToolchain</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="n">ArgToolchain</span><span class="w"> </span><span class="n">arg_msvc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">AddToolchain</span><span class="p">(</span><span class="s">"gcc"</span><span class="p">,</span><span class="w"> </span><span class="s">"Generic gcc toolchain"</span><span class="p">,</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">AddToolchain</span><span class="p">(</span><span class="s">"msvc"</span><span class="p">,</span><span class="w"> </span><span class="s">"Generic msvc toolchain"</span><span class="p">,</span><span class="w"> </span><span class="n">arg_msvc</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">11</span><span class="w">    </span><span class="c1">// NOTE, You can add more toolchains here as per your project requirement</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="w">    </span><span class="c1">// Parse the arguments from the command line</span>
+<span class="linenos">14</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="w">    </span><span class="c1">// Register module</span>
+<span class="linenos">17</span><span class="w">    </span><span class="n">Register</span><span class="w"> </span><span class="n">reg</span><span class="p">(</span><span class="n">args</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">18</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Clean</span><span class="p">(</span><span class="n">clean_cb</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="w">    </span><span class="c1">// TODO, Write your target builds here</span>
+<span class="linenos">21</span><span class="w">    </span><span class="c1">// See examples below</span>
+<span class="linenos">22</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">clean_cb</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">25</span><span class="w">    </span><span class="n">env</span><span class="o">::</span><span class="n">log_info</span><span class="p">(</span><span class="n">EXE</span><span class="p">,</span><span class="w"> </span><span class="n">fmt</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">"Cleaning {}"</span><span class="p">,</span><span class="w"> </span><span class="n">env</span><span class="o">::</span><span class="n">get_project_build_dir</span><span class="p">()));</span><span class="w"></span>
+<span class="linenos">26</span><span class="w">    </span><span class="n">fs</span><span class="o">::</span><span class="n">remove_all</span><span class="p">(</span><span class="n">env</span><span class="o">::</span><span class="n">get_project_build_dir</span><span class="p">());</span><span class="w"></span>
+<span class="linenos">27</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># Required parameters</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"> </span><span class="c1"># build executable meant to be invoked from the current directory</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"_build"</span><span class="w"> </span><span class="c1"># Creates this directory relative to where you invoke your build executable</span><span class="w"></span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># Optional parameters</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"trace"</span><span class="w"> </span><span class="c1"># trace, debug, info, warning, critical</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="n">clean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="w"> </span><span class="c1"># calls clean_cb if true, user specifies how their project must be cleaned</span><span class="w"></span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="c1"># Toolchain</span><span class="w"></span>
+<span class="linenos">10</span><span class="c1"># Valid configurations are</span><span class="w"></span>
+<span class="linenos">11</span><span class="c1"># build = false, test = false</span><span class="w"></span>
+<span class="linenos">12</span><span class="c1"># build = true, test = false</span><span class="w"></span>
+<span class="linenos">13</span><span class="c1"># build = true, test = true</span><span class="w"></span>
+<span class="linenos">14</span><span class="k">[toolchain.gcc]</span><span class="w"></span>
+<span class="linenos">15</span><span class="n">build</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="linenos">16</span><span class="n">test</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="c1"># If we are building on Windows make these true</span><span class="w"></span>
+<span class="linenos">19</span><span class="k">[toolchain.msvc]</span><span class="w"></span>
+<span class="linenos">20</span><span class="n">build</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="linenos">21</span><span class="n">test</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On Windows, make sure you install the Build Tools properly and invoke <code class="docutils literal notranslate"><span class="pre">vcvarsall.bat</span> <span class="pre">amd64</span></code> or equivalent from the command line to activate your toolchain.</p>
+</div>
+</div>
+<div class="section" id="simple">
+<h2>Simple<a class="headerlink" href="#simple" title="Permalink to this headline">¶</a></h2>
+<p>Similar to lowlevel GCC Flags example for both the GCC and MSVC compiler</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="c1">// See Multiple Boilerplate</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="n">Toolchain_gcc</span><span class="w"> </span><span class="n">gcc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="n">Toolchain_msvc</span><span class="w"> </span><span class="n">msvc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">g_cppflags</span><span class="p">(</span><span class="s">"cppflags"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">"files"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="n">ExecutableTarget_msvc</span><span class="w"> </span><span class="n">m_cppflags</span><span class="p">(</span><span class="s">"cppflags"</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">"files"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">g_cflags</span><span class="p">(</span><span class="s">"cflags"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">"files"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">ExecutableTarget_msvc</span><span class="w"> </span><span class="n">m_cflags</span><span class="p">(</span><span class="s">"cflags"</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">"files"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="w">    </span><span class="c1">// Select your builds and tests using the .toml files</span>
+<span class="linenos">13</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_gcc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">cppflags_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">g_cppflags</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">14</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_msvc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">cppflags_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">m_cppflags</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">15</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_gcc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">cflags_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">g_cflags</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">16</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_msvc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">cflags_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">m_cflags</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="w">    </span><span class="c1">// Test steps</span>
+<span class="linenos">19</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Test</span><span class="p">(</span><span class="n">arg_gcc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="s">"{executable}"</span><span class="p">,</span><span class="w"> </span><span class="n">g_cppflags</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">20</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Test</span><span class="p">(</span><span class="n">arg_msvc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="s">"{executable}"</span><span class="p">,</span><span class="w"> </span><span class="n">m_cppflags</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">21</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Test</span><span class="p">(</span><span class="n">arg_gcc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="s">"{executable}"</span><span class="p">,</span><span class="w"> </span><span class="n">g_cflags</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">22</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Test</span><span class="p">(</span><span class="n">arg_msvc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="s">"{executable}"</span><span class="p">,</span><span class="w"> </span><span class="n">m_cflags</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="w">    </span><span class="c1">// Build Target</span>
+<span class="linenos">25</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">RunBuild</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="w">    </span><span class="c1">// Test Target</span>
+<span class="linenos">28</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">RunTest</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">29</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">30</span>
+<span class="linenos">31</span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">cppflags_build_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cppflags</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">32</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"main.cpp"</span><span class="p">,</span><span class="w"> </span><span class="s">"src"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">33</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/random.cpp"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">34</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">35</span>
+<span class="linenos">36</span><span class="w">    </span><span class="c1">// Toolchain specific code goes here</span>
+<span class="linenos">37</span><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">cppflags</span><span class="p">.</span><span class="n">GetToolchain</span><span class="p">().</span><span class="n">GetId</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">38</span><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Gcc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">39</span><span class="w">        </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"-DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">40</span><span class="w">        </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"-Wall"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">41</span><span class="w">        </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"-Werror"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">42</span><span class="w">        </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddLinkFlag</span><span class="p">(</span><span class="s">"-lm"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">43</span><span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">44</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="linenos">45</span><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Msvc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">46</span><span class="w">        </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"/DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">47</span><span class="w">        </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"/W4"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">48</span><span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">49</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="linenos">50</span><span class="w">    </span><span class="k">default</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">51</span><span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">52</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="linenos">53</span>
+<span class="linenos">54</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">55</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">56</span>
+<span class="linenos">57</span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">cflags_build_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cflags</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">58</span><span class="w">    </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"main.c"</span><span class="p">,</span><span class="w"> </span><span class="s">"src"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">59</span>
+<span class="linenos">60</span><span class="w">    </span><span class="c1">// Toolchain specific code goes here</span>
+<span class="linenos">61</span><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">cflags</span><span class="p">.</span><span class="n">GetToolchain</span><span class="p">().</span><span class="n">GetId</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">62</span><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Gcc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">63</span><span class="w">        </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"-DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">64</span><span class="w">        </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">"-Wall"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">65</span><span class="w">        </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">"-Werror"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">66</span><span class="w">        </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddLinkFlag</span><span class="p">(</span><span class="s">"-lm"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">67</span><span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">68</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="linenos">69</span><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Msvc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">70</span><span class="w">        </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"/DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">71</span><span class="w">        </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">"/W4"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">72</span><span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">73</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="linenos">74</span><span class="w">    </span><span class="k">default</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">75</span><span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">76</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="linenos">77</span>
+<span class="linenos">78</span><span class="w">    </span><span class="n">cflags</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">79</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="foolib">
+<h2>Foolib<a class="headerlink" href="#foolib" title="Permalink to this headline">¶</a></h2>
+<p>For library developers</p>
+<div class="admonition-scenario admonition">
+<p class="admonition-title">Scenario</p>
+<p>Say suppose you are a library developer who has created an amazing <code class="docutils literal notranslate"><span class="pre">Foo</span></code> library. How would you easily specifiy your project build to be used by yourself and end users?</p>
+<p><strong>Solution</strong>: Create Header / Source segregations. For example. <code class="docutils literal notranslate"><span class="pre">build.foo.h</span></code> and <code class="docutils literal notranslate"><span class="pre">build.foo.cpp</span></code>
+End users can now create their own <code class="docutils literal notranslate"><span class="pre">build.[project].cpp</span></code> file and compile <code class="docutils literal notranslate"><span class="pre">build.foo.cpp</span></code> along with their source and use appropriate APIs are provided by your files.</p>
+<p>Depending on the complexity of your project the library developer can provide multiple APIs with different options that need to be selected at run time / compile time.</p>
+</div>
+<p><strong>Header</strong></p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="cp">#pragma once</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"buildcc.h"</span><span class="cp"></span>
+<span class="linenos">4</span>
+<span class="linenos">5</span><span class="kt">void</span><span class="w"> </span><span class="nf">fooTarget</span><span class="p">(</span><span class="n">buildcc</span><span class="o">::</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">fs</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="o">&amp;</span><span class="n">relative_path</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p><strong>Source</strong></p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"build.foo.h"</span><span class="cp"></span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="kt">void</span><span class="w"> </span><span class="nf">fooTarget</span><span class="p">(</span><span class="n">buildcc</span><span class="o">::</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">fs</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="o">&amp;</span><span class="n">relative_path</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">4</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="n">relative_path</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s">"src/foo.cpp"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">5</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="n">relative_path</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s">"src"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">6</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="external-lib">
+<h2>External Lib<a class="headerlink" href="#external-lib" title="Permalink to this headline">¶</a></h2>
+<p>For end users consuming third party libraries</p>
+<div class="admonition-scenario admonition">
+<p class="admonition-title">Scenario</p>
+<p>User would like to use the third party library <code class="docutils literal notranslate"><span class="pre">Foo</span></code> in their codebase. The <code class="docutils literal notranslate"><span class="pre">Foo</span></code> library resides in a different directory as visualized below.</p>
+</div>
+<p class="plantuml">
+<img alt="@startmindmap
+* [folder]
+** external_lib
+*** [project_root]
+** foolib
+@endmindmap" src="../_images/plantuml-58424095fa7403351edbcaabd888ba31c902656d.png"/>
+</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"build.foo.h"</span><span class="cp"></span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="c1">// See Multiple Boilerplate</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="c1">// Build steps</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="n">Toolchain_gcc</span><span class="w"> </span><span class="n">gcc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="n">Toolchain_msvc</span><span class="w"> </span><span class="n">msvc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">g_foolib</span><span class="p">(</span><span class="s">"foolib"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">11</span><span class="w">    </span><span class="n">ExecutableTarget_msvc</span><span class="w"> </span><span class="n">m_foolib</span><span class="p">(</span><span class="s">"foolib"</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_gcc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">foolib_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">g_foolib</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">14</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_msvc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">foolib_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">m_foolib</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">RunBuild</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">17</span><span class="p">}</span><span class="w"></span>
+<span class="hll"><span class="linenos">18</span>
+</span><span class="linenos">19</span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">foolib_build_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="n">target</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">20</span><span class="w">    </span><span class="n">fooTarget</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="s">"../foolib"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">21</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"main.cpp"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">22</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">23</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-target">
+<h2>Custom Target<a class="headerlink" href="#custom-target" title="Permalink to this headline">¶</a></h2>
+<p>For super customized targets and toolchains</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="n">Args</span><span class="w"> </span><span class="n">args</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="n">ArgToolchain</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="n">ArgToolchain</span><span class="w"> </span><span class="n">arg_msvc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="n">ArgToolchain</span><span class="w"> </span><span class="n">toolchain_clang_gnu</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="n">ArgTarget</span><span class="w"> </span><span class="n">target_clang_gnu</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">AddToolchain</span><span class="p">(</span><span class="s">"gcc"</span><span class="p">,</span><span class="w"> </span><span class="s">"Generic gcc toolchain"</span><span class="p">,</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">AddToolchain</span><span class="p">(</span><span class="s">"msvc"</span><span class="p">,</span><span class="w"> </span><span class="s">"Generic msvc toolchain"</span><span class="p">,</span><span class="w"> </span><span class="n">arg_msvc</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="w">    </span><span class="c1">// Add your custom toolchain - target to the command line</span>
+<span class="hll"><span class="linenos">12</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">AddToolchain</span><span class="p">(</span><span class="s">"clang_gnu"</span><span class="p">,</span><span class="w"> </span><span class="s">"Clang GNU toolchain"</span><span class="p">,</span><span class="w"> </span><span class="n">toolchain_clang_gnu</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">13</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">AddTarget</span><span class="p">(</span><span class="s">"clang_gnu"</span><span class="p">,</span><span class="w"> </span><span class="s">"Clang GNU target"</span><span class="p">,</span><span class="w"> </span><span class="n">target_clang_gnu</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos">14</span>
+<span class="linenos">15</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="w">    </span><span class="c1">// Additional boilerplate</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span><span class="w">    </span><span class="c1">// Supplied at compile time</span>
+<span class="linenos">20</span><span class="w">    </span><span class="n">Toolchain_gcc</span><span class="w"> </span><span class="n">gcc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">21</span><span class="w">    </span><span class="n">Toolchain_msvc</span><span class="w"> </span><span class="n">msvc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="w">    </span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">g_foolib</span><span class="p">(</span><span class="s">"foolib"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">24</span><span class="w">    </span><span class="n">ExecutableTarget_msvc</span><span class="w"> </span><span class="n">m_foolib</span><span class="p">(</span><span class="s">"foolib"</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_gcc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">foolib_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">g_foolib</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">27</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_msvc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">foolib_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">m_foolib</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">28</span>
+<span class="linenos">29</span><span class="w">    </span><span class="c1">// Get custom toolchain from the command line, supplied at run time</span>
+<span class="hll"><span class="linenos">30</span><span class="w">    </span><span class="n">BaseToolchain</span><span class="w"> </span><span class="n">clang</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">toolchain_clang_gnu</span><span class="p">.</span><span class="n">ConstructToolchain</span><span class="p">();</span><span class="w"></span>
+</span><span class="linenos">31</span>
+<span class="linenos">32</span><span class="w">    </span><span class="c1">// Get compile_command and link_command from the command line</span>
+<span class="linenos">33</span><span class="w">    </span><span class="n">TargetConfig</span><span class="w"> </span><span class="n">config</span><span class="p">;</span><span class="w"></span>
+<span class="hll"><span class="linenos">34</span><span class="w">    </span><span class="n">config</span><span class="p">.</span><span class="n">compile_command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">target_clang_gnu</span><span class="p">.</span><span class="n">compile_command</span><span class="p">;</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">35</span><span class="w">    </span><span class="n">config</span><span class="p">.</span><span class="n">link_command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">target_clang_gnu</span><span class="p">.</span><span class="n">link_command</span><span class="p">;</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">36</span><span class="w">    </span><span class="n">Target_custom</span><span class="w"> </span><span class="n">c_foolib</span><span class="p">(</span><span class="s">"CFoolib.exe"</span><span class="p">,</span><span class="w"> </span><span class="n">TargetType</span><span class="o">::</span><span class="n">Executable</span><span class="p">,</span><span class="w"> </span><span class="n">clang</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos">37</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">toolchain_clang_gnu</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">foolib_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">c_foolib</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">38</span>
+<span class="linenos">39</span><span class="w">    </span><span class="c1">// Build targets</span>
+<span class="linenos">40</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">RunBuild</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">41</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">42</span>
+<span class="linenos">43</span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">foolib_build_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="n">target</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">44</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/foo.cpp"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">45</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"src"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">46</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"main.cpp"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">47</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">48</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># See Multiple boilerplate .toml file</span><span class="w"></span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="c1"># Custom toolchain added here</span><span class="w"></span>
+<span class="hll"><span class="linenos"> 4</span><span class="k">[toolchain.clang_gnu]</span><span class="w"></span>
+</span><span class="linenos"> 5</span><span class="n">build</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="n">test</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="c1"># Custom toolchain added here, supplied during runtime</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Clang"</span><span class="w"></span>
+<span class="linenos">10</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"clang_gnu"</span><span class="w"></span>
+<span class="linenos">11</span><span class="n">asm_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"llvm-as"</span><span class="w"></span>
+<span class="linenos">12</span><span class="n">c_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"clang"</span><span class="w"></span>
+<span class="linenos">13</span><span class="n">cpp_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"clang++"</span><span class="w"></span>
+<span class="linenos">14</span><span class="n">archiver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"llvm-ar"</span><span class="w"></span>
+<span class="linenos">15</span><span class="n">linker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"ld"</span><span class="w"></span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="c1"># Custom target added here</span><span class="w"></span>
+<span class="hll"><span class="linenos">18</span><span class="k">[target.clang_gnu]</span><span class="w"></span>
+</span><span class="linenos">19</span><span class="n">compile_command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"{compiler} {preprocessor_flags} {include_dirs} {compile_flags} -o {output} -c {input}"</span><span class="w"></span>
+<span class="linenos">20</span><span class="n">link_command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"{cpp_compiler} {link_flags} {compiled_sources} -o {output} {lib_dirs} {lib_deps}"</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="precompileheader">
+<h2>PrecompileHeader<a class="headerlink" href="#precompileheader" title="Permalink to this headline">¶</a></h2>
+<p>Precompile header usage with GCC and MSVC compilers</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// Modified Lowlevel GCC Flags example for PCH</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">cppflags_build_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cppflags</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"main.cpp"</span><span class="p">,</span><span class="w"> </span><span class="s">"src"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"random.cpp"</span><span class="p">,</span><span class="w"> </span><span class="s">"src"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 7</span>
+<span class="hll"><span class="linenos"> 8</span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddPch</span><span class="p">(</span><span class="s">"pch/pch_cpp.h"</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos"> 9</span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddPch</span><span class="p">(</span><span class="s">"pch/pch_c.h"</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">10</span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"pch"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos">11</span>
+<span class="linenos">12</span><span class="c1">// Toolchain specific code goes here</span>
+<span class="linenos">13</span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">cppflags</span><span class="p">.</span><span class="n">GetToolchain</span><span class="p">().</span><span class="n">GetId</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">14</span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Gcc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">15</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"-DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">16</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"-Wall"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">17</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"-Werror"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">18</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddLinkFlag</span><span class="p">(</span><span class="s">"-lm"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">19</span><span class="w">    </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">20</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">21</span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Msvc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">22</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"/DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">23</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"/W4"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">24</span><span class="w">    </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">25</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">26</span><span class="k">default</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">27</span><span class="w">    </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">28</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">29</span>
+<span class="linenos">30</span><span class="n">cppflags</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">31</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">cflags_build_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cflags</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">34</span><span class="n">cflags</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"main.c"</span><span class="p">,</span><span class="w"> </span><span class="s">"src"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">35</span>
+<span class="hll"><span class="linenos">36</span><span class="n">cflags</span><span class="p">.</span><span class="n">AddPch</span><span class="p">(</span><span class="s">"pch/pch_c.h"</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">37</span><span class="n">cflags</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"pch"</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">38</span><span class="n">cflags</span><span class="p">.</span><span class="n">AddHeader</span><span class="p">(</span><span class="s">"pch/pch_c.h"</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos">39</span>
+<span class="linenos">40</span><span class="c1">// Toolchain specific code goes here</span>
+<span class="linenos">41</span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">cflags</span><span class="p">.</span><span class="n">GetToolchain</span><span class="p">().</span><span class="n">GetId</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">42</span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Gcc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">43</span><span class="w">    </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"-DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">44</span><span class="w">    </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">"-Wall"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">45</span><span class="w">    </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">"-Werror"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">46</span><span class="w">    </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddLinkFlag</span><span class="p">(</span><span class="s">"-lm"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">47</span><span class="w">    </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">48</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">49</span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Msvc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">50</span><span class="w">    </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"/DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">51</span><span class="w">    </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">"/W4"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">52</span><span class="w">    </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">53</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">54</span><span class="k">default</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">55</span><span class="w">    </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">56</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">57</span>
+<span class="linenos">58</span><span class="n">cflags</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">59</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dependency-chaining">
+<h2>Dependency Chaining<a class="headerlink" href="#dependency-chaining" title="Permalink to this headline">¶</a></h2>
+<p>Chain <strong>Generators</strong> and <strong>Targets</strong> using the <code class="docutils literal notranslate"><span class="pre">Register</span></code> module</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="c1">// See Multiple Boilerplate</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="n">Toolchain_gcc</span><span class="w"> </span><span class="n">gcc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="n">Toolchain_msvc</span><span class="w"> </span><span class="n">msvc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 6</span>
+<span class="hll"><span class="linenos"> 7</span><span class="w">    </span><span class="n">BaseGenerator</span><span class="w"> </span><span class="n">cpp_generator</span><span class="p">(</span><span class="s">"cpp_generator"</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos"> 8</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">cpp_generator_cb</span><span class="p">,</span><span class="w"> </span><span class="n">cpp_generator</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">g_cpptarget</span><span class="p">(</span><span class="s">"cpptarget"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">11</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_gcc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">cpp_target_cb</span><span class="p">,</span><span class="w"> </span><span class="n">g_cpptarget</span><span class="p">,</span><span class="w"> </span><span class="n">cpp_generator</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="w">    </span><span class="n">ExecutableTarget_msvc</span><span class="w"> </span><span class="n">m_cpptarget</span><span class="p">(</span><span class="s">"cpptarget"</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">14</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_msvc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">cpp_target_cb</span><span class="p">,</span><span class="w"> </span><span class="n">m_cpptarget</span><span class="p">,</span><span class="w"> </span><span class="n">cpp_generator</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="w">    </span><span class="c1">// cpp_generator runs before g_cpptarget and m_cpptarget</span>
+<span class="hll"><span class="linenos">17</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Dep</span><span class="p">(</span><span class="n">g_cpptarget</span><span class="p">,</span><span class="w"> </span><span class="n">cpp_generator</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">18</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Dep</span><span class="p">(</span><span class="n">m_cpptarget</span><span class="p">,</span><span class="w"> </span><span class="n">cpp_generator</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos">19</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="c1">// Use a python generator to create main.cpp</span>
+<span class="linenos">22</span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">cpp_generator_cb</span><span class="p">(</span><span class="n">BaseGenerator</span><span class="w"> </span><span class="o">&amp;</span><span class="n">generator</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">23</span><span class="w">    </span><span class="n">generator</span><span class="p">.</span><span class="n">AddOutput</span><span class="p">(</span><span class="s">"{gen_build_dir}/main.cpp"</span><span class="p">,</span><span class="w"> </span><span class="s">"main_cpp"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">24</span><span class="w">    </span><span class="n">generator</span><span class="p">.</span><span class="n">AddCommand</span><span class="p">(</span><span class="s">"python3 {gen_root_dir}/python/gen.py --source_type cpp "</span><span class="w"></span>
+<span class="linenos">25</span><span class="w">                        </span><span class="s">"--destination {main_cpp}"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">26</span><span class="w">    </span><span class="n">generator</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">27</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">28</span>
+<span class="linenos">29</span><span class="c1">// Use main.cpp generated by the python script to compile your target</span>
+<span class="linenos">30</span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">cpp_target_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cpptarget</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">31</span><span class="w">                      </span><span class="k">const</span><span class="w"> </span><span class="n">BaseGenerator</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cpp_generator</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">32</span><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">fs</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="n">main_cpp</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="linenos">33</span><span class="w">        </span><span class="n">fs</span><span class="o">::</span><span class="n">path</span><span class="p">(</span><span class="n">cpp_generator</span><span class="p">.</span><span class="n">GetValueByIdentifier</span><span class="p">(</span><span class="s">"main_cpp"</span><span class="p">))</span><span class="w"></span>
+<span class="linenos">34</span><span class="w">            </span><span class="p">.</span><span class="n">lexically_relative</span><span class="p">(</span><span class="n">env</span><span class="o">::</span><span class="n">get_project_root_dir</span><span class="p">());</span><span class="w"></span>
+<span class="linenos">35</span><span class="w">    </span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="n">main_cpp</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">36</span><span class="w">    </span><span class="n">cpptarget</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">37</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="target-info">
+<h2>Target Info<a class="headerlink" href="#target-info" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Target Info usage to store Target specific information</p></li>
+<li><p>Example usage for Header Only targets, however it can store information for all Target inputs</p></li>
+<li><p>Common information used between multiple targets can be stored into a <cite>TargetInfo</cite> instance</p></li>
+</ul>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="c1">// See Multiple boilerplate</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="n">Toolchain_gcc</span><span class="w"> </span><span class="n">gcc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="n">Toolchain_msvc</span><span class="w"> </span><span class="n">msvc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="c1">// TargetInfo</span>
+<span class="hll"><span class="linenos"> 8</span><span class="w">    </span><span class="n">TargetInfo</span><span class="w"> </span><span class="n">genericadd_ho</span><span class="p">(</span><span class="s">"files"</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos"> 9</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Callback</span><span class="p">(</span><span class="n">genericadd_ho_cb</span><span class="p">,</span><span class="w"> </span><span class="n">genericadd_ho</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos">10</span>
+<span class="linenos">11</span><span class="w">    </span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">g_genericadd1</span><span class="p">(</span><span class="s">"generic_add_1"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">"files"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">12</span><span class="w">    </span><span class="n">ExecutableTarget_msvc</span><span class="w"> </span><span class="n">m_genericadd1</span><span class="p">(</span><span class="s">"generic_add_1"</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">"files"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">13</span>
+<span class="linenos">14</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_gcc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">genericadd1_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">g_genericadd1</span><span class="p">,</span><span class="w"> </span><span class="n">genericadd_ho</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">15</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_msvc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">genericadd1_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">m_genericadd1</span><span class="p">,</span><span class="w"> </span><span class="n">genericadd_ho</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">16</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="c1">// HO library contains include dirs and header files which are copied into executable target</span>
+<span class="linenos">19</span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">genericadd1_build_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="n">genericadd</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">20</span><span class="w">                                </span><span class="k">const</span><span class="w"> </span><span class="n">TargetInfo</span><span class="w"> </span><span class="o">&amp;</span><span class="n">genericadd_ho</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">21</span><span class="w">    </span><span class="n">genericadd</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/main1.cpp"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">22</span><span class="w">    </span><span class="n">genericadd</span><span class="p">.</span><span class="n">Copy</span><span class="p">(</span><span class="n">genericadd_ho</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">23</span><span class="w">                                        </span><span class="n">SyncOption</span><span class="o">::</span><span class="n">IncludeDirs</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">24</span><span class="w">                                        </span><span class="n">SyncOption</span><span class="o">::</span><span class="n">HeaderFiles</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">25</span><span class="w">                                    </span><span class="p">});</span><span class="w"></span>
+<span class="linenos">26</span><span class="w">    </span><span class="n">genericadd</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">27</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="gcc.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">GCC</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="toc.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Examples</div>
+                
+              </div>
+            </a>
+        </div>
+
+        <div class="related-information">
+              Copyright &#169; 2021, Niket Naidu |
+          Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+          <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+            | <a class="muted-link" href="../_sources/examples/hybrid.rst.txt"
+               rel="nofollow">
+              Show Source
+            </a>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Hybrid</a><ul>
+<li><a class="reference internal" href="#single-boilerplate">Single Boilerplate</a></li>
+<li><a class="reference internal" href="#single">Single</a></li>
+<li><a class="reference internal" href="#multiple-boilerplate">Multiple Boilerplate</a></li>
+<li><a class="reference internal" href="#simple">Simple</a></li>
+<li><a class="reference internal" href="#foolib">Foolib</a></li>
+<li><a class="reference internal" href="#external-lib">External Lib</a></li>
+<li><a class="reference internal" href="#custom-target">Custom Target</a></li>
+<li><a class="reference internal" href="#precompileheader">PrecompileHeader</a></li>
+<li><a class="reference internal" href="#dependency-chaining">Dependency Chaining</a></li>
+<li><a class="reference internal" href="#target-info">Target Info</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    </body>
+</html>
