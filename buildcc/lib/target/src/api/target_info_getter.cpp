@@ -78,7 +78,7 @@ const fs_unordered_set &TargetInfoGetter<T>::GetHeaderFiles() const {
 }
 
 template <typename T>
-const fs_unordered_set &TargetInfoGetter<T>::GetCurrentPchFiles() const {
+const fs_unordered_set &TargetInfoGetter<T>::GetPchFiles() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_pch_files.user;

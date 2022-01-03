@@ -101,7 +101,7 @@ void CompilePch::BuildCompile() {
   }
 
   if (target_.dirty_) {
-    AggregateToFile(header_path_, target_.GetCurrentPchFiles());
+    AggregateToFile(header_path_, target_.GetPchFiles());
     if (!fs::exists(source_path_)) {
       const std::string p = fmt::format("{}", source_path_);
       const bool save =
