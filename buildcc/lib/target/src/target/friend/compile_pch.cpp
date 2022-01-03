@@ -87,7 +87,7 @@ void CompilePch::BuildCompile() {
     target_.RecheckFlags(loader.GetLoadedCppCompileFlags(),
                          target_.GetCurrentCppCompileFlags());
     target_.RecheckDirs(loader.GetLoadedIncludeDirs(),
-                        target_.GetCurrentIncludeDirs());
+                        target_.GetIncludeDirs());
     target_.RecheckPaths(loader.GetLoadedHeaders(),
                          target_.storer_.current_header_files.internal);
 

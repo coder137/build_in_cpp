@@ -100,7 +100,7 @@ TargetInfoGetter<T>::GetExternalLibDeps() const {
 }
 
 template <typename T>
-const fs_unordered_set &TargetInfoGetter<T>::GetCurrentIncludeDirs() const {
+const fs_unordered_set &TargetInfoGetter<T>::GetIncludeDirs() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_include_dirs;

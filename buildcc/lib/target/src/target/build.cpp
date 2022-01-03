@@ -75,7 +75,7 @@ void Target::Build() {
   // Target default arguments
   command_.AddDefaultArguments({
       {kIncludeDirs, internal::aggregate_with_prefix(config_.prefix_include_dir,
-                                                     GetCurrentIncludeDirs())},
+                                                     GetIncludeDirs())},
       {kLibDirs, internal::aggregate_with_prefix(config_.prefix_lib_dir,
                                                  GetCurrentLibDirs())},
 

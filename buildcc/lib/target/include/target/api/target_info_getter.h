@@ -49,7 +49,7 @@ public:
   const fs_unordered_set &GetPchFiles() const;
   const std::vector<fs::path> &GetLibDeps() const;
   const std::vector<std::string> &GetExternalLibDeps() const;
-  const fs_unordered_set &GetCurrentIncludeDirs() const;
+  const fs_unordered_set &GetIncludeDirs() const;
   const fs_unordered_set &GetCurrentLibDirs() const;
   const std::unordered_set<std::string> &GetCurrentPreprocessorFlags() const;
   const std::unordered_set<std::string> &GetCurrentCommonCompileFlags() const;

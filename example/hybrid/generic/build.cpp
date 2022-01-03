@@ -126,7 +126,7 @@ static void foolib_build_cb(BaseTarget &foolib_target) {
 
 static void generic_build_cb(BaseTarget &generic_target,
                              BaseTarget &foolib_target) {
-  const auto &foolib_include_dirs = foolib_target.GetCurrentIncludeDirs();
+  const auto &foolib_include_dirs = foolib_target.GetIncludeDirs();
   std::for_each(
       foolib_include_dirs.cbegin(), foolib_include_dirs.cend(),
       [&](const fs::path &p) { generic_target.AddIncludeDir(p, true); });
