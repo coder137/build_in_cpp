@@ -92,13 +92,13 @@ void Target::RecheckExternalLib(
 std::optional<std::string> Target::SelectCompileFlags(TargetFileExt ext) const {
   switch (ext) {
   case TargetFileExt::Asm:
-    return internal::aggregate(GetCurrentAsmCompileFlags());
+    return internal::aggregate(GetAsmCompileFlags());
     break;
   case TargetFileExt::C:
-    return internal::aggregate(GetCurrentCCompileFlags());
+    return internal::aggregate(GetCCompileFlags());
     break;
   case TargetFileExt::Cpp:
-    return internal::aggregate(GetCurrentCppCompileFlags());
+    return internal::aggregate(GetCppCompileFlags());
     break;
   default:
     break;

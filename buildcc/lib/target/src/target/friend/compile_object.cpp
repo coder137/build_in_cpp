@@ -145,17 +145,17 @@ void CompileObject::BuildObjectCompile(
     target_.dirty_ = true;
   } else {
     target_.RecheckFlags(loader.GetLoadedPreprocessorFlags(),
-                         target_.GetCurrentPreprocessorFlags());
+                         target_.GetPreprocessorFlags());
     target_.RecheckFlags(loader.GetLoadedCommonCompileFlags(),
-                         target_.GetCurrentCommonCompileFlags());
+                         target_.GetCommonCompileFlags());
     target_.RecheckFlags(loader.GetLoadedPchObjectFlags(),
-                         target_.GetCurrentPchObjectFlags());
+                         target_.GetPchObjectFlags());
     target_.RecheckFlags(loader.GetLoadedAsmCompileFlags(),
-                         target_.GetCurrentAsmCompileFlags());
+                         target_.GetAsmCompileFlags());
     target_.RecheckFlags(loader.GetLoadedCCompileFlags(),
-                         target_.GetCurrentCCompileFlags());
+                         target_.GetCCompileFlags());
     target_.RecheckFlags(loader.GetLoadedCppCompileFlags(),
-                         target_.GetCurrentCppCompileFlags());
+                         target_.GetCppCompileFlags());
     target_.RecheckDirs(loader.GetLoadedIncludeDirs(),
                         target_.GetIncludeDirs());
     target_.RecheckPaths(loader.GetLoadedHeaders(),

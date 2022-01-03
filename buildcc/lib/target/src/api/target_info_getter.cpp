@@ -115,7 +115,7 @@ const fs_unordered_set &TargetInfoGetter<T>::GetLibDirs() const {
 
 template <typename T>
 const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetCurrentPreprocessorFlags() const {
+TargetInfoGetter<T>::GetPreprocessorFlags() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_preprocessor_flags;
@@ -123,7 +123,7 @@ TargetInfoGetter<T>::GetCurrentPreprocessorFlags() const {
 
 template <typename T>
 const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetCurrentCommonCompileFlags() const {
+TargetInfoGetter<T>::GetCommonCompileFlags() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_common_compile_flags;
@@ -131,7 +131,7 @@ TargetInfoGetter<T>::GetCurrentCommonCompileFlags() const {
 
 template <typename T>
 const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetCurrentPchCompileFlags() const {
+TargetInfoGetter<T>::GetPchCompileFlags() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_pch_compile_flags;
@@ -139,7 +139,7 @@ TargetInfoGetter<T>::GetCurrentPchCompileFlags() const {
 
 template <typename T>
 const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetCurrentPchObjectFlags() const {
+TargetInfoGetter<T>::GetPchObjectFlags() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_pch_object_flags;
@@ -147,7 +147,7 @@ TargetInfoGetter<T>::GetCurrentPchObjectFlags() const {
 
 template <typename T>
 const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetCurrentAsmCompileFlags() const {
+TargetInfoGetter<T>::GetAsmCompileFlags() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_asm_compile_flags;
@@ -155,7 +155,7 @@ TargetInfoGetter<T>::GetCurrentAsmCompileFlags() const {
 
 template <typename T>
 const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetCurrentCCompileFlags() const {
+TargetInfoGetter<T>::GetCCompileFlags() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_c_compile_flags;
@@ -163,7 +163,7 @@ TargetInfoGetter<T>::GetCurrentCCompileFlags() const {
 
 template <typename T>
 const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetCurrentCppCompileFlags() const {
+TargetInfoGetter<T>::GetCppCompileFlags() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_cpp_compile_flags;
@@ -171,7 +171,7 @@ TargetInfoGetter<T>::GetCurrentCppCompileFlags() const {
 
 template <typename T>
 const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetCurrentLinkFlags() const {
+TargetInfoGetter<T>::GetLinkFlags() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_link_flags;

@@ -76,15 +76,14 @@ void Target::Build() {
   command_.AddDefaultArguments({
       {kIncludeDirs, internal::aggregate_with_prefix(config_.prefix_include_dir,
                                                      GetIncludeDirs())},
-      {kLibDirs, internal::aggregate_with_prefix(config_.prefix_lib_dir,
-                                                 GetLibDirs())},
+      {kLibDirs,
+       internal::aggregate_with_prefix(config_.prefix_lib_dir, GetLibDirs())},
 
-      {kPreprocessorFlags, internal::aggregate(GetCurrentPreprocessorFlags())},
-      {kCommonCompileFlags,
-       internal::aggregate(GetCurrentCommonCompileFlags())},
+      {kPreprocessorFlags, internal::aggregate(GetPreprocessorFlags())},
+      {kCommonCompileFlags, internal::aggregate(GetCommonCompileFlags())},
       //  TODO, Cache more flags here
       // ASM, C and CPP flags
-      {kLinkFlags, internal::aggregate(GetCurrentLinkFlags())},
+      {kLinkFlags, internal::aggregate(GetLinkFlags())},
 
       // Toolchain executables here
       {kAsmCompiler, toolchain_.GetAsmCompiler()},
@@ -104,8 +103,8 @@ void Target::Build() {
   // PCH Compile
   if (state_.ContainsPch()) {
     command_.AddDefaultArguments({
-        {kPchCompileFlags, internal::aggregate(GetCurrentPchCompileFlags())},
-        {kPchObjectFlags, internal::aggregate(GetCurrentPchObjectFlags())},
+        {kPchCompileFlags, internal::aggregate(GetPchCompileFlags())},
+        {kPchObjectFlags, internal::aggregate(GetPchObjectFlags())},
         {kPchObjectOutput, fmt::format("{}", compile_pch_.GetObjectPath())},
     });
 

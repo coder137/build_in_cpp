@@ -79,20 +79,20 @@ void CompilePch::BuildCompile() {
     target_.dirty_ = true;
   } else {
     target_.RecheckFlags(loader.GetLoadedPreprocessorFlags(),
-                         target_.GetCurrentPreprocessorFlags());
+                         target_.GetPreprocessorFlags());
     target_.RecheckFlags(loader.GetLoadedCommonCompileFlags(),
-                         target_.GetCurrentCommonCompileFlags());
+                         target_.GetCommonCompileFlags());
     target_.RecheckFlags(loader.GetLoadedCCompileFlags(),
-                         target_.GetCurrentCCompileFlags());
+                         target_.GetCCompileFlags());
     target_.RecheckFlags(loader.GetLoadedCppCompileFlags(),
-                         target_.GetCurrentCppCompileFlags());
+                         target_.GetCppCompileFlags());
     target_.RecheckDirs(loader.GetLoadedIncludeDirs(),
                         target_.GetIncludeDirs());
     target_.RecheckPaths(loader.GetLoadedHeaders(),
                          target_.storer_.current_header_files.internal);
 
     target_.RecheckFlags(loader.GetLoadedPchCompileFlags(),
-                         target_.GetCurrentPchCompileFlags());
+                         target_.GetPchCompileFlags());
     target_.RecheckPaths(loader.GetLoadedPchs(),
                          target_.storer_.current_pch_files.internal);
     if (!loader.GetLoadedPchCompiled()) {

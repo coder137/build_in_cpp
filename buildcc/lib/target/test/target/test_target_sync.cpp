@@ -76,14 +76,14 @@ TEST(TargetTestSyncGroup, CopyByConstRef) {
   CHECK_EQUAL(destTarget.GetIncludeDirs().size(), 1);
   CHECK_EQUAL(destTarget.GetLibDirs().size(), 1);
 
-  CHECK_EQUAL(destTarget.GetCurrentPreprocessorFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentCommonCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentPchCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentPchObjectFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentAsmCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentCCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentCppCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentLinkFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetPreprocessorFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCommonCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetPchCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetPchObjectFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetAsmCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCppCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetLinkFlags().size(), 1);
 
   CHECK_EQUAL(destTarget.GetCompileDependencies().size(), 1);
   CHECK_EQUAL(destTarget.GetLinkDependencies().size(), 1);
@@ -144,14 +144,14 @@ TEST(TargetTestSyncGroup, CopyByMove) {
   CHECK_EQUAL(destTarget.GetIncludeDirs().size(), 1);
   CHECK_EQUAL(destTarget.GetLibDirs().size(), 1);
 
-  CHECK_EQUAL(destTarget.GetCurrentPreprocessorFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentCommonCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentPchCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentPchObjectFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentAsmCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentCCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentCppCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentLinkFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetPreprocessorFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCommonCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetPchCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetPchObjectFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetAsmCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCppCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetLinkFlags().size(), 1);
 
   CHECK_EQUAL(destTarget.GetCompileDependencies().size(), 1);
   CHECK_EQUAL(destTarget.GetLinkDependencies().size(), 1);
@@ -224,14 +224,14 @@ TEST(TargetTestSyncGroup, InsertByConstRef) {
   CHECK_EQUAL(destTarget.GetIncludeDirs().size(), 1);
   CHECK_EQUAL(destTarget.GetLibDirs().size(), 1);
 
-  CHECK_EQUAL(destTarget.GetCurrentPreprocessorFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentCommonCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentPchCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentPchObjectFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentAsmCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentCCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentCppCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentLinkFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetPreprocessorFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCommonCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetPchCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetPchObjectFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetAsmCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCppCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetLinkFlags().size(), 1);
 
   CHECK_EQUAL(destTarget.GetCompileDependencies().size(), 1);
   CHECK_EQUAL(destTarget.GetLinkDependencies().size(), 1);
@@ -292,14 +292,14 @@ TEST(TargetTestSyncGroup, InsertByMove) {
   CHECK_EQUAL(destTarget.GetIncludeDirs().size(), 1);
   CHECK_EQUAL(destTarget.GetLibDirs().size(), 1);
 
-  CHECK_EQUAL(destTarget.GetCurrentPreprocessorFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentCommonCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentPchCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentPchObjectFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentAsmCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentCCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentCppCompileFlags().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentLinkFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetPreprocessorFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCommonCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetPchCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetPchObjectFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetAsmCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetCppCompileFlags().size(), 1);
+  CHECK_EQUAL(destTarget.GetLinkFlags().size(), 1);
 
   CHECK_EQUAL(destTarget.GetCompileDependencies().size(), 1);
   CHECK_EQUAL(destTarget.GetLinkDependencies().size(), 1);
