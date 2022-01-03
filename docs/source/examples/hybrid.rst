@@ -486,6 +486,7 @@ Dependency Chaining
 Chain **Generators** and **Targets** using the ``Register`` module 
 
 .. code-block:: cpp
+    :linenos:
 
     int main(int argc, char ** argv) {
         // See Multiple Boilerplate
@@ -532,3 +533,35 @@ Target Info
 * Target Info usage to store Target specific information
 * Example usage for Header Only targets, however it can store information for all Target inputs
 * Common information used between multiple targets can be stored into a `TargetInfo` instance
+
+.. code-block:: cpp
+    :linenos:
+    :emphasize-lines: 8,9
+
+    int main(int argc, char ** argv) {
+        // See Multiple boilerplate
+
+        Toolchain_gcc gcc;
+        Toolchain_msvc msvc;
+
+        // TargetInfo
+        TargetInfo genericadd_ho("files");
+        reg.Callback(genericadd_ho_cb, genericadd_ho);
+
+        ExecutableTarget_gcc g_genericadd1("generic_add_1", gcc, "files");
+        ExecutableTarget_msvc m_genericadd1("generic_add_1", msvc, "files");
+
+        reg.Build(arg_gcc.state, genericadd1_build_cb, g_genericadd1, genericadd_ho);
+        reg.Build(arg_msvc.state, genericadd1_build_cb, m_genericadd1, genericadd_ho);
+    }
+
+    // HO library contains include dirs and header files which are copied into executable target
+    static void genericadd1_build_cb(BaseTarget &genericadd,
+                                    const TargetInfo &genericadd_ho) {
+        genericadd.AddSource("src/main1.cpp");
+        genericadd.Copy(genericadd_ho, {
+                                            SyncOption::IncludeDirs,
+                                            SyncOption::HeaderFiles,
+                                        });
+        genericadd.Build();
+    }
