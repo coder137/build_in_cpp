@@ -66,7 +66,7 @@ TEST(TargetTestSyncGroup, CopyByConstRef) {
                                  buildcc::base::SyncOption::LinkDependencies,
                              });
 
-  CHECK_EQUAL(destTarget.GetCurrentSourceFiles().size(), 1);
+  CHECK_EQUAL(destTarget.GetSourceFiles().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentHeaderFiles().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentPchFiles().size(), 1);
 
@@ -134,7 +134,7 @@ TEST(TargetTestSyncGroup, CopyByMove) {
                       buildcc::base::SyncOption::LinkDependencies,
                   });
 
-  CHECK_EQUAL(destTarget.GetCurrentSourceFiles().size(), 1);
+  CHECK_EQUAL(destTarget.GetSourceFiles().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentHeaderFiles().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentPchFiles().size(), 1);
 
@@ -214,7 +214,7 @@ TEST(TargetTestSyncGroup, InsertByConstRef) {
                         buildcc::base::SyncOption::LinkDependencies,
                     });
 
-  CHECK_EQUAL(destTarget.GetCurrentSourceFiles().size(), 1);
+  CHECK_EQUAL(destTarget.GetSourceFiles().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentHeaderFiles().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentPchFiles().size(), 1);
 
@@ -282,7 +282,7 @@ TEST(TargetTestSyncGroup, InsertByMove) {
                         buildcc::base::SyncOption::LinkDependencies,
                     });
 
-  CHECK_EQUAL(destTarget.GetCurrentSourceFiles().size(), 1);
+  CHECK_EQUAL(destTarget.GetSourceFiles().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentHeaderFiles().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentPchFiles().size(), 1);
 

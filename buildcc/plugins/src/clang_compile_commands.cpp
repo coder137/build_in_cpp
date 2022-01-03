@@ -59,7 +59,7 @@ void ClangCompileCommands::Generate() {
   std::vector<std::string> compile_command_list;
 
   for (const auto *t : targets_) {
-    const auto &source_files = t->GetCurrentSourceFiles();
+    const auto &source_files = t->GetSourceFiles();
     for (const auto &source : source_files) {
       // DONE, Get source list name
       // DONE, Get std::vector<std::string> CompileCommand

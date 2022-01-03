@@ -44,7 +44,7 @@ public:
   const TargetConfig &GetConfig() const;
 
   // Target Storer
-  const fs_unordered_set &GetCurrentSourceFiles() const;
+  const fs_unordered_set &GetSourceFiles() const;
   const fs_unordered_set &GetCurrentHeaderFiles() const;
   const fs_unordered_set &GetCurrentPchFiles() const;
   const std::vector<fs::path> &GetTargetLibDeps() const;

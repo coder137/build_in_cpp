@@ -49,7 +49,7 @@ TEST(TargetTestSourceGroup, Target_SourceTypes) {
   simple.AddSource("fileext/asm_file2.S");
   simple.AddSource("fileext/asm_file3.asm");
 
-  CHECK_EQUAL(simple.GetCurrentSourceFiles().size(), 7);
+  CHECK_EQUAL(simple.GetSourceFiles().size(), 7);
   CHECK_THROWS(std::exception, simple.AddSource("fileext/header_file1.h"));
   CHECK_THROWS(std::exception, simple.AddSource("fileext/header_file2.hpp"));
   CHECK_THROWS(std::exception,
@@ -81,7 +81,7 @@ TEST(TargetTestSourceGroup, Target_GlobSource) {
   buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable, gcc,
                                "data");
   simple.GlobSources("");
-  CHECK_EQUAL(simple.GetCurrentSourceFiles().size(), 6);
+  CHECK_EQUAL(simple.GetSourceFiles().size(), 6);
 }
 
 TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {

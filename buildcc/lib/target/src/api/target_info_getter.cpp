@@ -64,7 +64,7 @@ const TargetConfig &TargetInfoGetter<T>::GetConfig() const {
 
 // Target Storer
 template <typename T>
-const fs_unordered_set &TargetInfoGetter<T>::GetCurrentSourceFiles() const {
+const fs_unordered_set &TargetInfoGetter<T>::GetSourceFiles() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_source_files.user;
