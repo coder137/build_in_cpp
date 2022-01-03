@@ -62,8 +62,8 @@ void CompileObject::CacheCompileCommands() {
   }
 }
 
-internal::fs_unordered_set CompileObject::GetCompiledSources() const {
-  internal::fs_unordered_set compiled_sources;
+fs_unordered_set CompileObject::GetCompiledSources() const {
+  fs_unordered_set compiled_sources;
   for (const auto &p : object_files_) {
     compiled_sources.insert(p.second.output);
   }

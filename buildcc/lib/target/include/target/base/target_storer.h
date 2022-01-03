@@ -32,8 +32,8 @@ struct TargetStorer {
   std::vector<fs::path> current_user_lib_deps;
   internal::path_unordered_set current_internal_lib_deps;
 
-  internal::fs_unordered_set current_include_dirs;
-  internal::fs_unordered_set current_lib_dirs;
+  fs_unordered_set current_include_dirs;
+  fs_unordered_set current_lib_dirs;
 
   // NOTE, Order matters (user takes care of the order here)
   std::vector<std::string> current_user_external_lib_deps;

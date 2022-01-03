@@ -29,7 +29,7 @@ template <typename T> std::string aggregate(const T &list) {
   return fmt::format("{}", fmt::join(list, " "));
 }
 
-std::string aggregate(const buildcc::internal::fs_unordered_set &paths);
+std::string aggregate(const buildcc::fs_unordered_set &paths);
 
 std::string aggregate_with_prefix(const std::string &prefix,
                                   const fs_unordered_set &dirs);

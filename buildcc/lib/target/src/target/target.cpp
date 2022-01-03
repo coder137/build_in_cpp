@@ -69,8 +69,8 @@ void Target::RecheckPaths(const internal::path_unordered_set &previous_path,
       [&]() { PathAdded(); }, [&]() { PathUpdated(); });
 }
 
-void Target::RecheckDirs(const internal::fs_unordered_set &previous_dirs,
-                         const internal::fs_unordered_set &current_dirs) {
+void Target::RecheckDirs(const fs_unordered_set &previous_dirs,
+                         const fs_unordered_set &current_dirs) {
   RecheckChanged(previous_dirs, current_dirs,
                  std::bind(&Target::DirChanged, this));
 }

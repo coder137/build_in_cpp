@@ -64,24 +64,21 @@ const TargetConfig &TargetInfoGetter<T>::GetConfig() const {
 
 // Target Storer
 template <typename T>
-const internal::fs_unordered_set &
-TargetInfoGetter<T>::GetCurrentSourceFiles() const {
+const fs_unordered_set &TargetInfoGetter<T>::GetCurrentSourceFiles() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_source_files.user;
 }
 
 template <typename T>
-const internal::fs_unordered_set &
-TargetInfoGetter<T>::GetCurrentHeaderFiles() const {
+const fs_unordered_set &TargetInfoGetter<T>::GetCurrentHeaderFiles() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_header_files.user;
 }
 
 template <typename T>
-const internal::fs_unordered_set &
-TargetInfoGetter<T>::GetCurrentPchFiles() const {
+const fs_unordered_set &TargetInfoGetter<T>::GetCurrentPchFiles() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_pch_files.user;
@@ -103,16 +100,14 @@ TargetInfoGetter<T>::GetCurrentExternalLibDeps() const {
 }
 
 template <typename T>
-const internal::fs_unordered_set &
-TargetInfoGetter<T>::GetCurrentIncludeDirs() const {
+const fs_unordered_set &TargetInfoGetter<T>::GetCurrentIncludeDirs() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_include_dirs;
 }
 
 template <typename T>
-const internal::fs_unordered_set &
-TargetInfoGetter<T>::GetCurrentLibDirs() const {
+const fs_unordered_set &TargetInfoGetter<T>::GetCurrentLibDirs() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_lib_dirs;
@@ -183,7 +178,7 @@ TargetInfoGetter<T>::GetCurrentLinkFlags() const {
 }
 
 template <typename T>
-const internal::fs_unordered_set &
+const fs_unordered_set &
 TargetInfoGetter<T>::GetCurrentCompileDependencies() const {
   const T &t = static_cast<const T &>(*this);
 
@@ -191,7 +186,7 @@ TargetInfoGetter<T>::GetCurrentCompileDependencies() const {
 }
 
 template <typename T>
-const internal::fs_unordered_set &
+const fs_unordered_set &
 TargetInfoGetter<T>::GetCurrentLinkDependencies() const {
   const T &t = static_cast<const T &>(*this);
 
