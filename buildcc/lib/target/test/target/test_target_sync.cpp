@@ -67,7 +67,7 @@ TEST(TargetTestSyncGroup, CopyByConstRef) {
                              });
 
   CHECK_EQUAL(destTarget.GetSourceFiles().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentHeaderFiles().size(), 1);
+  CHECK_EQUAL(destTarget.GetHeaderFiles().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentPchFiles().size(), 1);
 
   CHECK_EQUAL(destTarget.GetTargetLibDeps().size(), 1);
@@ -135,7 +135,7 @@ TEST(TargetTestSyncGroup, CopyByMove) {
                   });
 
   CHECK_EQUAL(destTarget.GetSourceFiles().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentHeaderFiles().size(), 1);
+  CHECK_EQUAL(destTarget.GetHeaderFiles().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentPchFiles().size(), 1);
 
   CHECK_EQUAL(destTarget.GetTargetLibDeps().size(), 1);
@@ -215,7 +215,7 @@ TEST(TargetTestSyncGroup, InsertByConstRef) {
                     });
 
   CHECK_EQUAL(destTarget.GetSourceFiles().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentHeaderFiles().size(), 1);
+  CHECK_EQUAL(destTarget.GetHeaderFiles().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentPchFiles().size(), 1);
 
   CHECK_EQUAL(destTarget.GetTargetLibDeps().size(), 1);
@@ -283,7 +283,7 @@ TEST(TargetTestSyncGroup, InsertByMove) {
                     });
 
   CHECK_EQUAL(destTarget.GetSourceFiles().size(), 1);
-  CHECK_EQUAL(destTarget.GetCurrentHeaderFiles().size(), 1);
+  CHECK_EQUAL(destTarget.GetHeaderFiles().size(), 1);
   CHECK_EQUAL(destTarget.GetCurrentPchFiles().size(), 1);
 
   CHECK_EQUAL(destTarget.GetTargetLibDeps().size(), 1);

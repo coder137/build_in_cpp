@@ -42,7 +42,7 @@ TEST(TargetTestIncludeDirGroup, Target_HeaderTypes) {
   simple.AddHeader("fileext/header_file1.h");
   simple.AddHeader("fileext/header_file2.hpp");
 
-  CHECK_EQUAL(simple.GetCurrentHeaderFiles().size(), 2);
+  CHECK_EQUAL(simple.GetHeaderFiles().size(), 2);
 
   CHECK_THROWS(std::exception, simple.AddHeader("fileext/c_file.c"));
   CHECK_THROWS(std::exception, simple.AddHeader("fileext/cpp_file1.cpp"));
@@ -65,7 +65,7 @@ TEST(TargetTestIncludeDirGroup, TargetGlobHeader) {
                                    gcc, "data");
   globHeader.GlobHeaders("include");
   globHeader.GlobHeaders("");
-  CHECK_EQUAL(globHeader.GetCurrentHeaderFiles().size(), 1);
+  CHECK_EQUAL(globHeader.GetHeaderFiles().size(), 1);
 }
 
 TEST(TargetTestIncludeDirGroup, TargetGlobThroughIncludeDir) {
@@ -78,7 +78,7 @@ TEST(TargetTestIncludeDirGroup, TargetGlobThroughIncludeDir) {
       NAME, buildcc::base::TargetType::Executable, gcc, "data");
   globIncludeDir.AddIncludeDir("include", true);
   globIncludeDir.AddIncludeDir("", true);
-  CHECK_EQUAL(globIncludeDir.GetCurrentHeaderFiles().size(), 1);
+  CHECK_EQUAL(globIncludeDir.GetHeaderFiles().size(), 1);
 }
 
 TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {

@@ -71,7 +71,7 @@ const fs_unordered_set &TargetInfoGetter<T>::GetSourceFiles() const {
 }
 
 template <typename T>
-const fs_unordered_set &TargetInfoGetter<T>::GetCurrentHeaderFiles() const {
+const fs_unordered_set &TargetInfoGetter<T>::GetHeaderFiles() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_header_files.user;
