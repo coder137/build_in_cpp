@@ -487,6 +487,7 @@ Chain **Generators** and **Targets** using the ``Register`` module
 
 .. code-block:: cpp
     :linenos:
+    :emphasize-lines: 7,8,17,18
 
     int main(int argc, char ** argv) {
         // See Multiple Boilerplate
