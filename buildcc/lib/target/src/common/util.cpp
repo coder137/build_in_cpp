@@ -25,7 +25,7 @@ namespace buildcc::internal {
 
 // Aggregates
 
-std::string aggregate(const buildcc::internal::fs_unordered_set &paths) {
+std::string aggregate(const buildcc::fs_unordered_set &paths) {
   std::vector<std::string> agg;
   std::transform(
       paths.begin(), paths.end(), std::back_inserter(agg),

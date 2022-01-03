@@ -57,7 +57,7 @@ TEST(TargetTestSourceOutOfRootGroup, Glob_OutOfRootSource) {
     buildcc::base::Target simple(
         OUTOFROOT, buildcc::base::TargetType::Executable, gcc, "");
     simple.GlobSources(".."); // 6 files detected
-    CHECK_EQUAL(6, simple.GetCurrentSourceFiles().size());
+    CHECK_EQUAL(6, simple.GetSourceFiles().size());
 
     buildcc::env::m::CommandExpect_Execute(6, true);
     buildcc::env::m::CommandExpect_Execute(1, true);

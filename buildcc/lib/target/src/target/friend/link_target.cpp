@@ -83,9 +83,8 @@ void LinkTarget::BuildLink() {
   if (!loader.IsLoaded()) {
     target_.dirty_ = true;
   } else {
-    target_.RecheckFlags(loader.GetLoadedLinkFlags(),
-                         target_.GetCurrentLinkFlags());
-    target_.RecheckDirs(loader.GetLoadedLibDirs(), target_.GetCurrentLibDirs());
+    target_.RecheckFlags(loader.GetLoadedLinkFlags(), target_.GetLinkFlags());
+    target_.RecheckDirs(loader.GetLoadedLibDirs(), target_.GetLibDirs());
     target_.RecheckExternalLib(loader.GetLoadedExternalLibDeps(),
                                storer.current_internal_external_lib_deps);
     target_.RecheckPaths(loader.GetLoadedLinkDependencies(),

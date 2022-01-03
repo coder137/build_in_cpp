@@ -194,6 +194,8 @@ inline std::string path_as_string(const fs::path &p) {
   return internal::Path::CreateNewPath(p).GetPathAsString();
 }
 
+typedef internal::fs_unordered_set fs_unordered_set;
+
 } // namespace buildcc
 
 // FMT specialization

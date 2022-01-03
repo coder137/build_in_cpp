@@ -262,7 +262,7 @@ TEST(TargetPchTestGroup, Target_AddPchCompileFlag_Build) {
   buildcc::base::m::TargetRunner(target);
   bool exists = fs::exists(target.GetPchHeaderPath());
   CHECK_TRUE(exists);
-  CHECK_EQUAL(target.GetCurrentPchCompileFlags().size(), 1);
+  CHECK_EQUAL(target.GetPchCompileFlags().size(), 1);
 
   mock().checkExpectations();
 }
@@ -282,7 +282,7 @@ TEST(TargetPchTestGroup, Target_AddPchObjectFlag_Build) {
   buildcc::base::m::TargetRunner(target);
   bool exists = fs::exists(target.GetPchHeaderPath());
   CHECK_TRUE(exists);
-  CHECK_EQUAL(target.GetCurrentPchObjectFlags().size(), 1);
+  CHECK_EQUAL(target.GetPchObjectFlags().size(), 1);
 
   mock().checkExpectations();
 }

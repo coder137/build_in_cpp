@@ -45,7 +45,7 @@ public:
     return loaded_input_files_;
   }
 
-  const internal::fs_unordered_set &GetLoadedOutputFiles() const noexcept {
+  const fs_unordered_set &GetLoadedOutputFiles() const noexcept {
     return loaded_output_files_;
   }
 
@@ -58,7 +58,7 @@ private:
   fs::path path_;
 
   internal::path_unordered_set loaded_input_files_;
-  internal::fs_unordered_set loaded_output_files_;
+  fs_unordered_set loaded_output_files_;
   std::vector<std::string> loaded_commands_;
 };
 

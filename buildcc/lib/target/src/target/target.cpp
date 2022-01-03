@@ -69,8 +69,8 @@ void Target::RecheckPaths(const internal::path_unordered_set &previous_path,
       [&]() { PathAdded(); }, [&]() { PathUpdated(); });
 }
 
-void Target::RecheckDirs(const internal::fs_unordered_set &previous_dirs,
-                         const internal::fs_unordered_set &current_dirs) {
+void Target::RecheckDirs(const fs_unordered_set &previous_dirs,
+                         const fs_unordered_set &current_dirs) {
   RecheckChanged(previous_dirs, current_dirs,
                  std::bind(&Target::DirChanged, this));
 }
@@ -92,13 +92,13 @@ void Target::RecheckExternalLib(
 std::optional<std::string> Target::SelectCompileFlags(TargetFileExt ext) const {
   switch (ext) {
   case TargetFileExt::Asm:
-    return internal::aggregate(GetCurrentAsmCompileFlags());
+    return internal::aggregate(GetAsmCompileFlags());
     break;
   case TargetFileExt::C:
-    return internal::aggregate(GetCurrentCCompileFlags());
+    return internal::aggregate(GetCCompileFlags());
     break;
   case TargetFileExt::Cpp:
-    return internal::aggregate(GetCurrentCppCompileFlags());
+    return internal::aggregate(GetCppCompileFlags());
     break;
   default:
     break;

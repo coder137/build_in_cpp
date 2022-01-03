@@ -113,7 +113,7 @@ create_fbs_vector_string(flatbuffers::FlatBufferBuilder &builder,
 
 inline std::vector<flatbuffers::Offset<flatbuffers::String>>
 create_fbs_vector_string(flatbuffers::FlatBufferBuilder &builder,
-                         const buildcc::internal::fs_unordered_set &fslist) {
+                         const buildcc::fs_unordered_set &fslist) {
   std::vector<flatbuffers::Offset<flatbuffers::String>> strs;
   std::transform(
       fslist.begin(), fslist.end(), std::back_inserter(strs),

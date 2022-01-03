@@ -132,7 +132,7 @@ private:
 
   // Serialization
   internal::RelationalPathFiles current_input_files_;
-  internal::fs_unordered_set current_output_files_;
+  fs_unordered_set current_output_files_;
   std::vector<std::string> current_commands_;
   bool parallel_{false};
 

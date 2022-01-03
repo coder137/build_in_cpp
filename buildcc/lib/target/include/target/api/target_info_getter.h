@@ -44,23 +44,23 @@ public:
   const TargetConfig &GetConfig() const;
 
   // Target Storer
-  const internal::fs_unordered_set &GetCurrentSourceFiles() const;
-  const internal::fs_unordered_set &GetCurrentHeaderFiles() const;
-  const internal::fs_unordered_set &GetCurrentPchFiles() const;
-  const std::vector<fs::path> &GetTargetLibDeps() const;
-  const std::vector<std::string> &GetCurrentExternalLibDeps() const;
-  const internal::fs_unordered_set &GetCurrentIncludeDirs() const;
-  const internal::fs_unordered_set &GetCurrentLibDirs() const;
-  const std::unordered_set<std::string> &GetCurrentPreprocessorFlags() const;
-  const std::unordered_set<std::string> &GetCurrentCommonCompileFlags() const;
-  const std::unordered_set<std::string> &GetCurrentPchCompileFlags() const;
-  const std::unordered_set<std::string> &GetCurrentPchObjectFlags() const;
-  const std::unordered_set<std::string> &GetCurrentAsmCompileFlags() const;
-  const std::unordered_set<std::string> &GetCurrentCCompileFlags() const;
-  const std::unordered_set<std::string> &GetCurrentCppCompileFlags() const;
-  const std::unordered_set<std::string> &GetCurrentLinkFlags() const;
-  const internal::fs_unordered_set &GetCurrentCompileDependencies() const;
-  const internal::fs_unordered_set &GetCurrentLinkDependencies() const;
+  const fs_unordered_set &GetSourceFiles() const;
+  const fs_unordered_set &GetHeaderFiles() const;
+  const fs_unordered_set &GetPchFiles() const;
+  const std::vector<fs::path> &GetLibDeps() const;
+  const std::vector<std::string> &GetExternalLibDeps() const;
+  const fs_unordered_set &GetIncludeDirs() const;
+  const fs_unordered_set &GetLibDirs() const;
+  const std::unordered_set<std::string> &GetPreprocessorFlags() const;
+  const std::unordered_set<std::string> &GetCommonCompileFlags() const;
+  const std::unordered_set<std::string> &GetPchCompileFlags() const;
+  const std::unordered_set<std::string> &GetPchObjectFlags() const;
+  const std::unordered_set<std::string> &GetAsmCompileFlags() const;
+  const std::unordered_set<std::string> &GetCCompileFlags() const;
+  const std::unordered_set<std::string> &GetCppCompileFlags() const;
+  const std::unordered_set<std::string> &GetLinkFlags() const;
+  const fs_unordered_set &GetCompileDependencies() const;
+  const fs_unordered_set &GetLinkDependencies() const;
 };
 
 } // namespace buildcc::base

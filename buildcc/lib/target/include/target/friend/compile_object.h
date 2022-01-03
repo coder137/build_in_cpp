@@ -54,7 +54,7 @@ public:
   GetObjectDataMap() const {
     return object_files_;
   }
-  internal::fs_unordered_set GetCompiledSources() const;
+  fs_unordered_set GetCompiledSources() const;
   tf::Task &GetTask() { return compile_task_; }
 
 private:
