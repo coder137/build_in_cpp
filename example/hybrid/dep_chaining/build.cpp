@@ -8,12 +8,11 @@ constexpr const char *const EXE = "build";
 
 // Function Prototypes
 static void clean_cb();
-static void cpp_target_cb(base::Target &cpptarget,
-                          const base::Generator &cpp_generator);
-static void c_target_cb(base::Target &ctarget,
-                        const base::Generator &c_generator);
-static void cpp_generator_cb(base::Generator &generator);
-static void c_generator_cb(base::Generator &generator);
+static void cpp_target_cb(BaseTarget &cpptarget,
+                          const BaseGenerator &cpp_generator);
+static void c_target_cb(BaseTarget &ctarget, const BaseGenerator &c_generator);
+static void cpp_generator_cb(BaseGenerator &generator);
+static void c_generator_cb(BaseGenerator &generator);
 
 int main(int argc, char **argv) {
   // 1. Get arguments
@@ -36,7 +35,7 @@ int main(int argc, char **argv) {
   Toolchain_msvc msvc;
 
   // CPP
-  base::Generator cpp_generator("cpp_generator", "");
+  BaseGenerator cpp_generator("cpp_generator", "");
   reg.Build(cpp_generator_cb, cpp_generator);
 
   ExecutableTarget_gcc g_cpptarget("cpptarget", gcc, "");
@@ -49,7 +48,7 @@ int main(int argc, char **argv) {
   reg.Dep(m_cpptarget, cpp_generator);
 
   // C
-  base::Generator c_generator("c_generator", "");
+  BaseGenerator c_generator("c_generator", "");
   reg.Build(c_generator_cb, c_generator);
 
   ExecutableTarget_gcc g_ctarget("ctarget", gcc, "");
@@ -91,8 +90,8 @@ static void clean_cb() {
   fs::remove_all(env::get_project_build_dir());
 }
 
-static void cpp_target_cb(base::Target &cpptarget,
-                          const base::Generator &cpp_generator) {
+static void cpp_target_cb(BaseTarget &cpptarget,
+                          const BaseGenerator &cpp_generator) {
   const fs::path main_cpp =
       fs::path(cpp_generator.GetValueByIdentifier("main_cpp"))
           .lexically_relative(env::get_project_root_dir());
@@ -100,22 +99,21 @@ static void cpp_target_cb(base::Target &cpptarget,
   cpptarget.Build();
 }
 
-static void c_target_cb(base::Target &ctarget,
-                        const base::Generator &c_generator) {
+static void c_target_cb(BaseTarget &ctarget, const BaseGenerator &c_generator) {
   const fs::path main_c = fs::path(c_generator.GetValueByIdentifier("main_c"))
                               .lexically_relative(env::get_project_root_dir());
   ctarget.AddSource(main_c);
   ctarget.Build();
 }
 
-static void cpp_generator_cb(base::Generator &generator) {
+static void cpp_generator_cb(BaseGenerator &generator) {
   generator.AddOutput("{gen_build_dir}/main.cpp", "main_cpp");
   generator.AddCommand("python3 {gen_root_dir}/python/gen.py --source_type cpp "
                        "--destination {main_cpp}");
   generator.Build();
 }
 
-static void c_generator_cb(base::Generator &generator) {
+static void c_generator_cb(BaseGenerator &generator) {
   generator.AddOutput("{gen_build_dir}/main.c", "main_c");
   generator.AddCommand("python3 {gen_root_dir}/python/gen.py --source_type c "
                        "--destination {main_c}");

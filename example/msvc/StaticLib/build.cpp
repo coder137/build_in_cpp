@@ -17,38 +17,31 @@ int main(void) {
 
   Toolchain_msvc msvc;
 
-  StaticTarget_msvc statictarget_msvc("librandom.lib", msvc, "");
-  statictarget_msvc.AddSource("src/random.cpp");
-  statictarget_msvc.AddIncludeDir("include", true);
-  statictarget_msvc.AddCppCompileFlag("/EHsc");
-  statictarget_msvc.AddCppCompileFlag("/nologo");
-  statictarget_msvc.AddLinkFlag("/nologo");
-  statictarget_msvc.Build();
+  StaticTarget_msvc statictarget("librandom", msvc, "");
+  statictarget.AddSource("src/random.cpp");
+  statictarget.AddIncludeDir("include", true);
+  statictarget.Build();
 
-  ExecutableTarget_msvc target_msvc("Simple.exe", msvc, "");
-  target_msvc.AddSource("src/main.cpp");
-  target_msvc.AddIncludeDir("include", true);
+  ExecutableTarget_msvc exetarget("Simple", msvc, "");
+  exetarget.AddSource("src/main.cpp");
+  exetarget.AddIncludeDir("include", true);
 
   // Method 1
-  // target_msvc.AddLibDep(statictarget_msvc);
+  exetarget.AddLibDep(statictarget);
 
   // Method 2
-  target_msvc.AddLibDep("librandom.lib");
-  target_msvc.AddLibDir(statictarget_msvc.GetTargetPath().parent_path());
+  // exetarget.AddLibDep("librandom.lib");
+  // exetarget.AddLibDir(statictarget.GetTargetPath().parent_path());
+  exetarget.Build();
 
-  target_msvc.AddCppCompileFlag("/EHsc");
-  target_msvc.AddCppCompileFlag("/nologo");
-  target_msvc.AddLinkFlag("/nologo");
-  target_msvc.Build();
+  plugin::ClangCompileCommands({&exetarget}).Generate();
 
-  plugin::ClangCompileCommands({&target_msvc}).Generate();
-
+  // Manually setup your dependencies
   tf::Executor executor;
   tf::Taskflow taskflow;
-  auto statictarget_msvcTask =
-      taskflow.composed_of(statictarget_msvc.GetTaskflow());
-  auto target_msvcTask = taskflow.composed_of(target_msvc.GetTaskflow());
-  target_msvcTask.succeed(statictarget_msvcTask);
+  auto statictargetTask = taskflow.composed_of(statictarget.GetTaskflow());
+  auto exetargetTask = taskflow.composed_of(exetarget.GetTaskflow());
+  exetargetTask.succeed(statictargetTask);
 
   executor.run(taskflow);
   executor.wait_for_all();

@@ -15,12 +15,10 @@ int main(void) {
   env::init(BUILD_ROOT, BUILD_INTERMEDIATE_DIR);
   env::set_log_level(env::LogLevel::Trace);
 
-  // Stored as a const & in target
-  base::Toolchain gcc(base::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++", "ar",
-                      "ld");
+  Toolchain_gcc gcc;
 
   // CppTarget
-  ExecutableTarget_gcc cpptarget("CppFlags.exe", gcc, "files");
+  ExecutableTarget_gcc cpptarget("CppFlags", gcc, "files");
   cpptarget.AddSource("main.cpp", "src");
   cpptarget.AddSource("src/random.cpp");
   cpptarget.AddHeader("include/random.h");
@@ -32,7 +30,7 @@ int main(void) {
   cpptarget.Build();
 
   // CTarget
-  ExecutableTarget_gcc ctarget("CFlags.exe", gcc, "files");
+  ExecutableTarget_gcc ctarget("CFlags", gcc, "files");
   ctarget.AddSource("main.c", "src");
   ctarget.AddPreprocessorFlag("-DRANDOM=1");
   ctarget.AddCCompileFlag("-Wall");

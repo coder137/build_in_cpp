@@ -6,10 +6,7 @@
 
 using namespace buildcc;
 
-// This example contains both OS Hosts
-// - Windows MSYS GCC 10.2.0
 // - Linux GCC 9.3.0
-// * Comment out one of the examples
 int main(void) {
   // Environment is meant to define
   // 1. Project Root path i.e all files and targets will be added relative to
@@ -19,60 +16,43 @@ int main(void) {
   env::init(BUILD_ROOT, BUILD_INTERMEDIATE_DIR);
   env::set_log_level(env::LogLevel::Trace);
 
-  base::Toolchain gcc(base::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++", "ar",
-                      "ld");
+  Toolchain_gcc gcc;
 
-  const std::string_view dynl_ext = Target_generic::Extension(
-      base::Target::Type::DynamicLibrary, gcc.GetId());
-  DynamicTarget_gcc randomDynLib(fmt::format("librandyn{}", dynl_ext), gcc,
-                                 "files");
+  DynamicTarget_gcc dynamictarget("librandom", gcc, "files");
+  dynamictarget.AddSource("src/random.cpp");
+  dynamictarget.AddHeader("include/random.h");
+  dynamictarget.AddIncludeDir("include");
+  dynamictarget.Build();
 
-  const std::string_view ex_ext =
-      Target_generic::Extension(base::Target::Type::Executable, gcc.GetId());
-  ExecutableTarget_gcc target(fmt::format("dynamictest{}", ex_ext), gcc,
-                              "files");
-
-  randomDynLib.AddSource("src/random.cpp");
-  randomDynLib.AddHeader("include/random.h");
-  randomDynLib.AddIncludeDir("include");
-  randomDynLib.Build();
-
+  ExecutableTarget_gcc target("dynamictest", gcc, "files");
   target.AddSource("main.cpp", "src");
   target.AddIncludeDir("include");
 
   // * Method 1
   // NOTE, Use buildcc built targets
-  target.AddLibDep(randomDynLib);
+  target.AddLibDep(dynamictarget);
 
   // * Method 2, External lib
-  // target.AddLibDirAbsolute(randomDynLib.GetTargetIntermediateDir());
-  // target.AddLibDep("-lrandyn");
+  // target.AddLibDirAbsolute(dynamictarget.GetTargetBuildDir());
+  // target.AddLibDep("-lrandom");
 
-  // OS Specific
-  if constexpr (env::is_linux()) {
-    target.AddLinkFlag("-Wl,-rpath=" +
-                       randomDynLib.GetTargetIntermediateDir().string());
-  }
   target.Build();
 
   tf::Executor executor;
   tf::Taskflow taskflow;
-  auto randomDynLibTask = taskflow.composed_of(randomDynLib.GetTaskflow());
+  auto dynamictargetTask = taskflow.composed_of(dynamictarget.GetTaskflow());
   auto targetTask = taskflow.composed_of(target.GetTaskflow());
 
-  targetTask.succeed(randomDynLibTask);
+  targetTask.succeed(dynamictargetTask);
 
   executor.run(taskflow);
   executor.wait_for_all();
 
   // Post Build step
-  if constexpr (env::is_win()) {
-    if (target.FirstBuild() || target.Rebuild()) {
-      fs::path copy_to_path =
-          target.GetTargetIntermediateDir() / randomDynLib.GetName();
-      fs::remove(copy_to_path);
-      fs::copy(randomDynLib.GetTargetPath(), copy_to_path);
-    }
+  if (target.IsBuilt()) {
+    fs::path copy_to_path =
+        target.GetTargetBuildDir() / dynamictarget.GetTargetPath().filename();
+    fs::copy(dynamictarget.GetTargetPath(), copy_to_path);
   }
 
   // Dump .dot output

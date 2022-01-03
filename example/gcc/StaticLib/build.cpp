@@ -15,40 +15,39 @@ int main(void) {
   env::init(BUILD_ROOT, BUILD_INTERMEDIATE_DIR);
   env::set_log_level(env::LogLevel::Trace);
 
-  base::Toolchain gcc(base::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++", "ar",
-                      "ld");
+  Toolchain_gcc gcc;
 
-  StaticTarget_gcc randomLib("libran.a", gcc, "files");
-  randomLib.AddSource("src/random.cpp");
-  randomLib.AddHeader("include/random.h");
-  randomLib.AddIncludeDir("include");
-  randomLib.Build();
+  StaticTarget_gcc statictarget("librandom", gcc, "files");
+  statictarget.AddSource("src/random.cpp");
+  statictarget.AddHeader("include/random.h");
+  statictarget.AddIncludeDir("include");
+  statictarget.Build();
 
-  ExecutableTarget_gcc target("statictest.exe", gcc, "files");
-  target.AddSource("main.cpp", "src");
-  target.AddIncludeDir("include");
+  ExecutableTarget_gcc exetarget("statictest", gcc, "files");
+  exetarget.AddSource("main.cpp", "src");
+  exetarget.AddIncludeDir("include");
 
   // * Method 1
   // NOTE, Use buildcc built targets
-  // target.AddLibDep(randomLib);
+  exetarget.AddLibDep(statictarget);
 
   // * Method 2
   // NOTE, This should be an absolute path since we could also be referencing
   // external libs that are not relative to this project
-  target.AddLibDirAbsolute(randomLib.GetTargetPath().parent_path());
-  target.AddLibDep("-lran");
+  // exetarget.AddLibDirAbsolute(statictarget.GetTargetPath().parent_path());
+  // exetarget.AddLibDep("-lrandom");
 
-  target.Build();
+  exetarget.Build();
 
   // Run
   tf::Executor executor;
   tf::Taskflow taskflow;
 
-  tf::Task randomLibTask = taskflow.composed_of(randomLib.GetTaskflow());
-  tf::Task targetTask = taskflow.composed_of(target.GetTaskflow());
+  tf::Task statictargetTask = taskflow.composed_of(statictarget.GetTaskflow());
+  tf::Task exetargetTask = taskflow.composed_of(exetarget.GetTaskflow());
 
   // Set dependency
-  targetTask.succeed(randomLibTask);
+  exetargetTask.succeed(statictargetTask);
 
   // Run
   executor.run(taskflow);

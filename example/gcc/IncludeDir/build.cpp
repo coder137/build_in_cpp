@@ -15,11 +15,9 @@ int main(void) {
   env::init(BUILD_ROOT, BUILD_INTERMEDIATE_DIR);
   env::set_log_level(env::LogLevel::Trace);
 
-  // Stored as const & in target
-  base::Toolchain gcc(base::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++", "ar",
-                      "ld");
+  Toolchain_gcc gcc;
 
-  ExecutableTarget_gcc target("IncludeDir.exe", gcc, "files");
+  ExecutableTarget_gcc target("IncludeDir", gcc, "files");
   target.AddSource("main.cpp", "src");
   target.AddSource("src/random.cpp");
   target.AddHeader("include/random.h");
