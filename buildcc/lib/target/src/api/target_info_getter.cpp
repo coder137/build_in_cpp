@@ -85,7 +85,7 @@ const fs_unordered_set &TargetInfoGetter<T>::GetPchFiles() const {
 }
 
 template <typename T>
-const std::vector<fs::path> &TargetInfoGetter<T>::GetTargetLibDeps() const {
+const std::vector<fs::path> &TargetInfoGetter<T>::GetLibDeps() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.storer_.current_user_lib_deps;

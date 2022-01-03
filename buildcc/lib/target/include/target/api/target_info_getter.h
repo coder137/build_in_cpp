@@ -47,7 +47,7 @@ public:
   const fs_unordered_set &GetSourceFiles() const;
   const fs_unordered_set &GetHeaderFiles() const;
   const fs_unordered_set &GetPchFiles() const;
-  const std::vector<fs::path> &GetTargetLibDeps() const;
+  const std::vector<fs::path> &GetLibDeps() const;
   const std::vector<std::string> &GetCurrentExternalLibDeps() const;
   const fs_unordered_set &GetCurrentIncludeDirs() const;
   const fs_unordered_set &GetCurrentLibDirs() const;
