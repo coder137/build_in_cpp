@@ -18,6 +18,7 @@
 #define TOOLCHAIN_TOOLCHAIN_VERIFY_H_
 
 #include <filesystem>
+#include <optional>
 #include <vector>
 
 #include "env/logging.h"
@@ -42,6 +43,13 @@ namespace buildcc::base {
 struct VerifyToolchainConfig {
   std::vector<std::string> absolute_search_paths;
   std::vector<std::string> env_vars{"PATH"};
+
+  std::optional<std::string> compiler_version;
+  std::optional<std::string> target_arch;
+
+  // Updates the toolchain with absolute paths once verified
+  // If multiple toolchains are found, uses the first in the list
+  bool update{true};
 };
 
 /**
@@ -60,8 +68,21 @@ struct VerifiedToolchain {
 
 template <typename T> class ToolchainVerify {
 public:
+  /**
+   * @brief Verify your toolchain executables by searching your operating system
+   * paths
+   * Only add the verified path IF all toolchain executables are matched
+   *
+   * @param config Search paths to find toolchains
+   * @return std::vector<VerifiedToolchain> Operating system can contain
+   * multiple toolchains of similar names with different versions. Collect all
+   * of them
+   */
   std::vector<VerifiedToolchain>
   Verify(const VerifyToolchainConfig &config = VerifyToolchainConfig());
+
+protected:
+  VerifiedToolchain verified_toolchain_;
 };
 
 } // namespace buildcc::base
