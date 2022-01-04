@@ -28,11 +28,7 @@ namespace buildcc {
 // Extensions
 constexpr const char *const kMingwExecutableExt = ".exe";
 constexpr const char *const kMingwStaticLibExt = ".a";
-// Why is `kMingwDynamicLibExt != .so` but `.a` instead?
-// See `kMingwDynamicLibLinkCommand`
-// IMPLIB .a stubs are what is linked during link time
-// OUT .dll needs to be present in the executable folder during runtime
-constexpr const char *const kMingwDynamicLibExt = ".a";
+constexpr const char *const kMingwDynamicLibExt = ".so";
 
 constexpr const char *const kMingwObjExt = ".o";
 constexpr const char *const kMingwPchHeaderExt = ".h";
