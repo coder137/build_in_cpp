@@ -233,11 +233,26 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
       vt.path = p;
       vt.compiler_version = env::trim(GetCompilerVersion(p, t).value_or(""));
       vt.target_arch = env::trim(GetCompilerArchitecture(p, t).value_or(""));
-      verified_toolchains.push_back(vt);
+
+      // Check add
+      bool add{true};
+      if (config.compiler_version.has_value()) {
+        add = add && (config.compiler_version.value() == vt.compiler_version);
+      }
+      if (config.target_arch.has_value()) {
+        add = add && (config.target_arch.value() == vt.target_arch);
+      }
+      if (add) {
+        verified_toolchains.push_back(vt);
+      }
     }
 
     // Reset
     matcher.FillWithToolchainFilenames();
+  }
+
+  if (config.update && !verified_toolchains.empty()) {
+    // TODO, Update logic here
   }
 
   return verified_toolchains;
