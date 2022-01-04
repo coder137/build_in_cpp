@@ -105,6 +105,27 @@ public:
   }
 };
 
+class StaticTarget_mingw : public BaseTarget {
+public:
+  StaticTarget_mingw(const std::string &name, const BaseToolchain &toolchain,
+                     const TargetEnv &env,
+                     const TargetConfig &config = MingwConfig::StaticLib())
+      : Target(name, TargetType::StaticLibrary, toolchain, env, config) {
+    DefaultGccOptions(*this);
+  }
+};
+
+class DynamicTarget_mingw : public BaseTarget {
+public:
+  DynamicTarget_mingw(const std::string &name, const BaseToolchain &toolchain,
+                      const TargetEnv &env,
+                      const TargetConfig &config = MingwConfig::DynamicLib())
+      : Target(name, TargetType::DynamicLibrary, toolchain, env, config) {
+    AddCommonCompileFlag("-fpic");
+    DefaultGccOptions(*this);
+  }
+};
+
 } // namespace buildcc
 
 #endif
