@@ -1,0 +1,5 @@
+#pragma once
+
+// clang-format off
+inline constexpr const char * const BUILD_ROOT = "@CMAKE_SOURCE_DIR@";
+inline constexpr const char * const BUILD_INTERMEDIATE_DIR = "@CMAKE_SOURCE_DIR@/buildcc";

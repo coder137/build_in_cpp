@@ -15,6 +15,8 @@ Google Style
 
 ``[snake_case_variable_name]_`` for private member variables
 
-``k[PascalCaseVariableName]`` constexpr variables and enum / enum classes names
+``k[PascalCaseVariableName]`` constexpr variables and enum / enum classes names ONLY when used internally
+
+``[PascakCaseVariableName]`` constexpr variables and enum / enum classes names when exposed to users
 
 .. attention:: If you see any wrong usage in the project please raise an issue
