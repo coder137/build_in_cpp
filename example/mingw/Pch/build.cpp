@@ -26,7 +26,7 @@ int main() {
   ExecutableTarget_mingw g_cflags("cflags", mingw, "files");
   cflags_build_cb(g_cflags);
 
-  tf::Executor executor(1);
+  tf::Executor executor;
   tf::Taskflow taskflow;
 
   taskflow.composed_of(g_cppflags.GetTaskflow());
