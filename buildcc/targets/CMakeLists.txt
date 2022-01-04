@@ -5,6 +5,7 @@ set(TARGET_SPECIALIZED_SRCS
     # Specialized targets
     include/targets/target_gcc.h
     include/targets/target_msvc.h
+    include/targets/target_mingw.h
 
     # User targets
     include/targets/target_generic.h
