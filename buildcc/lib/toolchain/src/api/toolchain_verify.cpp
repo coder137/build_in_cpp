@@ -197,7 +197,7 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
   }
 
   std::vector<VerifiedToolchain> verified_toolchains;
-  const T &t = static_cast<const T &>(*this);
+  T &t = static_cast<T &>(*this);
 
   ToolchainMatcher matcher(t);
   matcher.FillWithToolchainFilenames();
@@ -252,7 +252,17 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
   }
 
   if (config.update && !verified_toolchains.empty()) {
-    // TODO, Update logic here
+    verified_toolchain_ = verified_toolchains[0];
+    t.asm_compiler_ =
+        (verified_toolchain_.path / t.asm_compiler_).make_preferred().string();
+    t.c_compiler_ =
+        (verified_toolchain_.path / t.c_compiler_).make_preferred().string();
+    t.cpp_compiler_ =
+        (verified_toolchain_.path / t.cpp_compiler_).make_preferred().string();
+    t.archiver_ =
+        (verified_toolchain_.path / t.archiver_).make_preferred().string();
+    t.linker_ =
+        (verified_toolchain_.path / t.linker_).make_preferred().string();
   }
 
   return verified_toolchains;
