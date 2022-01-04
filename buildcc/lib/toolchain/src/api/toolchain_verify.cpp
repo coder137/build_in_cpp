@@ -252,17 +252,32 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
   }
 
   if (config.update && !verified_toolchains.empty()) {
+    constexpr const char *os_executable_ext =
+        buildcc::env::get_os_executable_extension();
+    buildcc::env::assert_fatal<os_executable_ext != nullptr>(
+        "OS not supported");
+
     verified_toolchain_ = verified_toolchains[0];
-    t.asm_compiler_ =
-        (verified_toolchain_.path / t.asm_compiler_).make_preferred().string();
-    t.c_compiler_ =
-        (verified_toolchain_.path / t.c_compiler_).make_preferred().string();
-    t.cpp_compiler_ =
-        (verified_toolchain_.path / t.cpp_compiler_).make_preferred().string();
-    t.archiver_ =
-        (verified_toolchain_.path / t.archiver_).make_preferred().string();
-    t.linker_ =
-        (verified_toolchain_.path / t.linker_).make_preferred().string();
+    t.asm_compiler_ = (verified_toolchain_.path /
+                       fmt::format("{}{}", t.asm_compiler_, os_executable_ext))
+                          .make_preferred()
+                          .string();
+    t.c_compiler_ = (verified_toolchain_.path /
+                     fmt::format("{}{}", t.c_compiler_, os_executable_ext))
+                        .make_preferred()
+                        .string();
+    t.cpp_compiler_ = (verified_toolchain_.path /
+                       fmt::format("{}{}", t.cpp_compiler_, os_executable_ext))
+                          .make_preferred()
+                          .string();
+    t.archiver_ = (verified_toolchain_.path /
+                   fmt::format("{}{}", t.archiver_, os_executable_ext))
+                      .make_preferred()
+                      .string();
+    t.linker_ = (verified_toolchain_.path /
+                 fmt::format("{}{}", t.linker_, os_executable_ext))
+                    .make_preferred()
+                    .string();
   }
 
   return verified_toolchains;
