@@ -52,6 +52,7 @@ int main(void) {
   if (target.IsBuilt()) {
     fs::path copy_to_path =
         target.GetTargetBuildDir() / dynamictarget.GetTargetPath().filename();
+    fs::remove_all(copy_to_path);
     fs::copy(dynamictarget.GetTargetPath(), copy_to_path);
   }
 
