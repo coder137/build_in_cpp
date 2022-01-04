@@ -46,23 +46,10 @@ static void cppflags_build_cb(BaseTarget &cppflags) {
   cppflags.AddPch("pch/pch_c.h");
   cppflags.AddIncludeDir("pch", true);
 
-  // Toolchain specific code goes here
-  switch (cppflags.GetToolchain().GetId()) {
-  case ToolchainId::Gcc: {
-    cppflags.AddPreprocessorFlag("-DRANDOM=1");
-    cppflags.AddCppCompileFlag("-Wall");
-    cppflags.AddCppCompileFlag("-Werror");
-    cppflags.AddLinkFlag("-lm");
-    break;
-  }
-  case ToolchainId::Msvc: {
-    cppflags.AddPreprocessorFlag("/DRANDOM=1");
-    cppflags.AddCppCompileFlag("/W4");
-    break;
-  }
-  default:
-    break;
-  }
+  cppflags.AddPreprocessorFlag("-DRANDOM=1");
+  cppflags.AddCppCompileFlag("-Wall");
+  cppflags.AddCppCompileFlag("-Werror");
+  cppflags.AddLinkFlag("-lm");
 
   cppflags.Build();
 }
@@ -74,23 +61,10 @@ static void cflags_build_cb(BaseTarget &cflags) {
   cflags.AddIncludeDir("pch", false);
   cflags.AddHeader("pch/pch_c.h");
 
-  // Toolchain specific code goes here
-  switch (cflags.GetToolchain().GetId()) {
-  case ToolchainId::Gcc: {
-    cflags.AddPreprocessorFlag("-DRANDOM=1");
-    cflags.AddCCompileFlag("-Wall");
-    cflags.AddCCompileFlag("-Werror");
-    cflags.AddLinkFlag("-lm");
-    break;
-  }
-  case ToolchainId::Msvc: {
-    cflags.AddPreprocessorFlag("/DRANDOM=1");
-    cflags.AddCCompileFlag("/W4");
-    break;
-  }
-  default:
-    break;
-  }
+  cflags.AddPreprocessorFlag("-DRANDOM=1");
+  cflags.AddCCompileFlag("-Wall");
+  cflags.AddCCompileFlag("-Werror");
+  cflags.AddLinkFlag("-lm");
 
   cflags.Build();
 }
