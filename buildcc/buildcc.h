@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Niket Naidu. All rights reserved.
+ * Copyright 2021-2022 Niket Naidu. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,12 +37,14 @@
 // Specialized Toolchain
 #include "toolchains/toolchain_gcc.h"
 #include "toolchains/toolchain_msvc.h"
+#include "toolchains/toolchain_mingw.h"
 
 // TODO, Add more specialized toolchains here
 
 // Specialized Targets
 #include "targets/target_gcc.h"
 #include "targets/target_msvc.h"
+#include "targets/target_mingw.h"
 #include "targets/target_generic.h"
 #include "targets/target_custom.h"
 
