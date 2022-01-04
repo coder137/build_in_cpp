@@ -1,6 +1,7 @@
 set(TOOLCHAIN_SPECIALIZED_SRCS
     include/toolchains/toolchain_gcc.h
     include/toolchains/toolchain_msvc.h
+    include/toolchains/toolchain_mingw.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})
