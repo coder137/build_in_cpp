@@ -22,8 +22,8 @@
 #include "target_config_interface.h"
 #include "target_gcc.h"
 
-// Windows
-// ".exe", ".a", ".so" -> MINGW frontend (x86_64-w64-mingw32)
+// MinGW
+// ".exe", ".a", ".so" -> (x86_64-w64-mingw32)
 namespace buildcc {
 
 // Extensions
