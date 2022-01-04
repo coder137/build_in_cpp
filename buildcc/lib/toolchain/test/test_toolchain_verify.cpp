@@ -311,6 +311,29 @@ TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_BothFailure) {
   CHECK_EQUAL(verified_toolchains.size(), 0);
 }
 
+TEST(ToolchainTestGroup, VerifyToolchain_UpdateFalse) {
+  buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc, "gcc", "as",
+                               "gcc", "g++", "ar", "ld");
+
+  buildcc::base::VerifyToolchainConfig config;
+  config.env_vars.clear();
+  config.absolute_search_paths.push_back(
+      (fs::current_path() / "toolchains" / "gcc").string());
+  // config.compiler_version = "none";
+  // config.target_arch = "none";
+  config.update = false;
+
+  std::vector<std::string> compiler_version{"10.2.1"};
+  std::vector<std::string> arch{"arm-none-eabi"};
+  buildcc::env::m::CommandExpect_Execute(1, true, &compiler_version, nullptr);
+  buildcc::env::m::CommandExpect_Execute(1, true, &arch, nullptr);
+
+  std::vector<buildcc::base::VerifiedToolchain> verified_toolchains =
+      gcc.Verify(config);
+  UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
+  CHECK_EQUAL(verified_toolchains.size(), 1);
+}
+
 int main(int ac, char **av) {
   buildcc::env::m::VectorStringCopier copier;
   mock().installCopier(TEST_VECTOR_STRING_TYPE, copier);
