@@ -112,9 +112,62 @@ DynamicLib
     }
 
 
-.. note:: Our ``ExecutableTarget_mingw`` depends on ``DynamicTarget_mingw`` and requires the ``librandom.lib.dll`` file to be present in the same folder location as the executable when running.
+.. note:: Our ``ExecutableTarget_mingw`` depends on ``DynamicTarget_mingw`` and requires the ``librandom.dll`` file to be present in the same folder location as the executable when running.
 
 PrecompileHeader
 -------------------
 
-TODO
+.. code-block:: cpp
+    :linenos:
+    :emphasize-lines: 2,4,7,24,25,26,39,40,41
+
+    int main() {
+        Toolchain_mingw mingw;
+
+        ExecutableTarget_mingw g_cppflags("cppflags", mingw, "files");
+        cppflags_build_cb(g_cppflags);
+
+        ExecutableTarget_mingw g_cflags("cflags", mingw, "files");
+        cflags_build_cb(g_cflags);
+
+        tf::Executor executor;
+        tf::Taskflow taskflow;
+
+        taskflow.composed_of(g_cppflags.GetTaskflow());
+        taskflow.composed_of(g_cflags.GetTaskflow());
+        executor.run(taskflow);
+        executor.wait_for_all();
+    }
+
+    static void cppflags_build_cb(BaseTarget &cppflags) {
+        cppflags.AddSource("main.cpp", "src");
+        cppflags.AddSource("random.cpp", "src");
+        cppflags.AddIncludeDir("include", true);
+
+        cppflags.AddPch("pch/pch_cpp.h");
+        cppflags.AddPch("pch/pch_c.h");
+        cppflags.AddIncludeDir("pch", true);
+
+        cppflags.AddPreprocessorFlag("-DRANDOM=1");
+        cppflags.AddCppCompileFlag("-Wall");
+        cppflags.AddCppCompileFlag("-Werror");
+        cppflags.AddLinkFlag("-lm");
+
+        cppflags.Build();
+    }
+
+    static void cflags_build_cb(BaseTarget &cflags) {
+        cflags.AddSource("main.c", "src");
+
+        cflags.AddPch("pch/pch_c.h");
+        cflags.AddIncludeDir("pch", false);
+        cflags.AddHeader("pch/pch_c.h");
+
+        cflags.AddPreprocessorFlag("-DRANDOM=1");
+        cflags.AddCCompileFlag("-Wall");
+        cflags.AddCCompileFlag("-Werror");
+        cflags.AddLinkFlag("-lm");
+
+        cflags.Build();
+    }
+
