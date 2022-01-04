@@ -62,9 +62,7 @@ Multi hosts but only one target compiler used
 
 > NOTE, See the distinction between **HOST** and **TARGET**
 
-## [host] MinGW GCC/GNU -> [target] gcc
-## [host] MSVC -> [target] gcc
-##  [host] Linux GCC/GNU -> [target] gcc
+## [target] Gcc
 
 - [x] Simple
   - Only 1 source file 
@@ -84,7 +82,7 @@ Multi hosts but only one target compiler used
   - [ ] ClangFormat
   - [ ] Taskflow graph visualizer
 
-## [host] MSVC -> [target] MSVC
+## [target] MSVC
 
 > TODO, Understand how MSVC compilation using `cl.exe` occurs
 
@@ -94,6 +92,12 @@ Multi hosts but only one target compiler used
   - MSVC StaticLib + Executable 
 - [x] DynamicLib
   - MSVC DynamicLib + Executable 
+
+## [target] MinGW
+
+- [x] Executable
+- [x] StaticLib
+- [x] DynamicLib
 
 # Real world Tests (Hybrid)
 
