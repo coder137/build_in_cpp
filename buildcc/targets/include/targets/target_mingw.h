@@ -20,49 +20,29 @@
 #include "target/target.h"
 
 #include "target_config_interface.h"
+#include "target_gcc.h"
 
 // Windows
-// ".exe", ".a", ".a" && ".dll" -> MINGW frontend (x86_64-w64-mingw32)
+// ".exe", ".a", ".so" -> MINGW frontend (x86_64-w64-mingw32)
 namespace buildcc {
 
 // Extensions
 constexpr const char *const kMingwExecutableExt = ".exe";
-constexpr const char *const kMingwStaticLibExt = ".a";
-constexpr const char *const kMingwDynamicLibExt = ".so";
+constexpr const char *const kMingwDynamicLibExt = ".dll";
 
-constexpr const char *const kMingwObjExt = ".o";
-constexpr const char *const kMingwPchHeaderExt = ".h";
-constexpr const char *const kMingwPchCompileExt = ".gch";
-
-constexpr const char *const kMingwPrefixIncludeDir = "-I";
-constexpr const char *const kMingwPrefixLibDir = "-L";
-
-constexpr const char *const kMingwGenericPchCompileCommand =
-    "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
-    "{pch_compile_flags} {compile_flags} -o {output} -c {input}";
-constexpr const char *const kMingwGenericCompileCommand =
-    "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
-    "{pch_object_flags} {compile_flags} -o {output} -c {input}";
-constexpr const char *const kMingwExecutableLinkCommand =
-    "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
-    "{lib_dirs} {lib_deps}";
-constexpr const char *const kMingwStaticLibLinkCommand =
-    "{archiver} rcs {output} {compiled_sources}";
 constexpr const char *const kMingwDynamicLibLinkCommand =
-    "{cpp_compiler} -shared {link_flags} {compiled_sources} -o {output}";
+    "{cpp_compiler} -shared {link_flags} {compiled_sources} -o {output} "
+    "-Wl,--out-implib,{output}.a";
 
 class MingwConfig : ConfigInterface<MingwConfig> {
 public:
   static TargetConfig Executable() {
-    return DefaultMingwConfig(kMingwExecutableExt, kMingwGenericCompileCommand,
-                              kMingwExecutableLinkCommand);
+    return DefaultMingwConfig(kMingwExecutableExt, kGccGenericCompileCommand,
+                              kGccExecutableLinkCommand);
   }
-  static TargetConfig StaticLib() {
-    return DefaultMingwConfig(kMingwStaticLibExt, kMingwGenericCompileCommand,
-                              kMingwStaticLibLinkCommand);
-  }
+
   static TargetConfig DynamicLib() {
-    return DefaultMingwConfig(kMingwDynamicLibExt, kMingwGenericCompileCommand,
+    return DefaultMingwConfig(kMingwDynamicLibExt, kGccGenericCompileCommand,
                               kMingwDynamicLibLinkCommand);
   }
 
@@ -72,54 +52,34 @@ private:
                                          const std::string &link_command) {
     TargetConfig config;
     config.target_ext = target_ext;
-    config.obj_ext = kMingwObjExt;
-    config.pch_header_ext = kMingwPchHeaderExt;
-    config.pch_compile_ext = kMingwPchCompileExt;
-    std::string prefix_include_dir = kMingwPrefixIncludeDir;
-    std::string prefix_lib_dir = kMingwPrefixLibDir;
-    config.pch_command = kMingwGenericPchCompileCommand;
+    config.obj_ext = kGccObjExt;
+    config.pch_header_ext = kGccPchHeaderExt;
+    config.pch_compile_ext = kGccPchCompileExt;
+    std::string prefix_include_dir = kGccPrefixIncludeDir;
+    std::string prefix_lib_dir = kGccPrefixLibDir;
+    config.pch_command = kGccGenericPchCompileCommand;
     config.compile_command = compile_command;
     config.link_command = link_command;
     return config;
   }
 };
 
-inline void DefaultMingwOptions(BaseTarget &target) {
-  target.AddPchObjectFlag(
-      fmt::format("-include {}",
-                  fs::path(target.GetPchCompilePath()).replace_extension("")));
-  target.AddPchObjectFlag("-H");
-}
-
-class ExecutableTarget_mingw : public BaseTarget {
+class ExecutableTarget_mingw : public ExecutableTarget_gcc {
 public:
   ExecutableTarget_mingw(const std::string &name,
                          const BaseToolchain &toolchain, const TargetEnv &env,
                          const TargetConfig &config = MingwConfig::Executable())
-      : Target(name, TargetType::Executable, toolchain, env, config) {
-    DefaultMingwOptions(*this);
-  }
+      : ExecutableTarget_gcc(name, toolchain, env, config) {}
 };
 
-class StaticTarget_mingw : public BaseTarget {
-public:
-  StaticTarget_mingw(const std::string &name, const BaseToolchain &toolchain,
-                     const TargetEnv &env,
-                     const TargetConfig &config = MingwConfig::StaticLib())
-      : Target(name, TargetType::StaticLibrary, toolchain, env, config) {
-    DefaultGccOptions(*this);
-  }
-};
+typedef StaticTarget_gcc StaticTarget_mingw;
 
-class DynamicTarget_mingw : public BaseTarget {
+class DynamicTarget_mingw : public DynamicTarget_gcc {
 public:
   DynamicTarget_mingw(const std::string &name, const BaseToolchain &toolchain,
                       const TargetEnv &env,
                       const TargetConfig &config = MingwConfig::DynamicLib())
-      : Target(name, TargetType::DynamicLibrary, toolchain, env, config) {
-    AddCommonCompileFlag("-fpic");
-    DefaultGccOptions(*this);
-  }
+      : DynamicTarget_gcc(name, toolchain, env, config) {}
 };
 
 } // namespace buildcc
