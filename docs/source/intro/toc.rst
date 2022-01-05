@@ -11,9 +11,9 @@ Features
 
 * Complete flexibility for custom workflows and toolchains
 * C++ language feature benefits and debuggable build binaries
-* Optimized rebuilds through serialization. See target.fbs schema
+* Optimized rebuilds through serialization.
    * Can optimize for rebuilds by comparing the previous stored build with current build.
-   * Also see the FAQ for more details on Serialization
+   * Further details given in **Architecture**
 * Customizable for community plugins.
 
 Pre-requisites
