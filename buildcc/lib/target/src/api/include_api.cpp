@@ -54,7 +54,6 @@ void IncludeApi<T>::GlobHeadersAbsolute(const fs::path &absolute_path) {
 
   for (const auto &p : fs::directory_iterator(absolute_path)) {
     if (t.config_.IsValidHeader(p.path())) {
-      env::log_trace(__FUNCTION__, fmt::format("Added header {}", p.path()));
       AddHeaderAbsolute(p.path());
     }
   }
