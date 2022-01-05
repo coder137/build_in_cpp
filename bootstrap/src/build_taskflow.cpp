@@ -26,7 +26,6 @@ void taskflow_ho_cb(TargetInfo &info) {
   info.GlobHeaders("taskflow/cuda");
   info.GlobHeaders("taskflow/cuda/cuda_algorithm");
   info.GlobHeaders("taskflow/dsl");
-  info.GlobHeaders("taskflow/sanitizer");
   info.GlobHeaders("taskflow/sycl");
   info.GlobHeaders("taskflow/sycl/sycl_algorithm");
   info.GlobHeaders("taskflow/utility");
