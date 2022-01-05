@@ -35,7 +35,7 @@ static void hybrid_simple_example_cb(BaseTarget &target,
 int main(int argc, char **argv) {
   Args args;
   ArgToolchain custom_toolchain_arg;
-  args.AddToolchain("custom", "Host Toolchain", custom_toolchain_arg);
+  args.AddToolchain("host", "Host Toolchain", custom_toolchain_arg);
   args.Parse(argc, argv);
 
   Register reg(args);
