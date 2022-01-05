@@ -21,9 +21,11 @@
 #include <optional>
 
 #include "target/target.h"
-#include "target_gcc.h"
-#include "target_msvc.h"
 #include "toolchain/toolchain.h"
+
+#include "target_gcc.h"
+#include "target_mingw.h"
+#include "target_msvc.h"
 
 namespace buildcc {
 
@@ -139,8 +141,10 @@ public:
     case ToolchainId::Msvc:
       Copy(ExecutableTarget_msvc(name, toolchain, env), kGenericCopyOptions);
       break;
-    case ToolchainId::Clang:
     case ToolchainId::MinGW:
+      Copy(ExecutableTarget_mingw(name, toolchain, env), kGenericCopyOptions);
+      break;
+    case ToolchainId::Clang:
     default:
       env::assert_fatal<false>("Compiler ID not supported");
       break;
@@ -163,8 +167,10 @@ public:
     case ToolchainId::Msvc:
       Copy(StaticTarget_msvc(name, toolchain, env), kGenericCopyOptions);
       break;
-    case ToolchainId::Clang:
     case ToolchainId::MinGW:
+      Copy(StaticTarget_mingw(name, toolchain, env), kGenericCopyOptions);
+      break;
+    case ToolchainId::Clang:
     default:
       env::assert_fatal<false>("Compiler ID not supported");
       break;
@@ -186,8 +192,10 @@ public:
     case ToolchainId::Msvc:
       Copy(DynamicTarget_msvc(name, toolchain, env), kGenericCopyOptions);
       break;
-    case ToolchainId::Clang:
     case ToolchainId::MinGW:
+      Copy(DynamicTarget_mingw(name, toolchain, env), kGenericCopyOptions);
+      break;
+    case ToolchainId::Clang:
     default:
       env::assert_fatal<false>("Compiler ID not supported");
       break;
@@ -208,7 +216,6 @@ public:
       Copy(ExecutableTarget_generic(name, toolchain, env), kGenericCopyOptions);
       break;
     case TargetType::StaticLibrary:
-
       Copy(StaticTarget_generic(name, toolchain, env), kGenericCopyOptions);
       break;
     case TargetType::DynamicLibrary:
