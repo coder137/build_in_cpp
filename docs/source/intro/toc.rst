@@ -59,15 +59,15 @@ General Information
 Licenses
 ---------
 
-`BuildCC` is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full license text. `BuildCC` aims to use open-source libraries containing permissive licenses. 
+`BuildCC` is licensed under the Apache License, Version 2.0. See **LICENSE** for the full license text. `BuildCC` aims to use open-source libraries containing permissive licenses. 
 
-> Developers who would like to suggest an alternative library, raise an issue with the **license** and **advantages** clearly outlined.
+.. note:: Developers who would like to suggest an alternative library, raise an issue with the **license** and **advantages** clearly outlined.
 
-* [Fmtlib](https://github.com/fmtlib/fmt) (Formatting) [MIT License] [Header Only]
-* [Spdlog](https://github.com/gabime/spdlog) (Logging) [MIT License] [Header Only]
-* [Tiny Process Library](https://gitlab.com/eidheim/tiny-process-library) (Process handling) [MIT License]
-* [Taskflow](https://github.com/taskflow/taskflow) (Parallel Programming) [MIT License] [Header Only]
-   * See also [3rd-Party](https://github.com/taskflow/taskflow/tree/master/3rd-party) used by Taskflow
-* [Flatbuffers](https://github.com/google/flatbuffers) (Serialization) [Apache-2.0 License] [Header Only]
-* [CLI11](https://github.com/CLIUtils/CLI11) (Argument Parsing) [BSD-3-Clause License] [Header Only]
-* [CppUTest](https://github.com/cpputest/cpputest) (Unit Testing/Mocking) [BSD-3-Clause License]
+* `Fmtlib <https://github.com/fmtlib/fmt>`_ (Formatting) [MIT License] [Header Only]
+* `Spdlog <https://github.com/gabime/spdlog>`_ (Logging) [MIT License] [Header Only]
+* `Tiny Process Library <https://gitlab.com/eidheim/tiny-process-library>`_ (Process handling) [MIT License]
+* `Taskflow <https://github.com/taskflow/taskflow>`_ (Parallel Programming) [MIT License] [Header Only]
+   * See also `3rd-Party <https://github.com/taskflow/taskflow/tree/master/3rd-party>`_ used by Taskflow
+* `Flatbuffers <https://github.com/google/flatbuffers>`_ (Serialization) [Apache-2.0 License] [Header Only]
+* `CLI11 <https://github.com/CLIUtils/CLI11>`_ (Argument Parsing) [BSD-3-Clause License] [Header Only]
+* `CppUTest <https://github.com/cpputest/cpputest>`_ (Unit Testing/Mocking) [BSD-3-Clause License]
