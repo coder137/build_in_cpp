@@ -136,9 +136,10 @@ fs::path CompilePch::ConstructObjectPath() const {
 }
 
 std::string CompilePch::ConstructCompileCommand() const {
-  const std::string compiler = target_.GetState().contains_cpp
-                                   ? target_.GetToolchain().GetCppCompiler()
-                                   : target_.GetToolchain().GetCCompiler();
+  std::string compiler = target_.GetState().contains_cpp
+                             ? target_.GetToolchain().GetCppCompiler()
+                             : target_.GetToolchain().GetCCompiler();
+  compiler = fmt::format("{}", fs::path(compiler));
   const TargetFileExt file_ext_type =
       target_.GetState().contains_cpp ? TargetFileExt::Cpp : TargetFileExt::C;
   const std::string compile_flags =

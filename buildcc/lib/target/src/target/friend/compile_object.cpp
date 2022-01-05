@@ -50,7 +50,7 @@ void CompileObject::CacheCompileCommands() {
     const std::string selected_aggregated_compile_flags =
         target_.SelectCompileFlags(type).value_or("");
     const std::string selected_compiler =
-        target_.SelectCompiler(type).value_or("");
+        fmt::format("{}", fs::path(target_.SelectCompiler(type).value_or("")));
     object_iter.second.command = target_.command_.Construct(
         target_.GetConfig().compile_command,
         {
