@@ -185,7 +185,6 @@ int main(int argc, char **argv) {
                                   SyncOption::ExternalLibDeps,
                               });
     switch (toolchain.GetId()) {
-    case ToolchainId::Gcc:
     case ToolchainId::MinGW:
       user_output_target.AddLinkFlag("-Wl,--allow-multiple-definition");
       break;
