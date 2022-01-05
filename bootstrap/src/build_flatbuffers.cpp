@@ -82,37 +82,23 @@ void build_flatc_exe_cb(BaseTarget &target) {
                 kFlatcPreprocessorFlags.cend(),
                 [&](const auto &f) { target.AddPreprocessorFlag(f); });
 
-  if constexpr (env::is_win()) {
-    switch (target.GetToolchain().GetId()) {
-    case ToolchainId::Gcc:
-    case ToolchainId::MinGW:
-      std::for_each(kFlatcGccCppCompileFlags.cbegin(),
-                    kFlatcGccCppCompileFlags.cend(),
-                    [&](const auto &f) { target.AddCppCompileFlag(f); });
-      break;
-    case ToolchainId::Msvc:
-      std::for_each(kFlatcMsvcCppCompileFlags.cbegin(),
-                    kFlatcMsvcCppCompileFlags.cend(),
-                    [&](const auto &f) { target.AddCppCompileFlag(f); });
-      break;
-    default:
-      break;
-    }
+  switch (target.GetToolchain().GetId()) {
+  case ToolchainId::Gcc:
+  case ToolchainId::MinGW:
+    std::for_each(kFlatcGccCppCompileFlags.cbegin(),
+                  kFlatcGccCppCompileFlags.cend(),
+                  [&](const auto &f) { target.AddCppCompileFlag(f); });
+    break;
+  case ToolchainId::Msvc:
+    std::for_each(kFlatcMsvcCppCompileFlags.cbegin(),
+                  kFlatcMsvcCppCompileFlags.cend(),
+                  [&](const auto &f) { target.AddCppCompileFlag(f); });
+    break;
+  case ToolchainId::Clang:
+    break;
+  default:
+    break;
   }
-
-  if constexpr (env::is_linux()) {
-    switch (target.GetToolchain().GetId()) {
-    case ToolchainId::Gcc:
-      std::for_each(kFlatcGccCppCompileFlags.cbegin(),
-                    kFlatcGccCppCompileFlags.cend(),
-                    [&](const auto &f) { target.AddCppCompileFlag(f); });
-      break;
-    default:
-      break;
-    }
-  }
-
-  // TODO, Add PCH
 
   target.Build();
 }
@@ -120,7 +106,6 @@ void build_flatc_exe_cb(BaseTarget &target) {
 void flatbuffers_ho_cb(TargetInfo &info) {
   info.AddIncludeDir("include");
   info.GlobHeaders("include/flatbuffers");
-  // TODO, Add PCH
 }
 
 } // namespace buildcc
