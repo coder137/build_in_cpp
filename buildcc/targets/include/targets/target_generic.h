@@ -78,8 +78,10 @@ private:
     case ToolchainId::Msvc:
       config = MsvcConfig::Executable();
       break;
-    case ToolchainId::Clang:
     case ToolchainId::MinGW:
+      config = MingwConfig::Executable();
+      break;
+    case ToolchainId::Clang:
     default:
       env::assert_fatal<false>("Compiler ID not supported");
       break;
@@ -97,8 +99,10 @@ private:
     case ToolchainId::Msvc:
       config = MsvcConfig::StaticLib();
       break;
-    case ToolchainId::Clang:
     case ToolchainId::MinGW:
+      config = MingwConfig::StaticLib();
+      break;
+    case ToolchainId::Clang:
     default:
       env::assert_fatal<false>("Compiler ID not supported");
       break;
@@ -116,8 +120,10 @@ private:
     case ToolchainId::Msvc:
       config = MsvcConfig::DynamicLib();
       break;
-    case ToolchainId::Clang:
     case ToolchainId::MinGW:
+      config = MingwConfig::DynamicLib();
+      break;
+    case ToolchainId::Clang:
     default:
       env::assert_fatal<false>("Compiler ID not supported");
       break;
