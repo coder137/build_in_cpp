@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
   Args args;
 
   ArgToolchain custom_toolchain_arg;
-  args.AddToolchain("custom", "Host Toolchain", custom_toolchain_arg);
+  args.AddToolchain("host", "Host Toolchain", custom_toolchain_arg);
 
   // TODO, Add Verification subcommand here for OS, Compiler etc!
   // os win, linux considerations
