@@ -238,7 +238,9 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
                     "tiny-process-library",
                 env_.GetTargetBuildDir()));
   reg_.CallbackIf(state, global_flags_cb, tpl_lib, toolchain_);
-  reg_.Build(state, tpl_cb, tpl_lib);
+  TplConfig tpl_config;
+  tpl_config.os_id = get_host_os();
+  reg_.Build(state, tpl_cb, tpl_lib, tpl_config);
 
   // TODO, Make this a generic selection between StaticTarget and
   // DynamicTarget
