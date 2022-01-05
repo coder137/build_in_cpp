@@ -21,7 +21,6 @@ namespace buildcc {
 void cli11_ho_cb(TargetInfo &info) {
   info.AddIncludeDir("include");
   info.GlobHeaders("include/CLI");
-  // TODO, Add PCH
 }
 
 } // namespace buildcc
