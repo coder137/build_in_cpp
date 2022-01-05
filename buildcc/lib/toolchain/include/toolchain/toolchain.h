@@ -59,6 +59,9 @@ public:
   const std::string &GetLinker() const { return linker_; }
 
 private:
+  friend class ToolchainVerify<Toolchain>;
+
+private:
   Id id_;
   std::string name_;
   std::string asm_compiler_;

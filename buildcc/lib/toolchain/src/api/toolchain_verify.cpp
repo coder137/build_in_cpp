@@ -197,7 +197,7 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
   }
 
   std::vector<VerifiedToolchain> verified_toolchains;
-  const T &t = static_cast<const T &>(*this);
+  T &t = static_cast<T &>(*this);
 
   ToolchainMatcher matcher(t);
   matcher.FillWithToolchainFilenames();
@@ -233,11 +233,51 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
       vt.path = p;
       vt.compiler_version = env::trim(GetCompilerVersion(p, t).value_or(""));
       vt.target_arch = env::trim(GetCompilerArchitecture(p, t).value_or(""));
-      verified_toolchains.push_back(vt);
+
+      // Check add
+      bool add{true};
+      if (config.compiler_version.has_value()) {
+        add = add && (config.compiler_version.value() == vt.compiler_version);
+      }
+      if (config.target_arch.has_value()) {
+        add = add && (config.target_arch.value() == vt.target_arch);
+      }
+      if (add) {
+        verified_toolchains.push_back(vt);
+      }
     }
 
     // Reset
     matcher.FillWithToolchainFilenames();
+  }
+
+  if (config.update && !verified_toolchains.empty()) {
+    constexpr const char *os_executable_ext =
+        buildcc::env::get_os_executable_extension();
+    buildcc::env::assert_fatal<os_executable_ext != nullptr>(
+        "OS not supported");
+
+    verified_toolchain_ = verified_toolchains[0];
+    t.asm_compiler_ = (verified_toolchain_.path /
+                       fmt::format("{}{}", t.asm_compiler_, os_executable_ext))
+                          .make_preferred()
+                          .string();
+    t.c_compiler_ = (verified_toolchain_.path /
+                     fmt::format("{}{}", t.c_compiler_, os_executable_ext))
+                        .make_preferred()
+                        .string();
+    t.cpp_compiler_ = (verified_toolchain_.path /
+                       fmt::format("{}{}", t.cpp_compiler_, os_executable_ext))
+                          .make_preferred()
+                          .string();
+    t.archiver_ = (verified_toolchain_.path /
+                   fmt::format("{}{}", t.archiver_, os_executable_ext))
+                      .make_preferred()
+                      .string();
+    t.linker_ = (verified_toolchain_.path /
+                 fmt::format("{}{}", t.linker_, os_executable_ext))
+                    .make_preferred()
+                    .string();
   }
 
   return verified_toolchains;
