@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Niket Naidu. All rights reserved.
+ * Copyright 2021-2022 Niket Naidu. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 
 #include "buildcc.h"
+
+#include "buildexe/args_setup.h"
 
 #include "bootstrap/build_buildcc.h"
 #include "bootstrap/build_cli11.h"
@@ -33,50 +35,12 @@ enum class BuildExeMode {
   Script,
 };
 
-struct ArgTargetInfo {
-  std::string name;
-  TargetType type;
-  fs::path relative_to_root;
-};
-
-struct ArgTargetInputs {
-  // Sources
-  std::vector<fs::path> source_files;
-  std::vector<fs::path> include_dirs;
-
-  // External libs
-  std::vector<fs::path> lib_dirs;
-  std::vector<std::string> external_lib_deps;
-
-  // Flags
-  std::vector<std::string> preprocessor_flags;
-  std::vector<std::string> common_compile_flags;
-  std::vector<std::string> asm_compile_flags;
-  std::vector<std::string> c_compile_flags;
-  std::vector<std::string> cpp_compile_flags;
-  std::vector<std::string> link_flags;
-};
-
-struct ArgScriptInfo {
-  std::vector<std::string> configs;
-};
-
-static const std::unordered_map<const char *, TargetType> kTargetTypeMap{
-    {"executable", TargetType::Executable},
-    {"staticLibrary", TargetType::StaticLibrary},
-    {"dynamicLibrary", TargetType::DynamicLibrary},
-};
-
 static const std::unordered_map<const char *, BuildExeMode> kBuildExeModeMap{
     {"immediate", BuildExeMode::Immediate},
     {"script", BuildExeMode::Script},
 };
 
 static void clean_cb();
-
-static void setup_arg_target_info(Args &args, ArgTargetInfo &out);
-static void setup_arg_target_inputs(Args &args, ArgTargetInputs &out);
-static void setup_arg_script_mode(Args &args, ArgScriptInfo &out);
 
 static void host_toolchain_verify(const BaseToolchain &toolchain);
 
@@ -151,9 +115,6 @@ int main(int argc, char **argv) {
     counter++;
   }
 
-  // TODO, Update Toolchain with VerifiedToolchain
-  // toolchain.UpdateFrom(verified_toolchain);
-
   if (mode == BuildExeMode::Script) {
     host_toolchain_verify(toolchain);
   }
@@ -204,6 +165,9 @@ int main(int argc, char **argv) {
   // Runners
   reg.RunBuild();
 
+  env::log_info(kTag, fmt::format("************** Running '{}' **************",
+                                  out_targetinfo.name));
+
   // Run
   if (mode == BuildExeMode::Script) {
     std::vector<std::string> configs;
@@ -235,52 +199,6 @@ static void clean_cb() {
   fs::remove_all(env::get_project_build_dir());
 }
 
-// TODO, Add subcommand [build.info]
-static void setup_arg_target_info(Args &args, ArgTargetInfo &out) {
-  auto &app = args.Ref();
-
-  app.add_option("--name", out.name, "Provide Target name")->required();
-
-  app.add_option("--type", out.type, "Provide Target Type")
-      ->transform(CLI::CheckedTransformer(kTargetTypeMap, CLI::ignore_case))
-      ->required();
-
-  app.add_option("--relative_to_root", out.relative_to_root,
-                 "Provide Target relative to root")
-      ->required();
-}
-
-// TODO, Add subcommand [build.inputs]
-// TODO, Add group, group by sources, headers, inncludes on CLI
-static void setup_arg_target_inputs(Args &args, ArgTargetInputs &out) {
-  auto &app = args.Ref();
-
-  app.add_option("--srcs", out.source_files, "Provide source files");
-  app.add_option("--includes", out.include_dirs, "Provide include dirs");
-
-  app.add_option("--lib_dirs", out.lib_dirs, "Provide lib dirs");
-  app.add_option("--external_libs", out.external_lib_deps,
-                 "Provide external libs");
-
-  app.add_option("--preprocessor_flags", out.preprocessor_flags,
-                 "Provide Preprocessor flags");
-  app.add_option("--common_compile_flags", out.common_compile_flags,
-                 "Provide CommonCompile Flags");
-  app.add_option("--asm_compile_flags", out.asm_compile_flags,
-                 "Provide AsmCompile Flags");
-  app.add_option("--c_compile_flags", out.c_compile_flags,
-                 "Provide CCompile Flags");
-  app.add_option("--cpp_compile_flags", out.cpp_compile_flags,
-                 "Provide CppCompile Flags");
-  app.add_option("--link_flags", out.link_flags, "Provide Link Flags");
-}
-
-static void setup_arg_script_mode(Args &args, ArgScriptInfo &out) {
-  auto *script_args = args.Ref().add_subcommand("script");
-  script_args->add_option("--configs", out.configs,
-                          "Config files for script mode");
-}
-
 static void host_toolchain_verify(const BaseToolchain &toolchain) {
   env::log_info(kTag, "*** Starting Toolchain verification ***");
 
@@ -294,8 +212,10 @@ static void host_toolchain_verify(const BaseToolchain &toolchain) {
 namespace fs = std::filesystem;
 
 int main() {
+  std::cout << "********************" << std::endl;
   std::cout << "Verifying host toolchain" << std::endl;
   std::cout << "Current Path: " << fs::current_path() << std::endl;
+  std::cout << "********************" << std::endl;
   return 0;
 })";
   env::save_file(path_as_string(file).c_str(), file_data, false);
