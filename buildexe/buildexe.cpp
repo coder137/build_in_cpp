@@ -76,9 +76,7 @@ int main(int argc, char **argv) {
 
   BuildEnvSetup build_setup(reg, toolchain, out_targetinfo, out_targetinputs);
   if (out_mode == BuildExeMode::Script) {
-    build_setup.BuildccTarget();
     build_setup.UserTargetWithBuildcc();
-    build_setup.DepUserTargetOnBuildcc();
   } else {
     build_setup.UserTarget();
   }

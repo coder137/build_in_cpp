@@ -38,7 +38,28 @@ static fs::path get_env_buildcc_home() {
   return buildcc_home_path;
 }
 
-void BuildEnvSetup::BuildccTarget() {
+void BuildEnvSetup::UserTarget() {
+  UserTargetSetup();
+  UserTargetCb();
+  UserTargetBuild();
+}
+
+void BuildEnvSetup::UserTargetWithBuildcc() {
+  BuildccTargetSetup();
+  UserTargetSetup();
+  UserTargetCb();
+  UserTargetWithBuildccSetup();
+  UserTargetBuild();
+  DepUserTargetOnBuildcc();
+}
+
+// Private
+
+void BuildEnvSetup::DepUserTargetOnBuildcc() {
+  reg_.Dep(GetUserTarget(), GetBuildcc());
+}
+
+void BuildEnvSetup::BuildccTargetSetup() {
   fs::path buildcc_home = get_env_buildcc_home();
   auto &buildcc_package = storage_.Add<BuildBuildCC>(
       kBuildccPackageName, reg_, toolchain_,
@@ -47,30 +68,10 @@ void BuildEnvSetup::BuildccTarget() {
   buildcc_package.Setup(state_);
 }
 
-void BuildEnvSetup::UserTarget() {
-  UserTargetSetup();
-  UserTargetCb();
-  UserTargetBuild();
-}
-
-void BuildEnvSetup::UserTargetWithBuildcc() {
-  BuildccTarget();
-  UserTargetSetup();
-  UserTargetCb();
-  UserTargetWithBuildccSetup();
-  UserTargetBuild();
-}
-
-void BuildEnvSetup::DepUserTargetOnBuildcc() {
-  reg_.Dep(GetUserTarget(), GetBuildcc());
-}
-
-// Private
-
 void BuildEnvSetup::UserTargetSetup() {
-  Target_generic &user_target = storage_.Add<Target_generic>(
-      kUserTargetName, arg_target_info_.name, arg_target_info_.type, toolchain_,
-      TargetEnv(arg_target_info_.relative_to_root));
+  storage_.Add<Target_generic>(kUserTargetName, arg_target_info_.name,
+                               arg_target_info_.type, toolchain_,
+                               TargetEnv(arg_target_info_.relative_to_root));
 }
 
 /**
@@ -121,7 +122,10 @@ void BuildEnvSetup::UserTargetCb() {
   }
 }
 
-void BuildEnvSetup::UserTargetBuild() { GetUserTarget().Build(); }
+void BuildEnvSetup::UserTargetBuild() {
+  reg_.Build(
+      state_, [](BaseTarget &target) { target.Build(); }, GetUserTarget());
+}
 
 void BuildEnvSetup::UserTargetWithBuildccSetup() {
   GetUserTarget().AddLibDep(GetBuildcc());

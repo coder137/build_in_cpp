@@ -38,10 +38,8 @@ public:
     state_.build = true;
   }
 
-  void BuildccTarget();
   void UserTarget();
   void UserTargetWithBuildcc();
-  void DepUserTargetOnBuildcc();
 
   // Getters
   StaticTarget_generic &GetBuildcc() {
@@ -52,11 +50,13 @@ public:
   }
 
 private:
+  void BuildccTargetSetup();
   void UserTargetSetup();
   void UserTargetCb();
   void UserTargetBuild();
 
   void UserTargetWithBuildccSetup();
+  void DepUserTargetOnBuildcc();
 
 private:
   Register &reg_;
