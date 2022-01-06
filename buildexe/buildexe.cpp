@@ -42,8 +42,8 @@ static void user_output_target_cb(BaseTarget &target,
 int main(int argc, char **argv) {
   Args args;
 
-  ArgToolchain custom_toolchain_arg;
-  args.AddToolchain("host", "Host Toolchain", custom_toolchain_arg);
+  ArgToolchain host_toolchain_arg;
+  args.AddToolchain("host", "Host Toolchain", host_toolchain_arg);
 
   BuildExeMode out_mode;
   setup_arg_buildexe_mode(args, out_mode);
@@ -72,9 +72,9 @@ int main(int argc, char **argv) {
   reg.Clean(clean_cb);
 
   // Build
-  BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
+  BaseToolchain toolchain = host_toolchain_arg.ConstructToolchain();
 
-  // BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
+  // BaseToolchain toolchain = host_toolchain_arg.ConstructToolchain();
   auto verified_toolchains = toolchain.Verify();
   env::assert_fatal(!verified_toolchains.empty(),
                     "Toolchain could not be verified. Please input correct "
@@ -115,7 +115,7 @@ int main(int argc, char **argv) {
         "BuildccPackage", reg, toolchain,
         TargetEnv(buildcc_home / "buildcc",
                   buildcc_home / "buildcc" / "_build_exe"));
-    buildcc_package.Setup(custom_toolchain_arg.state);
+    buildcc_package.Setup(host_toolchain_arg.state);
 
     // Add buildcc as a dependency to user_output_target
     user_output_target.AddLibDep(buildcc_package.GetBuildcc());
@@ -139,8 +139,8 @@ int main(int argc, char **argv) {
     }
   }
 
-  reg.Build(custom_toolchain_arg.state, user_output_target_cb,
-            user_output_target, out_targetinputs);
+  reg.Build(host_toolchain_arg.state, user_output_target_cb, user_output_target,
+            out_targetinputs);
 
   if (out_mode == BuildExeMode::Script) {
     auto &buildcc_package = storage.Ref<BuildBuildCC>("BuildccPackage");
