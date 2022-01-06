@@ -84,3 +84,24 @@ This folder will contain the .toml files of all the HOST toolchains present on y
     target_arch = "x86_64-linux-gnu"
 
 .. important:: For **Windows**, make sure to use ``vcvarsall.bat [flavour]`` to activate your toolchain
+
+* Your ENV[BUILDCC_HOME] directory should look like the following
+
+.. uml::
+
+    @startmindmap
+    * ENV[BUILDCC_HOME]
+    ** bin
+    *** flatc
+    *** buildexe
+    ** buildcc
+    *** [git cloned]
+    ** extensions
+    *** [empty]
+    ** libs
+    *** [empty]
+    ** host
+    *** gcc_x86_64-linux-gnu_9.3.0.toml
+    *** mingw_x86_64-w64-mingw32_10.2.0.toml
+    *** msvc_am64_19.29.30137.toml
+    @endmindmap
