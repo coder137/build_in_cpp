@@ -113,7 +113,9 @@ int main(int argc, char **argv) {
     }
   }
 
-  reg.Build(host_toolchain_arg.state, user_output_target_cb, user_output_target,
+  ArgToolchainState user_output_state;
+  user_output_state.build = true;
+  reg.Build(user_output_state, user_output_target_cb, user_output_target,
             out_targetinputs);
 
   if (out_mode == BuildExeMode::Script) {
