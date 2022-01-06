@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+#ifndef BUILDEXE_TOOLCHAIN_SETUP_H_
+#define BUILDEXE_TOOLCHAIN_SETUP_H_
+
 #include "buildcc.h"
 
 namespace buildcc {
@@ -22,3 +25,5 @@ void find_toolchain_verify(BaseToolchain &toolchain);
 void host_toolchain_verify(const BaseToolchain &toolchain);
 
 } // namespace buildcc
+
+#endif

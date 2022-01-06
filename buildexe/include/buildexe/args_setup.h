@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+#ifndef BUILDEXE_ARGS_SETUP_H_
+#define BUILDEXE_ARGS_SETUP_H_
+
 #include "buildcc.h"
 
 namespace buildcc {
@@ -57,3 +60,5 @@ void setup_arg_target_inputs(Args &args, ArgTargetInputs &out);
 void setup_arg_script_mode(Args &args, ArgScriptInfo &out);
 
 } // namespace buildcc
+
+#endif
