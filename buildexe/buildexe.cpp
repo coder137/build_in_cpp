@@ -17,7 +17,7 @@
 #include "buildcc.h"
 
 #include "buildexe/args_setup.h"
-#include "buildexe/buildcc_setup.h"
+#include "buildexe/build_env_setup.h"
 #include "buildexe/toolchain_setup.h"
 
 #include "bootstrap/build_buildcc.h"
@@ -33,11 +33,6 @@ using namespace buildcc;
 constexpr const char *const kTag = "BuildExe";
 
 static void clean_cb();
-
-static void user_output_buildcc_dep_cb(BaseTarget &user_target,
-                                       BaseTarget &buildcc_target);
-static void user_output_target_cb(BaseTarget &target,
-                                  const ArgTargetInputs &inputs);
 
 // TODO, Add BuildExeMode::Script usage
 int main(int argc, char **argv) {
@@ -79,30 +74,13 @@ int main(int argc, char **argv) {
     host_toolchain_verify(toolchain);
   }
 
-  ArgToolchainState user_output_state;
-  user_output_state.build = true;
-
-  PersistentStorage storage;
-  Target_generic user_output_target(out_targetinfo.name, out_targetinfo.type,
-                                    toolchain,
-                                    TargetEnv(out_targetinfo.relative_to_root));
+  BuildEnvSetup build_setup(reg, toolchain, out_targetinfo, out_targetinputs);
   if (out_mode == BuildExeMode::Script) {
-    fs::path buildcc_home = get_env_buildcc_home();
-    auto &buildcc_package = storage.Add<BuildBuildCC>(
-        "BuildccPackage", reg, toolchain,
-        TargetEnv(buildcc_home / "buildcc",
-                  buildcc_home / "buildcc" / "_build_exe"));
-
-    buildcc_package.Setup(user_output_state);
-    user_output_buildcc_dep_cb(user_output_target,
-                               buildcc_package.GetBuildcc());
-  }
-  reg.Build(user_output_state, user_output_target_cb, user_output_target,
-            out_targetinputs);
-
-  if (out_mode == BuildExeMode::Script) {
-    auto &buildcc_package = storage.Ref<BuildBuildCC>("BuildccPackage");
-    reg.Dep(user_output_target, buildcc_package.GetBuildcc());
+    build_setup.BuildccTarget();
+    build_setup.UserTargetWithBuildcc();
+    build_setup.DepUserTargetOnBuildcc();
+  } else {
+    build_setup.UserTarget();
   }
 
   // Runners
@@ -125,14 +103,14 @@ int main(int argc, char **argv) {
         "{executable} {configs}",
         {
             {"executable",
-             fmt::format("{}", user_output_target.GetTargetPath())},
+             fmt::format("{}", build_setup.GetUserTarget().GetTargetPath())},
             {"configs", aggregated_configs},
         });
     env::Command::Execute(command_str);
   }
 
   // - Clang Compile Commands
-  plugin::ClangCompileCommands({&user_output_target}).Generate();
+  plugin::ClangCompileCommands({&build_setup.GetUserTarget()}).Generate();
 
   return 0;
 }
@@ -140,65 +118,4 @@ int main(int argc, char **argv) {
 static void clean_cb() {
   env::log_info(kTag, fmt::format("Cleaning {}", env::get_project_build_dir()));
   fs::remove_all(env::get_project_build_dir());
-}
-
-static void user_output_buildcc_dep_cb(BaseTarget &user_target,
-                                       BaseTarget &buildcc_target) {
-  // Add buildcc as a dependency to user_target
-  user_target.AddLibDep(buildcc_target);
-  user_target.Insert(buildcc_target, {
-                                         SyncOption::PreprocessorFlags,
-                                         SyncOption::CppCompileFlags,
-                                         SyncOption::IncludeDirs,
-                                         SyncOption::LinkFlags,
-                                         SyncOption::HeaderFiles,
-                                         SyncOption::IncludeDirs,
-                                         SyncOption::LibDeps,
-                                         SyncOption::ExternalLibDeps,
-                                     });
-  switch (user_target.GetToolchain().GetId()) {
-  case ToolchainId::MinGW:
-    user_target.AddLinkFlag("-Wl,--allow-multiple-definition");
-    break;
-  default:
-    break;
-  }
-}
-
-static void user_output_target_cb(BaseTarget &target,
-                                  const ArgTargetInputs &inputs) {
-  for (const auto &s : inputs.source_files) {
-    target.AddSource(s);
-  }
-  for (const auto &i : inputs.include_dirs) {
-    target.AddIncludeDir(i);
-  }
-
-  for (const auto &l : inputs.lib_dirs) {
-    target.AddLibDir(l);
-  }
-  for (const auto &el : inputs.external_lib_deps) {
-    target.AddLibDep(el);
-  }
-
-  for (const auto &flag : inputs.preprocessor_flags) {
-    target.AddPreprocessorFlag(flag);
-  }
-  for (const auto &flag : inputs.common_compile_flags) {
-    target.AddCommonCompileFlag(flag);
-  }
-  for (const auto &flag : inputs.asm_compile_flags) {
-    target.AddAsmCompileFlag(flag);
-  }
-  for (const auto &flag : inputs.c_compile_flags) {
-    target.AddCCompileFlag(flag);
-  }
-  for (const auto &flag : inputs.cpp_compile_flags) {
-    target.AddCppCompileFlag(flag);
-  }
-  for (const auto &flag : inputs.link_flags) {
-    target.AddLinkFlag(flag);
-  }
-
-  target.Build();
 }
