@@ -14,9 +14,42 @@
  * limitations under the License.
  */
 
+namespace {
+
+constexpr const char *const kTag = "BuildExe";
+
+}
+
 namespace buildcc {
 
+void find_toolchain_verify(BaseToolchain &toolchain) {
+  auto verified_toolchains = toolchain.Verify();
+  env::assert_fatal(!verified_toolchains.empty(),
+                    "Toolchain could not be verified. Please input correct "
+                    "Gcc, Msvc, Clang or MinGW toolchain executable names");
+  if (verified_toolchains.size() > 1) {
+    env::log_info(
+        kTag,
+        fmt::format(
+            "Found {} toolchains. By default using the first added"
+            "toolchain. Modify your environment `PATH` information if you "
+            "would like compiler precedence when similar compilers are "
+            "detected in different folders",
+            verified_toolchains.size()));
+  }
+
+  // Print
+  int counter = 1;
+  for (const auto &vt : verified_toolchains) {
+    std::string info = fmt::format("{}. : {}", counter, vt.ToString());
+    env::log_info("Host Toolchain", info);
+    counter++;
+  }
+}
+
 void host_toolchain_verify(const BaseToolchain &toolchain) {
+  env::log_info(kTag, "*** Starting Toolchain verification ***");
+
   fs::path file = env::get_project_build_dir() / "verify_host_toolchain" /
                   "verify_host_toolchain.cpp";
   fs::create_directories(file.parent_path());
@@ -64,6 +97,8 @@ int main() {
   bool execute = env::Command::Execute(fmt::format(
       "{executable}", fmt::arg("executable", target.GetTargetPath().string())));
   env::assert_fatal(execute, "Could not execute verification target");
+
+  env::log_info(kTag, "*** Toolchain verification done ***");
 }
 
 } // namespace buildcc

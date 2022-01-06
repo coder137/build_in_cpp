@@ -73,35 +73,9 @@ int main(int argc, char **argv) {
 
   // Build
   BaseToolchain toolchain = host_toolchain_arg.ConstructToolchain();
-
-  // BaseToolchain toolchain = host_toolchain_arg.ConstructToolchain();
-  auto verified_toolchains = toolchain.Verify();
-  env::assert_fatal(!verified_toolchains.empty(),
-                    "Toolchain could not be verified. Please input correct "
-                    "Gcc, Msvc, Clang or MinGW toolchain executable names");
-  if (verified_toolchains.size() > 1) {
-    env::log_info(
-        kTag,
-        fmt::format(
-            "Found {} toolchains. By default using the first added"
-            "toolchain. Modify your environment `PATH` information if you "
-            "would like compiler precedence when similar compilers are "
-            "detected in different folders",
-            verified_toolchains.size()));
-  }
-
-  // Print
-  int counter = 1;
-  for (const auto &vt : verified_toolchains) {
-    std::string info = fmt::format("{}. : {}", counter, vt.ToString());
-    env::log_info("Host Toolchain", info);
-    counter++;
-  }
-
+  find_toolchain_verify(toolchain);
   if (out_mode == BuildExeMode::Script) {
-    env::log_info(kTag, "*** Starting Toolchain verification ***");
     host_toolchain_verify(toolchain);
-    env::log_info(kTag, "*** Toolchain verification done ***");
   }
 
   PersistentStorage storage;
