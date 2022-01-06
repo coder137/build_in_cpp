@@ -1,14 +1,17 @@
 Getting Started
 =================
 
-Pre-requisites
-----------------
+.. toctree::
 
-Installation and Setup
------------------------
+    setup
+
+Usage through BuildExe
+----------------------
+
+Usage through CMake
+-------------------
 
 Walkthroughs
 -------------
 
 .. note:: Add walkthroughs and example snippets of increasing complexity
-
