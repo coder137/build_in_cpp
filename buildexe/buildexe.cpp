@@ -17,6 +17,7 @@
 #include "buildcc.h"
 
 #include "buildexe/args_setup.h"
+#include "buildexe/buildcc_setup.h"
 #include "buildexe/toolchain_setup.h"
 
 #include "bootstrap/build_buildcc.h"
@@ -33,8 +34,8 @@ constexpr const char *const kTag = "BuildExe";
 
 static void clean_cb();
 
-static fs::path get_env_buildcc_home();
-
+static void user_output_buildcc_dep_cb(BaseTarget &user_target,
+                                       BaseTarget &buildcc_target);
 static void user_output_target_cb(BaseTarget &target,
                                   const ArgTargetInputs &inputs);
 
@@ -78,43 +79,24 @@ int main(int argc, char **argv) {
     host_toolchain_verify(toolchain);
   }
 
+  ArgToolchainState user_output_state;
+  user_output_state.build = true;
+
   PersistentStorage storage;
   Target_generic user_output_target(out_targetinfo.name, out_targetinfo.type,
                                     toolchain,
                                     TargetEnv(out_targetinfo.relative_to_root));
   if (out_mode == BuildExeMode::Script) {
-    // Compile buildcc using the constructed toolchain
     fs::path buildcc_home = get_env_buildcc_home();
     auto &buildcc_package = storage.Add<BuildBuildCC>(
         "BuildccPackage", reg, toolchain,
         TargetEnv(buildcc_home / "buildcc",
                   buildcc_home / "buildcc" / "_build_exe"));
-    buildcc_package.Setup(host_toolchain_arg.state);
 
-    // Add buildcc as a dependency to user_output_target
-    user_output_target.AddLibDep(buildcc_package.GetBuildcc());
-    user_output_target.Insert(buildcc_package.GetBuildcc(),
-                              {
-                                  SyncOption::PreprocessorFlags,
-                                  SyncOption::CppCompileFlags,
-                                  SyncOption::IncludeDirs,
-                                  SyncOption::LinkFlags,
-                                  SyncOption::HeaderFiles,
-                                  SyncOption::IncludeDirs,
-                                  SyncOption::LibDeps,
-                                  SyncOption::ExternalLibDeps,
-                              });
-    switch (toolchain.GetId()) {
-    case ToolchainId::MinGW:
-      user_output_target.AddLinkFlag("-Wl,--allow-multiple-definition");
-      break;
-    default:
-      break;
-    }
+    buildcc_package.Setup(user_output_state);
+    user_output_buildcc_dep_cb(user_output_target,
+                               buildcc_package.GetBuildcc());
   }
-
-  ArgToolchainState user_output_state;
-  user_output_state.build = true;
   reg.Build(user_output_state, user_output_target_cb, user_output_target,
             out_targetinputs);
 
@@ -160,24 +142,27 @@ static void clean_cb() {
   fs::remove_all(env::get_project_build_dir());
 }
 
-static fs::path get_env_buildcc_home() {
-  const char *buildcc_home = getenv("BUILDCC_HOME");
-  env::assert_fatal(buildcc_home != nullptr,
-                    "BUILDCC_HOME environment variable not defined");
-
-  // NOTE, Verify BUILDCC_HOME
-  // auto &buildcc_path = storage.Add<fs::path>("buildcc_path", buildcc_home);
-  fs::path buildcc_home_path{buildcc_home};
-  env::assert_fatal(fs::exists(buildcc_home_path),
-                    "{BUILDCC_HOME} path not found path not found");
-  env::assert_fatal(fs::exists(buildcc_home_path / "buildcc"),
-                    "{BUILDCC_HOME}/buildcc path not found");
-  env::assert_fatal(fs::exists(buildcc_home_path / "libs"),
-                    "{BUILDCC_HOME}/libs path not found");
-  env::assert_fatal(fs::exists(buildcc_home_path / "extensions"),
-                    "{BUILDCC_HOME}/extensions path not found");
-
-  return buildcc_home_path;
+static void user_output_buildcc_dep_cb(BaseTarget &user_target,
+                                       BaseTarget &buildcc_target) {
+  // Add buildcc as a dependency to user_target
+  user_target.AddLibDep(buildcc_target);
+  user_target.Insert(buildcc_target, {
+                                         SyncOption::PreprocessorFlags,
+                                         SyncOption::CppCompileFlags,
+                                         SyncOption::IncludeDirs,
+                                         SyncOption::LinkFlags,
+                                         SyncOption::HeaderFiles,
+                                         SyncOption::IncludeDirs,
+                                         SyncOption::LibDeps,
+                                         SyncOption::ExternalLibDeps,
+                                     });
+  switch (user_target.GetToolchain().GetId()) {
+  case ToolchainId::MinGW:
+    user_target.AddLinkFlag("-Wl,--allow-multiple-definition");
+    break;
+  default:
+    break;
+  }
 }
 
 static void user_output_target_cb(BaseTarget &target,
