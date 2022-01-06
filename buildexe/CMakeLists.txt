@@ -3,6 +3,9 @@ add_executable(buildexe
 
     src/args_setup.cpp
     include/buildexe/args_setup.h
+
+    src/toolchain_setup.cpp
+    include/buildexe/toolchain_setup.h
 )
 target_sources(buildexe PRIVATE
     ../bootstrap/src/build_buildcc.cpp
