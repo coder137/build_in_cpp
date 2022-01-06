@@ -18,11 +18,23 @@
 
 namespace buildcc {
 
+static const std::unordered_map<const char *, BuildExeMode> kBuildExeModeMap{
+    {"immediate", BuildExeMode::Immediate},
+    {"script", BuildExeMode::Script},
+};
+
 static const std::unordered_map<const char *, TargetType> kTargetTypeMap{
     {"executable", TargetType::Executable},
     {"staticLibrary", TargetType::StaticLibrary},
     {"dynamicLibrary", TargetType::DynamicLibrary},
 };
+
+void setup_arg_buildexe_mode(Args &args, BuildExeMode &out) {
+  args.Ref()
+      .add_option("--mode", out, "Provide BuildExe run mode")
+      ->transform(CLI::CheckedTransformer(kBuildExeModeMap, CLI::ignore_case))
+      ->required();
+}
 
 // TODO, Add subcommand [build.info]
 void setup_arg_target_info(Args &args, ArgTargetInfo &out) {

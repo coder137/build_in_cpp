@@ -31,16 +31,6 @@ using namespace buildcc;
 
 constexpr const char *const kTag = "BuildExe";
 
-enum class BuildExeMode {
-  Immediate,
-  Script,
-};
-
-static const std::unordered_map<const char *, BuildExeMode> kBuildExeModeMap{
-    {"immediate", BuildExeMode::Immediate},
-    {"script", BuildExeMode::Script},
-};
-
 static void clean_cb();
 
 static fs::path get_env_buildcc_home();
@@ -49,23 +39,14 @@ static void user_output_target_cb(BaseTarget &target,
                                   const ArgTargetInputs &inputs);
 
 // TODO, Add BuildExeMode::Script usage
-// TODO, Refactor magic strings
 int main(int argc, char **argv) {
   Args args;
 
   ArgToolchain custom_toolchain_arg;
   args.AddToolchain("host", "Host Toolchain", custom_toolchain_arg);
 
-  // TODO, Add Verification subcommand here for OS, Compiler etc!
-  // os win, linux considerations
-  // compiler gcc, msvc considerations
-  // arch considerations
-
-  BuildExeMode mode;
-  args.Ref()
-      .add_option("--mode", mode, "Provide BuildExe run mode")
-      ->transform(CLI::CheckedTransformer(kBuildExeModeMap, CLI::ignore_case))
-      ->required();
+  BuildExeMode out_mode;
+  setup_arg_buildexe_mode(args, out_mode);
 
   ArgTargetInfo out_targetinfo;
   setup_arg_target_info(args, out_targetinfo);
@@ -76,13 +57,16 @@ int main(int argc, char **argv) {
   ArgScriptInfo out_scriptinfo;
   setup_arg_script_mode(args, out_scriptinfo);
 
-  // script mode specific arguments
+  args.Parse(argc, argv);
+
+  // TODO, Add Verification subcommand here for OS, Compiler etc!
+  // os win, linux considerations
+  // compiler gcc, msvc considerations
+  // arch considerations
 
   // TODO, Add buildcc (git cloned)
   // TODO, Add libraries (git cloned)
   // TODO, Add extension (git cloned)
-
-  args.Parse(argc, argv);
 
   Register reg(args);
   reg.Clean(clean_cb);
@@ -114,7 +98,7 @@ int main(int argc, char **argv) {
     counter++;
   }
 
-  if (mode == BuildExeMode::Script) {
+  if (out_mode == BuildExeMode::Script) {
     env::log_info(kTag, "*** Starting Toolchain verification ***");
     host_toolchain_verify(toolchain);
     env::log_info(kTag, "*** Toolchain verification done ***");
@@ -124,7 +108,7 @@ int main(int argc, char **argv) {
   Target_generic user_output_target(out_targetinfo.name, out_targetinfo.type,
                                     toolchain,
                                     TargetEnv(out_targetinfo.relative_to_root));
-  if (mode == BuildExeMode::Script) {
+  if (out_mode == BuildExeMode::Script) {
     // Compile buildcc using the constructed toolchain
     fs::path buildcc_home = get_env_buildcc_home();
     auto &buildcc_package = storage.Add<BuildBuildCC>(
@@ -158,7 +142,7 @@ int main(int argc, char **argv) {
   reg.Build(custom_toolchain_arg.state, user_output_target_cb,
             user_output_target, out_targetinputs);
 
-  if (mode == BuildExeMode::Script) {
+  if (out_mode == BuildExeMode::Script) {
     auto &buildcc_package = storage.Ref<BuildBuildCC>("BuildccPackage");
     reg.Dep(user_output_target, buildcc_package.GetBuildcc());
   }
@@ -170,7 +154,7 @@ int main(int argc, char **argv) {
                                   out_targetinfo.name));
 
   // Run
-  if (mode == BuildExeMode::Script) {
+  if (out_mode == BuildExeMode::Script) {
     std::vector<std::string> configs;
     for (const auto &c : out_scriptinfo.configs) {
       std::string config = fmt::format("--config {}", c);

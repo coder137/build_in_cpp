@@ -18,6 +18,11 @@
 
 namespace buildcc {
 
+enum class BuildExeMode {
+  Immediate,
+  Script,
+};
+
 struct ArgTargetInfo {
   std::string name;
   TargetType type;
@@ -46,6 +51,7 @@ struct ArgScriptInfo {
   std::vector<std::string> configs;
 };
 
+void setup_arg_buildexe_mode(Args &args, BuildExeMode &out);
 void setup_arg_target_info(Args &args, ArgTargetInfo &out);
 void setup_arg_target_inputs(Args &args, ArgTargetInputs &out);
 void setup_arg_script_mode(Args &args, ArgScriptInfo &out);
