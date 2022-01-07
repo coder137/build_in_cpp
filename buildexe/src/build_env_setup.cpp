@@ -38,19 +38,39 @@ static fs::path get_env_buildcc_home() {
   return buildcc_home_path;
 }
 
-void BuildEnvSetup::UserTarget() {
+void BuildEnvSetup::ConstructUserTarget() {
   UserTargetSetup();
   UserTargetCb();
   UserTargetBuild();
 }
 
-void BuildEnvSetup::UserTargetWithBuildcc() {
+void BuildEnvSetup::ConstructUserTargetWithBuildcc() {
   BuildccTargetSetup();
   UserTargetSetup();
   UserTargetCb();
   UserTargetWithBuildccSetup();
   UserTargetBuild();
   DepUserTargetOnBuildcc();
+}
+
+void BuildEnvSetup::RunUserTarget(const ArgScriptInfo &arg_script_info) {
+  // Aggregate the different input build .toml files to
+  // `--config .toml` files
+  std::vector<std::string> configs;
+  std::transform(arg_script_info.configs.begin(), arg_script_info.configs.end(),
+                 std::back_inserter(configs),
+                 [](const std::string &c) -> std::string {
+                   return fmt::format("--config {}", c);
+                 });
+  std::string aggregated_configs = fmt::format("{}", fmt::join(configs, " "));
+
+  // Construct and execute with user target on subprocess
+  std::string command_str =
+      fmt::format("{executable} {configs}",
+                  fmt::arg("executable",
+                           fmt::format("{}", GetUserTarget().GetTargetPath())),
+                  fmt::arg("configs", aggregated_configs));
+  env::Command::Execute(command_str);
 }
 
 // Private

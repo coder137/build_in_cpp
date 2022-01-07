@@ -74,37 +74,23 @@ int main(int argc, char **argv) {
     host_toolchain_verify(toolchain);
   }
 
+  // Build environment
   BuildEnvSetup build_setup(reg, toolchain, out_targetinfo, out_targetinputs);
   if (out_mode == BuildExeMode::Script) {
-    build_setup.UserTargetWithBuildcc();
+    // buildcc and user target
+    build_setup.ConstructUserTargetWithBuildcc();
   } else {
-    build_setup.UserTarget();
+    // user target
+    build_setup.ConstructUserTarget();
   }
-
-  // Runners
   reg.RunBuild();
-
-  env::log_info(kTag, fmt::format("************** Running '{}' **************",
-                                  out_targetinfo.name));
 
   // Run
   if (out_mode == BuildExeMode::Script) {
-    std::vector<std::string> configs;
-    for (const auto &c : out_scriptinfo.configs) {
-      std::string config = fmt::format("--config {}", c);
-      configs.push_back(config);
-    }
-    std::string aggregated_configs = fmt::format("{}", fmt::join(configs, " "));
-
-    env::Command command;
-    std::string command_str = command.Construct(
-        "{executable} {configs}",
-        {
-            {"executable",
-             fmt::format("{}", build_setup.GetUserTarget().GetTargetPath())},
-            {"configs", aggregated_configs},
-        });
-    env::Command::Execute(command_str);
+    env::log_info(kTag,
+                  fmt::format("************** Running '{}' **************",
+                              out_targetinfo.name));
+    build_setup.RunUserTarget(out_scriptinfo);
   }
 
   // - Clang Compile Commands

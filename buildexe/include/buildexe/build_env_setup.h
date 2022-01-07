@@ -38,8 +38,10 @@ public:
     state_.build = true;
   }
 
-  void UserTarget();
-  void UserTargetWithBuildcc();
+  void ConstructUserTarget();
+  void ConstructUserTargetWithBuildcc();
+
+  void RunUserTarget(const ArgScriptInfo &arg_script_info);
 
   // Getters
   StaticTarget_generic &GetBuildcc() {
