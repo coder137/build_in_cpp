@@ -105,3 +105,6 @@ This folder will contain the .toml files of all the HOST toolchains present on y
     *** mingw_x86_64-w64-mingw32_10.2.0.toml
     *** msvc_am64_19.29.30137.toml
     @endmindmap
+
+
+.. note:: **Extensions** and **Libs** will come later in the tutorial
