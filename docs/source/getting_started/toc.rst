@@ -4,9 +4,9 @@ Getting Started
 .. toctree::
 
     setup
+    usage_buildexe
 
-Usage through BuildExe
-----------------------
+
 
 Usage through CMake
 -------------------
