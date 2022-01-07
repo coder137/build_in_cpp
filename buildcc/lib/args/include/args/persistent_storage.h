@@ -48,7 +48,7 @@ public:
     metadata.ptr = (void *)ptr;
     metadata.typeid_name = typeid(T).name();
     metadata.destructor = [this, identifier, ptr]() {
-      env::log_info("Cleaning", identifier);
+      env::log_trace("Cleaning", identifier);
       Remove<T>(ptr);
     };
     ptrs_.emplace(identifier, metadata);
