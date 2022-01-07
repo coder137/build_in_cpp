@@ -8,10 +8,7 @@ constexpr const char *const EXE = "build";
 static void clean_cb();
 static void hello_world_build_cb(BaseTarget &target);
 
-static PersistentStorage storage;
 int main(int argc, char **argv) {
-  std::atexit([]() { env::log_info("Cleaning", ""); });
-
   // 1. Get arguments
   Args args;
   ArgToolchain arg_gcc;
@@ -26,13 +23,7 @@ int main(int argc, char **argv) {
 
   // 4. Build steps
   // Explicit toolchain - target pairs
-  // Toolchain_gcc gcc;
-
-  // PersistentStorage storage;
-  Toolchain_gcc &gcc = storage.Add<Toolchain_gcc>("toolchain_gcc");
-  storage.Add<ExecutableTarget_gcc>("hello_world", "hello_world", gcc, "");
-
-  return 0;
+  Toolchain_gcc gcc;
 
   ExecutableTarget_gcc hello_world("hello_world", gcc, "");
   auto verified_toolchains = gcc.Verify();
