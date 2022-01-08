@@ -4,7 +4,7 @@ Getting Started
 .. toctree::
 
     buildexe_setup
-    buildexe_getting_started
+    buildexe_script_example
     all_compile_options
     all_default_build_options
 
