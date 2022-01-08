@@ -1,6 +1,9 @@
 add_executable(buildexe
     buildexe.cpp
 
+    src/build_env_home.cpp
+    include/buildexe/build_env_home.h
+
     src/args_setup.cpp
     include/buildexe/args_setup.h
 
