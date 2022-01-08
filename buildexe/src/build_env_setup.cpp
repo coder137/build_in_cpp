@@ -34,7 +34,12 @@ void BuildEnvSetup::ConstructUserTargetWithBuildcc() {
   DepUserTargetOnBuildcc();
 }
 
+constexpr const char *const kTag = "BuildExe";
+
 void BuildEnvSetup::RunUserTarget(const ArgScriptInfo &arg_script_info) {
+  env::log_info(kTag, fmt::format("************** Running '{}' **************",
+                                  arg_target_info_.name));
+
   // Aggregate the different input build .toml files to
   // `--config .toml` files
   std::vector<std::string> configs;

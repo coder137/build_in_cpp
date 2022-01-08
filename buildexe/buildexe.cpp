@@ -17,6 +17,7 @@
 #include "buildcc.h"
 
 #include "buildexe/args_setup.h"
+#include "buildexe/build_env_home.h"
 #include "buildexe/build_env_setup.h"
 #include "buildexe/toolchain_setup.h"
 
@@ -35,24 +36,13 @@ constexpr const char *const kTag = "BuildExe";
 static void clean_cb();
 
 int main(int argc, char **argv) {
-  Args args;
+  //
+  BuildccHome::Init();
 
-  ArgToolchain host_toolchain_arg;
-  args.AddToolchain("host", "Host Toolchain", host_toolchain_arg);
-
-  BuildExeMode out_mode;
-  setup_arg_buildexe_mode(args, out_mode);
-
-  ArgTargetInfo out_targetinfo;
-  setup_arg_target_info(args, out_targetinfo);
-
-  ArgTargetInputs out_targetinputs;
-  setup_arg_target_inputs(args, out_targetinputs);
-
-  ArgScriptInfo out_scriptinfo;
-  setup_arg_script_mode(args, out_scriptinfo);
-
-  args.Parse(argc, argv);
+  //
+  BuildExeArgs buildexe_args;
+  buildexe_args.Setup();
+  buildexe_args.Parse(argc, argv);
 
   // TODO, Add Verification subcommand here for OS, Compiler etc!
   // os win, linux considerations
@@ -63,19 +53,21 @@ int main(int argc, char **argv) {
   // TODO, Add libraries (git cloned)
   // TODO, Add extension (git cloned)
 
-  Register reg(args);
+  Register reg(buildexe_args.GetArgs());
   reg.Clean(clean_cb);
 
   // Build
-  BaseToolchain toolchain = host_toolchain_arg.ConstructToolchain();
+  BaseToolchain toolchain =
+      buildexe_args.GetHostToolchainArg().ConstructToolchain();
   find_toolchain_verify(toolchain);
-  if (out_mode == BuildExeMode::Script) {
+  if (buildexe_args.GetBuildMode() == BuildExeMode::Script) {
     host_toolchain_verify(toolchain);
   }
 
   // Build environment
-  BuildEnvSetup build_setup(reg, toolchain, out_targetinfo, out_targetinputs);
-  if (out_mode == BuildExeMode::Script) {
+  BuildEnvSetup build_setup(reg, toolchain, buildexe_args.GetTargetInfo(),
+                            buildexe_args.GetTargetInputs());
+  if (buildexe_args.GetBuildMode() == BuildExeMode::Script) {
     // buildcc and user target
     build_setup.ConstructUserTargetWithBuildcc();
   } else {
@@ -85,11 +77,9 @@ int main(int argc, char **argv) {
   reg.RunBuild();
 
   // Run
-  if (out_mode == BuildExeMode::Script) {
-    env::log_info(kTag,
-                  fmt::format("************** Running '{}' **************",
-                              out_targetinfo.name));
-    build_setup.RunUserTarget(out_scriptinfo);
+  if (buildexe_args.GetBuildMode() == BuildExeMode::Script) {
+
+    build_setup.RunUserTarget(buildexe_args.GetScriptInfo());
   }
 
   // - Clang Compile Commands
