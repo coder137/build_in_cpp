@@ -45,3 +45,50 @@ The "immediate" mode has a lot of limitations but it is also useful in certain s
    * build.toml contains the target information.
    * host_or_cross_toolchain.toml contains the host/cross toolchain information
    * We can combine the two into one .toml file.
+
+
+Helloworld "immediate" example
+------------------------------
+
+* Write your ``build.toml`` file
+* Invoke ``buildexe`` from the command line from the **[workspace]** folder
+   * Pay attention to the ``root_dir`` and ``build_dir`` parameters set in your ``build.toml`` file. 
+   * These directories are relative to the directory from which you **invoke** buildexe
+
+.. code-block:: bash
+
+    ./buildexe --config build.toml --config $BUILDCC_HOME/host/host_toolchain.toml
+
+* Your target will now be present in ``[build_dir]/[toolchain_name]/[target_name]`` (taken from ``build.toml``)
+
+Directory structure
+++++++++++++++++++++
+
+.. uml::
+    
+    @startmindmap
+    * [workspace]
+    ** [src]
+    *** main.cpp
+    ** build.toml 
+    @endmindmap
+
+Write your ``build.toml`` file
++++++++++++++++++++++++++++++++
+
+.. code-block:: toml
+
+    # Settings
+    root_dir = ""
+    build_dir = "_build"
+    loglevel = "info"
+    clean = false
+
+    # BuildExe run mode
+    mode = "immediate"
+
+    # Target information
+    name = "hello_world"
+    type = "executable"
+    relative_to_root = "src"
+    srcs = ["main.cpp"]
