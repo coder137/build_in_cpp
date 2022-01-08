@@ -3,6 +3,9 @@ Compile Options for BuildExe
 
 We can pass in configuration parameters through the Command Line but writing them inside a ``.toml`` file and passing it through the ``--config`` flag is much easier.
 
+Command Line options
+---------------------
+
 .. code-block:: shell
 
     BuildCC buildsystem
@@ -58,7 +61,12 @@ We can pass in configuration parameters through the Command Line but writing the
     Options:
         --configs TEXT ...          Config files for script mode
 
-**TOML** file equivalent. You can also read `CLI11 README <https://github.com/CLIUtils/CLI11>`_
+TOML file options
+-------------------
+
+Relate the options below with the **Command Line options** above.
+
+You can also read the `CLI11 README <https://github.com/CLIUtils/CLI11>`_
 
 .. code-block:: toml
 
