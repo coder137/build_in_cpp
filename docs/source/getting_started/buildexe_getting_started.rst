@@ -24,8 +24,8 @@ Since we are writing our scripts in C++ we first need to **compile** our "script
     build_toml -up-> build_project_exe
     build_project_exe -right-> hello_world_exe
 
-Helloworld example
-------------------
+Helloworld "script" example
+---------------------------
 
 * Write your C++ "script"
 * Write your ``compile.toml`` file
