@@ -40,12 +40,6 @@ void BuildExeArgs::Setup() {
 }
 
 void BuildExeArgs::SetupLibs() {
-  CLI::callback_t results_cb =
-      [&](const std::vector<std::string> &data) -> bool {
-    lib_build_files_.push_back(data);
-    return true;
-  };
-
   auto *libs_app = args_.Ref().add_subcommand("libs", "Libraries");
   std::error_code ec;
   fs::directory_iterator dir_iter =
@@ -57,10 +51,17 @@ void BuildExeArgs::SetupLibs() {
     if (!dir.is_directory()) {
       continue;
     }
-
-    std::string lib_name = dir.path().filename().string();
+    fs::path lib_path = dir.path();
+    std::string lib_name = lib_path.filename().string();
     libs_app->add_option_function<std::vector<std::string>>(
-        fmt::format("--{}", lib_name), results_cb,
+        fmt::format("--{}", lib_name),
+        [&lib_path, this](const std::vector<std::string> &paths) -> bool {
+          for (const auto &p : paths) {
+            fs::path absolute_file_path = lib_path / p;
+            lib_build_files_.push_back(absolute_file_path);
+          }
+          return true;
+        },
         fmt::format("{} library", lib_name));
   }
 }

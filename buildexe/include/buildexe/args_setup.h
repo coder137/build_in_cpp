@@ -83,7 +83,7 @@ private:
   ArgScriptInfo out_scriptinfo_;
 
   BuildExeMode out_mode_;
-  std::vector<std::vector<std::string>> lib_build_files_;
+  std::vector<fs::path> lib_build_files_;
 };
 
 void setup_arg_buildexe_mode(Args &args, BuildExeMode &out);
