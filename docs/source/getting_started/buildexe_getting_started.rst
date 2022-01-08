@@ -1,4 +1,4 @@
-Getting started with BuildExe
+BuildExe "Script" example
 =============================
 
 Basic Procedure

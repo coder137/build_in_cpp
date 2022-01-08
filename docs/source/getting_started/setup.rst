@@ -1,5 +1,5 @@
-Setup
-========
+BuildExe Setup
+==============
 
 ENV[BUILDCC_HOME]
 -----------------
