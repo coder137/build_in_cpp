@@ -2,7 +2,7 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="User API" href="../user_api/toc.html" /><link rel="prev" title="Style Guide" href="../arch/style_guide.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="BuildExe Setup" href="buildexe_setup.html" /><link rel="prev" title="Style Guide" href="../arch/style_guide.html" />
 
     <meta name="generator" content="sphinx-4.3.2, furo 2022.01.02"/>
         <title>Getting Started - BuildCC 0.1.1 documentation</title>
@@ -133,7 +133,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -168,8 +168,16 @@
 <li class="toctree-l2"><a class="reference internal" href="../arch/style_guide.html">Style Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Getting Started</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Getting Started</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="buildexe_setup.html">BuildExe Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildexe_script_example.html">BuildExe “Script” example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildexe_immediate_example.html">BuildExe “Immediate” example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="walkthroughs.html">Walkthrough Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="all_compile_options.html">Compile Options for BuildExe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="all_default_build_options.html">Build Options for “scripts”</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/environment.html">Environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
@@ -182,7 +190,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/toc.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/toc.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples/hybrid.html">Hybrid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/gcc.html">GCC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/msvc.html">MSVC</a></li>
@@ -210,7 +218,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -218,18 +226,48 @@
         <article role="main">
           <div class="section" id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="pre-requisites">
-<h2>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="installation-and-setup">
-<h2>Installation and Setup<a class="headerlink" href="#installation-and-setup" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="walkthroughs">
-<h2>Walkthroughs<a class="headerlink" href="#walkthroughs" title="Permalink to this headline">¶</a></h2>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Add walkthroughs and example snippets of increasing complexity</p>
-</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="buildexe_setup.html">BuildExe Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="buildexe_setup.html#env-buildcc-home">ENV[BUILDCC_HOME]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildexe_setup.html#host-toolchains">Host Toolchains</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="buildexe_script_example.html">BuildExe “Script” example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="buildexe_script_example.html#basic-procedure">Basic Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildexe_script_example.html#helloworld-script-example">Helloworld “script” example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="buildexe_script_example.html#directory-structure">Directory structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="buildexe_script_example.html#write-your-c-script">Write your C++ “script”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="buildexe_script_example.html#write-your-compile-toml-file">Write your <code class="docutils literal notranslate"><span class="pre">compile.toml</span></code> file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="buildexe_script_example.html#write-your-build-toml-file">Write your <code class="docutils literal notranslate"><span class="pre">build.toml</span></code> file</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="buildexe_immediate_example.html">BuildExe “Immediate” example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="buildexe_immediate_example.html#basic-procedure">Basic Procedure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="buildexe_immediate_example.html#what-is-the-point-of-the-script-mode-then">What is the point of the “script” mode then?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="buildexe_immediate_example.html#helloworld-immediate-example">Helloworld “immediate” example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="buildexe_immediate_example.html#directory-structure">Directory structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="buildexe_immediate_example.html#write-your-build-toml-file">Write your <code class="docutils literal notranslate"><span class="pre">build.toml</span></code> file</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="walkthroughs.html">Walkthrough Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="all_compile_options.html">Compile Options for BuildExe</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="all_compile_options.html#command-line-options">Command Line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="all_compile_options.html#toml-file-options">TOML file options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="all_default_build_options.html">Build Options for “scripts”</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="all_default_build_options.html#command-line-options">Command Line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="all_default_build_options.html#toml-file-options">TOML file options</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 
@@ -238,12 +276,12 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../user_api/toc.html">
+          <a class="next-page" href="buildexe_setup.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">User API</div>
+                <div class="title">BuildExe Setup</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -272,29 +310,8 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            Contents
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Getting Started</a><ul>
-<li><a class="reference internal" href="#pre-requisites">Pre-requisites</a></li>
-<li><a class="reference internal" href="#installation-and-setup">Installation and Setup</a></li>
-<li><a class="reference internal" href="#walkthroughs">Walkthroughs</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

@@ -168,8 +168,16 @@
 <li class="toctree-l2"><a class="reference internal" href="../arch/style_guide.html">Style Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_setup.html">BuildExe Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_script_example.html">BuildExe “Script” example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_immediate_example.html">BuildExe “Immediate” example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/walkthroughs.html">Walkthrough Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/all_compile_options.html">Compile Options for BuildExe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/all_default_build_options.html">Build Options for “scripts”</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/environment.html">Environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
@@ -182,7 +190,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Hybrid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gcc.html">GCC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="msvc.html">MSVC</a></li>
@@ -398,14 +406,14 @@
 <span class="linenos">35</span>
 <span class="linenos">36</span><span class="w">    </span><span class="c1">// Toolchain specific code goes here</span>
 <span class="linenos">37</span><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">cppflags</span><span class="p">.</span><span class="n">GetToolchain</span><span class="p">().</span><span class="n">GetId</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">38</span><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Gcc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">38</span><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="n">Gcc</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="linenos">39</span><span class="w">        </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"-DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">40</span><span class="w">        </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"-Wall"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">41</span><span class="w">        </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"-Werror"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">42</span><span class="w">        </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddLinkFlag</span><span class="p">(</span><span class="s">"-lm"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">43</span><span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">44</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="linenos">45</span><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Msvc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">45</span><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="n">Msvc</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="linenos">46</span><span class="w">        </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"/DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">47</span><span class="w">        </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"/W4"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">48</span><span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
@@ -422,14 +430,14 @@
 <span class="linenos">59</span>
 <span class="linenos">60</span><span class="w">    </span><span class="c1">// Toolchain specific code goes here</span>
 <span class="linenos">61</span><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">cflags</span><span class="p">.</span><span class="n">GetToolchain</span><span class="p">().</span><span class="n">GetId</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">62</span><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Gcc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">62</span><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="n">Gcc</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="linenos">63</span><span class="w">        </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"-DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">64</span><span class="w">        </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">"-Wall"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">65</span><span class="w">        </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">"-Werror"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">66</span><span class="w">        </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddLinkFlag</span><span class="p">(</span><span class="s">"-lm"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">67</span><span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">68</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="linenos">69</span><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Msvc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">69</span><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="n">Msvc</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="linenos">70</span><span class="w">        </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"/DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">71</span><span class="w">        </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">"/W4"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">72</span><span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
@@ -604,14 +612,14 @@ End users can now create their own <code class="docutils literal notranslate"><s
 </span><span class="linenos">11</span>
 <span class="linenos">12</span><span class="c1">// Toolchain specific code goes here</span>
 <span class="linenos">13</span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">cppflags</span><span class="p">.</span><span class="n">GetToolchain</span><span class="p">().</span><span class="n">GetId</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">14</span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Gcc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">14</span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="n">Gcc</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="linenos">15</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"-DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">16</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"-Wall"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">17</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"-Werror"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">18</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddLinkFlag</span><span class="p">(</span><span class="s">"-lm"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">19</span><span class="w">    </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">20</span><span class="p">}</span><span class="w"></span>
-<span class="linenos">21</span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Msvc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">21</span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="n">Msvc</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="linenos">22</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"/DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">23</span><span class="w">    </span><span class="n">cppflags</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"/W4"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">24</span><span class="w">    </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
@@ -632,14 +640,14 @@ End users can now create their own <code class="docutils literal notranslate"><s
 </span><span class="linenos">39</span>
 <span class="linenos">40</span><span class="c1">// Toolchain specific code goes here</span>
 <span class="linenos">41</span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">cflags</span><span class="p">.</span><span class="n">GetToolchain</span><span class="p">().</span><span class="n">GetId</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">42</span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Gcc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">42</span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="n">Gcc</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="linenos">43</span><span class="w">    </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"-DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">44</span><span class="w">    </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">"-Wall"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">45</span><span class="w">    </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">"-Werror"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">46</span><span class="w">    </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddLinkFlag</span><span class="p">(</span><span class="s">"-lm"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">47</span><span class="w">    </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">48</span><span class="p">}</span><span class="w"></span>
-<span class="linenos">49</span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="nl">Msvc</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">49</span><span class="k">case</span><span class="w"> </span><span class="n">ToolchainId</span><span class="o">::</span><span class="n">Msvc</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="linenos">50</span><span class="w">    </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"/DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">51</span><span class="w">    </span><span class="n">cflags</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">"/W4"</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">52</span><span class="w">    </span><span class="k">break</span><span class="p">;</span><span class="w"></span>

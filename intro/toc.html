@@ -168,8 +168,16 @@
 <li class="toctree-l2"><a class="reference internal" href="../arch/style_guide.html">Style Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_setup.html">BuildExe Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_script_example.html">BuildExe “Script” example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_immediate_example.html">BuildExe “Immediate” example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/walkthroughs.html">Walkthrough Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/all_compile_options.html">Compile Options for BuildExe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/all_default_build_options.html">Build Options for “scripts”</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/environment.html">Environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
@@ -182,7 +190,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/toc.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/toc.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples/hybrid.html">Hybrid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/gcc.html">GCC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/msvc.html">MSVC</a></li>
@@ -218,20 +226,130 @@
         <article role="main">
           <div class="section" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="aim-purpose-usecase">
-<h2>Aim/Purpose/Usecase<a class="headerlink" href="#aim-purpose-usecase" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="definitions">
-<h2>Definitions<a class="headerlink" href="#definitions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="aim">
+<h2>Aim<a class="headerlink" href="#aim" title="Permalink to this headline">¶</a></h2>
+<p>BuildCC aims to be an alternative to Makefiles while using the feature rich C++ language instead of a custom DSL.</p>
 </div>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Complete flexibility for custom workflows and toolchains</p></li>
+<li><p>C++ language feature benefits and debuggable build binaries</p></li>
+<li><dl class="simple">
+<dt>Optimized rebuilds through serialization.</dt><dd><ul>
+<li><p>Can optimize for rebuilds by comparing the previous stored build with current build.</p></li>
+<li><p>Further details given in <strong>Architecture</strong></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>Customizable for community plugins.</p></li>
+</ul>
 </div>
-<div class="section" id="community-help">
-<h2>Community Help<a class="headerlink" href="#community-help" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pre-requisites">
+<h2>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Technical Knowledge</dt><dd><ul>
+<li><p>C++03 classes and template usage</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>C++17 Compiler with</dt><dd><ul>
+<li><p>C++17 filesystem library support</p></li>
+<li><p>C++11 thread library support</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Third Party Libraries (See License below)</dt><dd><ul>
+<li><p>Flatbuffers v2.0.0</p></li>
+<li><p>Taskflow v3.1.0</p></li>
+<li><p>CLI11 v2.1.0</p></li>
+<li><p>Tiny Process Library v2.0.4</p></li>
+<li><p>fmt v8.0.1</p></li>
+<li><p>spdlog v1.9.2</p></li>
+<li><p>CppUTest v4.0</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="general-information">
+<h2>General Information<a class="headerlink" href="#general-information" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt>A one stage <strong>input / output</strong> procedure is called a <strong>Generator</strong> with a wide variety of use cases</dt><dd><ul>
+<li><p>Single input creates single output</p></li>
+<li><p>Single input creates multiple outputs</p></li>
+<li><p>Multiple inputs create single output</p></li>
+<li><p>Multiple inputs creates multiple outputs</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>A two stage <strong>compile</strong> and <strong>link</strong> procedure is called a <strong>Target</strong></dt><dd><ul>
+<li><p>This means that Executables, StaticLibraries and DynamicLibraries are all categorized as Targets</p></li>
+<li><p>In the future C++20 modules can also be its own target depending on compiler implementations</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Every Target requires a complementary (and compatible) <strong>Toolchain</strong></dt><dd><ul>
+<li><p>This ensures that cross compiling is very easy and explicit in nature.</p></li>
+<li><p>Multiple toolchains can be <cite>mixed</cite> in a single build file i.e we can generate targets using the GCC, Clang, MSVC and many other compilers <strong>simultaneously</strong>.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>The <strong>compile_command</strong> (pch and object commands) and <strong>link_command</strong> (target command) is fed to the <strong>process</strong> call to invoke the <strong>Toolchain</strong>.</p></li>
+<li><dl class="simple">
+<dt>Each <strong>Target</strong> can depend on other targets efficiently through Parallel Programming using <strong>Taskflow</strong>.</dt><dd><ul>
+<li><p>Dependency between targets is explicitly mentioned through the Taskflow APIs</p></li>
+<li><p>This has been made easier for the user through the <code class="docutils literal notranslate"><span class="pre">buildcc::Register</span></code> module.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Build files can be customized through command line arguments</dt><dd><ul>
+<li><p>Command line arguments can be stored in configurable <code class="docutils literal notranslate"><span class="pre">.toml</span></code> files and passed using the <code class="docutils literal notranslate"><span class="pre">--config</span></code> flag.</p></li>
+<li><p>Users can define their own custom arguments.</p></li>
+<li><p>Argument passing has been made easy using the <code class="docutils literal notranslate"><span class="pre">buildcc::Args</span></code> module.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
 </div>
 <div class="section" id="licenses">
 <h2>Licenses<a class="headerlink" href="#licenses" title="Permalink to this headline">¶</a></h2>
+<p><cite>BuildCC</cite> is licensed under the Apache License, Version 2.0. See <strong>LICENSE</strong> for the full license text. <cite>BuildCC</cite> aims to use open-source libraries containing permissive licenses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Developers who would like to suggest an alternative library, raise an issue with the <strong>license</strong> and <strong>advantages</strong> clearly outlined.</p>
+</div>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/fmtlib/fmt">Fmtlib</a> (Formatting) [MIT License] [Header Only]</p></li>
+<li><p><a class="reference external" href="https://github.com/gabime/spdlog">Spdlog</a> (Logging) [MIT License] [Header Only]</p></li>
+<li><p><a class="reference external" href="https://gitlab.com/eidheim/tiny-process-library">Tiny Process Library</a> (Process handling) [MIT License]</p></li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/taskflow/taskflow">Taskflow</a> (Parallel Programming) [MIT License] [Header Only]</dt><dd><ul>
+<li><p>See also <a class="reference external" href="https://github.com/taskflow/taskflow/tree/master/3rd-party">3rd-Party</a> used by Taskflow</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><a class="reference external" href="https://github.com/google/flatbuffers">Flatbuffers</a> (Serialization) [Apache-2.0 License] [Header Only]</p></li>
+<li><p><a class="reference external" href="https://github.com/CLIUtils/CLI11">CLI11</a> (Argument Parsing) [BSD-3-Clause License] [Header Only]</p></li>
+<li><p><a class="reference external" href="https://github.com/cpputest/cpputest">CppUTest</a> (Unit Testing/Mocking) [BSD-3-Clause License]</p></li>
+</ul>
 </div>
 </div>
 
@@ -287,10 +405,10 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Introduction</a><ul>
-<li><a class="reference internal" href="#aim-purpose-usecase">Aim/Purpose/Usecase</a></li>
-<li><a class="reference internal" href="#definitions">Definitions</a></li>
+<li><a class="reference internal" href="#aim">Aim</a></li>
 <li><a class="reference internal" href="#features">Features</a></li>
-<li><a class="reference internal" href="#community-help">Community Help</a></li>
+<li><a class="reference internal" href="#pre-requisites">Pre-requisites</a></li>
+<li><a class="reference internal" href="#general-information">General Information</a></li>
 <li><a class="reference internal" href="#licenses">Licenses</a></li>
 </ul>
 </li>
