@@ -34,7 +34,6 @@ constexpr const char *const kTag = "BuildExe";
 
 static void clean_cb();
 
-// TODO, Add BuildExeMode::Script usage
 int main(int argc, char **argv) {
   Args args;
 
