@@ -41,6 +41,8 @@ public:
                               kGccExecutableLinkCommand);
   }
 
+  static TargetConfig StaticLib() { return GccConfig::StaticLib(); }
+
   static TargetConfig DynamicLib() {
     return DefaultMingwConfig(kMingwDynamicLibExt, kGccGenericCompileCommand,
                               kMingwDynamicLibLinkCommand);

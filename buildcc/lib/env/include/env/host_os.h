@@ -56,4 +56,37 @@ inline constexpr bool is_unix() {
 
 } // namespace buildcc::env
 
+namespace buildcc {
+
+enum class OsId {
+  Linux,
+  Win,
+  Mac,
+  Unix,
+  Undefined,
+};
+
+inline constexpr OsId get_host_os() {
+  OsId os_id = OsId::Undefined;
+  if constexpr (env::is_linux()) {
+    os_id = OsId::Linux;
+  }
+
+  if constexpr (env::is_unix()) {
+    os_id = OsId::Unix;
+  }
+
+  if constexpr (env::is_win()) {
+    os_id = OsId::Win;
+  }
+
+  if constexpr (env::is_mac()) {
+    os_id = OsId::Mac;
+  }
+
+  return os_id;
+}
+
+} // namespace buildcc
+
 #endif

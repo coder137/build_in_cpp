@@ -18,15 +18,22 @@
 
 namespace buildcc {
 
-void tpl_cb(BaseTarget &target) {
+void tpl_cb(BaseTarget &target, const TplConfig &config) {
   target.AddSource("process.cpp");
   target.AddIncludeDir("");
   target.AddHeader("process.hpp");
 
-  if constexpr (env::is_win()) {
+  switch (config.os_id) {
+  case OsId::Win:
     target.AddSource("process_win.cpp");
-  } else {
+    break;
+  case OsId::Linux:
+  case OsId::Unix:
+  case OsId::Mac:
     target.AddSource("process_unix.cpp");
+    break;
+  default:
+    break;
   }
 
   target.Build();

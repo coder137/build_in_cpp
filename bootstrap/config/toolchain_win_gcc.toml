@@ -1,8 +1,8 @@
-[toolchain.custom]
+[toolchain.host]
 build = true
 test = true
 
-id = "gcc"
+id = "mingw"
 name = "x86_64-w64-mingw32"
 asm_compiler = "as"
 c_compiler = "gcc"

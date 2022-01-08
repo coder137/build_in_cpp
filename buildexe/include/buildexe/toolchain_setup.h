@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Niket Naidu. All rights reserved.
+ * Copyright 2021-2022 Niket Naidu. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-#include "bootstrap/build_taskflow.h"
+#ifndef BUILDEXE_TOOLCHAIN_SETUP_H_
+#define BUILDEXE_TOOLCHAIN_SETUP_H_
+
+#include "buildcc.h"
 
 namespace buildcc {
 
-void taskflow_ho_cb(TargetInfo &info) {
-  info.AddIncludeDir("");
-  info.GlobHeaders("taskflow");
-  info.GlobHeaders("taskflow/core");
-  info.GlobHeaders("taskflow/core/algorithm");
-  info.GlobHeaders("taskflow/cuda");
-  info.GlobHeaders("taskflow/cuda/cuda_algorithm");
-  info.GlobHeaders("taskflow/dsl");
-  info.GlobHeaders("taskflow/sycl");
-  info.GlobHeaders("taskflow/sycl/sycl_algorithm");
-  info.GlobHeaders("taskflow/utility");
-}
+void find_toolchain_verify(BaseToolchain &toolchain);
+void host_toolchain_verify(const BaseToolchain &toolchain);
 
 } // namespace buildcc
+
+#endif

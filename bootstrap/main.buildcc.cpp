@@ -35,7 +35,7 @@ static void hybrid_simple_example_cb(BaseTarget &target,
 int main(int argc, char **argv) {
   Args args;
   ArgToolchain custom_toolchain_arg;
-  args.AddToolchain("custom", "Host Toolchain", custom_toolchain_arg);
+  args.AddToolchain("host", "Host Toolchain", custom_toolchain_arg);
   args.Parse(argc, argv);
 
   Register reg(args);
@@ -43,7 +43,6 @@ int main(int argc, char **argv) {
 
   BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
 
-  PersistentStorage storage;
   BuildBuildCC buildcc(
       reg, toolchain,
       TargetEnv(env::get_project_root_dir(), env::get_project_build_dir()));

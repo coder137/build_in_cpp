@@ -21,7 +21,13 @@
 
 namespace buildcc {
 
-void tpl_cb(BaseTarget &target);
+struct TplConfig {
+  TplConfig() = default;
+
+  OsId os_id{OsId::Linux};
+};
+
+void tpl_cb(BaseTarget &target, const TplConfig &config = TplConfig());
 
 } // namespace buildcc
 

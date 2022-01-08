@@ -1,14 +1,11 @@
 Getting Started
 =================
 
-Pre-requisites
-----------------
+.. toctree::
 
-Installation and Setup
------------------------
-
-Walkthroughs
--------------
-
-.. note:: Add walkthroughs and example snippets of increasing complexity
-
+    buildexe_setup
+    buildexe_script_example
+    buildexe_immediate_example
+    walkthroughs
+    all_compile_options
+    all_default_build_options

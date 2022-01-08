@@ -54,8 +54,10 @@ void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
   target.GlobHeaders("lib/env/include/env");
 
   // TOOLCHAIN
+  target.GlobSources("lib/toolchain/src/api");
   target.AddIncludeDir("lib/toolchain/include");
   target.GlobHeaders("lib/toolchain/include/toolchain");
+  target.GlobHeaders("lib/toolchain/include/toolchain/api");
 
   // TARGET
   target.GlobSources("lib/target/src/common");
@@ -238,7 +240,9 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
                     "tiny-process-library",
                 env_.GetTargetBuildDir()));
   reg_.CallbackIf(state, global_flags_cb, tpl_lib, toolchain_);
-  reg_.Build(state, tpl_cb, tpl_lib);
+  TplConfig tpl_config;
+  tpl_config.os_id = get_host_os();
+  reg_.Build(state, tpl_cb, tpl_lib, tpl_config);
 
   // TODO, Make this a generic selection between StaticTarget and
   // DynamicTarget

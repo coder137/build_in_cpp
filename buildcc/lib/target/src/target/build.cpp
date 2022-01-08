@@ -86,11 +86,11 @@ void Target::Build() {
       {kLinkFlags, internal::aggregate(GetLinkFlags())},
 
       // Toolchain executables here
-      {kAsmCompiler, toolchain_.GetAsmCompiler()},
-      {kCCompiler, toolchain_.GetCCompiler()},
-      {kCppCompiler, toolchain_.GetCppCompiler()},
-      {kArchiver, toolchain_.GetArchiver()},
-      {kLinker, toolchain_.GetLinker()},
+      {kAsmCompiler, fmt::format("{}", fs::path(toolchain_.GetAsmCompiler()))},
+      {kCCompiler, fmt::format("{}", fs::path(toolchain_.GetCCompiler()))},
+      {kCppCompiler, fmt::format("{}", fs::path(toolchain_.GetCppCompiler()))},
+      {kArchiver, fmt::format("{}", fs::path(toolchain_.GetArchiver()))},
+      {kLinker, fmt::format("{}", fs::path(toolchain_.GetLinker()))},
   });
 
   // Load the serialized file

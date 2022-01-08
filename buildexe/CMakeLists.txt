@@ -1,5 +1,14 @@
 add_executable(buildexe
     buildexe.cpp
+
+    src/args_setup.cpp
+    include/buildexe/args_setup.h
+
+    src/toolchain_setup.cpp
+    include/buildexe/toolchain_setup.h
+
+    src/build_env_setup.cpp
+    include/buildexe/build_env_setup.h
 )
 target_sources(buildexe PRIVATE
     ../bootstrap/src/build_buildcc.cpp
@@ -11,6 +20,7 @@ target_sources(buildexe PRIVATE
     ../bootstrap/src/build_tpl.cpp
 )
 target_include_directories(buildexe PRIVATE 
+    include
     ../bootstrap/include
 )
 target_link_libraries(buildexe PRIVATE buildcc)
