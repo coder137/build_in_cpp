@@ -24,6 +24,12 @@ Since we are writing our scripts in C++ we first need to **compile** our "script
     build_toml -up-> build_project_exe
     build_project_exe -right-> hello_world_exe
 
+
+.. attention:: Limitation of **script** mode
+    
+    We need to compile our build "script" using a **HOST** toolchain. 
+    We cannot use a cross compiler here.
+
 Helloworld "script" example
 ---------------------------
 
