@@ -54,6 +54,38 @@ struct ArgScriptInfo {
   std::vector<std::string> configs;
 };
 
+class BuildExeArgs {
+public:
+  void Setup();
+  void Parse(int argc, char **argv) { args_.Parse(argc, argv); }
+
+  // Getters
+  const Args &GetArgs() const { return args_; }
+  const ArgToolchain &GetHostToolchainArg() const {
+    return host_toolchain_arg_;
+  }
+  const ArgTargetInfo &GetTargetInfo() const { return out_targetinfo_; }
+  const ArgTargetInputs &GetTargetInputs() const { return out_targetinputs_; }
+  const ArgScriptInfo &GetScriptInfo() const { return out_scriptinfo_; }
+  BuildExeMode GetBuildMode() const { return out_mode_; }
+
+private:
+  // void SetupBuildMode();
+  // void SetupTargetInfo();
+  // void SetupTargetInputs();
+  void SetupLibs();
+
+private:
+  Args args_;
+  ArgToolchain host_toolchain_arg_;
+  ArgTargetInfo out_targetinfo_;
+  ArgTargetInputs out_targetinputs_;
+  ArgScriptInfo out_scriptinfo_;
+
+  BuildExeMode out_mode_;
+  std::vector<std::vector<std::string>> lib_build_files_;
+};
+
 void setup_arg_buildexe_mode(Args &args, BuildExeMode &out);
 void setup_arg_target_info(Args &args, ArgTargetInfo &out);
 void setup_arg_target_inputs(Args &args, ArgTargetInputs &out);

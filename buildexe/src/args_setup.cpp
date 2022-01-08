@@ -15,6 +15,7 @@
  */
 
 #include "buildexe/args_setup.h"
+#include "buildexe/build_env_home.h"
 
 namespace buildcc {
 
@@ -28,6 +29,41 @@ static const std::unordered_map<const char *, TargetType> kTargetTypeMap{
     {"staticLibrary", TargetType::StaticLibrary},
     {"dynamicLibrary", TargetType::DynamicLibrary},
 };
+
+void BuildExeArgs::Setup() {
+  args_.AddToolchain("host", "Host Toolchain", host_toolchain_arg_);
+  setup_arg_buildexe_mode(args_, out_mode_);
+  setup_arg_target_info(args_, out_targetinfo_);
+  setup_arg_target_inputs(args_, out_targetinputs_);
+  setup_arg_script_mode(args_, out_scriptinfo_);
+  SetupLibs();
+}
+
+void BuildExeArgs::SetupLibs() {
+  CLI::callback_t results_cb =
+      [&](const std::vector<std::string> &data) -> bool {
+    lib_build_files_.push_back(data);
+    return true;
+  };
+
+  auto *libs_app = args_.Ref().add_subcommand("libs", "Libraries");
+  std::error_code ec;
+  fs::directory_iterator dir_iter =
+      fs::directory_iterator(BuildccHome::GetBuildccLibsDir(), ec);
+  env::assert_fatal(ec.value() == 0,
+                    "Cannot iterate over {BUILDCC_HOME}/libs directory");
+
+  for (const auto &dir : dir_iter) {
+    if (!dir.is_directory()) {
+      continue;
+    }
+
+    std::string lib_name = dir.path().filename().string();
+    libs_app->add_option_function<std::vector<std::string>>(
+        fmt::format("--{}", lib_name), results_cb,
+        fmt::format("{} library", lib_name));
+  }
+}
 
 void setup_arg_buildexe_mode(Args &args, BuildExeMode &out) {
   args.Ref()
