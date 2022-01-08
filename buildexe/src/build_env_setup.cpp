@@ -18,24 +18,34 @@
 
 namespace buildcc {
 
-static fs::path get_env_buildcc_home() {
+fs::path BuildccHome::buildcc_home_{""};
+fs::path BuildccHome::buildcc_base_{""};
+fs::path BuildccHome::buildcc_libs_{""};
+fs::path BuildccHome::buildcc_extensions_{""};
+bool BuildccHome::initialized_{false};
+
+void BuildccHome::Init() {
+  env::assert_fatal(!initialized_, "BuildccHome is already initialized");
+
   const char *buildcc_home = getenv("BUILDCC_HOME");
   env::assert_fatal(buildcc_home != nullptr,
                     "BUILDCC_HOME environment variable not defined");
 
   // NOTE, Verify BUILDCC_HOME
-  // auto &buildcc_path = storage.Add<fs::path>("buildcc_path", buildcc_home);
-  fs::path buildcc_home_path{buildcc_home};
-  env::assert_fatal(fs::exists(buildcc_home_path),
-                    "{BUILDCC_HOME} path not found");
-  env::assert_fatal(fs::exists(buildcc_home_path / "buildcc"),
+  buildcc_home_ = fs::path(buildcc_home);
+  buildcc_base_ = buildcc_home_ / "buildcc";
+  buildcc_libs_ = buildcc_home_ / "libs";
+  buildcc_extensions_ = buildcc_home_ / "extensions";
+
+  env::assert_fatal(fs::exists(buildcc_home_), "{BUILDCC_HOME} path not found");
+  env::assert_fatal(fs::exists(buildcc_base_),
                     "{BUILDCC_HOME}/buildcc path not found");
-  env::assert_fatal(fs::exists(buildcc_home_path / "libs"),
+  env::assert_fatal(fs::exists(buildcc_libs_),
                     "{BUILDCC_HOME}/libs path not found");
-  env::assert_fatal(fs::exists(buildcc_home_path / "extensions"),
+  env::assert_fatal(fs::exists(buildcc_extensions_),
                     "{BUILDCC_HOME}/extensions path not found");
 
-  return buildcc_home_path;
+  initialized_ = true;
 }
 
 void BuildEnvSetup::ConstructUserTarget() {
@@ -80,11 +90,10 @@ void BuildEnvSetup::DepUserTargetOnBuildcc() {
 }
 
 void BuildEnvSetup::BuildccTargetSetup() {
-  fs::path buildcc_home = get_env_buildcc_home();
+  const fs::path &buildcc_base = BuildccHome::GetBuildccBaseDir();
   auto &buildcc_package = storage_.Add<BuildBuildCC>(
       kBuildccPackageName, reg_, toolchain_,
-      TargetEnv(buildcc_home / "buildcc",
-                buildcc_home / "buildcc" / "_build_exe"));
+      TargetEnv(buildcc_base, buildcc_base / "_build_exe"));
   buildcc_package.Setup(state_);
 }
 
