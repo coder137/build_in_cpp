@@ -1,5 +1,5 @@
-Usage through BuildExe
-======================
+Getting started with BuildExe
+=============================
 
 Basic Procedure
 ----------------
@@ -39,6 +39,8 @@ Helloworld example
 
     ./buildexe --config compile.toml --config $BUILDCC_HOME/host/host_toolchain.toml
 
+* Your target will now be present in ``[build_dir]/[toolchain_name]/[target_name]`` (taken from ``build.toml`` and ``build.helloworld.cpp``)
+
 Directory structure
 ++++++++++++++++++++
 
@@ -56,8 +58,24 @@ Directory structure
 Write your C++ "script"
 ++++++++++++++++++++++++
 
+From the "script" below we can see that we have a few lines of **boilerplate**
+
+* Setup args
+* Setup register (pre and post callback requirements)
+
+We then setup our main **toolchain**-**target** pairs. Highlighted below
+
+* Specify your toolchain
+   * Verify the toolchain existance on your machine by using the ``.Verify`` API
+   * If multiple similar toolchains are detected (due to multiple installations), the first found toolchain is picked
+   * You can pass in the ``VerifyToolchainConfig`` to narrow down your search and verification.
+* Specify your compatible target
+   * Every specific target is meant to use a specific target.
+   * For example: ``ExecutableTarget_gcc`` specialized target can use the ``Toolchain_gcc`` specialized toolchain but not ``Toolchain_msvc``.
+
 .. code-block:: cpp
     :linenos:
+    :emphasize-lines: 25,26,27,29,30
     :caption: build.helloworld.cpp
 
     #include "buildcc.h"
@@ -83,6 +101,7 @@ Write your C++ "script"
         reg.Clean(clean_cb);
 
         // Step 4. Build steps
+        // Main setup
         Toolchain_gcc gcc;
         auto verified_gcc_toolchains = gcc.Verify();
         env::assert_fatal(!verified_gcc_toolchains.empty(), "GCC toolchain not found");
