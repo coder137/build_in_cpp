@@ -5,6 +5,8 @@ Getting Started
 
     setup
     buildexe_getting_started
+    all_compile_options
+    all_default_build_options
 
 Usage through CMake
 -------------------
