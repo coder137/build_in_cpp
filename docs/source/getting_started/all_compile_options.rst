@@ -8,9 +8,6 @@ Command Line options
 
 .. code-block:: shell
 
-    BuildCC buildsystem
-    Usage: buildexe [OPTIONS] [SUBCOMMAND]
-
     Options:
     -h,--help                   Print this help message and exit
     --help-all                  Expand individual options.
