@@ -15,38 +15,9 @@
  */
 
 #include "buildexe/build_env_setup.h"
+#include "buildexe/build_env_home.h"
 
 namespace buildcc {
-
-fs::path BuildccHome::buildcc_home_{""};
-fs::path BuildccHome::buildcc_base_{""};
-fs::path BuildccHome::buildcc_libs_{""};
-fs::path BuildccHome::buildcc_extensions_{""};
-bool BuildccHome::initialized_{false};
-
-void BuildccHome::Init() {
-  env::assert_fatal(!initialized_, "BuildccHome is already initialized");
-
-  const char *buildcc_home = getenv("BUILDCC_HOME");
-  env::assert_fatal(buildcc_home != nullptr,
-                    "BUILDCC_HOME environment variable not defined");
-
-  // NOTE, Verify BUILDCC_HOME
-  buildcc_home_ = fs::path(buildcc_home);
-  buildcc_base_ = buildcc_home_ / "buildcc";
-  buildcc_libs_ = buildcc_home_ / "libs";
-  buildcc_extensions_ = buildcc_home_ / "extensions";
-
-  env::assert_fatal(fs::exists(buildcc_home_), "{BUILDCC_HOME} path not found");
-  env::assert_fatal(fs::exists(buildcc_base_),
-                    "{BUILDCC_HOME}/buildcc path not found");
-  env::assert_fatal(fs::exists(buildcc_libs_),
-                    "{BUILDCC_HOME}/libs path not found");
-  env::assert_fatal(fs::exists(buildcc_extensions_),
-                    "{BUILDCC_HOME}/extensions path not found");
-
-  initialized_ = true;
-}
 
 void BuildEnvSetup::ConstructUserTarget() {
   UserTargetSetup();

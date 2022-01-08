@@ -20,43 +20,10 @@
 #include "buildcc.h"
 
 #include "bootstrap/build_buildcc.h"
+
 #include "buildexe/args_setup.h"
 
 namespace buildcc {
-
-class BuildccHome {
-public:
-  static void Init();
-
-  static const fs::path &GetBuildccHomeDir() {
-    ExpectInitialized();
-    return buildcc_home_;
-  }
-  static const fs::path &GetBuildccBaseDir() {
-    ExpectInitialized();
-    return buildcc_base_;
-  }
-  static const fs::path &GetBuildccLibsDir() {
-    ExpectInitialized();
-    return buildcc_libs_;
-  }
-  static const fs::path &GetBuildccExtensionsDir() {
-    ExpectInitialized();
-    return buildcc_extensions_;
-  }
-
-  static bool IsInitialized() { return initialized_; }
-  static void ExpectInitialized() {
-    env::assert_fatal(IsInitialized(), "BuildccHome is not initialized");
-  }
-
-private:
-  static fs::path buildcc_home_;
-  static fs::path buildcc_base_;
-  static fs::path buildcc_libs_;
-  static fs::path buildcc_extensions_;
-  static bool initialized_;
-};
 
 class BuildEnvSetup {
 public:
