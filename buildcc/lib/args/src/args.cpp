@@ -137,19 +137,17 @@ void Args::RootArgs() {
       ->expected(kMinFiles, kMaxFiles);
 
   // Root flags
+  auto *root_group = app_.add_option_group(kRootGroup);
 
-  app_.add_flag(kCleanParam, clean_, kCleanDesc)->group(kRootGroup);
-  app_.add_option(kLoglevelParam, loglevel_, kLoglevelDesc)
-      ->transform(CLI::CheckedTransformer(kLogLevelMap, CLI::ignore_case))
-      ->group(kRootGroup);
+  root_group->add_flag(kCleanParam, clean_, kCleanDesc);
+  root_group->add_option(kLoglevelParam, loglevel_, kLoglevelDesc)
+      ->transform(CLI::CheckedTransformer(kLogLevelMap, CLI::ignore_case));
 
   // Dir flags
-  app_.add_option(kRootDirParam, project_root_dir_, kRootDirDesc)
-      ->required()
-      ->group(kRootGroup);
-  app_.add_option(kBuildDirParam, project_build_dir_, kBuildDirDesc)
-      ->required()
-      ->group(kRootGroup);
+  root_group->add_option(kRootDirParam, project_root_dir_, kRootDirDesc)
+      ->required();
+  root_group->add_option(kBuildDirParam, project_build_dir_, kBuildDirDesc)
+      ->required();
 }
 
 } // namespace buildcc
