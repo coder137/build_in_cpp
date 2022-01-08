@@ -15,12 +15,11 @@ Since we are writing our scripts in C++ we first need to **compile** our "script
     usecase "build.toml" as build_toml
 
     rectangle "./buildexe" as buildexe_exe
-
     artifact "./hello_world" as hello_world_exe
 
-    compile_toml -up-> build_cpp
-    host_toolchain_toml -up-> build_cpp
     build_cpp -right-> buildexe_exe
+    compile_toml -up-> buildexe_exe
+    host_toolchain_toml -up-> buildexe_exe
     buildexe_exe -right-> build_project_exe
     build_toml -up-> build_project_exe
     build_project_exe -right-> hello_world_exe
