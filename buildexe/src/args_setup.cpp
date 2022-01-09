@@ -19,6 +19,8 @@
 
 namespace buildcc {
 
+constexpr const char *const kTag = "BuildExe";
+
 static const std::unordered_map<const char *, BuildExeMode> kBuildExeModeMap{
     {"immediate", BuildExeMode::Immediate},
     {"script", BuildExeMode::Script},
@@ -126,15 +128,16 @@ void BuildExeArgs::SetupLibs() {
     }
     fs::path lib_path = dir.path();
     std::string lib_name = lib_path.filename().string();
+    auto add_lib_files_cb_func = [lib_path,
+                                  this](const std::vector<std::string> &paths) {
+      for (const auto &p : paths) {
+        fs::path absolute_file_path = lib_path / p;
+        lib_build_files_.push_back(absolute_file_path);
+      }
+    };
+
     libs_app->add_option_function<std::vector<std::string>>(
-        fmt::format("--{}", lib_name),
-        [&lib_path, this](const std::vector<std::string> &paths) -> bool {
-          for (const auto &p : paths) {
-            fs::path absolute_file_path = lib_path / p;
-            lib_build_files_.push_back(absolute_file_path);
-          }
-          return true;
-        },
+        fmt::format("--{}", lib_name), add_lib_files_cb_func,
         fmt::format("{} library", lib_name));
   }
 }
