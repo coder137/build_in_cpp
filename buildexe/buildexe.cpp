@@ -35,6 +35,7 @@ constexpr const char *const kTag = "BuildExe";
 
 static void clean_cb();
 
+// TODO, Update BuildExeArgs with internal functions
 int main(int argc, char **argv) {
   //
   BuildccHome::Init();
@@ -64,21 +65,12 @@ int main(int argc, char **argv) {
     host_toolchain_verify(toolchain);
   }
 
-  // Build environment
-  BuildEnvSetup build_setup(reg, toolchain, buildexe_args.GetTargetInfo(),
-                            buildexe_args.GetTargetInputs());
-  if (buildexe_args.GetBuildMode() == BuildExeMode::Script) {
-    // buildcc and user target
-    build_setup.ConstructUserTargetWithBuildcc();
-  } else {
-    // user target
-    build_setup.ConstructUserTarget();
-  }
-  reg.RunBuild();
+  // Build
+  BuildEnvSetup build_setup(reg, toolchain, buildexe_args);
+  build_setup.ConstructTarget();
 
   // Run
   if (buildexe_args.GetBuildMode() == BuildExeMode::Script) {
-
     build_setup.RunUserTarget(buildexe_args.GetScriptInfo());
   }
 
