@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
   Register reg(buildexe_args.GetArgs());
   reg.Clean(clean_cb);
 
-  // Build
+  // Host Toolchain
   BaseToolchain toolchain =
       buildexe_args.GetHostToolchainArg().ConstructToolchain();
   find_toolchain_verify(toolchain);
@@ -65,11 +65,11 @@ int main(int argc, char **argv) {
     host_toolchain_verify(toolchain);
   }
 
-  // Build
+  // Build Target
   BuildEnvSetup build_setup(reg, toolchain, buildexe_args);
   build_setup.ConstructTarget();
 
-  // Run
+  // Run Target if script mode
   if (buildexe_args.GetBuildMode() == BuildExeMode::Script) {
     build_setup.RunUserTarget(buildexe_args.GetScriptInfo());
   }
