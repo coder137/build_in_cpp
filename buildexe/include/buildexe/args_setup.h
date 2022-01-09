@@ -68,6 +68,9 @@ public:
   const ArgTargetInputs &GetTargetInputs() const { return out_targetinputs_; }
   const ArgScriptInfo &GetScriptInfo() const { return out_scriptinfo_; }
   BuildExeMode GetBuildMode() const { return out_mode_; }
+  const std::vector<fs::path> &GetLibBuildFiles() const {
+    return lib_build_files_;
+  }
 
 private:
   void SetupBuildMode();

@@ -68,6 +68,7 @@ void BuildEnvSetup::ConstructUserTargetWithBuildcc() {
   UserTargetSetup();
   UserTargetCb();
   UserTargetWithBuildccSetup();
+  UserTargetWithLibsSetup();
   UserTargetBuild();
   DepUserTargetOnBuildcc();
 }
@@ -155,6 +156,32 @@ void BuildEnvSetup::UserTargetWithBuildccSetup() {
     break;
   default:
     break;
+  }
+}
+
+void BuildEnvSetup::UserTargetWithLibsSetup() {
+  auto &target = GetUserTarget();
+
+  // Segregate valid lib files into sources and include dirs
+  internal::fs_unordered_set sources;
+  internal::fs_unordered_set include_dirs;
+  for (const auto &lib_build_file : buildexe_args_.GetLibBuildFiles()) {
+    if (target.GetConfig().IsValidSource(lib_build_file)) {
+      sources.insert(lib_build_file);
+    }
+    if (target.GetConfig().IsValidHeader(lib_build_file)) {
+      include_dirs.insert(lib_build_file.parent_path());
+    }
+  }
+
+  // Add sources to target
+  for (const auto &s : sources) {
+    target.AddSourceAbsolute(s);
+  }
+
+  // Add include dirs to target
+  for (const auto &idir : include_dirs) {
+    target.AddIncludeDir(idir);
   }
 }
 

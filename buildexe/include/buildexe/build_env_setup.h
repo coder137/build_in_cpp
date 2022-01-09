@@ -56,9 +56,9 @@ private:
   void BuildccTargetSetup();
   void UserTargetSetup();
   void UserTargetCb();
-  void UserTargetBuild();
-
   void UserTargetWithBuildccSetup();
+  void UserTargetWithLibsSetup();
+  void UserTargetBuild();
   void DepUserTargetOnBuildcc();
 
 private:
