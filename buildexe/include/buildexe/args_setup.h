@@ -70,9 +70,10 @@ public:
   BuildExeMode GetBuildMode() const { return out_mode_; }
 
 private:
-  // void SetupBuildMode();
-  // void SetupTargetInfo();
-  // void SetupTargetInputs();
+  void SetupBuildMode();
+  void SetupTargetInfo();
+  void SetupTargetInputs();
+  void SetupScriptMode();
   void SetupLibs();
 
 private:
@@ -85,11 +86,6 @@ private:
   BuildExeMode out_mode_;
   std::vector<fs::path> lib_build_files_;
 };
-
-void setup_arg_buildexe_mode(Args &args, BuildExeMode &out);
-void setup_arg_target_info(Args &args, ArgTargetInfo &out);
-void setup_arg_target_inputs(Args &args, ArgTargetInputs &out);
-void setup_arg_script_mode(Args &args, ArgScriptInfo &out);
 
 } // namespace buildcc
 
