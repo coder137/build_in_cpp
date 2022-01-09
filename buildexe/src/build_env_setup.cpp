@@ -19,26 +19,22 @@
 
 namespace buildcc {
 
-void BuildEnvSetup::ConstructUserTarget() {
-  UserTargetSetup();
-  UserTargetCb();
-  UserTargetBuild();
-}
-
-void BuildEnvSetup::ConstructUserTargetWithBuildcc() {
-  BuildccTargetSetup();
-  UserTargetSetup();
-  UserTargetCb();
-  UserTargetWithBuildccSetup();
-  UserTargetBuild();
-  DepUserTargetOnBuildcc();
-}
-
 constexpr const char *const kTag = "BuildExe";
+
+void BuildEnvSetup::ConstructTarget() {
+  if (buildexe_args_.GetBuildMode() == BuildExeMode::Script) {
+    // buildcc and user target
+    ConstructUserTargetWithBuildcc();
+  } else {
+    // user target
+    ConstructUserTarget();
+  }
+  reg_.RunBuild();
+}
 
 void BuildEnvSetup::RunUserTarget(const ArgScriptInfo &arg_script_info) {
   env::log_info(kTag, fmt::format("************** Running '{}' **************",
-                                  arg_target_info_.name));
+                                  buildexe_args_.GetTargetInfo().name));
 
   // Aggregate the different input build .toml files to
   // `--config .toml` files
@@ -61,8 +57,19 @@ void BuildEnvSetup::RunUserTarget(const ArgScriptInfo &arg_script_info) {
 
 // Private
 
-void BuildEnvSetup::DepUserTargetOnBuildcc() {
-  reg_.Dep(GetUserTarget(), GetBuildcc());
+void BuildEnvSetup::ConstructUserTarget() {
+  UserTargetSetup();
+  UserTargetCb();
+  UserTargetBuild();
+}
+
+void BuildEnvSetup::ConstructUserTargetWithBuildcc() {
+  BuildccTargetSetup();
+  UserTargetSetup();
+  UserTargetCb();
+  UserTargetWithBuildccSetup();
+  UserTargetBuild();
+  DepUserTargetOnBuildcc();
 }
 
 void BuildEnvSetup::BuildccTargetSetup() {
@@ -74,9 +81,10 @@ void BuildEnvSetup::BuildccTargetSetup() {
 }
 
 void BuildEnvSetup::UserTargetSetup() {
-  storage_.Add<Target_generic>(kUserTargetName, arg_target_info_.name,
-                               arg_target_info_.type, toolchain_,
-                               TargetEnv(arg_target_info_.relative_to_root));
+  const ArgTargetInfo &arg_target_info = buildexe_args_.GetTargetInfo();
+  storage_.Add<Target_generic>(kUserTargetName, arg_target_info.name,
+                               arg_target_info.type, toolchain_,
+                               TargetEnv(arg_target_info.relative_to_root));
 }
 
 /**
@@ -94,42 +102,39 @@ void BuildEnvSetup::UserTargetSetup() {
  * Link flags
  */
 void BuildEnvSetup::UserTargetCb() {
+  const ArgTargetInputs arg_target_inputs = buildexe_args_.GetTargetInputs();
   Target_generic &user_target = GetUserTarget();
-  for (const auto &s : arg_target_inputs_.source_files) {
+
+  for (const auto &s : arg_target_inputs.source_files) {
     user_target.AddSource(s);
   }
-  for (const auto &i : arg_target_inputs_.include_dirs) {
+  for (const auto &i : arg_target_inputs.include_dirs) {
     user_target.AddIncludeDir(i);
   }
-  for (const auto &l : arg_target_inputs_.lib_dirs) {
+  for (const auto &l : arg_target_inputs.lib_dirs) {
     user_target.AddLibDir(l);
   }
-  for (const auto &el : arg_target_inputs_.external_lib_deps) {
+  for (const auto &el : arg_target_inputs.external_lib_deps) {
     user_target.AddLibDep(el);
   }
-  for (const auto &flag : arg_target_inputs_.preprocessor_flags) {
+  for (const auto &flag : arg_target_inputs.preprocessor_flags) {
     user_target.AddPreprocessorFlag(flag);
   }
-  for (const auto &flag : arg_target_inputs_.common_compile_flags) {
+  for (const auto &flag : arg_target_inputs.common_compile_flags) {
     user_target.AddCommonCompileFlag(flag);
   }
-  for (const auto &flag : arg_target_inputs_.asm_compile_flags) {
+  for (const auto &flag : arg_target_inputs.asm_compile_flags) {
     user_target.AddAsmCompileFlag(flag);
   }
-  for (const auto &flag : arg_target_inputs_.c_compile_flags) {
+  for (const auto &flag : arg_target_inputs.c_compile_flags) {
     user_target.AddCCompileFlag(flag);
   }
-  for (const auto &flag : arg_target_inputs_.cpp_compile_flags) {
+  for (const auto &flag : arg_target_inputs.cpp_compile_flags) {
     user_target.AddCppCompileFlag(flag);
   }
-  for (const auto &flag : arg_target_inputs_.link_flags) {
+  for (const auto &flag : arg_target_inputs.link_flags) {
     user_target.AddLinkFlag(flag);
   }
-}
-
-void BuildEnvSetup::UserTargetBuild() {
-  reg_.Build(
-      state_, [](BaseTarget &target) { target.Build(); }, GetUserTarget());
 }
 
 void BuildEnvSetup::UserTargetWithBuildccSetup() {
@@ -151,6 +156,15 @@ void BuildEnvSetup::UserTargetWithBuildccSetup() {
   default:
     break;
   }
+}
+
+void BuildEnvSetup::UserTargetBuild() {
+  reg_.Build(
+      state_, [](BaseTarget &target) { target.Build(); }, GetUserTarget());
+}
+
+void BuildEnvSetup::DepUserTargetOnBuildcc() {
+  reg_.Dep(GetUserTarget(), GetBuildcc());
 }
 
 } // namespace buildcc
