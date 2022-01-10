@@ -87,3 +87,27 @@ add_custom_target(run_buildexe_sm_simple_linux_gcc
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../example/hybrid/simple
     VERBATIM USES_TERMINAL
 )
+
+# [Script Mode] BuildExe libs example WIN GCC
+add_custom_target(run_buildexe_libs_hybrid_win_gcc
+    COMMAND buildexe --help-all
+    COMMAND buildexe --config compile.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_win_gcc.toml
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../example/buildexe/libs
+    VERBATIM USES_TERMINAL
+)
+
+# [Script Mode] BuildExe libs example WIN MSVC
+add_custom_target(run_buildexe_libs_hybrid_win_msvc
+    COMMAND buildexe --help-all
+    COMMAND buildexe --config compile.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_win_msvc.toml
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../example/buildexe/libs
+    VERBATIM USES_TERMINAL
+)
+
+# [Script Mode] BuildExe libs example LINUX GCC
+add_custom_target(run_buildexe_libs_hybrid_linux_gcc
+    COMMAND buildexe --help-all
+    COMMAND buildexe --config compile.toml --config ${CMAKE_CURRENT_SOURCE_DIR}/../bootstrap/config/toolchain_linux_gcc.toml
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../example/buildexe/libs
+    VERBATIM USES_TERMINAL
+)
