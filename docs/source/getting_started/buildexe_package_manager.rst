@@ -285,6 +285,37 @@ Write your C++ "script"
 Write your ``compile.toml`` file
 ++++++++++++++++++++++++++++++++
 
+* The only difference from the ``compile.toml`` in :doc:`buildexe_script_example` is the additional of the ``libs`` submodule
+* We use the ``fmt`` option since we git cloned the library into the libs folder
+* We add the various fmt build files that need to be compiled with our "script"
+* See highlighed lines 19 and 20
+
+.. code-block:: toml
+    :linenos:
+    :emphasize-lines: 19,20
+
+    # Settings
+    root_dir = ""
+    build_dir = "_build_internal"
+    loglevel = "debug"
+    clean = false
+
+    # BuildExe run mode
+    mode = "script"
+
+    # Target information
+    name = "single"
+    type = "executable"
+    relative_to_root = ""
+    srcs = ["build.main.cpp"]
+
+    [script]
+    configs = ["build.toml"]
+
+    [libs]
+    fmt = ["build.fmt.cpp", "build.fmt.h"]
+
+
 Write your ``build.toml`` file
 +++++++++++++++++++++++++++++++
 
