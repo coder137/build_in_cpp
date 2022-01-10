@@ -39,3 +39,60 @@ Basic Procedure
     build_project_exe -right-> hello_world_exe
 
     library -up-> hello_world_exe
+
+Helloworld "fmtlib" example
+----------------------------
+
+* Git clone the ``fmt`` library into your ``ENV{BUILDCC_HOME}/libs`` folder
+* Run ``buildexe libs --help-all``.
+   * You should automatically see the library folder name pop up under the ``libs`` submodule.
+   * In this case it will be the ``fmt`` option.
+
+.. code-block:: shell
+    :linenos:
+    :emphasize-lines: 8
+
+    script
+        Options:
+            --configs TEXT ...          Config files for script mode
+
+    libs
+        Libraries
+        Options:
+            --fmt TEXT ...              fmt library
+
+* Since we want to use the ``fmt`` library in our project we can now write your ``compile.toml`` file as given below.
+
+Directory structure
++++++++++++++++++++++
+
+.. uml::
+    
+    @startmindmap
+    * [workspace]
+    ** [src]
+    *** main.cpp
+    ** build.helloworld.cpp
+    ** compile.toml
+    ** build.toml 
+    @endmindmap
+
+Write your C++ "script"
+++++++++++++++++++++++++
+
+Write your ``compile.toml`` file
+++++++++++++++++++++++++++++++++
+
+Write your ``build.toml`` file
++++++++++++++++++++++++++++++++
+
+Write your ``main.cpp`` helloworld example in fmtlib
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. code-block:: cpp
+    
+    #include "fmt/format.h"
+    int main() {
+        fmt::print("{} {}", "Hello", "World");
+        return 0;
+    }
