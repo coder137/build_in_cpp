@@ -1,6 +1,12 @@
 BuildExe as a Package Manager
 =============================
 
+When we are **compiling** our "script" to an executable we can also add additional library build files which define how the library is built.
+
+The procedure is similar to git cloning the library to the **ENV{BUILDCC_HOME}/libs** folder using the ``libs`` options in buildexe.
+
+Please see :doc:`buildexe_setup` to setup your libs folder appropriately.
+
 Basic Procedure
 ----------------
 
