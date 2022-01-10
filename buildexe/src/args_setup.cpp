@@ -128,6 +128,12 @@ void BuildExeArgs::SetupLibs() {
     }
     fs::path lib_path = dir.path();
     std::string lib_name = lib_path.filename().string();
+
+    LibInfo lib_info;
+    lib_info.lib_name = lib_name;
+    lib_info.absolute_lib_path = fmt::format("{}", lib_path);
+    libs_info_.push_back(lib_info);
+
     auto add_lib_files_cb_func = [lib_path,
                                   this](const std::vector<std::string> &paths) {
       for (const auto &p : paths) {

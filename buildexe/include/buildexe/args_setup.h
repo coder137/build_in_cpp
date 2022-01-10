@@ -54,6 +54,11 @@ struct ArgScriptInfo {
   std::vector<std::string> configs;
 };
 
+struct LibInfo {
+  std::string lib_name;
+  std::string absolute_lib_path;
+};
+
 class BuildExeArgs {
 public:
   void Setup();
@@ -68,6 +73,8 @@ public:
   const ArgTargetInputs &GetTargetInputs() const { return out_targetinputs_; }
   const ArgScriptInfo &GetScriptInfo() const { return out_scriptinfo_; }
   BuildExeMode GetBuildMode() const { return out_mode_; }
+
+  const std::vector<LibInfo> &GetLibsInfo() const { return libs_info_; }
   const std::vector<fs::path> &GetLibBuildFiles() const {
     return lib_build_files_;
   }
@@ -87,6 +94,8 @@ private:
   ArgScriptInfo out_scriptinfo_;
 
   BuildExeMode out_mode_;
+
+  std::vector<LibInfo> libs_info_;
   std::vector<fs::path> lib_build_files_;
 };
 
