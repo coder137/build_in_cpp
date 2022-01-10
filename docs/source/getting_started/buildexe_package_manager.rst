@@ -319,6 +319,23 @@ Write your ``compile.toml`` file
 Write your ``build.toml`` file
 +++++++++++++++++++++++++++++++
 
+* Exact same ``build.toml`` as seen in the document :doc:`buildexe_script_example`
+
+.. code-block:: toml
+    :linenos:
+
+    # Root
+    root_dir = ""
+    build_dir = "_build"
+    loglevel = "debug"
+    clean = true
+
+    # Toolchain
+    [toolchain.gcc]
+    build = true
+    test = true
+
+
 Write your ``main.cpp`` helloworld example in fmtlib
 ++++++++++++++++++++++++++++++++++++++++++++++++++++
 
