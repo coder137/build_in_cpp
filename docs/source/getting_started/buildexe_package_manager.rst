@@ -61,7 +61,13 @@ Helloworld "fmtlib" example
         Options:
             --fmt TEXT ...              fmt library
 
-* Since we want to use the ``fmt`` library in our project we can now write your ``compile.toml`` file as given below.
+* Since we want to use the ``fmt`` library in our project we can now write our ``compile.toml`` file as given below. (See highlighted lines)
+* We then write our "script", include the ``fmt`` build header file and define our targets and dependencies.
+* Lastly we invoke buildexe to build our project
+
+.. code-block:: bash
+
+    buildexe --config compile.toml --config $BUILDCC_HOME/host/host_toolchain.toml
 
 Directory structure
 +++++++++++++++++++++
