@@ -63,9 +63,21 @@ jobs:
         run: |
           cmake --build . --target run_buildcc_lib_bootstrap_linux_gcc --config Release
 
+      - name: BuildExe Layout setup
+        working-directory: ${{github.workspace}}/..
+        run: |
+          mkdir buildcc_home
+          export BUILDCC_HOME="${{github.workspace}}/../buildcc_home"
+          echo $BUILDCC_HOME
+          cd buildcc_home
+          mkdir buildcc
+          mkdir libs
+          mkdir extensions
+
       - name: BuildExe IM example tiny-process-library
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
+          echo $BUILDCC_HOME
           cmake --build . --target run_buildexe_im_tpl_linux_gcc --config Release
 
       - name: CPack Release
@@ -200,9 +212,21 @@ jobs:
         run: |
           cmake --build . --target run_buildcc_lib_bootstrap_linux_gcc --config Release
 
+      - name: BuildExe Layout setup
+        working-directory: ${{github.workspace}}/..
+        run: |
+          mkdir buildcc_home
+          export BUILDCC_HOME="${{github.workspace}}/../buildcc_home"
+          echo $BUILDCC_HOME
+          cd buildcc_home
+          mkdir buildcc
+          mkdir libs
+          mkdir extensions
+
       - name: BuildExe IM example tiny-process-library
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
+          echo $BUILDCC_HOME
           cmake --build . --target run_buildexe_im_tpl_linux_gcc --config Release
 
       # - name: TODO, BuildExe SM simple hyrid example
