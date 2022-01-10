@@ -77,6 +77,87 @@ Directory structure
     ** build.toml 
     @endmindmap
 
+Write your fmtlib build files
+++++++++++++++++++++++++++++++
+
+.. note:: This process might seem like a hassle. But please note that fmtlib does not currently have support for BuildCC like build files and it must be provided by the user.
+
+.. code-block:: cpp
+    :linenos:
+    :caption: build.fmt.h
+
+    #pragma once
+
+    #include "buildcc.h"
+
+    using namespace buildcc;
+    
+    /**
+    * @brief User configurable options
+    * default_flags: Adds default preprocessor, compile and link flags to the fmt
+    * library if true. If false these would need to be provided by the user.
+    */
+    struct FmtConfig {
+        bool default_flags{true};
+        // NOTE, Add more options here as required to customize your fmtlib build
+    };
+
+    /**
+    * @brief Build the libfmt static or dynamic library
+    *
+    * @param target Initialized specialized library target
+    * @param config See FmtConfig above
+    */
+    void build_fmt_cb(BaseTarget& target, const FmtConfig& config = FmtConfig());
+
+    /**
+    * @brief Information for fmt header only library
+    *
+    * @param target_info Holds the include dirs, headers and preprocessor flag
+    * information
+    */
+    void build_fmt_ho_cb(TargetInfo& target_info);
+
+.. code-block:: cpp
+    :linenos:
+    :caption: build.fmt.cpp
+
+    #include "build.fmt.h"
+
+    void build_fmt_cb(BaseTarget& target, const FmtConfig& config) {
+        target.AddSource("src/os.cc");
+        target.AddSource("src/format.cc");
+        target.AddIncludeDir("include", false);
+        target.GlobHeaders("include/fmt");
+    
+        // Toolchain specific flags added 
+        // if default_flags == true
+        if (config.default_flags) {
+            switch (target.GetToolchain().GetId()) {
+            case ToolchainId::Gcc:
+                target.AddCppCompileFlag("-std=c++11");
+                break;
+            case ToolchainId::MinGW:
+                target.AddCppCompileFlag("-std=c++11");
+                break;
+            case ToolchainId::Msvc:
+                target.AddCppCompileFlag("/std:c++11");
+                break;
+            default:
+                break;
+            }
+        }
+
+        target.Build();
+    }
+
+    void build_fmt_ho_cb(TargetInfo& target_info) {
+        target_info.AddIncludeDir("include", false);
+        target_info.GlobHeaders("include/fmt");
+        target_info.AddPreprocessorFlag("-DFMT_HEADER_ONLY=1");
+    }
+
+
 Write your C++ "script"
 ++++++++++++++++++++++++
 
