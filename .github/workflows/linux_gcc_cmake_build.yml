@@ -73,10 +73,13 @@ jobs:
           mkdir buildcc
           mkdir libs
           mkdir extensions
+          cd ..
+          ls
 
       - name: BuildExe IM example tiny-process-library
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_ALL}}
         run: |
+          export BUILDCC_HOME="${{github.workspace}}/../buildcc_home"
           echo $BUILDCC_HOME
           cmake --build . --target run_buildexe_im_tpl_linux_gcc --config Release
 
@@ -222,10 +225,13 @@ jobs:
           mkdir buildcc
           mkdir libs
           mkdir extensions
+          cd ..
+          ls
 
       - name: BuildExe IM example tiny-process-library
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: |
+          export BUILDCC_HOME="${{github.workspace}}/../buildcc_home"
           echo $BUILDCC_HOME
           cmake --build . --target run_buildexe_im_tpl_linux_gcc --config Release
 
