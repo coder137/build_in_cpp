@@ -172,6 +172,7 @@
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">BuildExe Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="buildexe_script_example.html">BuildExe “Script” example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="buildexe_immediate_example.html">BuildExe “Immediate” example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildexe_package_manager.html">BuildExe as a Package Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="walkthroughs.html">Walkthrough Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="all_compile_options.html">Compile Options for BuildExe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="all_default_build_options.html">Build Options for “scripts”</a></li>
@@ -337,9 +338,58 @@ git submodule update
 *** msvc_am64_19.29.30137.toml
 @endmindmap" src="../_images/plantuml-968d5bbd1332b743a7b17b0e4274266a2acaaaae.png"/>
 </p>
+</div>
+<div class="section" id="libs">
+<h2>Libs<a class="headerlink" href="#libs" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Any library that the user needs to use in their projects can be <strong>git cloned</strong> into the libs folder.</p></li>
+<li><p>BuildExe can then be used to compile the library build files along with the “script”.</p></li>
+<li><p>The library build files define how a particular library is built.</p></li>
+<li><p>These functions can be used in the “script” to define how your target should be built.</p></li>
+</ul>
+<p>In this way we achieve a package manager like functionality with BuildExe and git. (Local package manager)</p>
+<p>For example we download the <strong>fmt library</strong> to our libs folder</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> <span class="nv">$BUILDCC_HOME</span>/libs
+git clone https://github.com/fmtlib/fmt.git
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This might sound strange, but the git cloned library <strong>folder name</strong> must also be a valid C++ <strong>variable name</strong>.</p>
+</div>
+<ul class="simple">
+<li><p>Since the <strong>fmt</strong> lib does not have support for BuildCC style build files we write our own</p></li>
+<li><p>Please see the <a class="reference internal" href="buildexe_package_manager.html"><span class="doc">BuildExe as a Package Manager</span></a> document for a simple example.</p></li>
+</ul>
+<p class="plantuml">
+<img alt="@startmindmap
+* ENV[BUILDCC_HOME]
+** bin
+*** flatc
+*** buildexe
+** buildcc
+*** [git cloned]
+** extensions
+*** [empty]
+** libs
+*** fmt
+**** [git cloned]
+*** spdlog
+**** [git cloned]
+*** flatbuffers
+**** [git cloned]
+** host
+*** gcc_x86_64-linux-gnu_9.3.0.toml
+*** mingw_x86_64-w64-mingw32_10.2.0.toml
+*** msvc_am64_19.29.30137.toml
+@endmindmap" src="../_images/plantuml-87d3b26be8cc5bb34385575617f41f55382be5a4.png"/>
+</p>
+</div>
+<div class="section" id="extensions">
+<h2>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><strong>Extensions</strong> and <strong>Libs</strong> will come later in the tutorial</p>
+<p>Extensions support in BuildExe is incomplete and there currently aren’t any third party extensions for BuildCC.</p>
 </div>
 </div>
 </div>
@@ -398,6 +448,8 @@ git submodule update
 <li><a class="reference internal" href="#">BuildExe Setup</a><ul>
 <li><a class="reference internal" href="#env-buildcc-home">ENV[BUILDCC_HOME]</a></li>
 <li><a class="reference internal" href="#host-toolchains">Host Toolchains</a></li>
+<li><a class="reference internal" href="#libs">Libs</a></li>
+<li><a class="reference internal" href="#extensions">Extensions</a></li>
 </ul>
 </li>
 </ul>
