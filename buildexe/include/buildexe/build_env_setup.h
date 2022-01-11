@@ -20,6 +20,7 @@
 #include "buildcc.h"
 
 #include "bootstrap/build_buildcc.h"
+
 #include "buildexe/args_setup.h"
 
 namespace buildcc {
@@ -31,15 +32,12 @@ public:
 
 public:
   BuildEnvSetup(Register &reg, const BaseToolchain &toolchain,
-                const ArgTargetInfo &arg_target_info,
-                const ArgTargetInputs &arg_target_inputs)
-      : reg_(reg), toolchain_(toolchain), arg_target_info_(arg_target_info),
-        arg_target_inputs_(arg_target_inputs) {
+                const BuildExeArgs &buildexe_args)
+      : reg_(reg), toolchain_(toolchain), buildexe_args_(buildexe_args) {
     state_.build = true;
   }
 
-  void ConstructUserTarget();
-  void ConstructUserTargetWithBuildcc();
+  void ConstructTarget();
 
   void RunUserTarget(const ArgScriptInfo &arg_script_info);
 
@@ -52,19 +50,21 @@ public:
   }
 
 private:
+  void ConstructUserTarget();
+  void ConstructUserTargetWithBuildcc();
+
   void BuildccTargetSetup();
   void UserTargetSetup();
   void UserTargetCb();
-  void UserTargetBuild();
-
   void UserTargetWithBuildccSetup();
+  void UserTargetWithLibsSetup();
+  void UserTargetBuild();
   void DepUserTargetOnBuildcc();
 
 private:
   Register &reg_;
   const BaseToolchain &toolchain_;
-  const ArgTargetInfo &arg_target_info_;
-  const ArgTargetInputs &arg_target_inputs_;
+  const BuildExeArgs &buildexe_args_;
 
   ArgToolchainState state_;
   PersistentStorage storage_;

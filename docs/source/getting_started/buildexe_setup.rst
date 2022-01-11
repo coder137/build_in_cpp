@@ -106,5 +106,53 @@ This folder will contain the .toml files of all the HOST toolchains present on y
     *** msvc_am64_19.29.30137.toml
     @endmindmap
 
+Libs
+-------
 
-.. note:: **Extensions** and **Libs** will come later in the tutorial
+* Any library that the user needs to use in their projects can be **git cloned** into the libs folder.
+* BuildExe can then be used to compile the library build files along with the "script". 
+* The library build files define how a particular library is built. 
+* These functions can be used in the "script" to define how your target should be built.
+
+In this way we achieve a package manager like functionality with BuildExe and git. (Local package manager)
+
+For example we download the **fmt library** to our libs folder
+
+.. code-block:: bash
+
+    cd $BUILDCC_HOME/libs
+    git clone https://github.com/fmtlib/fmt.git
+
+.. important:: This might sound strange, but the git cloned library **folder name** must also be a valid C++ **variable name**.
+
+* Since the **fmt** lib does not have support for BuildCC style build files we write our own
+* Please see the :doc:`buildexe_package_manager` document for a simple example.
+
+.. uml::
+
+    @startmindmap
+    * ENV[BUILDCC_HOME]
+    ** bin
+    *** flatc
+    *** buildexe
+    ** buildcc
+    *** [git cloned]
+    ** extensions
+    *** [empty]
+    ** libs
+    *** fmt
+    **** [git cloned]
+    *** spdlog
+    **** [git cloned]
+    *** flatbuffers
+    **** [git cloned]
+    ** host
+    *** gcc_x86_64-linux-gnu_9.3.0.toml
+    *** mingw_x86_64-w64-mingw32_10.2.0.toml
+    *** msvc_am64_19.29.30137.toml
+    @endmindmap
+
+Extensions
+-------------
+
+.. note:: Extensions support in BuildExe is incomplete and there currently aren't any third party extensions for BuildCC.

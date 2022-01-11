@@ -1,0 +1,20 @@
+# Settings
+root_dir = ""
+build_dir = "_build_internal"
+loglevel = "debug"
+clean = false
+
+# BuildExe run mode
+mode = "script"
+
+# Target information
+name = "single"
+type = "executable"
+relative_to_root = ""
+srcs = ["build.main.cpp"]
+
+[script]
+configs = ["build.toml"]
+
+[libs]
+fmt = ["build.fmt.cpp", "build.fmt.h"]

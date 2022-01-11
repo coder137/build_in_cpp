@@ -15,45 +15,27 @@
  */
 
 #include "buildexe/build_env_setup.h"
+#include "buildexe/build_env_home.h"
 
 namespace buildcc {
 
-static fs::path get_env_buildcc_home() {
-  const char *buildcc_home = getenv("BUILDCC_HOME");
-  env::assert_fatal(buildcc_home != nullptr,
-                    "BUILDCC_HOME environment variable not defined");
+constexpr const char *const kTag = "BuildExe";
 
-  // NOTE, Verify BUILDCC_HOME
-  // auto &buildcc_path = storage.Add<fs::path>("buildcc_path", buildcc_home);
-  fs::path buildcc_home_path{buildcc_home};
-  env::assert_fatal(fs::exists(buildcc_home_path),
-                    "{BUILDCC_HOME} path not found");
-  env::assert_fatal(fs::exists(buildcc_home_path / "buildcc"),
-                    "{BUILDCC_HOME}/buildcc path not found");
-  env::assert_fatal(fs::exists(buildcc_home_path / "libs"),
-                    "{BUILDCC_HOME}/libs path not found");
-  env::assert_fatal(fs::exists(buildcc_home_path / "extensions"),
-                    "{BUILDCC_HOME}/extensions path not found");
-
-  return buildcc_home_path;
-}
-
-void BuildEnvSetup::ConstructUserTarget() {
-  UserTargetSetup();
-  UserTargetCb();
-  UserTargetBuild();
-}
-
-void BuildEnvSetup::ConstructUserTargetWithBuildcc() {
-  BuildccTargetSetup();
-  UserTargetSetup();
-  UserTargetCb();
-  UserTargetWithBuildccSetup();
-  UserTargetBuild();
-  DepUserTargetOnBuildcc();
+void BuildEnvSetup::ConstructTarget() {
+  if (buildexe_args_.GetBuildMode() == BuildExeMode::Script) {
+    // buildcc and user target
+    ConstructUserTargetWithBuildcc();
+  } else {
+    // user target
+    ConstructUserTarget();
+  }
+  reg_.RunBuild();
 }
 
 void BuildEnvSetup::RunUserTarget(const ArgScriptInfo &arg_script_info) {
+  env::log_info(kTag, fmt::format("************** Running '{}' **************",
+                                  buildexe_args_.GetTargetInfo().name));
+
   // Aggregate the different input build .toml files to
   // `--config .toml` files
   std::vector<std::string> configs;
@@ -75,23 +57,35 @@ void BuildEnvSetup::RunUserTarget(const ArgScriptInfo &arg_script_info) {
 
 // Private
 
-void BuildEnvSetup::DepUserTargetOnBuildcc() {
-  reg_.Dep(GetUserTarget(), GetBuildcc());
+void BuildEnvSetup::ConstructUserTarget() {
+  UserTargetSetup();
+  UserTargetCb();
+  UserTargetBuild();
+}
+
+void BuildEnvSetup::ConstructUserTargetWithBuildcc() {
+  BuildccTargetSetup();
+  UserTargetSetup();
+  UserTargetCb();
+  UserTargetWithBuildccSetup();
+  UserTargetWithLibsSetup();
+  UserTargetBuild();
+  DepUserTargetOnBuildcc();
 }
 
 void BuildEnvSetup::BuildccTargetSetup() {
-  fs::path buildcc_home = get_env_buildcc_home();
+  const fs::path &buildcc_base = BuildccHome::GetBuildccBaseDir();
   auto &buildcc_package = storage_.Add<BuildBuildCC>(
       kBuildccPackageName, reg_, toolchain_,
-      TargetEnv(buildcc_home / "buildcc",
-                buildcc_home / "buildcc" / "_build_exe"));
+      TargetEnv(buildcc_base, buildcc_base / "_build_exe"));
   buildcc_package.Setup(state_);
 }
 
 void BuildEnvSetup::UserTargetSetup() {
-  storage_.Add<Target_generic>(kUserTargetName, arg_target_info_.name,
-                               arg_target_info_.type, toolchain_,
-                               TargetEnv(arg_target_info_.relative_to_root));
+  const ArgTargetInfo &arg_target_info = buildexe_args_.GetTargetInfo();
+  storage_.Add<Target_generic>(kUserTargetName, arg_target_info.name,
+                               arg_target_info.type, toolchain_,
+                               TargetEnv(arg_target_info.relative_to_root));
 }
 
 /**
@@ -109,42 +103,39 @@ void BuildEnvSetup::UserTargetSetup() {
  * Link flags
  */
 void BuildEnvSetup::UserTargetCb() {
+  const ArgTargetInputs arg_target_inputs = buildexe_args_.GetTargetInputs();
   Target_generic &user_target = GetUserTarget();
-  for (const auto &s : arg_target_inputs_.source_files) {
+
+  for (const auto &s : arg_target_inputs.source_files) {
     user_target.AddSource(s);
   }
-  for (const auto &i : arg_target_inputs_.include_dirs) {
+  for (const auto &i : arg_target_inputs.include_dirs) {
     user_target.AddIncludeDir(i);
   }
-  for (const auto &l : arg_target_inputs_.lib_dirs) {
+  for (const auto &l : arg_target_inputs.lib_dirs) {
     user_target.AddLibDir(l);
   }
-  for (const auto &el : arg_target_inputs_.external_lib_deps) {
+  for (const auto &el : arg_target_inputs.external_lib_deps) {
     user_target.AddLibDep(el);
   }
-  for (const auto &flag : arg_target_inputs_.preprocessor_flags) {
+  for (const auto &flag : arg_target_inputs.preprocessor_flags) {
     user_target.AddPreprocessorFlag(flag);
   }
-  for (const auto &flag : arg_target_inputs_.common_compile_flags) {
+  for (const auto &flag : arg_target_inputs.common_compile_flags) {
     user_target.AddCommonCompileFlag(flag);
   }
-  for (const auto &flag : arg_target_inputs_.asm_compile_flags) {
+  for (const auto &flag : arg_target_inputs.asm_compile_flags) {
     user_target.AddAsmCompileFlag(flag);
   }
-  for (const auto &flag : arg_target_inputs_.c_compile_flags) {
+  for (const auto &flag : arg_target_inputs.c_compile_flags) {
     user_target.AddCCompileFlag(flag);
   }
-  for (const auto &flag : arg_target_inputs_.cpp_compile_flags) {
+  for (const auto &flag : arg_target_inputs.cpp_compile_flags) {
     user_target.AddCppCompileFlag(flag);
   }
-  for (const auto &flag : arg_target_inputs_.link_flags) {
+  for (const auto &flag : arg_target_inputs.link_flags) {
     user_target.AddLinkFlag(flag);
   }
-}
-
-void BuildEnvSetup::UserTargetBuild() {
-  reg_.Build(
-      state_, [](BaseTarget &target) { target.Build(); }, GetUserTarget());
 }
 
 void BuildEnvSetup::UserTargetWithBuildccSetup() {
@@ -166,6 +157,77 @@ void BuildEnvSetup::UserTargetWithBuildccSetup() {
   default:
     break;
   }
+}
+
+void BuildEnvSetup::UserTargetWithLibsSetup() {
+  auto &user_target = GetUserTarget();
+
+  // Generate buildexe_lib_dirs.h with the absolute path to library folders
+  // Query the information through BuildExeLibDir::[lib_folder_name]
+  {
+    constexpr const char *const kConstexprLibNameFormat =
+        "static constexpr const char *const {lib_name} = "
+        "\"{absolute_lib_dir}\";";
+    constexpr const char *const kLibDirsFormat = R"(// Generated by BuildCC
+#pragma once
+
+struct BuildExeLibDir {{
+{lib_dirs}
+}};
+)";
+
+    const auto &libs_info = buildexe_args_.GetLibsInfo();
+    std::vector<std::string> lib_constants;
+    for (const auto &linfo : libs_info) {
+      std::string lib_constant = fmt::format(
+          kConstexprLibNameFormat, fmt::arg("lib_name", linfo.lib_name),
+          fmt::arg("absolute_lib_dir", linfo.absolute_lib_path));
+      lib_constants.push_back(lib_constant);
+    }
+    fs::path lib_dirs_filename =
+        user_target.GetTargetBuildDir() / "buildexe_lib_dirs.h";
+    std::string data = fmt::format(
+        kLibDirsFormat, fmt::arg("lib_dirs", fmt::join(lib_constants, "\r\n")));
+    env::save_file(lib_dirs_filename.string().c_str(), data, false);
+
+    user_target.AddIncludeDirAbsolute(user_target.GetTargetBuildDir(), true);
+  }
+
+  // Segregate valid lib files into sources and include dirs
+  internal::fs_unordered_set sources;
+  internal::fs_unordered_set include_dirs;
+  internal::fs_unordered_set headers;
+  for (const auto &lib_build_file : buildexe_args_.GetLibBuildFiles()) {
+    if (user_target.GetConfig().IsValidSource(lib_build_file)) {
+      sources.insert(lib_build_file);
+    }
+    if (user_target.GetConfig().IsValidHeader(lib_build_file)) {
+      include_dirs.insert(lib_build_file.parent_path());
+      headers.insert(lib_build_file);
+    }
+  }
+
+  // Add sources to user_target
+  for (const auto &s : sources) {
+    user_target.AddSourceAbsolute(s);
+  }
+  // Add include dirs to user_target
+  for (const auto &idir : include_dirs) {
+    user_target.AddIncludeDir(idir, false);
+  }
+  // Add headers to user_target
+  for (const auto &h : headers) {
+    user_target.AddHeaderAbsolute(h);
+  }
+}
+
+void BuildEnvSetup::UserTargetBuild() {
+  reg_.Build(
+      state_, [](BaseTarget &target) { target.Build(); }, GetUserTarget());
+}
+
+void BuildEnvSetup::DepUserTargetOnBuildcc() {
+  reg_.Dep(GetUserTarget(), GetBuildcc());
 }
 
 } // namespace buildcc

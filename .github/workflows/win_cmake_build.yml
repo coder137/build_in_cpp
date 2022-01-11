@@ -55,9 +55,23 @@ jobs:
         run: |
           cmake --build . --config Release --target run_buildcc_lib_bootstrap_win_msvc --parallel 2
 
+      - name: BuildExe Layout setup
+        working-directory: ${{github.workspace}}/..
+        run: |
+          mkdir buildcc_home
+          $env:BUILDCC_HOME = "${{github.workspace}}/../buildcc_home"
+          $env:BUILDCC_HOME
+          cd buildcc_home
+          mkdir buildcc
+          mkdir libs
+          mkdir extensions
+          cd ..
+          dir
+
       - name: BuildExe IM example tiny-process-library
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
+          $env:BUILDCC_HOME = "${{github.workspace}}/../buildcc_home"
           cmake --build . --config Release --target run_buildexe_im_tpl_win_msvc
 
       # - name: TODO, BuildExe SM simple hyrid example
