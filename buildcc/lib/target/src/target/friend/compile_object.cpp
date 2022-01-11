@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Niket Naidu. All rights reserved.
+ * Copyright 2021-2022 Niket Naidu. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,33 +96,60 @@ CompileObject::GetObjectData(const fs::path &absolute_source) const {
 // - {target_absolute_root_dir} / FOOLIB / source -> {target_absolute_build_dir}
 // / FOOLIB / source
 
-// TODO, Discuss PathReplacementStrategy API (Grey areas?)
-// NOTE, Replace part of the `relative path` with a path of users choice
-// - Add `folder/nested` -> FOLDER_NESTED
-// - {target_root_dir} / random / folder / nested / source -> {target_build_dir}
-// / random / FOLDER_NESTED / source.compiled
+// TODO, Discuss DifferentOutputFolder API
+// {target_root_dir} / random / folder / file.cpp -> {target_build_dir} / random
+// / folder / file.cpp.o (SAME)
+// {OUT_OF_ROOT_FOLDER} / file.cpp -> {target_build_dir} / {USER_OUTPUT_FOLDER}
+// / file.cpp.o
+// {OUT_OF_ROOT_FOLDER} / random / folder / file.cpp -> {target_build_dir} /
+// {USER_OUTPUT_FOLDER} / random / folder / file.cpp.o
 fs::path
 CompileObject::ConstructObjectPath(const fs::path &absolute_source_file) const {
 
   // Compute the relative compiled source path
+  // Expects to convert
+  // 1. {project_root_dir} / file.cpp -> file.cpp
+  // 2. {project_root_dir} / folder / file.cpp -> folder / file.cpp
   fs::path relative =
       absolute_source_file.lexically_relative(target_.GetTargetRootDir());
 
-  // TODO, Add path replacement strategy on relative
-
+  // Expects to convert
+  // 1. {project_root_dir} / .. / file.cpp -> .. / file.cpp
+  // 2. {project_root_dir} / .. / folder / file.cpp -> .. / folder / file.cpp
   // - Check if out of root
   // - Convert .. to __
   // NOTE, Similar to how CMake handles out of root files
   std::string relstr = relative.string();
   if (relstr.find("..") != std::string::npos) {
-    env::log_warning(__FUNCTION__,
-                     fmt::format("Out of Root Source detected '{}'. Use "
-                                 "TargetEnv to supply absolute target root "
-                                 "path -> absolute target build path. By "
-                                 "default converts '..' to '__'",
-                                 relstr));
+    env::log_warning(
+        __FUNCTION__,
+        fmt::format("Out of Root Source detected '{}' -> '{}'. Use "
+                    "TargetEnv to supply absolute target root "
+                    "path -> absolute target build path. By "
+                    "default converts '..' to '__'",
+                    absolute_source_file.string(), relstr));
     std::replace(relstr.begin(), relstr.end(), '.', '_');
+    // Converts above
+    // .. / file.cpp -> __ / file.cpp
+    // .. / folder / file.cpp -> __ / folder / file.cpp
     relative = relstr;
+
+    // TODO, path replacement found
+    // * API
+    // AddSourceAbsolute("BUILDCC_HOME / libs / fmt / build.fmt.cpp",
+    //                   {"BUILDCC_HOME / libs / fmt", "fmt"});
+
+    // Converts above
+    // .. / file.cpp -> {REPLACEMENT_DIR} / file.cpp
+    // .. / folder / file.cpp -> {REPLACEMENT_DIR} / folder / file.cpp
+    // relative = relative_replacement_dir / absolute_source_file.filename();
+
+    // std::string absolute_source_file_str =
+    //     path_as_string(absolute_source_file);
+    // auto iter = absolute_source_file_str.find(replacement_strategy.first);
+    // relative = absolute_source_file_str.replace(
+    //     iter, replacement_strategy.first.length(),
+    //     replacement_strategy.second);
   }
 
   // Compute relative object path
