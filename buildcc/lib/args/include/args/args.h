@@ -57,6 +57,10 @@ struct ArgToolchain {
         c_compiler(initial_c_compiler), cpp_compiler(initial_cpp_compiler),
         archiver(initial_archiver), linker(initial_linker) {}
 
+  /**
+   * @brief Construct a BaseToolchain from the arguments supplied through the
+   * command line information
+   */
   BaseToolchain ConstructToolchain() const {
     BaseToolchain toolchain(id, name, asm_compiler, c_compiler, cpp_compiler,
                             archiver, linker);

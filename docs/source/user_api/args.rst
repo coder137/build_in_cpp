@@ -4,13 +4,12 @@ Args
 args.h
 -------
 
-.. doxygenclass:: buildcc::Args    
+.. doxygenclass:: buildcc::Args
+    :members: Parse, Ref, ConstRef, AddToolchain, Clean, GetLogLevel, GetProjectRootDir, GetProjectBuildDir
 
 .. doxygenstruct:: buildcc::ArgToolchainState
 
 .. doxygenstruct:: buildcc::ArgToolchain
-
-.. doxygenstruct:: buildcc::ArgTarget
 
 Example
 ---------
