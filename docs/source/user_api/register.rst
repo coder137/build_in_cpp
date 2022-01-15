@@ -5,7 +5,7 @@ register.h
 -----------
 
 .. doxygenclass:: buildcc::Register
-    :members: Register, Clean, Callback, Build, Dep, Test, RunBuild, RunTest
+    :members: Register, Clean, Callback, CallbackIf, Build, Dep, Test, RunBuild, RunTest
 
 
 Example
@@ -29,6 +29,9 @@ Example
         
         BigObj obj;
         reg.Callback(callback_usage_func, BigObj(), obj);
+
+        bool expression = true; // false
+        reg.CallbackIf(expression, callback_usage_func, BigObj(), obj);
 
         // Example snippets of these given in Target API
         // Build
