@@ -46,8 +46,8 @@ public:
    * Can be used to organize code into functional chunks
    */
   template <typename C, typename... Params>
-  void Callback(const C &build_cb, Params &...params) {
-    build_cb(std::forward<Params &>(params)...);
+  void Callback(const C &build_cb, Params &&...params) {
+    build_cb(std::forward<Params>(params)...);
   }
 
   /**
@@ -57,9 +57,9 @@ public:
    */
   template <typename C, typename... Params>
   void CallbackIf(const ArgToolchainState &toolchain_state, const C &build_cb,
-                  Params &...params) {
+                  Params &&...params) {
     if (toolchain_state.build) {
-      Callback(build_cb, std::forward<Params &>(params)...);
+      Callback(build_cb, std::forward<Params>(params)...);
     }
   }
 
@@ -68,15 +68,15 @@ public:
    */
   template <typename C, typename... Params>
   void Build(const ArgToolchainState &toolchain_state, const C &build_cb,
-             base::Target &target, Params &...params) {
+             base::Target &target, Params &&...params) {
     tf::Task task;
     CallbackIf(
         toolchain_state,
-        [&](base::Target &ltarget, Params &...lparams) {
-          build_cb(ltarget, std::forward<Params &>(lparams)...);
+        [&](base::Target &ltarget, Params &&...lparams) {
+          build_cb(ltarget, std::forward<Params>(lparams)...);
           task = BuildTargetTask(ltarget);
         },
-        target, std::forward<Params &>(params)...);
+        target, std::forward<Params>(params)...);
     BuildStoreTask(target.GetUniqueId(), task);
   }
 
@@ -84,8 +84,9 @@ public:
    * @brief Register the generator to be built
    */
   template <typename C, typename... Params>
-  void Build(const C &build_cb, base::Generator &generator, Params &...params) {
-    build_cb(generator, std::forward<Params &>(params)...);
+  void Build(const C &build_cb, base::Generator &generator,
+             Params &&...params) {
+    build_cb(generator, std::forward<Params>(params)...);
     tf::Task task = BuildGeneratorTask(generator);
     BuildStoreTask(generator.GetUniqueId(), task);
   }
