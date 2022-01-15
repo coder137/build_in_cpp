@@ -51,6 +51,18 @@ public:
   }
 
   /**
+   * @brief Generic register callback that is run when `expression ==
+   * true`
+   * Can be used to add Toolchain-Target specific information
+   */
+  template <typename C, typename... Params>
+  void CallbackIf(bool expression, const C &build_cb, Params &&...params) {
+    if (expression) {
+      Callback(build_cb, std::forward<Params>(params)...);
+    }
+  }
+
+  /**
    * @brief Generic register callback that is run when `toolchain_state.build ==
    * true`
    * Can be used to add Toolchain-Target specific information
@@ -58,9 +70,8 @@ public:
   template <typename C, typename... Params>
   void CallbackIf(const ArgToolchainState &toolchain_state, const C &build_cb,
                   Params &&...params) {
-    if (toolchain_state.build) {
-      Callback(build_cb, std::forward<Params>(params)...);
-    }
+    CallbackIf(toolchain_state.build, build_cb,
+               std::forward<Params>(params)...);
   }
 
   /**
