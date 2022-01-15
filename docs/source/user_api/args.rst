@@ -32,8 +32,10 @@ Example
         args.Clean(); // Contains ``clean`` value
 
         // Toolchain
-        arg_gcc_toolchain.state; // .build, .test
-        BaseToolchain gcc_toolchain = arg_gcc_toolchain.ConstructToolchain(); // .id, .name, .asm_compiler, .c_compiler, .cpp_compiler, .archiver, .linker
+        // .build, .test
+        arg_gcc_toolchain.state;
+        // .id, .name, .asm_compiler, .c_compiler, .cpp_compiler, .archiver, .linker -> BaseToolchain
+        BaseToolchain gcc_toolchain = arg_gcc_toolchain.ConstructToolchain();
 
         // Underlying CLI11 library
         auto & app = args.Ref();
