@@ -5,7 +5,7 @@ args.h
 -------
 
 .. doxygenclass:: buildcc::Args
-    :members: Parse, Ref, ConstRef, AddToolchain, Clean, GetLogLevel, GetProjectRootDir, GetProjectBuildDir
+    :members: Args, Parse, Ref, ConstRef, AddToolchain, Clean, GetLogLevel, GetProjectRootDir, GetProjectBuildDir
 
 .. doxygenstruct:: buildcc::ArgToolchainState
 
