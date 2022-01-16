@@ -2,7 +2,7 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Register" href="register.html" /><link rel="prev" title="TargetInfo" href="target.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Register" href="register.html" /><link rel="prev" title="User API" href="toc.html" />
 
     <meta name="generator" content="sphinx-4.3.2, furo 2022.01.02"/>
         <title>Args - BuildCC 0.1.1 documentation</title>
@@ -179,16 +179,16 @@
 </ul>
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">User API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="environment.html">Environment</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Args</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register.html">Register</a></li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generator.html">Generator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target.html">TargetInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target.html#target">Target</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target.html#specialized-target">Specialized Target</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Args</a></li>
-<li class="toctree-l2"><a class="reference internal" href="register.html">Register</a></li>
 <li class="toctree-l2"><a class="reference internal" href="supported_plugins.html">Supported Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html">Environment</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../examples/toc.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -229,6 +229,196 @@
 <h1>Args<a class="headerlink" href="#args" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="args-h">
 <h2>args.h<a class="headerlink" href="#args-h" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4ArgsE">
+<span id="_CPPv3N7buildcc4ArgsE"></span><span id="_CPPv2N7buildcc4ArgsE"></span><span id="buildcc::Args"></span><span class="target" id="classbuildcc_1_1Args"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc4ArgsE" title="Permalink to this definition">¶</a><br/></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4Args4ArgsEv">
+<span id="_CPPv3N7buildcc4Args4ArgsEv"></span><span id="_CPPv2N7buildcc4Args4ArgsEv"></span><span id="buildcc::Args::Args"></span><span class="target" id="classbuildcc_1_1Args_1a344436a0be8cf71d6bfe56ec049bba11"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4Args4ArgsEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4Args4ArgsERK4Args">
+<span id="_CPPv3N7buildcc4Args4ArgsERK4Args"></span><span id="_CPPv2N7buildcc4Args4ArgsERK4Args"></span><span id="buildcc::Args::Args__ArgsCR"></span><span class="target" id="classbuildcc_1_1Args_1aa000849eb40745c455ebc03706b648aa"></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7buildcc4Args4ArgsERK4Args" title="buildcc::Args::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N7buildcc4Args4ArgsERK4Args" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4Args5ParseEiPPCKc">
+<span id="_CPPv3N7buildcc4Args5ParseEiPPCKc"></span><span id="_CPPv2N7buildcc4Args5ParseEiPPCKc"></span><span id="buildcc::Args::Parse__i.cCPCP"></span><span class="target" id="classbuildcc_1_1Args_1a084572585e09ae51bd49dd5ca70a5171"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Parse</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">argc</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">argv</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4Args5ParseEiPPCKc" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Parse command line information to CLI11. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>argc</strong> – from int main(int argc, char ** argv) </p></li>
+<li><p><strong>argv</strong> – from int main(int argc, char ** argv) </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4Args3RefEv">
+<span id="_CPPv3N7buildcc4Args3RefEv"></span><span id="_CPPv2N7buildcc4Args3RefEv"></span><span id="buildcc::Args::Ref"></span><span class="target" id="classbuildcc_1_1Args_1a1d68d1e9f3f36b8ed08c861b7845f0e1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">CLI</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">App</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Ref</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4Args3RefEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Modifiable reference to CLI::App (CLI11) </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc4Args8ConstRefEv">
+<span id="_CPPv3NK7buildcc4Args8ConstRefEv"></span><span id="_CPPv2NK7buildcc4Args8ConstRefEv"></span><span id="buildcc::Args::ConstRefC"></span><span class="target" id="classbuildcc_1_1Args_1a90ef5d28e77659c189c83e1f239c5768"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">CLI</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">App</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">ConstRef</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc4Args8ConstRefEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Constant reference to CLI::App (CLI11) </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc4Args12AddToolchainERKNSt6stringERKNSt6stringER12ArgToolchainRK12ArgToolchain">
+<span id="_CPPv3N7buildcc4Args12AddToolchainERKNSt6stringERKNSt6stringER12ArgToolchainRK12ArgToolchain"></span><span id="_CPPv2N7buildcc4Args12AddToolchainERKNSt6stringERKNSt6stringER12ArgToolchainRK12ArgToolchain"></span><span id="buildcc::Args::AddToolchain__ssCR.ssCR.ArgToolchainR.ArgToolchainCR"></span><span class="target" id="classbuildcc_1_1Args_1a5bbd393fcf305121ad0cfdcbce4ab46b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddToolchain</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">description</span></span>, <a class="reference internal" href="#_CPPv4N7buildcc12ArgToolchainE" title="buildcc::ArgToolchain"><span class="n"><span class="pre">ArgToolchain</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">out</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7buildcc12ArgToolchainE" title="buildcc::ArgToolchain"><span class="n"><span class="pre">ArgToolchain</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initial</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7buildcc12ArgToolchainE" title="buildcc::ArgToolchain"><span class="n"><span class="pre">ArgToolchain</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc4Args12AddToolchainERKNSt6stringERKNSt6stringER12ArgToolchainRK12ArgToolchain" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Add toolchain with a unique name and description. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>out</strong> – Receive the toolchain information through the CLI </p></li>
+<li><p><strong>initial</strong> – Set the default toolchain information as a fallback </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc4Args5CleanEv">
+<span id="_CPPv3NK7buildcc4Args5CleanEv"></span><span id="_CPPv2NK7buildcc4Args5CleanEv"></span><span id="buildcc::Args::CleanC"></span><span class="target" id="classbuildcc_1_1Args_1ad7596e4fa8b39ca98b78b2ebc6f6718d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Clean</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc4Args5CleanEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc4Args11GetLogLevelEv">
+<span id="_CPPv3NK7buildcc4Args11GetLogLevelEv"></span><span id="_CPPv2NK7buildcc4Args11GetLogLevelEv"></span><span id="buildcc::Args::GetLogLevelC"></span><span class="target" id="classbuildcc_1_1Args_1a420d944a929481821b980e5f1ee8c0b7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">LogLevel</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetLogLevel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc4Args11GetLogLevelEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc4Args17GetProjectRootDirEv">
+<span id="_CPPv3NK7buildcc4Args17GetProjectRootDirEv"></span><span id="_CPPv2NK7buildcc4Args17GetProjectRootDirEv"></span><span id="buildcc::Args::GetProjectRootDirC"></span><span class="target" id="classbuildcc_1_1Args_1a359f9aa04bb2c524c4f69d961223fa2f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetProjectRootDir</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc4Args17GetProjectRootDirEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc4Args18GetProjectBuildDirEv">
+<span id="_CPPv3NK7buildcc4Args18GetProjectBuildDirEv"></span><span id="_CPPv2NK7buildcc4Args18GetProjectBuildDirEv"></span><span id="buildcc::Args::GetProjectBuildDirC"></span><span class="target" id="classbuildcc_1_1Args_1ad7f4e070068f092683df1533092604cd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetProjectBuildDir</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc4Args18GetProjectBuildDirEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+</div>
+</dd></dl>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc17ArgToolchainStateE">
+<span id="_CPPv3N7buildcc17ArgToolchainStateE"></span><span id="_CPPv2N7buildcc17ArgToolchainStateE"></span><span id="buildcc::ArgToolchainState"></span><span class="target" id="structbuildcc_1_1ArgToolchainState"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ArgToolchainState</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc17ArgToolchainStateE" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Toolchain State used by the <a class="reference internal" href="register.html#classbuildcc_1_1Register"><span class="std std-ref">Register</span></a> module to selectively build or test targets. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc17ArgToolchainState5buildE">
+<span id="_CPPv3N7buildcc17ArgToolchainState5buildE"></span><span id="_CPPv2N7buildcc17ArgToolchainState5buildE"></span><span id="buildcc::ArgToolchainState::build__b"></span><span class="target" id="structbuildcc_1_1ArgToolchainState_1a3082dad4a04706f99326fe526c93d8d1"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">build</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="k"><span class="pre">false</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc17ArgToolchainState5buildE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc17ArgToolchainState4testE">
+<span id="_CPPv3N7buildcc17ArgToolchainState4testE"></span><span id="_CPPv2N7buildcc17ArgToolchainState4testE"></span><span id="buildcc::ArgToolchainState::test__b"></span><span class="target" id="structbuildcc_1_1ArgToolchainState_1a48b5fb135f539c5c1b79403f8c4f0d81"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">test</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="k"><span class="pre">false</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc17ArgToolchainState4testE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+</div>
+</dd></dl>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12ArgToolchainE">
+<span id="_CPPv3N7buildcc12ArgToolchainE"></span><span id="_CPPv2N7buildcc12ArgToolchainE"></span><span id="buildcc::ArgToolchain"></span><span class="target" id="structbuildcc_1_1ArgToolchain"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ArgToolchain</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc12ArgToolchainE" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Toolchain Arg used to receive toolchain information through the command line Bundled with Toolchain State. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12ArgToolchain12ArgToolchainEv">
+<span id="_CPPv3N7buildcc12ArgToolchain12ArgToolchainEv"></span><span id="_CPPv2N7buildcc12ArgToolchain12ArgToolchainEv"></span><span id="buildcc::ArgToolchain::ArgToolchain"></span><span class="target" id="structbuildcc_1_1ArgToolchain_1a9b201cb758ec294117780e6826485ae2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ArgToolchain</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc12ArgToolchain12ArgToolchainEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12ArgToolchain12ArgToolchainE11ToolchainIdRKNSt6stringERKNSt6stringERKNSt6stringERKNSt6stringERKNSt6stringERKNSt6stringE">
+<span id="_CPPv3N7buildcc12ArgToolchain12ArgToolchainE11ToolchainIdRKNSt6stringERKNSt6stringERKNSt6stringERKNSt6stringERKNSt6stringERKNSt6stringE"></span><span id="_CPPv2N7buildcc12ArgToolchain12ArgToolchainE11ToolchainIdRKNSt6stringERKNSt6stringERKNSt6stringERKNSt6stringERKNSt6stringERKNSt6stringE"></span><span id="buildcc::ArgToolchain::ArgToolchain__ToolchainId.ssCR.ssCR.ssCR.ssCR.ssCR.ssCR"></span><span class="target" id="structbuildcc_1_1ArgToolchain_1a137c839e727d4abd713c25ad4173f020"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ArgToolchain</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ToolchainId</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">initial_id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initial_name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initial_asm_compiler</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initial_c_compiler</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initial_cpp_compiler</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initial_archiver</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initial_linker</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc12ArgToolchain12ArgToolchainE11ToolchainIdRKNSt6stringERKNSt6stringERKNSt6stringERKNSt6stringERKNSt6stringERKNSt6stringE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc12ArgToolchain18ConstructToolchainEv">
+<span id="_CPPv3NK7buildcc12ArgToolchain18ConstructToolchainEv"></span><span id="_CPPv2NK7buildcc12ArgToolchain18ConstructToolchainEv"></span><span id="buildcc::ArgToolchain::ConstructToolchainC"></span><span class="target" id="structbuildcc_1_1ArgToolchain_1a0c0e14bba1330eb0052b00e0dccd1c83"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">BaseToolchain</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ConstructToolchain</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc12ArgToolchain18ConstructToolchainEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Construct a BaseToolchain from the arguments supplied through the command line information. </p>
+</dd></dl>
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12ArgToolchain5stateE">
+<span id="_CPPv3N7buildcc12ArgToolchain5stateE"></span><span id="_CPPv2N7buildcc12ArgToolchain5stateE"></span><span id="buildcc::ArgToolchain::state__ArgToolchainState"></span><span class="target" id="structbuildcc_1_1ArgToolchain_1af6f39e185fb27d99ec16947a5a9a3d99"></span><a class="reference internal" href="#_CPPv4N7buildcc17ArgToolchainStateE" title="buildcc::ArgToolchainState"><span class="n"><span class="pre">ArgToolchainState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">state</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc12ArgToolchain5stateE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12ArgToolchain2idE">
+<span id="_CPPv3N7buildcc12ArgToolchain2idE"></span><span id="_CPPv2N7buildcc12ArgToolchain2idE"></span><span id="buildcc::ArgToolchain::id__ToolchainId"></span><span class="target" id="structbuildcc_1_1ArgToolchain_1a3e6646c1dddbf7376c2a7c56f019b97e"></span><span class="n"><span class="pre">ToolchainId</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">id</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="n"><span class="pre">ToolchainId</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Undefined</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc12ArgToolchain2idE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12ArgToolchain4nameE">
+<span id="_CPPv3N7buildcc12ArgToolchain4nameE"></span><span id="_CPPv2N7buildcc12ArgToolchain4nameE"></span><span id="buildcc::ArgToolchain::name__ss"></span><span class="target" id="structbuildcc_1_1ArgToolchain_1a8ca10d6c25ae4f496c03d9591ea6ad35"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">""</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc12ArgToolchain4nameE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12ArgToolchain12asm_compilerE">
+<span id="_CPPv3N7buildcc12ArgToolchain12asm_compilerE"></span><span id="_CPPv2N7buildcc12ArgToolchain12asm_compilerE"></span><span id="buildcc::ArgToolchain::asm_compiler__ss"></span><span class="target" id="structbuildcc_1_1ArgToolchain_1a6258ae3491ee164f0824a4f319bb9e9c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">asm_compiler</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">""</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc12ArgToolchain12asm_compilerE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12ArgToolchain10c_compilerE">
+<span id="_CPPv3N7buildcc12ArgToolchain10c_compilerE"></span><span id="_CPPv2N7buildcc12ArgToolchain10c_compilerE"></span><span id="buildcc::ArgToolchain::c_compiler__ss"></span><span class="target" id="structbuildcc_1_1ArgToolchain_1a700070d31b83dcdd6ae62fb7395e88d8"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">c_compiler</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">""</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc12ArgToolchain10c_compilerE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12ArgToolchain12cpp_compilerE">
+<span id="_CPPv3N7buildcc12ArgToolchain12cpp_compilerE"></span><span id="_CPPv2N7buildcc12ArgToolchain12cpp_compilerE"></span><span id="buildcc::ArgToolchain::cpp_compiler__ss"></span><span class="target" id="structbuildcc_1_1ArgToolchain_1adc54e7e72da3597a2dde6227ea11a951"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cpp_compiler</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">""</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc12ArgToolchain12cpp_compilerE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12ArgToolchain8archiverE">
+<span id="_CPPv3N7buildcc12ArgToolchain8archiverE"></span><span id="_CPPv2N7buildcc12ArgToolchain8archiverE"></span><span id="buildcc::ArgToolchain::archiver__ss"></span><span class="target" id="structbuildcc_1_1ArgToolchain_1ad9aa012fec1cf81586f7cc35454aa0d3"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">archiver</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">""</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc12ArgToolchain8archiverE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12ArgToolchain6linkerE">
+<span id="_CPPv3N7buildcc12ArgToolchain6linkerE"></span><span id="_CPPv2N7buildcc12ArgToolchain6linkerE"></span><span id="buildcc::ArgToolchain::linker__ss"></span><span class="target" id="structbuildcc_1_1ArgToolchain_1ad89b5103fc1a0990d36555adc9a933af"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">linker</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">""</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc12ArgToolchain6linkerE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+</div>
+</dd></dl>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="n">Args</span><span class="w"> </span><span class="n">args</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="n">ArgToolchain</span><span class="w"> </span><span class="n">arg_gcc_toolchain</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">AddToolchain</span><span class="p">(</span><span class="s">"gcc"</span><span class="p">,</span><span class="w"> </span><span class="s">"Generic GCC toolchain"</span><span class="p">,</span><span class="w"> </span><span class="n">arg_gcc_toolchain</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="c1">// TODO, Add ArgTarget example (Currently incomplete)</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="c1">// Root</span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">GetProjectRootDir</span><span class="p">();</span><span class="w"> </span><span class="c1">// Contains ``root_dir`` value</span>
+<span class="linenos">11</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">GetProjectBuildDir</span><span class="p">();</span><span class="w"> </span><span class="c1">// Contains ``build_dir`` value</span>
+<span class="linenos">12</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">GetLogLevel</span><span class="p">();</span><span class="w"> </span><span class="c1">// Contains ``loglevel`` enum</span>
+<span class="linenos">13</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">Clean</span><span class="p">();</span><span class="w"> </span><span class="c1">// Contains ``clean`` value</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="w">    </span><span class="c1">// Toolchain</span>
+<span class="linenos">16</span><span class="w">    </span><span class="c1">// .build, .test</span>
+<span class="linenos">17</span><span class="w">    </span><span class="n">arg_gcc_toolchain</span><span class="p">.</span><span class="n">state</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">18</span><span class="w">    </span><span class="c1">// .id, .name, .asm_compiler, .c_compiler, .cpp_compiler, .archiver, .linker -&gt; BaseToolchain</span>
+<span class="linenos">19</span><span class="w">    </span><span class="n">BaseToolchain</span><span class="w"> </span><span class="n">gcc_toolchain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg_gcc_toolchain</span><span class="p">.</span><span class="n">ConstructToolchain</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="w">    </span><span class="c1">// Underlying CLI11 library</span>
+<span class="linenos">22</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">Ref</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">23</span><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">ConstRef</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">26</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># Root</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"_build"</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"trace"</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="n">clean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="c1"># Toolchain</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="k">[toolchain.gcc]</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="n">build</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="linenos">10</span><span class="n">test</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"gcc"</span><span class="w"></span>
+<span class="linenos">13</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"x86_64-linux-gnu"</span><span class="w"></span>
+<span class="linenos">14</span><span class="n">asm_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"as"</span><span class="w"></span>
+<span class="linenos">15</span><span class="n">c_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"gcc"</span><span class="w"></span>
+<span class="linenos">16</span><span class="n">cpp_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"g++"</span><span class="w"></span>
+<span class="linenos">17</span><span class="n">archiver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"ar"</span><span class="w"></span>
+<span class="linenos">18</span><span class="n">linker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"ld"</span><span class="w"></span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -246,14 +436,14 @@
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="target.html">
+          <a class="prev-page" href="toc.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">TargetInfo</div>
+                <div class="title">User API</div>
                 
               </div>
             </a>
@@ -285,6 +475,7 @@
             <ul>
 <li><a class="reference internal" href="#">Args</a><ul>
 <li><a class="reference internal" href="#args-h">args.h</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
 </ul>
 </li>
 </ul>
