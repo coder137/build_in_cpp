@@ -21,7 +21,7 @@
 
 namespace buildcc {
 
-class Toolchain_gcc : public base::Toolchain {
+class Toolchain_gcc : public Toolchain {
 public:
   Toolchain_gcc()
       : Toolchain(Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++", "ar", "ld") {}

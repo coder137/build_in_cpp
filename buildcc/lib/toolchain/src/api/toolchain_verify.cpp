@@ -70,7 +70,7 @@ std::string GetMsvcCompilerVersion() {
 
 std::optional<std::string>
 GetCompilerVersion(const fs::path &absolute_path,
-                   const buildcc::base::Toolchain &toolchain) {
+                   const buildcc::Toolchain &toolchain) {
   buildcc::env::Command command;
   command.AddDefaultArgument(
       "compiler",
@@ -78,12 +78,12 @@ GetCompilerVersion(const fs::path &absolute_path,
 
   std::optional<std::string> compiler_version;
   switch (toolchain.GetId()) {
-  case buildcc::base::Toolchain::Id::Gcc:
-  case buildcc::base::Toolchain::Id::MinGW:
-  case buildcc::base::Toolchain::Id::Clang:
+  case buildcc::Toolchain::Id::Gcc:
+  case buildcc::Toolchain::Id::MinGW:
+  case buildcc::Toolchain::Id::Clang:
     compiler_version = GetGccCompilerVersion(command);
     break;
-  case buildcc::base::Toolchain::Id::Msvc:
+  case buildcc::Toolchain::Id::Msvc:
     compiler_version = GetMsvcCompilerVersion();
     break;
   default:
@@ -120,19 +120,19 @@ std::string GetMsvcTargetArchitecture() {
 
 std::optional<std::string>
 GetCompilerArchitecture(const fs::path &absolute_path,
-                        const buildcc::base::Toolchain &toolchain) {
+                        const buildcc::Toolchain &toolchain) {
   buildcc::env::Command command;
   command.AddDefaultArgument(
       "compiler",
       (absolute_path / toolchain.GetCppCompiler()).make_preferred().string());
   std::optional<std::string> target_arch;
   switch (toolchain.GetId()) {
-  case buildcc::base::Toolchain::Id::Gcc:
-  case buildcc::base::Toolchain::Id::MinGW:
-  case buildcc::base::Toolchain::Id::Clang:
+  case buildcc::Toolchain::Id::Gcc:
+  case buildcc::Toolchain::Id::MinGW:
+  case buildcc::Toolchain::Id::Clang:
     target_arch = GetGccTargetArchitecture(command);
     break;
-  case buildcc::base::Toolchain::Id::Msvc:
+  case buildcc::Toolchain::Id::Msvc:
     target_arch = GetMsvcTargetArchitecture();
     break;
   default:
@@ -146,7 +146,7 @@ GetCompilerArchitecture(const fs::path &absolute_path,
 
 class ToolchainMatcher {
 public:
-  explicit ToolchainMatcher(const buildcc::base::Toolchain &toolchain)
+  explicit ToolchainMatcher(const buildcc::Toolchain &toolchain)
       : toolchain_(toolchain) {}
 
   void FillWithToolchainFilenames() {
@@ -172,14 +172,14 @@ public:
   bool Found() { return matcher_.empty(); }
 
 private:
-  const buildcc::base::Toolchain &toolchain_;
+  const buildcc::Toolchain &toolchain_;
 
   std::unordered_set<std::string> matcher_;
 };
 
 } // namespace
 
-namespace buildcc::base {
+namespace buildcc {
 
 template <typename T>
 std::vector<VerifiedToolchain>
@@ -285,4 +285,4 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
 
 template class ToolchainVerify<Toolchain>;
 
-} // namespace buildcc::base
+} // namespace buildcc

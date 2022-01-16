@@ -23,7 +23,7 @@
 
 #include "api/toolchain_verify.h"
 
-namespace buildcc::base {
+namespace buildcc {
 
 // Base toolchain class
 class Toolchain : public ToolchainVerify<Toolchain> {
@@ -71,12 +71,8 @@ private:
   std::string linker_;
 };
 
-} // namespace buildcc::base
-
-namespace buildcc {
-
-typedef base::Toolchain::Id ToolchainId;
-typedef base::Toolchain BaseToolchain;
+typedef Toolchain::Id ToolchainId;
+typedef Toolchain BaseToolchain;
 
 } // namespace buildcc
 

@@ -21,7 +21,7 @@
 
 namespace buildcc {
 
-class Toolchain_msvc : public base::Toolchain {
+class Toolchain_msvc : public Toolchain {
 public:
   Toolchain_msvc()
       : Toolchain(Toolchain::Id::Msvc, "msvc", "cl", "cl", "cl", "lib",

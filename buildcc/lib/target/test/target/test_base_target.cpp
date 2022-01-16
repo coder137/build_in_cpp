@@ -21,9 +21,8 @@ TEST_GROUP(TargetBaseTestGroup)
   }
 };
 // clang-format on
-static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
-                                          "gcc", "as", "gcc", "g++", "ar",
-                                          "ld");
+static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
+                                    "gcc", "g++", "ar", "ld");
 
 TEST(TargetBaseTestGroup, InvalidTargetType) {
   constexpr const char *const INVALID_NAME = "Invalid.random";

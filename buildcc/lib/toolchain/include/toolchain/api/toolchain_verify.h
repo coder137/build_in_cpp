@@ -27,7 +27,7 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc::base {
+namespace buildcc {
 
 /**
  * @param absolute_search_paths absolute_search_paths expect directories that
@@ -85,13 +85,6 @@ protected:
   VerifiedToolchain verified_toolchain_;
 };
 
-} // namespace buildcc::base
-
-namespace buildcc {
-
-typedef base::VerifyToolchainConfig VerifyToolchainConfig;
-typedef base::VerifiedToolchain VerifiedToolchain;
-
 } // namespace buildcc
 
 constexpr const char *const kVerifiedToolchainFormat = R"({{
@@ -101,10 +94,9 @@ constexpr const char *const kVerifiedToolchainFormat = R"({{
 }})";
 
 template <>
-struct fmt::formatter<buildcc::base::VerifiedToolchain>
-    : formatter<std::string> {
+struct fmt::formatter<buildcc::VerifiedToolchain> : formatter<std::string> {
   template <typename FormatContext>
-  auto format(const buildcc::base::VerifiedToolchain &vt, FormatContext &ctx) {
+  auto format(const buildcc::VerifiedToolchain &vt, FormatContext &ctx) {
     std::string verified_toolchain_info =
         fmt::format(kVerifiedToolchainFormat, vt.path.string(),
                     vt.compiler_version, vt.target_arch);

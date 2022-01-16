@@ -19,7 +19,7 @@ TEST_GROUP(TargetTestSyncGroup)
 };
 // clang-format on
 
-buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc, "gcc", "as",
+buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
                              "gcc", "g++", "ar", "ldd");
 
 TEST(TargetTestSyncGroup, CopyByConstRef) {
