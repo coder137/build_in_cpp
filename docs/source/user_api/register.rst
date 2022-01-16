@@ -8,6 +8,15 @@ register.h
     :members: Register, Clean, Callback, CallbackIf, Build, Dep, Test, RunBuild, RunTest
 
 
+test_info.h
+-------------
+
+.. doxygenstruct:: buildcc::TestOutput
+
+.. doxygenstruct:: buildcc::TestConfig
+
+.. doxygenstruct:: buildcc::TestInfo
+
 Example
 --------
 
