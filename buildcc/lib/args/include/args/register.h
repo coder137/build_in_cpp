@@ -113,9 +113,12 @@ public:
   /**
    * @brief Register the Target to be run
    * PreReq: Call `Register::Build` before calling `Register::Test`
-   * PreReq: Requires toolchain_state.build && test to be true
+   * PreReq: Requires ArgToolchainState::build && ArgToolchainState::test to be
+   * true
    *
-   * Target is added as the `{executable}` argument
+   * Target is added as the `{executable}` argument.
+   * We can add more fmt::format arguments using the TestConfig arguments
+   * parameter
    */
   void Test(const ArgToolchainState &toolchain_state,
             const std::string &command, const BaseTarget &target,

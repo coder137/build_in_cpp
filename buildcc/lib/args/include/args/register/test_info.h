@@ -35,7 +35,7 @@ struct TestOutput {
   };
 
   /**
-   * @brief Configure your Reg::Test to get test output
+   * @brief Configure your Register::Test to get test output
    *
    * @param output_type Select your output type (behaviour)
    * @param redirect_stdout User stdout redirection
@@ -64,7 +64,7 @@ private:
 struct TestConfig {
 public:
   /**
-   * @brief Configure your Reg::Test using TestConfig
+   * @brief Configure your Register::Test using TestConfig
    *
    * @param arguments fmt::format args passed to test commands
    * @param working_directory Working directory from which the test runs
