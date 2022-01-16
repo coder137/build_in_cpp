@@ -11,11 +11,9 @@ register.h
 test_info.h
 -------------
 
-.. doxygenstruct:: buildcc::TestOutput
-
 .. doxygenstruct:: buildcc::TestConfig
 
-.. doxygenstruct:: buildcc::TestInfo
+.. doxygenstruct:: buildcc::TestOutput
 
 Example
 --------

@@ -34,6 +34,13 @@ struct TestOutput {
     UserRedirect,               ///< Redirects to user variables
   };
 
+  /**
+   * @brief Configure your Reg::Test to get test output
+   *
+   * @param output_type Select your output type (behaviour)
+   * @param redirect_stdout User stdout redirection
+   * @param redirect_stderr User stderr redirection
+   */
   TestOutput(Type output_type = Type::TestPrintOnStderrAndStdout,
              std::vector<std::string> *redirect_stdout = nullptr,
              std::vector<std::string> *redirect_stderr = nullptr)
@@ -56,6 +63,13 @@ private:
 
 struct TestConfig {
 public:
+  /**
+   * @brief Configure your Reg::Test using TestConfig
+   *
+   * @param arguments fmt::format args passed to test commands
+   * @param working_directory Working directory from which the test runs
+   * @param output Output from tests
+   */
   TestConfig(
       const std::unordered_map<const char *, std::string> &arguments = {},
       const std::optional<fs::path> &working_directory = {},
@@ -76,6 +90,8 @@ private:
   std::optional<fs::path> working_directory_{};
   TestOutput output_;
 };
+
+// PRIVATE
 
 struct TestInfo {
   TestInfo(const BaseTarget &target, const std::string &command,
