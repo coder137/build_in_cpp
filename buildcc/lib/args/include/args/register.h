@@ -79,11 +79,11 @@ public:
    */
   template <typename C, typename... Params>
   void Build(const ArgToolchainState &toolchain_state, const C &build_cb,
-             base::Target &target, Params &&...params) {
+             BaseTarget &target, Params &&...params) {
     tf::Task task;
     CallbackIf(
         toolchain_state,
-        [&](base::Target &ltarget, Params &&...lparams) {
+        [&](BaseTarget &ltarget, Params &&...lparams) {
           build_cb(ltarget, std::forward<Params>(lparams)...);
           task = BuildTargetTask(ltarget);
         },
@@ -95,8 +95,7 @@ public:
    * @brief Register the generator to be built
    */
   template <typename C, typename... Params>
-  void Build(const C &build_cb, base::Generator &generator,
-             Params &&...params) {
+  void Build(const C &build_cb, BaseGenerator &generator, Params &&...params) {
     build_cb(generator, std::forward<Params>(params)...);
     tf::Task task = BuildGeneratorTask(generator);
     BuildStoreTask(generator.GetUniqueId(), task);
@@ -119,7 +118,7 @@ public:
    * Target is added as the `{executable}` argument
    */
   void Test(const ArgToolchainState &toolchain_state,
-            const std::string &command, const base::Target &target,
+            const std::string &command, const BaseTarget &target,
             const TestConfig &config = TestConfig());
 
   /**
@@ -147,8 +146,8 @@ private:
   void Env();
 
   // BuildTasks
-  tf::Task BuildTargetTask(base::Target &target);
-  tf::Task BuildGeneratorTask(base::Generator &generator);
+  tf::Task BuildTargetTask(BaseTarget &target);
+  tf::Task BuildGeneratorTask(BaseGenerator &generator);
   void BuildStoreTask(const std::string &unique_id, const tf::Task &task);
 
 private:
