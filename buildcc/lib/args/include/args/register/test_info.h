@@ -26,12 +26,12 @@ namespace buildcc {
 
 struct TestOutput {
   enum class Type {
-    DefaultBehaviour,  // Do not redirect to user or tests, default printed on
-                       // console
-    TestPrintOnStderr, // Test only redirects stderr and prints
-    TestPrintOnStdout, // Test only redirects stdout and prints
-    TestPrintOnStderrAndStdout, // Test redirects both and prints
-    UserRedirect,               // Redirects to user
+    DefaultBehaviour,  ///< Do not redirect to user or tests, default printed on
+                       ///< console
+    TestPrintOnStderr, ///< Test only redirects stderr and prints
+    TestPrintOnStdout, ///< Test only redirects stdout and prints
+    TestPrintOnStderrAndStdout, ///< Test redirects both and prints
+    UserRedirect,               ///< Redirects to user variables
   };
 
   TestOutput(Type output_type = Type::TestPrintOnStderrAndStdout,
