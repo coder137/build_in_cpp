@@ -57,6 +57,10 @@ struct ArgToolchain {
         c_compiler(initial_c_compiler), cpp_compiler(initial_cpp_compiler),
         archiver(initial_archiver), linker(initial_linker) {}
 
+  /**
+   * @brief Construct a BaseToolchain from the arguments supplied through the
+   * command line information
+   */
   BaseToolchain ConstructToolchain() const {
     BaseToolchain toolchain(id, name, asm_compiler, c_compiler, cpp_compiler,
                             archiver, linker);
@@ -88,10 +92,22 @@ public:
   Args() { Initialize(); }
   Args(const Args &) = delete;
 
+  /**
+   * @brief Parse command line information to CLI11
+   *
+   * @param argc from int main(int argc, char ** argv)
+   * @param argv from int main(int argc, char ** argv)
+   */
   void Parse(int argc, const char *const *argv);
 
-  // TODO, Check if these are necessary
+  /**
+   * @brief Modifiable reference to CLI::App (CLI11)
+   */
   CLI::App &Ref() { return app_; }
+
+  /**
+   * @brief Constant reference to CLI::App (CLI11)
+   */
   const CLI::App &ConstRef() const { return app_; }
 
   // Setters
@@ -106,8 +122,14 @@ public:
                     ArgToolchain &out,
                     const ArgToolchain &initial = ArgToolchain());
 
-  // NOTE, Incomplete TargetArg
-  // TODO, Update for pch_compile_command
+  /**
+   * @brief Add Target config commands with a unique name and description
+   *
+   * @param out Receive the target command information through the CLI
+   * @param initial Set the default target command information as a fallback
+   *
+   * TODO, Update with other options for TargetConfig
+   */
   void AddTarget(const std::string &name, const std::string &description,
                  ArgTarget &out, const ArgTarget &initial = ArgTarget());
 

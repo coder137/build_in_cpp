@@ -162,7 +162,7 @@ jobs:
 
       - name: System Packages
         run: |
-          sudo apt-get install ninja-build doxygen graphviz gcovr cppcheck clang-tidy
+          sudo apt-get install ninja-build doxygen graphviz cppcheck clang-tidy
 
       - name: Install LCOV
         run: |
@@ -179,7 +179,6 @@ jobs:
           clang --version
           ninja --version
           doxygen --version
-          gcovr --version
           cppcheck --version
           clang-tidy --version
 

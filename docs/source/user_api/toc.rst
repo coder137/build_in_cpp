@@ -4,10 +4,10 @@ User API
 
 .. toctree::
 
-    environment
+    args
+    register
     toolchain
     generator
     target
-    args
-    register
     supported_plugins
+    environment

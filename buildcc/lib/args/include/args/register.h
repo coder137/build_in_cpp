@@ -46,8 +46,20 @@ public:
    * Can be used to organize code into functional chunks
    */
   template <typename C, typename... Params>
-  void Callback(const C &build_cb, Params &...params) {
-    build_cb(std::forward<Params &>(params)...);
+  void Callback(const C &build_cb, Params &&...params) {
+    build_cb(std::forward<Params>(params)...);
+  }
+
+  /**
+   * @brief Generic register callback that is run when `expression ==
+   * true`
+   * Can be used to add Toolchain-Target specific information
+   */
+  template <typename C, typename... Params>
+  void CallbackIf(bool expression, const C &build_cb, Params &&...params) {
+    if (expression) {
+      Callback(build_cb, std::forward<Params>(params)...);
+    }
   }
 
   /**
@@ -57,10 +69,9 @@ public:
    */
   template <typename C, typename... Params>
   void CallbackIf(const ArgToolchainState &toolchain_state, const C &build_cb,
-                  Params &...params) {
-    if (toolchain_state.build) {
-      Callback(build_cb, std::forward<Params &>(params)...);
-    }
+                  Params &&...params) {
+    CallbackIf(toolchain_state.build, build_cb,
+               std::forward<Params>(params)...);
   }
 
   /**
@@ -68,15 +79,15 @@ public:
    */
   template <typename C, typename... Params>
   void Build(const ArgToolchainState &toolchain_state, const C &build_cb,
-             base::Target &target, Params &...params) {
+             BaseTarget &target, Params &&...params) {
     tf::Task task;
     CallbackIf(
         toolchain_state,
-        [&](base::Target &ltarget, Params &...lparams) {
-          build_cb(ltarget, std::forward<Params &>(lparams)...);
+        [&](BaseTarget &ltarget, Params &&...lparams) {
+          build_cb(ltarget, std::forward<Params>(lparams)...);
           task = BuildTargetTask(ltarget);
         },
-        target, std::forward<Params &>(params)...);
+        target, std::forward<Params>(params)...);
     BuildStoreTask(target.GetUniqueId(), task);
   }
 
@@ -84,8 +95,8 @@ public:
    * @brief Register the generator to be built
    */
   template <typename C, typename... Params>
-  void Build(const C &build_cb, base::Generator &generator, Params &...params) {
-    build_cb(generator, std::forward<Params &>(params)...);
+  void Build(const C &build_cb, BaseGenerator &generator, Params &&...params) {
+    build_cb(generator, std::forward<Params>(params)...);
     tf::Task task = BuildGeneratorTask(generator);
     BuildStoreTask(generator.GetUniqueId(), task);
   }
@@ -102,12 +113,15 @@ public:
   /**
    * @brief Register the Target to be run
    * PreReq: Call `Register::Build` before calling `Register::Test`
-   * PreReq: Requires toolchain_state.build && test to be true
+   * PreReq: Requires ArgToolchainState::build && ArgToolchainState::test to be
+   * true
    *
-   * Target is added as the `{executable}` argument
+   * Target is added as the `{executable}` argument.
+   * We can add more fmt::format arguments using the TestConfig arguments
+   * parameter
    */
   void Test(const ArgToolchainState &toolchain_state,
-            const std::string &command, const base::Target &target,
+            const std::string &command, const BaseTarget &target,
             const TestConfig &config = TestConfig());
 
   /**
@@ -135,8 +149,8 @@ private:
   void Env();
 
   // BuildTasks
-  tf::Task BuildTargetTask(base::Target &target);
-  tf::Task BuildGeneratorTask(base::Generator &generator);
+  tf::Task BuildTargetTask(BaseTarget &target);
+  tf::Task BuildGeneratorTask(BaseGenerator &generator);
   void BuildStoreTask(const std::string &unique_id, const tf::Task &task);
 
 private:
