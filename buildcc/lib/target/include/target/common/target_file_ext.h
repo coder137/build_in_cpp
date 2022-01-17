@@ -17,7 +17,7 @@
 #ifndef TARGET_COMMON_TARGET_FILE_EXT_H_
 #define TARGET_COMMON_TARGET_FILE_EXT_H_
 
-namespace buildcc::base {
+namespace buildcc {
 
 enum class TargetFileExt {
   Asm,

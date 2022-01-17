@@ -25,7 +25,7 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc::base {
+namespace buildcc {
 
 struct TargetConfig {
   TargetConfig() {}
@@ -61,6 +61,6 @@ struct TargetConfig {
   std::unordered_set<std::string> valid_header_ext{".h", ".hpp"};
 };
 
-} // namespace buildcc::base
+} // namespace buildcc
 
 #endif

@@ -59,7 +59,7 @@ TEST(TargetBaseTestGroup, TargetConfig_BadCompileCommand) {
   // Delete
   fs::remove_all(intermediate_path);
   {
-    buildcc::base::TargetConfig config;
+    buildcc::TargetConfig config;
     config.compile_command = "{invalid_compile_string}";
     buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
                                  gcc, "data", config);
@@ -82,7 +82,7 @@ TEST(TargetBaseTestGroup, TargetConfig_BadLinkCommand) {
   // Delete
   fs::remove_all(intermediate_path);
   {
-    buildcc::base::TargetConfig config;
+    buildcc::TargetConfig config;
     config.link_command = "{invalid_link_string}";
     buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
                                  gcc, "data", config);
