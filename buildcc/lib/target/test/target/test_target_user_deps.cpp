@@ -36,7 +36,7 @@ static const fs::path target_source_intermediate_path =
 
 TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_NoChange) {
   constexpr const char *NAME = "compileDep_NoChange.exe";
-  buildcc::base::Target compileDep(NAME, buildcc::base::TargetType::Executable,
+  buildcc::base::Target compileDep(NAME, buildcc::TargetType::Executable,
                                    gcc, "data");
   compileDep.AddSource("dummy_main.cpp");
   compileDep.AddCompileDependency("new_source.cpp");
@@ -51,7 +51,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_NoChange) {
 
 TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_NoChange) {
   constexpr const char *NAME = "linkDep_NoChange.exe";
-  buildcc::base::Target linkDep(NAME, buildcc::base::TargetType::Executable,
+  buildcc::base::Target linkDep(NAME, buildcc::TargetType::Executable,
                                 gcc, "data");
   linkDep.AddSource("dummy_main.cpp");
   linkDep.AddLinkDependency("new_source.cpp");
@@ -68,7 +68,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_Rebuild) {
   constexpr const char *NAME = "compileDep_Rebuild.exe";
   {
     buildcc::base::Target compileDep(
-        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        NAME, buildcc::TargetType::Executable, gcc, "data");
     compileDep.AddSource("dummy_main.cpp");
     compileDep.AddCompileDependency("new_source.cpp");
 
@@ -89,7 +89,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_Rebuild) {
 
   {
     buildcc::base::Target compileDep(
-        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+        NAME, buildcc::TargetType::Executable, gcc, "data");
     compileDep.AddSource("dummy_main.cpp");
     compileDep.AddCompileDependency("new_source.cpp");
 
@@ -106,7 +106,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_Rebuild) {
 TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_Rebuild) {
   constexpr const char *NAME = "linkDep_Rebuild.exe";
   {
-    buildcc::base::Target linkDep(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target linkDep(NAME, buildcc::TargetType::Executable,
                                   gcc, "data");
     linkDep.AddSource("dummy_main.cpp");
     linkDep.AddLinkDependency("new_source.cpp");
@@ -127,7 +127,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_Rebuild) {
   }
 
   {
-    buildcc::base::Target linkDep(NAME, buildcc::base::TargetType::Executable,
+    buildcc::base::Target linkDep(NAME, buildcc::TargetType::Executable,
                                   gcc, "data");
     linkDep.AddSource("dummy_main.cpp");
     linkDep.AddLinkDependency("new_source.cpp");

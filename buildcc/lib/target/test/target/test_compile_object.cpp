@@ -20,8 +20,7 @@ static buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc",
 
 TEST(TargetCompileObjectTestGroup, CacheCompileCommand_Invalid) {
   buildcc::base::Target target("CacheCompileCommand_Invalid",
-                               buildcc::base::TargetType::Executable, gcc,
-                               "data");
+                               buildcc::TargetType::Executable, gcc, "data");
   buildcc::base::CompileObject object(target);
 
   object.AddObjectData("random.invalid");

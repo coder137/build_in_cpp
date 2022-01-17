@@ -17,7 +17,7 @@
 #ifndef TARGET_COMMON_TARGET_TYPE_H_
 #define TARGET_COMMON_TARGET_TYPE_H_
 
-namespace buildcc::base {
+namespace buildcc {
 
 enum class TargetType {
   Executable,
