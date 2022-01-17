@@ -10,8 +10,6 @@ Target
 target.h
 ---------
 
-.. doxygenclass:: buildcc::base::FlagApi
-
 Specialized Target
 ==================
 
