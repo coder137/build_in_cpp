@@ -14,7 +14,7 @@ TEST_GROUP(TargetStateTestGroup)
 // clang-format on
 
 TEST(TargetStateTestGroup, SetSourceState) {
-  buildcc::base::TargetState target_state;
+  buildcc::TargetState target_state;
 
   CHECK_FALSE(target_state.contains_c);
   target_state.SetSourceState(buildcc::TargetFileExt::C);

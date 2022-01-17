@@ -170,8 +170,6 @@ private:
 // TODO, Make all of these external and remove this namespace
 namespace buildcc {
 
-typedef base::TargetState TargetState;
-
 typedef base::Target BaseTarget;
 
 } // namespace buildcc

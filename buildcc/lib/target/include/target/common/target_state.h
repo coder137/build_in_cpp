@@ -19,7 +19,7 @@
 
 #include "target/common/target_file_ext.h"
 
-namespace buildcc::base {
+namespace buildcc {
 
 // TODO, Seperate TargetState into lock_ and other internal boolean variables
 // NOTE, This is because apart from lock_ every other parameter is updated
@@ -48,6 +48,6 @@ private:
   bool contains_pch_{false};
 };
 
-} // namespace buildcc::base
+} // namespace buildcc
 
 #endif

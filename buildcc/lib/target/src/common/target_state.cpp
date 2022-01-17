@@ -18,7 +18,7 @@
 
 #include "env/assert_fatal.h"
 
-namespace buildcc::base {
+namespace buildcc {
 
 void TargetState::SetSourceState(TargetFileExt file_extension) {
   switch (file_extension) {
@@ -50,4 +50,4 @@ void TargetState::ExpectsLock() const {
   env::assert_fatal(lock, "Cannot use this function when lock == false");
 }
 
-} // namespace buildcc::base
+} // namespace buildcc
