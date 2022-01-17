@@ -26,7 +26,7 @@
 #include "target/common/path.h"
 #include "target/common/util.h"
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 // TODO, 1. Consider updating Recheck* APIs - do not modify internal `dirty_`
 // flag
@@ -114,6 +114,6 @@ protected:
   std::string unique_id_;
 };
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 #endif

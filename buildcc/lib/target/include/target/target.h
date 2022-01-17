@@ -62,7 +62,7 @@ namespace buildcc::base {
 
 // NOTE, base::Target is meant to be a blank slate which can be customized by
 // the specialized target-toolchain classes
-class Target : public BuilderInterface,
+class Target : public internal::BuilderInterface,
                public TargetInfo,
                public TargetGetter<Target> {
 

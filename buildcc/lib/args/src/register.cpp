@@ -66,8 +66,8 @@ void Register::Clean(const std::function<void(void)> &clean_cb) {
   }
 }
 
-void Register::Dep(const base::BuilderInterface &target,
-                   const base::BuilderInterface &dependency) {
+void Register::Dep(const internal::BuilderInterface &target,
+                   const internal::BuilderInterface &dependency) {
   const auto target_iter = build_.find(target.GetUniqueId());
   const auto dep_iter = build_.find(dependency.GetUniqueId());
   env::assert_fatal(!(target_iter == build_.end() || dep_iter == build_.end()),

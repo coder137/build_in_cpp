@@ -39,7 +39,7 @@
 
 namespace buildcc::base {
 
-class Generator : public BuilderInterface {
+class Generator : public internal::BuilderInterface {
 public:
   Generator(const std::string &name, const TargetEnv &env,
             bool parallel = false)
