@@ -27,7 +27,7 @@ constexpr const char *const kGenerateTaskName = "Generate";
 
 } // namespace
 
-namespace buildcc::base {
+namespace buildcc {
 
 void Generator::GenerateTask() {
   tf::Task start_task = tf_.emplace([this]() {
@@ -122,4 +122,4 @@ void Generator::GenerateTask() {
   generate_task.precede(end_task);
 }
 
-} // namespace buildcc::base
+} // namespace buildcc

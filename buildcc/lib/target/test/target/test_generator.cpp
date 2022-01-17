@@ -29,7 +29,7 @@ fs::path BUILD_DIR = fs::current_path() / "intermediate" / "generator";
 
 TEST(GeneratorTestGroup, Generator_Build) {
   constexpr const char *const NAME = "Build";
-  buildcc::base::Generator generator(NAME, "");
+  buildcc::Generator generator(NAME, "");
 
   generator.AddDefaultArguments({
       {"compiler", "gcc"},
@@ -42,14 +42,14 @@ TEST(GeneratorTestGroup, Generator_Build) {
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   generator.Build();
-  buildcc::base::m::GeneratorRunner(generator);
+  buildcc::m::GeneratorRunner(generator);
 
   mock().checkExpectations();
 }
 
 TEST(GeneratorTestGroup, Generator_BuildParallel) {
   constexpr const char *const NAME = "BuildParallel";
-  buildcc::base::Generator generator(NAME, "", true);
+  buildcc::Generator generator(NAME, "", true);
 
   generator.AddDefaultArguments({
       {"compiler", "gcc"},
@@ -62,14 +62,14 @@ TEST(GeneratorTestGroup, Generator_BuildParallel) {
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   generator.Build();
-  buildcc::base::m::GeneratorRunner(generator);
+  buildcc::m::GeneratorRunner(generator);
 
   mock().checkExpectations();
 }
 
 TEST(GeneratorTestGroup, Generator_Identifier) {
   constexpr const char *const NAME = "Identifier";
-  buildcc::base::Generator generator(NAME, "");
+  buildcc::Generator generator(NAME, "");
 
   generator.AddDefaultArguments({
       {"compiler", "gcc"},
@@ -81,7 +81,7 @@ TEST(GeneratorTestGroup, Generator_Identifier) {
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   generator.Build();
-  buildcc::base::m::GeneratorRunner(generator);
+  buildcc::m::GeneratorRunner(generator);
 
   mock().checkExpectations();
 }
@@ -89,7 +89,7 @@ TEST(GeneratorTestGroup, Generator_Identifier) {
 TEST(GeneratorTestGroup, Generator_Rebuild) {
   constexpr const char *const NAME = "Rebuild";
   {
-    buildcc::base::Generator generator(NAME, "");
+    buildcc::Generator generator(NAME, "");
     generator.AddInput("{gen_root_dir}/dummy_main.c");
     generator.AddOutput("{gen_build_dir}/dummy_main.exe");
     generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
@@ -100,11 +100,11 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   {
-    buildcc::base::Generator generator(NAME, "");
+    buildcc::Generator generator(NAME, "");
     generator.AddInput("{gen_root_dir}/dummy_main.c");
     generator.AddOutput("{gen_build_dir}/dummy_main.exe");
     generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
@@ -114,7 +114,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
                          });
 
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -124,7 +124,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
   constexpr const char *const NAME = "Rebuild_Inputs";
 
   {
-    buildcc::base::Generator generator(NAME, "");
+    buildcc::Generator generator(NAME, "");
     generator.AddInput("{gen_root_dir}/new_source.cpp");
     generator.AddOutput("{gen_build_dir}/new_source.exe");
     generator.AddCommand("gcc -o {gen_build_dir}/new_source.exe "
@@ -132,34 +132,34 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   // Removed
   {
-    buildcc::base::Generator generator(NAME, "");
+    buildcc::Generator generator(NAME, "");
     generator.AddOutput("{gen_build_dir}/new_source.exe");
     generator.AddCommand("gcc -o {gen_build_dir}/new_source.exe "
                          "{gen_root_dir}/new_source.cpp");
 
-    buildcc::base::m::GeneratorExpect_InputRemoved(1, &generator);
+    buildcc::m::GeneratorExpect_InputRemoved(1, &generator);
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   // Added
   {
-    buildcc::base::Generator generator(NAME, "");
+    buildcc::Generator generator(NAME, "");
     generator.AddInput("{gen_root_dir}/new_source.cpp");
     generator.AddOutput("{gen_build_dir}/new_source.cpp.exe");
     generator.AddCommand("gcc -o {gen_build_dir}/new_source.cpp.exe "
                          "{gen_root_dir}/new_source.cpp");
 
-    buildcc::base::m::GeneratorExpect_InputAdded(1, &generator);
+    buildcc::m::GeneratorExpect_InputAdded(1, &generator);
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   sleep(1);
@@ -172,15 +172,15 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
 
   // Updated
   {
-    buildcc::base::Generator generator(NAME, "");
+    buildcc::Generator generator(NAME, "");
     generator.AddInput("{gen_root_dir}/new_source.cpp");
     generator.AddOutput("{gen_build_dir}/new_source.cpp.exe");
     generator.AddCommand("gcc -o {gen_build_dir}/new_source.cpp.exe "
                          "{gen_root_dir}/new_source.cpp");
-    buildcc::base::m::GeneratorExpect_InputUpdated(1, &generator);
+    buildcc::m::GeneratorExpect_InputUpdated(1, &generator);
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -189,7 +189,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
 TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
   constexpr const char *const NAME = "Rebuild_Outputs";
   {
-    buildcc::base::Generator generator(NAME, "");
+    buildcc::Generator generator(NAME, "");
     generator.AddInput("{gen_root_dir}/dummy_main.c");
     generator.AddOutput("{gen_build_dir}/dummy_main.exe");
     generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
@@ -200,11 +200,11 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   {
-    buildcc::base::Generator generator(NAME, "");
+    buildcc::Generator generator(NAME, "");
     generator.AddInput("{gen_root_dir}/dummy_main.c");
     generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
                          "{gen_root_dir}/dummy_main.c",
@@ -212,14 +212,14 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
                              {"compiler", "gcc"},
                          });
 
-    buildcc::base::m::GeneratorExpect_OutputChanged(1, &generator);
+    buildcc::m::GeneratorExpect_OutputChanged(1, &generator);
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   {
-    buildcc::base::Generator generator(NAME, "");
+    buildcc::Generator generator(NAME, "");
     generator.AddInput("{gen_root_dir}/dummy_main.c");
     generator.AddOutput("{gen_build_dir}/dummy_main.exe");
     generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
@@ -228,10 +228,10 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
                              {"compiler", "gcc"},
                          });
 
-    buildcc::base::m::GeneratorExpect_OutputChanged(1, &generator);
+    buildcc::m::GeneratorExpect_OutputChanged(1, &generator);
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -240,7 +240,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
 TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
   constexpr const char *const NAME = "Rebuild_Commands";
   {
-    buildcc::base::Generator generator(NAME, "");
+    buildcc::Generator generator(NAME, "");
     generator.AddInput("{gen_root_dir}/dummy_main.c");
     generator.AddOutput("{gen_build_dir}/dummy_main.exe");
     generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
@@ -251,11 +251,11 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   {
-    buildcc::base::Generator generator(NAME, "");
+    buildcc::Generator generator(NAME, "");
     generator.AddInput("{gen_root_dir}/dummy_main.c");
     generator.AddOutput("{gen_build_dir}/dummy_main.exe");
     generator.AddCommand("{compiler} {gen_root_dir}/dummy_main.c",
@@ -263,23 +263,23 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
                              {"compiler", "gcc"},
                          });
 
-    buildcc::base::m::GeneratorExpect_CommandChanged(1, &generator);
+    buildcc::m::GeneratorExpect_CommandChanged(1, &generator);
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   {
-    buildcc::base::Generator generator(NAME, "");
+    buildcc::Generator generator(NAME, "");
     generator.AddInput("{gen_root_dir}/dummy_main.c");
     generator.AddOutput("{gen_build_dir}/dummy_main.exe");
     generator.AddCommand("gcc -o {gen_build_dir}/dummy_main.exe "
                          "{gen_root_dir}/dummy_main.c");
 
-    buildcc::base::m::GeneratorExpect_CommandChanged(1, &generator);
+    buildcc::m::GeneratorExpect_CommandChanged(1, &generator);
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -287,7 +287,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
 
 TEST(GeneratorTestGroup, Generator_AddDefaultArguments) {
   constexpr const char *const NAME = "AddDefaultArgument";
-  buildcc::base::Generator generator(NAME, "");
+  buildcc::Generator generator(NAME, "");
 
   generator.AddDefaultArguments({
       {"key", "value"},
@@ -303,7 +303,7 @@ TEST(GeneratorTestGroup, Generator_FailedEnvTaskState) {
   buildcc::env::set_task_state(buildcc::env::TaskState::FAILURE);
 
   constexpr const char *const NAME = "FailedEnvTaskState";
-  buildcc::base::Generator generator(NAME, "", true);
+  buildcc::Generator generator(NAME, "", true);
 
   generator.AddDefaultArguments({
       {"compiler", "gcc"},
@@ -315,7 +315,7 @@ TEST(GeneratorTestGroup, Generator_FailedEnvTaskState) {
                        "{gen_root_dir}/dummy_main.c");
 
   generator.Build();
-  buildcc::base::m::GeneratorRunner(generator);
+  buildcc::m::GeneratorRunner(generator);
 
   mock().checkExpectations();
 
@@ -324,7 +324,7 @@ TEST(GeneratorTestGroup, Generator_FailedEnvTaskState) {
 
 TEST(GeneratorTestGroup, Generator_FailedGenerateConvert) {
   constexpr const char *const NAME = "FailedGenerateConvert";
-  buildcc::base::Generator generator(NAME, "", false);
+  buildcc::Generator generator(NAME, "", false);
 
   generator.AddDefaultArguments({
       {"compiler", "gcc"},
@@ -336,7 +336,7 @@ TEST(GeneratorTestGroup, Generator_FailedGenerateConvert) {
                        "{gen_root_dir}/dummy_main.c");
 
   generator.Build();
-  buildcc::base::m::GeneratorRunner(generator);
+  buildcc::m::GeneratorRunner(generator);
 
   mock().checkExpectations();
 
@@ -345,7 +345,7 @@ TEST(GeneratorTestGroup, Generator_FailedGenerateConvert) {
 
 TEST(GeneratorTestGroup, Generator_FailedGenerateCommand) {
   constexpr const char *const NAME = "FailedGenerateCommand";
-  buildcc::base::Generator generator(NAME, "", false);
+  buildcc::Generator generator(NAME, "", false);
 
   generator.AddDefaultArguments({
       {"compiler", "gcc"},
@@ -358,7 +358,7 @@ TEST(GeneratorTestGroup, Generator_FailedGenerateCommand) {
 
   buildcc::env::m::CommandExpect_Execute(1, false);
   generator.Build();
-  buildcc::base::m::GeneratorRunner(generator);
+  buildcc::m::GeneratorRunner(generator);
 
   mock().checkExpectations();
 
@@ -369,7 +369,7 @@ TEST(GeneratorTestGroup, Generator_FailedStore) {
   constexpr const char *const NAME = "FailedStore";
   const fs::path test_build_dir = buildcc::env::get_project_build_dir() / NAME;
 
-  buildcc::base::Generator generator(NAME, "", false);
+  buildcc::Generator generator(NAME, "", false);
   fs::remove_all(test_build_dir);
 
   generator.AddDefaultArguments({
@@ -383,7 +383,7 @@ TEST(GeneratorTestGroup, Generator_FailedStore) {
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   generator.Build();
-  buildcc::base::m::GeneratorRunner(generator);
+  buildcc::m::GeneratorRunner(generator);
 
   CHECK(generator.GetTaskState() == buildcc::env::TaskState::FAILURE);
 
@@ -397,7 +397,7 @@ TEST(GeneratorTestGroup, FailedEnvTaskState_Rebuild) {
 
   constexpr const char *const NAME = "FailedEnvTaskState_Rebuild";
   {
-    buildcc::base::Generator generator(NAME, "", true);
+    buildcc::Generator generator(NAME, "", true);
 
     generator.AddDefaultArguments({
         {"compiler", "gcc"},
@@ -409,7 +409,7 @@ TEST(GeneratorTestGroup, FailedEnvTaskState_Rebuild) {
                          "{gen_root_dir}/dummy_main.c");
 
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   // reset
@@ -417,7 +417,7 @@ TEST(GeneratorTestGroup, FailedEnvTaskState_Rebuild) {
 
   // rebuild
   {
-    buildcc::base::Generator generator(NAME, "", true);
+    buildcc::Generator generator(NAME, "", true);
 
     generator.AddDefaultArguments({
         {"compiler", "gcc"},
@@ -430,7 +430,7 @@ TEST(GeneratorTestGroup, FailedEnvTaskState_Rebuild) {
 
     generator.Build();
     buildcc::env::m::CommandExpect_Execute(1, true);
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -440,7 +440,7 @@ TEST(GeneratorTestGroup, FailedGenerateCommand_Rebuild) {
   constexpr const char *const NAME = "FailedGenerateCommand_Rebuild";
 
   {
-    buildcc::base::Generator generator(NAME, "", false);
+    buildcc::Generator generator(NAME, "", false);
 
     generator.AddDefaultArguments({
         {"compiler", "gcc"},
@@ -453,7 +453,7 @@ TEST(GeneratorTestGroup, FailedGenerateCommand_Rebuild) {
 
     buildcc::env::m::CommandExpect_Execute(1, false);
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   // reset
@@ -461,7 +461,7 @@ TEST(GeneratorTestGroup, FailedGenerateCommand_Rebuild) {
 
   // rebuild
   {
-    buildcc::base::Generator generator(NAME, "", false);
+    buildcc::Generator generator(NAME, "", false);
 
     generator.AddDefaultArguments({
         {"compiler", "gcc"},
@@ -474,7 +474,7 @@ TEST(GeneratorTestGroup, FailedGenerateCommand_Rebuild) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::base::m::GeneratorRunner(generator);
+    buildcc::m::GeneratorRunner(generator);
   }
 
   mock().checkExpectations();

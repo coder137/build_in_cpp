@@ -25,7 +25,7 @@
 
 namespace fbs = schema::internal;
 
-namespace buildcc::base {
+namespace buildcc {
 
 bool Generator::Store() {
   env::log_trace(name_, __FUNCTION__);
@@ -50,4 +50,4 @@ bool Generator::Store() {
                         builder.GetSize(), true);
 }
 
-} // namespace buildcc::base
+} // namespace buildcc

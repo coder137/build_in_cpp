@@ -4,7 +4,7 @@
 
 #include "CppUTestExt/MockSupport.h"
 
-namespace buildcc::base {
+namespace buildcc {
 
 static constexpr const char *const INPUT_REMOVED_FUNCTION =
     "Generator::InputRemoved";
@@ -56,4 +56,4 @@ void GeneratorExpect_CommandChanged(unsigned int calls, Generator *generator) {
 
 } // namespace m
 
-} // namespace buildcc::base
+} // namespace buildcc

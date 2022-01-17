@@ -9,7 +9,7 @@ tf::Task Register::BuildTargetTask(base::Target &target) {
   return build_tf_.placeholder().name(target.GetUniqueId());
 }
 
-tf::Task Register::BuildGeneratorTask(base::Generator &generator) {
+tf::Task Register::BuildGeneratorTask(BaseGenerator &generator) {
   mock().actualCall(
       fmt::format("BuildGeneratorTask_{}", generator.GetName()).c_str());
   return build_tf_.placeholder().name(generator.GetUniqueId());

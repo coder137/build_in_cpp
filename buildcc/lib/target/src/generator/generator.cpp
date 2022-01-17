@@ -20,7 +20,7 @@
 
 #include "env/assert_fatal.h"
 
-namespace buildcc::base {
+namespace buildcc {
 
 void Generator::AddDefaultArguments(
     const std::unordered_map<std::string, std::string> &arguments) {
@@ -111,4 +111,4 @@ void Generator::BuildGenerate() {
   }
 }
 
-} // namespace buildcc::base
+} // namespace buildcc

@@ -37,7 +37,7 @@
 #include "target/common/path.h"
 #include "target/common/target_env.h"
 
-namespace buildcc::base {
+namespace buildcc {
 
 class Generator : public internal::BuilderInterface {
 public:
@@ -143,12 +143,14 @@ private:
   tf::Taskflow tf_;
 };
 
-} // namespace buildcc::base
+typedef Generator BaseGenerator;
 
-namespace buildcc {
+} // namespace buildcc
 
-typedef base::Generator BaseGenerator;
+// namespace buildcc {
 
-}
+// typedef base::Generator BaseGenerator;
+
+// }
 
 #endif
