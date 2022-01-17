@@ -23,7 +23,7 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc::base {
+namespace buildcc {
 
 class TargetEnv {
 public:
@@ -53,6 +53,6 @@ private:
   bool relative_{false};
 };
 
-} // namespace buildcc::base
+} // namespace buildcc
 
 #endif

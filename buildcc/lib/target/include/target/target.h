@@ -173,7 +173,6 @@ namespace buildcc {
 typedef base::TargetType TargetType;
 typedef base::TargetState TargetState;
 typedef base::TargetConfig TargetConfig;
-typedef base::TargetEnv TargetEnv;
 
 typedef base::Target BaseTarget;
 
