@@ -21,6 +21,16 @@
 
 namespace buildcc {
 
+/**
+ * @brief Generic GCC Toolchain <br>
+ * id = ToolchainId::Gcc <br>
+ * name = "gcc" <br>
+ * asm_compiler = "as" <br>
+ * c_compiler = "gcc" <br>
+ * cpp_compiler = "g++" <br>
+ * archiver = "ar" <br>
+ * linker = "ld" <br>
+ */
 class Toolchain_gcc : public Toolchain {
 public:
   Toolchain_gcc()

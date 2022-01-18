@@ -21,6 +21,16 @@
 
 namespace buildcc {
 
+/**
+ * @brief Generic GCC Toolchain <br>
+ * id = ToolchainId::Msvc <br>
+ * name = "msvc" <br>
+ * asm_compiler = "cl" <br>
+ * c_compiler = "cl" <br>
+ * cpp_compiler = "cl" <br>
+ * archiver = "lib" <br>
+ * linker = "link" <br>
+ */
 class Toolchain_msvc : public Toolchain {
 public:
   Toolchain_msvc()
