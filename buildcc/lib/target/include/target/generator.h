@@ -55,8 +55,6 @@ public:
    * @brief Add default arguments for input, output and command requirements
    *
    * @param arguments Key-Value pair for arguments
-   * NOTE, Key must be a variable (lvalue) not a constant (rvalue)
-   *
    */
   void AddDefaultArguments(
       const std::unordered_map<std::string, std::string> &arguments);
