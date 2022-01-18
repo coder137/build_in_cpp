@@ -30,7 +30,7 @@ class Target;
 
 }
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 class LinkTarget {
 public:
@@ -58,6 +58,6 @@ private:
   tf::Task task_;
 };
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 #endif

@@ -70,7 +70,7 @@ void Target::StartTask() {
 
 } // namespace buildcc
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 // 1. User adds/removes/updates pch_headers
 // 2. `BuildCompile` aggregates pch_headers to a single `buildcc_header` and
@@ -169,7 +169,7 @@ void LinkTarget::Task() {
   task_.name(kLinkTaskName);
 }
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 namespace buildcc {
 

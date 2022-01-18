@@ -30,7 +30,7 @@ class Target;
 
 }
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 class CompilePch {
 public:
@@ -84,6 +84,6 @@ private:
   tf::Task task_;
 };
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 #endif

@@ -24,7 +24,7 @@ constexpr const char *const kCompiledSources = "compiled_sources";
 constexpr const char *const kLibDeps = "lib_deps";
 } // namespace
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 // PUBLIC
 
@@ -105,4 +105,4 @@ void LinkTarget::BuildLink() {
   }
 }
 
-} // namespace buildcc::base
+} // namespace buildcc::internal

@@ -89,9 +89,9 @@ public:
   env::TaskState GetTaskState() const noexcept { return task_state_; }
 
 private:
-  friend class base::CompilePch;
-  friend class base::CompileObject;
-  friend class base::LinkTarget;
+  friend class internal::CompilePch;
+  friend class internal::CompileObject;
+  friend class internal::LinkTarget;
 
   friend class TargetGetter<Target>;
 
@@ -146,9 +146,9 @@ private:
   internal::TargetLoader loader_;
 
   // Friend classes
-  base::CompilePch compile_pch_;
-  base::CompileObject compile_object_;
-  base::LinkTarget link_target_;
+  internal::CompilePch compile_pch_;
+  internal::CompileObject compile_object_;
+  internal::LinkTarget link_target_;
 
   // Task states
   tf::Task target_start_task_;

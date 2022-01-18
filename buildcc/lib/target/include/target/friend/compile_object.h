@@ -32,7 +32,7 @@ class Target;
 
 }
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 class CompileObject {
 
@@ -80,6 +80,6 @@ private:
   tf::Task compile_task_;
 };
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 #endif
