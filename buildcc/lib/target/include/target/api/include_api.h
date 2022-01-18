@@ -21,7 +21,7 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 // Requires
 // - TargetStorer
@@ -43,6 +43,6 @@ public:
                              bool glob_headers = false);
 };
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 #endif

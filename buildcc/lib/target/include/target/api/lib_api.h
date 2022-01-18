@@ -26,6 +26,10 @@ namespace buildcc::base {
 
 class Target;
 
+}
+
+namespace buildcc::internal {
+
 // Requires
 // - TargetStorer
 // - TargetState
@@ -33,13 +37,13 @@ class Target;
 // T::GetTargetPath
 template <typename T> class LibApi {
 public:
-  void AddLibDep(const Target &lib_dep);
+  void AddLibDep(const base::Target &lib_dep);
   void AddLibDep(const std::string &lib_dep);
 
   void AddLibDir(const fs::path &relative_lib_dir);
   void AddLibDirAbsolute(const fs::path &absolute_lib_dir);
 };
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 #endif

@@ -41,14 +41,14 @@ namespace buildcc::base {
 // multiple targets
 // It is also meant to be used in situations where we do not need to build
 // For example: Header only targets
-class TargetInfo : public SourceApi<TargetInfo>,
-                   public IncludeApi<TargetInfo>,
-                   public LibApi<TargetInfo>,
-                   public PchApi<TargetInfo>,
-                   public FlagApi<TargetInfo>,
-                   public DepsApi<TargetInfo>,
-                   public SyncApi<TargetInfo>,
-                   public TargetInfoGetter<TargetInfo> {
+class TargetInfo : public internal::SourceApi<TargetInfo>,
+                   public internal::IncludeApi<TargetInfo>,
+                   public internal::LibApi<TargetInfo>,
+                   public internal::PchApi<TargetInfo>,
+                   public internal::FlagApi<TargetInfo>,
+                   public internal::DepsApi<TargetInfo>,
+                   public internal::SyncApi<TargetInfo>,
+                   public internal::TargetInfoGetter<TargetInfo> {
 public:
   TargetInfo(const TargetEnv &env, const TargetConfig &config = TargetConfig())
       : env_(env), config_(config) {}

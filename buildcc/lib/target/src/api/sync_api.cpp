@@ -20,7 +20,7 @@
 
 #include "env/assert_fatal.h"
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 template <typename T>
 void SyncApi<T>::Copy(const T &target,
@@ -260,4 +260,4 @@ void SyncApi<T>::SpecializedInsert(TargetType target,
 
 template class SyncApi<TargetInfo>;
 
-} // namespace buildcc::base
+} // namespace buildcc::internal

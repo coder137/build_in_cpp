@@ -18,7 +18,7 @@
 
 #include "target/target_info.h"
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 template <typename T>
 void DepsApi<T>::AddCompileDependencyAbsolute(const fs::path &absolute_path) {
@@ -53,4 +53,4 @@ void DepsApi<T>::AddLinkDependency(const fs::path &relative_path) {
 
 template class DepsApi<TargetInfo>;
 
-} // namespace buildcc::base
+} // namespace buildcc::internal

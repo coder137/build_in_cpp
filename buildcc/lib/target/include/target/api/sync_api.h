@@ -19,7 +19,7 @@
 
 #include <initializer_list>
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 enum class SyncOption {
   SourceFiles,
@@ -77,11 +77,11 @@ private:
                          std::initializer_list<SyncOption> options);
 };
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 namespace buildcc {
 
-typedef base::SyncOption SyncOption;
+typedef internal::SyncOption SyncOption;
 
 }
 

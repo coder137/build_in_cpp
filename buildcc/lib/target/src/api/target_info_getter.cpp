@@ -18,7 +18,7 @@
 
 #include "target/target_info.h"
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 // Target State
 template <typename T> const TargetState &TargetInfoGetter<T>::GetState() const {
@@ -193,4 +193,4 @@ const fs_unordered_set &TargetInfoGetter<T>::GetLinkDependencies() const {
 
 template class TargetInfoGetter<TargetInfo>;
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
