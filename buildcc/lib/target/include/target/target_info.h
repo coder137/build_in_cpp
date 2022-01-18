@@ -37,7 +37,7 @@
 
 namespace buildcc {
 
-// NOTE: base::Target info is meant to hold information that is common to
+// NOTE: BaseTarget info is meant to hold information that is common to
 // multiple targets
 // It is also meant to be used in situations where we do not need to build
 // For example: Header only targets

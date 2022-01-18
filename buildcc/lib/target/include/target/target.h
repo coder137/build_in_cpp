@@ -60,7 +60,7 @@
 
 namespace buildcc {
 
-// NOTE, base::Target is meant to be a blank slate which can be customized by
+// NOTE, BaseTarget is meant to be a blank slate which can be customized by
 // the specialized target-toolchain classes
 class Target : public internal::BuilderInterface,
                public TargetInfo,

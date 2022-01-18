@@ -147,10 +147,4 @@ typedef Generator BaseGenerator;
 
 } // namespace buildcc
 
-// namespace buildcc {
-
-// typedef base::Generator BaseGenerator;
-
-// }
-
 #endif
