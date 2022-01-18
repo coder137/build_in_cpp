@@ -29,12 +29,12 @@ namespace buildcc {
 class Toolchain : public ToolchainVerify<Toolchain> {
 public:
   enum class Id {
-    Gcc = 0,
-    Msvc,
-    Clang,
-    MinGW,
-    Custom,
-    Undefined,
+    Gcc = 0,   ///< GCC Toolchain
+    Msvc,      ///< MSVC Toolchain
+    Clang,     ///< Clang Toolchain
+    MinGW,     ///< MinGW Toolchain (Similar to GCC, but for Windows)
+    Custom,    ///< Custom Toolchain not defined in this list
+    Undefined, ///< Default value when unknown
   };
 
 public:
