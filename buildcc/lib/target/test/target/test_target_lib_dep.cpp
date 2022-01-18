@@ -49,7 +49,7 @@ TEST(TargetTestLibDep, StaticLibrary_SimpleBuildTest) {
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   foolib.Build();
-  buildcc::base::m::TargetRunner(foolib);
+  buildcc::m::TargetRunner(foolib);
 
   mock().checkExpectations();
 
@@ -79,7 +79,7 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     foolib.Build();
-    buildcc::base::m::TargetRunner(foolib);
+    buildcc::m::TargetRunner(foolib);
     buildcc::env::save_file(foolib.GetTargetPath().string().c_str(),
                             std::string{""}, false);
 
@@ -93,7 +93,7 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe_target.Build();
-    buildcc::base::m::TargetRunner(exe_target);
+    buildcc::m::TargetRunner(exe_target);
   }
 
   {
@@ -102,7 +102,7 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
     foolib.Build();
-    buildcc::base::m::TargetRunner(foolib);
+    buildcc::m::TargetRunner(foolib);
     CHECK_FALSE(foolib.IsBuilt());
 
     // Executable for static
@@ -112,7 +112,7 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
     exe_target.Build();
-    buildcc::base::m::TargetRunner(exe_target);
+    buildcc::m::TargetRunner(exe_target);
     CHECK_FALSE(exe_target.IsBuilt());
   }
 
@@ -134,7 +134,7 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   foolib.Build();
-  buildcc::base::m::TargetRunner(foolib);
+  buildcc::m::TargetRunner(foolib);
 
   buildcc::env::save_file(foolib.GetTargetPath().string().c_str(),
                           std::string{""}, false);
@@ -150,7 +150,7 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe_target.Build();
-    buildcc::base::m::TargetRunner(exe_target);
+    buildcc::m::TargetRunner(exe_target);
   }
 
   // * Add new library
@@ -162,10 +162,10 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
 
-    buildcc::base::m::TargetExpect_PathAdded(1, &exe_target);
+    buildcc::m::TargetExpect_PathAdded(1, &exe_target);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe_target.Build();
-    buildcc::base::m::TargetRunner(exe_target);
+    buildcc::m::TargetRunner(exe_target);
   }
 
   // * Remove library
@@ -175,10 +175,10 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
     exe_target.AddSource("empty_main.cpp");
     exe_target.AddIncludeDir("foo");
 
-    buildcc::base::m::TargetExpect_PathRemoved(1, &exe_target);
+    buildcc::m::TargetExpect_PathRemoved(1, &exe_target);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe_target.Build();
-    buildcc::base::m::TargetRunner(exe_target);
+    buildcc::m::TargetRunner(exe_target);
   }
 
   mock().checkExpectations();
@@ -201,7 +201,7 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     foolib.Build();
-    buildcc::base::m::TargetRunner(foolib);
+    buildcc::m::TargetRunner(foolib);
 
     bool saved = buildcc::env::save_file(
         foolib.GetTargetPath().string().c_str(), std::string{""}, false);
@@ -216,7 +216,7 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe_target.Build();
-    buildcc::base::m::TargetRunner(exe_target);
+    buildcc::m::TargetRunner(exe_target);
   }
 
   // * Update static library
@@ -227,11 +227,11 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     foolib.AddIncludeDir("foo");
     foolib.AddIncludeDir("");
 
-    buildcc::base::m::TargetExpect_DirChanged(1, &foolib);
+    buildcc::m::TargetExpect_DirChanged(1, &foolib);
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     foolib.Build();
-    buildcc::base::m::TargetRunner(foolib);
+    buildcc::m::TargetRunner(foolib);
 
     // * To make sure that save_file is newer
     sleep(1);
@@ -245,10 +245,10 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
 
-    buildcc::base::m::TargetExpect_PathUpdated(1, &exe_target);
+    buildcc::m::TargetExpect_PathUpdated(1, &exe_target);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe_target.Build();
-    buildcc::base::m::TargetRunner(exe_target);
+    buildcc::m::TargetRunner(exe_target);
   }
 
   mock().checkExpectations();

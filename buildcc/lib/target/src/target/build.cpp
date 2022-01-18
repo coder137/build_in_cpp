@@ -43,7 +43,7 @@ constexpr const char *const kLinker = "linker";
 
 } // namespace
 
-namespace buildcc::base {
+namespace buildcc {
 
 // * Load
 // TODO, Verify things that cannot be changed
@@ -130,4 +130,4 @@ void Target::Build() {
   TaskDeps();
 }
 
-} // namespace buildcc::base
+} // namespace buildcc

@@ -37,7 +37,7 @@ void LibApi<T>::AddLibDirAbsolute(const fs::path &absolute_lib_dir) {
   t.storer_.current_lib_dirs.insert(absolute_lib_dir);
 }
 
-template <typename T> void LibApi<T>::AddLibDep(const base::Target &lib_dep) {
+template <typename T> void LibApi<T>::AddLibDep(const BaseTarget &lib_dep) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();

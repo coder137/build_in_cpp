@@ -88,6 +88,6 @@ template <typename T> tf::Taskflow &TargetGetter<T>::GetTaskflow() {
   return t.tf_;
 }
 
-template class TargetGetter<base::Target>;
+template class TargetGetter<BaseTarget>;
 
 } // namespace buildcc::internal

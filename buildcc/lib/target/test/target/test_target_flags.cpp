@@ -56,7 +56,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   simple.Build();
-  buildcc::base::m::TargetRunner(simple);
+  buildcc::m::TargetRunner(simple);
   CHECK_TRUE(simple.IsBuilt());
 
   mock().checkExpectations();
@@ -88,7 +88,7 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
   {
@@ -96,11 +96,11 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
     buildcc::BaseTarget simple(NAME, buildcc::TargetType::Executable, gcc,
                                "data");
     simple.AddSource(DUMMY_MAIN);
-    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
 
@@ -110,11 +110,11 @@ TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
                                "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddPreprocessorFlag("-DRANDOM=1");
-    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
 
@@ -154,7 +154,7 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_AddCommonCompileFlag) {
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   simple.Build();
-  buildcc::base::m::TargetRunner(simple);
+  buildcc::m::TargetRunner(simple);
   CHECK_TRUE(simple.IsBuilt());
 
   mock().checkExpectations();
@@ -187,7 +187,7 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
   {
@@ -198,7 +198,7 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
     simple.AddCommonCompileFlag("-g");
 
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_FALSE(simple.IsBuilt());
   }
   {
@@ -208,11 +208,11 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
     simple.AddSource(DUMMY_MAIN);
     simple.AddCommonCompileFlag("-O0");
 
-    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
 
@@ -224,11 +224,11 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
     simple.AddCommonCompileFlag("-O0");
     simple.AddCommonCompileFlag("-g");
 
-    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
 
@@ -268,7 +268,7 @@ TEST(TargetTestAsmCompileFlagGroup, Target_AddCompileFlag) {
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   simple.Build();
-  buildcc::base::m::TargetRunner(simple);
+  buildcc::m::TargetRunner(simple);
   CHECK_TRUE(simple.IsBuilt());
 
   mock().checkExpectations();
@@ -301,7 +301,7 @@ TEST(TargetTestAsmCompileFlagGroup, Target_ChangedCompileFlag) {
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
   {
@@ -313,7 +313,7 @@ TEST(TargetTestAsmCompileFlagGroup, Target_ChangedCompileFlag) {
     simple.AddAsmCompileFlag("-g");
 
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_FALSE(simple.IsBuilt());
   }
   {
@@ -323,11 +323,11 @@ TEST(TargetTestAsmCompileFlagGroup, Target_ChangedCompileFlag) {
     simple.AddSource(EMPTY_ASM);
     simple.AddAsmCompileFlag("-O0");
 
-    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
 
@@ -339,11 +339,11 @@ TEST(TargetTestAsmCompileFlagGroup, Target_ChangedCompileFlag) {
     simple.AddAsmCompileFlag("-O0");
     simple.AddAsmCompileFlag("-g");
 
-    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
 
@@ -382,7 +382,7 @@ TEST(TargetTestCCompileFlagsGroup, Target_AddCompileFlag) {
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   simple.Build();
-  buildcc::base::m::TargetRunner(simple);
+  buildcc::m::TargetRunner(simple);
   CHECK_TRUE(simple.IsBuilt());
 
   mock().checkExpectations();
@@ -414,7 +414,7 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
   {
@@ -422,11 +422,11 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
     buildcc::BaseTarget simple(NAME, buildcc::TargetType::Executable, gcc,
                                "data");
     simple.AddSource(DUMMY_MAIN);
-    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
 
@@ -436,11 +436,11 @@ TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
                                "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddCCompileFlag("-std=c11");
-    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
 
@@ -479,7 +479,7 @@ TEST(TargetTestCppCompileFlagsGroup, Target_AddCompileFlag) {
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   simple.Build();
-  buildcc::base::m::TargetRunner(simple);
+  buildcc::m::TargetRunner(simple);
   CHECK_TRUE(simple.IsBuilt());
 
   mock().checkExpectations();
@@ -511,7 +511,7 @@ TEST(TargetTestCppCompileFlagsGroup, Target_ChangedCompileFlag) {
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
   {
@@ -519,11 +519,11 @@ TEST(TargetTestCppCompileFlagsGroup, Target_ChangedCompileFlag) {
     buildcc::BaseTarget simple(NAME, buildcc::TargetType::Executable, gcc,
                                "data");
     simple.AddSource(DUMMY_MAIN);
-    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
 
@@ -533,11 +533,11 @@ TEST(TargetTestCppCompileFlagsGroup, Target_ChangedCompileFlag) {
                                "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddCCompileFlag("-std=c++17");
-    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
 
@@ -576,7 +576,7 @@ TEST(TargetTestLinkFlagsGroup, Target_AddLinkFlag) {
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   simple.Build();
-  buildcc::base::m::TargetRunner(simple);
+  buildcc::m::TargetRunner(simple);
   CHECK_TRUE(simple.IsBuilt());
 
   mock().checkExpectations();
@@ -608,7 +608,7 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
   {
@@ -616,10 +616,10 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
     buildcc::BaseTarget simple(NAME, buildcc::TargetType::Executable, gcc,
                                "data");
     simple.AddSource(DUMMY_MAIN);
-    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
 
@@ -629,10 +629,10 @@ TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
                                "data");
     simple.AddSource(DUMMY_MAIN);
     simple.AddLinkFlag("-lm");
-    buildcc::base::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::m::TargetExpect_FlagChanged(1, &simple);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
     CHECK_TRUE(simple.IsBuilt());
   }
 

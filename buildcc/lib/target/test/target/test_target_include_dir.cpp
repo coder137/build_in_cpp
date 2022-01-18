@@ -112,7 +112,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     buildcc::env::m::CommandExpect_Execute(2, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     include_compile.Build();
-    buildcc::base::m::TargetRunner(include_compile);
+    buildcc::m::TargetRunner(include_compile);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
@@ -140,11 +140,11 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     // Adds the data directory
     include_compile.AddIncludeDir("");
 
-    buildcc::base::m::TargetExpect_DirChanged(1, &include_compile);
+    buildcc::m::TargetExpect_DirChanged(1, &include_compile);
     buildcc::env::m::CommandExpect_Execute(2, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     include_compile.Build();
-    buildcc::base::m::TargetRunner(include_compile);
+    buildcc::m::TargetRunner(include_compile);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
@@ -169,11 +169,11 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     include_compile.AddSource(INCLUDE_HEADER_SOURCE);
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
 
-    buildcc::base::m::TargetExpect_DirChanged(1, &include_compile);
+    buildcc::m::TargetExpect_DirChanged(1, &include_compile);
     buildcc::env::m::CommandExpect_Execute(2, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     include_compile.Build();
-    buildcc::base::m::TargetRunner(include_compile);
+    buildcc::m::TargetRunner(include_compile);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
@@ -226,7 +226,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     buildcc::env::m::CommandExpect_Execute(2, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     add_header.Build();
-    buildcc::base::m::TargetRunner(add_header);
+    buildcc::m::TargetRunner(add_header);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
@@ -245,11 +245,11 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     add_header.AddHeader(RELATIVE_HEADER_FILE);
     add_header.AddIncludeDir(RELATIVE_INCLUDE_DIR);
 
-    buildcc::base::m::TargetExpect_PathAdded(1, &add_header);
+    buildcc::m::TargetExpect_PathAdded(1, &add_header);
     buildcc::env::m::CommandExpect_Execute(2, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     add_header.Build();
-    buildcc::base::m::TargetRunner(add_header);
+    buildcc::m::TargetRunner(add_header);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
@@ -274,11 +274,11 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     add_header.AddHeader(RELATIVE_HEADER_FILE);
     add_header.AddIncludeDir(RELATIVE_INCLUDE_DIR);
 
-    buildcc::base::m::TargetExpect_PathUpdated(1, &add_header);
+    buildcc::m::TargetExpect_PathUpdated(1, &add_header);
     buildcc::env::m::CommandExpect_Execute(2, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     add_header.Build();
-    buildcc::base::m::TargetRunner(add_header);
+    buildcc::m::TargetRunner(add_header);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();
@@ -296,11 +296,11 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     add_header.AddSource(INCLUDE_HEADER_SOURCE);
     add_header.AddIncludeDir(RELATIVE_INCLUDE_DIR);
 
-    buildcc::base::m::TargetExpect_PathRemoved(1, &add_header);
+    buildcc::m::TargetExpect_PathRemoved(1, &add_header);
     buildcc::env::m::CommandExpect_Execute(2, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     add_header.Build();
-    buildcc::base::m::TargetRunner(add_header);
+    buildcc::m::TargetRunner(add_header);
 
     buildcc::internal::TargetLoader loader(NAME, intermediate_path);
     bool is_loaded = loader.Load();

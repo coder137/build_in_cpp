@@ -88,7 +88,7 @@ void Register::Dep(const internal::BuilderInterface &target,
 }
 
 void Register::Test(const ArgToolchainState &toolchain_state,
-                    const std::string &command, const base::Target &target,
+                    const std::string &command, const BaseTarget &target,
                     const TestConfig &config) {
   if (!(toolchain_state.build && toolchain_state.test)) {
     return;

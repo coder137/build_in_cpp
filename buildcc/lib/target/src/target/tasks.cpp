@@ -36,7 +36,7 @@ constexpr const char *const kLinkTaskName = "Target";
 
 } // namespace
 
-namespace buildcc::base {
+namespace buildcc {
 
 void Target::SetTaskStateFailure() {
   std::lock_guard<std::mutex> guard(task_state_mutex_);
@@ -67,6 +67,10 @@ void Target::StartTask() {
   });
   target_start_task_.name(kStartTaskName);
 }
+
+} // namespace buildcc
+
+namespace buildcc::base {
 
 // 1. User adds/removes/updates pch_headers
 // 2. `BuildCompile` aggregates pch_headers to a single `buildcc_header` and
@@ -165,6 +169,10 @@ void LinkTarget::Task() {
   task_.name(kLinkTaskName);
 }
 
+} // namespace buildcc::base
+
+namespace buildcc {
+
 void Target::EndTask() {
   target_end_task_ = tf_.emplace([&]() {
     if (dirty_) {
@@ -202,4 +210,4 @@ void Target::TaskDeps() {
   link_target_.GetTask().precede(target_end_task_);
 }
 
-} // namespace buildcc::base
+} // namespace buildcc

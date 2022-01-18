@@ -58,7 +58,7 @@
 // Third Party
 #include "taskflow/taskflow.hpp"
 
-namespace buildcc::base {
+namespace buildcc {
 
 // NOTE, base::Target is meant to be a blank slate which can be customized by
 // the specialized target-toolchain classes
@@ -89,9 +89,9 @@ public:
   env::TaskState GetTaskState() const noexcept { return task_state_; }
 
 private:
-  friend class CompilePch;
-  friend class CompileObject;
-  friend class LinkTarget;
+  friend class base::CompilePch;
+  friend class base::CompileObject;
+  friend class base::LinkTarget;
 
   friend class TargetGetter<Target>;
 
@@ -146,9 +146,9 @@ private:
   internal::TargetLoader loader_;
 
   // Friend classes
-  CompilePch compile_pch_;
-  CompileObject compile_object_;
-  LinkTarget link_target_;
+  base::CompilePch compile_pch_;
+  base::CompileObject compile_object_;
+  base::LinkTarget link_target_;
 
   // Task states
   tf::Task target_start_task_;
@@ -165,12 +165,7 @@ private:
   tf::Taskflow tf_;
 };
 
-} // namespace buildcc::base
-
-// TODO, Make all of these external and remove this namespace
-namespace buildcc {
-
-typedef base::Target BaseTarget;
+typedef Target BaseTarget;
 
 } // namespace buildcc
 

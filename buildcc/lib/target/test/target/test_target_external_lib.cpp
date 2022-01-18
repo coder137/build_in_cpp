@@ -47,7 +47,7 @@ TEST(TargetTestExternalLib, TestAddLibDir) {
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   exe.Build();
-  buildcc::base::m::TargetRunner(exe);
+  buildcc::m::TargetRunner(exe);
   CHECK_TRUE(exe.IsBuilt());
 
   mock().checkExpectations();
@@ -75,7 +75,7 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_Simple) {
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   exe.Build();
-  buildcc::base::m::TargetRunner(exe);
+  buildcc::m::TargetRunner(exe);
   CHECK_TRUE(exe.IsBuilt());
 
   mock().checkExpectations();
@@ -104,7 +104,7 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_RebuildChanged) {
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe.Build();
-    buildcc::base::m::TargetRunner(exe);
+    buildcc::m::TargetRunner(exe);
     CHECK_TRUE(exe.IsBuilt());
   }
 
@@ -116,10 +116,10 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_RebuildChanged) {
     exe.AddLibDir(exe.GetTargetPath().parent_path());
     exe.AddLibDep("-lfoo");
 
-    buildcc::base::m::TargetExpect_ExternalLibChanged(1, &exe);
+    buildcc::m::TargetExpect_ExternalLibChanged(1, &exe);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe.Build();
-    buildcc::base::m::TargetRunner(exe);
+    buildcc::m::TargetRunner(exe);
     CHECK_TRUE(exe.IsBuilt());
   }
 
@@ -130,10 +130,10 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_RebuildChanged) {
     exe.AddSource("foo_main.cpp");
     exe.AddLibDir(exe.GetTargetPath().parent_path());
 
-    buildcc::base::m::TargetExpect_ExternalLibChanged(1, &exe);
+    buildcc::m::TargetExpect_ExternalLibChanged(1, &exe);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe.Build();
-    buildcc::base::m::TargetRunner(exe);
+    buildcc::m::TargetRunner(exe);
     CHECK_TRUE(exe.IsBuilt());
   }
 

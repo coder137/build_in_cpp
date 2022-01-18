@@ -20,7 +20,7 @@
 
 namespace buildcc {
 
-tf::Task Register::BuildTargetTask(base::Target &target) {
+tf::Task Register::BuildTargetTask(BaseTarget &target) {
   return build_tf_.composed_of(target.GetTaskflow()).name(target.GetUniqueId());
 }
 

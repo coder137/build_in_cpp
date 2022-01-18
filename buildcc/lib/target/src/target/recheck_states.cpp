@@ -18,7 +18,7 @@
 // be used accurately
 #include "target/target.h"
 
-namespace buildcc::base {
+namespace buildcc {
 
 // Source rechecks
 void Target::SourceRemoved() {}
@@ -34,4 +34,4 @@ void Target::DirChanged() {}
 void Target::FlagChanged() {}
 void Target::ExternalLibChanged() {}
 
-} // namespace buildcc::base
+} // namespace buildcc
