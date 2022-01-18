@@ -35,7 +35,7 @@
 
 #include "target/api/target_info_getter.h"
 
-namespace buildcc::base {
+namespace buildcc {
 
 // NOTE: base::Target info is meant to hold information that is common to
 // multiple targets
@@ -76,12 +76,8 @@ protected:
   TargetState state_;
 };
 
-} // namespace buildcc::base
+typedef TargetInfo BaseTargetInfo;
 
-namespace buildcc {
-
-typedef base::TargetInfo TargetInfo;
-
-}
+} // namespace buildcc
 
 #endif
