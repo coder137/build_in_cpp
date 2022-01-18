@@ -23,10 +23,10 @@ buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
                        "ar", "ldd");
 
 TEST(TargetTestSyncGroup, CopyByConstRef) {
-  buildcc::base::Target srcTarget("srcTarget", buildcc::TargetType::Executable,
-                                  gcc, "data");
-  buildcc::base::Target destTarget(
-      "destTarget", buildcc::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget srcTarget("srcTarget", buildcc::TargetType::Executable,
+                                gcc, "data");
+  buildcc::BaseTarget destTarget("destTarget", buildcc::TargetType::Executable,
+                                 gcc, "data");
 
   srcTarget.AddSource("dummy_main.c");
   srcTarget.AddIncludeDir("include", true);
@@ -90,10 +90,10 @@ TEST(TargetTestSyncGroup, CopyByConstRef) {
 }
 
 TEST(TargetTestSyncGroup, CopyByMove) {
-  buildcc::base::Target srcTarget("srcTarget", buildcc::TargetType::Executable,
-                                  gcc, "data");
-  buildcc::base::Target destTarget(
-      "destTarget", buildcc::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget srcTarget("srcTarget", buildcc::TargetType::Executable,
+                                gcc, "data");
+  buildcc::BaseTarget destTarget("destTarget", buildcc::TargetType::Executable,
+                                 gcc, "data");
 
   srcTarget.AddSource("dummy_main.c");
   srcTarget.AddIncludeDir("include", true);
@@ -158,10 +158,10 @@ TEST(TargetTestSyncGroup, CopyByMove) {
 }
 
 TEST(TargetTestSyncGroup, CopyCrash) {
-  buildcc::base::Target srcTarget("srcTarget", buildcc::TargetType::Executable,
-                                  gcc, "data");
-  buildcc::base::Target destTarget(
-      "destTarget", buildcc::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget srcTarget("srcTarget", buildcc::TargetType::Executable,
+                                gcc, "data");
+  buildcc::BaseTarget destTarget("destTarget", buildcc::TargetType::Executable,
+                                 gcc, "data");
 
   CHECK_THROWS(std::exception,
                destTarget.Copy(srcTarget, {
@@ -170,10 +170,10 @@ TEST(TargetTestSyncGroup, CopyCrash) {
 }
 
 TEST(TargetTestSyncGroup, InsertByConstRef) {
-  buildcc::base::Target srcTarget("srcTarget", buildcc::TargetType::Executable,
-                                  gcc, "data");
-  buildcc::base::Target destTarget(
-      "destTarget", buildcc::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget srcTarget("srcTarget", buildcc::TargetType::Executable,
+                                gcc, "data");
+  buildcc::BaseTarget destTarget("destTarget", buildcc::TargetType::Executable,
+                                 gcc, "data");
 
   srcTarget.AddSource("dummy_main.c");
   srcTarget.AddIncludeDir("include", true);
@@ -237,10 +237,10 @@ TEST(TargetTestSyncGroup, InsertByConstRef) {
 }
 
 TEST(TargetTestSyncGroup, InsertByMove) {
-  buildcc::base::Target srcTarget("srcTarget", buildcc::TargetType::Executable,
-                                  gcc, "data");
-  buildcc::base::Target destTarget(
-      "destTarget", buildcc::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget srcTarget("srcTarget", buildcc::TargetType::Executable,
+                                gcc, "data");
+  buildcc::BaseTarget destTarget("destTarget", buildcc::TargetType::Executable,
+                                 gcc, "data");
 
   srcTarget.AddSource("dummy_main.c");
   srcTarget.AddIncludeDir("include", true);
@@ -305,10 +305,10 @@ TEST(TargetTestSyncGroup, InsertByMove) {
 }
 
 TEST(TargetTestSyncGroup, InsertCrash) {
-  buildcc::base::Target srcTarget("srcTarget", buildcc::TargetType::Executable,
-                                  gcc, "data");
-  buildcc::base::Target destTarget(
-      "destTarget", buildcc::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget srcTarget("srcTarget", buildcc::TargetType::Executable,
+                                gcc, "data");
+  buildcc::BaseTarget destTarget("destTarget", buildcc::TargetType::Executable,
+                                 gcc, "data");
 
   CHECK_THROWS(std::exception,
                destTarget.Insert(srcTarget, {

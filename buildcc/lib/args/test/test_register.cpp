@@ -102,15 +102,15 @@ TEST(RegisterTestGroup, Register_Build) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::Toolchain::Id::Gcc, "", "", "", "", "",
                                "");
-  buildcc::base::Target target("dummyT", buildcc::TargetType::Executable,
-                               toolchain, "");
+  buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
+                             toolchain, "");
 
   {
     buildcc::ArgToolchainState state{false, false};
 
     buildcc::Register reg(args);
     reg.Build(
-        state, [](buildcc::base::Target &target) { (void)target; }, target);
+        state, [](buildcc::BaseTarget &target) { (void)target; }, target);
   }
 
   {
@@ -119,7 +119,7 @@ TEST(RegisterTestGroup, Register_Build) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
-        state, [](buildcc::base::Target &target) { (void)target; }, target);
+        state, [](buildcc::BaseTarget &target) { (void)target; }, target);
   }
 
   buildcc::env::deinit();
@@ -150,10 +150,10 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::Toolchain::Id::Gcc, "", "", "", "", "",
                                "");
-  buildcc::base::Target target("dummyT", buildcc::TargetType::Executable,
-                               toolchain, "");
-  buildcc::base::Target dependency("depT", buildcc::TargetType::Executable,
-                                   toolchain, "");
+  buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
+                             toolchain, "");
+  buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
+                                 toolchain, "");
 
   // 4 options
   // T -> Target
@@ -176,7 +176,7 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_depT");
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; },
+        trueState, [](buildcc::BaseTarget &target) { (void)target; },
         dependency);
 
     CHECK_THROWS(std::exception, reg.Dep(target, dependency));
@@ -187,7 +187,7 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+        trueState, [](buildcc::BaseTarget &target) { (void)target; }, target);
 
     CHECK_THROWS(std::exception, reg.Dep(target, dependency));
   }
@@ -198,9 +198,9 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
     mock().expectNCalls(1, "BuildTask_dummyT");
     mock().expectNCalls(1, "BuildTask_depT");
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+        trueState, [](buildcc::BaseTarget &target) { (void)target; }, target);
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; },
+        trueState, [](buildcc::BaseTarget &target) { (void)target; },
         dependency);
 
     reg.Dep(target, dependency);
@@ -234,10 +234,10 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::Toolchain::Id::Gcc, "", "", "", "", "",
                                "");
-  buildcc::base::Target target("dummyT", buildcc::TargetType::Executable,
-                               toolchain, "");
-  buildcc::base::Target dependency("depT", buildcc::TargetType::Executable,
-                                   toolchain, "");
+  buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
+                             toolchain, "");
+  buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
+                                 toolchain, "");
 
   // 4 options
   // T -> Target
@@ -253,10 +253,9 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
   {
     buildcc::Register reg(args);
     reg.Build(
-        falseState, [](buildcc::base::Target &target) { (void)target; },
-        target);
+        falseState, [](buildcc::BaseTarget &target) { (void)target; }, target);
     reg.Build(
-        falseState, [](buildcc::base::Target &target) { (void)target; },
+        falseState, [](buildcc::BaseTarget &target) { (void)target; },
         dependency);
 
     reg.Dep(target, dependency);
@@ -266,11 +265,10 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
   {
     buildcc::Register reg(args);
     reg.Build(
-        falseState, [](buildcc::base::Target &target) { (void)target; },
-        target);
+        falseState, [](buildcc::BaseTarget &target) { (void)target; }, target);
     mock().expectNCalls(1, "BuildTask_depT");
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; },
+        trueState, [](buildcc::BaseTarget &target) { (void)target; },
         dependency);
 
     reg.Dep(target, dependency);
@@ -281,9 +279,9 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+        trueState, [](buildcc::BaseTarget &target) { (void)target; }, target);
     reg.Build(
-        falseState, [](buildcc::base::Target &target) { (void)target; },
+        falseState, [](buildcc::BaseTarget &target) { (void)target; },
         dependency);
 
     reg.Dep(target, dependency);
@@ -295,9 +293,9 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
     mock().expectNCalls(1, "BuildTask_dummyT");
     mock().expectNCalls(1, "BuildTask_depT");
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+        trueState, [](buildcc::BaseTarget &target) { (void)target; }, target);
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; },
+        trueState, [](buildcc::BaseTarget &target) { (void)target; },
         dependency);
 
     reg.Dep(target, dependency);
@@ -331,12 +329,12 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::Toolchain::Id::Gcc, "", "", "", "", "",
                                "");
-  buildcc::base::Target target("dummyT", buildcc::TargetType::Executable,
-                               toolchain, "");
-  buildcc::base::Target dependency("depT", buildcc::TargetType::Executable,
-                                   toolchain, "");
-  buildcc::base::Target dependency2("dep2T", buildcc::TargetType::Executable,
-                                    toolchain, "");
+  buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
+                             toolchain, "");
+  buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
+                                 toolchain, "");
+  buildcc::BaseTarget dependency2("dep2T", buildcc::TargetType::Executable,
+                                  toolchain, "");
 
   buildcc::ArgToolchainState trueState{true, true};
 
@@ -346,9 +344,9 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
     mock().expectNCalls(1, "BuildTask_dummyT");
     mock().expectNCalls(1, "BuildTask_depT");
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+        trueState, [](buildcc::BaseTarget &target) { (void)target; }, target);
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; },
+        trueState, [](buildcc::BaseTarget &target) { (void)target; },
         dependency);
 
     reg.Dep(target, dependency);
@@ -363,12 +361,12 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
     mock().expectNCalls(1, "BuildTask_dep2T");
 
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+        trueState, [](buildcc::BaseTarget &target) { (void)target; }, target);
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; },
+        trueState, [](buildcc::BaseTarget &target) { (void)target; },
         dependency);
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; },
+        trueState, [](buildcc::BaseTarget &target) { (void)target; },
         dependency2);
 
     reg.Dep(dependency, dependency2);
@@ -407,12 +405,12 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::Toolchain::Id::Gcc, "", "", "", "", "",
                                "");
-  buildcc::base::Target target("dummyT", buildcc::TargetType::Executable,
-                               toolchain, "");
-  buildcc::base::Target dependency("depT", buildcc::TargetType::Executable,
-                                   toolchain, "");
-  buildcc::base::Target dependency2("dep2T", buildcc::TargetType::Executable,
-                                    toolchain, "");
+  buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
+                             toolchain, "");
+  buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
+                                 toolchain, "");
+  buildcc::BaseTarget dependency2("dep2T", buildcc::TargetType::Executable,
+                                  toolchain, "");
 
   buildcc::ArgToolchainState trueState{true, true};
 
@@ -422,9 +420,9 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
     mock().expectNCalls(1, "BuildTask_dummyT");
     mock().expectNCalls(1, "BuildTask_depT");
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+        trueState, [](buildcc::BaseTarget &target) { (void)target; }, target);
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; },
+        trueState, [](buildcc::BaseTarget &target) { (void)target; },
         dependency);
 
     reg.Dep(target, dependency);
@@ -439,12 +437,12 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
     mock().expectNCalls(1, "BuildTask_dep2T");
 
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; }, target);
+        trueState, [](buildcc::BaseTarget &target) { (void)target; }, target);
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; },
+        trueState, [](buildcc::BaseTarget &target) { (void)target; },
         dependency);
     reg.Build(
-        trueState, [](buildcc::base::Target &target) { (void)target; },
+        trueState, [](buildcc::BaseTarget &target) { (void)target; },
         dependency2);
 
     reg.Dep(dependency, dependency2);
@@ -483,10 +481,10 @@ TEST(RegisterTestGroup, Register_Test) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::Toolchain::Id::Gcc, "", "", "", "", "",
                                "");
-  buildcc::base::Target target("dummyT", buildcc::TargetType::Executable,
-                               toolchain, "");
-  buildcc::base::Target dependency("depT", buildcc::TargetType::Executable,
-                                   toolchain, "");
+  buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
+                             toolchain, "");
+  buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
+                                 toolchain, "");
 
   // 4 states between build and test
   // FF
@@ -529,7 +527,7 @@ TEST(RegisterTestGroup, Register_Test) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
-        stateSuccess, [](buildcc::base::Target &target) { (void)target; },
+        stateSuccess, [](buildcc::BaseTarget &target) { (void)target; },
         target);
     reg.Test(stateSuccess, "{executable}", target);
 
@@ -568,10 +566,10 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::Toolchain::Id::Gcc, "", "", "", "", "",
                                "");
-  buildcc::base::Target target("dummyT", buildcc::TargetType::Executable,
-                               toolchain, "");
-  buildcc::base::Target dependency("depT", buildcc::TargetType::Executable,
-                                   toolchain, "");
+  buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
+                             toolchain, "");
+  buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
+                                 toolchain, "");
 
   buildcc::ArgToolchainState stateSuccess{true, true};
 
@@ -580,7 +578,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
-        stateSuccess, [](buildcc::base::Target &target) { (void)target; },
+        stateSuccess, [](buildcc::BaseTarget &target) { (void)target; },
         target);
     reg.Test(
         stateSuccess, "{executable}", target,
@@ -597,7 +595,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
-        stateSuccess, [](buildcc::base::Target &target) { (void)target; },
+        stateSuccess, [](buildcc::BaseTarget &target) { (void)target; },
         target);
     reg.Test(
         stateSuccess, "{executable}", target,
@@ -615,7 +613,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
-        stateSuccess, [](buildcc::base::Target &target) { (void)target; },
+        stateSuccess, [](buildcc::BaseTarget &target) { (void)target; },
         target);
     reg.Test(
         stateSuccess, "{executable}", target,
@@ -633,7 +631,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
-        stateSuccess, [](buildcc::base::Target &target) { (void)target; },
+        stateSuccess, [](buildcc::BaseTarget &target) { (void)target; },
         target);
     reg.Test(stateSuccess, "{executable}", target,
              buildcc::TestConfig(
@@ -652,7 +650,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
-        stateSuccess, [](buildcc::base::Target &target) { (void)target; },
+        stateSuccess, [](buildcc::BaseTarget &target) { (void)target; },
         target);
     reg.Test(stateSuccess, "{executable}", target,
              buildcc::TestConfig(
@@ -669,7 +667,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
     buildcc::Register reg(args);
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
-        stateSuccess, [](buildcc::base::Target &target) { (void)target; },
+        stateSuccess, [](buildcc::BaseTarget &target) { (void)target; },
         target);
     reg.Test(
         stateSuccess, "{executable}", target,

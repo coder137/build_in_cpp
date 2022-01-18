@@ -37,8 +37,8 @@ TEST(TargetTestSourceOutOfRootGroup, Add_OutOfRootSource) {
 
   fs::remove_all(target_source_intermediate_path / OUTOFROOT);
 
-  buildcc::base::Target simple(OUTOFROOT, buildcc::TargetType::Executable, gcc,
-                               "");
+  buildcc::BaseTarget simple(OUTOFROOT, buildcc::TargetType::Executable, gcc,
+                             "");
   simple.AddSource("../dummy_main.cpp");
 
   buildcc::env::m::CommandExpect_Execute(1, true);
@@ -53,8 +53,8 @@ TEST(TargetTestSourceOutOfRootGroup, Glob_OutOfRootSource) {
   fs::remove_all(target_source_intermediate_path / OUTOFROOT);
 
   {
-    buildcc::base::Target simple(OUTOFROOT, buildcc::TargetType::Executable,
-                                 gcc, "");
+    buildcc::BaseTarget simple(OUTOFROOT, buildcc::TargetType::Executable, gcc,
+                               "");
     simple.GlobSources(".."); // 6 files detected
     CHECK_EQUAL(6, simple.GetSourceFiles().size());
 
@@ -72,8 +72,8 @@ TEST(TargetTestSourceOutOfRootGroup, GlobAbsolute_OutOfRootSource) {
 
   fs::remove_all(target_source_intermediate_path / OUTOFROOT);
   {
-    buildcc::base::Target simple(OUTOFROOT, buildcc::TargetType::Executable,
-                                 gcc, "");
+    buildcc::BaseTarget simple(OUTOFROOT, buildcc::TargetType::Executable, gcc,
+                               "");
     simple.GlobSourcesAbsolute(fs::path(BUILD_SCRIPT_SOURCE) /
                                "data"); // 6 files detected
     buildcc::env::m::CommandExpect_Execute(6, true);

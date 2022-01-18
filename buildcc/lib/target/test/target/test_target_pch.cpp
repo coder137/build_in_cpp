@@ -36,16 +36,16 @@ static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
 
 TEST(TargetPchTestGroup, Target_AddPch) {
   constexpr const char *const NAME = "AddPch.exe";
-  buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
   target.AddPch("pch/pch_header_1.h");
   target.AddPch("pch/pch_header_2.h");
 }
 
 TEST(TargetPchTestGroup, Target_AddPch_Build) {
   constexpr const char *const NAME = "AddPch_Build.exe";
-  buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
   target.AddPch("pch/pch_header_1.h");
   target.AddPch("pch/pch_header_2.h");
 
@@ -69,8 +69,8 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
   constexpr const char *const NAME = "AddPch_Rebuild.exe";
 
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
     target.AddPch("pch/pch_header_1.h");
     target.AddPch("pch/pch_header_2.h");
 
@@ -84,8 +84,8 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
 
   // Rebuild: No change
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
     target.AddPch("pch/pch_header_1.h");
     target.AddPch("pch/pch_header_2.h");
 
@@ -97,8 +97,8 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
 
   // Rebuild: Removed
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
     target.AddPch("pch/pch_header_1.h");
 
     buildcc::base::m::TargetExpect_PathRemoved(1, &target);
@@ -112,8 +112,8 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
 
   // Rebuild: Added
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
     target.AddPch("pch/pch_header_1.h");
     target.AddPch("pch/pch_header_2.h");
 
@@ -134,8 +134,8 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
     bool save = buildcc::env::save_file(filename.string().c_str(), "", false);
     CHECK_TRUE(save);
 
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
     target.AddPch("pch/pch_header_1.h");
     target.AddPch("pch/pch_header_2.h");
 
@@ -155,8 +155,8 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
   constexpr const char *const NAME = "AddPch_CppRebuild.exe";
 
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
     target.AddPch("pch/pch_header_1.h");
     target.AddPch("pch/pch_header_2.h");
     target.AddSource("dummy_main.cpp");
@@ -172,8 +172,8 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
 
   // Rebuild: No change
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
     target.AddPch("pch/pch_header_1.h");
     target.AddPch("pch/pch_header_2.h");
     target.AddSource("dummy_main.cpp");
@@ -186,8 +186,8 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
 
   // Rebuild: Removed
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
     target.AddPch("pch/pch_header_1.h");
     target.AddSource("dummy_main.cpp");
 
@@ -203,8 +203,8 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
 
   // Rebuild: Added
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
     target.AddPch("pch/pch_header_1.h");
     target.AddPch("pch/pch_header_2.h");
     target.AddSource("dummy_main.cpp");
@@ -227,8 +227,8 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
     bool save = buildcc::env::save_file(filename.string().c_str(), "", false);
     CHECK_TRUE(save);
 
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
     target.AddPch("pch/pch_header_1.h");
     target.AddPch("pch/pch_header_2.h");
     target.AddSource("dummy_main.cpp");
@@ -249,8 +249,8 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
 TEST(TargetPchTestGroup, Target_AddPchCompileFlag_Build) {
   constexpr const char *const NAME = "AddPchCompileFlag_Build.exe";
 
-  buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
   target.AddPchCompileFlag("-H");
   target.AddPch("pch/pch_header_1.h");
   target.AddPch("pch/pch_header_2.h");
@@ -269,8 +269,8 @@ TEST(TargetPchTestGroup, Target_AddPchCompileFlag_Build) {
 TEST(TargetPchTestGroup, Target_AddPchObjectFlag_Build) {
   constexpr const char *const NAME = "AddPchObjectFlag_Build.exe";
 
-  buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
   target.AddPchObjectFlag("-H");
   target.AddPch("pch/pch_header_1.h");
   target.AddPch("pch/pch_header_2.h");

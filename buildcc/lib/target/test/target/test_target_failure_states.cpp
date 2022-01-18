@@ -32,8 +32,8 @@ TEST(TargetTestFailureStates, StartTaskEnvFailure) {
   buildcc::env::set_task_state(buildcc::env::TaskState::FAILURE);
 
   constexpr const char *const NAME = "StartTaskEnvFailure.exe";
-  buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
 
   target.AddSource("dummy_main.cpp");
   target.Build();
@@ -44,8 +44,8 @@ TEST(TargetTestFailureStates, StartTaskEnvFailure) {
 
 TEST(TargetTestFailureStates, CompilePchFailure) {
   constexpr const char *const NAME = "CompilePchFailure.exe";
-  buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
 
   target.AddSource("dummy_main.cpp");
   target.AddPch("include/include_header.h");
@@ -60,8 +60,8 @@ TEST(TargetTestFailureStates, CompilePchFailure) {
 TEST(TargetTestFailureStates, CompileObjectFailure) {
   constexpr const char *const NAME = "CompileObjectFailure.exe";
 
-  buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
 
   target.AddSource("dummy_main.cpp");
   target.AddSource("dummy_main.c");
@@ -77,8 +77,8 @@ TEST(TargetTestFailureStates, CompileObjectFailure) {
 TEST(TargetTestFailureStates, CompileObject_FileNotFoundFailure) {
   constexpr const char *const NAME = "CompileObject_FileNotFoundFailure.exe";
 
-  buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
 
   target.AddSource("file_not_present.cpp");
   target.Build();
@@ -90,8 +90,8 @@ TEST(TargetTestFailureStates, CompileObject_FileNotFoundFailure) {
 TEST(TargetTestFailureStates, LinkTargetFailure) {
   constexpr const char *const NAME = "LinkTargetFailure.exe";
 
-  buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
 
   target.AddSource("dummy_main.cpp");
   target.Build();
@@ -106,8 +106,8 @@ TEST(TargetTestFailureStates, LinkTargetFailure) {
 TEST(TargetTestFailureStates, EndTaskStoreFailure) {
   constexpr const char *const NAME = "EndTaskStoreFailure.exe";
 
-  buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
 
   target.AddSource("dummy_main.cpp");
   target.Build();
@@ -130,8 +130,8 @@ TEST(TargetTestFailureStates, StartTaskEnvFailure_Rebuild) {
   constexpr const char *const NAME = "StartTaskEnvFailure_Rebuild.exe";
 
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.Build();
@@ -146,8 +146,8 @@ TEST(TargetTestFailureStates, StartTaskEnvFailure_Rebuild) {
 
   // during rebuild, this target must run!
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.Build();
@@ -166,8 +166,8 @@ TEST(TargetTestFailureStates, CompilePchFailure_Rebuild) {
   constexpr const char *const NAME = "CompilePchFailure_Rebuild.exe";
 
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.AddPch("include/include_header.h");
@@ -186,8 +186,8 @@ TEST(TargetTestFailureStates, CompilePchFailure_Rebuild) {
   // must move to compile object stage
   // must move to link target stage
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.AddPch("include/include_header.h");
@@ -209,8 +209,8 @@ TEST(TargetTestFailureStates, CompileObjectFailure_Rebuild) {
   constexpr const char *const NAME = "CompileObjectFailure_Rebuild.exe";
 
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.AddSource("dummy_main.c");
@@ -237,8 +237,8 @@ TEST(TargetTestFailureStates, CompileObjectFailure_Rebuild) {
 
   // must move to link target stage
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.AddSource("dummy_main.c");
@@ -260,8 +260,8 @@ TEST(TargetTestFailureStates, LinkTargetFailure_Rebuild) {
   constexpr const char *const NAME = "LinkTargetFailure_Rebuild.exe";
 
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.Build();
@@ -278,8 +278,8 @@ TEST(TargetTestFailureStates, LinkTargetFailure_Rebuild) {
 
   // during rebuild this must try to relink!
   {
-    buildcc::base::Target target(NAME, buildcc::TargetType::Executable, gcc,
-                                 "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.Build();

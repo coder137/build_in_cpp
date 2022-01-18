@@ -30,7 +30,7 @@ static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
 
 TEST(TargetTestLock, LockState) {
   constexpr const char *const NAME = "LockState.exe";
-  buildcc::base::Target exe(NAME, buildcc::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget exe(NAME, buildcc::TargetType::Executable, gcc, "data");
 
   CHECK_FALSE(exe.IsLocked());
 
@@ -45,7 +45,7 @@ TEST(TargetTestLock, LockState) {
 
 TEST(TargetTestLock, Lock_Build) {
   constexpr const char *const NAME = "Lock_Build.exe";
-  buildcc::base::Target exe(NAME, buildcc::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget exe(NAME, buildcc::TargetType::Executable, gcc, "data");
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   exe.Build();
@@ -58,7 +58,7 @@ TEST(TargetTestLock, Lock_Build) {
 
 TEST(TargetTestLock, Lock_APIs) {
   constexpr const char *const NAME = "Lock_APIs.exe";
-  buildcc::base::Target exe(NAME, buildcc::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget exe(NAME, buildcc::TargetType::Executable, gcc, "data");
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   exe.Build();
@@ -95,7 +95,7 @@ TEST(TargetTestLock, Lock_APIs) {
 
 TEST(TargetTestLock, Unlock_APIs) {
   constexpr const char *const NAME = "Unlock_APIs.exe";
-  buildcc::base::Target exe(NAME, buildcc::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget exe(NAME, buildcc::TargetType::Executable, gcc, "data");
 
   CHECK_THROWS(std::exception,
                exe.GetCompileCommand(exe.GetTargetRootDir() / "dummy_main.c"));
