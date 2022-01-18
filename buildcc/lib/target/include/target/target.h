@@ -64,7 +64,7 @@ namespace buildcc::base {
 // the specialized target-toolchain classes
 class Target : public internal::BuilderInterface,
                public TargetInfo,
-               public TargetGetter<Target> {
+               public internal::TargetGetter<Target> {
 
 public:
   explicit Target(const std::string &name, TargetType type,
