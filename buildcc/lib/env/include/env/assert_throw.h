@@ -26,7 +26,8 @@ namespace buildcc::env {
 /**
  * @brief Compile time expr asserts fatally when false
  */
-template <bool expr> inline void assert_throw(const char *message) {
+template <bool expr>
+inline void assert_throw([[maybe_unused]] const char *message) {
   if constexpr (!expr) {
     env::log_critical("assert", message);
     // TODO, If needed specialize this
