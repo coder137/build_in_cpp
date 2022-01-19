@@ -28,8 +28,14 @@ namespace fs = std::filesystem;
 namespace buildcc {
 
 struct TargetConfig {
-  TargetConfig() {}
+  TargetConfig() = default;
 
+  /**
+   * @brief Get the File Ext object
+   *
+   * @param filepath
+   * @return TargetFileExt
+   */
   TargetFileExt GetFileExt(const fs::path &filepath) const;
   bool IsValidSource(const fs::path &filepath) const;
   bool IsValidHeader(const fs::path &filepath) const;
@@ -45,15 +51,11 @@ struct TargetConfig {
   std::string prefix_include_dir{"-I"};
   std::string prefix_lib_dir{"-L"};
 
-  std::string pch_command{"{compiler} {preprocessor_flags} {include_dirs} "
-                          "{common_compile_flags} {pch_compile_flags} "
-                          "{compile_flags} -o {output} -c {input}"};
-  std::string compile_command{
-      "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
-      "{pch_object_flags} {compile_flags} -o {output} -c {input}"};
-  std::string link_command{
-      "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
-      "{lib_dirs} {lib_deps}"};
+  // clang-format off
+  std::string pch_command{"{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} {pch_compile_flags} {compile_flags} -o {output} -c {input}"};
+  std::string compile_command{"{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} {pch_object_flags} {compile_flags} -o {output} -c {input}"};
+  std::string link_command{"{cpp_compiler} {link_flags} {compiled_sources} -o {output} {lib_dirs} {lib_deps}"};
+  // clang-format on
 
   std::unordered_set<std::string> valid_c_ext{".c"};
   std::unordered_set<std::string> valid_cpp_ext{".cpp", ".cxx", ".cc"};
