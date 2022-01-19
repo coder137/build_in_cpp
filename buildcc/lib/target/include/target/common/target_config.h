@@ -31,15 +31,47 @@ struct TargetConfig {
   TargetConfig() = default;
 
   /**
-   * @brief Get the File Ext object
+   * @brief Get the valid file extension from a path
    *
-   * @param filepath
-   * @return TargetFileExt
+   * See TargetConfig::valid_c_ext, TargetConfig::valid_cpp_ext,
+   * TargetConfig::valid_asm_ext, TargetConfig::valid_header_ext
+   *
+   * @param filepath Absolute / Relative path of the file
+   * @return TargetFileExt File path detected as per TargetConfig::valid_*
+   * variables
    */
   TargetFileExt GetFileExt(const fs::path &filepath) const;
+
+  /**
+   * @brief Checks for C/C++ source file validity.
+   *
+   * See TargetConfig::valid_c_ext, TargetConfig::valid_cpp_ext,
+   * TargetConfig::valid_asm_ext
+   *
+   * @param filepath Absolute / Relative path of file
+   * @return true If file extension belongs to the above valid_* list
+   * @return false If file extension does not belong to the above valid_* list
+   */
   bool IsValidSource(const fs::path &filepath) const;
+
+  /**
+   * @brief Checks for Header file validity
+   *
+   * See TargetConfig::valid_header_ext
+   *
+   * @param filepath Absolute / Relative path of file
+   * @return true If file extension belongs to above valid_* list
+   * @return false If file extension does not belong to above valid_* list
+   */
   bool IsValidHeader(const fs::path &filepath) const;
 
+  /**
+   * @brief Expects Source file validity
+   *
+   * env::assert_fatal if not a valid source
+   *
+   * @param filepath Absolute / Relative path of file
+   */
   void ExpectsValidSource(const fs::path &filepath) const;
   void ExpectsValidHeader(const fs::path &filepath) const;
 
