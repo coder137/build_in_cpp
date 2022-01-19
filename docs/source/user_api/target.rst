@@ -59,11 +59,17 @@ Target APIs
 target_info_getter.h
 ---------------------
 
+.. doxygenclass:: buildcc::internal::TargetGetter
+
 Target
 =======
 
 target.h
 ---------
+
+.. doxygenclass:: buildcc::Target
+
+.. doxygentypedef:: buildcc::BaseTarget
 
 Specialized Target
 ==================
@@ -71,11 +77,33 @@ Specialized Target
 target_custom.h
 ---------------
 
+.. doxygentypedef:: buildcc::Target_custom
+
 target_gcc.h
 -------------
+
+.. doxygenclass:: buildcc::ExecutableTarget_gcc
+
+.. doxygenclass:: buildcc::StaticTarget_gcc
+
+.. doxygenclass:: buildcc::DynamicTarget_gcc
 
 target_msvc.h
 -------------
 
+.. doxygenclass:: buildcc::ExecutableTarget_msvc
+
+.. doxygenclass:: buildcc::StaticTarget_msvc
+
+.. doxygenclass:: buildcc::DynamicTarget_msvc
+
 target_generic.h
 -----------------
+
+.. doxygenclass:: buildcc::ExecutableTarget_generic
+
+.. doxygenclass:: buildcc::StaticTarget_generic
+
+.. doxygenclass:: buildcc::DynamicTarget_generic
+
+.. doxygenclass:: buildcc::Target_generic
