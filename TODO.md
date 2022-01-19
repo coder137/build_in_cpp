@@ -26,7 +26,6 @@ Contains the following working features
 
 - Serialization Interface
 - Namespace changes
-  - Remove ``buildcc::base``
   - Remove ``buildcc::env``
   - We should only have 3 namespaces ``buildcc``, ``buildcc::plugin`` and ``buildcc::internal``
 - Environment updates
