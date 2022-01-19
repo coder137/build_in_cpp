@@ -73,6 +73,14 @@ struct TargetConfig {
    * @param filepath Absolute / Relative path of file
    */
   void ExpectsValidSource(const fs::path &filepath) const;
+
+  /**
+   * @brief Expects header file validity
+   *
+   * env::assert_fatal if not a valid header
+   *
+   * @param filepath Absolute / Relative path of file
+   */
   void ExpectsValidHeader(const fs::path &filepath) const;
 
   std::string target_ext{""};
