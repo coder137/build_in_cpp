@@ -83,15 +83,21 @@ public:
 
   /**
    * @brief Add a command_pattern that is fed to `Command::Execute` internally
+   *
    * NOTE: The order of all commands are maintained (`std::vector::push_back`)
    *
-   * If you would like to run the commands in parallel, set parallel == true in
-   * the constructor
+   * If you would like to run the commands in parallel, set `parallel == true`
+   * in the constructor
    */
   void AddCommand(
       const std::string &command_pattern,
       const std::unordered_map<const char *, std::string> &arguments = {});
 
+  /**
+   * @brief Build Generator Tasks
+   *
+   * Use `GetTaskflow` for the registered tasks
+   */
   void Build() override;
 
   // Getter
