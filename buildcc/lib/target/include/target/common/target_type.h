@@ -20,9 +20,9 @@
 namespace buildcc {
 
 enum class TargetType {
-  Executable,
-  StaticLibrary,
-  DynamicLibrary,
+  Executable,     ///< Executable Target type
+  StaticLibrary,  ///< Static library target type
+  DynamicLibrary, ///< Dynamic library target type
 };
 
 }
