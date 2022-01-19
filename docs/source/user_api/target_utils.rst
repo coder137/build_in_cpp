@@ -7,3 +7,13 @@ target_env.h
 --------------
 
 .. doxygenclass:: buildcc::TargetEnv
+
+target_file_ext.h
+------------------
+
+.. doxygenenum:: buildcc::TargetFileExt
+
+target_config.h
+----------------
+
+.. doxygenstruct:: buildcc::TargetConfig

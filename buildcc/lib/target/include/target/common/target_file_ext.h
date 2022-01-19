@@ -20,11 +20,11 @@
 namespace buildcc {
 
 enum class TargetFileExt {
-  Asm,
-  C,
-  Cpp,
-  Header,
-  Invalid,
+  Asm,     ///< Valid Assembly source extension
+  C,       ///< Valid C source extension
+  Cpp,     ///< Valid Cpp source extension
+  Header,  ///< Valid Header extension
+  Invalid, ///< Not a valid C/C++ family extension
 };
 
 }
