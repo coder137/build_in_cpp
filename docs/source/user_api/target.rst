@@ -4,26 +4,42 @@ Target Info APIs
 source_api.h
 -------------
 
+.. doxygenclass:: buildcc::internal::SourceApi
+
 include_api.h
 ---------------
+
+.. doxygenclass:: buildcc::internal::IncludeApi
 
 lib_api.h
 ----------
 
-deps_api.h
------------
-
-flag_api.h
-------------
+.. doxygenclass:: buildcc::internal::LibApi
 
 pch_api.h
 -----------
 
+.. doxygenclass:: buildcc::internal::PchApi
+
+flag_api.h
+------------
+
+.. doxygenclass:: buildcc::internal::FlagApi
+
+deps_api.h
+-----------
+
+.. doxygenclass:: buildcc::internal::DepsApi
+
 sync_api.h
 ------------
 
+.. doxygenclass:: buildcc::internal::SyncApi
+
 target_getter.h
 -----------------
+
+.. doxygenclass:: buildcc::internal::TargetInfoGetter
 
 TargetInfo
 ===========
