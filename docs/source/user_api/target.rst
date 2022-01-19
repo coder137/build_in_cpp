@@ -4,6 +4,10 @@ TargetInfo
 target_info.h
 --------------
 
+.. doxygenclass:: buildcc::TargetInfo
+
+.. doxygentypedef:: BaseTargetInfo
+
 Target
 =======
 
