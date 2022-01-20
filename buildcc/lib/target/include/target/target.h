@@ -93,7 +93,7 @@ private:
   friend class internal::CompileObject;
   friend class internal::LinkTarget;
 
-  friend class TargetGetter<Target>;
+  friend class internal::TargetGetter<Target>;
 
 private:
   void Initialize();
