@@ -21,9 +21,8 @@ TEST_GROUP(TargetBaseTestGroup)
   }
 };
 // clang-format on
-static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
-                                          "gcc", "as", "gcc", "g++", "ar",
-                                          "ld");
+static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
+                                    "gcc", "g++", "ar", "ld");
 
 TEST(TargetBaseTestGroup, InvalidTargetType) {
   constexpr const char *const INVALID_NAME = "Invalid.random";
@@ -34,9 +33,9 @@ TEST(TargetBaseTestGroup, InvalidTargetType) {
 
   fs::remove_all(intermediate_path / INVALID_NAME);
 
-  CHECK_THROWS(std::exception,
-               buildcc::base::Target(INVALID_NAME, (buildcc::base::TargetType)3,
-                                     gcc, ""));
+  CHECK_THROWS(
+      std::exception,
+      buildcc::BaseTarget(INVALID_NAME, (buildcc::TargetType)3, gcc, ""));
 
   buildcc::env::deinit();
 }
@@ -44,9 +43,9 @@ TEST(TargetBaseTestGroup, InvalidTargetType) {
 TEST(TargetBaseTestGroup, NoEnvInit) {
   constexpr const char *const NAME = "Init.exe";
 
-  CHECK_THROWS(std::exception,
-               buildcc::base::Target(
-                   NAME, buildcc::base::TargetType::Executable, gcc, "data"));
+  CHECK_THROWS(
+      std::exception,
+      buildcc::BaseTarget(NAME, buildcc::TargetType::Executable, gcc, "data"));
 }
 
 TEST(TargetBaseTestGroup, TargetConfig_BadCompileCommand) {
@@ -60,11 +59,11 @@ TEST(TargetBaseTestGroup, TargetConfig_BadCompileCommand) {
   // Delete
   fs::remove_all(intermediate_path);
   {
-    buildcc::base::TargetConfig config;
+    buildcc::TargetConfig config;
     config.compile_command = "{invalid_compile_string}";
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data", config);
-    CHECK(simple.GetType() == buildcc::base::TargetType::Executable);
+    buildcc::BaseTarget simple(NAME, buildcc::TargetType::Executable, gcc,
+                               "data", config);
+    CHECK(simple.GetType() == buildcc::TargetType::Executable);
     simple.AddSource("dummy_main.c");
     CHECK_THROWS(std::exception, simple.Build());
   }
@@ -83,10 +82,10 @@ TEST(TargetBaseTestGroup, TargetConfig_BadLinkCommand) {
   // Delete
   fs::remove_all(intermediate_path);
   {
-    buildcc::base::TargetConfig config;
+    buildcc::TargetConfig config;
     config.link_command = "{invalid_link_string}";
-    buildcc::base::Target simple(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data", config);
+    buildcc::BaseTarget simple(NAME, buildcc::TargetType::Executable, gcc,
+                               "data", config);
     simple.AddSource("dummy_main.c");
     CHECK_THROWS(std::exception, simple.Build());
   }

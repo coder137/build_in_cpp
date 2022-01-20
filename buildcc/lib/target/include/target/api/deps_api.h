@@ -21,7 +21,7 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 // Requires
 // - TargetStorer
@@ -58,6 +58,6 @@ public:
   void AddLinkDependencyAbsolute(const fs::path &absolute_path);
 };
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 #endif

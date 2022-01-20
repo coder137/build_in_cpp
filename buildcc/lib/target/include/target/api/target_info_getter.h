@@ -22,7 +22,7 @@
 #include "target/common/target_config.h"
 #include "target/common/target_state.h"
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 // Requires
 // - TargetStorer
@@ -63,6 +63,6 @@ public:
   const fs_unordered_set &GetLinkDependencies() const;
 };
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 #endif

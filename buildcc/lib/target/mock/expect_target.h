@@ -3,9 +3,7 @@
 
 #include "target/target.h"
 
-namespace buildcc {
-
-namespace base::m {
+namespace buildcc::m {
 
 /**
  * @brief Runs the target using Taskflow with 1 thread
@@ -25,8 +23,6 @@ void TargetExpect_DirChanged(unsigned int calls, Target *target);
 void TargetExpect_FlagChanged(unsigned int calls, Target *target);
 void TargetExpect_ExternalLibChanged(unsigned int calls, Target *target);
 
-} // namespace base::m
-
-} // namespace buildcc
+} // namespace buildcc::m
 
 #endif

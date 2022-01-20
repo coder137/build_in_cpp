@@ -10,7 +10,7 @@
 
 // TestBuilderInterface
 
-class TestBuilderInterface : public buildcc::base::BuilderInterface {
+class TestBuilderInterface : public buildcc::internal::BuilderInterface {
 public:
   void Build() override {}
 

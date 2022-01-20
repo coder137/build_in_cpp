@@ -23,14 +23,14 @@ namespace buildcc::plugin {
 
 class ClangCompileCommands {
 public:
-  explicit ClangCompileCommands(std::vector<const base::Target *> &&targets)
+  explicit ClangCompileCommands(std::vector<const BaseTarget *> &&targets)
       : targets_(targets) {}
   ClangCompileCommands(const ClangCompileCommands &compile_commands) = delete;
 
   /**
    * @brief Add non-null targets
    */
-  void AddTarget(const base::Target *target);
+  void AddTarget(const BaseTarget *target);
 
   /**
    * @brief Generate clang compile commands file in `env::get_project_build_dir`
@@ -39,7 +39,7 @@ public:
   void Generate();
 
 private:
-  std::vector<const base::Target *> targets_;
+  std::vector<const BaseTarget *> targets_;
 };
 
 } // namespace buildcc::plugin

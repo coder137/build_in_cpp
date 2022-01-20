@@ -23,18 +23,18 @@
 
 #include "api/toolchain_verify.h"
 
-namespace buildcc::base {
+namespace buildcc {
 
 // Base toolchain class
 class Toolchain : public ToolchainVerify<Toolchain> {
 public:
   enum class Id {
-    Gcc = 0,
-    Msvc,
-    Clang,
-    MinGW,
-    Custom,
-    Undefined,
+    Gcc = 0,   ///< GCC Toolchain
+    Msvc,      ///< MSVC Toolchain
+    Clang,     ///< Clang Toolchain
+    MinGW,     ///< MinGW Toolchain (Similar to GCC, but for Windows)
+    Custom,    ///< Custom Toolchain not defined in this list
+    Undefined, ///< Default value when unknown
   };
 
 public:
@@ -71,12 +71,8 @@ private:
   std::string linker_;
 };
 
-} // namespace buildcc::base
-
-namespace buildcc {
-
-typedef base::Toolchain::Id ToolchainId;
-typedef base::Toolchain BaseToolchain;
+typedef Toolchain::Id ToolchainId;
+typedef Toolchain BaseToolchain;
 
 } // namespace buildcc
 

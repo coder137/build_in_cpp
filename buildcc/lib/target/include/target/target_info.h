@@ -35,38 +35,38 @@
 
 #include "target/api/target_info_getter.h"
 
-namespace buildcc::base {
+namespace buildcc {
 
-// NOTE: base::Target info is meant to hold information that is common to
+// NOTE: BaseTarget info is meant to hold information that is common to
 // multiple targets
 // It is also meant to be used in situations where we do not need to build
 // For example: Header only targets
-class TargetInfo : public SourceApi<TargetInfo>,
-                   public IncludeApi<TargetInfo>,
-                   public LibApi<TargetInfo>,
-                   public PchApi<TargetInfo>,
-                   public FlagApi<TargetInfo>,
-                   public DepsApi<TargetInfo>,
-                   public SyncApi<TargetInfo>,
-                   public TargetInfoGetter<TargetInfo> {
+class TargetInfo : public internal::SourceApi<TargetInfo>,
+                   public internal::IncludeApi<TargetInfo>,
+                   public internal::LibApi<TargetInfo>,
+                   public internal::PchApi<TargetInfo>,
+                   public internal::FlagApi<TargetInfo>,
+                   public internal::DepsApi<TargetInfo>,
+                   public internal::SyncApi<TargetInfo>,
+                   public internal::TargetInfoGetter<TargetInfo> {
 public:
   TargetInfo(const TargetEnv &env, const TargetConfig &config = TargetConfig())
       : env_(env), config_(config) {}
 
 private:
   // Inputs
-  friend class SourceApi<TargetInfo>;
-  friend class IncludeApi<TargetInfo>;
-  friend class LibApi<TargetInfo>;
-  friend class PchApi<TargetInfo>;
-  friend class FlagApi<TargetInfo>;
-  friend class DepsApi<TargetInfo>;
+  friend class internal::SourceApi<TargetInfo>;
+  friend class internal::IncludeApi<TargetInfo>;
+  friend class internal::LibApi<TargetInfo>;
+  friend class internal::PchApi<TargetInfo>;
+  friend class internal::FlagApi<TargetInfo>;
+  friend class internal::DepsApi<TargetInfo>;
 
   // Feature
-  friend class SyncApi<TargetInfo>;
+  friend class internal::SyncApi<TargetInfo>;
 
   // Getters
-  friend class TargetInfoGetter<TargetInfo>;
+  friend class internal::TargetInfoGetter<TargetInfo>;
 
 protected:
   TargetEnv env_;
@@ -76,12 +76,8 @@ protected:
   TargetState state_;
 };
 
-} // namespace buildcc::base
+typedef TargetInfo BaseTargetInfo;
 
-namespace buildcc {
-
-typedef base::TargetInfo TargetInfo;
-
-}
+} // namespace buildcc
 
 #endif

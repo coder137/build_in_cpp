@@ -28,9 +28,8 @@ TEST_GROUP(TargetTestExternalLib)
 };
 // clang-format on
 
-static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
-                                          "gcc", "as", "gcc", "g++", "ar",
-                                          "ld");
+static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
+                                    "gcc", "g++", "ar", "ld");
 
 static const fs::path intermediate_path =
     fs::path(BUILD_TARGET_EXTERNAL_LIB_INTERMEDIATE_DIR) / gcc.GetName();
@@ -40,15 +39,15 @@ TEST(TargetTestExternalLib, TestAddLibDir) {
 
   fs::remove_all(intermediate_path / EXENAME);
 
-  buildcc::base::Target exe(EXENAME, buildcc::base::TargetType::StaticLibrary,
-                            gcc, "data");
+  buildcc::BaseTarget exe(EXENAME, buildcc::TargetType::StaticLibrary, gcc,
+                          "data");
   exe.AddSource("foo_main.cpp");
   exe.AddLibDir(exe.GetTargetPath().parent_path());
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   exe.Build();
-  buildcc::base::m::TargetRunner(exe);
+  buildcc::m::TargetRunner(exe);
   CHECK_TRUE(exe.IsBuilt());
 
   mock().checkExpectations();
@@ -67,8 +66,8 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_Simple) {
 
   fs::remove_all(intermediate_path / EXENAME);
 
-  buildcc::base::Target exe(EXENAME, buildcc::base::TargetType::StaticLibrary,
-                            gcc, "data");
+  buildcc::BaseTarget exe(EXENAME, buildcc::TargetType::StaticLibrary, gcc,
+                          "data");
   exe.AddSource("foo_main.cpp");
   exe.AddLibDir(exe.GetTargetPath().parent_path());
   exe.AddLibDep("-lfoo");
@@ -76,7 +75,7 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_Simple) {
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   exe.Build();
-  buildcc::base::m::TargetRunner(exe);
+  buildcc::m::TargetRunner(exe);
   CHECK_TRUE(exe.IsBuilt());
 
   mock().checkExpectations();
@@ -97,44 +96,44 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_RebuildChanged) {
 
   // First build
   {
-    buildcc::base::Target exe(EXENAME, buildcc::base::TargetType::StaticLibrary,
-                              gcc, "data");
+    buildcc::BaseTarget exe(EXENAME, buildcc::TargetType::StaticLibrary, gcc,
+                            "data");
     exe.AddSource("foo_main.cpp");
     exe.AddLibDir(exe.GetTargetPath().parent_path());
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe.Build();
-    buildcc::base::m::TargetRunner(exe);
+    buildcc::m::TargetRunner(exe);
     CHECK_TRUE(exe.IsBuilt());
   }
 
   // Add
   {
-    buildcc::base::Target exe(EXENAME, buildcc::base::TargetType::StaticLibrary,
-                              gcc, "data");
+    buildcc::BaseTarget exe(EXENAME, buildcc::TargetType::StaticLibrary, gcc,
+                            "data");
     exe.AddSource("foo_main.cpp");
     exe.AddLibDir(exe.GetTargetPath().parent_path());
     exe.AddLibDep("-lfoo");
 
-    buildcc::base::m::TargetExpect_ExternalLibChanged(1, &exe);
+    buildcc::m::TargetExpect_ExternalLibChanged(1, &exe);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe.Build();
-    buildcc::base::m::TargetRunner(exe);
+    buildcc::m::TargetRunner(exe);
     CHECK_TRUE(exe.IsBuilt());
   }
 
   // Remove
   {
-    buildcc::base::Target exe(EXENAME, buildcc::base::TargetType::StaticLibrary,
-                              gcc, "data");
+    buildcc::BaseTarget exe(EXENAME, buildcc::TargetType::StaticLibrary, gcc,
+                            "data");
     exe.AddSource("foo_main.cpp");
     exe.AddLibDir(exe.GetTargetPath().parent_path());
 
-    buildcc::base::m::TargetExpect_ExternalLibChanged(1, &exe);
+    buildcc::m::TargetExpect_ExternalLibChanged(1, &exe);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe.Build();
-    buildcc::base::m::TargetRunner(exe);
+    buildcc::m::TargetRunner(exe);
     CHECK_TRUE(exe.IsBuilt());
   }
 

@@ -22,9 +22,13 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc::base {
+namespace buildcc {
 
 class Target;
+
+}
+
+namespace buildcc::internal {
 
 // Requires
 // - TargetStorer
@@ -40,6 +44,6 @@ public:
   void AddLibDirAbsolute(const fs::path &absolute_lib_dir);
 };
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 #endif

@@ -18,7 +18,7 @@
 
 #include "target/target.h"
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 template <typename T> const fs::path &TargetGetter<T>::GetBinaryPath() const {
   const T &t = static_cast<const T &>(*this);
@@ -88,6 +88,6 @@ template <typename T> tf::Taskflow &TargetGetter<T>::GetTaskflow() {
   return t.tf_;
 }
 
-template class TargetGetter<Target>;
+template class TargetGetter<BaseTarget>;
 
-} // namespace buildcc::base
+} // namespace buildcc::internal

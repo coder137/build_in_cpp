@@ -18,7 +18,7 @@
 
 #include "target/target_info.h"
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 template <typename T>
 void SourceApi<T>::AddSourceAbsolute(const fs::path &absolute_source) {
@@ -69,4 +69,4 @@ void SourceApi<T>::GlobSources(const fs::path &relative_to_target_path) {
 //
 template class SourceApi<TargetInfo>;
 
-} // namespace buildcc::base
+} // namespace buildcc::internal

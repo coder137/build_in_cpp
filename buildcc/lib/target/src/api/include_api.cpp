@@ -18,7 +18,7 @@
 
 #include "target/target_info.h"
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 template <typename T>
 void IncludeApi<T>::AddHeaderAbsolute(const fs::path &absolute_filepath) {
@@ -84,4 +84,4 @@ void IncludeApi<T>::AddIncludeDirAbsolute(const fs::path &absolute_include_dir,
 
 template class IncludeApi<TargetInfo>;
 
-} // namespace buildcc::base
+} // namespace buildcc::internal

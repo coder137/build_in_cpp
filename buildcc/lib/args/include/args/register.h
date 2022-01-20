@@ -107,8 +107,8 @@ public:
    *
    * Target runs after dependency is built
    */
-  void Dep(const base::BuilderInterface &target,
-           const base::BuilderInterface &dependency);
+  void Dep(const internal::BuilderInterface &target,
+           const internal::BuilderInterface &dependency);
 
   /**
    * @brief Register the Target to be run

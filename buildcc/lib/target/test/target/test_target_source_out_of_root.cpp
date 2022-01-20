@@ -26,9 +26,8 @@ TEST_GROUP(TargetTestSourceOutOfRootGroup)
 };
 // clang-format on
 
-static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
-                                          "gcc", "as", "gcc", "g++", "ar",
-                                          "ld");
+static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
+                                    "gcc", "g++", "ar", "ld");
 
 static const fs::path target_source_intermediate_path =
     fs::path(BUILD_TARGET_SOURCE_OUT_OF_ROOT_INTERMEDIATE_DIR) / gcc.GetName();
@@ -38,14 +37,14 @@ TEST(TargetTestSourceOutOfRootGroup, Add_OutOfRootSource) {
 
   fs::remove_all(target_source_intermediate_path / OUTOFROOT);
 
-  buildcc::base::Target simple(OUTOFROOT, buildcc::base::TargetType::Executable,
-                               gcc, "");
+  buildcc::BaseTarget simple(OUTOFROOT, buildcc::TargetType::Executable, gcc,
+                             "");
   simple.AddSource("../dummy_main.cpp");
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   simple.Build();
-  buildcc::base::m::TargetRunner(simple);
+  buildcc::m::TargetRunner(simple);
 }
 
 TEST(TargetTestSourceOutOfRootGroup, Glob_OutOfRootSource) {
@@ -54,15 +53,15 @@ TEST(TargetTestSourceOutOfRootGroup, Glob_OutOfRootSource) {
   fs::remove_all(target_source_intermediate_path / OUTOFROOT);
 
   {
-    buildcc::base::Target simple(
-        OUTOFROOT, buildcc::base::TargetType::Executable, gcc, "");
+    buildcc::BaseTarget simple(OUTOFROOT, buildcc::TargetType::Executable, gcc,
+                               "");
     simple.GlobSources(".."); // 6 files detected
     CHECK_EQUAL(6, simple.GetSourceFiles().size());
 
     buildcc::env::m::CommandExpect_Execute(6, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
   }
 
   mock().checkExpectations();
@@ -73,14 +72,14 @@ TEST(TargetTestSourceOutOfRootGroup, GlobAbsolute_OutOfRootSource) {
 
   fs::remove_all(target_source_intermediate_path / OUTOFROOT);
   {
-    buildcc::base::Target simple(
-        OUTOFROOT, buildcc::base::TargetType::Executable, gcc, "");
+    buildcc::BaseTarget simple(OUTOFROOT, buildcc::TargetType::Executable, gcc,
+                               "");
     simple.GlobSourcesAbsolute(fs::path(BUILD_SCRIPT_SOURCE) /
                                "data"); // 6 files detected
     buildcc::env::m::CommandExpect_Execute(6, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     simple.Build();
-    buildcc::base::m::TargetRunner(simple);
+    buildcc::m::TargetRunner(simple);
   }
   mock().checkExpectations();
 }

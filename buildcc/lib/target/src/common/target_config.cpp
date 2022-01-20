@@ -22,7 +22,7 @@
 
 #include "fmt/format.h"
 
-namespace buildcc::base {
+namespace buildcc {
 
 TargetFileExt TargetConfig::GetFileExt(const fs::path &filepath) const {
   if (!filepath.has_extension()) {
@@ -85,4 +85,4 @@ void TargetConfig::ExpectsValidHeader(const fs::path &filepath) const {
       fmt::format("{} does not have a valid header extension", filepath));
 }
 
-} // namespace buildcc::base
+} // namespace buildcc

@@ -59,7 +59,7 @@ void AggregateToFile(const fs::path &filename,
 
 } // namespace
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 // PUBLIC
 
@@ -163,4 +163,4 @@ void CompilePch::PreCompile() {
   target_.storer_.current_pch_files.Convert();
 }
 
-} // namespace buildcc::base
+} // namespace buildcc::internal

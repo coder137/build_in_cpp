@@ -27,7 +27,7 @@ constexpr const char *const kInput = "input";
 
 } // namespace
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 void CompileObject::AddObjectData(const fs::path &absolute_source_path) {
   const fs::path absolute_object_path =
@@ -266,4 +266,4 @@ void CompileObject::RecompileSources(
   }
 }
 
-} // namespace buildcc::base
+} // namespace buildcc::internal

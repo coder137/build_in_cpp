@@ -25,34 +25,34 @@ TEST_GROUP(TargetTestFailureStates)
 };
 // clang-format on
 
-buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc, "gcc", "as",
-                             "gcc", "g++", "ar", "ld");
+buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
+                       "ar", "ld");
 
 TEST(TargetTestFailureStates, StartTaskEnvFailure) {
   buildcc::env::set_task_state(buildcc::env::TaskState::FAILURE);
 
   constexpr const char *const NAME = "StartTaskEnvFailure.exe";
-  buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
 
   target.AddSource("dummy_main.cpp");
   target.Build();
-  buildcc::base::m::TargetRunner(target);
+  buildcc::m::TargetRunner(target);
 
   CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
 }
 
 TEST(TargetTestFailureStates, CompilePchFailure) {
   constexpr const char *const NAME = "CompilePchFailure.exe";
-  buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
 
   target.AddSource("dummy_main.cpp");
   target.AddPch("include/include_header.h");
   target.Build();
 
   buildcc::env::m::CommandExpect_Execute(1, false); // PCH compile
-  buildcc::base::m::TargetRunner(target);
+  buildcc::m::TargetRunner(target);
 
   CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
 }
@@ -60,8 +60,8 @@ TEST(TargetTestFailureStates, CompilePchFailure) {
 TEST(TargetTestFailureStates, CompileObjectFailure) {
   constexpr const char *const NAME = "CompileObjectFailure.exe";
 
-  buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
 
   target.AddSource("dummy_main.cpp");
   target.AddSource("dummy_main.c");
@@ -69,7 +69,7 @@ TEST(TargetTestFailureStates, CompileObjectFailure) {
 
   buildcc::env::m::CommandExpect_Execute(1, false); // compile
   buildcc::env::m::CommandExpect_Execute(1, true);  // compile
-  buildcc::base::m::TargetRunner(target);
+  buildcc::m::TargetRunner(target);
 
   CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
 }
@@ -77,12 +77,12 @@ TEST(TargetTestFailureStates, CompileObjectFailure) {
 TEST(TargetTestFailureStates, CompileObject_FileNotFoundFailure) {
   constexpr const char *const NAME = "CompileObject_FileNotFoundFailure.exe";
 
-  buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
 
   target.AddSource("file_not_present.cpp");
   target.Build();
-  buildcc::base::m::TargetRunner(target);
+  buildcc::m::TargetRunner(target);
 
   CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
 }
@@ -90,15 +90,15 @@ TEST(TargetTestFailureStates, CompileObject_FileNotFoundFailure) {
 TEST(TargetTestFailureStates, LinkTargetFailure) {
   constexpr const char *const NAME = "LinkTargetFailure.exe";
 
-  buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
 
   target.AddSource("dummy_main.cpp");
   target.Build();
 
   buildcc::env::m::CommandExpect_Execute(1, true);  // compile
   buildcc::env::m::CommandExpect_Execute(1, false); // link
-  buildcc::base::m::TargetRunner(target);
+  buildcc::m::TargetRunner(target);
 
   CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
 }
@@ -106,8 +106,8 @@ TEST(TargetTestFailureStates, LinkTargetFailure) {
 TEST(TargetTestFailureStates, EndTaskStoreFailure) {
   constexpr const char *const NAME = "EndTaskStoreFailure.exe";
 
-  buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable, gcc,
-                               "data");
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
 
   target.AddSource("dummy_main.cpp");
   target.Build();
@@ -116,7 +116,7 @@ TEST(TargetTestFailureStates, EndTaskStoreFailure) {
 
   buildcc::env::m::CommandExpect_Execute(1, true); // compile
   buildcc::env::m::CommandExpect_Execute(1, true); // link
-  buildcc::base::m::TargetRunner(target);
+  buildcc::m::TargetRunner(target);
 
   CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
 }
@@ -130,12 +130,12 @@ TEST(TargetTestFailureStates, StartTaskEnvFailure_Rebuild) {
   constexpr const char *const NAME = "StartTaskEnvFailure_Rebuild.exe";
 
   {
-    buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.Build();
-    buildcc::base::m::TargetRunner(target);
+    buildcc::m::TargetRunner(target);
 
     CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
     CHECK_FALSE(target.IsBuilt());
@@ -146,15 +146,15 @@ TEST(TargetTestFailureStates, StartTaskEnvFailure_Rebuild) {
 
   // during rebuild, this target must run!
   {
-    buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.Build();
 
     buildcc::env::m::CommandExpect_Execute(1, true); // compile
     buildcc::env::m::CommandExpect_Execute(1, true); // link
-    buildcc::base::m::TargetRunner(target);
+    buildcc::m::TargetRunner(target);
 
     CHECK(target.GetTaskState() == buildcc::env::TaskState::SUCCESS);
     CHECK_TRUE(target.IsBuilt());
@@ -166,15 +166,15 @@ TEST(TargetTestFailureStates, CompilePchFailure_Rebuild) {
   constexpr const char *const NAME = "CompilePchFailure_Rebuild.exe";
 
   {
-    buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.AddPch("include/include_header.h");
     target.Build();
 
     buildcc::env::m::CommandExpect_Execute(1, false); // PCH compile
-    buildcc::base::m::TargetRunner(target);
+    buildcc::m::TargetRunner(target);
 
     CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
   }
@@ -186,8 +186,8 @@ TEST(TargetTestFailureStates, CompilePchFailure_Rebuild) {
   // must move to compile object stage
   // must move to link target stage
   {
-    buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.AddPch("include/include_header.h");
@@ -197,7 +197,7 @@ TEST(TargetTestFailureStates, CompilePchFailure_Rebuild) {
     buildcc::env::m::CommandExpect_Execute(1, true); // Object compile
     buildcc::env::m::CommandExpect_Execute(1, true); // Link target
 
-    buildcc::base::m::TargetRunner(target);
+    buildcc::m::TargetRunner(target);
 
     CHECK(target.GetTaskState() == buildcc::env::TaskState::SUCCESS);
   }
@@ -209,8 +209,8 @@ TEST(TargetTestFailureStates, CompileObjectFailure_Rebuild) {
   constexpr const char *const NAME = "CompileObjectFailure_Rebuild.exe";
 
   {
-    buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.AddSource("dummy_main.c");
@@ -218,7 +218,7 @@ TEST(TargetTestFailureStates, CompileObjectFailure_Rebuild) {
 
     buildcc::env::m::CommandExpect_Execute(1, false); // compile
     buildcc::env::m::CommandExpect_Execute(1, true);  // compile
-    buildcc::base::m::TargetRunner(target);
+    buildcc::m::TargetRunner(target);
 
     CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
   }
@@ -237,8 +237,8 @@ TEST(TargetTestFailureStates, CompileObjectFailure_Rebuild) {
 
   // must move to link target stage
   {
-    buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.AddSource("dummy_main.c");
@@ -247,9 +247,9 @@ TEST(TargetTestFailureStates, CompileObjectFailure_Rebuild) {
     // NOTE, The other one does not compile since it already compiled
     // successfully earlier!
     buildcc::env::m::CommandExpect_Execute(1, true); // compile
-    buildcc::base::m::TargetExpect_SourceAdded(1, &target);
+    buildcc::m::TargetExpect_SourceAdded(1, &target);
     buildcc::env::m::CommandExpect_Execute(1, true); // link
-    buildcc::base::m::TargetRunner(target);
+    buildcc::m::TargetRunner(target);
 
     CHECK(target.GetTaskState() == buildcc::env::TaskState::SUCCESS);
   }
@@ -260,15 +260,15 @@ TEST(TargetTestFailureStates, LinkTargetFailure_Rebuild) {
   constexpr const char *const NAME = "LinkTargetFailure_Rebuild.exe";
 
   {
-    buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.Build();
 
     buildcc::env::m::CommandExpect_Execute(1, true);  // compile
     buildcc::env::m::CommandExpect_Execute(1, false); // link
-    buildcc::base::m::TargetRunner(target);
+    buildcc::m::TargetRunner(target);
 
     CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
   }
@@ -278,15 +278,15 @@ TEST(TargetTestFailureStates, LinkTargetFailure_Rebuild) {
 
   // during rebuild this must try to relink!
   {
-    buildcc::base::Target target(NAME, buildcc::base::TargetType::Executable,
-                                 gcc, "data");
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
 
     target.AddSource("dummy_main.cpp");
     target.Build();
 
     // we do not recompile
     buildcc::env::m::CommandExpect_Execute(1, true); // link
-    buildcc::base::m::TargetRunner(target);
+    buildcc::m::TargetRunner(target);
 
     CHECK(target.GetTaskState() == buildcc::env::TaskState::SUCCESS);
   }

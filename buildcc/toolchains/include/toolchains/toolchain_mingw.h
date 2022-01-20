@@ -21,6 +21,16 @@
 
 namespace buildcc {
 
+/**
+ * @brief Generic MinGW Toolchain <br>
+ * id = ToolchainId::MinGW <br>
+ * name = "gcc" <br>
+ * asm_compiler = "as" <br>
+ * c_compiler = "gcc" <br>
+ * cpp_compiler = "g++" <br>
+ * archiver = "ar" <br>
+ * linker = "ld" <br>
+ */
 class Toolchain_mingw : public BaseToolchain {
 public:
   Toolchain_mingw()

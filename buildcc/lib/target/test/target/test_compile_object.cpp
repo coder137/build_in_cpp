@@ -15,14 +15,13 @@ TEST_GROUP(TargetCompileObjectTestGroup)
 };
 // clang-format on
 
-static buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc, "gcc",
-                                    "as", "gcc", "g++", "ar", "ld");
+static buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc",
+                              "g++", "ar", "ld");
 
 TEST(TargetCompileObjectTestGroup, CacheCompileCommand_Invalid) {
-  buildcc::base::Target target("CacheCompileCommand_Invalid",
-                               buildcc::base::TargetType::Executable, gcc,
-                               "data");
-  buildcc::base::CompileObject object(target);
+  buildcc::BaseTarget target("CacheCompileCommand_Invalid",
+                             buildcc::TargetType::Executable, gcc, "data");
+  buildcc::internal::CompileObject object(target);
 
   object.AddObjectData("random.invalid");
 

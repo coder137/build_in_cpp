@@ -3,7 +3,7 @@
 
 #include "target/generator.h"
 
-namespace buildcc::base::m {
+namespace buildcc::m {
 
 /**
  * @brief Runs the generator using Taskflow with 1 thread
@@ -18,6 +18,6 @@ void GeneratorExpect_InputUpdated(unsigned int calls, Generator *generator);
 void GeneratorExpect_OutputChanged(unsigned int calls, Generator *generator);
 void GeneratorExpect_CommandChanged(unsigned int calls, Generator *generator);
 
-} // namespace buildcc::base::m
+} // namespace buildcc::m
 
 #endif

@@ -37,9 +37,9 @@
 #include "target/common/path.h"
 #include "target/common/target_env.h"
 
-namespace buildcc::base {
+namespace buildcc {
 
-class Generator : public BuilderInterface {
+class Generator : public internal::BuilderInterface {
 public:
   Generator(const std::string &name, const TargetEnv &env,
             bool parallel = false)
@@ -55,8 +55,6 @@ public:
    * @brief Add default arguments for input, output and command requirements
    *
    * @param arguments Key-Value pair for arguments
-   * NOTE, Key must be a variable (lvalue) not a constant (rvalue)
-   *
    */
   void AddDefaultArguments(
       const std::unordered_map<std::string, std::string> &arguments);
@@ -85,15 +83,21 @@ public:
 
   /**
    * @brief Add a command_pattern that is fed to `Command::Execute` internally
+   *
    * NOTE: The order of all commands are maintained (`std::vector::push_back`)
    *
-   * If you would like to run the commands in parallel, set parallel == true in
-   * the constructor
+   * If you would like to run the commands in parallel, set `parallel == true`
+   * in the constructor
    */
   void AddCommand(
       const std::string &command_pattern,
       const std::unordered_map<const char *, std::string> &arguments = {});
 
+  /**
+   * @brief Build Generator Tasks
+   *
+   * Use `GetTaskflow` for the registered tasks
+   */
   void Build() override;
 
   // Getter
@@ -143,12 +147,8 @@ private:
   tf::Taskflow tf_;
 };
 
-} // namespace buildcc::base
+typedef Generator BaseGenerator;
 
-namespace buildcc {
-
-typedef base::Generator BaseGenerator;
-
-}
+} // namespace buildcc
 
 #endif

@@ -25,20 +25,18 @@ TEST_GROUP(TargetTestLock)
 };
 // clang-format on
 
-static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
-                                          "gcc", "as", "gcc", "g++", "ar",
-                                          "ld");
+static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
+                                    "gcc", "g++", "ar", "ld");
 
 TEST(TargetTestLock, LockState) {
   constexpr const char *const NAME = "LockState.exe";
-  buildcc::base::Target exe(NAME, buildcc::base::TargetType::Executable, gcc,
-                            "data");
+  buildcc::BaseTarget exe(NAME, buildcc::TargetType::Executable, gcc, "data");
 
   CHECK_FALSE(exe.IsLocked());
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   exe.Build();
-  buildcc::base::m::TargetRunner(exe);
+  buildcc::m::TargetRunner(exe);
 
   CHECK_TRUE(exe.IsLocked());
 
@@ -47,12 +45,11 @@ TEST(TargetTestLock, LockState) {
 
 TEST(TargetTestLock, Lock_Build) {
   constexpr const char *const NAME = "Lock_Build.exe";
-  buildcc::base::Target exe(NAME, buildcc::base::TargetType::Executable, gcc,
-                            "data");
+  buildcc::BaseTarget exe(NAME, buildcc::TargetType::Executable, gcc, "data");
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   exe.Build();
-  buildcc::base::m::TargetRunner(exe);
+  buildcc::m::TargetRunner(exe);
 
   CHECK_THROWS(std::exception, exe.Build());
 
@@ -61,12 +58,11 @@ TEST(TargetTestLock, Lock_Build) {
 
 TEST(TargetTestLock, Lock_APIs) {
   constexpr const char *const NAME = "Lock_APIs.exe";
-  buildcc::base::Target exe(NAME, buildcc::base::TargetType::Executable, gcc,
-                            "data");
+  buildcc::BaseTarget exe(NAME, buildcc::TargetType::Executable, gcc, "data");
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   exe.Build();
-  buildcc::base::m::TargetRunner(exe);
+  buildcc::m::TargetRunner(exe);
 
   mock().checkExpectations();
 
@@ -99,8 +95,7 @@ TEST(TargetTestLock, Lock_APIs) {
 
 TEST(TargetTestLock, Unlock_APIs) {
   constexpr const char *const NAME = "Unlock_APIs.exe";
-  buildcc::base::Target exe(NAME, buildcc::base::TargetType::Executable, gcc,
-                            "data");
+  buildcc::BaseTarget exe(NAME, buildcc::TargetType::Executable, gcc, "data");
 
   CHECK_THROWS(std::exception,
                exe.GetCompileCommand(exe.GetTargetRootDir() / "dummy_main.c"));
@@ -111,7 +106,7 @@ TEST(TargetTestLock, Unlock_APIs) {
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   exe.Build();
-  buildcc::base::m::TargetRunner(exe);
+  buildcc::m::TargetRunner(exe);
   mock().checkExpectations();
 
   exe.GetCompileCommand(exe.GetTargetRootDir() / "dummy_main.c");

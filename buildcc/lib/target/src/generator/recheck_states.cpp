@@ -16,7 +16,7 @@
 
 #include "target/generator.h"
 
-namespace buildcc::base {
+namespace buildcc {
 
 void Generator::InputRemoved() {}
 void Generator::InputAdded() {}
@@ -25,4 +25,4 @@ void Generator::InputUpdated() {}
 void Generator::OutputChanged() {}
 void Generator::CommandChanged() {}
 
-} // namespace buildcc::base
+} // namespace buildcc

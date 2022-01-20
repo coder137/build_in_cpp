@@ -19,7 +19,7 @@
 
 #include <string>
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 // Requires
 // - TargetStorer
@@ -36,6 +36,6 @@ public:
   void AddLinkFlag(const std::string &flag);
 };
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 #endif

@@ -27,18 +27,36 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc::base {
+namespace buildcc {
 
 /**
+ * @brief Configure the behaviour of Toolchain::Verify API. By default searches
+ * the directories mentioned in the ENV{PATH} variable to find the toolchain.
  * @param absolute_search_paths absolute_search_paths expect directories that
  * are iterated for exact toolchain matches
  * @param env_vars env_vars contain paths that are seperated by OS delimiter.
  * These are converted to paths and searched similarly to absolute_search_paths
- * NOTE: env_vars must contain single absolute paths or multiple absolute paths
- * seperated by OS delimiter
- *
- * Example: [Windows]   "absolute_path_1;absolute_path_2;..."
- * Example: [Linux]     "absolute_path_1:absolute_path_2:..."
+ * <br>
+ * NOTE: env_vars must contain single absolute paths or multiple absolute
+ * paths seperated by OS delimiter <br>
+ * Example: [Windows]   "absolute_path_1;absolute_path_2;..." <br>
+ * Example: [Linux]     "absolute_path_1:absolute_path_2:..." <br>
+ * @param compiler_version Optionally supply a compiler version if multiple
+ * toolchains of the same family/id are installed <br>
+ * Example: [GCC/MinGW/Clang]   {compiler} -dumpversion <br>
+ * Example: [MSVC]              getenv(VSCMD_VER) <br>
+ * For [MSVC] make sure to use `vcvarsall.bat {flavour}` to activate your
+ * toolchain
+ * @param target_arch Optionally supply a target architecture if multiple
+ * toolchains of the same family/id are installed but target different platforms
+ * <br>
+ * Example: [GCC/MinGW/Clang] {compiler} -dumpmachine <br>
+ * Example: [MSVC]            getenv(VSCMD_ARG_HOST_ARCH) +
+ * getenv(VSCMD_ARG_TGT_ARCH) <br>
+ * For [MSVC] make sure to use `vcvarsall.bat {flavour}` to activate your
+ * toolchain
+ * @param update Updates the toolchain with absolute paths once verified <br>
+ * If multiple toolchains are found, uses the first in the list
  */
 struct VerifyToolchainConfig {
   std::vector<std::string> absolute_search_paths;
@@ -47,21 +65,21 @@ struct VerifyToolchainConfig {
   std::optional<std::string> compiler_version;
   std::optional<std::string> target_arch;
 
-  // Updates the toolchain with absolute paths once verified
-  // If multiple toolchains are found, uses the first in the list
   bool update{true};
 };
 
 /**
- * @param path
- * @param compiler_version
- * @param target_arch
+ * @brief Verified Toolchain information
+ * @param path Absolute host path where ALL the toolchain executables are found
+ * <br>
+ * NOTE: All the Toolchain executables must be found in a single folder. <br>
+ * @param compiler_version Compiler version of the verified toolchain
+ * @param target_arch Target architecture of the verified toolchain
  */
 struct VerifiedToolchain {
   fs::path path;
   std::string compiler_version;
   std::string target_arch;
-  // TODO, Add more here as needed
 
   std::string ToString() const { return fmt::format("{}", *this); }
 };
@@ -85,13 +103,6 @@ protected:
   VerifiedToolchain verified_toolchain_;
 };
 
-} // namespace buildcc::base
-
-namespace buildcc {
-
-typedef base::VerifyToolchainConfig VerifyToolchainConfig;
-typedef base::VerifiedToolchain VerifiedToolchain;
-
 } // namespace buildcc
 
 constexpr const char *const kVerifiedToolchainFormat = R"({{
@@ -101,10 +112,9 @@ constexpr const char *const kVerifiedToolchainFormat = R"({{
 }})";
 
 template <>
-struct fmt::formatter<buildcc::base::VerifiedToolchain>
-    : formatter<std::string> {
+struct fmt::formatter<buildcc::VerifiedToolchain> : formatter<std::string> {
   template <typename FormatContext>
-  auto format(const buildcc::base::VerifiedToolchain &vt, FormatContext &ctx) {
+  auto format(const buildcc::VerifiedToolchain &vt, FormatContext &ctx) {
     std::string verified_toolchain_info =
         fmt::format(kVerifiedToolchainFormat, vt.path.string(),
                     vt.compiler_version, vt.target_arch);

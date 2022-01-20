@@ -24,9 +24,13 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc::base {
+namespace buildcc {
 
 class Target;
+
+}
+
+namespace buildcc::internal {
 
 class CompilePch {
 public:
@@ -80,6 +84,6 @@ private:
   tf::Task task_;
 };
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 #endif

@@ -19,14 +19,14 @@ TEST_GROUP(TargetTestSyncGroup)
 };
 // clang-format on
 
-buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc, "gcc", "as",
-                             "gcc", "g++", "ar", "ldd");
+buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
+                       "ar", "ldd");
 
 TEST(TargetTestSyncGroup, CopyByConstRef) {
-  buildcc::base::Target srcTarget(
-      "srcTarget", buildcc::base::TargetType::Executable, gcc, "data");
-  buildcc::base::Target destTarget(
-      "destTarget", buildcc::base::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget srcTarget("srcTarget", buildcc::TargetType::Executable,
+                                gcc, "data");
+  buildcc::BaseTarget destTarget("destTarget", buildcc::TargetType::Executable,
+                                 gcc, "data");
 
   srcTarget.AddSource("dummy_main.c");
   srcTarget.AddIncludeDir("include", true);
@@ -47,23 +47,23 @@ TEST(TargetTestSyncGroup, CopyByConstRef) {
   srcTarget.AddLinkDependency("new_source.cpp");
 
   destTarget.Copy(srcTarget, {
-                                 buildcc::base::SyncOption::SourceFiles,
-                                 buildcc::base::SyncOption::HeaderFiles,
-                                 buildcc::base::SyncOption::PchFiles,
-                                 buildcc::base::SyncOption::LibDeps,
-                                 buildcc::base::SyncOption::IncludeDirs,
-                                 buildcc::base::SyncOption::LibDirs,
-                                 buildcc::base::SyncOption::ExternalLibDeps,
-                                 buildcc::base::SyncOption::PreprocessorFlags,
-                                 buildcc::base::SyncOption::CommonCompileFlags,
-                                 buildcc::base::SyncOption::PchCompileFlags,
-                                 buildcc::base::SyncOption::PchObjectFlags,
-                                 buildcc::base::SyncOption::AsmCompileFlags,
-                                 buildcc::base::SyncOption::CCompileFlags,
-                                 buildcc::base::SyncOption::CppCompileFlags,
-                                 buildcc::base::SyncOption::LinkFlags,
-                                 buildcc::base::SyncOption::CompileDependencies,
-                                 buildcc::base::SyncOption::LinkDependencies,
+                                 buildcc::SyncOption::SourceFiles,
+                                 buildcc::SyncOption::HeaderFiles,
+                                 buildcc::SyncOption::PchFiles,
+                                 buildcc::SyncOption::LibDeps,
+                                 buildcc::SyncOption::IncludeDirs,
+                                 buildcc::SyncOption::LibDirs,
+                                 buildcc::SyncOption::ExternalLibDeps,
+                                 buildcc::SyncOption::PreprocessorFlags,
+                                 buildcc::SyncOption::CommonCompileFlags,
+                                 buildcc::SyncOption::PchCompileFlags,
+                                 buildcc::SyncOption::PchObjectFlags,
+                                 buildcc::SyncOption::AsmCompileFlags,
+                                 buildcc::SyncOption::CCompileFlags,
+                                 buildcc::SyncOption::CppCompileFlags,
+                                 buildcc::SyncOption::LinkFlags,
+                                 buildcc::SyncOption::CompileDependencies,
+                                 buildcc::SyncOption::LinkDependencies,
                              });
 
   CHECK_EQUAL(destTarget.GetSourceFiles().size(), 1);
@@ -90,10 +90,10 @@ TEST(TargetTestSyncGroup, CopyByConstRef) {
 }
 
 TEST(TargetTestSyncGroup, CopyByMove) {
-  buildcc::base::Target srcTarget(
-      "srcTarget", buildcc::base::TargetType::Executable, gcc, "data");
-  buildcc::base::Target destTarget(
-      "destTarget", buildcc::base::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget srcTarget("srcTarget", buildcc::TargetType::Executable,
+                                gcc, "data");
+  buildcc::BaseTarget destTarget("destTarget", buildcc::TargetType::Executable,
+                                 gcc, "data");
 
   srcTarget.AddSource("dummy_main.c");
   srcTarget.AddIncludeDir("include", true);
@@ -115,23 +115,23 @@ TEST(TargetTestSyncGroup, CopyByMove) {
 
   destTarget.Copy(std::move(srcTarget),
                   {
-                      buildcc::base::SyncOption::SourceFiles,
-                      buildcc::base::SyncOption::HeaderFiles,
-                      buildcc::base::SyncOption::PchFiles,
-                      buildcc::base::SyncOption::LibDeps,
-                      buildcc::base::SyncOption::IncludeDirs,
-                      buildcc::base::SyncOption::LibDirs,
-                      buildcc::base::SyncOption::ExternalLibDeps,
-                      buildcc::base::SyncOption::PreprocessorFlags,
-                      buildcc::base::SyncOption::CommonCompileFlags,
-                      buildcc::base::SyncOption::PchCompileFlags,
-                      buildcc::base::SyncOption::PchObjectFlags,
-                      buildcc::base::SyncOption::AsmCompileFlags,
-                      buildcc::base::SyncOption::CCompileFlags,
-                      buildcc::base::SyncOption::CppCompileFlags,
-                      buildcc::base::SyncOption::LinkFlags,
-                      buildcc::base::SyncOption::CompileDependencies,
-                      buildcc::base::SyncOption::LinkDependencies,
+                      buildcc::SyncOption::SourceFiles,
+                      buildcc::SyncOption::HeaderFiles,
+                      buildcc::SyncOption::PchFiles,
+                      buildcc::SyncOption::LibDeps,
+                      buildcc::SyncOption::IncludeDirs,
+                      buildcc::SyncOption::LibDirs,
+                      buildcc::SyncOption::ExternalLibDeps,
+                      buildcc::SyncOption::PreprocessorFlags,
+                      buildcc::SyncOption::CommonCompileFlags,
+                      buildcc::SyncOption::PchCompileFlags,
+                      buildcc::SyncOption::PchObjectFlags,
+                      buildcc::SyncOption::AsmCompileFlags,
+                      buildcc::SyncOption::CCompileFlags,
+                      buildcc::SyncOption::CppCompileFlags,
+                      buildcc::SyncOption::LinkFlags,
+                      buildcc::SyncOption::CompileDependencies,
+                      buildcc::SyncOption::LinkDependencies,
                   });
 
   CHECK_EQUAL(destTarget.GetSourceFiles().size(), 1);
@@ -158,22 +158,22 @@ TEST(TargetTestSyncGroup, CopyByMove) {
 }
 
 TEST(TargetTestSyncGroup, CopyCrash) {
-  buildcc::base::Target srcTarget(
-      "srcTarget", buildcc::base::TargetType::Executable, gcc, "data");
-  buildcc::base::Target destTarget(
-      "destTarget", buildcc::base::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget srcTarget("srcTarget", buildcc::TargetType::Executable,
+                                gcc, "data");
+  buildcc::BaseTarget destTarget("destTarget", buildcc::TargetType::Executable,
+                                 gcc, "data");
 
   CHECK_THROWS(std::exception,
                destTarget.Copy(srcTarget, {
-                                              (buildcc::base::SyncOption)65535,
+                                              (buildcc::SyncOption)65535,
                                           }));
 }
 
 TEST(TargetTestSyncGroup, InsertByConstRef) {
-  buildcc::base::Target srcTarget(
-      "srcTarget", buildcc::base::TargetType::Executable, gcc, "data");
-  buildcc::base::Target destTarget(
-      "destTarget", buildcc::base::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget srcTarget("srcTarget", buildcc::TargetType::Executable,
+                                gcc, "data");
+  buildcc::BaseTarget destTarget("destTarget", buildcc::TargetType::Executable,
+                                 gcc, "data");
 
   srcTarget.AddSource("dummy_main.c");
   srcTarget.AddIncludeDir("include", true);
@@ -193,26 +193,25 @@ TEST(TargetTestSyncGroup, InsertByConstRef) {
   srcTarget.AddCompileDependency("new_source.cpp");
   srcTarget.AddLinkDependency("new_source.cpp");
 
-  destTarget.Insert(srcTarget,
-                    {
-                        buildcc::base::SyncOption::SourceFiles,
-                        buildcc::base::SyncOption::HeaderFiles,
-                        buildcc::base::SyncOption::PchFiles,
-                        buildcc::base::SyncOption::LibDeps,
-                        buildcc::base::SyncOption::IncludeDirs,
-                        buildcc::base::SyncOption::LibDirs,
-                        buildcc::base::SyncOption::ExternalLibDeps,
-                        buildcc::base::SyncOption::PreprocessorFlags,
-                        buildcc::base::SyncOption::CommonCompileFlags,
-                        buildcc::base::SyncOption::PchCompileFlags,
-                        buildcc::base::SyncOption::PchObjectFlags,
-                        buildcc::base::SyncOption::AsmCompileFlags,
-                        buildcc::base::SyncOption::CCompileFlags,
-                        buildcc::base::SyncOption::CppCompileFlags,
-                        buildcc::base::SyncOption::LinkFlags,
-                        buildcc::base::SyncOption::CompileDependencies,
-                        buildcc::base::SyncOption::LinkDependencies,
-                    });
+  destTarget.Insert(srcTarget, {
+                                   buildcc::SyncOption::SourceFiles,
+                                   buildcc::SyncOption::HeaderFiles,
+                                   buildcc::SyncOption::PchFiles,
+                                   buildcc::SyncOption::LibDeps,
+                                   buildcc::SyncOption::IncludeDirs,
+                                   buildcc::SyncOption::LibDirs,
+                                   buildcc::SyncOption::ExternalLibDeps,
+                                   buildcc::SyncOption::PreprocessorFlags,
+                                   buildcc::SyncOption::CommonCompileFlags,
+                                   buildcc::SyncOption::PchCompileFlags,
+                                   buildcc::SyncOption::PchObjectFlags,
+                                   buildcc::SyncOption::AsmCompileFlags,
+                                   buildcc::SyncOption::CCompileFlags,
+                                   buildcc::SyncOption::CppCompileFlags,
+                                   buildcc::SyncOption::LinkFlags,
+                                   buildcc::SyncOption::CompileDependencies,
+                                   buildcc::SyncOption::LinkDependencies,
+                               });
 
   CHECK_EQUAL(destTarget.GetSourceFiles().size(), 1);
   CHECK_EQUAL(destTarget.GetHeaderFiles().size(), 1);
@@ -238,10 +237,10 @@ TEST(TargetTestSyncGroup, InsertByConstRef) {
 }
 
 TEST(TargetTestSyncGroup, InsertByMove) {
-  buildcc::base::Target srcTarget(
-      "srcTarget", buildcc::base::TargetType::Executable, gcc, "data");
-  buildcc::base::Target destTarget(
-      "destTarget", buildcc::base::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget srcTarget("srcTarget", buildcc::TargetType::Executable,
+                                gcc, "data");
+  buildcc::BaseTarget destTarget("destTarget", buildcc::TargetType::Executable,
+                                 gcc, "data");
 
   srcTarget.AddSource("dummy_main.c");
   srcTarget.AddIncludeDir("include", true);
@@ -263,23 +262,23 @@ TEST(TargetTestSyncGroup, InsertByMove) {
 
   destTarget.Insert(std::move(srcTarget),
                     {
-                        buildcc::base::SyncOption::SourceFiles,
-                        buildcc::base::SyncOption::HeaderFiles,
-                        buildcc::base::SyncOption::PchFiles,
-                        buildcc::base::SyncOption::LibDeps,
-                        buildcc::base::SyncOption::IncludeDirs,
-                        buildcc::base::SyncOption::LibDirs,
-                        buildcc::base::SyncOption::ExternalLibDeps,
-                        buildcc::base::SyncOption::PreprocessorFlags,
-                        buildcc::base::SyncOption::CommonCompileFlags,
-                        buildcc::base::SyncOption::PchCompileFlags,
-                        buildcc::base::SyncOption::PchObjectFlags,
-                        buildcc::base::SyncOption::AsmCompileFlags,
-                        buildcc::base::SyncOption::CCompileFlags,
-                        buildcc::base::SyncOption::CppCompileFlags,
-                        buildcc::base::SyncOption::LinkFlags,
-                        buildcc::base::SyncOption::CompileDependencies,
-                        buildcc::base::SyncOption::LinkDependencies,
+                        buildcc::SyncOption::SourceFiles,
+                        buildcc::SyncOption::HeaderFiles,
+                        buildcc::SyncOption::PchFiles,
+                        buildcc::SyncOption::LibDeps,
+                        buildcc::SyncOption::IncludeDirs,
+                        buildcc::SyncOption::LibDirs,
+                        buildcc::SyncOption::ExternalLibDeps,
+                        buildcc::SyncOption::PreprocessorFlags,
+                        buildcc::SyncOption::CommonCompileFlags,
+                        buildcc::SyncOption::PchCompileFlags,
+                        buildcc::SyncOption::PchObjectFlags,
+                        buildcc::SyncOption::AsmCompileFlags,
+                        buildcc::SyncOption::CCompileFlags,
+                        buildcc::SyncOption::CppCompileFlags,
+                        buildcc::SyncOption::LinkFlags,
+                        buildcc::SyncOption::CompileDependencies,
+                        buildcc::SyncOption::LinkDependencies,
                     });
 
   CHECK_EQUAL(destTarget.GetSourceFiles().size(), 1);
@@ -306,16 +305,15 @@ TEST(TargetTestSyncGroup, InsertByMove) {
 }
 
 TEST(TargetTestSyncGroup, InsertCrash) {
-  buildcc::base::Target srcTarget(
-      "srcTarget", buildcc::base::TargetType::Executable, gcc, "data");
-  buildcc::base::Target destTarget(
-      "destTarget", buildcc::base::TargetType::Executable, gcc, "data");
+  buildcc::BaseTarget srcTarget("srcTarget", buildcc::TargetType::Executable,
+                                gcc, "data");
+  buildcc::BaseTarget destTarget("destTarget", buildcc::TargetType::Executable,
+                                 gcc, "data");
 
-  CHECK_THROWS(
-      std::exception,
-      destTarget.Insert(srcTarget, {
-                                       (buildcc::base::SyncOption)65535,
-                                   }));
+  CHECK_THROWS(std::exception,
+               destTarget.Insert(srcTarget, {
+                                                (buildcc::SyncOption)65535,
+                                            }));
 }
 
 int main(int ac, char **av) {

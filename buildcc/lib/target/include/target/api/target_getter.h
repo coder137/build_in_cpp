@@ -28,7 +28,7 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 template <typename T> class TargetGetter {
 public:
@@ -68,6 +68,6 @@ public:
   tf::Taskflow &GetTaskflow();
 };
 
-}; // namespace buildcc::base
+}; // namespace buildcc::internal
 
 #endif

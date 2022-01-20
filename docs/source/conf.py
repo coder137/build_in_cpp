@@ -18,7 +18,7 @@ import os
 # -- Project information -----------------------------------------------------
 
 project = 'BuildCC'
-copyright = '2021, Niket Naidu'
+copyright = '2021-2022, Niket Naidu'
 author = 'Niket Naidu'
 
 # The full version, including alpha/beta/rc tags

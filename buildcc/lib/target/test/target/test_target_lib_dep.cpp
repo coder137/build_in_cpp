@@ -30,9 +30,8 @@ TEST_GROUP(TargetTestLibDep)
 };
 // clang-format on
 
-static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
-                                          "gcc", "as", "gcc", "g++", "ar",
-                                          "ld");
+static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
+                                    "gcc", "g++", "ar", "ld");
 
 static const fs::path intermediate_path =
     fs::path(BUILD_TARGET_LIB_DEP_INTERMEDIATE_DIR) / gcc.GetName();
@@ -42,15 +41,15 @@ TEST(TargetTestLibDep, StaticLibrary_SimpleBuildTest) {
 
   fs::remove_all(intermediate_path / STATIC_NAME);
 
-  buildcc::base::Target foolib(
-      STATIC_NAME, buildcc::base::TargetType::StaticLibrary, gcc, "data");
+  buildcc::BaseTarget foolib(STATIC_NAME, buildcc::TargetType::StaticLibrary,
+                             gcc, "data");
   foolib.AddSource("foo.cpp", "foo");
   foolib.AddIncludeDir("foo");
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   foolib.Build();
-  buildcc::base::m::TargetRunner(foolib);
+  buildcc::m::TargetRunner(foolib);
 
   mock().checkExpectations();
 
@@ -72,21 +71,21 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
   fs::remove_all(intermediate_path / EXE_NAME);
 
   {
-    buildcc::base::Target foolib(
-        STATIC_FOO_LIB, buildcc::base::TargetType::StaticLibrary, gcc, "data");
+    buildcc::BaseTarget foolib(STATIC_FOO_LIB,
+                               buildcc::TargetType::StaticLibrary, gcc, "data");
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     foolib.Build();
-    buildcc::base::m::TargetRunner(foolib);
+    buildcc::m::TargetRunner(foolib);
     buildcc::env::save_file(foolib.GetTargetPath().string().c_str(),
                             std::string{""}, false);
 
     // Executable for static
-    buildcc::base::Target exe_target(
-        EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
+    buildcc::BaseTarget exe_target(EXE_NAME, buildcc::TargetType::Executable,
+                                   gcc, "data");
     exe_target.AddSource("foo_main.cpp");
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
@@ -94,26 +93,26 @@ TEST(TargetTestLibDep, TargetDep_RebuildTest) {
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe_target.Build();
-    buildcc::base::m::TargetRunner(exe_target);
+    buildcc::m::TargetRunner(exe_target);
   }
 
   {
-    buildcc::base::Target foolib(
-        STATIC_FOO_LIB, buildcc::base::TargetType::StaticLibrary, gcc, "data");
+    buildcc::BaseTarget foolib(STATIC_FOO_LIB,
+                               buildcc::TargetType::StaticLibrary, gcc, "data");
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
     foolib.Build();
-    buildcc::base::m::TargetRunner(foolib);
+    buildcc::m::TargetRunner(foolib);
     CHECK_FALSE(foolib.IsBuilt());
 
     // Executable for static
-    buildcc::base::Target exe_target(
-        EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
+    buildcc::BaseTarget exe_target(EXE_NAME, buildcc::TargetType::Executable,
+                                   gcc, "data");
     exe_target.AddSource("foo_main.cpp");
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
     exe_target.Build();
-    buildcc::base::m::TargetRunner(exe_target);
+    buildcc::m::TargetRunner(exe_target);
     CHECK_FALSE(exe_target.IsBuilt());
   }
 
@@ -127,15 +126,15 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
   fs::remove_all(intermediate_path / STATIC_NAME);
   fs::remove_all(intermediate_path / EXE_NAME);
 
-  buildcc::base::Target foolib(
-      STATIC_NAME, buildcc::base::TargetType::StaticLibrary, gcc, "data");
+  buildcc::BaseTarget foolib(STATIC_NAME, buildcc::TargetType::StaticLibrary,
+                             gcc, "data");
   foolib.AddSource("foo/foo.cpp");
   foolib.AddIncludeDir("foo");
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   foolib.Build();
-  buildcc::base::m::TargetRunner(foolib);
+  buildcc::m::TargetRunner(foolib);
 
   buildcc::env::save_file(foolib.GetTargetPath().string().c_str(),
                           std::string{""}, false);
@@ -143,43 +142,43 @@ TEST(TargetTestLibDep, TargetDep_AddRemoveTest) {
   // * Initial executable
   // Executable for static
   {
-    buildcc::base::Target exe_target(
-        EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
+    buildcc::BaseTarget exe_target(EXE_NAME, buildcc::TargetType::Executable,
+                                   gcc, "data");
     exe_target.AddSource("empty_main.cpp");
     exe_target.AddIncludeDir("foo");
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe_target.Build();
-    buildcc::base::m::TargetRunner(exe_target);
+    buildcc::m::TargetRunner(exe_target);
   }
 
   // * Add new library
   // Build
   {
-    buildcc::base::Target exe_target(
-        EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
+    buildcc::BaseTarget exe_target(EXE_NAME, buildcc::TargetType::Executable,
+                                   gcc, "data");
     exe_target.AddSource("empty_main.cpp");
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
 
-    buildcc::base::m::TargetExpect_PathAdded(1, &exe_target);
+    buildcc::m::TargetExpect_PathAdded(1, &exe_target);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe_target.Build();
-    buildcc::base::m::TargetRunner(exe_target);
+    buildcc::m::TargetRunner(exe_target);
   }
 
   // * Remove library
   {
-    buildcc::base::Target exe_target(
-        EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
+    buildcc::BaseTarget exe_target(EXE_NAME, buildcc::TargetType::Executable,
+                                   gcc, "data");
     exe_target.AddSource("empty_main.cpp");
     exe_target.AddIncludeDir("foo");
 
-    buildcc::base::m::TargetExpect_PathRemoved(1, &exe_target);
+    buildcc::m::TargetExpect_PathRemoved(1, &exe_target);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe_target.Build();
-    buildcc::base::m::TargetRunner(exe_target);
+    buildcc::m::TargetRunner(exe_target);
   }
 
   mock().checkExpectations();
@@ -194,22 +193,22 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
 
   // Build initial
   {
-    buildcc::base::Target foolib(
-        STATIC_NAME, buildcc::base::TargetType::StaticLibrary, gcc, "data");
+    buildcc::BaseTarget foolib(STATIC_NAME, buildcc::TargetType::StaticLibrary,
+                               gcc, "data");
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     foolib.Build();
-    buildcc::base::m::TargetRunner(foolib);
+    buildcc::m::TargetRunner(foolib);
 
     bool saved = buildcc::env::save_file(
         foolib.GetTargetPath().string().c_str(), std::string{""}, false);
     CHECK_TRUE(saved);
 
-    buildcc::base::Target exe_target(
-        EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
+    buildcc::BaseTarget exe_target(EXE_NAME, buildcc::TargetType::Executable,
+                                   gcc, "data");
     exe_target.AddSource("foo_main.cpp");
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
@@ -217,22 +216,22 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe_target.Build();
-    buildcc::base::m::TargetRunner(exe_target);
+    buildcc::m::TargetRunner(exe_target);
   }
 
   // * Update static library
   {
-    buildcc::base::Target foolib(
-        STATIC_NAME, buildcc::base::TargetType::StaticLibrary, gcc, "data");
+    buildcc::BaseTarget foolib(STATIC_NAME, buildcc::TargetType::StaticLibrary,
+                               gcc, "data");
     foolib.AddSource("foo/foo.cpp");
     foolib.AddIncludeDir("foo");
     foolib.AddIncludeDir("");
 
-    buildcc::base::m::TargetExpect_DirChanged(1, &foolib);
+    buildcc::m::TargetExpect_DirChanged(1, &foolib);
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     foolib.Build();
-    buildcc::base::m::TargetRunner(foolib);
+    buildcc::m::TargetRunner(foolib);
 
     // * To make sure that save_file is newer
     sleep(1);
@@ -240,16 +239,16 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
         foolib.GetTargetPath().string().c_str(), std::string{""}, false);
     CHECK_TRUE(saved);
 
-    buildcc::base::Target exe_target(
-        EXE_NAME, buildcc::base::TargetType::Executable, gcc, "data");
+    buildcc::BaseTarget exe_target(EXE_NAME, buildcc::TargetType::Executable,
+                                   gcc, "data");
     exe_target.AddSource("foo_main.cpp");
     exe_target.AddIncludeDir("foo");
     exe_target.AddLibDep(foolib);
 
-    buildcc::base::m::TargetExpect_PathUpdated(1, &exe_target);
+    buildcc::m::TargetExpect_PathUpdated(1, &exe_target);
     buildcc::env::m::CommandExpect_Execute(1, true);
     exe_target.Build();
-    buildcc::base::m::TargetRunner(exe_target);
+    buildcc::m::TargetRunner(exe_target);
   }
 
   mock().checkExpectations();

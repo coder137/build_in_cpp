@@ -21,7 +21,7 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 // Requires
 // - TargetStorer
@@ -38,6 +38,6 @@ public:
   void GlobSources(const fs::path &relative_to_target_path = "");
 };
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 #endif

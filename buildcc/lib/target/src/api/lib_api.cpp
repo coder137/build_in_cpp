@@ -19,7 +19,7 @@
 #include "target/target.h"
 #include "target/target_info.h"
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 template <typename T>
 void LibApi<T>::AddLibDir(const fs::path &relative_lib_dir) {
@@ -37,7 +37,7 @@ void LibApi<T>::AddLibDirAbsolute(const fs::path &absolute_lib_dir) {
   t.storer_.current_lib_dirs.insert(absolute_lib_dir);
 }
 
-template <typename T> void LibApi<T>::AddLibDep(const Target &lib_dep) {
+template <typename T> void LibApi<T>::AddLibDep(const BaseTarget &lib_dep) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
@@ -53,4 +53,4 @@ template <typename T> void LibApi<T>::AddLibDep(const std::string &lib_dep) {
 
 template class LibApi<TargetInfo>;
 
-} // namespace buildcc::base
+} // namespace buildcc::internal

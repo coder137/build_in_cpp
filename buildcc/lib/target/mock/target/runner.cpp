@@ -2,7 +2,7 @@
 
 #include "expect_target.h"
 
-namespace buildcc::base::m {
+namespace buildcc::m {
 
 void TargetRunner(Target &target) {
   tf::Executor executor(1);
@@ -10,4 +10,4 @@ void TargetRunner(Target &target) {
   executor.wait_for_all();
 }
 
-} // namespace buildcc::base::m
+} // namespace buildcc::m

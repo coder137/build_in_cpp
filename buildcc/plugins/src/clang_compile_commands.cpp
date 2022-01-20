@@ -40,7 +40,7 @@ R"({{
 
 namespace buildcc::plugin {
 
-void ClangCompileCommands::AddTarget(const base::Target *target) {
+void ClangCompileCommands::AddTarget(const BaseTarget *target) {
   env::assert_fatal(target != nullptr, "Target should not be NULL");
   targets_.push_back(target);
 }
@@ -49,7 +49,7 @@ void ClangCompileCommands::Generate() {
   // Early terminate if rebuild is not required
   const bool regenerate =
       std::any_of(targets_.begin(), targets_.end(),
-                  [](const base::Target *target) { return target->IsBuilt(); });
+                  [](const BaseTarget *target) { return target->IsBuilt(); });
   if (!regenerate) {
     env::log_trace("ClangCompileCommands", "Generate -> false");
     return;

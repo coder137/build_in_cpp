@@ -23,24 +23,54 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc::base {
+namespace buildcc {
 
 class TargetEnv {
 public:
   // * NOTE, This has only been added for implicit conversion
   // TODO, Make the constructors below explicit
   // TODO, Remove this constructor
+
+  /**
+   * @brief Change the relative root path for a particular Generator / Target
+   *
+   * Absolute root now changes to
+   * `env::get_project_root_dir() / target_relative_to_env_root`
+   *
+   * Absolute build dir remains the same.
+   *
+   * Can be used implicitly
+   *
+   * @param target_relative_to_env_root Change root dir with respect to
+   * env::get_project_root_dir()
+   */
   TargetEnv(const char *target_relative_to_env_root)
+      : TargetEnv(fs::path(target_relative_to_env_root)) {}
+
+  /**
+   * @brief Similar to `TargetEnv(const char *)`
+   *
+   * Only explicit usage allowed
+   *
+   * @param target_relative_to_env_root Change root dir with respect to
+   * env::get_project_root_dir()
+   */
+  explicit TargetEnv(const fs::path &target_relative_to_env_root)
       : target_root_dir_(env::get_project_root_dir() /
                          target_relative_to_env_root),
         target_build_dir_(env::get_project_build_dir()), relative_(true) {}
 
-  TargetEnv(const fs::path &target_relative_to_env_root)
-      : target_root_dir_(env::get_project_root_dir() /
-                         target_relative_to_env_root),
-        target_build_dir_(env::get_project_build_dir()), relative_(true) {}
-  TargetEnv(const fs::path &absolute_target_root,
-            const fs::path &absolute_target_build)
+  /**
+   * @brief Change the absolute root and build path for a particular Generator /
+   * Target
+   *
+   * @param absolute_target_root Absolute root directory for this target changes
+   * as per this parameter
+   * @param absolute_target_build Absolute build directory for this target
+   * changes as per this parameter
+   */
+  explicit TargetEnv(const fs::path &absolute_target_root,
+                     const fs::path &absolute_target_build)
       : target_root_dir_(absolute_target_root),
         target_build_dir_(absolute_target_build), relative_(false) {}
 
@@ -53,6 +83,6 @@ private:
   bool relative_{false};
 };
 
-} // namespace buildcc::base
+} // namespace buildcc
 
 #endif

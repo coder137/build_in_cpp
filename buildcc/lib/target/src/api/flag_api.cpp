@@ -18,7 +18,7 @@
 
 #include "target/target_info.h"
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 template <typename T>
 void FlagApi<T>::AddPreprocessorFlag(const std::string &flag) {
@@ -78,4 +78,4 @@ template <typename T> void FlagApi<T>::AddLinkFlag(const std::string &flag) {
 
 template class FlagApi<TargetInfo>;
 
-} // namespace buildcc::base
+} // namespace buildcc::internal

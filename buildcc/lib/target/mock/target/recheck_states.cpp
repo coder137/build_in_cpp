@@ -4,7 +4,7 @@
 
 #include "CppUTestExt/MockSupport.h"
 
-namespace buildcc::base {
+namespace buildcc {
 
 static constexpr const char *const SOURCE_REMOVED_FUNCTION =
     "Target::SourceRemoved";
@@ -95,4 +95,4 @@ void TargetExpect_ExternalLibChanged(unsigned int calls, Target *target) {
 
 } // namespace m
 
-} // namespace buildcc::base
+} // namespace buildcc

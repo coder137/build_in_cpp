@@ -28,39 +28,38 @@ TEST_GROUP(TargetTestUserDepsGroup)
 };
 // clang-format on
 
-static const buildcc::base::Toolchain gcc(buildcc::base::Toolchain::Id::Gcc,
-                                          "gcc", "as", "gcc", "g++", "ar",
-                                          "ld");
+static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
+                                    "gcc", "g++", "ar", "ld");
 
 static const fs::path target_source_intermediate_path =
     fs::path(BUILD_TARGET_USER_DEPS_INTERMEDIATE_DIR) / gcc.GetName();
 
 TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_NoChange) {
   constexpr const char *NAME = "compileDep_NoChange.exe";
-  buildcc::base::Target compileDep(NAME, buildcc::base::TargetType::Executable,
-                                   gcc, "data");
+  buildcc::BaseTarget compileDep(NAME, buildcc::TargetType::Executable, gcc,
+                                 "data");
   compileDep.AddSource("dummy_main.cpp");
   compileDep.AddCompileDependency("new_source.cpp");
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   compileDep.Build();
-  buildcc::base::m::TargetRunner(compileDep);
+  buildcc::m::TargetRunner(compileDep);
 
   mock().checkExpectations();
 }
 
 TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_NoChange) {
   constexpr const char *NAME = "linkDep_NoChange.exe";
-  buildcc::base::Target linkDep(NAME, buildcc::base::TargetType::Executable,
-                                gcc, "data");
+  buildcc::BaseTarget linkDep(NAME, buildcc::TargetType::Executable, gcc,
+                              "data");
   linkDep.AddSource("dummy_main.cpp");
   linkDep.AddLinkDependency("new_source.cpp");
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   buildcc::env::m::CommandExpect_Execute(1, true);
   linkDep.Build();
-  buildcc::base::m::TargetRunner(linkDep);
+  buildcc::m::TargetRunner(linkDep);
 
   mock().checkExpectations();
 }
@@ -68,15 +67,15 @@ TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_NoChange) {
 TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_Rebuild) {
   constexpr const char *NAME = "compileDep_Rebuild.exe";
   {
-    buildcc::base::Target compileDep(
-        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+    buildcc::BaseTarget compileDep(NAME, buildcc::TargetType::Executable, gcc,
+                                   "data");
     compileDep.AddSource("dummy_main.cpp");
     compileDep.AddCompileDependency("new_source.cpp");
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     compileDep.Build();
-    buildcc::base::m::TargetRunner(compileDep);
+    buildcc::m::TargetRunner(compileDep);
   }
 
   {
@@ -89,16 +88,16 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_Rebuild) {
   }
 
   {
-    buildcc::base::Target compileDep(
-        NAME, buildcc::base::TargetType::Executable, gcc, "data");
+    buildcc::BaseTarget compileDep(NAME, buildcc::TargetType::Executable, gcc,
+                                   "data");
     compileDep.AddSource("dummy_main.cpp");
     compileDep.AddCompileDependency("new_source.cpp");
 
-    buildcc::base::m::TargetExpect_PathUpdated(1, &compileDep);
+    buildcc::m::TargetExpect_PathUpdated(1, &compileDep);
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     compileDep.Build();
-    buildcc::base::m::TargetRunner(compileDep);
+    buildcc::m::TargetRunner(compileDep);
   }
 
   mock().checkExpectations();
@@ -107,15 +106,15 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_Rebuild) {
 TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_Rebuild) {
   constexpr const char *NAME = "linkDep_Rebuild.exe";
   {
-    buildcc::base::Target linkDep(NAME, buildcc::base::TargetType::Executable,
-                                  gcc, "data");
+    buildcc::BaseTarget linkDep(NAME, buildcc::TargetType::Executable, gcc,
+                                "data");
     linkDep.AddSource("dummy_main.cpp");
     linkDep.AddLinkDependency("new_source.cpp");
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     buildcc::env::m::CommandExpect_Execute(1, true);
     linkDep.Build();
-    buildcc::base::m::TargetRunner(linkDep);
+    buildcc::m::TargetRunner(linkDep);
   }
 
   {
@@ -128,15 +127,15 @@ TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_Rebuild) {
   }
 
   {
-    buildcc::base::Target linkDep(NAME, buildcc::base::TargetType::Executable,
-                                  gcc, "data");
+    buildcc::BaseTarget linkDep(NAME, buildcc::TargetType::Executable, gcc,
+                                "data");
     linkDep.AddSource("dummy_main.cpp");
     linkDep.AddLinkDependency("new_source.cpp");
 
-    buildcc::base::m::TargetExpect_PathUpdated(1, &linkDep); // Only link
+    buildcc::m::TargetExpect_PathUpdated(1, &linkDep); // Only link
     buildcc::env::m::CommandExpect_Execute(1, true);
     linkDep.Build();
-    buildcc::base::m::TargetRunner(linkDep);
+    buildcc::m::TargetRunner(linkDep);
   }
 
   mock().checkExpectations();

@@ -15,7 +15,4 @@ User
 Developer
 ----------
 
-* ``buildcc::base``
 * ``buildcc::internal``
-
-.. note:: Consider removing ``buildcc::base`` since a lot of the APIs are typedef`ed to the ``buildcc`` namespace

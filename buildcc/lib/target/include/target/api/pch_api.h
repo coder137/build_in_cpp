@@ -21,7 +21,7 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 // Requires
 // - TargetStorer
@@ -35,6 +35,6 @@ public:
   void AddPchAbsolute(const fs::path &absolute_filepath);
 };
 
-} // namespace buildcc::base
+} // namespace buildcc::internal
 
 #endif

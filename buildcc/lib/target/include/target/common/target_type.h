@@ -17,12 +17,12 @@
 #ifndef TARGET_COMMON_TARGET_TYPE_H_
 #define TARGET_COMMON_TARGET_TYPE_H_
 
-namespace buildcc::base {
+namespace buildcc {
 
 enum class TargetType {
-  Executable,
-  StaticLibrary,
-  DynamicLibrary,
+  Executable,     ///< Executable Target type
+  StaticLibrary,  ///< Static library target type
+  DynamicLibrary, ///< Dynamic library target type
 };
 
 }

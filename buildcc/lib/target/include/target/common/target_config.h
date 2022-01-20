@@ -25,16 +25,62 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc::base {
+namespace buildcc {
 
 struct TargetConfig {
-  TargetConfig() {}
+  TargetConfig() = default;
 
+  /**
+   * @brief Get the valid file extension from a path
+   *
+   * See TargetConfig::valid_c_ext, TargetConfig::valid_cpp_ext,
+   * TargetConfig::valid_asm_ext, TargetConfig::valid_header_ext
+   *
+   * @param filepath Absolute / Relative path of the file
+   * @return TargetFileExt File path detected as per TargetConfig::valid_*
+   * variables
+   */
   TargetFileExt GetFileExt(const fs::path &filepath) const;
+
+  /**
+   * @brief Checks for C/C++ source file validity.
+   *
+   * See TargetConfig::valid_c_ext, TargetConfig::valid_cpp_ext,
+   * TargetConfig::valid_asm_ext
+   *
+   * @param filepath Absolute / Relative path of file
+   * @return true If file extension belongs to the above valid_* list
+   * @return false If file extension does not belong to the above valid_* list
+   */
   bool IsValidSource(const fs::path &filepath) const;
+
+  /**
+   * @brief Checks for Header file validity
+   *
+   * See TargetConfig::valid_header_ext
+   *
+   * @param filepath Absolute / Relative path of file
+   * @return true If file extension belongs to above valid_* list
+   * @return false If file extension does not belong to above valid_* list
+   */
   bool IsValidHeader(const fs::path &filepath) const;
 
+  /**
+   * @brief Expects Source file validity
+   *
+   * env::assert_fatal if not a valid source
+   *
+   * @param filepath Absolute / Relative path of file
+   */
   void ExpectsValidSource(const fs::path &filepath) const;
+
+  /**
+   * @brief Expects header file validity
+   *
+   * env::assert_fatal if not a valid header
+   *
+   * @param filepath Absolute / Relative path of file
+   */
   void ExpectsValidHeader(const fs::path &filepath) const;
 
   std::string target_ext{""};
@@ -45,15 +91,11 @@ struct TargetConfig {
   std::string prefix_include_dir{"-I"};
   std::string prefix_lib_dir{"-L"};
 
-  std::string pch_command{"{compiler} {preprocessor_flags} {include_dirs} "
-                          "{common_compile_flags} {pch_compile_flags} "
-                          "{compile_flags} -o {output} -c {input}"};
-  std::string compile_command{
-      "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
-      "{pch_object_flags} {compile_flags} -o {output} -c {input}"};
-  std::string link_command{
-      "{cpp_compiler} {link_flags} {compiled_sources} -o {output} "
-      "{lib_dirs} {lib_deps}"};
+  // clang-format off
+  std::string pch_command{"{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} {pch_compile_flags} {compile_flags} -o {output} -c {input}"};
+  std::string compile_command{"{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} {pch_object_flags} {compile_flags} -o {output} -c {input}"};
+  std::string link_command{"{cpp_compiler} {link_flags} {compiled_sources} -o {output} {lib_dirs} {lib_deps}"};
+  // clang-format on
 
   std::unordered_set<std::string> valid_c_ext{".c"};
   std::unordered_set<std::string> valid_cpp_ext{".cpp", ".cxx", ".cc"};
@@ -61,6 +103,6 @@ struct TargetConfig {
   std::unordered_set<std::string> valid_header_ext{".h", ".hpp"};
 };
 
-} // namespace buildcc::base
+} // namespace buildcc
 
 #endif

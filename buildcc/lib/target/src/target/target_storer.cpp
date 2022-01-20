@@ -29,13 +29,13 @@ namespace fbs = schema::internal;
 
 namespace {
 
-fbs::TargetType CreateFbsTargetType(buildcc::base::TargetType type) {
+fbs::TargetType CreateFbsTargetType(buildcc::TargetType type) {
   return (fbs::TargetType)type;
 }
 
 } // namespace
 
-namespace buildcc::base {
+namespace buildcc {
 
 bool Target::Store() {
   env::log_trace(name_, __FUNCTION__);
@@ -101,4 +101,4 @@ bool Target::Store() {
                         builder.GetSize(), true);
 }
 
-} // namespace buildcc::base
+} // namespace buildcc

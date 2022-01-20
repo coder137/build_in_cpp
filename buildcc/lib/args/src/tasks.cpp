@@ -20,11 +20,11 @@
 
 namespace buildcc {
 
-tf::Task Register::BuildTargetTask(base::Target &target) {
+tf::Task Register::BuildTargetTask(BaseTarget &target) {
   return build_tf_.composed_of(target.GetTaskflow()).name(target.GetUniqueId());
 }
 
-tf::Task Register::BuildGeneratorTask(base::Generator &generator) {
+tf::Task Register::BuildGeneratorTask(BaseGenerator &generator) {
   return build_tf_.composed_of(generator.GetTaskflow())
       .name(generator.GetUniqueId());
 }

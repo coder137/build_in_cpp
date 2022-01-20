@@ -18,7 +18,7 @@
 
 #include "target/target_info.h"
 
-namespace buildcc::base {
+namespace buildcc::internal {
 
 template <typename T>
 void PchApi<T>::AddPchAbsolute(const fs::path &absolute_filepath) {
@@ -45,4 +45,4 @@ void PchApi<T>::AddPch(const fs::path &relative_filename,
 
 template class PchApi<TargetInfo>;
 
-} // namespace buildcc::base
+} // namespace buildcc::internal

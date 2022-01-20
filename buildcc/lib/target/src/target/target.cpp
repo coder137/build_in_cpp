@@ -29,11 +29,11 @@ namespace fs = std::filesystem;
 
 namespace {
 
-bool IsValidTargetType(buildcc::base::TargetType type) {
+bool IsValidTargetType(buildcc::TargetType type) {
   switch (type) {
-  case buildcc::base::TargetType::Executable:
-  case buildcc::base::TargetType::StaticLibrary:
-  case buildcc::base::TargetType::DynamicLibrary:
+  case buildcc::TargetType::Executable:
+  case buildcc::TargetType::StaticLibrary:
+  case buildcc::TargetType::DynamicLibrary:
     return true;
     break;
   default:
@@ -44,7 +44,7 @@ bool IsValidTargetType(buildcc::base::TargetType type) {
 
 } // namespace
 
-namespace buildcc::base {
+namespace buildcc {
 
 void Target::Initialize() {
   // Checks
@@ -123,4 +123,4 @@ std::optional<std::string> Target::SelectCompiler(TargetFileExt ext) const {
   return {};
 }
 
-} // namespace buildcc::base
+} // namespace buildcc
