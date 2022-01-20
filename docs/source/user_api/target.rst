@@ -107,3 +107,26 @@ target_generic.h
 .. doxygenclass:: buildcc::DynamicTarget_generic
 
 .. doxygenclass:: buildcc::Target_generic
+
+Example
+--------
+
+.. code-block:: cpp
+    :linenos:
+
+    // Generic toolchain GCC
+    Toolchain_gcc gcc;
+
+    // Target compatible GCC toolchain
+    ExecutableTarget_gcc hello_world("name", gcc, "relative_to_global_env_root_dir");
+
+    // NOTE: See APIs above, they are self explanatory
+    hello_world.AddSource("");
+
+    // Setup the tasks
+    hello_world.Build();
+
+    // Run the task
+    tf::Executor executor;
+    executor.run(hello_world.GetTaskflow());
+    executor.wait_for_all();
