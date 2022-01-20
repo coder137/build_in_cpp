@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Compile Options for BuildExe" href="all_compile_options.html" /><link rel="prev" title="BuildExe as a Package Manager" href="buildexe_package_manager.html" />
 
-    <meta name="generator" content="sphinx-4.3.2, furo 2022.01.02"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.01.02"/>
         <title>Walkthrough Examples - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
@@ -133,7 +133,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -183,8 +183,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/register.html">Register</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target_utils.html">Target Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html">Generator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html">Target Info APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#targetinfo">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#target-apis">Target APIs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#target">Target</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#specialized-target">Specialized Target</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/supported_plugins.html">Supported Plugins</a></li>
@@ -219,7 +222,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -238,9 +241,46 @@
 <li><p>Flags (Preprocessor, Compile and Link flags)</p></li>
 <li><p>Generators</p></li>
 <li><p>Target Info</p></li>
+</ul>
+<div class="section" id="todo">
+<h2>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
 <li><p>Custom Targets</p></li>
 <li><p>Custom Arguments</p></li>
+<li><p>Debugging</p></li>
 </ul>
+</div>
+<div class="section" id="simple">
+<h2>Simple<a class="headerlink" href="#simple" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>See <code class="docutils literal notranslate"><span class="pre">SourceApi</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="includedirs">
+<h2>IncludeDirs<a class="headerlink" href="#includedirs" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>See <code class="docutils literal notranslate"><span class="pre">IncludeDirApi</span></code></p></li>
+<li><p>Read why Header files and Include dirs are tracked</p></li>
+</ul>
+</div>
+<div class="section" id="libdeps">
+<h2>LibDeps<a class="headerlink" href="#libdeps" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>See <code class="docutils literal notranslate"><span class="pre">LibApi</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="flags">
+<h2>Flags<a class="headerlink" href="#flags" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>See <code class="docutils literal notranslate"><span class="pre">FlagApi</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="generator">
+<h2>Generator<a class="headerlink" href="#generator" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>See <a class="reference internal" href="../user_api/generator.html"><span class="doc">Generator</span></a></p></li>
+</ul>
+</div>
 </div>
 
         </article>
@@ -271,7 +311,7 @@
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, Niket Naidu |
+              Copyright &#169; 2021-2022, Niket Naidu |
           Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
           <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
             | <a class="muted-link" href="../_sources/getting_started/walkthroughs.rst.txt"
@@ -282,8 +322,32 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Walkthrough Examples</a><ul>
+<li><a class="reference internal" href="#todo">TODO</a></li>
+<li><a class="reference internal" href="#simple">Simple</a></li>
+<li><a class="reference internal" href="#includedirs">IncludeDirs</a></li>
+<li><a class="reference internal" href="#libdeps">LibDeps</a></li>
+<li><a class="reference internal" href="#flags">Flags</a></li>
+<li><a class="reference internal" href="#generator">Generator</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

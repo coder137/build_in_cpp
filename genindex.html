@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
 
-    <meta name="generator" content="sphinx-4.3.2, furo 2022.01.02"/><title>Index - BuildCC 0.1.1 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.01.02"/><title>Index - BuildCC 0.1.1 documentation</title>
 <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=fade93df149f7c5fedb3ff897f799dc7d283b420" />
@@ -182,8 +182,11 @@
 <li class="toctree-l2"><a class="reference internal" href="user_api/register.html">Register</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_api/toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_api/target_utils.html">Target Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_api/generator.html">Generator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_api/target.html">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_api/target.html">Target Info APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_api/target.html#targetinfo">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_api/target.html#target-apis">Target APIs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_api/target.html#target">Target</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_api/target.html#specialized-target">Specialized Target</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_api/supported_plugins.html">Supported Plugins</a></li>
@@ -227,8 +230,22 @@
           
 <section class="genindex-section">
   <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"><a href="#B"><strong>B</strong></a></div>
+  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a></div>
 </section>
+<section id="A" class="genindex-section">
+  <h2>A</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="user_api/environment.html#c.ASSERT_FATAL">ASSERT_FATAL (C macro)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="user_api/environment.html#c.ASSERT_THROW">ASSERT_THROW (C macro)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
 <section id="B" class="genindex-section">
   <h2>B</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
@@ -281,51 +298,77 @@
 </li>
         <li><a href="user_api/args.html#_CPPv4N7buildcc17ArgToolchainState4testE">buildcc::ArgToolchainState::test (C++ member)</a>
 </li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m30GeneratorExpect_CommandChangedEjP9Generator">buildcc::base::m::GeneratorExpect_CommandChanged (C++ function)</a>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc13BaseGeneratorE">buildcc::BaseGenerator (C++ type)</a>
 </li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m26GeneratorExpect_InputAddedEjP9Generator">buildcc::base::m::GeneratorExpect_InputAdded (C++ function)</a>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc10BaseTargetE">buildcc::BaseTarget (C++ type)</a>
 </li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m28GeneratorExpect_InputRemovedEjP9Generator">buildcc::base::m::GeneratorExpect_InputRemoved (C++ function)</a>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc14BaseTargetInfoE">buildcc::BaseTargetInfo (C++ type)</a>
 </li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m28GeneratorExpect_InputUpdatedEjP9Generator">buildcc::base::m::GeneratorExpect_InputUpdated (C++ function)</a>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc13BaseToolchainE">buildcc::BaseToolchain (C++ type)</a>
 </li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m29GeneratorExpect_OutputChangedEjP9Generator">buildcc::base::m::GeneratorExpect_OutputChanged (C++ function)</a>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc17DynamicTarget_gccE">buildcc::DynamicTarget_gcc (C++ class)</a>
 </li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m15GeneratorRunnerER9Generator">buildcc::base::m::GeneratorRunner (C++ function)</a>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc17DynamicTarget_gcc17DynamicTarget_gccERKNSt6stringERK13BaseToolchainRK9TargetEnvRK12TargetConfig">buildcc::DynamicTarget_gcc::DynamicTarget_gcc (C++ function)</a>
 </li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m23TargetExpect_DirChangedEjP6Target">buildcc::base::m::TargetExpect_DirChanged (C++ function)</a>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc21DynamicTarget_genericE">buildcc::DynamicTarget_generic (C++ class)</a>
 </li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m31TargetExpect_ExternalLibChangedEjP6Target">buildcc::base::m::TargetExpect_ExternalLibChanged (C++ function)</a>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc21DynamicTarget_generic21DynamicTarget_genericERKNSt6stringERK13BaseToolchainRK9TargetEnvRKNSt8optionalI12TargetConfigEE">buildcc::DynamicTarget_generic::DynamicTarget_generic (C++ function)</a>
 </li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m24TargetExpect_FlagChangedEjP6Target">buildcc::base::m::TargetExpect_FlagChanged (C++ function)</a>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc18DynamicTarget_msvcE">buildcc::DynamicTarget_msvc (C++ class)</a>
 </li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m22TargetExpect_PathAddedEjP6Target">buildcc::base::m::TargetExpect_PathAdded (C++ function)</a>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc18DynamicTarget_msvc18DynamicTarget_msvcERKNSt6stringERK13BaseToolchainRK9TargetEnvRK12TargetConfig">buildcc::DynamicTarget_msvc::DynamicTarget_msvc (C++ function)</a>
 </li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m24TargetExpect_PathRemovedEjP6Target">buildcc::base::m::TargetExpect_PathRemoved (C++ function)</a>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc18DynamicTarget_msvc10GetDllPathEv">buildcc::DynamicTarget_msvc::GetDllPath (C++ function)</a>
 </li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m24TargetExpect_PathUpdatedEjP6Target">buildcc::base::m::TargetExpect_PathUpdated (C++ function)</a>
-</li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m24TargetExpect_SourceAddedEjP6Target">buildcc::base::m::TargetExpect_SourceAdded (C++ function)</a>
-</li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m26TargetExpect_SourceRemovedEjP6Target">buildcc::base::m::TargetExpect_SourceRemoved (C++ function)</a>
-</li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m26TargetExpect_SourceUpdatedEjP6Target">buildcc::base::m::TargetExpect_SourceUpdated (C++ function)</a>
-</li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc4base1m12TargetRunnerER6Target">buildcc::base::m::TargetRunner (C++ function)</a>
+        <li><a href="user_api/environment.html#_CPPv4I_bEN7buildcc3env12assert_fatalEvPKc">buildcc::env::assert_fatal (C++ function)</a>, <a href="user_api/environment.html#_CPPv4I_bEN7buildcc3env12assert_fatalEvRKNSt6stringE">[1]</a>, <a href="user_api/environment.html#_CPPv4N7buildcc3env12assert_fatalEbPKc">[2]</a>, <a href="user_api/environment.html#_CPPv4N7buildcc3env12assert_fatalEbRKNSt6stringE">[3]</a>
 </li>
         <li><a href="arch/testing.html#_CPPv4N7buildcc3env19assert_handle_fatalEv">buildcc::env::assert_handle_fatal (C++ function)</a>
 </li>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc3env7CommandE">buildcc::env::Command (C++ class)</a>
+        <li><a href="user_api/environment.html#_CPPv4I_bEN7buildcc3env12assert_throwEvPKc">buildcc::env::assert_throw (C++ function)</a>, <a href="user_api/environment.html#_CPPv4I_bEN7buildcc3env12assert_throwEvRKNSt6stringE">[1]</a>, <a href="user_api/environment.html#_CPPv4N7buildcc3env12assert_throwEbPKc">[2]</a>, <a href="user_api/environment.html#_CPPv4N7buildcc3env12assert_throwEbRKNSt6stringE">[3]</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="arch/testing.html#_CPPv4N7buildcc3env7Command7ExecuteERKNSt6stringERKNSt8optionalIN2fs4pathEEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE">buildcc::env::Command::Execute (C++ function)</a>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env7CommandE">buildcc::env::Command (C++ class)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env7Command18AddDefaultArgumentERKNSt6stringERKNSt6stringE">buildcc::env::Command::AddDefaultArgument (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env7Command19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE">buildcc::env::Command::AddDefaultArguments (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env7Command7CommandEv">buildcc::env::Command::Command (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4NK7buildcc3env7Command9ConstructERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE">buildcc::env::Command::Construct (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env7Command7ExecuteERKNSt6stringERKNSt8optionalIN2fs4pathEEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE">buildcc::env::Command::Execute (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4NK7buildcc3env7Command20GetDefaultValueByKeyERKNSt6stringE">buildcc::env::Command::GetDefaultValueByKey (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env19get_os_envvar_delimEv">buildcc::env::get_os_envvar_delim (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env27get_os_executable_extensionEv">buildcc::env::get_os_executable_extension (C++ function)</a>
 </li>
         <li><a href="user_api/environment.html#_CPPv4N7buildcc3env21get_project_build_dirEv">buildcc::env::get_project_build_dir (C++ function)</a>
 </li>
         <li><a href="user_api/environment.html#_CPPv4N7buildcc3env20get_project_root_dirEv">buildcc::env::get_project_root_dir (C++ function)</a>
 </li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env14get_task_stateEv">buildcc::env::get_task_state (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env8is_clangEv">buildcc::env::is_clang (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env6is_gccEv">buildcc::env::is_gcc (C++ function)</a>
+</li>
         <li><a href="user_api/environment.html#_CPPv4N7buildcc3env7is_initEv">buildcc::env::is_init (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env8is_linuxEv">buildcc::env::is_linux (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env6is_macEv">buildcc::env::is_mac (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env8is_mingwEv">buildcc::env::is_mingw (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env7is_msvcEv">buildcc::env::is_msvc (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env7is_unixEv">buildcc::env::is_unix (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env6is_winEv">buildcc::env::is_win (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env9load_fileEPKcbPNSt6stringE">buildcc::env::load_file (C++ function)</a>
 </li>
         <li><a href="user_api/environment.html#_CPPv4N7buildcc3env12log_criticalENSt11string_viewENSt11string_viewE">buildcc::env::log_critical (C++ function)</a>
 </li>
@@ -343,11 +386,249 @@
 </li>
         <li><a href="arch/testing.html#_CPPv4N7buildcc3env1m18VectorStringCopier4copyEPvPKv">buildcc::env::m::VectorStringCopier::copy (C++ function)</a>
 </li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env9save_fileEPKcRKNSt6stringEb">buildcc::env::save_file (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env9TaskStateE">buildcc::env::TaskState (C++ enum)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env9TaskState7FAILUREE">buildcc::env::TaskState::FAILURE (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc3env9TaskState7SUCCESSE">buildcc::env::TaskState::SUCCESS (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc20ExecutableTarget_gccE">buildcc::ExecutableTarget_gcc (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc20ExecutableTarget_gcc20ExecutableTarget_gccERKNSt6stringERK13BaseToolchainRK9TargetEnvRK12TargetConfig">buildcc::ExecutableTarget_gcc::ExecutableTarget_gcc (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc24ExecutableTarget_genericE">buildcc::ExecutableTarget_generic (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc24ExecutableTarget_generic24ExecutableTarget_genericERKNSt6stringERK13BaseToolchainRK9TargetEnvRKNSt8optionalI12TargetConfigEE">buildcc::ExecutableTarget_generic::ExecutableTarget_generic (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc24ExecutableTarget_genericD0Ev">buildcc::ExecutableTarget_generic::~ExecutableTarget_generic (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc21ExecutableTarget_msvcE">buildcc::ExecutableTarget_msvc (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc21ExecutableTarget_msvc21ExecutableTarget_msvcERKNSt6stringERK13BaseToolchainRK9TargetEnvRK12TargetConfig">buildcc::ExecutableTarget_msvc::ExecutableTarget_msvc (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc9GeneratorE">buildcc::Generator (C++ class)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc9Generator10AddCommandERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE">buildcc::Generator::AddCommand (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc9Generator19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE">buildcc::Generator::AddDefaultArguments (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc9Generator8AddInputERKNSt6stringEPKc">buildcc::Generator::AddInput (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc9Generator9AddOutputERKNSt6stringEPKc">buildcc::Generator::AddOutput (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc9Generator5BuildEv">buildcc::Generator::Build (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc9Generator9GeneratorERK9Generator">buildcc::Generator::Generator (C++ function)</a>, <a href="user_api/generator.html#_CPPv4N7buildcc9Generator9GeneratorERKNSt6stringERK9TargetEnvb">[1]</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4NK7buildcc9Generator13GetBinaryPathEv">buildcc::Generator::GetBinaryPath (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4NK7buildcc9Generator7GetNameEv">buildcc::Generator::GetName (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc9Generator11GetTaskflowEv">buildcc::Generator::GetTaskflow (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4NK7buildcc9Generator12GetTaskStateEv">buildcc::Generator::GetTaskState (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4NK7buildcc9Generator20GetValueByIdentifierERKNSt6stringE">buildcc::Generator::GetValueByIdentifier (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc9GeneratorD0Ev">buildcc::Generator::~Generator (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc11get_host_osEv">buildcc::get_host_os (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4I0EN7buildcc8internal7DepsApiE">buildcc::internal::DepsApi (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7DepsApi20AddCompileDependencyERKN2fs4pathE">buildcc::internal::DepsApi::AddCompileDependency (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7DepsApi28AddCompileDependencyAbsoluteERKN2fs4pathE">buildcc::internal::DepsApi::AddCompileDependencyAbsolute (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7DepsApi17AddLinkDependencyERKN2fs4pathE">buildcc::internal::DepsApi::AddLinkDependency (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7DepsApi25AddLinkDependencyAbsoluteERKN2fs4pathE">buildcc::internal::DepsApi::AddLinkDependencyAbsolute (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4I0EN7buildcc8internal7FlagApiE">buildcc::internal::FlagApi (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7FlagApi17AddAsmCompileFlagERKNSt6stringE">buildcc::internal::FlagApi::AddAsmCompileFlag (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7FlagApi15AddCCompileFlagERKNSt6stringE">buildcc::internal::FlagApi::AddCCompileFlag (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7FlagApi20AddCommonCompileFlagERKNSt6stringE">buildcc::internal::FlagApi::AddCommonCompileFlag (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7FlagApi17AddCppCompileFlagERKNSt6stringE">buildcc::internal::FlagApi::AddCppCompileFlag (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7FlagApi11AddLinkFlagERKNSt6stringE">buildcc::internal::FlagApi::AddLinkFlag (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7FlagApi17AddPchCompileFlagERKNSt6stringE">buildcc::internal::FlagApi::AddPchCompileFlag (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7FlagApi16AddPchObjectFlagERKNSt6stringE">buildcc::internal::FlagApi::AddPchObjectFlag (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7FlagApi19AddPreprocessorFlagERKNSt6stringE">buildcc::internal::FlagApi::AddPreprocessorFlag (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4I0EN7buildcc8internal10IncludeApiE">buildcc::internal::IncludeApi (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal10IncludeApi9AddHeaderERKN2fs4pathERKN2fs4pathE">buildcc::internal::IncludeApi::AddHeader (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal10IncludeApi17AddHeaderAbsoluteERKN2fs4pathE">buildcc::internal::IncludeApi::AddHeaderAbsolute (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal10IncludeApi13AddIncludeDirERKN2fs4pathEb">buildcc::internal::IncludeApi::AddIncludeDir (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal10IncludeApi21AddIncludeDirAbsoluteERKN2fs4pathEb">buildcc::internal::IncludeApi::AddIncludeDirAbsolute (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal10IncludeApi11GlobHeadersERKN2fs4pathE">buildcc::internal::IncludeApi::GlobHeaders (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal10IncludeApi19GlobHeadersAbsoluteERKN2fs4pathE">buildcc::internal::IncludeApi::GlobHeadersAbsolute (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4I0EN7buildcc8internal6LibApiE">buildcc::internal::LibApi (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal6LibApi9AddLibDepERK6Target">buildcc::internal::LibApi::AddLibDep (C++ function)</a>, <a href="user_api/target.html#_CPPv4N7buildcc8internal6LibApi9AddLibDepERKNSt6stringE">[1]</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal6LibApi9AddLibDirERKN2fs4pathE">buildcc::internal::LibApi::AddLibDir (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal6LibApi17AddLibDirAbsoluteERKN2fs4pathE">buildcc::internal::LibApi::AddLibDirAbsolute (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4I0EN7buildcc8internal6PchApiE">buildcc::internal::PchApi (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal6PchApi6AddPchERKN2fs4pathERKN2fs4pathE">buildcc::internal::PchApi::AddPch (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal6PchApi14AddPchAbsoluteERKN2fs4pathE">buildcc::internal::PchApi::AddPchAbsolute (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4I0EN7buildcc8internal9SourceApiE">buildcc::internal::SourceApi (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal9SourceApi9AddSourceERKN2fs4pathERKN2fs4pathE">buildcc::internal::SourceApi::AddSource (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal9SourceApi17AddSourceAbsoluteERKN2fs4pathE">buildcc::internal::SourceApi::AddSourceAbsolute (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal9SourceApi11GlobSourcesERKN2fs4pathE">buildcc::internal::SourceApi::GlobSources (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal9SourceApi19GlobSourcesAbsoluteERKN2fs4pathE">buildcc::internal::SourceApi::GlobSourcesAbsolute (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4I0EN7buildcc8internal7SyncApiE">buildcc::internal::SyncApi (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7SyncApi4CopyERK1TNSt16initializer_listI10SyncOptionEE">buildcc::internal::SyncApi::Copy (C++ function)</a>, <a href="user_api/target.html#_CPPv4N7buildcc8internal7SyncApi4CopyERR1TNSt16initializer_listI10SyncOptionEE">[1]</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7SyncApi6InsertERK1TNSt16initializer_listI10SyncOptionEE">buildcc::internal::SyncApi::Insert (C++ function)</a>, <a href="user_api/target.html#_CPPv4N7buildcc8internal7SyncApi6InsertERR1TNSt16initializer_listI10SyncOptionEE">[1]</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4I0EN7buildcc8internal12TargetGetterE">buildcc::internal::TargetGetter (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter13GetBinaryPathEv">buildcc::internal::TargetGetter::GetBinaryPath (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter17GetCompileCommandERKN2fs4pathE">buildcc::internal::TargetGetter::GetCompileCommand (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter14GetLinkCommandEv">buildcc::internal::TargetGetter::GetLinkCommand (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter7GetNameEv">buildcc::internal::TargetGetter::GetName (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter17GetPchCompilePathEv">buildcc::internal::TargetGetter::GetPchCompilePath (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter16GetPchHeaderPathEv">buildcc::internal::TargetGetter::GetPchHeaderPath (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter13GetTargetPathEv">buildcc::internal::TargetGetter::GetTargetPath (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc8internal12TargetGetter11GetTaskflowEv">buildcc::internal::TargetGetter::GetTaskflow (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter12GetToolchainEv">buildcc::internal::TargetGetter::GetToolchain (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter7GetTypeEv">buildcc::internal::TargetGetter::GetType (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4I0EN7buildcc8internal16TargetInfoGetterE">buildcc::internal::TargetInfoGetter (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter18GetAsmCompileFlagsEv">buildcc::internal::TargetInfoGetter::GetAsmCompileFlags (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter16GetCCompileFlagsEv">buildcc::internal::TargetInfoGetter::GetCCompileFlags (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter21GetCommonCompileFlagsEv">buildcc::internal::TargetInfoGetter::GetCommonCompileFlags (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter22GetCompileDependenciesEv">buildcc::internal::TargetInfoGetter::GetCompileDependencies (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter9GetConfigEv">buildcc::internal::TargetInfoGetter::GetConfig (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter18GetCppCompileFlagsEv">buildcc::internal::TargetInfoGetter::GetCppCompileFlags (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter18GetExternalLibDepsEv">buildcc::internal::TargetInfoGetter::GetExternalLibDeps (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter14GetHeaderFilesEv">buildcc::internal::TargetInfoGetter::GetHeaderFiles (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter14GetIncludeDirsEv">buildcc::internal::TargetInfoGetter::GetIncludeDirs (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter10GetLibDepsEv">buildcc::internal::TargetInfoGetter::GetLibDeps (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter10GetLibDirsEv">buildcc::internal::TargetInfoGetter::GetLibDirs (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter19GetLinkDependenciesEv">buildcc::internal::TargetInfoGetter::GetLinkDependencies (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter12GetLinkFlagsEv">buildcc::internal::TargetInfoGetter::GetLinkFlags (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter18GetPchCompileFlagsEv">buildcc::internal::TargetInfoGetter::GetPchCompileFlags (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter11GetPchFilesEv">buildcc::internal::TargetInfoGetter::GetPchFiles (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter17GetPchObjectFlagsEv">buildcc::internal::TargetInfoGetter::GetPchObjectFlags (C++ function)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter20GetPreprocessorFlagsEv">buildcc::internal::TargetInfoGetter::GetPreprocessorFlags (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter14GetSourceFilesEv">buildcc::internal::TargetInfoGetter::GetSourceFiles (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter8GetStateEv">buildcc::internal::TargetInfoGetter::GetState (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter17GetTargetBuildDirEv">buildcc::internal::TargetInfoGetter::GetTargetBuildDir (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter16GetTargetRootDirEv">buildcc::internal::TargetInfoGetter::GetTargetRootDir (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter7IsBuiltEv">buildcc::internal::TargetInfoGetter::IsBuilt (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter8IsLockedEv">buildcc::internal::TargetInfoGetter::IsLocked (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m30GeneratorExpect_CommandChangedEjP9Generator">buildcc::m::GeneratorExpect_CommandChanged (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m26GeneratorExpect_InputAddedEjP9Generator">buildcc::m::GeneratorExpect_InputAdded (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m28GeneratorExpect_InputRemovedEjP9Generator">buildcc::m::GeneratorExpect_InputRemoved (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m28GeneratorExpect_InputUpdatedEjP9Generator">buildcc::m::GeneratorExpect_InputUpdated (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m29GeneratorExpect_OutputChangedEjP9Generator">buildcc::m::GeneratorExpect_OutputChanged (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m15GeneratorRunnerER9Generator">buildcc::m::GeneratorRunner (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m23TargetExpect_DirChangedEjP6Target">buildcc::m::TargetExpect_DirChanged (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m31TargetExpect_ExternalLibChangedEjP6Target">buildcc::m::TargetExpect_ExternalLibChanged (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m24TargetExpect_FlagChangedEjP6Target">buildcc::m::TargetExpect_FlagChanged (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m22TargetExpect_PathAddedEjP6Target">buildcc::m::TargetExpect_PathAdded (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m24TargetExpect_PathRemovedEjP6Target">buildcc::m::TargetExpect_PathRemoved (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m24TargetExpect_PathUpdatedEjP6Target">buildcc::m::TargetExpect_PathUpdated (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m24TargetExpect_SourceAddedEjP6Target">buildcc::m::TargetExpect_SourceAdded (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m26TargetExpect_SourceRemovedEjP6Target">buildcc::m::TargetExpect_SourceRemoved (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m26TargetExpect_SourceUpdatedEjP6Target">buildcc::m::TargetExpect_SourceUpdated (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m12TargetRunnerER6Target">buildcc::m::TargetRunner (C++ function)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc4OsIdE">buildcc::OsId (C++ enum)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc4OsId5LinuxE">buildcc::OsId::Linux (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc4OsId3MacE">buildcc::OsId::Mac (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc4OsId9UndefinedE">buildcc::OsId::Undefined (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc4OsId4UnixE">buildcc::OsId::Unix (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/environment.html#_CPPv4N7buildcc4OsId3WinE">buildcc::OsId::Win (C++ enumerator)</a>
+</li>
         <li><a href="user_api/supported_plugins.html#_CPPv4N7buildcc6plugin20ClangCompileCommandsE">buildcc::plugin::ClangCompileCommands (C++ class)</a>
 </li>
-        <li><a href="user_api/supported_plugins.html#_CPPv4N7buildcc6plugin20ClangCompileCommands9AddTargetEPKN4base6TargetE">buildcc::plugin::ClangCompileCommands::AddTarget (C++ function)</a>
+        <li><a href="user_api/supported_plugins.html#_CPPv4N7buildcc6plugin20ClangCompileCommands9AddTargetEPK10BaseTarget">buildcc::plugin::ClangCompileCommands::AddTarget (C++ function)</a>
 </li>
-        <li><a href="user_api/supported_plugins.html#_CPPv4N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERK20ClangCompileCommands">buildcc::plugin::ClangCompileCommands::ClangCompileCommands (C++ function)</a>, <a href="user_api/supported_plugins.html#_CPPv4N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERRNSt6vectorIPKN4base6TargetEEE">[1]</a>
+        <li><a href="user_api/supported_plugins.html#_CPPv4N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERK20ClangCompileCommands">buildcc::plugin::ClangCompileCommands::ClangCompileCommands (C++ function)</a>, <a href="user_api/supported_plugins.html#_CPPv4N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERRNSt6vectorIPK10BaseTargetEE">[1]</a>
 </li>
         <li><a href="user_api/supported_plugins.html#_CPPv4N7buildcc6plugin20ClangCompileCommands8GenerateEv">buildcc::plugin::ClangCompileCommands::Generate (C++ function)</a>
 </li>
@@ -361,7 +642,7 @@
 </li>
         <li><a href="user_api/register.html#_CPPv4N7buildcc8Register5CleanERKNSt8functionIFvvEEE">buildcc::Register::Clean (C++ function)</a>
 </li>
-        <li><a href="user_api/register.html#_CPPv4N7buildcc8Register3DepERKN4base16BuilderInterfaceERKN4base16BuilderInterfaceE">buildcc::Register::Dep (C++ function)</a>
+        <li><a href="user_api/register.html#_CPPv4N7buildcc8Register3DepERKN8internal16BuilderInterfaceERKN8internal16BuilderInterfaceE">buildcc::Register::Dep (C++ function)</a>
 </li>
         <li><a href="user_api/register.html#_CPPv4N7buildcc8Register8RegisterERK4Args">buildcc::Register::Register (C++ function)</a>, <a href="user_api/register.html#_CPPv4N7buildcc8Register8RegisterERK8Register">[1]</a>
 </li>
@@ -370,6 +651,130 @@
         <li><a href="user_api/register.html#_CPPv4N7buildcc8Register7RunTestEv">buildcc::Register::RunTest (C++ function)</a>
 </li>
         <li><a href="user_api/register.html#_CPPv4N7buildcc8Register4TestERK17ArgToolchainStateRKNSt6stringERK10BaseTargetRK10TestConfig">buildcc::Register::Test (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc16StaticTarget_gccE">buildcc::StaticTarget_gcc (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc16StaticTarget_gcc16StaticTarget_gccERKNSt6stringERK13BaseToolchainRK9TargetEnvRK12TargetConfig">buildcc::StaticTarget_gcc::StaticTarget_gcc (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc20StaticTarget_genericE">buildcc::StaticTarget_generic (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc20StaticTarget_generic20StaticTarget_genericERKNSt6stringERK13BaseToolchainRK9TargetEnvRKNSt8optionalI12TargetConfigEE">buildcc::StaticTarget_generic::StaticTarget_generic (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc17StaticTarget_msvcE">buildcc::StaticTarget_msvc (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc17StaticTarget_msvc17StaticTarget_msvcERKNSt6stringERK13BaseToolchainRK9TargetEnvRK12TargetConfig">buildcc::StaticTarget_msvc::StaticTarget_msvc (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc6TargetE">buildcc::Target (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc6Target5BuildEv">buildcc::Target::Build (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc6Target12GetTaskStateEv">buildcc::Target::GetTaskState (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc6Target6TargetERK6Target">buildcc::Target::Target (C++ function)</a>, <a href="user_api/target.html#_CPPv4N7buildcc6Target6TargetERKNSt6stringE10TargetTypeRK9ToolchainRK9TargetEnvRK12TargetConfig">[1]</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc6TargetD0Ev">buildcc::Target::~Target (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc13Target_customE">buildcc::Target_custom (C++ type)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc14Target_genericE">buildcc::Target_generic (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc14Target_generic14Target_genericERKNSt6stringE10TargetTypeRK13BaseToolchainRK9TargetEnvRKNSt8optionalI12TargetConfigEE">buildcc::Target_generic::Target_generic (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfigE">buildcc::TargetConfig (C++ struct)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfig15compile_commandE">buildcc::TargetConfig::compile_command (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4NK7buildcc12TargetConfig18ExpectsValidHeaderERKN2fs4pathE">buildcc::TargetConfig::ExpectsValidHeader (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4NK7buildcc12TargetConfig18ExpectsValidSourceERKN2fs4pathE">buildcc::TargetConfig::ExpectsValidSource (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4NK7buildcc12TargetConfig10GetFileExtERKN2fs4pathE">buildcc::TargetConfig::GetFileExt (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4NK7buildcc12TargetConfig13IsValidHeaderERKN2fs4pathE">buildcc::TargetConfig::IsValidHeader (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4NK7buildcc12TargetConfig13IsValidSourceERKN2fs4pathE">buildcc::TargetConfig::IsValidSource (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfig12link_commandE">buildcc::TargetConfig::link_command (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfig7obj_extE">buildcc::TargetConfig::obj_ext (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfig11pch_commandE">buildcc::TargetConfig::pch_command (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfig15pch_compile_extE">buildcc::TargetConfig::pch_compile_ext (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfig14pch_header_extE">buildcc::TargetConfig::pch_header_ext (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfig18prefix_include_dirE">buildcc::TargetConfig::prefix_include_dir (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfig14prefix_lib_dirE">buildcc::TargetConfig::prefix_lib_dir (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfig10target_extE">buildcc::TargetConfig::target_ext (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfig12TargetConfigEv">buildcc::TargetConfig::TargetConfig (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfig13valid_asm_extE">buildcc::TargetConfig::valid_asm_ext (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfig11valid_c_extE">buildcc::TargetConfig::valid_c_ext (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfig13valid_cpp_extE">buildcc::TargetConfig::valid_cpp_ext (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc12TargetConfig16valid_header_extE">buildcc::TargetConfig::valid_header_ext (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc9TargetEnvE">buildcc::TargetEnv (C++ class)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4NK7buildcc9TargetEnv17GetTargetBuildDirEv">buildcc::TargetEnv::GetTargetBuildDir (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4NK7buildcc9TargetEnv16GetTargetRootDirEv">buildcc::TargetEnv::GetTargetRootDir (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc9TargetEnv9TargetEnvEPKc">buildcc::TargetEnv::TargetEnv (C++ function)</a>, <a href="user_api/target_utils.html#_CPPv4N7buildcc9TargetEnv9TargetEnvERKN2fs4pathE">[1]</a>, <a href="user_api/target_utils.html#_CPPv4N7buildcc9TargetEnv9TargetEnvERKN2fs4pathERKN2fs4pathE">[2]</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc13TargetFileExtE">buildcc::TargetFileExt (C++ enum)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc13TargetFileExt3AsmE">buildcc::TargetFileExt::Asm (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc13TargetFileExt1CE">buildcc::TargetFileExt::C (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc13TargetFileExt3CppE">buildcc::TargetFileExt::Cpp (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc13TargetFileExt6HeaderE">buildcc::TargetFileExt::Header (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc13TargetFileExt7InvalidE">buildcc::TargetFileExt::Invalid (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc10TargetInfoE">buildcc::TargetInfo (C++ class)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4N7buildcc10TargetInfo10TargetInfoERK9TargetEnvRK12TargetConfig">buildcc::TargetInfo::TargetInfo (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc11TargetStateE">buildcc::TargetState (C++ struct)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc11TargetState5buildE">buildcc::TargetState::build (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc11TargetState12contains_asmE">buildcc::TargetState::contains_asm (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc11TargetState10contains_cE">buildcc::TargetState::contains_c (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc11TargetState12contains_cppE">buildcc::TargetState::contains_cpp (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4NK7buildcc11TargetState11ContainsPchEv">buildcc::TargetState::ContainsPch (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4NK7buildcc11TargetState11ExpectsLockEv">buildcc::TargetState::ExpectsLock (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4NK7buildcc11TargetState13ExpectsUnlockEv">buildcc::TargetState::ExpectsUnlock (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc11TargetState4lockE">buildcc::TargetState::lock (C++ member)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc11TargetState7SetLockEv">buildcc::TargetState::SetLock (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc11TargetState6SetPchEv">buildcc::TargetState::SetPch (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc11TargetState14SetSourceStateE13TargetFileExt">buildcc::TargetState::SetSourceState (C++ function)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc10TargetTypeE">buildcc::TargetType (C++ enum)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc10TargetType14DynamicLibraryE">buildcc::TargetType::DynamicLibrary (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc10TargetType10ExecutableE">buildcc::TargetType::Executable (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/target_utils.html#_CPPv4N7buildcc10TargetType13StaticLibraryE">buildcc::TargetType::StaticLibrary (C++ enumerator)</a>
 </li>
         <li><a href="user_api/register.html#_CPPv4N7buildcc10TestConfigE">buildcc::TestConfig (C++ struct)</a>
 </li>
@@ -403,6 +808,78 @@
 </li>
         <li><a href="user_api/register.html#_CPPv4N7buildcc10TestOutput4Type12UserRedirectE">buildcc::TestOutput::Type::UserRedirect (C++ enumerator)</a>
 </li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc9ToolchainE">buildcc::Toolchain (C++ class)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4NK7buildcc9Toolchain11GetArchiverEv">buildcc::Toolchain::GetArchiver (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4NK7buildcc9Toolchain14GetAsmCompilerEv">buildcc::Toolchain::GetAsmCompiler (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4NK7buildcc9Toolchain12GetCCompilerEv">buildcc::Toolchain::GetCCompiler (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4NK7buildcc9Toolchain14GetCppCompilerEv">buildcc::Toolchain::GetCppCompiler (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4NK7buildcc9Toolchain5GetIdEv">buildcc::Toolchain::GetId (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4NK7buildcc9Toolchain9GetLinkerEv">buildcc::Toolchain::GetLinker (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4NK7buildcc9Toolchain7GetNameEv">buildcc::Toolchain::GetName (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain2IdE">buildcc::Toolchain::Id (C++ enum)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain2Id5ClangE">buildcc::Toolchain::Id::Clang (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain2Id6CustomE">buildcc::Toolchain::Id::Custom (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain2Id3GccE">buildcc::Toolchain::Id::Gcc (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain2Id5MinGWE">buildcc::Toolchain::Id::MinGW (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain2Id4MsvcE">buildcc::Toolchain::Id::Msvc (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain2Id9UndefinedE">buildcc::Toolchain::Id::Undefined (C++ enumerator)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain9ToolchainE2IdNSt11string_viewENSt11string_viewENSt11string_viewENSt11string_viewENSt11string_viewENSt11string_viewE">buildcc::Toolchain::Toolchain (C++ function)</a>, <a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain9ToolchainERK9Toolchain">[1]</a>, <a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain9ToolchainERR9Toolchain">[2]</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc13Toolchain_gccE">buildcc::Toolchain_gcc (C++ class)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc13Toolchain_gcc13Toolchain_gccERK13Toolchain_gcc">buildcc::Toolchain_gcc::Toolchain_gcc (C++ function)</a>, <a href="user_api/toolchain.html#_CPPv4N7buildcc13Toolchain_gcc13Toolchain_gccEv">[1]</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc15Toolchain_mingwE">buildcc::Toolchain_mingw (C++ class)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc15Toolchain_mingw15Toolchain_mingwERK15Toolchain_mingw">buildcc::Toolchain_mingw::Toolchain_mingw (C++ function)</a>, <a href="user_api/toolchain.html#_CPPv4N7buildcc15Toolchain_mingw15Toolchain_mingwEv">[1]</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc14Toolchain_msvcE">buildcc::Toolchain_msvc (C++ class)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc14Toolchain_msvc14Toolchain_msvcERK14Toolchain_msvc">buildcc::Toolchain_msvc::Toolchain_msvc (C++ function)</a>, <a href="user_api/toolchain.html#_CPPv4N7buildcc14Toolchain_msvc14Toolchain_msvcEv">[1]</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc11ToolchainIdE">buildcc::ToolchainId (C++ type)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4I0EN7buildcc15ToolchainVerifyE">buildcc::ToolchainVerify (C++ class)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc15ToolchainVerify6VerifyERK21VerifyToolchainConfig">buildcc::ToolchainVerify::Verify (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc17VerifiedToolchainE">buildcc::VerifiedToolchain (C++ struct)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc17VerifiedToolchain16compiler_versionE">buildcc::VerifiedToolchain::compiler_version (C++ member)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc17VerifiedToolchain4pathE">buildcc::VerifiedToolchain::path (C++ member)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc17VerifiedToolchain11target_archE">buildcc::VerifiedToolchain::target_arch (C++ member)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4NK7buildcc17VerifiedToolchain8ToStringEv">buildcc::VerifiedToolchain::ToString (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc21VerifyToolchainConfigE">buildcc::VerifyToolchainConfig (C++ struct)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc21VerifyToolchainConfig21absolute_search_pathsE">buildcc::VerifyToolchainConfig::absolute_search_paths (C++ member)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc21VerifyToolchainConfig16compiler_versionE">buildcc::VerifyToolchainConfig::compiler_version (C++ member)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc21VerifyToolchainConfig8env_varsE">buildcc::VerifyToolchainConfig::env_vars (C++ member)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc21VerifyToolchainConfig11target_archE">buildcc::VerifyToolchainConfig::target_arch (C++ member)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc21VerifyToolchainConfig6updateE">buildcc::VerifyToolchainConfig::update (C++ member)</a>
+</li>
     </ul></td>
   </tr></table>
 </section>
@@ -418,7 +895,7 @@
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, Niket Naidu |
+              Copyright &#169; 2021-2022, Niket Naidu |
           Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
           <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
         </div>

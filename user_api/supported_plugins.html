@@ -2,9 +2,9 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Environment" href="environment.html" /><link rel="prev" title="TargetInfo" href="target.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Environment" href="environment.html" /><link rel="prev" title="Target Info APIs" href="target.html" />
 
-    <meta name="generator" content="sphinx-4.3.2, furo 2022.01.02"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.01.02"/>
         <title>Supported Plugins - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
@@ -183,8 +183,11 @@
 <li class="toctree-l2"><a class="reference internal" href="register.html">Register</a></li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target_utils.html">Target Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generator.html">Generator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html">Target Info APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#targetinfo">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target-apis">Target APIs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target.html#target">Target</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target.html#specialized-target">Specialized Target</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Supported Plugins</a></li>
@@ -235,16 +238,16 @@
 <dd><div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERRNSt6vectorIPKN4base6TargetEEE">
-<span id="_CPPv3N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERRNSt6vectorIPKN4base6TargetEEE"></span><span id="_CPPv2N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERRNSt6vectorIPKN4base6TargetEEE"></span><span id="buildcc::plugin::ClangCompileCommands::ClangCompileCommands__std::vector:base::TargetCP:RR"></span><span class="target" id="classbuildcc_1_1plugin_1_1ClangCompileCommands_1a3b6b3e208a50c98a805d0105f46d9a03"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ClangCompileCommands</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Target</span></span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">targets</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERRNSt6vectorIPKN4base6TargetEEE" title="Permalink to this definition">¶</a><br/></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERRNSt6vectorIPK10BaseTargetEE">
+<span id="_CPPv3N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERRNSt6vectorIPK10BaseTargetEE"></span><span id="_CPPv2N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERRNSt6vectorIPK10BaseTargetEE"></span><span id="buildcc::plugin::ClangCompileCommands::ClangCompileCommands__std::vector:BaseTargetCP:RR"></span><span class="target" id="classbuildcc_1_1plugin_1_1ClangCompileCommands_1a995c856edc9f43b53951a4ac9af860be"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ClangCompileCommands</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="target.html#_CPPv4N7buildcc10BaseTargetE" title="buildcc::BaseTarget"><span class="n"><span class="pre">BaseTarget</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">targets</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERRNSt6vectorIPK10BaseTargetEE" title="Permalink to this definition">¶</a><br/></dt>
 <dd></dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERK20ClangCompileCommands">
 <span id="_CPPv3N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERK20ClangCompileCommands"></span><span id="_CPPv2N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERK20ClangCompileCommands"></span><span id="buildcc::plugin::ClangCompileCommands::ClangCompileCommands__ClangCompileCommandsCR"></span><span class="target" id="classbuildcc_1_1plugin_1_1ClangCompileCommands_1a4dde58fa8305a429c0ae115e1da1b235"></span><span class="sig-name descname"><span class="n"><span class="pre">ClangCompileCommands</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERK20ClangCompileCommands" title="buildcc::plugin::ClangCompileCommands::ClangCompileCommands"><span class="n"><span class="pre">ClangCompileCommands</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">compile_commands</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERK20ClangCompileCommands" title="Permalink to this definition">¶</a><br/></dt>
 <dd></dd></dl>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7buildcc6plugin20ClangCompileCommands9AddTargetEPKN4base6TargetE">
-<span id="_CPPv3N7buildcc6plugin20ClangCompileCommands9AddTargetEPKN4base6TargetE"></span><span id="_CPPv2N7buildcc6plugin20ClangCompileCommands9AddTargetEPKN4base6TargetE"></span><span id="buildcc::plugin::ClangCompileCommands::AddTarget__base::TargetCP"></span><span class="target" id="classbuildcc_1_1plugin_1_1ClangCompileCommands_1a48165a707929375449af4b23bfcc5eb4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddTarget</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Target</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc6plugin20ClangCompileCommands9AddTargetEPKN4base6TargetE" title="Permalink to this definition">¶</a><br/></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc6plugin20ClangCompileCommands9AddTargetEPK10BaseTarget">
+<span id="_CPPv3N7buildcc6plugin20ClangCompileCommands9AddTargetEPK10BaseTarget"></span><span id="_CPPv2N7buildcc6plugin20ClangCompileCommands9AddTargetEPK10BaseTarget"></span><span id="buildcc::plugin::ClangCompileCommands::AddTarget__BaseTargetCP"></span><span class="target" id="classbuildcc_1_1plugin_1_1ClangCompileCommands_1a9f2c68bc62ad0218c0facdffbe60bbb3"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddTarget</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="target.html#_CPPv4N7buildcc10BaseTargetE" title="buildcc::BaseTarget"><span class="n"><span class="pre">BaseTarget</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc6plugin20ClangCompileCommands9AddTargetEPK10BaseTarget" title="Permalink to this definition">¶</a><br/></dt>
 <dd><p>Add non-null targets. </p>
 </dd></dl>
 <dl class="cpp function">
@@ -290,14 +293,14 @@
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">TargetInfo</div>
+                <div class="title">Target Info APIs</div>
                 
               </div>
             </a>
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, Niket Naidu |
+              Copyright &#169; 2021-2022, Niket Naidu |
           Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
           <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
             | <a class="muted-link" href="../_sources/user_api/supported_plugins.rst.txt"

@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Args" href="args.html" /><link rel="prev" title="Build Options for “scripts”" href="../getting_started/all_default_build_options.html" />
 
-    <meta name="generator" content="sphinx-4.3.2, furo 2022.01.02"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.01.02"/>
         <title>User API - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
@@ -183,8 +183,11 @@
 <li class="toctree-l2"><a class="reference internal" href="register.html">Register</a></li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target_utils.html">Target Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generator.html">Generator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html">Target Info APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#targetinfo">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target-apis">Target APIs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target.html#target">Target</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target.html#specialized-target">Specialized Target</a></li>
 <li class="toctree-l2"><a class="reference internal" href="supported_plugins.html">Supported Plugins</a></li>
@@ -243,19 +246,46 @@
 <li class="toctree-l1"><a class="reference internal" href="toolchain.html">Toolchain</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-h">toolchain.h</a></li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-verify-h">toolchain_verify.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html#example">Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="toolchain.html#specialized-toolchain">Specialized Toolchain</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-gcc-h">toolchain_gcc.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-mingw-h">toolchain_mingw.h</a></li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-msvc-h">toolchain_msvc.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html#id1">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="target_utils.html">Target Utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="target_utils.html#target-file-ext-h">target_file_ext.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target_utils.html#target-type-h">target_type.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target_utils.html#target-env-h">target_env.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target_utils.html#target-config-h">target_config.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target_utils.html#target-state-h">target_state.h</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="generator.html">Generator</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="generator.html#generator-h">generator.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generator.html#example">Example</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="target.html">TargetInfo</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="target.html">Target Info APIs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="target.html#source-api-h">source_api.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#include-api-h">include_api.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#lib-api-h">lib_api.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#pch-api-h">pch_api.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#flag-api-h">flag_api.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#deps-api-h">deps_api.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#sync-api-h">sync_api.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target-getter-h">target_getter.h</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="target.html#targetinfo">TargetInfo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="target.html#target-info-h">target_info.h</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="target.html#target-apis">Target APIs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target-info-getter-h">target_info_getter.h</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="target.html#target">Target</a><ul>
@@ -267,6 +297,7 @@
 <li class="toctree-l2"><a class="reference internal" href="target.html#target-gcc-h">target_gcc.h</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target.html#target-msvc-h">target_msvc.h</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target.html#target-generic-h">target_generic.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#example">Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="supported_plugins.html">Supported Plugins</a><ul>
@@ -280,6 +311,11 @@
 <li class="toctree-l2"><a class="reference internal" href="environment.html#assert-fatal-h">assert_fatal.h</a></li>
 <li class="toctree-l2"><a class="reference internal" href="environment.html#assert-throw-h">assert_throw.h</a></li>
 <li class="toctree-l2"><a class="reference internal" href="environment.html#command-h">command.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html#host-compiler-h">host_compiler.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html#host-os-h">host_os.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html#host-os-util-h">host_os_util.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html#task-state-h">task_state.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html#util-h">util.h</a></li>
 </ul>
 </li>
 </ul>
@@ -314,7 +350,7 @@
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, Niket Naidu |
+              Copyright &#169; 2021-2022, Niket Naidu |
           Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
           <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
             | <a class="muted-link" href="../_sources/user_api/toc.rst.txt"

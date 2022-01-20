@@ -7,6 +7,7 @@ User API
     args
     register
     toolchain
+    target_utils
     generator
     target
     supported_plugins

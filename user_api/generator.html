@@ -2,9 +2,9 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="TargetInfo" href="target.html" /><link rel="prev" title="Toolchain" href="toolchain.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Target Info APIs" href="target.html" /><link rel="prev" title="Target Utils" href="target_utils.html" />
 
-    <meta name="generator" content="sphinx-4.3.2, furo 2022.01.02"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.01.02"/>
         <title>Generator - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
@@ -183,8 +183,11 @@
 <li class="toctree-l2"><a class="reference internal" href="register.html">Register</a></li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target_utils.html">Target Utils</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Generator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html">Target Info APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#targetinfo">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target-apis">Target APIs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target.html#target">Target</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target.html#specialized-target">Specialized Target</a></li>
 <li class="toctree-l2"><a class="reference internal" href="supported_plugins.html">Supported Plugins</a></li>
@@ -229,6 +232,117 @@
 <h1>Generator<a class="headerlink" href="#generator" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="generator-h">
 <h2>generator.h<a class="headerlink" href="#generator-h" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc9GeneratorE">
+<span id="_CPPv3N7buildcc9GeneratorE"></span><span id="_CPPv2N7buildcc9GeneratorE"></span><span id="buildcc::Generator"></span><span class="target" id="classbuildcc_1_1Generator"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Generator</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">internal</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">BuilderInterface</span></span><a class="headerlink" href="#_CPPv4N7buildcc9GeneratorE" title="Permalink to this definition">¶</a><br/></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc9Generator9GeneratorERKNSt6stringERK9TargetEnvb">
+<span id="_CPPv3N7buildcc9Generator9GeneratorERKNSt6stringERK9TargetEnvb"></span><span id="_CPPv2N7buildcc9Generator9GeneratorERKNSt6stringERK9TargetEnvb"></span><span id="buildcc::Generator::Generator__ssCR.TargetEnvCR.b"></span><span class="target" id="classbuildcc_1_1Generator_1ae46a1cc3e5b6eedd41267bc1b54e27e7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Generator</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc9TargetEnvE" title="buildcc::TargetEnv"><span class="n"><span class="pre">TargetEnv</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">env</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">parallel</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc9Generator9GeneratorERKNSt6stringERK9TargetEnvb" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc9GeneratorD0Ev">
+<span id="_CPPv3N7buildcc9GeneratorD0Ev"></span><span id="_CPPv2N7buildcc9GeneratorD0Ev"></span><span id="buildcc::Generator::~Generator"></span><span class="target" id="classbuildcc_1_1Generator_1a0c6d6e718807101b08de2acee75ec196"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Generator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc9GeneratorD0Ev" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc9Generator9GeneratorERK9Generator">
+<span id="_CPPv3N7buildcc9Generator9GeneratorERK9Generator"></span><span id="_CPPv2N7buildcc9Generator9GeneratorERK9Generator"></span><span id="buildcc::Generator::Generator__GeneratorCR"></span><span class="target" id="classbuildcc_1_1Generator_1ae8829dee8d80d0ce58a1904b0b057303"></span><span class="sig-name descname"><span class="n"><span class="pre">Generator</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7buildcc9Generator9GeneratorERK9Generator" title="buildcc::Generator::Generator"><span class="n"><span class="pre">Generator</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">generator</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N7buildcc9Generator9GeneratorERK9Generator" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc9Generator19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE">
+<span id="_CPPv3N7buildcc9Generator19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE"></span><span id="_CPPv2N7buildcc9Generator19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE"></span><span id="buildcc::Generator::AddDefaultArguments__std::unordered_map:ss.ss:CR"></span><span class="target" id="classbuildcc_1_1Generator_1a5345600c500a7b434bc2eb5332b1cd1b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddDefaultArguments</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">arguments</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc9Generator19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Add default arguments for input, output and command requirements. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>arguments</strong> – Key-Value pair for arguments </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc9Generator8AddInputERKNSt6stringEPKc">
+<span id="_CPPv3N7buildcc9Generator8AddInputERKNSt6stringEPKc"></span><span id="_CPPv2N7buildcc9Generator8AddInputERKNSt6stringEPKc"></span><span id="buildcc::Generator::AddInput__ssCR.cCP"></span><span class="target" id="classbuildcc_1_1Generator_1a86a406cc943261cd8af4193337cdf5f1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddInput</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">absolute_input_pattern</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">identifier</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc9Generator8AddInputERKNSt6stringEPKc" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Add absolute input path pattern to generator NOTE: We can use {gen_root_dir} and {gen_build_dir} in the absolute_input_pattern. </p>
+<p>If <code class="docutils literal notranslate"><span class="pre">identifier</span></code> is supplied it is added to default arguments as a key Example: fmt::format(“{identifier}”) -&gt; “absolute_input_pattern” </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc9Generator9AddOutputERKNSt6stringEPKc">
+<span id="_CPPv3N7buildcc9Generator9AddOutputERKNSt6stringEPKc"></span><span id="_CPPv2N7buildcc9Generator9AddOutputERKNSt6stringEPKc"></span><span id="buildcc::Generator::AddOutput__ssCR.cCP"></span><span class="target" id="classbuildcc_1_1Generator_1a96134c6628e98d5ed87c837443575432"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddOutput</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">absolute_output_pattern</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">identifier</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc9Generator9AddOutputERKNSt6stringEPKc" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Add absolute output path pattern to generator NOTE: We can use {gen_root_dir} and {gen_build_dir} in the absolute_output_pattern. </p>
+<p>If <code class="docutils literal notranslate"><span class="pre">identifier</span></code> is supplied it is added to default arguments as a key Example: fmt::format(“{identifier}”) -&gt; “absolute_output_pattern” </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc9Generator10AddCommandERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE">
+<span id="_CPPv3N7buildcc9Generator10AddCommandERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE"></span><span id="_CPPv2N7buildcc9Generator10AddCommandERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE"></span><span id="buildcc::Generator::AddCommand__ssCR.std::unordered_map:cCP.ss:CR"></span><span class="target" id="classbuildcc_1_1Generator_1a8434630762b805e1370fc308b177c4db"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddCommand</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">command_pattern</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">arguments</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc9Generator10AddCommandERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Add a command_pattern that is fed to <code class="docutils literal notranslate"><span class="pre">Command::Execute</span></code> internally. </p>
+<p>NOTE: The order of all commands are maintained (<code class="docutils literal notranslate"><span class="pre">std::vector::push_back</span></code>)</p>
+<p>If you would like to run the commands in parallel, set <code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">==</span> <span class="pre">true</span></code> in the constructor </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc9Generator5BuildEv">
+<span id="_CPPv3N7buildcc9Generator5BuildEv"></span><span id="_CPPv2N7buildcc9Generator5BuildEv"></span><span id="buildcc::Generator::Build"></span><span class="target" id="classbuildcc_1_1Generator_1ae3f6639be2028a4722a4d91401922491"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Build</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N7buildcc9Generator5BuildEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Build <a class="reference internal" href="#classbuildcc_1_1Generator"><span class="std std-ref">Generator</span></a> Tasks. </p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">GetTaskflow</span></code> for the registered tasks </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc9Generator13GetBinaryPathEv">
+<span id="_CPPv3NK7buildcc9Generator13GetBinaryPathEv"></span><span id="_CPPv2NK7buildcc9Generator13GetBinaryPathEv"></span><span id="buildcc::Generator::GetBinaryPathC"></span><span class="target" id="classbuildcc_1_1Generator_1ad8ac6e7839b3762cb6261118c1955978"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetBinaryPath</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc9Generator13GetBinaryPathEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc9Generator11GetTaskflowEv">
+<span id="_CPPv3N7buildcc9Generator11GetTaskflowEv"></span><span id="_CPPv2N7buildcc9Generator11GetTaskflowEv"></span><span id="buildcc::Generator::GetTaskflow"></span><span class="target" id="classbuildcc_1_1Generator_1ae70fa1a7ab0d16e369ebdb4609d33a0f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">tf</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Taskflow</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetTaskflow</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc9Generator11GetTaskflowEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc9Generator7GetNameEv">
+<span id="_CPPv3NK7buildcc9Generator7GetNameEv"></span><span id="_CPPv2NK7buildcc9Generator7GetNameEv"></span><span id="buildcc::Generator::GetNameC"></span><span class="target" id="classbuildcc_1_1Generator_1a79399dba0adaac9c8e3f155d634a22eb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetName</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc9Generator7GetNameEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc9Generator12GetTaskStateEv">
+<span id="_CPPv3NK7buildcc9Generator12GetTaskStateEv"></span><span id="_CPPv2NK7buildcc9Generator12GetTaskStateEv"></span><span id="buildcc::Generator::GetTaskStateC"></span><span class="target" id="classbuildcc_1_1Generator_1a3bdd995736172b5175f876b7da434055"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env9TaskStateE" title="buildcc::env::TaskState"><span class="n"><span class="pre">TaskState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetTaskState</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc9Generator12GetTaskStateEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc9Generator20GetValueByIdentifierERKNSt6stringE">
+<span id="_CPPv3NK7buildcc9Generator20GetValueByIdentifierERKNSt6stringE"></span><span id="_CPPv2NK7buildcc9Generator20GetValueByIdentifierERKNSt6stringE"></span><span id="buildcc::Generator::GetValueByIdentifier__ssCRC"></span><span class="target" id="classbuildcc_1_1Generator_1a7258fd4a5a6d60c898678097962372cb"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetValueByIdentifier</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">file_identifier</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc9Generator20GetValueByIdentifierERKNSt6stringE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+</div>
+</dd></dl>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc13BaseGeneratorE">
+<span id="_CPPv3N7buildcc13BaseGeneratorE"></span><span id="_CPPv2N7buildcc13BaseGeneratorE"></span><span id="buildcc::BaseGenerator"></span><span class="target" id="namespacebuildcc_1a028f6ef2e5bc18d9d65562157e6e871f"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7buildcc9GeneratorE" title="buildcc::Generator"><span class="n"><span class="pre">Generator</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">BaseGenerator</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc13BaseGeneratorE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// Example Setup</span>
+<span class="linenos"> 2</span><span class="n">TargetEnv</span><span class="w"> </span><span class="nf">gen_env</span><span class="p">(</span><span class="s">"gen_root"</span><span class="p">,</span><span class="w"> </span><span class="s">"gen_build"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="kt">bool</span><span class="w"> </span><span class="n">parallel</span><span class="p">{</span><span class="nb">true</span><span class="p">};</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="n">BaseGenerator</span><span class="w"> </span><span class="nf">generator</span><span class="p">(</span><span class="s">"unique_name"</span><span class="p">,</span><span class="w"> </span><span class="n">gen_env</span><span class="p">,</span><span class="w"> </span><span class="n">parallel</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="c1">// Adds absolute {gen_root_dir} and {gen_build_dir} paths to internal fmt::format</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="c1">// We can now do this</span>
+<span class="linenos"> 8</span><span class="c1">// {gen_root_dir}/my_generator.py -&gt; {my_generator}</span>
+<span class="linenos"> 9</span><span class="n">generator</span><span class="p">.</span><span class="n">AddInput</span><span class="p">(</span><span class="s">"{gen_root_dir}/my_generator.py"</span><span class="p">,</span><span class="w"> </span><span class="s">"my_generator"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="c1">// {gen_build_dir}/my_generator.h -&gt; {generated_header}</span>
+<span class="linenos">12</span><span class="c1">// {gen_build_dir}/my_generator.cpp -&gt; {generated_source}</span>
+<span class="linenos">13</span><span class="n">generator</span><span class="p">.</span><span class="n">AddOutput</span><span class="p">(</span><span class="s">"{gen_build_dir}/generated.h"</span><span class="p">,</span><span class="w"> </span><span class="s">"generated_header"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">14</span><span class="n">generator</span><span class="p">.</span><span class="n">AddOutput</span><span class="p">(</span><span class="s">"{gen_build_dir}/generated.cpp"</span><span class="p">,</span><span class="w"> </span><span class="s">"generated_source"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="c1">// Example Commands</span>
+<span class="linenos">17</span><span class="c1">// NOTE: If `parallel==true`, both of these commands runs in parallel</span>
+<span class="linenos">18</span><span class="c1">// NOTE: If `parallel==false`, commands will run in the order that they are added.</span>
+<span class="linenos">19</span><span class="n">generator</span><span class="p">.</span><span class="n">AddCommand</span><span class="p">(</span><span class="s">"{my_generator} --generate header {generated_header}"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">20</span><span class="n">generator</span><span class="p">.</span><span class="n">AddCommand</span><span class="p">(</span><span class="s">"{my_generator} --generate source {generated_source}"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="c1">// Setup the tasks</span>
+<span class="linenos">23</span><span class="n">generator</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="c1">// Run the generator</span>
+<span class="linenos">26</span><span class="n">tf</span><span class="o">::</span><span class="n">Executor</span><span class="w"> </span><span class="n">executor</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">27</span><span class="n">executor</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">generator</span><span class="p">.</span><span class="n">GetTaskflow</span><span class="p">());</span><span class="w"></span>
+<span class="linenos">28</span><span class="n">executor</span><span class="p">.</span><span class="n">wait_for_all</span><span class="p">();</span><span class="w"></span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -242,25 +356,25 @@
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">TargetInfo</div>
+                <div class="title">Target Info APIs</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="toolchain.html">
+          <a class="prev-page" href="target_utils.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Toolchain</div>
+                <div class="title">Target Utils</div>
                 
               </div>
             </a>
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, Niket Naidu |
+              Copyright &#169; 2021-2022, Niket Naidu |
           Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
           <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
             | <a class="muted-link" href="../_sources/user_api/generator.rst.txt"
@@ -285,6 +399,7 @@
             <ul>
 <li><a class="reference internal" href="#">Generator</a><ul>
 <li><a class="reference internal" href="#generator-h">generator.h</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
 </ul>
 </li>
 </ul>

@@ -22,9 +22,6 @@ mock_env
 * Provided with the ``CommandExpect_Execute`` mocked API
 * The ``command`` and ``working_directory`` params are not used
 
-.. doxygenclass:: buildcc::env::Command
-   :members: Execute
-
 .. doxygenfunction:: CommandExpect_Execute
 
 * All of the logging APIs have been **stubbed** out since they are unnecessary for unit tests and very noisy when getting output
