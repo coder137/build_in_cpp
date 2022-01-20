@@ -55,18 +55,18 @@ public:
 
 private:
   // Inputs
-  friend class SourceApi<TargetInfo>;
-  friend class IncludeApi<TargetInfo>;
-  friend class LibApi<TargetInfo>;
-  friend class PchApi<TargetInfo>;
-  friend class FlagApi<TargetInfo>;
-  friend class DepsApi<TargetInfo>;
+  friend class internal::SourceApi<TargetInfo>;
+  friend class internal::IncludeApi<TargetInfo>;
+  friend class internal::LibApi<TargetInfo>;
+  friend class internal::PchApi<TargetInfo>;
+  friend class internal::FlagApi<TargetInfo>;
+  friend class internal::DepsApi<TargetInfo>;
 
   // Feature
-  friend class SyncApi<TargetInfo>;
+  friend class internal::SyncApi<TargetInfo>;
 
   // Getters
-  friend class TargetInfoGetter<TargetInfo>;
+  friend class internal::TargetInfoGetter<TargetInfo>;
 
 protected:
   TargetEnv env_;
