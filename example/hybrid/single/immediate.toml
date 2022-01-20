@@ -1,0 +1,14 @@
+# Settings
+root_dir = ""
+build_dir = "_build"
+loglevel = "trace"
+clean = false
+
+# BuildExe run mode
+mode = "immediate"
+
+# Target information
+name = "hello_world"
+type = "executable"
+relative_to_root = "src"
+srcs = ["main.cpp"]

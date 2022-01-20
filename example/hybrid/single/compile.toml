@@ -1,0 +1,17 @@
+# Settings
+root_dir = ""
+build_dir = "_build_internal"
+loglevel = "info"
+clean = true
+
+# BuildExe run mode
+mode = "script"
+
+# Target information
+name = "single"
+type = "executable"
+relative_to_root = ""
+srcs = ["build.cpp"]
+
+[script]
+configs = ["build.toml"]
