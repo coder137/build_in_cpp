@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include "buildexe/toolchain_setup.h"
+
 namespace {
 
 constexpr const char *const kTag = "BuildExe";
