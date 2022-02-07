@@ -33,6 +33,7 @@
 #include "target/interface/builder_interface.h"
 
 #include "target/base/generator_loader.h"
+#include "target/serialization/generator_serialization.h"
 
 #include "target/common/path.h"
 #include "target/common/target_env.h"
@@ -45,7 +46,8 @@ public:
             bool parallel = false)
       : name_(name), generator_root_dir_(env.GetTargetRootDir()),
         generator_build_dir_(env.GetTargetBuildDir() / name),
-        loader_(name, generator_build_dir_), parallel_(parallel) {
+        serialization_(generator_build_dir_ / fmt::format("{}.bin", name)),
+        parallel_(parallel) {
     Initialize();
   }
   virtual ~Generator() {}
@@ -101,7 +103,9 @@ public:
   void Build() override;
 
   // Getter
-  const fs::path &GetBinaryPath() const { return loader_.GetBinaryPath(); }
+  const fs::path &GetBinaryPath() const {
+    return serialization_.GetSerializedFile();
+  }
   tf::Taskflow &GetTaskflow() { return tf_; }
 
   const std::string &GetName() const { return name_; }
@@ -117,7 +121,7 @@ private:
   void Convert();
   void BuildGenerate();
 
-  bool Store() override;
+  bool Store() override { return false; }
 
   // Recheck states
   void InputRemoved();
@@ -132,13 +136,12 @@ private:
   std::string name_;
   fs::path generator_root_dir_;
   fs::path generator_build_dir_;
-  internal::GeneratorLoader loader_;
+  internal::GeneratorSerialization serialization_;
+  bool parallel_{false};
 
   // Serialization
-  internal::RelationalPathFiles current_input_files_;
-  fs_unordered_set current_output_files_;
-  std::vector<std::string> current_commands_;
-  bool parallel_{false};
+  fs_unordered_set user_inputs_;
+  internal::GeneratorSchema user_;
 
   // Internal
   std::mutex task_state_mutex_;

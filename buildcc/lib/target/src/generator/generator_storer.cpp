@@ -25,29 +25,4 @@
 
 namespace fbs = schema::internal;
 
-namespace buildcc {
-
-bool Generator::Store() {
-  env::log_trace(name_, __FUNCTION__);
-
-  flatbuffers::FlatBufferBuilder builder;
-
-  auto fbs_input_files =
-      internal::create_fbs_vector_path(builder, current_input_files_.internal);
-  auto fbs_output_files =
-      internal::create_fbs_vector_string(builder, current_output_files_);
-  auto fbs_commands =
-      internal::create_fbs_vector_string(builder, current_commands_);
-
-  auto fbs_generator =
-      fbs::CreateGeneratorDirect(builder, name_.c_str(), &fbs_input_files,
-                                 &fbs_output_files, &fbs_commands);
-  fbs::FinishGeneratorBuffer(builder, fbs_generator);
-
-  const fs::path file_path = GetBinaryPath();
-  return env::save_file(path_as_string(file_path).c_str(),
-                        (const char *)builder.GetBufferPointer(),
-                        builder.GetSize(), true);
-}
-
-} // namespace buildcc
+namespace buildcc {} // namespace buildcc

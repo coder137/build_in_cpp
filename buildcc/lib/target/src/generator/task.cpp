@@ -62,11 +62,11 @@ void Generator::GenerateTask() {
     tf::Task command_task;
     if (dirty_) {
       if (parallel_) {
-        command_task = subflow.for_each(current_commands_.cbegin(),
-                                        current_commands_.cend(), run_command);
+        command_task = subflow.for_each(user_.commands.cbegin(),
+                                        user_.commands.cend(), run_command);
       } else {
         command_task = subflow.emplace([&, run_command]() {
-          for (const auto &command : current_commands_) {
+          for (const auto &command : user_.commands) {
             run_command(command);
           }
         });
@@ -77,14 +77,14 @@ void Generator::GenerateTask() {
     command_task.name(kCommandTaskName);
 
     // Graph Generation
-    for (const auto &i : current_input_files_.user) {
+    for (const auto &i : user_inputs_) {
       std::string name =
           fmt::format("{}", i.lexically_relative(env::get_project_root_dir()));
       tf::Task task = subflow.placeholder().name(name);
       task.precede(command_task);
     }
 
-    for (const auto &o : current_output_files_) {
+    for (const auto &o : user_.outputs) {
       std::string name =
           fmt::format("{}", o.lexically_relative(env::get_project_root_dir()));
       tf::Task task = subflow.placeholder().name(name);
@@ -103,15 +103,15 @@ void Generator::GenerateTask() {
     if (task_state_ == env::TaskState::SUCCESS) {
       if (dirty_) {
         try {
-          env::assert_throw(Store(), fmt::format("Store failed for {}", name_));
+          serialization_.UpdateStore(user_);
+          env::assert_throw(serialization_.StoreToFile(),
+                            fmt::format("Store failed for {}", name_));
         } catch (...) {
           task_state_ = env::TaskState::FAILURE;
         }
       }
-    }
-
-    // Update Env task state when NOT SUCCESS only
-    if (task_state_ != env::TaskState::SUCCESS) {
+    } else {
+      // not SUCCESS state
       env::set_task_state(task_state_);
     }
   });
