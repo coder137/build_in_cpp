@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+#ifndef TARGET_INTERFACE_SERIALIZATION_INTERFACE_H_
+#define TARGET_INTERFACE_SERIALIZATION_INTERFACE_H_
+
 #include <filesystem>
 
 #include "env/assert_fatal.h"
@@ -69,3 +72,5 @@ private:
 };
 
 } // namespace buildcc::internal
+
+#endif

@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+#ifndef TARGET_SERIALIZATION_GENERATOR_SERIALIZATION_H_
+#define TARGET_SERIALIZATION_GENERATOR_SERIALIZATION_H_
+
 #include "target/interface/serialization_interface.h"
 
 #include <string>
@@ -57,3 +60,5 @@ private:
 };
 
 } // namespace buildcc::internal
+
+#endif
