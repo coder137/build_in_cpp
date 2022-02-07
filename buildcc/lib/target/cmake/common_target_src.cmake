@@ -2,6 +2,7 @@ set(COMMON_TARGET_SRCS
     # Interfaces
     include/target/interface/loader_interface.h
     include/target/interface/builder_interface.h
+    include/target/interface/serialization_interface.h
 
     # Common
     src/common/target_config.cpp
@@ -40,9 +41,8 @@ set(COMMON_TARGET_SRCS
     include/target/api/target_getter.h
 
     # Base Generator
-    src/generator/generator_loader.cpp
-    src/generator/generator_storer.cpp
-    include/target/base/generator_loader.h
+    src/generator/generator_serialization.cpp
+    include/target/serialization/generator_serialization.h
 
     # Generator
     src/generator/generator.cpp
