@@ -39,7 +39,7 @@ public:
   GeneratorSerialization(const fs::path &serialized_file)
       : SerializationInterface(serialized_file) {}
 
-  void UpdateStore(const GeneratorSchema &store);
+  void UpdateStore(const GeneratorSchema &store) { store_ = store; }
 
   const path_unordered_set &GetLoadInputs() const {
     return load_.internal_inputs;

@@ -33,7 +33,7 @@ void Generator::AddInput(const std::string &absolute_input_pattern,
       command_.Construct(absolute_input_pattern);
   const auto absolute_input_path =
       internal::Path::CreateNewPath(absolute_input_string);
-  user_inputs_.insert(absolute_input_path.GetPathname());
+  user_.inputs.insert(absolute_input_path.GetPathname());
 
   if (identifier != nullptr) {
     command_.AddDefaultArgument(identifier,
@@ -64,7 +64,6 @@ void Generator::AddCommand(
 }
 
 void Generator::Build() {
-  // (void)loader_.Load();
   (void)serialization_.LoadFromFile();
 
   GenerateTask();
@@ -97,23 +96,13 @@ void Generator::Initialize() {
 
 void Generator::Convert() {
   user_.internal_inputs = internal::path_schema_convert(
-      user_inputs_, internal::Path::CreateExistingPath);
+      user_.inputs, internal::Path::CreateExistingPath);
 }
 
 void Generator::BuildGenerate() {
-  // if (!loader_.IsLoaded()) {
   if (!serialization_.IsLoaded()) {
     dirty_ = true;
   } else {
-    // RecheckPaths(
-    //     loader_.GetLoadedInputFiles(), current_input_files_.internal,
-    //     [&]() { InputRemoved(); }, [&]() { InputAdded(); },
-    //     [&]() { InputUpdated(); });
-    // RecheckChanged(loader_.GetLoadedOutputFiles(), current_output_files_,
-    //                [&]() { OutputChanged(); });
-    // RecheckChanged(loader_.GetLoadedCommands(), current_commands_,
-    //                [&]() { CommandChanged(); });
-
     RecheckPaths(
         serialization_.GetLoadInputs(), user_.internal_inputs,
         [&]() { InputRemoved(); }, [&]() { InputAdded(); },

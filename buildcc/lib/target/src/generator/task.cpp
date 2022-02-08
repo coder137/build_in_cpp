@@ -77,7 +77,7 @@ void Generator::GenerateTask() {
     command_task.name(kCommandTaskName);
 
     // Graph Generation
-    for (const auto &i : user_inputs_) {
+    for (const auto &i : user_.inputs) {
       std::string name =
           fmt::format("{}", i.lexically_relative(env::get_project_root_dir()));
       tf::Task task = subflow.placeholder().name(name);

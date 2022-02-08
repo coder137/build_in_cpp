@@ -27,12 +27,6 @@
 
 namespace buildcc::internal {
 
-// PUBLIC
-
-void GeneratorSerialization::UpdateStore(const GeneratorSchema &store) {
-  store_ = store;
-}
-
 // PRIVATE
 
 bool GeneratorSerialization::Verify(const std::string &serialized_data) {

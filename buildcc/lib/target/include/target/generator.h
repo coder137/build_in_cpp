@@ -40,6 +40,10 @@
 
 namespace buildcc {
 
+struct UserGeneratorSchema : public internal::GeneratorSchema {
+  fs_unordered_set inputs;
+};
+
 class Generator : public internal::BuilderInterface {
 public:
   Generator(const std::string &name, const TargetEnv &env,
@@ -121,6 +125,7 @@ private:
   void Convert();
   void BuildGenerate();
 
+  // TODO, Remove this later
   bool Store() override { return false; }
 
   // Recheck states
@@ -140,8 +145,7 @@ private:
   bool parallel_{false};
 
   // Serialization
-  fs_unordered_set user_inputs_;
-  internal::GeneratorSchema user_;
+  UserGeneratorSchema user_;
 
   // Internal
   std::mutex task_state_mutex_;
