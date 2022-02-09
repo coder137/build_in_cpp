@@ -104,12 +104,12 @@ void Generator::BuildGenerate() {
     dirty_ = true;
   } else {
     RecheckPaths(
-        serialization_.GetLoadInputs(), user_.internal_inputs,
+        serialization_.GetLoad().internal_inputs, user_.internal_inputs,
         [&]() { InputRemoved(); }, [&]() { InputAdded(); },
         [&]() { InputUpdated(); });
-    RecheckChanged(serialization_.GetLoadOutputs(), user_.outputs,
+    RecheckChanged(serialization_.GetLoad().outputs, user_.outputs,
                    [&]() { OutputChanged(); });
-    RecheckChanged(serialization_.GetLoadCommands(), user_.commands,
+    RecheckChanged(serialization_.GetLoad().commands, user_.commands,
                    [&]() { CommandChanged(); });
   }
 }

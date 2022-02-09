@@ -40,14 +40,8 @@ public:
       : SerializationInterface(serialized_file) {}
 
   void UpdateStore(const GeneratorSchema &store) { store_ = store; }
-
-  const path_unordered_set &GetLoadInputs() const {
-    return load_.internal_inputs;
-  }
-  const fs_unordered_set &GetLoadOutputs() const { return load_.outputs; }
-  const std::vector<std::string> &GetLoadCommands() const {
-    return load_.commands;
-  }
+  const GeneratorSchema &GetLoad() const { return load_; }
+  const GeneratorSchema &GetStore() const { return store_; }
 
 private:
   bool Verify(const std::string &serialized_data) override;
