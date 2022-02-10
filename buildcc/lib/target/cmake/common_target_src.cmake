@@ -1,6 +1,5 @@
 set(COMMON_TARGET_SRCS 
     # Interfaces
-    include/target/interface/loader_interface.h
     include/target/interface/builder_interface.h
     include/target/interface/serialization_interface.h
 
