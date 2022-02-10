@@ -19,7 +19,6 @@
 
 #include <string>
 
-#include "target/base/target_storer.h"
 #include "target/common/target_config.h"
 #include "target/common/target_env.h"
 #include "target/common/target_state.h"

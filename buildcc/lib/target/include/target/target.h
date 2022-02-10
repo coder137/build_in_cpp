@@ -43,10 +43,7 @@
 #include "target/friend/link_target.h"
 
 // Internal
-#include "target/base/target_loader.h"
-#include "target/base/target_storer.h"
 #include "target/common/path.h"
-
 #include "target/serialization/target_serialization.h"
 
 // Env
@@ -146,7 +143,6 @@ private:
   std::string name_;
   TargetType type_;
   const Toolchain &toolchain_;
-  // internal::TargetLoader loader_;
   internal::TargetSerialization serialization_;
 
   // Friend classes
@@ -160,9 +156,6 @@ private:
 
   std::mutex task_state_mutex_;
   env::TaskState task_state_{env::TaskState::SUCCESS};
-
-  std::mutex compiled_source_files_mutex_;
-  // internal::path_unordered_set compiled_source_files_;
 
   //
   env::Command command_;

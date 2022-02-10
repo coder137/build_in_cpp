@@ -32,7 +32,6 @@
 
 #include "target/interface/builder_interface.h"
 
-#include "target/base/generator_loader.h"
 #include "target/serialization/generator_serialization.h"
 
 #include "target/common/path.h"
