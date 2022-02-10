@@ -114,11 +114,12 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     include_compile.Build();
     buildcc::m::TargetRunner(include_compile);
 
-    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
-    bool is_loaded = loader.Load();
+    buildcc::internal::TargetSerialization serialization(
+        intermediate_path / (std::string(NAME) + ".bin"));
+    bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
-    const auto &loaded_sources = loader.GetLoadedSources();
-    const auto &loaded_dirs = loader.GetLoadedIncludeDirs();
+    const auto &loaded_sources = serialization.GetLoad().internal_sources;
+    const auto &loaded_dirs = serialization.GetLoad().include_dirs;
 
     CHECK_EQUAL(loaded_sources.size(), 2);
     CHECK_EQUAL(loaded_dirs.size(), 1);
@@ -146,11 +147,12 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     include_compile.Build();
     buildcc::m::TargetRunner(include_compile);
 
-    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
-    bool is_loaded = loader.Load();
+    buildcc::internal::TargetSerialization serialization(
+        intermediate_path / (std::string(NAME) + ".bin"));
+    bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
-    const auto &loaded_sources = loader.GetLoadedSources();
-    const auto &loaded_dirs = loader.GetLoadedIncludeDirs();
+    const auto &loaded_sources = serialization.GetLoad().internal_sources;
+    const auto &loaded_dirs = serialization.GetLoad().include_dirs;
 
     CHECK_EQUAL(loaded_sources.size(), 2);
     CHECK_EQUAL(loaded_dirs.size(), 2);
@@ -175,11 +177,12 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     include_compile.Build();
     buildcc::m::TargetRunner(include_compile);
 
-    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
-    bool is_loaded = loader.Load();
+    buildcc::internal::TargetSerialization serialization(
+        intermediate_path / (std::string(NAME) + ".bin"));
+    bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
-    const auto &loaded_sources = loader.GetLoadedSources();
-    const auto &loaded_dirs = loader.GetLoadedIncludeDirs();
+    const auto &loaded_sources = serialization.GetLoad().internal_sources;
+    const auto &loaded_dirs = serialization.GetLoad().include_dirs;
 
     CHECK_EQUAL(loaded_sources.size(), 2);
     CHECK_EQUAL(loaded_dirs.size(), 1);
@@ -228,12 +231,13 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     add_header.Build();
     buildcc::m::TargetRunner(add_header);
 
-    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
-    bool is_loaded = loader.Load();
+    buildcc::internal::TargetSerialization serialization(
+        intermediate_path / (std::string(NAME) + ".bin"));
+    bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
-    CHECK_EQUAL(loader.GetLoadedSources().size(), 2);
-    CHECK_EQUAL(loader.GetLoadedIncludeDirs().size(), 1);
-    CHECK_EQUAL(loader.GetLoadedHeaders().size(), 0);
+    CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
+    CHECK_EQUAL(serialization.GetLoad().include_dirs.size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().internal_headers.size(), 0);
   }
 
   // Add header
@@ -251,12 +255,13 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     add_header.Build();
     buildcc::m::TargetRunner(add_header);
 
-    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
-    bool is_loaded = loader.Load();
+    buildcc::internal::TargetSerialization serialization(
+        intermediate_path / (std::string(NAME) + ".bin"));
+    bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
-    CHECK_EQUAL(loader.GetLoadedSources().size(), 2);
-    CHECK_EQUAL(loader.GetLoadedIncludeDirs().size(), 1);
-    CHECK_EQUAL(loader.GetLoadedHeaders().size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
+    CHECK_EQUAL(serialization.GetLoad().include_dirs.size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().internal_headers.size(), 1);
   }
 
   // Update header
@@ -280,12 +285,13 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     add_header.Build();
     buildcc::m::TargetRunner(add_header);
 
-    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
-    bool is_loaded = loader.Load();
+    buildcc::internal::TargetSerialization serialization(
+        intermediate_path / (std::string(NAME) + ".bin"));
+    bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
-    CHECK_EQUAL(loader.GetLoadedSources().size(), 2);
-    CHECK_EQUAL(loader.GetLoadedIncludeDirs().size(), 1);
-    CHECK_EQUAL(loader.GetLoadedHeaders().size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
+    CHECK_EQUAL(serialization.GetLoad().include_dirs.size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().internal_headers.size(), 1);
   }
 
   // Remove header
@@ -302,12 +308,13 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     add_header.Build();
     buildcc::m::TargetRunner(add_header);
 
-    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
-    bool is_loaded = loader.Load();
+    buildcc::internal::TargetSerialization serialization(
+        intermediate_path / (std::string(NAME) + ".bin"));
+    bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
-    CHECK_EQUAL(loader.GetLoadedSources().size(), 2);
-    CHECK_EQUAL(loader.GetLoadedIncludeDirs().size(), 1);
-    CHECK_EQUAL(loader.GetLoadedHeaders().size(), 0);
+    CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
+    CHECK_EQUAL(serialization.GetLoad().include_dirs.size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().internal_headers.size(), 0);
   }
 
   mock().checkExpectations();

@@ -107,11 +107,12 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
 
   mock().checkExpectations();
 
-  buildcc::internal::TargetLoader loader(NAME, intermediate_path);
-  bool is_loaded = loader.Load();
+  buildcc::internal::TargetSerialization serialization(
+      intermediate_path / (std::string(NAME) + ".bin"));
+  bool is_loaded = serialization.LoadFromFile();
   CHECK_TRUE(is_loaded);
 
-  const auto &loaded_sources = loader.GetLoadedSources();
+  const auto &loaded_sources = serialization.GetLoad().internal_sources;
   CHECK_EQUAL(loaded_sources.size(), 1);
   auto dummy_file = buildcc::internal::Path::CreateExistingPath(
       (source_path / DUMMY_MAIN).make_preferred().string());
@@ -150,11 +151,12 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     simple.Build();
     buildcc::m::TargetRunner(simple);
 
-    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
-    bool is_loaded = loader.Load();
+    buildcc::internal::TargetSerialization serialization(
+        intermediate_path / (std::string(NAME) + ".bin"));
+    bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
 
-    const auto &loaded_sources = loader.GetLoadedSources();
+    const auto &loaded_sources = serialization.GetLoad().internal_sources;
     CHECK_EQUAL(loaded_sources.size(), 2);
 
     CHECK_FALSE(loaded_sources.find(dummy_c_file) == loaded_sources.end());
@@ -181,11 +183,12 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     simple.Build();
     buildcc::m::TargetRunner(simple);
 
-    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
-    bool is_loaded = loader.Load();
+    buildcc::internal::TargetSerialization serialization(
+        intermediate_path / (std::string(NAME) + ".bin"));
+    bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
 
-    const auto &loaded_sources = loader.GetLoadedSources();
+    const auto &loaded_sources = serialization.GetLoad().internal_sources;
     CHECK_EQUAL(loaded_sources.size(), 2);
     CHECK_FALSE(loaded_sources.find(dummy_cpp_file) == loaded_sources.end());
     CHECK_FALSE(loaded_sources.find(new_source_file) == loaded_sources.end());
@@ -211,11 +214,12 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     simple.Build();
     buildcc::m::TargetRunner(simple);
 
-    buildcc::internal::TargetLoader loader(NAME, intermediate_path);
-    bool is_loaded = loader.Load();
+    buildcc::internal::TargetSerialization serialization(
+        intermediate_path / (std::string(NAME) + ".bin"));
+    bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
 
-    const auto &loaded_sources = loader.GetLoadedSources();
+    const auto &loaded_sources = serialization.GetLoad().internal_sources;
     CHECK_EQUAL(loaded_sources.size(), 2);
     CHECK_FALSE(loaded_sources.find(dummy_cpp_file) == loaded_sources.end());
     CHECK_FALSE(loaded_sources.find(new_source_file) == loaded_sources.end());

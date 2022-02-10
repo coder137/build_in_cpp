@@ -7,7 +7,7 @@
 
 #include "target/target.h"
 
-#include "target/base/target_loader.h"
+#include "target/serialization/target_serialization.h"
 
 #include <iostream>
 #include <unistd.h>
@@ -53,12 +53,12 @@ TEST(TargetTestExternalLib, TestAddLibDir) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(EXENAME, exe.GetTargetBuildDir());
-  bool loaded = loader.Load();
+  buildcc::internal::TargetSerialization serialization(
+      exe.GetTargetBuildDir() / (std::string(EXENAME) + ".bin"));
+  bool loaded = serialization.LoadFromFile();
   CHECK_TRUE(loaded);
-
-  CHECK_EQUAL(loader.GetLoadedLibDirs().size(), 1);
-  CHECK_EQUAL(loader.GetLoadedExternalLibDeps().size(), 0);
+  CHECK_EQUAL(serialization.GetLoad().lib_dirs.size(), 1);
+  CHECK_EQUAL(serialization.GetLoad().external_libs.size(), 0);
 }
 
 TEST(TargetTestExternalLib, TestAddExternalLibDep_Simple) {
@@ -81,12 +81,13 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_Simple) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(EXENAME, exe.GetTargetBuildDir());
-  bool loaded = loader.Load();
+  buildcc::internal::TargetSerialization serialization(
+      exe.GetTargetBuildDir() / (std::string(EXENAME) + ".bin"));
+  bool loaded = serialization.LoadFromFile();
   CHECK_TRUE(loaded);
 
-  CHECK_EQUAL(loader.GetLoadedLibDirs().size(), 1);
-  CHECK_EQUAL(loader.GetLoadedExternalLibDeps().size(), 1);
+  CHECK_EQUAL(serialization.GetLoad().lib_dirs.size(), 1);
+  CHECK_EQUAL(serialization.GetLoad().external_libs.size(), 1);
 }
 
 TEST(TargetTestExternalLib, TestAddExternalLibDep_RebuildChanged) {
