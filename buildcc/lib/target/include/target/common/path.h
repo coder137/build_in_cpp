@@ -18,6 +18,7 @@
 #define TARGET_COMMON_PATH_H_
 
 #include <filesystem>
+#include <functional>
 #include <string>
 
 // The Path class defined below is meant to be used with Sets
