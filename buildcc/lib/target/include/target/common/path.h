@@ -174,47 +174,6 @@ path_schema_convert(const path_unordered_set &internal_path_set) {
   return path_set;
 }
 
-// * Relation between
-// - internal timestamp verified files (Path + Timestamp)
-// - user facing file paths (Only Path)
-// ? Why has this been done?
-// We cannot guarantee that filepaths would be present
-// when the user is defining the build
-// The input to a Generator / Target might also be generated!
-// We must only verify the File timestamp AFTER dependent Generator(s) /
-// Target(s) have been built
-// ? Why not do everything inside path_unordered_set?
-// Users might want to query just the `fs_unordered_set` instead of the
-// entire internal::path_unordered_set (The timestamp is internal
-// information that the user does not need) In this case we opt for runtime
-// (speed) optimization instead of memory optimization by caching the `user`
-// information and `internal` information together
-struct RelationalPathFiles {
-  RelationalPathFiles() {}
-  RelationalPathFiles(const path_unordered_set &i, const fs_unordered_set &u)
-      : internal(i), user(u) {}
-
-  /**
-   * @brief Convert from fs_unordered_set to path_unordered_set
-   * Can assert throw if file does not exist when calling `CreateExistingPath`
-   */
-  void Convert() {
-    if (done_once) {
-      return;
-    }
-
-    done_once = true;
-    internal = path_schema_convert(user, Path::CreateExistingPath);
-  }
-
-public:
-  path_unordered_set internal;
-  fs_unordered_set user;
-
-private:
-  bool done_once{false};
-};
-
 } // namespace buildcc::internal
 
 namespace buildcc {
