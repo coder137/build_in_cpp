@@ -57,10 +57,8 @@ set(COMMON_TARGET_SRCS
     include/target/friend/link_target.h
 
     # Base Target
-    src/target/target_loader.cpp
-    src/target/target_storer.cpp
-    include/target/base/target_loader.h
-    include/target/base/target_storer.h
+    src/target/target_serialization.cpp
+    include/target/serialization/target_serialization.h
 
     # Target
     src/target/target.cpp

@@ -58,13 +58,13 @@ void Target::Build() {
   state_.SetLock();
 
   // PCH state
-  if (!storer_.current_pch_files.user.empty()) {
+  if (!user_.pchs.empty()) {
     state_.SetPch();
   }
 
   // Source - Object relation
   // Source state
-  for (const auto &abs_source : storer_.current_source_files.user) {
+  for (const auto &abs_source : user_.sources) {
     // Set state
     state_.SetSourceState(config_.GetFileExt(abs_source));
 
@@ -94,7 +94,7 @@ void Target::Build() {
   });
 
   // Load the serialized file
-  (void)loader_.Load();
+  (void)serialization_.LoadFromFile();
 
   // Target State Tasks
   StartTask();

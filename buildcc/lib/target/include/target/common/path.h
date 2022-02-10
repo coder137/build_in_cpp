@@ -142,9 +142,21 @@ public:
 typedef std::unordered_set<Path, PathHash> path_unordered_set;
 typedef std::unordered_set<fs::path, PathHash> fs_unordered_set;
 
+inline std::vector<Path>
+path_schema_convert(const std::vector<fs::path> &path_list,
+                    const std::function<Path(const fs::path &)> &cb =
+                        Path::CreateExistingPath) {
+  std::vector<Path> internal_path_list;
+  for (const auto &p : path_list) {
+    internal_path_list.push_back(cb(p));
+  }
+  return internal_path_list;
+}
+
 inline path_unordered_set
 path_schema_convert(const fs_unordered_set &path_set,
-                    const std::function<Path(const fs::path &)> &cb) {
+                    const std::function<Path(const fs::path &)> &cb =
+                        Path::CreateExistingPath) {
   path_unordered_set internal_path_set;
   for (const auto &p : path_set) {
     internal_path_set.insert(cb(p));

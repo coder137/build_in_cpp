@@ -29,13 +29,24 @@
 #include "target/api/include_api.h"
 #include "target/api/lib_api.h"
 #include "target/api/pch_api.h"
-#include "target/api/sync_api.h"
-
 #include "target/api/source_api.h"
-
+#include "target/api/sync_api.h"
 #include "target/api/target_info_getter.h"
 
+#include "target/serialization/target_serialization.h"
+
 namespace buildcc {
+
+struct UserTargetSchema : public internal::TargetSchema {
+  fs_unordered_set sources;
+  fs_unordered_set headers;
+  fs_unordered_set pchs;
+
+  std::vector<fs::path> libs;
+
+  fs_unordered_set compile_dependencies;
+  fs_unordered_set link_dependencies;
+};
 
 // NOTE: BaseTarget info is meant to hold information that is common to
 // multiple targets
@@ -72,7 +83,8 @@ protected:
   TargetEnv env_;
   TargetConfig config_;
 
-  internal::TargetStorer storer_;
+  UserTargetSchema user_;
+
   TargetState state_;
 };
 

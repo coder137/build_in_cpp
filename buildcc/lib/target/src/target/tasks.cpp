@@ -80,6 +80,7 @@ void CompilePch::Task() {
   task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
     try {
       BuildCompile();
+      target_.serialization_.UpdatePchCompiled(target_.user_);
     } catch (...) {
       target_.SetTaskStateFailure();
     }
@@ -111,9 +112,9 @@ void CompileObject::Task() {
 
     try {
       BuildObjectCompile(selected_source_files, selected_dummy_source_files);
-      target_.compiled_source_files_.clear();
-      target_.compiled_source_files_.insert(selected_dummy_source_files.begin(),
-                                            selected_dummy_source_files.end());
+      for (const auto &piter : selected_dummy_source_files) {
+        target_.serialization_.AddSource(piter);
+      }
 
       for (const auto &s : selected_source_files) {
         std::string name = fmt::format("{}", s.GetPathname().lexically_relative(
@@ -124,17 +125,9 @@ void CompileObject::Task() {
                 bool success = env::Command::Execute(
                     GetObjectData(s.GetPathname()).command);
                 env::assert_throw(success, "Could not compile source");
-
-                // NOTE, If conmpilation is successful we update the source
-                // files
-                std::lock_guard<std::mutex> guard(
-                    target_.compiled_source_files_mutex_);
-                target_.compiled_source_files_.insert(s);
+                target_.serialization_.AddSource(s);
               } catch (...) {
                 target_.SetTaskStateFailure();
-
-                // NOTE, If compilation fails, we do not need to update the
-                // source files
               }
             })
             .name(name);
@@ -177,8 +170,8 @@ void Target::EndTask() {
   target_end_task_ = tf_.emplace([&]() {
     if (dirty_) {
       try {
-        storer_.current_source_files.internal = compiled_source_files_;
-        env::assert_throw(Store(),
+        serialization_.UpdateStore(user_);
+        env::assert_throw(serialization_.StoreToFile(),
                           fmt::format("Store failed for {}", GetName()));
         state_.build = true;
       } catch (...) {

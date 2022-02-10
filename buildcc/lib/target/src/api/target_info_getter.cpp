@@ -67,28 +67,28 @@ template <typename T>
 const fs_unordered_set &TargetInfoGetter<T>::GetSourceFiles() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_source_files.user;
+  return t.user_.sources;
 }
 
 template <typename T>
 const fs_unordered_set &TargetInfoGetter<T>::GetHeaderFiles() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_header_files.user;
+  return t.user_.headers;
 }
 
 template <typename T>
 const fs_unordered_set &TargetInfoGetter<T>::GetPchFiles() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_pch_files.user;
+  return t.user_.pchs;
 }
 
 template <typename T>
 const std::vector<fs::path> &TargetInfoGetter<T>::GetLibDeps() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_user_lib_deps;
+  return t.user_.libs;
 }
 
 template <typename T>
@@ -96,21 +96,21 @@ const std::vector<std::string> &
 TargetInfoGetter<T>::GetExternalLibDeps() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_user_external_lib_deps;
+  return t.user_.external_libs;
 }
 
 template <typename T>
 const fs_unordered_set &TargetInfoGetter<T>::GetIncludeDirs() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_include_dirs;
+  return t.user_.include_dirs;
 }
 
 template <typename T>
 const fs_unordered_set &TargetInfoGetter<T>::GetLibDirs() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_lib_dirs;
+  return t.user_.lib_dirs;
 }
 
 template <typename T>
@@ -118,7 +118,7 @@ const std::unordered_set<std::string> &
 TargetInfoGetter<T>::GetPreprocessorFlags() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_preprocessor_flags;
+  return t.user_.preprocessor_flags;
 }
 
 template <typename T>
@@ -126,7 +126,7 @@ const std::unordered_set<std::string> &
 TargetInfoGetter<T>::GetCommonCompileFlags() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_common_compile_flags;
+  return t.user_.common_compile_flags;
 }
 
 template <typename T>
@@ -134,7 +134,7 @@ const std::unordered_set<std::string> &
 TargetInfoGetter<T>::GetPchCompileFlags() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_pch_compile_flags;
+  return t.user_.pch_compile_flags;
 }
 
 template <typename T>
@@ -142,7 +142,7 @@ const std::unordered_set<std::string> &
 TargetInfoGetter<T>::GetPchObjectFlags() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_pch_object_flags;
+  return t.user_.pch_object_flags;
 }
 
 template <typename T>
@@ -150,7 +150,7 @@ const std::unordered_set<std::string> &
 TargetInfoGetter<T>::GetAsmCompileFlags() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_asm_compile_flags;
+  return t.user_.asm_compile_flags;
 }
 
 template <typename T>
@@ -158,7 +158,7 @@ const std::unordered_set<std::string> &
 TargetInfoGetter<T>::GetCCompileFlags() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_c_compile_flags;
+  return t.user_.c_compile_flags;
 }
 
 template <typename T>
@@ -166,7 +166,7 @@ const std::unordered_set<std::string> &
 TargetInfoGetter<T>::GetCppCompileFlags() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_cpp_compile_flags;
+  return t.user_.cpp_compile_flags;
 }
 
 template <typename T>
@@ -174,21 +174,21 @@ const std::unordered_set<std::string> &
 TargetInfoGetter<T>::GetLinkFlags() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_link_flags;
+  return t.user_.link_flags;
 }
 
 template <typename T>
 const fs_unordered_set &TargetInfoGetter<T>::GetCompileDependencies() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_compile_dependencies.user;
+  return t.user_.compile_dependencies;
 }
 
 template <typename T>
 const fs_unordered_set &TargetInfoGetter<T>::GetLinkDependencies() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.storer_.current_link_dependencies.user;
+  return t.user_.link_dependencies;
 }
 
 template class TargetInfoGetter<TargetInfo>;

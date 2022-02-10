@@ -22,6 +22,14 @@
 namespace buildcc::internal {
 
 template <typename T>
+void LibApi<T>::AddLibDirAbsolute(const fs::path &absolute_lib_dir) {
+  T &t = static_cast<T &>(*this);
+
+  t.state_.ExpectsUnlock();
+  t.user_.lib_dirs.insert(absolute_lib_dir);
+}
+
+template <typename T>
 void LibApi<T>::AddLibDir(const fs::path &relative_lib_dir) {
   T &t = static_cast<T &>(*this);
 
@@ -29,26 +37,18 @@ void LibApi<T>::AddLibDir(const fs::path &relative_lib_dir) {
   AddLibDirAbsolute(final_lib_dir);
 }
 
-template <typename T>
-void LibApi<T>::AddLibDirAbsolute(const fs::path &absolute_lib_dir) {
-  T &t = static_cast<T &>(*this);
-
-  t.state_.ExpectsUnlock();
-  t.storer_.current_lib_dirs.insert(absolute_lib_dir);
-}
-
 template <typename T> void LibApi<T>::AddLibDep(const BaseTarget &lib_dep) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.storer_.current_user_lib_deps.push_back(lib_dep.GetTargetPath());
+  t.user_.libs.push_back(lib_dep.GetTargetPath());
 }
 
 template <typename T> void LibApi<T>::AddLibDep(const std::string &lib_dep) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.storer_.current_user_external_lib_deps.push_back(lib_dep);
+  t.user_.external_libs.push_back(lib_dep);
 }
 
 template class LibApi<TargetInfo>;

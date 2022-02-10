@@ -47,6 +47,8 @@
 #include "target/base/target_storer.h"
 #include "target/common/path.h"
 
+#include "target/serialization/target_serialization.h"
+
 // Env
 #include "env/env.h"
 #include "env/task_state.h"
@@ -75,8 +77,9 @@ public:
                       env.GetTargetBuildDir() / toolchain.GetName() / name),
             config),
         name_(name), type_(type), toolchain_(toolchain),
-        loader_(name, env_.GetTargetBuildDir()), compile_pch_(*this),
-        compile_object_(*this), link_target_(*this) {
+        // loader_(name, env_.GetTargetBuildDir()),
+        serialization_(env_.GetTargetBuildDir() / fmt::format("{}.bin", name)),
+        compile_pch_(*this), compile_object_(*this), link_target_(*this) {
     Initialize();
   }
   virtual ~Target() {}
@@ -109,12 +112,12 @@ private:
                    const fs_unordered_set &current_dirs);
   void RecheckFlags(const std::unordered_set<std::string> &previous_flags,
                     const std::unordered_set<std::string> &current_flags);
-  void RecheckExternalLib(
-      const std::unordered_set<std::string> &previous_external_libs,
-      const std::unordered_set<std::string> &current_external_libs);
+  void
+  RecheckExternalLib(const std::vector<std::string> &previous_external_libs,
+                     const std::vector<std::string> &current_external_libs);
 
   // Fbs
-  bool Store() override;
+  bool Store() override { return false; }
 
   // Tasks
   void SetTaskStateFailure();
@@ -143,7 +146,8 @@ private:
   std::string name_;
   TargetType type_;
   const Toolchain &toolchain_;
-  internal::TargetLoader loader_;
+  // internal::TargetLoader loader_;
+  internal::TargetSerialization serialization_;
 
   // Friend classes
   internal::CompilePch compile_pch_;
@@ -158,7 +162,7 @@ private:
   env::TaskState task_state_{env::TaskState::SUCCESS};
 
   std::mutex compiled_source_files_mutex_;
-  internal::path_unordered_set compiled_source_files_;
+  // internal::path_unordered_set compiled_source_files_;
 
   //
   env::Command command_;
