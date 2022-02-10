@@ -124,9 +124,6 @@ private:
   void Convert();
   void BuildGenerate();
 
-  // TODO, Remove this later
-  bool Store() override { return false; }
-
   // Recheck states
   void InputRemoved();
   void InputAdded();

@@ -32,7 +32,6 @@ public:
   }
 
 private:
-  bool Store() override { return false; }
   buildcc::internal::path_unordered_set previous_;
   buildcc::internal::path_unordered_set current_;
 };

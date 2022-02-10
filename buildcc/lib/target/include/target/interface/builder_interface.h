@@ -106,9 +106,6 @@ protected:
         });
   }
 
-private:
-  virtual bool Store() = 0;
-
 protected:
   bool dirty_{false};
   std::string unique_id_;

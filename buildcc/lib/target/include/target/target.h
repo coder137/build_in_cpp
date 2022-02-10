@@ -113,9 +113,6 @@ private:
   RecheckExternalLib(const std::vector<std::string> &previous_external_libs,
                      const std::vector<std::string> &current_external_libs);
 
-  // Fbs
-  bool Store() override { return false; }
-
   // Tasks
   void SetTaskStateFailure();
   int GetTaskStateAsInt() const noexcept {
