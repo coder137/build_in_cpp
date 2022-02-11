@@ -238,9 +238,9 @@
 <dd><p>Subclassed by <a class="reference internal" href="#classbuildcc_1_1Toolchain__gcc"><span class="std std-ref">buildcc::Toolchain_gcc</span></a>, <a class="reference internal" href="#classbuildcc_1_1Toolchain__mingw"><span class="std std-ref">buildcc::Toolchain_mingw</span></a>, <a class="reference internal" href="#classbuildcc_1_1Toolchain__msvc"><span class="std std-ref">buildcc::Toolchain_msvc</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
-<dl class="cpp enum">
+<dl class="cpp enum-class">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc9Toolchain2IdE">
-<span id="_CPPv3N7buildcc9Toolchain2IdE"></span><span id="_CPPv2N7buildcc9Toolchain2IdE"></span><span class="target" id="classbuildcc_1_1Toolchain_1a089e7f8f80c2850803db769395c1735e"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Id</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc9Toolchain2IdE" title="Permalink to this definition">¶</a><br/></dt>
+<span id="_CPPv3N7buildcc9Toolchain2IdE"></span><span id="_CPPv2N7buildcc9Toolchain2IdE"></span><span class="target" id="classbuildcc_1_1Toolchain_1a089e7f8f80c2850803db769395c1735e"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Id</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc9Toolchain2IdE" title="Permalink to this definition">¶</a><br/></dt>
 <dd><p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc9Toolchain2Id3GccE">
@@ -353,38 +353,37 @@
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc21VerifyToolchainConfigE">
 <span id="_CPPv3N7buildcc21VerifyToolchainConfigE"></span><span id="_CPPv2N7buildcc21VerifyToolchainConfigE"></span><span id="buildcc::VerifyToolchainConfig"></span><span class="target" id="structbuildcc_1_1VerifyToolchainConfig"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">VerifyToolchainConfig</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc21VerifyToolchainConfigE" title="Permalink to this definition">¶</a><br/></dt>
 <dd><p>Configure the behaviour of <a class="reference internal" href="#classbuildcc_1_1ToolchainVerify_1ae775d453c29ce4ca1a33a4dc7f2ab1af"><span class="std std-ref">Toolchain::Verify</span></a> API. By default searches the directories mentioned in the ENV{PATH} variable to find the toolchain. </p>
-<p><dl class="field-list simple">
-<dt class="field-odd">param absolute_search_paths</dt>
+<dl class="field-list simple">
+<dt class="field-odd">Param absolute_search_paths</dt>
 <dd class="field-odd"><p>absolute_search_paths expect directories that are iterated for exact toolchain matches </p>
 </dd>
-<dt class="field-even">param env_vars</dt>
+<dt class="field-even">Param env_vars</dt>
 <dd class="field-even"><p><p>env_vars contain paths that are seperated by OS delimiter. These are converted to paths and searched similarly to absolute_search_paths</p>
 <p>NOTE: env_vars must contain single absolute paths or multiple absolute paths seperated by OS delimiter</p>
 <p>Example: [Windows] “absolute_path_1;absolute_path_2;…”</p>
 <p>Example: [Linux] “absolute_path_1:absolute_path_2:…”</p>
 </p>
 </dd>
-<dt class="field-odd">param compiler_version</dt>
+<dt class="field-odd">Param compiler_version</dt>
 <dd class="field-odd"><p><p>Optionally supply a compiler version if multiple toolchains of the same family/id are installed</p>
 <p>Example: [GCC/MinGW/Clang] {compiler} -dumpversion</p>
 <p>Example: [MSVC] getenv(VSCMD_VER)</p>
 <p>For [MSVC] make sure to use</p>
 <code class="docutils literal notranslate"><span class="pre">vcvarsall.bat</span> <span class="pre">{flavour}</span></code> to activate your toolchain </p>
 </dd>
-<dt class="field-even">param target_arch</dt>
+<dt class="field-even">Param target_arch</dt>
 <dd class="field-even"><p><p>Optionally supply a target architecture if multiple toolchains of the same family/id are installed but target different platforms</p>
 <p>Example: [GCC/MinGW/Clang] {compiler} -dumpmachine</p>
 <p>Example: [MSVC] getenv(VSCMD_ARG_HOST_ARCH) + getenv(VSCMD_ARG_TGT_ARCH)</p>
 <p>For [MSVC] make sure to use</p>
 <code class="docutils literal notranslate"><span class="pre">vcvarsall.bat</span> <span class="pre">{flavour}</span></code> to activate your toolchain </p>
 </dd>
-<dt class="field-odd">param update</dt>
+<dt class="field-odd">Param update</dt>
 <dd class="field-odd"><p><p>Updates the toolchain with absolute paths once verified</p>
 <p>If multiple toolchains are found, uses the first in the list</p>
 </p>
 </dd>
 </dl>
-</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
@@ -413,20 +412,19 @@
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc17VerifiedToolchainE">
 <span id="_CPPv3N7buildcc17VerifiedToolchainE"></span><span id="_CPPv2N7buildcc17VerifiedToolchainE"></span><span id="buildcc::VerifiedToolchain"></span><span class="target" id="structbuildcc_1_1VerifiedToolchain"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">VerifiedToolchain</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc17VerifiedToolchainE" title="Permalink to this definition">¶</a><br/></dt>
 <dd><p>Verified <a class="reference internal" href="#classbuildcc_1_1Toolchain"><span class="std std-ref">Toolchain</span></a> information. </p>
-<p><dl class="field-list simple">
-<dt class="field-odd">param path</dt>
+<dl class="field-list simple">
+<dt class="field-odd">Param path</dt>
 <dd class="field-odd"><p><p>Absolute host path where ALL the toolchain executables are found</p>
 <p>NOTE: All the</p>
 <a class="reference internal" href="#classbuildcc_1_1Toolchain"><span class="std std-ref">Toolchain</span></a> executables must be found in a single folder. </p>
 </dd>
-<dt class="field-even">param compiler_version</dt>
+<dt class="field-even">Param compiler_version</dt>
 <dd class="field-even"><p>Compiler version of the verified toolchain </p>
 </dd>
-<dt class="field-odd">param target_arch</dt>
+<dt class="field-odd">Param target_arch</dt>
 <dd class="field-odd"><p><a class="reference internal" href="target.html#classbuildcc_1_1Target"><span class="std std-ref">Target</span></a> architecture of the verified toolchain </p>
 </dd>
 </dl>
-</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
