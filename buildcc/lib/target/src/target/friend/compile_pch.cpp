@@ -73,29 +73,31 @@ void CompilePch::CacheCompileCommand() {
 void CompilePch::BuildCompile() {
   PreCompile();
 
-  const auto &loader = target_.loader_;
+  const auto &serialization = target_.serialization_;
+  const auto &load_target_schema = serialization.GetLoad();
+  const auto &user_target_schema = target_.user_;
 
-  if (!loader.IsLoaded()) {
+  if (!serialization.IsLoaded()) {
     target_.dirty_ = true;
   } else {
-    target_.RecheckFlags(loader.GetLoadedPreprocessorFlags(),
-                         target_.GetPreprocessorFlags());
-    target_.RecheckFlags(loader.GetLoadedCommonCompileFlags(),
-                         target_.GetCommonCompileFlags());
-    target_.RecheckFlags(loader.GetLoadedCCompileFlags(),
-                         target_.GetCCompileFlags());
-    target_.RecheckFlags(loader.GetLoadedCppCompileFlags(),
-                         target_.GetCppCompileFlags());
-    target_.RecheckDirs(loader.GetLoadedIncludeDirs(),
-                        target_.GetIncludeDirs());
-    target_.RecheckPaths(loader.GetLoadedHeaders(),
-                         target_.storer_.current_header_files.internal);
+    target_.RecheckFlags(load_target_schema.preprocessor_flags,
+                         user_target_schema.preprocessor_flags);
+    target_.RecheckFlags(load_target_schema.common_compile_flags,
+                         user_target_schema.common_compile_flags);
+    target_.RecheckFlags(load_target_schema.c_compile_flags,
+                         user_target_schema.c_compile_flags);
+    target_.RecheckFlags(load_target_schema.cpp_compile_flags,
+                         user_target_schema.cpp_compile_flags);
+    target_.RecheckDirs(load_target_schema.include_dirs,
+                        user_target_schema.include_dirs);
+    target_.RecheckPaths(load_target_schema.internal_headers,
+                         user_target_schema.internal_headers);
 
-    target_.RecheckFlags(loader.GetLoadedPchCompileFlags(),
-                         target_.GetPchCompileFlags());
-    target_.RecheckPaths(loader.GetLoadedPchs(),
-                         target_.storer_.current_pch_files.internal);
-    if (!loader.GetLoadedPchCompiled()) {
+    target_.RecheckFlags(load_target_schema.pch_compile_flags,
+                         user_target_schema.pch_compile_flags);
+    target_.RecheckPaths(load_target_schema.internal_pchs,
+                         user_target_schema.internal_pchs);
+    if (!load_target_schema.pch_compiled) {
       target_.dirty_ = true;
     }
   }
@@ -110,7 +112,6 @@ void CompilePch::BuildCompile() {
     }
     bool success = env::Command::Execute(command_);
     env::assert_throw(success, "Failed to compile pch");
-    target_.storer_.pch_compiled = true;
   }
 }
 
@@ -158,9 +159,13 @@ std::string CompilePch::ConstructCompileCommand() const {
 }
 
 void CompilePch::PreCompile() {
-  target_.storer_.current_header_files.Convert();
+  auto &target_user_schema = target_.user_;
 
-  target_.storer_.current_pch_files.Convert();
+  target_user_schema.internal_headers =
+      internal::path_schema_convert(target_user_schema.headers);
+
+  target_user_schema.internal_pchs =
+      internal::path_schema_convert(target_user_schema.pchs);
 }
 
 } // namespace buildcc::internal

@@ -193,6 +193,7 @@ TEST(TargetTestFailureStates, CompilePchFailure_Rebuild) {
     target.AddPch("include/include_header.h");
     target.Build();
 
+    buildcc::m::TargetExpect_PathAdded(1, &target);
     buildcc::env::m::CommandExpect_Execute(1, true); // PCH compile
     buildcc::env::m::CommandExpect_Execute(1, true); // Object compile
     buildcc::env::m::CommandExpect_Execute(1, true); // Link target

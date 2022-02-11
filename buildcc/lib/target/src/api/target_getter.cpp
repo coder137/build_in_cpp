@@ -23,7 +23,7 @@ namespace buildcc::internal {
 template <typename T> const fs::path &TargetGetter<T>::GetBinaryPath() const {
   const T &t = static_cast<const T &>(*this);
 
-  return t.loader_.GetBinaryPath();
+  return t.serialization_.GetSerializedFile();
 }
 
 template <typename T> const fs::path &TargetGetter<T>::GetTargetPath() const {

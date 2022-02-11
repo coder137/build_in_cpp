@@ -34,18 +34,15 @@ void LinkTarget::CacheLinkCommand() {
       internal::aggregate(target_.compile_object_.GetCompiledSources());
 
   const std::string output_target = fmt::format("{}", output_);
-
-  const auto &storer = target_.storer_;
+  const auto &target_user_schema = target_.user_;
   command_ = target_.command_.Construct(
       target_.config_.link_command,
       {
           {kOutput, output_target},
           {kCompiledSources, aggregated_compiled_sources},
-          // NOTE, This needs to be ORDERED
           {kLibDeps,
-           fmt::format(
-               "{} {}", internal::aggregate(storer.current_user_lib_deps),
-               internal::aggregate(storer.current_user_external_lib_deps))},
+           fmt::format("{} {}", internal::aggregate(target_user_schema.libs),
+                       internal::aggregate(target_user_schema.external_libs))},
       });
 }
 
@@ -60,40 +57,41 @@ fs::path LinkTarget::ConstructOutputPath() const {
 }
 
 void LinkTarget::PreLink() {
-  auto &storer = target_.storer_;
+  auto &target_user_schema = target_.user_;
 
-  for (const auto &p : storer.current_user_lib_deps) {
-    storer.current_internal_lib_deps.emplace(
-        internal::Path::CreateExistingPath(p));
-  }
+  target_user_schema.internal_libs =
+      path_schema_convert(target_user_schema.libs);
 
-  storer.current_internal_external_lib_deps.insert(
-      storer.current_user_external_lib_deps.begin(),
-      storer.current_user_external_lib_deps.end());
-
-  storer.current_link_dependencies.Convert();
+  target_user_schema.internal_link_dependencies =
+      path_schema_convert(target_user_schema.link_dependencies);
 }
 
 void LinkTarget::BuildLink() {
   PreLink();
 
-  const auto &loader = target_.loader_;
-  const auto &storer = target_.storer_;
+  const auto &serialization = target_.serialization_;
+  const auto &target_load_schema = serialization.GetLoad();
+  const auto &target_user_schema = target_.user_;
 
-  if (!loader.IsLoaded()) {
+  if (!serialization.IsLoaded()) {
     target_.dirty_ = true;
   } else {
-    target_.RecheckFlags(loader.GetLoadedLinkFlags(), target_.GetLinkFlags());
-    target_.RecheckDirs(loader.GetLoadedLibDirs(), target_.GetLibDirs());
-    target_.RecheckExternalLib(loader.GetLoadedExternalLibDeps(),
-                               storer.current_internal_external_lib_deps);
-    target_.RecheckPaths(loader.GetLoadedLinkDependencies(),
-                         storer.current_link_dependencies.internal);
-
-    //  NOTE, This needs to be UNORDERED
-    target_.RecheckPaths(loader.GetLoadedLibDeps(),
-                         storer.current_internal_lib_deps);
-    if (!loader.GetLoadedTargetLinked()) {
+    target_.RecheckFlags(target_load_schema.link_flags,
+                         target_user_schema.link_flags);
+    target_.RecheckDirs(target_load_schema.lib_dirs,
+                        target_user_schema.lib_dirs);
+    target_.RecheckExternalLib(target_load_schema.external_libs,
+                               target_user_schema.external_libs);
+    target_.RecheckPaths(target_load_schema.internal_link_dependencies,
+                         target_user_schema.internal_link_dependencies);
+    path_unordered_set target_loaded_libs(
+        target_load_schema.internal_libs.begin(),
+        target_load_schema.internal_libs.end());
+    path_unordered_set target_user_libs(
+        target_user_schema.internal_libs.begin(),
+        target_user_schema.internal_libs.end());
+    target_.RecheckPaths(target_loaded_libs, target_user_libs);
+    if (!target_load_schema.target_linked) {
       target_.dirty_ = true;
     }
   }
@@ -101,7 +99,7 @@ void LinkTarget::BuildLink() {
   if (target_.dirty_) {
     bool success = env::Command::Execute(command_);
     env::assert_throw(success, "Failed to link target");
-    target_.storer_.target_linked = true;
+    target_.serialization_.UpdateTargetCompiled();
   }
 }
 

@@ -83,8 +83,8 @@ void Target::RecheckFlags(
 }
 
 void Target::RecheckExternalLib(
-    const std::unordered_set<std::string> &previous_external_libs,
-    const std::unordered_set<std::string> &current_external_libs) {
+    const std::vector<std::string> &previous_external_libs,
+    const std::vector<std::string> &current_external_libs) {
   RecheckChanged(previous_external_libs, current_external_libs,
                  std::bind(&Target::ExternalLibChanged, this));
 }

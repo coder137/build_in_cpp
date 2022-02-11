@@ -33,7 +33,7 @@ void Generator::AddInput(const std::string &absolute_input_pattern,
       command_.Construct(absolute_input_pattern);
   const auto absolute_input_path =
       internal::Path::CreateNewPath(absolute_input_string);
-  current_input_files_.user.insert(absolute_input_path.GetPathname());
+  user_.inputs.insert(absolute_input_path.GetPathname());
 
   if (identifier != nullptr) {
     command_.AddDefaultArgument(identifier,
@@ -47,7 +47,7 @@ void Generator::AddOutput(const std::string &absolute_output_pattern,
       command_.Construct(absolute_output_pattern);
   const auto absolute_output_path =
       internal::Path::CreateNewPath(absolute_output_string);
-  current_output_files_.insert(absolute_output_path.GetPathname());
+  user_.outputs.insert(absolute_output_path.GetPathname());
 
   if (identifier != nullptr) {
     command_.AddDefaultArgument(identifier,
@@ -60,11 +60,11 @@ void Generator::AddCommand(
     const std::unordered_map<const char *, std::string> &arguments) {
   std::string constructed_command =
       command_.Construct(command_pattern, arguments);
-  current_commands_.emplace_back(std::move(constructed_command));
+  user_.commands.emplace_back(std::move(constructed_command));
 }
 
 void Generator::Build() {
-  (void)loader_.Load();
+  (void)serialization_.LoadFromFile();
 
   GenerateTask();
 }
@@ -94,19 +94,22 @@ void Generator::Initialize() {
   tf_.name(name_);
 }
 
-void Generator::Convert() { current_input_files_.Convert(); }
+void Generator::Convert() {
+  user_.internal_inputs = internal::path_schema_convert(
+      user_.inputs, internal::Path::CreateExistingPath);
+}
 
 void Generator::BuildGenerate() {
-  if (!loader_.IsLoaded()) {
+  if (!serialization_.IsLoaded()) {
     dirty_ = true;
   } else {
     RecheckPaths(
-        loader_.GetLoadedInputFiles(), current_input_files_.internal,
+        serialization_.GetLoad().internal_inputs, user_.internal_inputs,
         [&]() { InputRemoved(); }, [&]() { InputAdded(); },
         [&]() { InputUpdated(); });
-    RecheckChanged(loader_.GetLoadedOutputFiles(), current_output_files_,
+    RecheckChanged(serialization_.GetLoad().outputs, user_.outputs,
                    [&]() { OutputChanged(); });
-    RecheckChanged(loader_.GetLoadedCommands(), current_commands_,
+    RecheckChanged(serialization_.GetLoad().commands, user_.commands,
                    [&]() { CommandChanged(); });
   }
 }

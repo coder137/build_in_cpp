@@ -25,55 +25,55 @@ void FlagApi<T>::AddPreprocessorFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.storer_.current_preprocessor_flags.insert(flag);
+  t.user_.preprocessor_flags.insert(flag);
 }
 template <typename T>
 void FlagApi<T>::AddCommonCompileFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.storer_.current_common_compile_flags.insert(flag);
+  t.user_.common_compile_flags.insert(flag);
 }
 template <typename T>
 void FlagApi<T>::AddPchCompileFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.storer_.current_pch_compile_flags.insert(flag);
+  t.user_.pch_compile_flags.insert(flag);
 }
 template <typename T>
 void FlagApi<T>::AddPchObjectFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.storer_.current_pch_object_flags.insert(flag);
+  t.user_.pch_object_flags.insert(flag);
 }
 template <typename T>
 void FlagApi<T>::AddAsmCompileFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.storer_.current_asm_compile_flags.insert(flag);
+  t.user_.asm_compile_flags.insert(flag);
 }
 template <typename T>
 void FlagApi<T>::AddCCompileFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.storer_.current_c_compile_flags.insert(flag);
+  t.user_.c_compile_flags.insert(flag);
 }
 template <typename T>
 void FlagApi<T>::AddCppCompileFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.storer_.current_cpp_compile_flags.insert(flag);
+  t.user_.cpp_compile_flags.insert(flag);
 }
 template <typename T> void FlagApi<T>::AddLinkFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.storer_.current_link_flags.insert(flag);
+  t.user_.link_flags.insert(flag);
 }
 
 template class FlagApi<TargetInfo>;

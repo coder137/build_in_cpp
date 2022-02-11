@@ -28,7 +28,7 @@ void PchApi<T>::AddPchAbsolute(const fs::path &absolute_filepath) {
   t.config_.ExpectsValidHeader(absolute_filepath);
 
   const fs::path absolute_pch = fs::path(absolute_filepath).make_preferred();
-  t.storer_.current_pch_files.user.insert(absolute_pch);
+  t.user_.pchs.insert(absolute_pch);
 }
 
 template <typename T>

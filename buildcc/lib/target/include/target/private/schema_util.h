@@ -32,14 +32,28 @@ namespace buildcc::internal {
 inline void extract_path(
     const flatbuffers::Vector<flatbuffers::Offset<schema::internal::Path>>
         *fbs_paths,
-    buildcc::internal::path_unordered_set &out) {
+    path_unordered_set &out) {
   if (fbs_paths == nullptr) {
     return;
   }
 
   for (auto iter = fbs_paths->begin(); iter != fbs_paths->end(); iter++) {
-    out.insert(buildcc::internal::Path::CreateNewPath(
-        iter->pathname()->c_str(), iter->last_write_timestamp()));
+    out.insert(Path::CreateNewPath(iter->pathname()->c_str(),
+                                   iter->last_write_timestamp()));
+  }
+}
+
+inline void extract_path(
+    const flatbuffers::Vector<flatbuffers::Offset<schema::internal::Path>>
+        *fbs_paths,
+    std::vector<Path> &out) {
+  if (fbs_paths == nullptr) {
+    return;
+  }
+
+  for (auto iter = fbs_paths->begin(); iter != fbs_paths->end(); iter++) {
+    out.push_back(Path::CreateNewPath(iter->pathname()->c_str(),
+                                      iter->last_write_timestamp()));
   }
 }
 
@@ -86,9 +100,10 @@ extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
 
 // Create APIs for STORE
 
+template <typename T>
 inline std::vector<flatbuffers::Offset<fbs::Path>>
 create_fbs_vector_path(flatbuffers::FlatBufferBuilder &builder,
-                       const buildcc::internal::path_unordered_set &pathlist) {
+                       const T &pathlist) {
   std::vector<flatbuffers::Offset<fbs::Path>> paths;
   for (const auto &p : pathlist) {
     auto fbs_file = fbs::CreatePathDirect(builder, p.GetPathAsString().c_str(),

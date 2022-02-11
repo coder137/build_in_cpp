@@ -69,11 +69,11 @@ void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
   target.AddIncludeDir("lib/target/include");
   target.GlobHeaders("lib/target/include/target");
   target.GlobHeaders("lib/target/include/target/api");
-  target.GlobHeaders("lib/target/include/target/base");
   target.GlobHeaders("lib/target/include/target/common");
   target.GlobHeaders("lib/target/include/target/friend");
   target.GlobHeaders("lib/target/include/target/interface");
   target.GlobHeaders("lib/target/include/target/private");
+  target.GlobHeaders("lib/target/include/target/serialization");
 
   // ARGS
   target.GlobSources("lib/args/src");

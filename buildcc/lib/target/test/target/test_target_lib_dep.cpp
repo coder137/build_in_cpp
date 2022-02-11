@@ -9,7 +9,7 @@
 #include "target/target.h"
 
 //
-#include "target/base/target_loader.h"
+#include "target/serialization/target_serialization.h"
 
 #include <iostream>
 #include <unistd.h>
@@ -54,13 +54,13 @@ TEST(TargetTestLibDep, StaticLibrary_SimpleBuildTest) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(STATIC_NAME,
-                                         foolib.GetTargetBuildDir());
-  bool loaded = loader.Load();
+  buildcc::internal::TargetSerialization serialization(
+      foolib.GetTargetBuildDir() / (std::string(STATIC_NAME) + ".bin"));
+  bool loaded = serialization.LoadFromFile();
   CHECK_TRUE(loaded);
 
-  CHECK_EQUAL(loader.GetLoadedSources().size(), 1);
-  CHECK_EQUAL(loader.GetLoadedIncludeDirs().size(), 1);
+  CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 1);
+  CHECK_EQUAL(serialization.GetLoad().include_dirs.size(), 1);
 }
 
 TEST(TargetTestLibDep, TargetDep_RebuildTest) {

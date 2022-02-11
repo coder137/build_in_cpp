@@ -165,30 +165,31 @@ void CompileObject::BuildObjectCompile(
     std::vector<internal::Path> &dummy_source_files) {
   PreObjectCompile();
 
-  const auto &loader = target_.loader_;
-  const auto &storer = target_.storer_;
+  const auto &serialization = target_.serialization_;
+  const auto &load_target_schema = serialization.GetLoad();
+  const auto &user_target_schema = target_.user_;
 
-  if (!loader.IsLoaded()) {
+  if (!serialization.IsLoaded()) {
     target_.dirty_ = true;
   } else {
-    target_.RecheckFlags(loader.GetLoadedPreprocessorFlags(),
-                         target_.GetPreprocessorFlags());
-    target_.RecheckFlags(loader.GetLoadedCommonCompileFlags(),
-                         target_.GetCommonCompileFlags());
-    target_.RecheckFlags(loader.GetLoadedPchObjectFlags(),
-                         target_.GetPchObjectFlags());
-    target_.RecheckFlags(loader.GetLoadedAsmCompileFlags(),
-                         target_.GetAsmCompileFlags());
-    target_.RecheckFlags(loader.GetLoadedCCompileFlags(),
-                         target_.GetCCompileFlags());
-    target_.RecheckFlags(loader.GetLoadedCppCompileFlags(),
-                         target_.GetCppCompileFlags());
-    target_.RecheckDirs(loader.GetLoadedIncludeDirs(),
-                        target_.GetIncludeDirs());
-    target_.RecheckPaths(loader.GetLoadedHeaders(),
-                         storer.current_header_files.internal);
-    target_.RecheckPaths(loader.GetLoadedCompileDependencies(),
-                         storer.current_compile_dependencies.internal);
+    target_.RecheckFlags(load_target_schema.preprocessor_flags,
+                         user_target_schema.preprocessor_flags);
+    target_.RecheckFlags(load_target_schema.common_compile_flags,
+                         user_target_schema.common_compile_flags);
+    target_.RecheckFlags(load_target_schema.pch_object_flags,
+                         user_target_schema.pch_object_flags);
+    target_.RecheckFlags(load_target_schema.asm_compile_flags,
+                         user_target_schema.asm_compile_flags);
+    target_.RecheckFlags(load_target_schema.c_compile_flags,
+                         user_target_schema.c_compile_flags);
+    target_.RecheckFlags(load_target_schema.cpp_compile_flags,
+                         user_target_schema.cpp_compile_flags);
+    target_.RecheckDirs(load_target_schema.include_dirs,
+                        user_target_schema.include_dirs);
+    target_.RecheckPaths(load_target_schema.internal_headers,
+                         user_target_schema.internal_headers);
+    target_.RecheckPaths(load_target_schema.internal_compile_dependencies,
+                         user_target_schema.internal_compile_dependencies);
   }
 
   if (target_.dirty_) {
@@ -199,39 +200,41 @@ void CompileObject::BuildObjectCompile(
 }
 
 void CompileObject::PreObjectCompile() {
-  auto &storer = target_.storer_;
+  auto &target_user_schema = target_.user_;
 
   // Convert user_source_files to current_source_files
-  storer.current_source_files.Convert();
+  target_user_schema.internal_sources =
+      internal::path_schema_convert(target_user_schema.sources);
 
   // Convert user_header_files to current_header_files
-  storer.current_header_files.Convert();
+  target_user_schema.internal_headers =
+      internal::path_schema_convert(target_user_schema.headers);
 
   // Convert user_compile_dependencies to current_compile_dependencies
-  storer.current_compile_dependencies.Convert();
+  target_user_schema.internal_compile_dependencies =
+      internal::path_schema_convert(target_user_schema.compile_dependencies);
 }
 
 void CompileObject::CompileSources(std::vector<internal::Path> &source_files) {
-  const auto &storer = target_.storer_;
+  const auto &target_user_schema = target_.user_;
   source_files =
-      std::vector<internal::Path>(storer.current_source_files.internal.begin(),
-                                  storer.current_source_files.internal.end());
+      std::vector<internal::Path>(target_user_schema.internal_sources.begin(),
+                                  target_user_schema.internal_sources.end());
 }
 
 void CompileObject::RecompileSources(
     std::vector<internal::Path> &source_files,
     std::vector<internal::Path> &dummy_source_files) {
-  const auto &loader = target_.loader_;
-  const auto &storer = target_.storer_;
-
-  const auto &previous_source_files = loader.GetLoadedSources();
+  const auto &serialization = target_.serialization_;
+  const auto &user_target_schema = target_.user_;
+  const auto &previous_source_files = serialization.GetLoad().internal_sources;
 
   // * Cannot find previous source in current source files
   const bool is_source_removed =
       std::any_of(previous_source_files.begin(), previous_source_files.end(),
                   [&](const internal::Path &p) {
-                    return storer.current_source_files.internal.find(p) ==
-                           storer.current_source_files.internal.end();
+                    return user_target_schema.internal_sources.find(p) ==
+                           user_target_schema.internal_sources.end();
                   });
 
   if (is_source_removed) {
@@ -239,9 +242,7 @@ void CompileObject::RecompileSources(
     target_.SourceRemoved();
   }
 
-  for (const auto &current_file : storer.current_source_files.internal) {
-    // const auto &current_source = current_file.GetPathname();
-
+  for (const auto &current_file : user_target_schema.internal_sources) {
     // Find current_file in the loaded sources
     auto iter = previous_source_files.find(current_file);
 

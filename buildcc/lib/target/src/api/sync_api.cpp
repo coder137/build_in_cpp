@@ -45,71 +45,57 @@ void SyncApi<T>::SpecializedCopy(TargetType target,
   for (const SyncOption o : options) {
     switch (o) {
     case SyncOption::PreprocessorFlags:
-      t.storer_.current_preprocessor_flags =
-          std::move(target.storer_.current_preprocessor_flags);
+      t.user_.preprocessor_flags = std::move(target.user_.preprocessor_flags);
       break;
     case SyncOption::CommonCompileFlags:
-      t.storer_.current_common_compile_flags =
-          std::move(target.storer_.current_common_compile_flags);
+      t.user_.common_compile_flags =
+          std::move(target.user_.common_compile_flags);
       break;
     case SyncOption::PchCompileFlags:
-      t.storer_.current_pch_compile_flags =
-          std::move(target.storer_.current_pch_compile_flags);
+      t.user_.pch_compile_flags = std::move(target.user_.pch_compile_flags);
       break;
     case SyncOption::PchObjectFlags:
-      t.storer_.current_pch_object_flags =
-          std::move(target.storer_.current_pch_object_flags);
+      t.user_.pch_object_flags = std::move(target.user_.pch_object_flags);
       break;
     case SyncOption::AsmCompileFlags:
-      t.storer_.current_asm_compile_flags =
-          std::move(target.storer_.current_asm_compile_flags);
+      t.user_.asm_compile_flags = std::move(target.user_.asm_compile_flags);
       break;
     case SyncOption::CCompileFlags:
-      t.storer_.current_c_compile_flags =
-          std::move(target.storer_.current_c_compile_flags);
+      t.user_.c_compile_flags = std::move(target.user_.c_compile_flags);
       break;
     case SyncOption::CppCompileFlags:
-      t.storer_.current_cpp_compile_flags =
-          std::move(target.storer_.current_cpp_compile_flags);
+      t.user_.cpp_compile_flags = std::move(target.user_.cpp_compile_flags);
       break;
     case SyncOption::LinkFlags:
-      t.storer_.current_link_flags =
-          std::move(target.storer_.current_link_flags);
+      t.user_.link_flags = std::move(target.user_.link_flags);
       break;
     case SyncOption::CompileDependencies:
-      t.storer_.current_compile_dependencies.user =
-          std::move(target.storer_.current_compile_dependencies.user);
+      t.user_.compile_dependencies =
+          std::move(target.user_.compile_dependencies);
       break;
     case SyncOption::LinkDependencies:
-      t.storer_.current_link_dependencies.user =
-          std::move(target.storer_.current_link_dependencies.user);
+      t.user_.link_dependencies = std::move(target.user_.link_dependencies);
       break;
     case SyncOption::SourceFiles:
-      t.storer_.current_source_files.user =
-          std::move(target.storer_.current_source_files.user);
+      t.user_.sources = std::move(target.user_.sources);
       break;
     case SyncOption::HeaderFiles:
-      t.storer_.current_header_files.user =
-          std::move(target.storer_.current_header_files.user);
+      t.user_.headers = std::move(target.user_.headers);
       break;
     case SyncOption::PchFiles:
-      t.storer_.current_pch_files.user =
-          std::move(target.storer_.current_pch_files.user);
+      t.user_.pchs = std::move(target.user_.pchs);
       break;
     case SyncOption::LibDeps:
-      t.storer_.current_user_lib_deps =
-          std::move(target.storer_.current_user_lib_deps);
+      t.user_.libs = std::move(target.user_.libs);
       break;
     case SyncOption::IncludeDirs:
-      t.storer_.current_include_dirs =
-          std::move(target.storer_.current_include_dirs);
+      t.user_.include_dirs = std::move(target.user_.include_dirs);
       break;
     case SyncOption::LibDirs:
-      t.storer_.current_lib_dirs = std::move(target.storer_.current_lib_dirs);
+      t.user_.lib_dirs = std::move(target.user_.lib_dirs);
       break;
     case SyncOption::ExternalLibDeps:
-      t.storer_.current_user_external_lib_deps =
-          std::move(target.storer_.current_user_external_lib_deps);
+      t.user_.external_libs = std::move(target.user_.external_libs);
       break;
     default:
       env::assert_fatal<false>("Invalid Option added");
@@ -140,116 +126,89 @@ void SyncApi<T>::SpecializedInsert(TargetType target,
   for (const SyncOption o : options) {
     switch (o) {
     case SyncOption::PreprocessorFlags:
-      t.storer_.current_preprocessor_flags.insert(
-          std::make_move_iterator(
-              target.storer_.current_preprocessor_flags.begin()),
-          std::make_move_iterator(
-              target.storer_.current_preprocessor_flags.end()));
+      t.user_.preprocessor_flags.insert(
+          std::make_move_iterator(target.user_.preprocessor_flags.begin()),
+          std::make_move_iterator(target.user_.preprocessor_flags.end()));
       break;
     case SyncOption::CommonCompileFlags:
-      t.storer_.current_common_compile_flags.insert(
-          std::make_move_iterator(
-              target.storer_.current_common_compile_flags.begin()),
-          std::make_move_iterator(
-              target.storer_.current_common_compile_flags.end()));
+      t.user_.common_compile_flags.insert(
+          std::make_move_iterator(target.user_.common_compile_flags.begin()),
+          std::make_move_iterator(target.user_.common_compile_flags.end()));
       break;
     case SyncOption::PchCompileFlags:
-      t.storer_.current_pch_compile_flags.insert(
-          std::make_move_iterator(
-              target.storer_.current_pch_compile_flags.begin()),
-          std::make_move_iterator(
-              target.storer_.current_pch_compile_flags.end()));
+      t.user_.pch_compile_flags.insert(
+          std::make_move_iterator(target.user_.pch_compile_flags.begin()),
+          std::make_move_iterator(target.user_.pch_compile_flags.end()));
       break;
     case SyncOption::PchObjectFlags:
-      t.storer_.current_pch_object_flags.insert(
-          std::make_move_iterator(
-              target.storer_.current_pch_object_flags.begin()),
-          std::make_move_iterator(
-              target.storer_.current_pch_object_flags.end()));
+      t.user_.pch_object_flags.insert(
+          std::make_move_iterator(target.user_.pch_object_flags.begin()),
+          std::make_move_iterator(target.user_.pch_object_flags.end()));
       break;
     case SyncOption::AsmCompileFlags:
-      t.storer_.current_asm_compile_flags.insert(
-          std::make_move_iterator(
-              target.storer_.current_asm_compile_flags.begin()),
-          std::make_move_iterator(
-              target.storer_.current_asm_compile_flags.end()));
+      t.user_.asm_compile_flags.insert(
+          std::make_move_iterator(target.user_.asm_compile_flags.begin()),
+          std::make_move_iterator(target.user_.asm_compile_flags.end()));
       break;
     case SyncOption::CCompileFlags:
-      t.storer_.current_c_compile_flags.insert(
-          std::make_move_iterator(
-              target.storer_.current_c_compile_flags.begin()),
-          std::make_move_iterator(
-              target.storer_.current_c_compile_flags.end()));
+      t.user_.c_compile_flags.insert(
+          std::make_move_iterator(target.user_.c_compile_flags.begin()),
+          std::make_move_iterator(target.user_.c_compile_flags.end()));
       break;
     case SyncOption::CppCompileFlags:
-      t.storer_.current_cpp_compile_flags.insert(
-          std::make_move_iterator(
-              target.storer_.current_cpp_compile_flags.begin()),
-          std::make_move_iterator(
-              target.storer_.current_cpp_compile_flags.end()));
+      t.user_.cpp_compile_flags.insert(
+          std::make_move_iterator(target.user_.cpp_compile_flags.begin()),
+          std::make_move_iterator(target.user_.cpp_compile_flags.end()));
       break;
     case SyncOption::LinkFlags:
-      t.storer_.current_link_flags.insert(
-          std::make_move_iterator(target.storer_.current_link_flags.begin()),
-          std::make_move_iterator(target.storer_.current_link_flags.end()));
+      t.user_.link_flags.insert(
+          std::make_move_iterator(target.user_.link_flags.begin()),
+          std::make_move_iterator(target.user_.link_flags.end()));
       break;
     case SyncOption::CompileDependencies:
-      t.storer_.current_compile_dependencies.user.insert(
-          std::make_move_iterator(
-              target.storer_.current_compile_dependencies.user.begin()),
-          std::make_move_iterator(
-              target.storer_.current_compile_dependencies.user.end()));
+      t.user_.compile_dependencies.insert(
+          std::make_move_iterator(target.user_.compile_dependencies.begin()),
+          std::make_move_iterator(target.user_.compile_dependencies.end()));
       break;
     case SyncOption::LinkDependencies:
-      t.storer_.current_link_dependencies.user.insert(
-          std::make_move_iterator(
-              target.storer_.current_link_dependencies.user.begin()),
-          std::make_move_iterator(
-              target.storer_.current_link_dependencies.user.end()));
+      t.user_.link_dependencies.insert(
+          std::make_move_iterator(target.user_.link_dependencies.begin()),
+          std::make_move_iterator(target.user_.link_dependencies.end()));
       break;
     case SyncOption::SourceFiles:
-      t.storer_.current_source_files.user.insert(
-          std::make_move_iterator(
-              target.storer_.current_source_files.user.begin()),
-          std::make_move_iterator(
-              target.storer_.current_source_files.user.end()));
+      t.user_.sources.insert(
+          std::make_move_iterator(target.user_.sources.begin()),
+          std::make_move_iterator(target.user_.sources.end()));
       break;
     case SyncOption::HeaderFiles:
-      t.storer_.current_header_files.user.insert(
-          std::make_move_iterator(
-              target.storer_.current_header_files.user.begin()),
-          std::make_move_iterator(
-              target.storer_.current_header_files.user.end()));
+      t.user_.headers.insert(
+          std::make_move_iterator(target.user_.headers.begin()),
+          std::make_move_iterator(target.user_.headers.end()));
       break;
     case SyncOption::PchFiles:
-      t.storer_.current_pch_files.user.insert(
-          std::make_move_iterator(
-              target.storer_.current_pch_files.user.begin()),
-          std::make_move_iterator(target.storer_.current_pch_files.user.end()));
+      t.user_.pchs.insert(std::make_move_iterator(target.user_.pchs.begin()),
+                          std::make_move_iterator(target.user_.pchs.end()));
       break;
     case SyncOption::LibDeps:
-      t.storer_.current_user_lib_deps.insert(
-          t.storer_.current_user_lib_deps.end(),
-          std::make_move_iterator(target.storer_.current_user_lib_deps.begin()),
-          std::make_move_iterator(target.storer_.current_user_lib_deps.end()));
+      t.user_.libs.insert(t.user_.libs.end(),
+                          std::make_move_iterator(target.user_.libs.begin()),
+                          std::make_move_iterator(target.user_.libs.end()));
       break;
     case SyncOption::IncludeDirs:
-      t.storer_.current_include_dirs.insert(
-          std::make_move_iterator(target.storer_.current_include_dirs.begin()),
-          std::make_move_iterator(target.storer_.current_include_dirs.end()));
+      t.user_.include_dirs.insert(
+          std::make_move_iterator(target.user_.include_dirs.begin()),
+          std::make_move_iterator(target.user_.include_dirs.end()));
       break;
     case SyncOption::LibDirs:
-      t.storer_.current_lib_dirs.insert(
-          std::make_move_iterator(target.storer_.current_lib_dirs.begin()),
-          std::make_move_iterator(target.storer_.current_lib_dirs.end()));
+      t.user_.lib_dirs.insert(
+          std::make_move_iterator(target.user_.lib_dirs.begin()),
+          std::make_move_iterator(target.user_.lib_dirs.end()));
       break;
     case SyncOption::ExternalLibDeps:
-      t.storer_.current_user_external_lib_deps.insert(
-          t.storer_.current_user_external_lib_deps.end(),
-          std::make_move_iterator(
-              target.storer_.current_user_external_lib_deps.begin()),
-          std::make_move_iterator(
-              target.storer_.current_user_external_lib_deps.end()));
+      t.user_.external_libs.insert(
+          t.user_.external_libs.end(),
+          std::make_move_iterator(target.user_.external_libs.begin()),
+          std::make_move_iterator(target.user_.external_libs.end()));
       break;
     default:
       env::assert_fatal<false>("Invalid Option added");

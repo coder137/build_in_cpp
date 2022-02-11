@@ -8,7 +8,7 @@
 #include "env/env.h"
 
 //
-#include "target/base/target_loader.h"
+#include "target/serialization/target_serialization.h"
 
 // Third Party
 
@@ -62,11 +62,12 @@ TEST(TargetTestPreprocessorFlagGroup, Target_AddPreprocessorFlag) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(NAME, simple.GetTargetBuildDir());
-  bool loaded = loader.Load();
+  buildcc::internal::TargetSerialization serialization(
+      simple.GetTargetBuildDir() / (std::string(NAME) + ".bin"));
+  bool loaded = serialization.LoadFromFile();
   CHECK_TRUE(loaded);
 
-  CHECK_EQUAL(loader.GetLoadedPreprocessorFlags().size(), 1);
+  CHECK_EQUAL(serialization.GetLoad().preprocessor_flags.size(), 1);
 }
 
 TEST(TargetTestPreprocessorFlagGroup, Target_ChangedPreprocessorFlag) {
@@ -160,11 +161,12 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_AddCommonCompileFlag) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(NAME, simple.GetTargetBuildDir());
-  bool loaded = loader.Load();
+  buildcc::internal::TargetSerialization serialization(
+      simple.GetTargetBuildDir() / (std::string(NAME) + ".bin"));
+  bool loaded = serialization.LoadFromFile();
   CHECK_TRUE(loaded);
 
-  CHECK_EQUAL(loader.GetLoadedCommonCompileFlags().size(), 2);
+  CHECK_EQUAL(serialization.GetLoad().common_compile_flags.size(), 2);
 }
 
 TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
@@ -274,11 +276,12 @@ TEST(TargetTestAsmCompileFlagGroup, Target_AddCompileFlag) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(NAME, simple.GetTargetBuildDir());
-  bool loaded = loader.Load();
+  buildcc::internal::TargetSerialization serialization(
+      simple.GetTargetBuildDir() / (std::string(NAME) + ".bin"));
+  bool loaded = serialization.LoadFromFile();
   CHECK_TRUE(loaded);
 
-  CHECK_EQUAL(loader.GetLoadedAsmCompileFlags().size(), 2);
+  CHECK_EQUAL(serialization.GetLoad().asm_compile_flags.size(), 2);
 }
 
 TEST(TargetTestAsmCompileFlagGroup, Target_ChangedCompileFlag) {
@@ -388,11 +391,12 @@ TEST(TargetTestCCompileFlagsGroup, Target_AddCompileFlag) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(NAME, simple.GetTargetBuildDir());
-  bool loaded = loader.Load();
+  buildcc::internal::TargetSerialization serialization(
+      simple.GetTargetBuildDir() / (std::string(NAME) + ".bin"));
+  bool loaded = serialization.LoadFromFile();
   CHECK_TRUE(loaded);
 
-  CHECK_EQUAL(loader.GetLoadedCCompileFlags().size(), 1);
+  CHECK_EQUAL(serialization.GetLoad().c_compile_flags.size(), 1);
 }
 
 TEST(TargetTestCCompileFlagsGroup, Target_ChangedCompileFlag) {
@@ -485,11 +489,12 @@ TEST(TargetTestCppCompileFlagsGroup, Target_AddCompileFlag) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(NAME, simple.GetTargetBuildDir());
-  bool loaded = loader.Load();
+  buildcc::internal::TargetSerialization serialization(
+      simple.GetTargetBuildDir() / (std::string(NAME) + ".bin"));
+  bool loaded = serialization.LoadFromFile();
   CHECK_TRUE(loaded);
 
-  CHECK_EQUAL(loader.GetLoadedCppCompileFlags().size(), 1);
+  CHECK_EQUAL(serialization.GetLoad().cpp_compile_flags.size(), 1);
 }
 
 TEST(TargetTestCppCompileFlagsGroup, Target_ChangedCompileFlag) {
@@ -582,11 +587,12 @@ TEST(TargetTestLinkFlagsGroup, Target_AddLinkFlag) {
   mock().checkExpectations();
 
   // Verify binary
-  buildcc::internal::TargetLoader loader(NAME, simple.GetTargetBuildDir());
-  bool loaded = loader.Load();
+  buildcc::internal::TargetSerialization serialization(
+      simple.GetTargetBuildDir() / (std::string(NAME) + ".bin"));
+  bool loaded = serialization.LoadFromFile();
   CHECK_TRUE(loaded);
 
-  CHECK_EQUAL(loader.GetLoadedLinkFlags().size(), 1);
+  CHECK_EQUAL(serialization.GetLoad().link_flags.size(), 1);
 }
 
 TEST(TargetTestLinkFlagsGroup, Target_ChangedLinkFlag) {
