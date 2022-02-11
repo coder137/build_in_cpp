@@ -107,8 +107,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
 
   mock().checkExpectations();
 
-  buildcc::internal::TargetSerialization serialization(
-      intermediate_path / (std::string(NAME) + ".bin"));
+  buildcc::internal::TargetSerialization serialization(simple.GetBinaryPath());
   bool is_loaded = serialization.LoadFromFile();
   CHECK_TRUE(is_loaded);
 
@@ -152,7 +151,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     buildcc::m::TargetRunner(simple);
 
     buildcc::internal::TargetSerialization serialization(
-        intermediate_path / (std::string(NAME) + ".bin"));
+        simple.GetBinaryPath());
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
 
@@ -184,7 +183,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     buildcc::m::TargetRunner(simple);
 
     buildcc::internal::TargetSerialization serialization(
-        intermediate_path / (std::string(NAME) + ".bin"));
+        simple.GetBinaryPath());
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
 
@@ -215,7 +214,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     buildcc::m::TargetRunner(simple);
 
     buildcc::internal::TargetSerialization serialization(
-        intermediate_path / (std::string(NAME) + ".bin"));
+        simple.GetBinaryPath());
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
 
