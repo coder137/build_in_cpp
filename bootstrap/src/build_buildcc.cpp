@@ -53,6 +53,13 @@ void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
   target.AddIncludeDir("lib/env/include");
   target.GlobHeaders("lib/env/include/env");
 
+  // SCHEMA
+  target.GlobSources("schema/src");
+  target.AddIncludeDir("schema/include");
+  target.GlobHeaders("schema/include/schema");
+  target.GlobHeaders("schema/include/schema/interface");
+  target.GlobHeaders("schema/include/schema/private");
+
   // TOOLCHAIN
   target.GlobSources("lib/toolchain/src/api");
   target.AddIncludeDir("lib/toolchain/include");
