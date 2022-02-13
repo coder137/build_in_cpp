@@ -4,6 +4,7 @@ include(cmake/common_target_src.cmake)
 if (${TESTING})
     set(TARGET_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
     include(cmake/mock_target.cmake)
+    add_subdirectory(test/path)
     add_subdirectory(test/target)
 endif()
 
