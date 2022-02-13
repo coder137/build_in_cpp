@@ -14,26 +14,17 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_COMMON_UTIL_H_
-#define TARGET_COMMON_UTIL_H_
+#ifndef TARGET_COMMON_TARGET_TYPE_H_
+#define TARGET_COMMON_TARGET_TYPE_H_
 
-#include <string>
-#include <vector>
+namespace buildcc {
 
-#include "schema/path.h"
+enum class TargetType {
+  Executable,     ///< Executable Target type
+  StaticLibrary,  ///< Static library target type
+  DynamicLibrary, ///< Dynamic library target type
+};
 
-namespace buildcc::internal {
-
-// Aggregates
-template <typename T> std::string aggregate(const T &list) {
-  return fmt::format("{}", fmt::join(list, " "));
 }
-
-std::string aggregate(const buildcc::fs_unordered_set &paths);
-
-std::string aggregate_with_prefix(const std::string &prefix,
-                                  const fs_unordered_set &dirs);
-
-} // namespace buildcc::internal
 
 #endif

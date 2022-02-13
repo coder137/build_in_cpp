@@ -32,7 +32,7 @@
 #include "target/api/sync_api.h"
 #include "target/api/target_info_getter.h"
 
-#include "target/serialization/target_serialization.h"
+#include "schema/target_serialization.h"
 
 namespace buildcc {
 

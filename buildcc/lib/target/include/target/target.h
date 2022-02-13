@@ -43,8 +43,8 @@
 #include "target/friend/link_target.h"
 
 // Internal
-#include "target/common/path.h"
-#include "target/serialization/target_serialization.h"
+#include "schema/path.h"
+#include "schema/target_serialization.h"
 
 // Env
 #include "env/env.h"

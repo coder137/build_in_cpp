@@ -1,21 +1,17 @@
 set(COMMON_TARGET_SRCS 
     # Interfaces
     include/target/interface/builder_interface.h
-    include/target/interface/serialization_interface.h
 
     # Common
     src/common/target_config.cpp
     src/common/target_state.cpp
-    include/target/common/target_file_ext.h
     include/target/common/target_config.h
     include/target/common/target_state.h
+    include/target/common/target_file_ext.h
     include/target/common/target_env.h
-    include/target/common/target_type.h
 
     src/common/util.cpp
     include/target/common/util.h
-
-    include/target/common/path.h
 
     # API
     src/api/source_api.cpp
@@ -39,9 +35,6 @@ set(COMMON_TARGET_SRCS
     include/target/api/target_info_getter.h
     include/target/api/target_getter.h
 
-    # Base Generator
-    src/generator/generator_serialization.cpp
-    include/target/serialization/generator_serialization.h
 
     # Generator
     src/generator/generator.cpp
@@ -55,9 +48,6 @@ set(COMMON_TARGET_SRCS
     include/target/friend/compile_object.h
     include/target/friend/link_target.h
 
-    # Base Target
-    src/target/target_serialization.cpp
-    include/target/serialization/target_serialization.h
 
     # Target
     src/target/target.cpp

@@ -14,7 +14,6 @@ add_library(mock_target STATIC
 target_include_directories(mock_target PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/mock
-    ${SCHEMA_BUILD_DIR}
 )
 
 target_compile_options(mock_target PUBLIC ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_FLAGS})
@@ -23,6 +22,7 @@ target_link_libraries(mock_target PUBLIC
     flatbuffers_header_only
     Taskflow
 
+    mock_schema
     mock_toolchain
 
     CppUTest
@@ -36,5 +36,3 @@ if (${MINGW})
     message(WARNING "-Wl,--allow-multiple-definition for MINGW")
     target_link_options(mock_target PUBLIC -Wl,--allow-multiple-definition)
 endif()
-
-add_dependencies(mock_target fbs_to_header)

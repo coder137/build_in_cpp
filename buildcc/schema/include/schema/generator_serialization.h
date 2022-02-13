@@ -17,13 +17,12 @@
 #ifndef TARGET_SERIALIZATION_GENERATOR_SERIALIZATION_H_
 #define TARGET_SERIALIZATION_GENERATOR_SERIALIZATION_H_
 
-#include "target/interface/serialization_interface.h"
-
 #include <string>
 #include <unordered_set>
 #include <vector>
 
-#include "target/common/path.h"
+#include "schema/path.h"
+#include "schema/serialization_interface.h"
 
 namespace buildcc::internal {
 

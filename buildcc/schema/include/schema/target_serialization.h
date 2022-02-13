@@ -17,12 +17,11 @@
 #ifndef TARGET_SERIALIZATION_TARGET_SERIALIZATION_H_
 #define TARGET_SERIALIZATION_TARGET_SERIALIZATION_H_
 
-#include "target/interface/serialization_interface.h"
-
 #include <mutex>
 
-#include "target/common/path.h"
-#include "target/common/target_type.h"
+#include "schema/path.h"
+#include "schema/serialization_interface.h"
+#include "schema/target_type.h"
 
 namespace buildcc::internal {
 

@@ -2,9 +2,6 @@
 set(BUILDCC_INSTALL_LIB_PREFIX "lib/cmake")
 set(BUILDCC_INSTALL_HEADER_PREFIX "include/buildcc")
 
-# Flatbuffers schema
-add_subdirectory(schema)
-
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})
     add_library(buildcc STATIC
         buildcc.h
@@ -30,6 +27,9 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
         target_precompile_headers(buildcc INTERFACE ${FBS_DIR}/pch/pch.h)
     endif()
 endif()
+
+# Flatbuffers schema
+add_subdirectory(schema)
 
 # Environment
 add_subdirectory(lib/env)

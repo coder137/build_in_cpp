@@ -23,7 +23,7 @@
 #include "env/host_os_util.h"
 #include "env/logging.h"
 
-#include "target/common/path.h"
+#include "schema/path.h"
 
 namespace {
 constexpr const char *const kEnvVarNotFound =
