@@ -272,6 +272,7 @@ rectangle CLI11 as cli11 #palegreen
 rectangle "tiny-process-library" as tpl #palegreen
 
 rectangle Environment as env #aliceblue
+rectangle Schema as schema #aliceblue
 rectangle Toolchain as toolchain #aliceblue
 rectangle Target as target #aliceblue
 rectangle "Toolchain specialized" as toolchain_specialized #aliceblue
@@ -286,17 +287,19 @@ fmt -up-&gt; env
 spdlog .up.&gt; env
 tpl .up.&gt; env
 
-flatbuffers .up.&gt; target
-taskflow -up-&gt; target
-
 cli11 -up-&gt; args
 taskflow -up-&gt; register
 
+flatbuffers .up.&gt; schema
+
 env -up-&gt; toolchain
+env -up-&gt; schema
 
+taskflow -up-&gt; target
+schema -up-&gt; target
 toolchain -up-&gt; target
-toolchain -up-&gt; toolchain_specialized
 
+toolchain -up-&gt; toolchain_specialized
 target -up-&gt; target_specialized
 
 target -up-&gt; args
@@ -307,7 +310,7 @@ toolchain_specialized -up-&gt; buildcc
 target_specialized -up-&gt; buildcc
 args -up-&gt; buildcc
 register -up-&gt; buildcc
-plugins -up-&gt; buildcc' src="../_images/plantuml-ea8c5f0829bc754249170b2b7f39d19d63f930bc.png"/>
+plugins -up-&gt; buildcc' src="../_images/plantuml-f0648d1fb23ac5a0956c3ec8bbfbe3bd74b4d3b7.png"/>
 </p>
 </div>
 </div>

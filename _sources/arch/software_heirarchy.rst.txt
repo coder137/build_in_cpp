@@ -47,6 +47,7 @@ BuildCC interface lib
    rectangle "tiny-process-library" as tpl #palegreen
 
    rectangle Environment as env #aliceblue
+   rectangle Schema as schema #aliceblue
    rectangle Toolchain as toolchain #aliceblue
    rectangle Target as target #aliceblue
    rectangle "Toolchain specialized" as toolchain_specialized #aliceblue
@@ -61,17 +62,19 @@ BuildCC interface lib
    spdlog .up.> env
    tpl .up.> env
 
-   flatbuffers .up.> target
-   taskflow -up-> target
-
    cli11 -up-> args
    taskflow -up-> register
 
+   flatbuffers .up.> schema
+
    env -up-> toolchain
+   env -up-> schema
 
+   taskflow -up-> target
+   schema -up-> target
    toolchain -up-> target
-   toolchain -up-> toolchain_specialized
 
+   toolchain -up-> toolchain_specialized
    target -up-> target_specialized
 
    target -up-> args
