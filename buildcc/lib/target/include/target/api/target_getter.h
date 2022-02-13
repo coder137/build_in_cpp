@@ -20,7 +20,7 @@
 #include <filesystem>
 #include <string>
 
-#include "target/common/target_type.h"
+#include "schema/target_type.h"
 
 #include "toolchain/toolchain.h"
 

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_SERIALIZATION_GENERATOR_SERIALIZATION_H_
-#define TARGET_SERIALIZATION_GENERATOR_SERIALIZATION_H_
+#ifndef SCHEMA_GENERATOR_SERIALIZATION_H_
+#define SCHEMA_GENERATOR_SERIALIZATION_H_
 
 #include <string>
 #include <unordered_set>

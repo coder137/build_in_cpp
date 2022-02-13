@@ -35,7 +35,7 @@
 #include "target/target_info.h"
 
 // Common
-#include "target/common/target_type.h"
+#include "schema/target_type.h"
 
 // Friend
 #include "target/friend/compile_object.h"

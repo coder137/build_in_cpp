@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_COMMON_TARGET_TYPE_H_
-#define TARGET_COMMON_TARGET_TYPE_H_
+#ifndef SCHEMA_TARGET_TYPE_H_
+#define SCHEMA_TARGET_TYPE_H_
 
 namespace buildcc {
 
