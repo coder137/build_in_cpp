@@ -32,9 +32,9 @@
 
 #include "target/interface/builder_interface.h"
 
-#include "target/serialization/generator_serialization.h"
+#include "schema/generator_serialization.h"
+#include "schema/path.h"
 
-#include "target/common/path.h"
 #include "target/common/target_env.h"
 
 namespace buildcc {

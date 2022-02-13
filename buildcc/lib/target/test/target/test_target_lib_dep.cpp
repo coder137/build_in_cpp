@@ -9,7 +9,7 @@
 #include "target/target.h"
 
 //
-#include "target/serialization/target_serialization.h"
+#include "schema/target_serialization.h"
 
 #include <iostream>
 #include <unistd.h>

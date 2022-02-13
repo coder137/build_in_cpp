@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_SERIALIZATION_TARGET_SERIALIZATION_H_
-#define TARGET_SERIALIZATION_TARGET_SERIALIZATION_H_
-
-#include "target/interface/serialization_interface.h"
+#ifndef SCHEMA_TARGET_SERIALIZATION_H_
+#define SCHEMA_TARGET_SERIALIZATION_H_
 
 #include <mutex>
 
-#include "target/common/path.h"
-#include "target/common/target_type.h"
+#include "schema/path.h"
+#include "schema/target_type.h"
+
+#include "schema/interface/serialization_interface.h"
 
 namespace buildcc::internal {
 

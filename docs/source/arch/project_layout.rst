@@ -14,11 +14,15 @@ Project Layout
    ** README.md
    ** TODO.md
    * buildcc
-   ** env
-   ** toolchain
-   ** target
-   ** args
-   ** register
+   ** lib
+   *** env
+   *** toolchain
+   *** target
+   *** args
+   *** register
+   ** schema
+   ** toolchains
+   ** targets
    * bootstrap
    * buildexe
    * cmake

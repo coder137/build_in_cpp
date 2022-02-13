@@ -53,6 +53,13 @@ void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
   target.AddIncludeDir("lib/env/include");
   target.GlobHeaders("lib/env/include/env");
 
+  // SCHEMA
+  target.GlobSources("schema/src");
+  target.AddIncludeDir("schema/include");
+  target.GlobHeaders("schema/include/schema");
+  target.GlobHeaders("schema/include/schema/interface");
+  target.GlobHeaders("schema/include/schema/private");
+
   // TOOLCHAIN
   target.GlobSources("lib/toolchain/src/api");
   target.AddIncludeDir("lib/toolchain/include");
@@ -72,8 +79,6 @@ void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
   target.GlobHeaders("lib/target/include/target/common");
   target.GlobHeaders("lib/target/include/target/friend");
   target.GlobHeaders("lib/target/include/target/interface");
-  target.GlobHeaders("lib/target/include/target/private");
-  target.GlobHeaders("lib/target/include/target/serialization");
 
   // ARGS
   target.GlobSources("lib/args/src");

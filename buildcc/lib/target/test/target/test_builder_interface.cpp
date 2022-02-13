@@ -1,6 +1,6 @@
 #include "target/interface/builder_interface.h"
 
-#include "target/common/path.h"
+#include "schema/path.h"
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"

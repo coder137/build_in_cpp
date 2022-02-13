@@ -10,7 +10,9 @@ target_include_directories(${TEST_NAME} PRIVATE
     ${CMAKE_CURRENT_BINARY_DIR}/generated
 )
 target_link_libraries(${TEST_NAME} PRIVATE
-    mock_env    
+    mock_env
+    mock_schema
+
     CppUTest
     CppUTestExt
     gcov

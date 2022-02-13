@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_INTERFACE_SERIALIZATION_INTERFACE_H_
-#define TARGET_INTERFACE_SERIALIZATION_INTERFACE_H_
+#ifndef SCHEMA_INTERFACE_SERIALIZATION_INTERFACE_H_
+#define SCHEMA_INTERFACE_SERIALIZATION_INTERFACE_H_
 
 #include <filesystem>
 
 #include "env/assert_fatal.h"
 #include "env/util.h"
 
-#include "target/common/path.h"
+#include "schema/path.h"
 
 namespace fs = std::filesystem;
 

@@ -35,7 +35,7 @@
 #include "target/target_info.h"
 
 // Common
-#include "target/common/target_type.h"
+#include "schema/target_type.h"
 
 // Friend
 #include "target/friend/compile_object.h"
@@ -43,8 +43,8 @@
 #include "target/friend/link_target.h"
 
 // Internal
-#include "target/common/path.h"
-#include "target/serialization/target_serialization.h"
+#include "schema/path.h"
+#include "schema/target_serialization.h"
 
 // Env
 #include "env/env.h"

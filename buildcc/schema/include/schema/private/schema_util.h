@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_PRIVATE_SCHEMA_UTIL_H_
-#define TARGET_PRIVATE_SCHEMA_UTIL_H_
+#ifndef SCHEMA_PRIVATE_SCHEMA_UTIL_H_
+#define SCHEMA_PRIVATE_SCHEMA_UTIL_H_
 
 #include "path_generated.h"
 
 #include <algorithm>
 
-#include "target/common/path.h"
+#include "schema/path.h"
 
 namespace fbs = schema::internal;
 

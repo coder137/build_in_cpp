@@ -23,7 +23,6 @@
 
 #include "env/assert_fatal.h"
 
-#include "target/common/path.h"
 #include "target/common/util.h"
 
 namespace buildcc::internal {

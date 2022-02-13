@@ -1,4 +1,4 @@
-#include "target/interface/serialization_interface.h"
+#include "schema/interface/serialization_interface.h"
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"

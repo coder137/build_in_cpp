@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-#include "target/serialization/generator_serialization.h"
+#include "schema/generator_serialization.h"
 
 // Third party
 #include "flatbuffers/flatbuffers.h"
 
 // Private
-#include "target/private/schema_util.h"
+#include "schema/private/schema_util.h"
 
 // Schema generated
 #include "generator_generated.h"
