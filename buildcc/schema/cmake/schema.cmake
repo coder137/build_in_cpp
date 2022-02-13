@@ -1,14 +1,15 @@
 # schema test
 if (${TESTING})
     add_library(mock_schema STATIC
-        include/schema/schema_util.h
-        include/schema/path.h
-        include/schema/serialization_interface.h
-        include/schema/generator_serialization.h
-        include/schema/target_serialization.h
-
         src/generator_serialization.cpp
         src/target_serialization.cpp
+
+        include/schema/private/schema_util.h
+        include/schema/interface/serialization_interface.h
+
+        include/schema/path.h
+        include/schema/generator_serialization.h
+        include/schema/target_serialization.h
     )
     target_include_directories(mock_schema PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -33,13 +34,15 @@ if (${TESTING})
 endif()
 
 set(SCHEMA_SRCS
-    include/schema/path.h
-    include/schema/serialization_interface.h
-    include/schema/generator_serialization.h
-    include/schema/target_serialization.h
-
     src/generator_serialization.cpp
     src/target_serialization.cpp
+
+    include/schema/private/schema_util.h
+    include/schema/interface/serialization_interface.h
+
+    include/schema/path.h
+    include/schema/generator_serialization.h
+    include/schema/target_serialization.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})

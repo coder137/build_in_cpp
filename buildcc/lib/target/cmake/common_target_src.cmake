@@ -35,7 +35,6 @@ set(COMMON_TARGET_SRCS
     include/target/api/target_info_getter.h
     include/target/api/target_getter.h
 
-
     # Generator
     src/generator/generator.cpp
     include/target/generator.h
@@ -47,7 +46,6 @@ set(COMMON_TARGET_SRCS
     include/target/friend/compile_pch.h
     include/target/friend/compile_object.h
     include/target/friend/link_target.h
-
 
     # Target
     src/target/target.cpp

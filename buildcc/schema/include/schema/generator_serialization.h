@@ -22,7 +22,8 @@
 #include <vector>
 
 #include "schema/path.h"
-#include "schema/serialization_interface.h"
+
+#include "schema/interface/serialization_interface.h"
 
 namespace buildcc::internal {
 

@@ -20,8 +20,9 @@
 #include <mutex>
 
 #include "schema/path.h"
-#include "schema/serialization_interface.h"
 #include "schema/target_type.h"
+
+#include "schema/interface/serialization_interface.h"
 
 namespace buildcc::internal {
 

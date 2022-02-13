@@ -20,7 +20,7 @@
 #include "flatbuffers/flatbuffers.h"
 
 // Private
-#include "schema/schema_util.h"
+#include "schema/private/schema_util.h"
 
 // Schema generated
 #include "generator_generated.h"
