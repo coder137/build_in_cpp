@@ -30,7 +30,6 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     target_link_libraries(target PUBLIC 
         schema
         toolchain
-        flatbuffers_header_only
         Taskflow
     )
     target_compile_options(target PRIVATE ${BUILD_COMPILE_FLAGS})
