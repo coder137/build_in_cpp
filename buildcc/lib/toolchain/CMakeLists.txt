@@ -1,6 +1,12 @@
 set(TOOLCHAIN_SRCS
     include/toolchain/toolchain.h
 
+    include/toolchain/common/file_ext.h
+
+    src/common/toolchain_config.cpp
+    include/toolchain/common/toolchain_config.h
+
+    # Features
     src/api/toolchain_verify.cpp
     include/toolchain/api/toolchain_verify.h
 )
@@ -14,7 +20,7 @@ if (${TESTING})
     target_compile_options(mock_toolchain PUBLIC ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_FLAGS})
     target_link_options(mock_toolchain PUBLIC ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS})
     target_link_libraries(mock_toolchain PUBLIC
-        mock_env
+        mock_schema
 
         CppUTest
         CppUTestExt
@@ -53,7 +59,7 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
         $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
     )
     target_link_libraries(toolchain PUBLIC 
-        env
+        schema
     )
 endif()
 
