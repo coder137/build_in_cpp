@@ -1,11 +1,10 @@
 #include <filesystem>
 
-#include <unistd.h>
-
 #include "constants.h"
 
 #include "expect_command.h"
 #include "expect_target.h"
+#include "test_target_util.h"
 
 #include "target/target.h"
 
@@ -128,7 +127,7 @@ TEST(TargetPchTestGroup, Target_AddPch_Rebuild) {
 
   // Rebuild: Updated
   {
-    sleep(1);
+    buildcc::m::blocking_sleep(1);
     fs::path filename =
         fs::path(BUILD_SCRIPT_SOURCE) / "data" / "pch/pch_header_1.h";
     bool save = buildcc::env::save_file(filename.string().c_str(), "", false);
@@ -221,7 +220,7 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
 
   // Rebuild: Updated
   {
-    sleep(1);
+    buildcc::m::blocking_sleep(1);
     fs::path filename =
         fs::path(BUILD_SCRIPT_SOURCE) / "data" / "pch/pch_header_1.h";
     bool save = buildcc::env::save_file(filename.string().c_str(), "", false);

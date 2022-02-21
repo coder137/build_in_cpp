@@ -1,9 +1,8 @@
-#include <unistd.h>
-
 #include "constants.h"
 
 #include "expect_command.h"
 #include "expect_target.h"
+#include "test_target_util.h"
 
 #include "target/target.h"
 
@@ -80,7 +79,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_Rebuild) {
 
   {
     // * To make sure that save_file is newer
-    sleep(1);
+    buildcc::m::blocking_sleep(1);
     const fs::path new_source =
         buildcc::env::get_project_root_dir() / "data" / "new_source.cpp";
     std::string buf{""};
@@ -119,7 +118,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_Rebuild) {
 
   {
     // * To make sure that save_file is newer
-    sleep(1);
+    buildcc::m::blocking_sleep(1);
     const fs::path new_source =
         buildcc::env::get_project_root_dir() / "data" / "new_source.cpp";
     std::string buf{""};
