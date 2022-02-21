@@ -20,16 +20,18 @@
 
 namespace buildcc {
 
+void TargetState::BuildCompleted() { build_ = true; }
+
 void TargetState::SetSourceState(FileExt file_extension) {
   switch (file_extension) {
   case FileExt::Asm:
-    contains_asm = true;
+    contains_asm_ = true;
     break;
   case FileExt::C:
-    contains_c = true;
+    contains_c_ = true;
     break;
   case FileExt::Cpp:
-    contains_cpp = true;
+    contains_cpp_ = true;
     break;
   case FileExt::Header:
   case FileExt::Invalid:
