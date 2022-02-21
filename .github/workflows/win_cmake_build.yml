@@ -44,7 +44,13 @@ jobs:
           cmake --list-presets
           cmake --preset=${{env.BUILD_MSVC_PRESET}}
 
-      - name: Build
+      - name: Build Debug and test
+        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+        run: |
+          cmake --build . --parallel 2 --config Debug
+          ctest . --parallel 2 -C Debug
+
+      - name: Build Release
         # Linux has 2 cores
         run: |
           cmake --build --list-presets

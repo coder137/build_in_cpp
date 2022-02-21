@@ -24,7 +24,7 @@ if (${TESTING})
 
         CppUTest
         CppUTestExt
-        gcov
+        ${TEST_LINK_LIBS}
     )
 
     add_executable(test_toolchain_verify

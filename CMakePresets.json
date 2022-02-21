@@ -121,7 +121,7 @@
                 "BUILDCC_BOOTSTRAP_THROUGH_CMAKE": true,
                 "BUILDCC_PRECOMPILE_HEADERS": true,
                 "BUILDCC_EXAMPLES": true,
-                "BUILDCC_TESTING": false,
+                "BUILDCC_TESTING": true,
                 "BUILDCC_CLANGTIDY": false,
                 "BUILDCC_CPPCHECK": false,
                 "BUILDCC_DOCUMENTATION": false,

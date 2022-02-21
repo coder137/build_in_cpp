@@ -49,7 +49,7 @@ namespace buildcc::env {
  */
 inline bool save_file(const char *name, const char *buf, size_t len,
                       bool binary) {
-  if (buf == nullptr) {
+  if (name == nullptr || buf == nullptr) {
     return false;
   }
   std::ofstream ofs(name, binary ? std::ofstream::binary : std::ofstream::out);

@@ -33,25 +33,11 @@ TEST(EnvUtilTestGroup, Util_SaveFile_NullptrName) {
   CHECK_FALSE(save);
 }
 
-TEST(EnvUtilTestGroup, Util_SaveFile_BadWrite) {
-  constexpr const char *const FILENAME = "BadWrite.txt";
-  fs::remove(FILENAME);
-  bool save = buildcc::env::save_file(FILENAME, "Hello", -1, false);
-  CHECK_FALSE(save);
-}
-
 TEST(EnvUtilTestGroup, Util_SaveFile_GoodWrite) {
   constexpr const char *const FILENAME = "GoodWrite.txt";
   fs::remove(FILENAME);
   bool save = buildcc::env::save_file(FILENAME, "Hello", false);
   CHECK_TRUE(save);
-}
-
-TEST(EnvUtilTestGroup, Util_SaveFile_BadWrite_Binary) {
-  constexpr const char *const FILENAME = "BadWrite_Binary.txt";
-  fs::remove(FILENAME);
-  bool save = buildcc::env::save_file(FILENAME, "Hello", -1, true);
-  CHECK_FALSE(save);
 }
 
 TEST(EnvUtilTestGroup, Util_SaveFile_GoodWrite_Binary) {
@@ -66,22 +52,6 @@ TEST(EnvUtilTestGroup, Util_SaveFile_CheckDirectory) {
   constexpr const char *const DIRNAME = "my_random_directory";
   fs::create_directory(DIRNAME);
   bool save = buildcc::env::save_file(DIRNAME, "Hello", true);
-  CHECK_FALSE(save);
-}
-
-TEST(EnvUtilTestGroup, Util_SaveFile_CannotWrite) {
-  constexpr const char *const FILENAME = "CannotWrite.txt";
-  fs::remove(FILENAME);
-  bool save = buildcc::env::save_file(FILENAME, "Hello", false);
-  CHECK_TRUE(save);
-
-  std::error_code err;
-  fs::permissions(FILENAME, fs::perms::none, err);
-  if (err) {
-    FAIL("Cannot disable file permissions");
-  }
-
-  save = buildcc::env::save_file(FILENAME, "Hello", false);
   CHECK_FALSE(save);
 }
 
@@ -143,6 +113,8 @@ TEST(EnvUtilTestGroup, Util_LoadFile_ReadTxt) {
   CHECK_TRUE(load);
 }
 
+#if defined(__GNUC__) && !defined(__MINGW32__) && !defined(__MINGW64__)
+
 TEST(EnvUtilTestGroup, Util_LoadFile_CannotOpen) {
   constexpr const char *const FILENAME = "CannotOpen.txt";
   buildcc::env::save_file(FILENAME, "Random Data", false);
@@ -158,6 +130,38 @@ TEST(EnvUtilTestGroup, Util_LoadFile_CannotOpen) {
   bool load = buildcc::env::load_file(FILENAME, true, &str);
   CHECK_FALSE(load);
 }
+
+TEST(EnvUtilTestGroup, Util_SaveFile_BadWrite_Binary) {
+  constexpr const char *const FILENAME = "BadWrite_Binary.txt";
+  fs::remove(FILENAME);
+  bool save = buildcc::env::save_file(FILENAME, "Hello", -1, true);
+  CHECK_FALSE(save);
+}
+
+TEST(EnvUtilTestGroup, Util_SaveFile_BadWrite) {
+  constexpr const char *const FILENAME = "BadWrite.txt";
+  fs::remove(FILENAME);
+  bool save = buildcc::env::save_file(FILENAME, "Hello", -1, false);
+  CHECK_FALSE(save);
+}
+
+TEST(EnvUtilTestGroup, Util_SaveFile_CannotWrite) {
+  constexpr const char *const FILENAME = "CannotWrite.txt";
+  fs::remove(FILENAME);
+  bool save = buildcc::env::save_file(FILENAME, "Hello", false);
+  CHECK_TRUE(save);
+
+  std::error_code err;
+  fs::permissions(FILENAME, fs::perms::none, err);
+  if (err) {
+    FAIL("Cannot disable file permissions");
+  }
+
+  save = buildcc::env::save_file(FILENAME, "Hello", false);
+  CHECK_FALSE(save);
+}
+
+#endif
 
 TEST(EnvUtilTestGroup, Util_Split) {
   {

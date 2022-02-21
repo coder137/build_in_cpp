@@ -15,7 +15,7 @@ target_link_libraries(${TEST_NAME} PRIVATE
 
     CppUTest
     CppUTestExt
-    gcov
+    ${TEST_LINK_LIBS}
 )
 target_compile_options(${TEST_NAME} PRIVATE ${TEST_COMPILE_FLAGS})
 target_link_options(${TEST_NAME} PRIVATE ${TEST_LINK_FLAGS})

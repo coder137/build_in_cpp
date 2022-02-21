@@ -1,9 +1,8 @@
 #include "target/generator.h"
 
-#include <unistd.h>
-
 #include "expect_command.h"
 #include "expect_generator.h"
+#include "test_target_util.h"
 
 #include "taskflow/taskflow.hpp"
 
@@ -162,7 +161,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
     buildcc::m::GeneratorRunner(generator);
   }
 
-  sleep(1);
+  buildcc::m::blocking_sleep(1);
   bool saved = buildcc::env::save_file(
       (buildcc::env::get_project_root_dir() / "new_source.cpp")
           .string()

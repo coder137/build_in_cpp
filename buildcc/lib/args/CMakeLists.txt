@@ -22,7 +22,7 @@ target_link_libraries(mock_args PUBLIC
 
     CppUTest
     CppUTestExt
-    gcov
+    ${TEST_LINK_LIBS}
 )
 
 # Tests

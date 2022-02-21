@@ -22,6 +22,7 @@
 
 #include "env/host_os_util.h"
 #include "env/logging.h"
+#include "env/util.h"
 
 #include "schema/path.h"
 
@@ -33,20 +34,6 @@ constexpr const char *const kOsNotSupported =
     "issue at https://github.com/coder137/build_in_cpp outlining your OS and "
     "usecase";
 
-std::vector<fs::path> SplitEnv(const char *env_ptr, const char *delim) {
-  std::vector<fs::path> env_paths;
-
-  std::string temp{env_ptr};
-  char *path = std::strtok(temp.data(), delim);
-  while (path != nullptr) {
-    env_paths.push_back(
-        buildcc::internal::Path::CreateNewPath(path).GetPathname());
-    path = std::strtok(nullptr, delim);
-  }
-
-  return env_paths;
-}
-
 std::vector<fs::path> SearchEnv(const std::string &host_env_var,
                                 const std::string &regex) {
   char *path_ptr = std::getenv(host_env_var.c_str());
@@ -56,13 +43,13 @@ std::vector<fs::path> SearchEnv(const std::string &host_env_var,
     return {};
   }
 
-  std::vector<fs::path> env_paths;
   constexpr const char *const kDelim = buildcc::env::get_os_envvar_delim();
   if constexpr (kDelim == nullptr) {
     buildcc::env::log_critical(__FUNCTION__, kOsNotSupported);
     return {};
   }
-  env_paths = SplitEnv(path_ptr, kDelim);
+
+  std::vector<std::string> env_paths = buildcc::env::split(path_ptr, kDelim[0]);
 
   // DONE, Construct a directory iterator
   // Only take the files
@@ -71,12 +58,12 @@ std::vector<fs::path> SearchEnv(const std::string &host_env_var,
     std::error_code errcode;
     const auto dir_iter = fs::directory_iterator(env_p, errcode);
     if (errcode) {
-      buildcc::env::log_critical(env_p.string(), errcode.message());
+      buildcc::env::log_critical(env_p, errcode.message());
       continue;
     }
 
     for (const auto &dir_entry : dir_iter) {
-      if (!dir_entry.is_regular_file()) {
+      if (!dir_entry.path().has_filename()) {
         continue;
       }
 

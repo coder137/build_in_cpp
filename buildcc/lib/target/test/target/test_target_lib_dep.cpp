@@ -5,6 +5,7 @@
 
 #include "expect_command.h"
 #include "expect_target.h"
+#include "test_target_util.h"
 
 #include "target/target.h"
 
@@ -12,7 +13,6 @@
 #include "schema/target_serialization.h"
 
 #include <iostream>
-#include <unistd.h>
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
@@ -234,7 +234,7 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
     buildcc::m::TargetRunner(foolib);
 
     // * To make sure that save_file is newer
-    sleep(1);
+    buildcc::m::blocking_sleep(1);
     bool saved = buildcc::env::save_file(
         foolib.GetTargetPath().string().c_str(), std::string{""}, false);
     CHECK_TRUE(saved);

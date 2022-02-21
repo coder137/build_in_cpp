@@ -10,7 +10,6 @@
 #include "schema/target_serialization.h"
 
 #include <iostream>
-#include <unistd.h>
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
