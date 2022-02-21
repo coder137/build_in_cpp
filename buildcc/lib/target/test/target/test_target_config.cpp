@@ -15,25 +15,25 @@ TEST_GROUP(TargetConfigTestGroup)
 TEST(TargetConfigTestGroup, GetFileExt) {
   buildcc::TargetConfig target_config;
 
-  buildcc::TargetFileExt ext;
+  buildcc::FileExt ext;
 
   ext = target_config.GetFileExt("file.asm");
-  CHECK(ext == buildcc::TargetFileExt::Asm);
+  CHECK(ext == buildcc::FileExt::Asm);
 
   ext = target_config.GetFileExt("file.c");
-  CHECK(ext == buildcc::TargetFileExt::C);
+  CHECK(ext == buildcc::FileExt::C);
 
   ext = target_config.GetFileExt("file.cpp");
-  CHECK(ext == buildcc::TargetFileExt::Cpp);
+  CHECK(ext == buildcc::FileExt::Cpp);
 
   ext = target_config.GetFileExt("file.h");
-  CHECK(ext == buildcc::TargetFileExt::Header);
+  CHECK(ext == buildcc::FileExt::Header);
 
   ext = target_config.GetFileExt("file.invalid");
-  CHECK(ext == buildcc::TargetFileExt::Invalid);
+  CHECK(ext == buildcc::FileExt::Invalid);
 
   ext = target_config.GetFileExt("random/directory");
-  CHECK(ext == buildcc::TargetFileExt::Invalid);
+  CHECK(ext == buildcc::FileExt::Invalid);
 }
 
 int main(int ac, char **av) {

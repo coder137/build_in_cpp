@@ -101,8 +101,8 @@ private:
   void Initialize();
 
   //
-  std::optional<std::string> SelectCompileFlags(TargetFileExt ext) const;
-  std::optional<std::string> SelectCompiler(TargetFileExt ext) const;
+  std::optional<std::string> SelectCompileFlags(FileExt ext) const;
+  std::optional<std::string> SelectCompiler(FileExt ext) const;
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,

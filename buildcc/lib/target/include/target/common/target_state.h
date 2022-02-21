@@ -17,7 +17,7 @@
 #ifndef TARGET_COMMON_TARGET_STATE_H_
 #define TARGET_COMMON_TARGET_STATE_H_
 
-#include "target/common/target_file_ext.h"
+#include "toolchain/common/file_ext.h"
 
 namespace buildcc {
 
@@ -27,7 +27,7 @@ namespace buildcc {
 // TargetInfo does not have a `Build` method, it is only meant to hold
 // information
 struct TargetState {
-  void SetSourceState(TargetFileExt file_extension);
+  void SetSourceState(FileExt file_extension);
   void SetPch();
   void SetLock();
 
