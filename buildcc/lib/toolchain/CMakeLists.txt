@@ -34,9 +34,17 @@ if (${TESTING})
         mock_toolchain
     )
 
+    add_executable(test_toolchain_config
+        test/test_toolchain_config.cpp
+    )
+    target_link_libraries(test_toolchain_config PRIVATE
+        mock_toolchain
+    )
+
     add_test(NAME test_toolchain_verify COMMAND test_toolchain_verify
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
     )
+    add_test(NAME test_toolchain_config COMMAND test_toolchain_config)
 endif()
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})
