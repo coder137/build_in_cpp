@@ -25,7 +25,7 @@ void IncludeApi<T>::AddHeaderAbsolute(const fs::path &absolute_filepath) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.config_.ExpectsValidHeader(absolute_filepath);
+  t.toolchain_.GetConfig().ExpectsValidHeader(absolute_filepath);
   t.user_.headers.insert(absolute_filepath);
 }
 
@@ -53,7 +53,7 @@ void IncludeApi<T>::GlobHeadersAbsolute(const fs::path &absolute_path) {
   T &t = static_cast<T &>(*this);
 
   for (const auto &p : fs::directory_iterator(absolute_path)) {
-    if (t.config_.IsValidHeader(p.path())) {
+    if (t.toolchain_.GetConfig().IsValidHeader(p.path())) {
       AddHeaderAbsolute(p.path());
     }
   }

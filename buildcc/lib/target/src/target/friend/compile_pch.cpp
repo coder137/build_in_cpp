@@ -117,13 +117,14 @@ void CompilePch::BuildCompile() {
 
 fs::path CompilePch::ConstructHeaderPath() const {
   return target_.GetTargetBuildDir() /
-         fmt::format("buildcc_pch{}", target_.GetConfig().pch_header_ext);
+         fmt::format("buildcc_pch{}",
+                     target_.toolchain_.GetConfig().pch_header_ext);
 }
 
 fs::path CompilePch::ConstructCompilePath() const {
   return ConstructHeaderPath().replace_extension(
-      fmt::format("{}{}", target_.GetConfig().pch_header_ext,
-                  target_.GetConfig().pch_compile_ext));
+      fmt::format("{}{}", target_.toolchain_.GetConfig().pch_header_ext,
+                  target_.toolchain_.GetConfig().pch_compile_ext));
 }
 
 fs::path CompilePch::ConstructSourcePath(bool has_cpp) const {
@@ -133,7 +134,7 @@ fs::path CompilePch::ConstructSourcePath(bool has_cpp) const {
 
 fs::path CompilePch::ConstructObjectPath() const {
   return ConstructHeaderPath().replace_extension(
-      fmt::format("{}", target_.GetConfig().obj_ext));
+      fmt::format("{}", target_.toolchain_.GetConfig().obj_ext));
 }
 
 std::string CompilePch::ConstructCompileCommand() const {
@@ -141,14 +142,14 @@ std::string CompilePch::ConstructCompileCommand() const {
                              ? target_.GetToolchain().GetCppCompiler()
                              : target_.GetToolchain().GetCCompiler();
   compiler = fmt::format("{}", fs::path(compiler));
-  const TargetFileExt file_ext_type =
-      target_.GetState().contains_cpp ? TargetFileExt::Cpp : TargetFileExt::C;
+  const FileExt file_ext_type =
+      target_.GetState().contains_cpp ? FileExt::Cpp : FileExt::C;
   const std::string compile_flags =
       target_.SelectCompileFlags(file_ext_type).value_or("");
   const std::string pch_compile_path = fmt::format("{}", compile_path_);
   const std::string pch_header_path = fmt::format("{}", header_path_);
   const std::string pch_source_path = fmt::format("{}", source_path_);
-  return target_.command_.Construct(target_.config_.pch_command,
+  return target_.command_.Construct(target_.GetConfig().pch_command,
                                     {
                                         {kCompiler, compiler},
                                         {kCompileFlags, compile_flags},

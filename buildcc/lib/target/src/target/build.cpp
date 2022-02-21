@@ -66,7 +66,7 @@ void Target::Build() {
   // Source state
   for (const auto &abs_source : user_.sources) {
     // Set state
-    state_.SetSourceState(config_.GetFileExt(abs_source));
+    state_.SetSourceState(toolchain_.GetConfig().GetFileExt(abs_source));
 
     // Relate input source with output object
     compile_object_.AddObjectData(abs_source);
@@ -74,10 +74,11 @@ void Target::Build() {
 
   // Target default arguments
   command_.AddDefaultArguments({
-      {kIncludeDirs, internal::aggregate_with_prefix(config_.prefix_include_dir,
-                                                     GetIncludeDirs())},
-      {kLibDirs,
-       internal::aggregate_with_prefix(config_.prefix_lib_dir, GetLibDirs())},
+      {kIncludeDirs,
+       internal::aggregate_with_prefix(
+           toolchain_.GetConfig().prefix_include_dir, GetIncludeDirs())},
+      {kLibDirs, internal::aggregate_with_prefix(
+                     toolchain_.GetConfig().prefix_lib_dir, GetLibDirs())},
 
       {kPreprocessorFlags, internal::aggregate(GetPreprocessorFlags())},
       {kCommonCompileFlags, internal::aggregate(GetCommonCompileFlags())},
