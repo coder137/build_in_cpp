@@ -25,17 +25,11 @@ add_test(NAME test_serialization_interface COMMAND test_serialization_interface
 )
 
 # Common
-add_executable(test_target_config
-    test_target_config.cpp
-)
-target_link_libraries(test_target_config PRIVATE target_interface)
-
 add_executable(test_target_state
     test_target_state.cpp
 )
 target_link_libraries(test_target_state PRIVATE target_interface)
 
-add_test(NAME test_target_config COMMAND test_target_config)
 add_test(NAME test_target_state COMMAND test_target_state)
 
 # Generator
