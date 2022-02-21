@@ -4,11 +4,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Walkthrough Examples" href="walkthroughs.html" /><link rel="prev" title="BuildExe “Immediate” example" href="buildexe_immediate_example.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.01.02"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.14.1"/>
         <title>BuildExe as a Package Manager - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=fade93df149f7c5fedb3ff897f799dc7d283b420" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=a8f031f701c6af50c9919b48f173a5785af06fac" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
     
     
 
@@ -40,17 +40,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path stroke="none" d="M0 0h24v24H0z" />
-      <line x1="4" y1="6" x2="20" y2="6" />
-      <line x1="10" y1="12" x2="20" y2="12" />
-      <line x1="6" y1="18" x2="20" y2="18" />
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
     </svg>
   </symbol>
   <symbol id="svg-menu" viewBox="0 0 24 24">
     <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
       <line x1="3" y1="12" x2="21" y2="12"></line>
       <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -59,14 +55,14 @@
   </symbol>
   <symbol id="svg-arrow-right" viewBox="0 0 24 24">
     <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
       <polyline points="9 18 15 12 9 6"></polyline>
     </svg>
   </symbol>
   <symbol id="svg-sun" viewBox="0 0 24 24">
     <title>Light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
       <circle cx="12" cy="12" r="5"></circle>
       <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -81,7 +77,7 @@
   </symbol>
   <symbol id="svg-moon" viewBox="0 0 24 24">
     <title>Dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
@@ -89,7 +85,7 @@
   </symbol>
   <symbol id="svg-sun-half" viewBox="0 0 24 24">
     <title>Auto light/dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
       <circle cx="12" cy="12" r="9" />
@@ -181,6 +177,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/args.html">Args</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/register.html">Register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain_utils.html">Toolchain Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target_utils.html">Target Utils</a></li>
@@ -206,6 +203,7 @@
 
 </div>
 </div>
+
       </div>
       
     </div>
@@ -213,8 +211,7 @@
   <div class="main">
     <div class="content">
       <div class="article-container">
-        <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -229,12 +226,12 @@
         </div>
         <article role="main">
           <div class="section" id="buildexe-as-a-package-manager">
-<h1>BuildExe as a Package Manager<a class="headerlink" href="#buildexe-as-a-package-manager" title="Permalink to this headline">¶</a></h1>
+<h1>BuildExe as a Package Manager<a class="headerlink" href="#buildexe-as-a-package-manager" title="Permalink to this headline">#</a></h1>
 <p>When we are <strong>compiling</strong> our “script” to an executable we can also add additional library build files which define how the library is built.</p>
 <p>The procedure is similar to git cloning the library to the <strong>ENV{BUILDCC_HOME}/libs</strong> folder using the <code class="docutils literal notranslate"><span class="pre">libs</span></code> options in buildexe.</p>
 <p>Please see <a class="reference internal" href="buildexe_setup.html"><span class="doc">BuildExe Setup</span></a> to setup your libs folder appropriately.</p>
 <div class="section" id="basic-procedure">
-<h2>Basic Procedure<a class="headerlink" href="#basic-procedure" title="Permalink to this headline">¶</a></h2>
+<h2>Basic Procedure<a class="headerlink" href="#basic-procedure" title="Permalink to this headline">#</a></h2>
 <p class="plantuml">
 <img alt='usecase "build.user_project.cpp" as build_cpp
 usecase "libs/library/build.library.h" as build_lib_header
@@ -266,7 +263,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </p>
 </div>
 <div class="section" id="helloworld-fmtlib-example">
-<h2>Helloworld “fmtlib” example<a class="headerlink" href="#helloworld-fmtlib-example" title="Permalink to this headline">¶</a></h2>
+<h2>Helloworld “fmtlib” example<a class="headerlink" href="#helloworld-fmtlib-example" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p>Git clone the <code class="docutils literal notranslate"><span class="pre">fmt</span></code> library into your <code class="docutils literal notranslate"><span class="pre">ENV{BUILDCC_HOME}/libs</span></code> folder</p></li>
 <li><dl class="simple">
@@ -297,7 +294,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </pre></div>
 </div>
 <div class="section" id="directory-structure">
-<h3>Directory structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h3>
+<h3>Directory structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">#</a></h3>
 <p class="plantuml">
 <img alt="@startmindmap
 * [workspace]
@@ -310,13 +307,13 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </p>
 </div>
 <div class="section" id="write-your-fmtlib-build-files">
-<h3>Write your fmtlib build files<a class="headerlink" href="#write-your-fmtlib-build-files" title="Permalink to this headline">¶</a></h3>
+<h3>Write your fmtlib build files<a class="headerlink" href="#write-your-fmtlib-build-files" title="Permalink to this headline">#</a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This process might seem like a hassle. But please note that fmtlib does not currently have support for BuildCC like build files and it must be provided by the user.</p>
 </div>
 <div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">build.fmt.h</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="code-block-caption"><span class="caption-text">build.fmt.h</span><a class="headerlink" href="#id1" title="Permalink to this code">#</a></div>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#pragma once</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"buildcc.h"</span><span class="cp"></span>
@@ -352,7 +349,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </div>
 </div>
 <div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">build.fmt.cpp</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="code-block-caption"><span class="caption-text">build.fmt.cpp</span><a class="headerlink" href="#id2" title="Permalink to this code">#</a></div>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"build.fmt.h"</span><span class="cp"></span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="kt">void</span><span class="w"> </span><span class="nf">build_fmt_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="o">&amp;</span><span class="w"> </span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">FmtConfig</span><span class="o">&amp;</span><span class="w"> </span><span class="n">config</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -393,7 +390,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </div>
 </div>
 <div class="section" id="write-your-c-script">
-<h3>Write your C++ “script”<a class="headerlink" href="#write-your-c-script" title="Permalink to this headline">¶</a></h3>
+<h3>Write your C++ “script”<a class="headerlink" href="#write-your-c-script" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Boilerplate is similar to the BuildExe helloworld “script” example in <a class="reference internal" href="buildexe_script_example.html"><span class="doc">BuildExe “Script” example</span></a></p></li>
 </ul>
@@ -538,7 +535,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </div>
 </div>
 <div class="section" id="write-your-compile-toml-file">
-<h3>Write your <code class="docutils literal notranslate"><span class="pre">compile.toml</span></code> file<a class="headerlink" href="#write-your-compile-toml-file" title="Permalink to this headline">¶</a></h3>
+<h3>Write your <code class="docutils literal notranslate"><span class="pre">compile.toml</span></code> file<a class="headerlink" href="#write-your-compile-toml-file" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>The only difference from the <code class="docutils literal notranslate"><span class="pre">compile.toml</span></code> in <a class="reference internal" href="buildexe_script_example.html"><span class="doc">BuildExe “Script” example</span></a> is the additional of the <code class="docutils literal notranslate"><span class="pre">libs</span></code> submodule</p></li>
 <li><p>We use the <code class="docutils literal notranslate"><span class="pre">fmt</span></code> option since we git cloned the library into the libs folder</p></li>
@@ -569,7 +566,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </div>
 </div>
 <div class="section" id="write-your-build-toml-file">
-<h3>Write your <code class="docutils literal notranslate"><span class="pre">build.toml</span></code> file<a class="headerlink" href="#write-your-build-toml-file" title="Permalink to this headline">¶</a></h3>
+<h3>Write your <code class="docutils literal notranslate"><span class="pre">build.toml</span></code> file<a class="headerlink" href="#write-your-build-toml-file" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Exact same <code class="docutils literal notranslate"><span class="pre">build.toml</span></code> as seen in the document <a class="reference internal" href="buildexe_script_example.html"><span class="doc">BuildExe “Script” example</span></a></p></li>
 </ul>
@@ -587,7 +584,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </div>
 </div>
 <div class="section" id="write-your-main-cpp-helloworld-example-in-fmtlib">
-<h3>Write your <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> helloworld example in fmtlib<a class="headerlink" href="#write-your-main-cpp-helloworld-example-in-fmtlib" title="Permalink to this headline">¶</a></h3>
+<h3>Write your <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> helloworld example in fmtlib<a class="headerlink" href="#write-your-main-cpp-helloworld-example-in-fmtlib" title="Permalink to this headline">#</a></h3>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"fmt/format.h"</span><span class="cp"></span>
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">fmt</span><span class="o">::</span><span class="n">print</span><span class="p">(</span><span class="s">"{} {}"</span><span class="p">,</span><span class="w"> </span><span class="s">"Hello"</span><span class="p">,</span><span class="w"> </span><span class="s">"World"</span><span class="p">);</span><span class="w"></span>
@@ -625,15 +622,21 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
               </div>
             </a>
         </div>
-
-        <div class="related-information">
-              Copyright &#169; 2021-2022, Niket Naidu |
-          Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-          <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
-            | <a class="muted-link" href="../_sources/getting_started/buildexe_package_manager.rst.txt"
-               rel="nofollow">
-              Show Source
-            </a>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2021-2022, Niket Naidu
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
         </div>
         
       </footer>

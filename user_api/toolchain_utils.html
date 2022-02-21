@@ -1,0 +1,466 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Toolchain" href="toolchain.html" /><link rel="prev" title="Register" href="register.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.14.1"/>
+        <title>Toolchain Utils - BuildCC 0.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=a8f031f701c6af50c9919b48f173a5785af06fac" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  body[data-theme="dark"] {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">BuildCC 0.1.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">BuildCC 0.1.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/toc.html">Introduction</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../arch/toc.html">Architecture</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../arch/project_layout.html">Project Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/software_heirarchy.html">Software Heirarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/serialization_schema.html">Serialization Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/cmake_boilerplate.html">CMake Boilerplate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/namespaces.html">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/design_patterns.html">Design Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/outputs.html">Outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arch/style_guide.html">Style Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_setup.html">BuildExe Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_script_example.html">BuildExe “Script” example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_immediate_example.html">BuildExe “Immediate” example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_package_manager.html">BuildExe as a Package Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/walkthroughs.html">Walkthrough Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/all_compile_options.html">Compile Options for BuildExe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/all_default_build_options.html">Build Options for “scripts”</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">User API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="args.html">Args</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register.html">Register</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Toolchain Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html">Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target_utils.html">Target Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generator.html">Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html">Target Info APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#targetinfo">TargetInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target-apis">Target APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target">Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#specialized-target">Specialized Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_plugins.html">Supported Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html">Environment</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/toc.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/hybrid.html">Hybrid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/gcc.html">GCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/msvc.html">MSVC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/clang.html">Clang</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/mingw.html">MinGW</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <div class="section" id="toolchain-utils">
+<h1>Toolchain Utils<a class="headerlink" href="#toolchain-utils" title="Permalink to this headline">#</a></h1>
+<p>Commonly used Utils (Classes / Structs) for <strong>Toolchain</strong></p>
+<div class="section" id="file-ext-h">
+<h2>file_ext.h<a class="headerlink" href="#file-ext-h" title="Permalink to this headline">#</a></h2>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc7FileExtE">
+<span id="_CPPv3N7buildcc7FileExtE"></span><span id="_CPPv2N7buildcc7FileExtE"></span><span class="target" id="namespacebuildcc_1a1d041afa0fa20d0d6e7a09b3fd4695b8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">FileExt</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc7FileExtE" title="Permalink to this definition">#</a><br/></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc7FileExt3AsmE">
+<span id="_CPPv3N7buildcc7FileExt3AsmE"></span><span id="_CPPv2N7buildcc7FileExt3AsmE"></span><span class="target" id="namespacebuildcc_1a1d041afa0fa20d0d6e7a09b3fd4695b8acf37c17a233d3e6855b79dc4360075ab"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Asm</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc7FileExt3AsmE" title="Permalink to this definition">#</a><br/></dt>
+<dd><p>Valid Assembly source extension. </p>
+</dd></dl>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc7FileExt1CE">
+<span id="_CPPv3N7buildcc7FileExt1CE"></span><span id="_CPPv2N7buildcc7FileExt1CE"></span><span class="target" id="namespacebuildcc_1a1d041afa0fa20d0d6e7a09b3fd4695b8a0d61f8370cad1d412f80b84d143e1257"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">C</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc7FileExt1CE" title="Permalink to this definition">#</a><br/></dt>
+<dd><p>Valid C source extension. </p>
+</dd></dl>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc7FileExt3CppE">
+<span id="_CPPv3N7buildcc7FileExt3CppE"></span><span id="_CPPv2N7buildcc7FileExt3CppE"></span><span class="target" id="namespacebuildcc_1a1d041afa0fa20d0d6e7a09b3fd4695b8adb4a39bf594c9fbcf318dd39ea19fed3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Cpp</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc7FileExt3CppE" title="Permalink to this definition">#</a><br/></dt>
+<dd><p>Valid Cpp source extension. </p>
+</dd></dl>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc7FileExt6HeaderE">
+<span id="_CPPv3N7buildcc7FileExt6HeaderE"></span><span id="_CPPv2N7buildcc7FileExt6HeaderE"></span><span class="target" id="namespacebuildcc_1a1d041afa0fa20d0d6e7a09b3fd4695b8abf50d5e661106d0abe925af3c2e6f7e7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Header</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc7FileExt6HeaderE" title="Permalink to this definition">#</a><br/></dt>
+<dd><p>Valid Header extension. </p>
+</dd></dl>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc7FileExt7InvalidE">
+<span id="_CPPv3N7buildcc7FileExt7InvalidE"></span><span id="_CPPv2N7buildcc7FileExt7InvalidE"></span><span class="target" id="namespacebuildcc_1a1d041afa0fa20d0d6e7a09b3fd4695b8a4bbb8f967da6d1a610596d7257179c2b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Invalid</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc7FileExt7InvalidE" title="Permalink to this definition">#</a><br/></dt>
+<dd><p>Not a valid C/C++ family extension. </p>
+</dd></dl>
+</dd></dl>
+</div>
+<div class="section" id="toolchain-config-h">
+<h2>toolchain_config.h<a class="headerlink" href="#toolchain-config-h" title="Permalink to this headline">#</a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15ToolchainConfigE">
+<span id="_CPPv3N7buildcc15ToolchainConfigE"></span><span id="_CPPv2N7buildcc15ToolchainConfigE"></span><span id="buildcc::ToolchainConfig"></span><span class="target" id="structbuildcc_1_1ToolchainConfig"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ToolchainConfig</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc15ToolchainConfigE" title="Permalink to this definition">#</a><br/></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15ToolchainConfig15ToolchainConfigEv">
+<span id="_CPPv3N7buildcc15ToolchainConfig15ToolchainConfigEv"></span><span id="_CPPv2N7buildcc15ToolchainConfig15ToolchainConfigEv"></span><span id="buildcc::ToolchainConfig::ToolchainConfig"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1abeb583a0550573cd49879ead0f60da2c"></span><span class="sig-name descname"><span class="n"><span class="pre">ToolchainConfig</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N7buildcc15ToolchainConfig15ToolchainConfigEv" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc15ToolchainConfig10GetFileExtERKN2fs4pathE">
+<span id="_CPPv3NK7buildcc15ToolchainConfig10GetFileExtERKN2fs4pathE"></span><span id="_CPPv2NK7buildcc15ToolchainConfig10GetFileExtERKN2fs4pathE"></span><span id="buildcc::ToolchainConfig::GetFileExt__fs::pathCRC"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1a0a0313fd7687bfcb10ccb44c26727993"></span><a class="reference internal" href="#_CPPv4N7buildcc7FileExtE" title="buildcc::FileExt"><span class="n"><span class="pre">FileExt</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetFileExt</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filepath</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc15ToolchainConfig10GetFileExtERKN2fs4pathE" title="Permalink to this definition">#</a><br/></dt>
+<dd><p>Get the valid file extension from a path. </p>
+<p>See <a class="reference internal" href="#structbuildcc_1_1ToolchainConfig_1a7349f93325a7e766dc7423baba9fd274"><span class="std std-ref">ToolchainConfig::valid_c_ext</span></a>, <a class="reference internal" href="#structbuildcc_1_1ToolchainConfig_1add2a395b409ebff73c9d9ee843ca3d77"><span class="std std-ref">ToolchainConfig::valid_cpp_ext</span></a>, <a class="reference internal" href="#structbuildcc_1_1ToolchainConfig_1ab492a4c297b830428de8ab42934f3a4b"><span class="std std-ref">ToolchainConfig::valid_asm_ext</span></a>, <a class="reference internal" href="#structbuildcc_1_1ToolchainConfig_1af3eefc51844f8fc1456aeefad687bb66"><span class="std std-ref">ToolchainConfig::valid_header_ext</span></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> – Absolute / Relative path of the file </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>FileExt File path detected as per Toolchain::valid_* variables </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc15ToolchainConfig13IsValidSourceERKN2fs4pathE">
+<span id="_CPPv3NK7buildcc15ToolchainConfig13IsValidSourceERKN2fs4pathE"></span><span id="_CPPv2NK7buildcc15ToolchainConfig13IsValidSourceERKN2fs4pathE"></span><span id="buildcc::ToolchainConfig::IsValidSource__fs::pathCRC"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1ae4e3f8c3e80eeb87143c8255430c483b"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsValidSource</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filepath</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc15ToolchainConfig13IsValidSourceERKN2fs4pathE" title="Permalink to this definition">#</a><br/></dt>
+<dd><p>Checks for C/C++ source file validity. </p>
+<p>See <a class="reference internal" href="#structbuildcc_1_1ToolchainConfig_1a7349f93325a7e766dc7423baba9fd274"><span class="std std-ref">ToolchainConfig::valid_c_ext</span></a>, <a class="reference internal" href="#structbuildcc_1_1ToolchainConfig_1add2a395b409ebff73c9d9ee843ca3d77"><span class="std std-ref">ToolchainConfig::valid_cpp_ext</span></a>, <a class="reference internal" href="#structbuildcc_1_1ToolchainConfig_1ab492a4c297b830428de8ab42934f3a4b"><span class="std std-ref">ToolchainConfig::valid_asm_ext</span></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> – Absolute / Relative path of file </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>true If file extension belongs to the above valid_* list </p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>false If file extension does not belong to the above valid_* list </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc15ToolchainConfig13IsValidHeaderERKN2fs4pathE">
+<span id="_CPPv3NK7buildcc15ToolchainConfig13IsValidHeaderERKN2fs4pathE"></span><span id="_CPPv2NK7buildcc15ToolchainConfig13IsValidHeaderERKN2fs4pathE"></span><span id="buildcc::ToolchainConfig::IsValidHeader__fs::pathCRC"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1ad34340efc831f08d5b213d8ac11684ee"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsValidHeader</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filepath</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc15ToolchainConfig13IsValidHeaderERKN2fs4pathE" title="Permalink to this definition">#</a><br/></dt>
+<dd><p>Checks for Header file validity. </p>
+<p>See <a class="reference internal" href="#structbuildcc_1_1ToolchainConfig_1af3eefc51844f8fc1456aeefad687bb66"><span class="std std-ref">ToolchainConfig::valid_header_ext</span></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> – Absolute / Relative path of file </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>true If file extension belongs to above valid_* list </p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>false If file extension does not belong to above valid_* list </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc15ToolchainConfig18ExpectsValidSourceERKN2fs4pathE">
+<span id="_CPPv3NK7buildcc15ToolchainConfig18ExpectsValidSourceERKN2fs4pathE"></span><span id="_CPPv2NK7buildcc15ToolchainConfig18ExpectsValidSourceERKN2fs4pathE"></span><span id="buildcc::ToolchainConfig::ExpectsValidSource__fs::pathCRC"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1a0c95e9c4eb6172724851adf5c91c3a14"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExpectsValidSource</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filepath</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc15ToolchainConfig18ExpectsValidSourceERKN2fs4pathE" title="Permalink to this definition">#</a><br/></dt>
+<dd><p>Expects Source file validity. </p>
+<p><a class="reference internal" href="environment.html#namespacebuildcc_1_1env_1a56de12e5a0ec91323b6f0c79354fb06b"><span class="std std-ref">env::assert_fatal</span></a> if not a valid source</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> – Absolute / Relative path of file </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc15ToolchainConfig18ExpectsValidHeaderERKN2fs4pathE">
+<span id="_CPPv3NK7buildcc15ToolchainConfig18ExpectsValidHeaderERKN2fs4pathE"></span><span id="_CPPv2NK7buildcc15ToolchainConfig18ExpectsValidHeaderERKN2fs4pathE"></span><span id="buildcc::ToolchainConfig::ExpectsValidHeader__fs::pathCRC"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1aed492809837b9b2079531e8c09b80fd1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExpectsValidHeader</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filepath</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc15ToolchainConfig18ExpectsValidHeaderERKN2fs4pathE" title="Permalink to this definition">#</a><br/></dt>
+<dd><p>Expects header file validity. </p>
+<p><a class="reference internal" href="environment.html#namespacebuildcc_1_1env_1a56de12e5a0ec91323b6f0c79354fb06b"><span class="std std-ref">env::assert_fatal</span></a> if not a valid header</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> – Absolute / Relative path of file </p>
+</dd>
+</dl>
+</dd></dl>
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15ToolchainConfig7obj_extE">
+<span id="_CPPv3N7buildcc15ToolchainConfig7obj_extE"></span><span id="_CPPv2N7buildcc15ToolchainConfig7obj_extE"></span><span id="buildcc::ToolchainConfig::obj_ext__ss"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1a177dbf34260396d0748aeaa46804506b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">obj_ext</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">".o"</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc15ToolchainConfig7obj_extE" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15ToolchainConfig14pch_header_extE">
+<span id="_CPPv3N7buildcc15ToolchainConfig14pch_header_extE"></span><span id="_CPPv2N7buildcc15ToolchainConfig14pch_header_extE"></span><span id="buildcc::ToolchainConfig::pch_header_ext__ss"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1afcd5ed50c612714c9ff601c85f65c9b6"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pch_header_ext</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">".h"</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc15ToolchainConfig14pch_header_extE" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15ToolchainConfig15pch_compile_extE">
+<span id="_CPPv3N7buildcc15ToolchainConfig15pch_compile_extE"></span><span id="_CPPv2N7buildcc15ToolchainConfig15pch_compile_extE"></span><span id="buildcc::ToolchainConfig::pch_compile_ext__ss"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1a4f6ee7ebaf74de3b712b60fd12e4df0e"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pch_compile_ext</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">".gch"</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc15ToolchainConfig15pch_compile_extE" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15ToolchainConfig18prefix_include_dirE">
+<span id="_CPPv3N7buildcc15ToolchainConfig18prefix_include_dirE"></span><span id="_CPPv2N7buildcc15ToolchainConfig18prefix_include_dirE"></span><span id="buildcc::ToolchainConfig::prefix_include_dir__ss"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1a38f4530148c817a623545b29ba3b7ee3"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">prefix_include_dir</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">"-I"</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc15ToolchainConfig18prefix_include_dirE" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15ToolchainConfig14prefix_lib_dirE">
+<span id="_CPPv3N7buildcc15ToolchainConfig14prefix_lib_dirE"></span><span id="_CPPv2N7buildcc15ToolchainConfig14prefix_lib_dirE"></span><span id="buildcc::ToolchainConfig::prefix_lib_dir__ss"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1ad7b89d59067d867728bb849e85d69a5e"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">prefix_lib_dir</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">"-L"</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc15ToolchainConfig14prefix_lib_dirE" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15ToolchainConfig11valid_c_extE">
+<span id="_CPPv3N7buildcc15ToolchainConfig11valid_c_extE"></span><span id="_CPPv2N7buildcc15ToolchainConfig11valid_c_extE"></span><span id="buildcc::ToolchainConfig::valid_c_ext__std::unordered_set:ss:"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1a7349f93325a7e766dc7423baba9fd274"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_set</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">valid_c_ext</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">".c"</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc15ToolchainConfig11valid_c_extE" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15ToolchainConfig13valid_cpp_extE">
+<span id="_CPPv3N7buildcc15ToolchainConfig13valid_cpp_extE"></span><span id="_CPPv2N7buildcc15ToolchainConfig13valid_cpp_extE"></span><span id="buildcc::ToolchainConfig::valid_cpp_ext__std::unordered_set:ss:"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1add2a395b409ebff73c9d9ee843ca3d77"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_set</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">valid_cpp_ext</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">".cpp"</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">".cxx"</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">".cc"</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc15ToolchainConfig13valid_cpp_extE" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15ToolchainConfig13valid_asm_extE">
+<span id="_CPPv3N7buildcc15ToolchainConfig13valid_asm_extE"></span><span id="_CPPv2N7buildcc15ToolchainConfig13valid_asm_extE"></span><span id="buildcc::ToolchainConfig::valid_asm_ext__std::unordered_set:ss:"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1ab492a4c297b830428de8ab42934f3a4b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_set</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">valid_asm_ext</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">".s"</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">".S"</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">".asm"</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc15ToolchainConfig13valid_asm_extE" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15ToolchainConfig16valid_header_extE">
+<span id="_CPPv3N7buildcc15ToolchainConfig16valid_header_extE"></span><span id="_CPPv2N7buildcc15ToolchainConfig16valid_header_extE"></span><span id="buildcc::ToolchainConfig::valid_header_ext__std::unordered_set:ss:"></span><span class="target" id="structbuildcc_1_1ToolchainConfig_1af3eefc51844f8fc1456aeefad687bb66"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_set</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">valid_header_ext</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="s"><span class="pre">".h"</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">".hpp"</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N7buildcc15ToolchainConfig16valid_header_extE" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+</div>
+</dd></dl>
+</div>
+</div>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="toolchain.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Toolchain</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="register.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Register</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2021-2022, Niket Naidu
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Toolchain Utils</a><ul>
+<li><a class="reference internal" href="#file-ext-h">file_ext.h</a></li>
+<li><a class="reference internal" href="#toolchain-config-h">toolchain_config.h</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    </body>
+</html>
