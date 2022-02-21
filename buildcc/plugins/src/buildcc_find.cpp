@@ -34,20 +34,6 @@ constexpr const char *const kOsNotSupported =
     "issue at https://github.com/coder137/build_in_cpp outlining your OS and "
     "usecase";
 
-std::vector<fs::path> SplitEnv(const char *env_ptr, const char *delim) {
-  std::vector<fs::path> env_paths;
-
-  std::string temp{env_ptr};
-  char *path = std::strtok(temp.data(), delim);
-  while (path != nullptr) {
-    env_paths.push_back(
-        buildcc::internal::Path::CreateNewPath(path).GetPathname());
-    path = std::strtok(nullptr, delim);
-  }
-
-  return env_paths;
-}
-
 std::vector<fs::path> SearchEnv(const std::string &host_env_var,
                                 const std::string &regex) {
   char *path_ptr = std::getenv(host_env_var.c_str());
