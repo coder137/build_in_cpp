@@ -175,34 +175,6 @@ TEST(ToolchainTestGroup, VerifyToolchain_PathContainsDir) {
   CHECK_TRUE(verified_toolchains.empty());
 }
 
-TEST(ToolchainTestGroup, VerifyToolchain_LockedFolder) {
-  std::error_code err;
-  fs::permissions(fs::current_path() / "toolchains" / "gcc", fs::perms::none,
-                  err);
-  if (err) {
-    FAIL_TEST("Could not set file permissions");
-  }
-
-  buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
-                         "ar", "ld");
-
-  buildcc::VerifyToolchainConfig config;
-  config.env_vars.clear();
-  config.absolute_search_paths.push_back(
-      (fs::current_path() / "toolchains" / "gcc").string());
-
-  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
-      gcc.Verify(config);
-  UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
-  CHECK_TRUE(verified_toolchains.empty());
-
-  fs::permissions(fs::current_path() / "toolchains" / "gcc", fs::perms::all,
-                  err);
-  if (err) {
-    FAIL_TEST("Could not set file permissions");
-  }
-}
-
 TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_CompilerVersion) {
   buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
@@ -332,6 +304,38 @@ TEST(ToolchainTestGroup, VerifyToolchain_UpdateFalse) {
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_EQUAL(verified_toolchains.size(), 1);
 }
+
+#if defined(__GNUC__) && !defined(__MINGW32__) && !defined(__MINGW64__)
+
+TEST(ToolchainTestGroup, VerifyToolchain_LockedFolder) {
+  std::error_code err;
+  fs::permissions(fs::current_path() / "toolchains" / "gcc", fs::perms::none,
+                  err);
+  if (err) {
+    FAIL_TEST("Could not set file permissions");
+  }
+
+  buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
+                         "ar", "ld");
+
+  buildcc::VerifyToolchainConfig config;
+  config.env_vars.clear();
+  config.absolute_search_paths.push_back(
+      (fs::current_path() / "toolchains" / "gcc").string());
+
+  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
+      gcc.Verify(config);
+  UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
+  CHECK_TRUE(verified_toolchains.empty());
+
+  fs::permissions(fs::current_path() / "toolchains" / "gcc", fs::perms::all,
+                  err);
+  if (err) {
+    FAIL_TEST("Could not set file permissions");
+  }
+}
+
+#endif
 
 int main(int ac, char **av) {
   buildcc::env::m::VectorStringCopier copier;
