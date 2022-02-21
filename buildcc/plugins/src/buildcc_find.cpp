@@ -22,6 +22,7 @@
 
 #include "env/host_os_util.h"
 #include "env/logging.h"
+#include "env/util.h"
 
 #include "schema/path.h"
 
@@ -56,13 +57,13 @@ std::vector<fs::path> SearchEnv(const std::string &host_env_var,
     return {};
   }
 
-  std::vector<fs::path> env_paths;
   constexpr const char *const kDelim = buildcc::env::get_os_envvar_delim();
   if constexpr (kDelim == nullptr) {
     buildcc::env::log_critical(__FUNCTION__, kOsNotSupported);
     return {};
   }
-  env_paths = SplitEnv(path_ptr, kDelim);
+
+  std::vector<std::string> env_paths = buildcc::env::split(path_ptr, kDelim[0]);
 
   // DONE, Construct a directory iterator
   // Only take the files
@@ -71,12 +72,12 @@ std::vector<fs::path> SearchEnv(const std::string &host_env_var,
     std::error_code errcode;
     const auto dir_iter = fs::directory_iterator(env_p, errcode);
     if (errcode) {
-      buildcc::env::log_critical(env_p.string(), errcode.message());
+      buildcc::env::log_critical(env_p, errcode.message());
       continue;
     }
 
     for (const auto &dir_entry : dir_iter) {
-      if (!dir_entry.is_regular_file()) {
+      if (!dir_entry.path().has_filename()) {
         continue;
       }
 
