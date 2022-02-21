@@ -7,7 +7,6 @@ set(COMMON_TARGET_SRCS
     src/common/target_state.cpp
     include/target/common/target_config.h
     include/target/common/target_state.h
-    include/target/common/target_file_ext.h
     include/target/common/target_env.h
 
     src/common/util.cpp
