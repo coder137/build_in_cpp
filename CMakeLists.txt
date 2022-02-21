@@ -42,7 +42,7 @@ endif()
 
 # Testing
 set(BUILD_TESTING OFF CACHE BOOL "Third Party modules use these options")
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND ${BUILDCC_TESTING})
+if (${BUILDCC_TESTING})
     set(TESTING ON)
     message("Enabling unit-testing")
     message("Compiler identification: ${CMAKE_CXX_COMPILER_ID}")
@@ -85,7 +85,7 @@ endif()
 
 # Coverage
 
-if (${TESTING})
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND ${TESTING})
     include(cmake/coverage/lcov.cmake)
     include(cmake/coverage/gcovr.cmake)
 endif()
