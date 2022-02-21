@@ -21,6 +21,13 @@
 
 namespace buildcc {
 
+constexpr const char *const kMsvcObjExt = ".obj";
+constexpr const char *const kMsvcPchHeaderExt = ".h";
+constexpr const char *const kMsvcPchCompileExt = ".pch";
+
+constexpr const char *const kMsvcPrefixIncludeDir = "/I";
+constexpr const char *const kMsvcPrefixLibDir = "/LIBPATH:";
+
 /**
  * @brief Generic GCC Toolchain <br>
  * id = ToolchainId::Msvc <br>
@@ -37,6 +44,15 @@ public:
       : Toolchain(Toolchain::Id::Msvc, "msvc", "cl", "cl", "cl", "lib",
                   "link") {}
   Toolchain_msvc(const Toolchain_msvc &gcc) = delete;
+
+private:
+  void UpdateConfig(ToolchainConfig &config) {
+    config.obj_ext = kMsvcObjExt;
+    config.pch_header_ext = kMsvcPchHeaderExt;
+    config.pch_compile_ext = kMsvcPchCompileExt;
+    config.prefix_include_dir = kMsvcPrefixIncludeDir;
+    config.prefix_lib_dir = kMsvcPrefixLibDir;
+  }
 };
 
 } // namespace buildcc

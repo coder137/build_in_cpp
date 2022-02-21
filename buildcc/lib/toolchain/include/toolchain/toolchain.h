@@ -47,7 +47,9 @@ public:
                      const ToolchainConfig &config = ToolchainConfig())
       : id_(id), name_(name), asm_compiler_(asm_compiler),
         c_compiler_(c_compiler), cpp_compiler_(cpp_compiler),
-        archiver_(archiver), linker_(linker), config_(config) {}
+        archiver_(archiver), linker_(linker), config_(config) {
+    UpdateConfig(config_);
+  }
 
   Toolchain(Toolchain &&toolchain) = default;
   Toolchain(const Toolchain &toolchain) = delete;
@@ -62,6 +64,9 @@ public:
   const std::string &GetLinker() const { return linker_; }
 
   const ToolchainConfig &GetConfig() const { return config_; }
+
+private:
+  virtual void UpdateConfig(ToolchainConfig &config) { (void)config; }
 
 private:
   friend class ToolchainVerify<Toolchain>;

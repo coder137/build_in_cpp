@@ -54,11 +54,6 @@ private:
                                          const std::string &link_command) {
     TargetConfig config;
     config.target_ext = target_ext;
-    config.obj_ext = kGccObjExt;
-    config.pch_header_ext = kGccPchHeaderExt;
-    config.pch_compile_ext = kGccPchCompileExt;
-    std::string prefix_include_dir = kGccPrefixIncludeDir;
-    std::string prefix_lib_dir = kGccPrefixLibDir;
     config.pch_command = kGccGenericPchCompileCommand;
     config.compile_command = compile_command;
     config.link_command = link_command;
