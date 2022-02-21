@@ -22,7 +22,7 @@ namespace buildcc {
 
 void TargetState::BuildCompleted() { build_ = true; }
 
-void TargetState::SetSourceState(FileExt file_extension) {
+void TargetState::SourceDetected(FileExt file_extension) {
   switch (file_extension) {
   case FileExt::Asm:
     contains_asm_ = true;
@@ -40,6 +40,6 @@ void TargetState::SetSourceState(FileExt file_extension) {
   }
 }
 
-void TargetState::SetPch() { contains_pch_ = true; }
+void TargetState::PchDetected() { contains_pch_ = true; }
 
 } // namespace buildcc

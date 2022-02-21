@@ -59,14 +59,14 @@ void Target::Build() {
 
   // PCH state
   if (!user_.pchs.empty()) {
-    state_.SetPch();
+    state_.PchDetected();
   }
 
   // Source - Object relation
   // Source state
   for (const auto &abs_source : user_.sources) {
     // Set state
-    state_.SetSourceState(toolchain_.GetConfig().GetFileExt(abs_source));
+    state_.SourceDetected(toolchain_.GetConfig().GetFileExt(abs_source));
 
     // Relate input source with output object
     compile_object_.AddObjectData(abs_source);

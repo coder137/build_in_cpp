@@ -23,8 +23,8 @@ namespace buildcc {
 
 struct TargetState {
   void BuildCompleted();
-  void SetSourceState(FileExt file_extension);
-  void SetPch();
+  void SourceDetected(FileExt file_extension);
+  void PchDetected();
 
   bool IsBuilt() const { return build_; }
   bool ContainsPch() const { return contains_pch_; }
