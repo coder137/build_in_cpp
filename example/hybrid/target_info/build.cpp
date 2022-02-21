@@ -33,8 +33,10 @@ int main(int argc, char **argv) {
   Toolchain_msvc msvc;
 
   // TargetInfo
-  TargetInfo genericadd_ho("files");
-  reg.Callback(genericadd_ho_cb, genericadd_ho);
+  TargetInfo gcc_genericadd_ho(gcc, "files");
+  TargetInfo msvc_genericadd_ho(msvc, "files");
+  reg.Callback(genericadd_ho_cb, gcc_genericadd_ho);
+  reg.Callback(genericadd_ho_cb, msvc_genericadd_ho);
 
   ExecutableTarget_gcc g_genericadd1("generic_add_1", gcc, "files");
   ExecutableTarget_msvc m_genericadd1("generic_add_1", msvc, "files");
@@ -43,11 +45,15 @@ int main(int argc, char **argv) {
   ExecutableTarget_msvc m_genericadd2("generic_add_2", msvc, "files");
 
   // Select your builds and tests using the .toml files
-  reg.Build(arg_gcc.state, genericadd1_build_cb, g_genericadd1, genericadd_ho);
-  reg.Build(arg_msvc.state, genericadd1_build_cb, m_genericadd1, genericadd_ho);
+  reg.Build(arg_gcc.state, genericadd1_build_cb, g_genericadd1,
+            gcc_genericadd_ho);
+  reg.Build(arg_gcc.state, genericadd2_build_cb, g_genericadd2,
+            gcc_genericadd_ho);
 
-  reg.Build(arg_gcc.state, genericadd2_build_cb, g_genericadd2, genericadd_ho);
-  reg.Build(arg_msvc.state, genericadd2_build_cb, m_genericadd2, genericadd_ho);
+  reg.Build(arg_msvc.state, genericadd1_build_cb, m_genericadd1,
+            msvc_genericadd_ho);
+  reg.Build(arg_msvc.state, genericadd2_build_cb, m_genericadd2,
+            msvc_genericadd_ho);
 
   // 5. Test steps
   // NOTE, For now they are just dummy callbacks
