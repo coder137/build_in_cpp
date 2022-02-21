@@ -70,10 +70,12 @@ public:
                   const Toolchain &toolchain, const TargetEnv &env,
                   const TargetConfig &config = TargetConfig())
       : TargetInfo(
+            toolchain,
             TargetEnv(env.GetTargetRootDir(),
                       env.GetTargetBuildDir() / toolchain.GetName() / name),
             config),
-        name_(name), type_(type), toolchain_(toolchain),
+        name_(name), type_(type),
+        // toolchain_(toolchain),
         // loader_(name, env_.GetTargetBuildDir()),
         serialization_(env_.GetTargetBuildDir() / fmt::format("{}.bin", name)),
         compile_pch_(*this), compile_object_(*this), link_target_(*this) {
@@ -139,7 +141,7 @@ private:
 private:
   std::string name_;
   TargetType type_;
-  const Toolchain &toolchain_;
+  // const Toolchain &toolchain_;
   internal::TargetSerialization serialization_;
 
   // Friend classes

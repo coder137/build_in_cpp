@@ -19,6 +19,8 @@
 
 #include <string>
 
+#include "toolchain/toolchain.h"
+
 #include "target/common/target_config.h"
 #include "target/common/target_env.h"
 #include "target/common/target_state.h"
@@ -60,8 +62,9 @@ class TargetInfo : public internal::SourceApi<TargetInfo>,
                    public internal::SyncApi<TargetInfo>,
                    public internal::TargetInfoGetter<TargetInfo> {
 public:
-  TargetInfo(const TargetEnv &env, const TargetConfig &config = TargetConfig())
-      : env_(env), config_(config) {}
+  TargetInfo(const BaseToolchain &toolchain, const TargetEnv &env,
+             const TargetConfig &config = TargetConfig())
+      : toolchain_(toolchain), env_(env), config_(config) {}
 
 private:
   // Inputs
@@ -79,6 +82,7 @@ private:
   friend class internal::TargetInfoGetter<TargetInfo>;
 
 protected:
+  const BaseToolchain &toolchain_;
   TargetEnv env_;
   TargetConfig config_;
 
