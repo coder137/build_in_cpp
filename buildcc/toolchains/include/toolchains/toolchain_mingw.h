@@ -21,6 +21,12 @@
 
 namespace buildcc {
 
+constexpr const char *const kMingwObjExt = ".o";
+constexpr const char *const kMingwPchHeaderExt = ".h";
+constexpr const char *const kMingwPchCompileExt = ".gch";
+constexpr const char *const kMingwPrefixIncludeDir = "-I";
+constexpr const char *const kMingwPrefixLibDir = "-L";
+
 /**
  * @brief Generic MinGW Toolchain <br>
  * id = ToolchainId::MinGW <br>
@@ -36,6 +42,15 @@ public:
   Toolchain_mingw()
       : Toolchain(ToolchainId::MinGW, "gcc", "as", "gcc", "g++", "ar", "ld") {}
   Toolchain_mingw(const Toolchain_mingw &) = delete;
+
+private:
+  void UpdateConfig(ToolchainConfig &config) {
+    config.obj_ext = kMingwObjExt;
+    config.pch_header_ext = kMingwPchHeaderExt;
+    config.pch_compile_ext = kMingwPchCompileExt;
+    config.prefix_include_dir = kMingwPrefixIncludeDir;
+    config.prefix_lib_dir = kMingwPrefixLibDir;
+  }
 };
 
 } // namespace buildcc

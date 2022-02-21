@@ -66,13 +66,12 @@ BuildCC interface lib
    taskflow -up-> register
 
    flatbuffers .up.> schema
-
-   env -up-> toolchain
    env -up-> schema
 
-   taskflow -up-> target
-   schema -up-> target
+   schema -up-> toolchain
+
    toolchain -up-> target
+   taskflow -up-> target
 
    toolchain -up-> toolchain_specialized
    target -up-> target_specialized

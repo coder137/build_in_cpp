@@ -21,7 +21,6 @@ target_link_options(mock_target PUBLIC ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS})
 target_link_libraries(mock_target PUBLIC 
     Taskflow
 
-    mock_schema
     mock_toolchain
 
     CppUTest

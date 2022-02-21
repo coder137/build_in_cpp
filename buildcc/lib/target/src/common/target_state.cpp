@@ -20,19 +20,19 @@
 
 namespace buildcc {
 
-void TargetState::SetSourceState(TargetFileExt file_extension) {
+void TargetState::SetSourceState(FileExt file_extension) {
   switch (file_extension) {
-  case TargetFileExt::Asm:
+  case FileExt::Asm:
     contains_asm = true;
     break;
-  case TargetFileExt::C:
+  case FileExt::C:
     contains_c = true;
     break;
-  case TargetFileExt::Cpp:
+  case FileExt::Cpp:
     contains_cpp = true;
     break;
-  case TargetFileExt::Header:
-  case TargetFileExt::Invalid:
+  case FileExt::Header:
+  case FileExt::Invalid:
   default:
     break;
   }

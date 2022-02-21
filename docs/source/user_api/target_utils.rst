@@ -3,11 +3,6 @@ Target Utils
 
 Commonly used Utils (Classes / Structs) for **Generator**, **TargetInfo** and **Target** classes.
 
-target_file_ext.h
-------------------
-
-.. doxygenenum:: buildcc::TargetFileExt
-
 target_type.h
 --------------
 

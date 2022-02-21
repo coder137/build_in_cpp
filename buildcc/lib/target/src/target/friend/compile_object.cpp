@@ -46,7 +46,8 @@ void CompileObject::CacheCompileCommands() {
         fmt::format("{}", GetObjectData(absolute_current_source).output);
     const std::string input = fmt::format("{}", absolute_current_source);
 
-    const auto type = target_.config_.GetFileExt(absolute_current_source);
+    const auto type =
+        target_.toolchain_.GetConfig().GetFileExt(absolute_current_source);
     const std::string selected_aggregated_compile_flags =
         target_.SelectCompileFlags(type).value_or("");
     const std::string selected_compiler =
@@ -156,7 +157,7 @@ CompileObject::ConstructObjectPath(const fs::path &absolute_source_file) const {
   fs::path absolute_compiled_source = target_.GetTargetBuildDir() / relative;
   absolute_compiled_source.replace_filename(
       fmt::format("{}{}", absolute_source_file.filename().string(),
-                  target_.GetConfig().obj_ext));
+                  target_.toolchain_.GetConfig().obj_ext));
   return absolute_compiled_source;
 }
 

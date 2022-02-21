@@ -21,7 +21,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "api/toolchain_verify.h"
+#include "toolchain/common/toolchain_config.h"
+
+#include "toolchain/api/toolchain_verify.h"
 
 namespace buildcc {
 
@@ -41,10 +43,13 @@ public:
   explicit Toolchain(Id id, std::string_view name,
                      std::string_view asm_compiler, std::string_view c_compiler,
                      std::string_view cpp_compiler, std::string_view archiver,
-                     std::string_view linker)
+                     std::string_view linker,
+                     const ToolchainConfig &config = ToolchainConfig())
       : id_(id), name_(name), asm_compiler_(asm_compiler),
         c_compiler_(c_compiler), cpp_compiler_(cpp_compiler),
-        archiver_(archiver), linker_(linker) {}
+        archiver_(archiver), linker_(linker), config_(config) {
+    UpdateConfig(config_);
+  }
 
   Toolchain(Toolchain &&toolchain) = default;
   Toolchain(const Toolchain &toolchain) = delete;
@@ -58,6 +63,11 @@ public:
   const std::string &GetArchiver() const { return archiver_; }
   const std::string &GetLinker() const { return linker_; }
 
+  const ToolchainConfig &GetConfig() const { return config_; }
+
+private:
+  virtual void UpdateConfig(ToolchainConfig &config) { (void)config; }
+
 private:
   friend class ToolchainVerify<Toolchain>;
 
@@ -69,6 +79,8 @@ private:
   std::string cpp_compiler_;
   std::string archiver_;
   std::string linker_;
+
+  ToolchainConfig config_;
 };
 
 typedef Toolchain::Id ToolchainId;

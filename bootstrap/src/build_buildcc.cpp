@@ -62,9 +62,11 @@ void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
 
   // TOOLCHAIN
   target.GlobSources("lib/toolchain/src/api");
+  target.GlobSources("lib/toolchain/src/common");
   target.AddIncludeDir("lib/toolchain/include");
   target.GlobHeaders("lib/toolchain/include/toolchain");
   target.GlobHeaders("lib/toolchain/include/toolchain/api");
+  target.GlobHeaders("lib/toolchain/include/toolchain/common");
 
   // TARGET
   target.GlobSources("lib/target/src/common");
@@ -205,33 +207,35 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
 
   // Flatbuffers HO lib
   auto &flatbuffers_ho_lib = storage_.Add<TargetInfo>(
-      kFlatbuffersHoName,
+      kFlatbuffersHoName, toolchain_,
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "flatbuffers",
                 env_.GetTargetBuildDir()));
   reg_.CallbackIf(state, flatbuffers_ho_cb, flatbuffers_ho_lib);
 
   // CLI11 HO lib
   auto &cli11_ho_lib = storage_.Add<TargetInfo>(
-      kCli11HoName, TargetEnv(env_.GetTargetRootDir() / "third_party" / "CLI11",
-                              env_.GetTargetBuildDir()));
+      kCli11HoName, toolchain_,
+      TargetEnv(env_.GetTargetRootDir() / "third_party" / "CLI11",
+                env_.GetTargetBuildDir()));
   reg_.CallbackIf(state, cli11_ho_cb, cli11_ho_lib);
 
   // fmt HO lib
   auto &fmt_ho_lib = storage_.Add<TargetInfo>(
-      kFmtHoName, TargetEnv(env_.GetTargetRootDir() / "third_party" / "fmt",
-                            env_.GetTargetBuildDir()));
+      kFmtHoName, toolchain_,
+      TargetEnv(env_.GetTargetRootDir() / "third_party" / "fmt",
+                env_.GetTargetBuildDir()));
   reg_.CallbackIf(state, fmt_ho_cb, fmt_ho_lib);
 
   // spdlog HO lib
   auto &spdlog_ho_lib = storage_.Add<TargetInfo>(
-      kSpdlogHoName,
+      kSpdlogHoName, toolchain_,
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "spdlog",
                 env_.GetTargetBuildDir()));
   reg_.CallbackIf(state, spdlog_ho_cb, spdlog_ho_lib);
 
   // taskflow HO lib
   auto &taskflow_ho_lib = storage_.Add<TargetInfo>(
-      kTaskflowHoName,
+      kTaskflowHoName, toolchain_,
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "taskflow",
                 env_.GetTargetBuildDir()));
   reg_.CallbackIf(state, taskflow_ho_cb, taskflow_ho_lib);

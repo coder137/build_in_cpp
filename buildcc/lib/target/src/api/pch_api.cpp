@@ -25,7 +25,7 @@ void PchApi<T>::AddPchAbsolute(const fs::path &absolute_filepath) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.config_.ExpectsValidHeader(absolute_filepath);
+  t.toolchain_.GetConfig().ExpectsValidHeader(absolute_filepath);
 
   const fs::path absolute_pch = fs::path(absolute_filepath).make_preferred();
   t.user_.pchs.insert(absolute_pch);

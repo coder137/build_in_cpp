@@ -33,13 +33,6 @@ constexpr const char *const kMsvcStaticLibExt = ".lib";
 // OUT .dll needs to be present in the executable folder during runtime
 constexpr const char *const kMsvcDynamicLibExt = ".lib";
 
-constexpr const char *const kMsvcObjExt = ".obj";
-constexpr const char *const kMsvcPchHeaderExt = ".h";
-constexpr const char *const kMsvcPchCompileExt = ".pch";
-
-constexpr const char *const kMsvcPrefixIncludeDir = "/I";
-constexpr const char *const kMsvcPrefixLibDir = "/LIBPATH:";
-
 constexpr const char *const kMsvcPchCompileCommand =
     "{compiler} {preprocessor_flags} {include_dirs} {common_compile_flags} "
     "/Yc{input} /FI{input} /Fp{output} {pch_compile_flags} {compile_flags} "
@@ -79,11 +72,6 @@ private:
                                         const std::string &link_command) {
     TargetConfig config;
     config.target_ext = target_ext;
-    config.obj_ext = kMsvcObjExt;
-    config.pch_header_ext = kMsvcPchHeaderExt;
-    config.pch_compile_ext = kMsvcPchCompileExt;
-    config.prefix_include_dir = kMsvcPrefixIncludeDir;
-    config.prefix_lib_dir = kMsvcPrefixLibDir;
     config.pch_command = kMsvcPchCompileCommand;
     config.compile_command = compile_command;
     config.link_command = link_command;

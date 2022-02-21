@@ -68,6 +68,9 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
     )
+    target_link_libraries(schema PUBLIC
+        env
+    )
     target_include_directories(schema PRIVATE
         ${SCHEMA_BUILD_DIR}
     )
@@ -75,7 +78,6 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     target_link_options(schema PRIVATE ${BUILD_LINK_FLAGS})
     target_link_libraries(schema PRIVATE
         flatbuffers_header_only
-        env
     )
     add_dependencies(schema fbs_to_header)
 endif()

@@ -25,7 +25,7 @@ void SourceApi<T>::AddSourceAbsolute(const fs::path &absolute_source) {
   T &t = static_cast<T &>(*this);
 
   t.state_.ExpectsUnlock();
-  t.config_.ExpectsValidSource(absolute_source);
+  t.toolchain_.GetConfig().ExpectsValidSource(absolute_source);
   t.user_.sources.emplace(fs::path(absolute_source).make_preferred());
 }
 
@@ -34,7 +34,7 @@ void SourceApi<T>::GlobSourcesAbsolute(const fs::path &absolute_source_dir) {
   T &t = static_cast<T &>(*this);
 
   for (const auto &p : fs::directory_iterator(absolute_source_dir)) {
-    if (t.config_.IsValidSource(p.path())) {
+    if (t.toolchain_.GetConfig().IsValidSource(p.path())) {
       AddSourceAbsolute(p.path());
     }
   }
@@ -59,7 +59,7 @@ void SourceApi<T>::GlobSources(const fs::path &relative_to_target_path) {
   fs::path absolute_input_path =
       t.env_.GetTargetRootDir() / relative_to_target_path;
   for (const auto &p : fs::directory_iterator(absolute_input_path)) {
-    if (t.config_.IsValidSource(p.path())) {
+    if (t.toolchain_.GetConfig().IsValidSource(p.path())) {
       AddSourceAbsolute(p.path());
     }
   }

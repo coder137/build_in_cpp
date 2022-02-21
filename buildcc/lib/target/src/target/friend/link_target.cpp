@@ -36,7 +36,7 @@ void LinkTarget::CacheLinkCommand() {
   const std::string output_target = fmt::format("{}", output_);
   const auto &target_user_schema = target_.user_;
   command_ = target_.command_.Construct(
-      target_.config_.link_command,
+      target_.GetConfig().link_command,
       {
           {kOutput, output_target},
           {kCompiledSources, aggregated_compiled_sources},

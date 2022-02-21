@@ -21,6 +21,12 @@
 
 namespace buildcc {
 
+constexpr const char *const kGccObjExt = ".o";
+constexpr const char *const kGccPchHeaderExt = ".h";
+constexpr const char *const kGccPchCompileExt = ".gch";
+constexpr const char *const kGccPrefixIncludeDir = "-I";
+constexpr const char *const kGccPrefixLibDir = "-L";
+
 /**
  * @brief Generic GCC Toolchain <br>
  * id = ToolchainId::Gcc <br>
@@ -36,6 +42,15 @@ public:
   Toolchain_gcc()
       : Toolchain(Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++", "ar", "ld") {}
   Toolchain_gcc(const Toolchain_gcc &gcc) = delete;
+
+private:
+  void UpdateConfig(ToolchainConfig &config) override {
+    config.obj_ext = kGccObjExt;
+    config.pch_header_ext = kGccPchHeaderExt;
+    config.pch_compile_ext = kGccPchCompileExt;
+    config.prefix_include_dir = kGccPrefixIncludeDir;
+    config.prefix_lib_dir = kGccPrefixLibDir;
+  }
 };
 
 } // namespace buildcc

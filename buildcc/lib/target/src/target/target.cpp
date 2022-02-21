@@ -89,15 +89,15 @@ void Target::RecheckExternalLib(
                  std::bind(&Target::ExternalLibChanged, this));
 }
 
-std::optional<std::string> Target::SelectCompileFlags(TargetFileExt ext) const {
+std::optional<std::string> Target::SelectCompileFlags(FileExt ext) const {
   switch (ext) {
-  case TargetFileExt::Asm:
+  case FileExt::Asm:
     return internal::aggregate(GetAsmCompileFlags());
     break;
-  case TargetFileExt::C:
+  case FileExt::C:
     return internal::aggregate(GetCCompileFlags());
     break;
-  case TargetFileExt::Cpp:
+  case FileExt::Cpp:
     return internal::aggregate(GetCppCompileFlags());
     break;
   default:
@@ -106,15 +106,15 @@ std::optional<std::string> Target::SelectCompileFlags(TargetFileExt ext) const {
   return {};
 }
 
-std::optional<std::string> Target::SelectCompiler(TargetFileExt ext) const {
+std::optional<std::string> Target::SelectCompiler(FileExt ext) const {
   switch (ext) {
-  case TargetFileExt::Asm:
+  case FileExt::Asm:
     return GetToolchain().GetAsmCompiler();
     break;
-  case TargetFileExt::C:
+  case FileExt::C:
     return GetToolchain().GetCCompiler();
     break;
-  case TargetFileExt::Cpp:
+  case FileExt::Cpp:
     return GetToolchain().GetCppCompiler();
     break;
   default:

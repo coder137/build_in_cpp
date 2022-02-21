@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_COMMON_TARGET_FILE_EXT_H_
-#define TARGET_COMMON_TARGET_FILE_EXT_H_
+#ifndef TOOLCHAIN_COMMON_FILE_EXT_H_
+#define TOOLCHAIN_COMMON_FILE_EXT_H_
 
 namespace buildcc {
 
-enum class TargetFileExt {
+enum class FileExt {
   Asm,     ///< Valid Assembly source extension
   C,       ///< Valid C source extension
   Cpp,     ///< Valid Cpp source extension
