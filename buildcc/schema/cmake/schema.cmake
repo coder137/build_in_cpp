@@ -22,7 +22,7 @@ if (${TESTING})
     
         CppUTest
         CppUTestExt
-        gcov
+        ${TEST_LINK_LIBS}
     )
     add_dependencies(mock_schema fbs_to_header)
 

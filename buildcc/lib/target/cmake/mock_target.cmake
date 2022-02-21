@@ -25,7 +25,7 @@ target_link_libraries(mock_target PUBLIC
 
     CppUTest
     CppUTestExt
-    gcov
+    ${TEST_LINK_LIBS}
 )
 
 # https://github.com/msys2/MINGW-packages/issues/2303
