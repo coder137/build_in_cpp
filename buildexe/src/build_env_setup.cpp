@@ -194,30 +194,14 @@ struct BuildExeLibDir {{
   }
 
   // Segregate valid lib files into sources and include dirs
-  internal::fs_unordered_set sources;
-  internal::fs_unordered_set include_dirs;
-  internal::fs_unordered_set headers;
   for (const auto &lib_build_file : buildexe_args_.GetLibBuildFiles()) {
-    if (user_target.GetConfig().IsValidSource(lib_build_file)) {
-      sources.insert(lib_build_file);
+    if (user_target.GetToolchain().GetConfig().IsValidSource(lib_build_file)) {
+      user_target.AddSourceAbsolute(lib_build_file);
     }
-    if (user_target.GetConfig().IsValidHeader(lib_build_file)) {
-      include_dirs.insert(lib_build_file.parent_path());
-      headers.insert(lib_build_file);
+    if (user_target.GetToolchain().GetConfig().IsValidHeader(lib_build_file)) {
+      user_target.AddIncludeDirAbsolute(lib_build_file.parent_path(), false);
+      user_target.AddHeaderAbsolute(lib_build_file);
     }
-  }
-
-  // Add sources to user_target
-  for (const auto &s : sources) {
-    user_target.AddSourceAbsolute(s);
-  }
-  // Add include dirs to user_target
-  for (const auto &idir : include_dirs) {
-    user_target.AddIncludeDir(idir, false);
-  }
-  // Add headers to user_target
-  for (const auto &h : headers) {
-    user_target.AddHeaderAbsolute(h);
   }
 }
 
