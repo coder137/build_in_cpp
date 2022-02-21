@@ -6,6 +6,7 @@ User API
 
     args
     register
+    toolchain_utils
     toolchain
     target_utils
     generator
