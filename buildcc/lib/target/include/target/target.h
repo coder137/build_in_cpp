@@ -75,8 +75,6 @@ public:
                       env.GetTargetBuildDir() / toolchain.GetName() / name),
             config),
         name_(name), type_(type),
-        // toolchain_(toolchain),
-        // loader_(name, env_.GetTargetBuildDir()),
         serialization_(env_.GetTargetBuildDir() / fmt::format("{}.bin", name)),
         compile_pch_(*this), compile_object_(*this), link_target_(*this) {
     Initialize();
@@ -141,7 +139,6 @@ private:
 private:
   std::string name_;
   TargetType type_;
-  // const Toolchain &toolchain_;
   internal::TargetSerialization serialization_;
 
   // Friend classes
