@@ -191,7 +191,7 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_DEV_SINGLE}}
         run: cmake --build . --target cppcheck_static_analysis
 
-      - name: Build Debug for test
+      - name: Build Debug and test
         # Linux has 2 cores
         run: |
           cmake --build --list-presets
