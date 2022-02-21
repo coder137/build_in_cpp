@@ -28,7 +28,6 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
         $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
     )
     target_link_libraries(target PUBLIC 
-        schema
         toolchain
         Taskflow
     )
