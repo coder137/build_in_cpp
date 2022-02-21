@@ -29,12 +29,6 @@ namespace buildcc {
 struct TargetState {
   void SetSourceState(FileExt file_extension);
   void SetPch();
-  void SetLock();
-
-  void ExpectsUnlock() const;
-  void ExpectsLock() const;
-  // TODO, IsLocked
-
   bool ContainsPch() const { return contains_pch_; }
 
   // TODO, Make these private getters
@@ -42,7 +36,6 @@ struct TargetState {
   bool contains_c{false};
   bool contains_cpp{false};
   bool build{false};
-  bool lock{false};
 
 private:
   bool contains_pch_{false};
