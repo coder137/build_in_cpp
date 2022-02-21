@@ -24,14 +24,14 @@ template <typename T>
 void DepsApi<T>::AddCompileDependencyAbsolute(const fs::path &absolute_path) {
   T &t = static_cast<T &>(*this);
 
-  t.state_.ExpectsUnlock();
+  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.user_.compile_dependencies.insert(absolute_path);
 }
 template <typename T>
 void DepsApi<T>::AddLinkDependencyAbsolute(const fs::path &absolute_path) {
   T &t = static_cast<T &>(*this);
 
-  t.state_.ExpectsUnlock();
+  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.user_.link_dependencies.insert(absolute_path);
 }
 
