@@ -21,7 +21,6 @@
 
 #include "toolchain/toolchain.h"
 
-#include "target/common/function_lock.h"
 #include "target/common/target_config.h"
 #include "target/common/target_env.h"
 #include "target/common/target_state.h"

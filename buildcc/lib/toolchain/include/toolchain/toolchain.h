@@ -21,14 +21,29 @@
 #include <unordered_map>
 #include <vector>
 
+#include "toolchain/common/function_lock.h"
 #include "toolchain/common/toolchain_config.h"
 
+#include "toolchain/api/flag_api.h"
 #include "toolchain/api/toolchain_verify.h"
 
 namespace buildcc {
 
+// TODO, Make this private
+struct UserToolchainSchema {
+  std::unordered_set<std::string> preprocessor_flags;
+  std::unordered_set<std::string> common_compile_flags;
+  std::unordered_set<std::string> pch_compile_flags;
+  std::unordered_set<std::string> pch_object_flags;
+  std::unordered_set<std::string> asm_compile_flags;
+  std::unordered_set<std::string> c_compile_flags;
+  std::unordered_set<std::string> cpp_compile_flags;
+  std::unordered_set<std::string> link_flags;
+};
+
 // Base toolchain class
-class Toolchain : public ToolchainVerify<Toolchain> {
+class Toolchain : public internal::FlagApi<Toolchain>,
+                  public ToolchainVerify<Toolchain> {
 public:
   enum class Id {
     Gcc = 0,   ///< GCC Toolchain
@@ -69,6 +84,8 @@ private:
   virtual void UpdateConfig(ToolchainConfig &config) { (void)config; }
 
 private:
+  friend class internal::FlagApi<Toolchain>;
+
   friend class ToolchainVerify<Toolchain>;
 
 private:
@@ -79,8 +96,12 @@ private:
   std::string cpp_compiler_;
   std::string archiver_;
   std::string linker_;
-
   ToolchainConfig config_;
+
+  //
+  UserToolchainSchema user_;
+
+  FunctionLock lock_;
 };
 
 typedef Toolchain::Id ToolchainId;
