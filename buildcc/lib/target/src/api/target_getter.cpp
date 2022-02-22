@@ -69,7 +69,7 @@ const std::string &
 TargetGetter<T>::GetCompileCommand(const fs::path &source) const {
   const T &t = static_cast<const T &>(*this);
 
-  t.state_.ExpectsLock();
+  t.lock_.ExpectsLock(__FUNCTION__);
   return t.compile_object_.GetObjectData(source).command;
 }
 
@@ -77,14 +77,14 @@ template <typename T>
 const std::string &TargetGetter<T>::GetLinkCommand() const {
   const T &t = static_cast<const T &>(*this);
 
-  t.state_.ExpectsLock();
+  t.lock_.ExpectsLock(__FUNCTION__);
   return t.link_target_.GetCommand();
 }
 
 template <typename T> tf::Taskflow &TargetGetter<T>::GetTaskflow() {
   T &t = static_cast<T &>(*this);
 
-  t.state_.ExpectsLock();
+  t.lock_.ExpectsLock(__FUNCTION__);
   return t.tf_;
 }
 

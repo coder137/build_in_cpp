@@ -173,7 +173,7 @@ void Target::EndTask() {
         serialization_.UpdateStore(user_);
         env::assert_throw(serialization_.StoreToFile(),
                           fmt::format("Store failed for {}", GetName()));
-        state_.build = true;
+        state_.BuildCompleted();
       } catch (...) {
         SetTaskStateFailure();
       }

@@ -25,7 +25,7 @@ template <typename T>
 void LibApi<T>::AddLibDirAbsolute(const fs::path &absolute_lib_dir) {
   T &t = static_cast<T &>(*this);
 
-  t.state_.ExpectsUnlock();
+  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.user_.lib_dirs.insert(absolute_lib_dir);
 }
 
@@ -40,14 +40,14 @@ void LibApi<T>::AddLibDir(const fs::path &relative_lib_dir) {
 template <typename T> void LibApi<T>::AddLibDep(const BaseTarget &lib_dep) {
   T &t = static_cast<T &>(*this);
 
-  t.state_.ExpectsUnlock();
+  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.user_.libs.push_back(lib_dep.GetTargetPath());
 }
 
 template <typename T> void LibApi<T>::AddLibDep(const std::string &lib_dep) {
   T &t = static_cast<T &>(*this);
 
-  t.state_.ExpectsUnlock();
+  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.user_.external_libs.push_back(lib_dep);
 }
 

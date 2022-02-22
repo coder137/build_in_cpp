@@ -64,7 +64,7 @@ namespace buildcc::internal {
 // PUBLIC
 
 void CompilePch::CacheCompileCommand() {
-  source_path_ = ConstructSourcePath(target_.GetState().contains_cpp);
+  source_path_ = ConstructSourcePath(target_.GetState().ContainsCpp());
   command_ = ConstructCompileCommand();
 }
 
@@ -138,12 +138,12 @@ fs::path CompilePch::ConstructObjectPath() const {
 }
 
 std::string CompilePch::ConstructCompileCommand() const {
-  std::string compiler = target_.GetState().contains_cpp
+  std::string compiler = target_.GetState().ContainsCpp()
                              ? target_.GetToolchain().GetCppCompiler()
                              : target_.GetToolchain().GetCCompiler();
   compiler = fmt::format("{}", fs::path(compiler));
   const FileExt file_ext_type =
-      target_.GetState().contains_cpp ? FileExt::Cpp : FileExt::C;
+      target_.GetState().ContainsCpp() ? FileExt::Cpp : FileExt::C;
   const std::string compile_flags =
       target_.SelectCompileFlags(file_ext_type).value_or("");
   const std::string pch_compile_path = fmt::format("{}", compile_path_);

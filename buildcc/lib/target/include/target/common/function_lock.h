@@ -14,32 +14,35 @@
  * limitations under the License.
  */
 
-#include "target/common/target_state.h"
+#ifndef TARGET_COMMON_FUNCTION_LOCK_H_
+#define TARGET_COMMON_FUNCTION_LOCK_H_
+
+#include <string_view>
+
+#include "fmt/format.h"
 
 #include "env/assert_fatal.h"
 
 namespace buildcc {
 
-void TargetState::BuildCompleted() { build_ = true; }
-
-void TargetState::SourceDetected(FileExt file_extension) {
-  switch (file_extension) {
-  case FileExt::Asm:
-    contains_asm_ = true;
-    break;
-  case FileExt::C:
-    contains_c_ = true;
-    break;
-  case FileExt::Cpp:
-    contains_cpp_ = true;
-    break;
-  case FileExt::Header:
-  case FileExt::Invalid:
-  default:
-    break;
+class FunctionLock {
+public:
+  void Lock() { lock_ = true; }
+  void Unlock() { lock_ = false; }
+  bool IsLocked() const { return lock_; }
+  void ExpectsUnlock(std::string_view tag) const {
+    env::assert_fatal(!lock_,
+                      fmt::format("Cannot use {} when lock == true", tag));
   }
-}
+  void ExpectsLock(std::string_view tag) const {
+    env::assert_fatal(lock_,
+                      fmt::format("Cannot use {} when lock == false", tag));
+  }
 
-void TargetState::PchDetected() { contains_pch_ = true; }
+private:
+  bool lock_{false};
+};
 
 } // namespace buildcc
+
+#endif

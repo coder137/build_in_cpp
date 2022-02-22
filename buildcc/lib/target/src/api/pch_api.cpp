@@ -24,7 +24,7 @@ template <typename T>
 void PchApi<T>::AddPchAbsolute(const fs::path &absolute_filepath) {
   T &t = static_cast<T &>(*this);
 
-  t.state_.ExpectsUnlock();
+  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.toolchain_.GetConfig().ExpectsValidHeader(absolute_filepath);
 
   const fs::path absolute_pch = fs::path(absolute_filepath).make_preferred();

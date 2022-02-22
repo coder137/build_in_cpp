@@ -16,21 +16,21 @@ TEST_GROUP(TargetStateTestGroup)
 TEST(TargetStateTestGroup, SetSourceState) {
   buildcc::TargetState target_state;
 
-  CHECK_FALSE(target_state.contains_c);
-  target_state.SetSourceState(buildcc::FileExt::C);
-  CHECK_TRUE(target_state.contains_c);
+  CHECK_FALSE(target_state.ContainsC());
+  target_state.SourceDetected(buildcc::FileExt::C);
+  CHECK_TRUE(target_state.ContainsC());
 
-  CHECK_FALSE(target_state.contains_cpp);
-  target_state.SetSourceState(buildcc::FileExt::Cpp);
-  CHECK_TRUE(target_state.contains_cpp);
+  CHECK_FALSE(target_state.ContainsCpp());
+  target_state.SourceDetected(buildcc::FileExt::Cpp);
+  CHECK_TRUE(target_state.ContainsCpp());
 
-  CHECK_FALSE(target_state.contains_asm);
-  target_state.SetSourceState(buildcc::FileExt::Asm);
-  CHECK_TRUE(target_state.contains_asm);
+  CHECK_FALSE(target_state.ContainsAsm());
+  target_state.SourceDetected(buildcc::FileExt::Asm);
+  CHECK_TRUE(target_state.ContainsAsm());
 
   // Ignored
-  target_state.SetSourceState(buildcc::FileExt::Header);
-  target_state.SetSourceState(buildcc::FileExt::Invalid);
+  target_state.SourceDetected(buildcc::FileExt::Header);
+  target_state.SourceDetected(buildcc::FileExt::Invalid);
 }
 
 int main(int ac, char **av) {
