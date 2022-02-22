@@ -39,6 +39,7 @@
 
 namespace buildcc {
 
+// TODO, Make this private
 struct UserGeneratorSchema : public internal::GeneratorSchema {
   fs_unordered_set inputs;
 };
