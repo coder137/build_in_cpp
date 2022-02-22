@@ -77,5 +77,6 @@ template <typename T> void FlagApi<T>::AddLinkFlag(const std::string &flag) {
 }
 
 template class FlagApi<TargetInfo>;
+template class FlagApi<Toolchain>;
 
 } // namespace buildcc::internal

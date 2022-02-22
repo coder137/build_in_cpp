@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_API_FLAG_API_H_
-#define TARGET_API_FLAG_API_H_
+#ifndef TOOLCHAIN_API_FLAG_API_H_
+#define TOOLCHAIN_API_FLAG_API_H_
 
 #include <string>
 
 namespace buildcc::internal {
 
 // Requires
-// - TargetStorer
-// - TargetState
+// TargetSchema
+// FunctionLock
 template <typename T> class FlagApi {
 public:
   void AddPreprocessorFlag(const std::string &flag);
