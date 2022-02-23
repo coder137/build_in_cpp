@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "target/api/flag_api.h"
+#include "toolchain/api/flag_api.h"
 
 #include "target/target_info.h"
 

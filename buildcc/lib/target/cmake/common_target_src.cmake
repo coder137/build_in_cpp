@@ -23,7 +23,6 @@ set(COMMON_TARGET_SRCS
     include/target/api/include_api.h
     include/target/api/lib_api.h
     include/target/api/pch_api.h
-    include/target/api/flag_api.h
     include/target/api/deps_api.h
 
     src/api/sync_api.cpp

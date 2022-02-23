@@ -26,7 +26,6 @@
 #include "target/common/target_state.h"
 
 #include "target/api/deps_api.h"
-#include "target/api/flag_api.h"
 #include "target/api/include_api.h"
 #include "target/api/lib_api.h"
 #include "target/api/pch_api.h"

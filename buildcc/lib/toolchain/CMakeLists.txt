@@ -9,6 +9,7 @@ set(TOOLCHAIN_SRCS
     # Features
     src/api/toolchain_verify.cpp
     include/toolchain/api/toolchain_verify.h
+    include/toolchain/api/flag_api.h
 )
 if (${TESTING})
     add_library(mock_toolchain
