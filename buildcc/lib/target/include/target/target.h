@@ -140,22 +140,20 @@ private:
   std::string name_;
   TargetType type_;
   internal::TargetSerialization serialization_;
-
-  // Friend classes
   internal::CompilePch compile_pch_;
   internal::CompileObject compile_object_;
   internal::LinkTarget link_target_;
 
+  //
+  TargetState state_;
+  env::Command command_;
+  tf::Taskflow tf_;
+
   // Task states
   tf::Task target_start_task_;
   tf::Task target_end_task_;
-
   std::mutex task_state_mutex_;
   env::TaskState task_state_{env::TaskState::SUCCESS};
-
-  //
-  env::Command command_;
-  tf::Taskflow tf_;
 };
 
 typedef Target BaseTarget;
