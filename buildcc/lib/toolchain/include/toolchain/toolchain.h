@@ -68,6 +68,10 @@ public:
 
   Toolchain(Toolchain &&toolchain) = default;
   Toolchain(const Toolchain &toolchain) = delete;
+  void Lock() {
+    lock_.Lock();
+    // TODO, In the future add some more code here
+  }
 
   // Getters
   Id GetId() const { return id_; }
@@ -78,6 +82,7 @@ public:
   const std::string &GetArchiver() const { return archiver_; }
   const std::string &GetLinker() const { return linker_; }
 
+  const FunctionLock &GetLockInfo() const { return lock_; }
   const ToolchainConfig &GetConfig() const { return config_; }
 
 private:
@@ -86,6 +91,9 @@ private:
 private:
   friend class internal::FlagApi<Toolchain>;
 
+  // TODO, Remove this and have a virtual `Verify` function instead
+  // Anti-pattern: ToolchainVerify contains GCC and MSVC specific
+  // implementations in a "Base" toolchain class
   friend class ToolchainVerify<Toolchain>;
 
 private:
