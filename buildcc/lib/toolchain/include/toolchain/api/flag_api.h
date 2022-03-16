@@ -18,6 +18,7 @@
 #define TOOLCHAIN_API_FLAG_API_H_
 
 #include <string>
+#include <unordered_set>
 
 namespace buildcc::internal {
 
@@ -34,6 +35,16 @@ public:
   void AddCCompileFlag(const std::string &flag);
   void AddCppCompileFlag(const std::string &flag);
   void AddLinkFlag(const std::string &flag);
+
+  // Getters
+  const std::unordered_set<std::string> &GetPreprocessorFlags() const;
+  const std::unordered_set<std::string> &GetCommonCompileFlags() const;
+  const std::unordered_set<std::string> &GetPchCompileFlags() const;
+  const std::unordered_set<std::string> &GetPchObjectFlags() const;
+  const std::unordered_set<std::string> &GetAsmCompileFlags() const;
+  const std::unordered_set<std::string> &GetCCompileFlags() const;
+  const std::unordered_set<std::string> &GetCppCompileFlags() const;
+  const std::unordered_set<std::string> &GetLinkFlags() const;
 };
 
 } // namespace buildcc::internal

@@ -45,14 +45,7 @@ public:
   const std::vector<std::string> &GetExternalLibDeps() const;
   const fs_unordered_set &GetIncludeDirs() const;
   const fs_unordered_set &GetLibDirs() const;
-  const std::unordered_set<std::string> &GetPreprocessorFlags() const;
-  const std::unordered_set<std::string> &GetCommonCompileFlags() const;
-  const std::unordered_set<std::string> &GetPchCompileFlags() const;
-  const std::unordered_set<std::string> &GetPchObjectFlags() const;
-  const std::unordered_set<std::string> &GetAsmCompileFlags() const;
-  const std::unordered_set<std::string> &GetCCompileFlags() const;
-  const std::unordered_set<std::string> &GetCppCompileFlags() const;
-  const std::unordered_set<std::string> &GetLinkFlags() const;
+
   const fs_unordered_set &GetCompileDependencies() const;
   const fs_unordered_set &GetLinkDependencies() const;
 };
