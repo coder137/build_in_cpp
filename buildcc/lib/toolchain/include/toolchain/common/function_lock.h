@@ -30,10 +30,12 @@ public:
   void Lock() { lock_ = true; }
   void Unlock() { lock_ = false; }
   bool IsLocked() const { return lock_; }
+  // TODO, Make this better
   void ExpectsUnlock(std::string_view tag) const {
     env::assert_fatal(!lock_,
                       fmt::format("Cannot use {} when lock == true", tag));
   }
+  // TODO, Make this better
   void ExpectsLock(std::string_view tag) const {
     env::assert_fatal(lock_,
                       fmt::format("Cannot use {} when lock == false", tag));
