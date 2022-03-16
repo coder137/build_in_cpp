@@ -27,8 +27,8 @@ TEST_GROUP(TargetTestUserDepsGroup)
 };
 // clang-format on
 
-static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
-                                    "gcc", "g++", "ar", "ld");
+static buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc",
+                              "g++", "ar", "ld");
 
 static const fs::path target_source_intermediate_path =
     fs::path(BUILD_TARGET_USER_DEPS_INTERMEDIATE_DIR) / gcc.GetName();
@@ -144,5 +144,7 @@ int main(int ac, char **av) {
   fs::remove_all(target_source_intermediate_path);
   buildcc::env::init(BUILD_SCRIPT_SOURCE,
                      BUILD_TARGET_USER_DEPS_INTERMEDIATE_DIR);
+
+  gcc.Lock();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

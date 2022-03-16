@@ -19,8 +19,8 @@ TEST_GROUP(TargetTestSyncGroup)
 };
 // clang-format on
 
-buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
-                       "ar", "ldd");
+static buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc",
+                              "g++", "ar", "ldd");
 
 TEST(TargetTestSyncGroup, CopyByConstRef) {
   buildcc::BaseTarget srcTarget("srcTarget", buildcc::TargetType::Executable,
@@ -319,5 +319,7 @@ TEST(TargetTestSyncGroup, InsertCrash) {
 int main(int ac, char **av) {
   buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_TARGET_SYNC_INTERMEDIATE_DIR);
   fs::remove_all(buildcc::env::get_project_build_dir());
+
+  gcc.Lock();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

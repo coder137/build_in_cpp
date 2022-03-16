@@ -30,8 +30,8 @@ TEST_GROUP(TargetTestLibDep)
 };
 // clang-format on
 
-static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
-                                    "gcc", "g++", "ar", "ld");
+static buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc",
+                              "g++", "ar", "ld");
 
 static const fs::path intermediate_path =
     fs::path(BUILD_TARGET_LIB_DEP_INTERMEDIATE_DIR) / gcc.GetName();
@@ -257,5 +257,7 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
 int main(int ac, char **av) {
   buildcc::env::init(BUILD_SCRIPT_SOURCE,
                      BUILD_TARGET_LIB_DEP_INTERMEDIATE_DIR);
+
+  gcc.Lock();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

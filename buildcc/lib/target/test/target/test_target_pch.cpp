@@ -30,8 +30,8 @@ TEST_GROUP(TargetPchTestGroup)
 };
 // clang-format on
 
-static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
-                                    "gcc", "g++", "ar", "ld");
+static buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc",
+                              "g++", "ar", "ld");
 
 TEST(TargetPchTestGroup, Target_AddPch) {
   constexpr const char *const NAME = "AddPch.exe";
@@ -291,5 +291,7 @@ int main(int ac, char **av) {
   fs::remove_all(target_source_intermediate_path);
 
   buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_TARGET_PCH_INTERMEDIATE_DIR);
+
+  gcc.Lock();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

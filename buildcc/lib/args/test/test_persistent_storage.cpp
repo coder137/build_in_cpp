@@ -16,8 +16,8 @@ TEST_GROUP(PersistentStorageTestGroup)
 };
 // clang-format on
 
-buildcc::BaseToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
-                           "ar", "ld");
+static buildcc::BaseToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc",
+                                  "g++", "ar", "ld");
 
 TEST(PersistentStorageTestGroup, BasicUsage) {
   buildcc::PersistentStorage persistent;
@@ -56,5 +56,7 @@ TEST(PersistentStorageTestGroup, NullptrDelete) {
 
 int main(int ac, char **av) {
   buildcc::env::init(fs::current_path(), fs::current_path());
+
+  gcc.Lock();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

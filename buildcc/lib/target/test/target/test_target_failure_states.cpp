@@ -25,8 +25,8 @@ TEST_GROUP(TargetTestFailureStates)
 };
 // clang-format on
 
-buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
-                       "ar", "ld");
+static buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc",
+                              "g++", "ar", "ld");
 
 TEST(TargetTestFailureStates, StartTaskEnvFailure) {
   buildcc::env::set_task_state(buildcc::env::TaskState::FAILURE);
@@ -297,5 +297,7 @@ int main(int ac, char **av) {
   buildcc::env::init(BUILD_SCRIPT_SOURCE,
                      BUILD_TARGET_FAILURE_STATES_BUILD_DIR);
   fs::remove_all(buildcc::env::get_project_build_dir());
+
+  gcc.Lock();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

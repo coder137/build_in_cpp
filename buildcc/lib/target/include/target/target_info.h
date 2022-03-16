@@ -63,7 +63,9 @@ class TargetInfo : public internal::SourceApi<TargetInfo>,
 public:
   TargetInfo(const BaseToolchain &toolchain, const TargetEnv &env,
              const TargetConfig &config = TargetConfig())
-      : toolchain_(toolchain), env_(env), config_(config) {}
+      : toolchain_(toolchain), env_(env), config_(config) {
+    toolchain_.GetLockInfo().ExpectsLock(__FUNCTION__);
+  }
 
 private:
   // Inputs
@@ -85,8 +87,8 @@ protected:
   TargetEnv env_;
   TargetConfig config_;
 
+  //
   UserTargetSchema user_;
-
   FunctionLock lock_;
 };
 
