@@ -32,7 +32,6 @@ namespace buildcc::internal {
 
 // Requires
 // - TargetStorer
-// - TargetState
 // - TargetEnv
 // T::GetTargetPath
 template <typename T> class LibApi {

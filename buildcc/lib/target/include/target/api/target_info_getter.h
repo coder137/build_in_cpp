@@ -26,7 +26,6 @@ namespace buildcc::internal {
 
 // Requires
 // - TargetStorer
-// - TargetState
 // - TargetEnv
 // - TargetConfig
 template <typename T> class TargetInfoGetter {

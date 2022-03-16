@@ -25,7 +25,6 @@ namespace buildcc::internal {
 
 // Requires
 // - TargetStorer
-// - TargetState
 // - TargetConfig
 // - TargetEnv
 template <typename T> class IncludeApi {
