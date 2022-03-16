@@ -22,6 +22,31 @@ namespace buildcc {
 
 void TargetInfo::Initialize() {
   toolchain_.GetLockInfo().ExpectsLock(__FUNCTION__);
+
+  std::for_each(toolchain_.GetPreprocessorFlags().begin(),
+                toolchain_.GetPreprocessorFlags().end(),
+                [&](const std::string &flag) { AddPreprocessorFlag(flag); });
+  std::for_each(toolchain_.GetCommonCompileFlags().begin(),
+                toolchain_.GetCommonCompileFlags().end(),
+                [&](const std::string &flag) { AddCommonCompileFlag(flag); });
+  std::for_each(toolchain_.GetPchCompileFlags().begin(),
+                toolchain_.GetPchCompileFlags().end(),
+                [&](const std::string &flag) { AddPchCompileFlag(flag); });
+  std::for_each(toolchain_.GetPchObjectFlags().begin(),
+                toolchain_.GetPchObjectFlags().end(),
+                [&](const std::string &flag) { AddPchObjectFlag(flag); });
+  std::for_each(toolchain_.GetAsmCompileFlags().begin(),
+                toolchain_.GetAsmCompileFlags().end(),
+                [&](const std::string &flag) { AddAsmCompileFlag(flag); });
+  std::for_each(toolchain_.GetCCompileFlags().begin(),
+                toolchain_.GetCCompileFlags().end(),
+                [&](const std::string &flag) { AddCCompileFlag(flag); });
+  std::for_each(toolchain_.GetCppCompileFlags().begin(),
+                toolchain_.GetCppCompileFlags().end(),
+                [&](const std::string &flag) { AddCppCompileFlag(flag); });
+  std::for_each(toolchain_.GetLinkFlags().begin(),
+                toolchain_.GetLinkFlags().end(),
+                [&](const std::string &flag) { AddLinkFlag(flag); });
 }
 
 } // namespace buildcc

@@ -59,14 +59,14 @@ TEST(ToolchainFlagApiTestGroup, BasicTargetTest) {
   CHECK_TRUE(toolchain.GetLockInfo().IsLocked());
   {
     buildcc::TargetInfo targetinfo(toolchain, "");
-    // CHECK_EQUAL(targetinfo.GetPreprocessorFlags().size(), 1);
-    // CHECK_EQUAL(targetinfo.GetAsmCompileFlags().size(), 1);
-    // CHECK_EQUAL(targetinfo.GetPchCompileFlags().size(), 1);
-    // CHECK_EQUAL(targetinfo.GetPchObjectFlags().size(), 1);
-    // CHECK_EQUAL(targetinfo.GetCommonCompileFlags().size(), 1);
-    // CHECK_EQUAL(targetinfo.GetCCompileFlags().size(), 1);
-    // CHECK_EQUAL(targetinfo.GetCppCompileFlags().size(), 1);
-    // CHECK_EQUAL(targetinfo.GetLinkFlags().size(), 1);
+    CHECK_EQUAL(targetinfo.GetPreprocessorFlags().size(), 1);
+    CHECK_EQUAL(targetinfo.GetAsmCompileFlags().size(), 1);
+    CHECK_EQUAL(targetinfo.GetPchCompileFlags().size(), 1);
+    CHECK_EQUAL(targetinfo.GetPchObjectFlags().size(), 1);
+    CHECK_EQUAL(targetinfo.GetCommonCompileFlags().size(), 1);
+    CHECK_EQUAL(targetinfo.GetCCompileFlags().size(), 1);
+    CHECK_EQUAL(targetinfo.GetCppCompileFlags().size(), 1);
+    CHECK_EQUAL(targetinfo.GetLinkFlags().size(), 1);
   }
 }
 
