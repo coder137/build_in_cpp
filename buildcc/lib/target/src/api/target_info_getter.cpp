@@ -20,25 +20,6 @@
 
 namespace buildcc::internal {
 
-// Target State
-template <typename T> const TargetState &TargetInfoGetter<T>::GetState() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.state_;
-}
-
-template <typename T> bool TargetInfoGetter<T>::IsBuilt() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.state_.IsBuilt();
-}
-
-template <typename T> bool TargetInfoGetter<T>::IsLocked() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.lock_.IsLocked();
-}
-
 // Target Env
 template <typename T>
 const fs::path &TargetInfoGetter<T>::GetTargetRootDir() const {

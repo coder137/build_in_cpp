@@ -23,7 +23,6 @@
 
 #include "target/common/target_config.h"
 #include "target/common/target_env.h"
-#include "target/common/target_state.h"
 
 #include "target/api/deps_api.h"
 #include "target/api/include_api.h"
@@ -89,7 +88,6 @@ protected:
   UserTargetSchema user_;
 
   FunctionLock lock_;
-  TargetState state_;
 };
 
 typedef TargetInfo BaseTargetInfo;
