@@ -64,7 +64,7 @@ public:
   TargetInfo(const BaseToolchain &toolchain, const TargetEnv &env,
              const TargetConfig &config = TargetConfig())
       : toolchain_(toolchain), env_(env), config_(config) {
-    toolchain_.GetLockInfo().ExpectsLock(__FUNCTION__);
+    Initialize();
   }
 
 private:
@@ -90,6 +90,9 @@ protected:
   //
   UserTargetSchema user_;
   FunctionLock lock_;
+
+private:
+  void Initialize();
 };
 
 typedef TargetInfo BaseTargetInfo;

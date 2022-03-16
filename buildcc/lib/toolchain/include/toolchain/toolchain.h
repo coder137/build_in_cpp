@@ -108,7 +108,6 @@ private:
 
   //
   UserToolchainSchema user_;
-
   FunctionLock lock_;
 };
 
