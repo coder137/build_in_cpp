@@ -16,8 +16,8 @@ TEST_GROUP(PersistentStorageTestGroup)
 };
 // clang-format on
 
-buildcc::BaseToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
-                           "ar", "ld");
+static buildcc::BaseToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc",
+                                  "g++", "ar", "ld");
 
 TEST(PersistentStorageTestGroup, BasicUsage) {
   buildcc::PersistentStorage persistent;

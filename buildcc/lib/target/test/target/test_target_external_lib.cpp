@@ -27,8 +27,8 @@ TEST_GROUP(TargetTestExternalLib)
 };
 // clang-format on
 
-static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
-                                    "gcc", "g++", "ar", "ld");
+static buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc",
+                              "g++", "ar", "ld");
 
 static const fs::path intermediate_path =
     fs::path(BUILD_TARGET_EXTERNAL_LIB_INTERMEDIATE_DIR) / gcc.GetName();

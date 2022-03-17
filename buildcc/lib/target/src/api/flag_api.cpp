@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "target/api/flag_api.h"
+#include "toolchain/api/flag_api.h"
 
 #include "target/target_info.h"
 
@@ -76,6 +76,50 @@ template <typename T> void FlagApi<T>::AddLinkFlag(const std::string &flag) {
   t.user_.link_flags.insert(flag);
 }
 
+template <typename T>
+const std::unordered_set<std::string> &
+FlagApi<T>::GetPreprocessorFlags() const {
+  const T &t = static_cast<const T &>(*this);
+  return t.user_.preprocessor_flags;
+}
+template <typename T>
+const std::unordered_set<std::string> &
+FlagApi<T>::GetCommonCompileFlags() const {
+  const T &t = static_cast<const T &>(*this);
+  return t.user_.common_compile_flags;
+}
+template <typename T>
+const std::unordered_set<std::string> &FlagApi<T>::GetPchCompileFlags() const {
+  const T &t = static_cast<const T &>(*this);
+  return t.user_.pch_compile_flags;
+}
+template <typename T>
+const std::unordered_set<std::string> &FlagApi<T>::GetPchObjectFlags() const {
+  const T &t = static_cast<const T &>(*this);
+  return t.user_.pch_object_flags;
+}
+template <typename T>
+const std::unordered_set<std::string> &FlagApi<T>::GetAsmCompileFlags() const {
+  const T &t = static_cast<const T &>(*this);
+  return t.user_.asm_compile_flags;
+}
+template <typename T>
+const std::unordered_set<std::string> &FlagApi<T>::GetCCompileFlags() const {
+  const T &t = static_cast<const T &>(*this);
+  return t.user_.c_compile_flags;
+}
+template <typename T>
+const std::unordered_set<std::string> &FlagApi<T>::GetCppCompileFlags() const {
+  const T &t = static_cast<const T &>(*this);
+  return t.user_.cpp_compile_flags;
+}
+template <typename T>
+const std::unordered_set<std::string> &FlagApi<T>::GetLinkFlags() const {
+  const T &t = static_cast<const T &>(*this);
+  return t.user_.link_flags;
+}
+
 template class FlagApi<TargetInfo>;
+template class FlagApi<Toolchain>;
 
 } // namespace buildcc::internal

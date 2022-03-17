@@ -20,25 +20,6 @@
 
 namespace buildcc::internal {
 
-// Target State
-template <typename T> const TargetState &TargetInfoGetter<T>::GetState() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.state_;
-}
-
-template <typename T> bool TargetInfoGetter<T>::IsBuilt() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.state_.IsBuilt();
-}
-
-template <typename T> bool TargetInfoGetter<T>::IsLocked() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.lock_.IsLocked();
-}
-
 // Target Env
 template <typename T>
 const fs::path &TargetInfoGetter<T>::GetTargetRootDir() const {
@@ -111,70 +92,6 @@ const fs_unordered_set &TargetInfoGetter<T>::GetLibDirs() const {
   const T &t = static_cast<const T &>(*this);
 
   return t.user_.lib_dirs;
-}
-
-template <typename T>
-const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetPreprocessorFlags() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.user_.preprocessor_flags;
-}
-
-template <typename T>
-const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetCommonCompileFlags() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.user_.common_compile_flags;
-}
-
-template <typename T>
-const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetPchCompileFlags() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.user_.pch_compile_flags;
-}
-
-template <typename T>
-const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetPchObjectFlags() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.user_.pch_object_flags;
-}
-
-template <typename T>
-const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetAsmCompileFlags() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.user_.asm_compile_flags;
-}
-
-template <typename T>
-const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetCCompileFlags() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.user_.c_compile_flags;
-}
-
-template <typename T>
-const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetCppCompileFlags() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.user_.cpp_compile_flags;
-}
-
-template <typename T>
-const std::unordered_set<std::string> &
-TargetInfoGetter<T>::GetLinkFlags() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.user_.link_flags;
 }
 
 template <typename T>

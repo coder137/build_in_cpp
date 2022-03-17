@@ -43,7 +43,6 @@ enum class SyncOption {
 
 // Requires
 // - TargetStorer
-// - TargetState
 template <typename T> class SyncApi {
 public:
   /**

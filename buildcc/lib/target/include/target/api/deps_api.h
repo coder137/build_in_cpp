@@ -25,7 +25,6 @@ namespace buildcc::internal {
 
 // Requires
 // - TargetStorer
-// - TargetState
 // - TargetEnv
 template <typename T> class DepsApi {
 public:

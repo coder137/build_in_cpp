@@ -14,29 +14,12 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_API_SOURCE_API_H_
-#define TARGET_API_SOURCE_API_H_
+#include "toolchain/toolchain.h"
 
-#include <filesystem>
+namespace buildcc {
 
-namespace fs = std::filesystem;
+void Toolchain::Initialize() { UpdateConfig(config_); }
 
-namespace buildcc::internal {
+void Toolchain::Lock() { lock_.Lock(); }
 
-// Requires
-// - TargetStorer
-// - TargetConfig
-// - TargetEnv
-template <typename T> class SourceApi {
-public:
-  void AddSourceAbsolute(const fs::path &absolute_source);
-  void GlobSourcesAbsolute(const fs::path &absolute_source_dir);
-
-  void AddSource(const fs::path &relative_source,
-                 const fs::path &relative_to_target_path = "");
-  void GlobSources(const fs::path &relative_to_target_path = "");
-};
-
-} // namespace buildcc::internal
-
-#endif
+} // namespace buildcc

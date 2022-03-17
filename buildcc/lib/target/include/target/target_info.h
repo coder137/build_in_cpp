@@ -21,13 +21,10 @@
 
 #include "toolchain/toolchain.h"
 
-#include "target/common/function_lock.h"
 #include "target/common/target_config.h"
 #include "target/common/target_env.h"
-#include "target/common/target_state.h"
 
 #include "target/api/deps_api.h"
-#include "target/api/flag_api.h"
 #include "target/api/include_api.h"
 #include "target/api/lib_api.h"
 #include "target/api/pch_api.h"
@@ -39,6 +36,7 @@
 
 namespace buildcc {
 
+// TODO, Make this private
 struct UserTargetSchema : public internal::TargetSchema {
   fs_unordered_set sources;
   fs_unordered_set headers;
@@ -65,7 +63,9 @@ class TargetInfo : public internal::SourceApi<TargetInfo>,
 public:
   TargetInfo(const BaseToolchain &toolchain, const TargetEnv &env,
              const TargetConfig &config = TargetConfig())
-      : toolchain_(toolchain), env_(env), config_(config) {}
+      : toolchain_(toolchain), env_(env), config_(config) {
+    Initialize();
+  }
 
 private:
   // Inputs
@@ -87,10 +87,12 @@ protected:
   TargetEnv env_;
   TargetConfig config_;
 
+  //
   UserTargetSchema user_;
-
   FunctionLock lock_;
-  TargetState state_;
+
+private:
+  void Initialize();
 };
 
 typedef TargetInfo BaseTargetInfo;

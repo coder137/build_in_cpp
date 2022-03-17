@@ -23,7 +23,6 @@ set(COMMON_TARGET_SRCS
     include/target/api/include_api.h
     include/target/api/lib_api.h
     include/target/api/pch_api.h
-    include/target/api/flag_api.h
     include/target/api/deps_api.h
 
     src/api/sync_api.cpp
@@ -38,6 +37,10 @@ set(COMMON_TARGET_SRCS
     src/generator/generator.cpp
     include/target/generator.h
 
+    # Target Info
+    src/target_info/target_info.cpp
+    include/target/target_info.h
+
     # Target friend
     src/target/friend/compile_pch.cpp
     src/target/friend/compile_object.cpp
@@ -49,6 +52,5 @@ set(COMMON_TARGET_SRCS
     # Target
     src/target/target.cpp
     src/target/build.cpp
-    include/target/target_info.h
     include/target/target.h
 )

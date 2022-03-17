@@ -8,6 +8,15 @@ target_link_libraries(target_interface INTERFACE
     mock_target
 )
 
+# Toolchain
+
+add_executable(test_toolchain_flag_api
+    test_toolchain_flag_api.cpp
+)
+target_link_libraries(test_toolchain_flag_api PRIVATE target_interface)
+
+add_test(NAME test_toolchain_flag_api COMMAND test_toolchain_flag_api)
+
 # Interfaces
 add_executable(test_builder_interface
     test_builder_interface.cpp

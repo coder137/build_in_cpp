@@ -30,8 +30,8 @@ TEST_GROUP(TargetPchTestGroup)
 };
 // clang-format on
 
-static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
-                                    "gcc", "g++", "ar", "ld");
+static buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc",
+                              "g++", "ar", "ld");
 
 TEST(TargetPchTestGroup, Target_AddPch) {
   constexpr const char *const NAME = "AddPch.exe";

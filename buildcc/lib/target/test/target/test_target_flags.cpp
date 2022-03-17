@@ -21,8 +21,8 @@
 
 // Constants
 
-static const buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as",
-                                    "gcc", "g++", "ar", "ld");
+static buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc",
+                              "g++", "ar", "ld");
 
 // ------------- PREPROCESSOR FLAGS ---------------
 

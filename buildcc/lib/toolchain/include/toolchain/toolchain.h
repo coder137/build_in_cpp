@@ -21,14 +21,17 @@
 #include <unordered_map>
 #include <vector>
 
+#include "toolchain/common/function_lock.h"
 #include "toolchain/common/toolchain_config.h"
 
+#include "toolchain/api/flag_api.h"
 #include "toolchain/api/toolchain_verify.h"
 
 namespace buildcc {
 
 // Base toolchain class
-class Toolchain : public ToolchainVerify<Toolchain> {
+class Toolchain : public internal::FlagApi<Toolchain>,
+                  public ToolchainVerify<Toolchain> {
 public:
   enum class Id {
     Gcc = 0,   ///< GCC Toolchain
@@ -43,16 +46,18 @@ public:
   explicit Toolchain(Id id, std::string_view name,
                      std::string_view asm_compiler, std::string_view c_compiler,
                      std::string_view cpp_compiler, std::string_view archiver,
-                     std::string_view linker,
+                     std::string_view linker, bool lock = true,
                      const ToolchainConfig &config = ToolchainConfig())
       : id_(id), name_(name), asm_compiler_(asm_compiler),
         c_compiler_(c_compiler), cpp_compiler_(cpp_compiler),
-        archiver_(archiver), linker_(linker), config_(config) {
-    UpdateConfig(config_);
+        archiver_(archiver), linker_(linker), config_(config), lock_(lock) {
+    Initialize();
   }
 
   Toolchain(Toolchain &&toolchain) = default;
   Toolchain(const Toolchain &toolchain) = delete;
+
+  void Lock();
 
   // Getters
   Id GetId() const { return id_; }
@@ -63,12 +68,31 @@ public:
   const std::string &GetArchiver() const { return archiver_; }
   const std::string &GetLinker() const { return linker_; }
 
+  const FunctionLock &GetLockInfo() const { return lock_; }
   const ToolchainConfig &GetConfig() const { return config_; }
 
 private:
-  virtual void UpdateConfig(ToolchainConfig &config) { (void)config; }
+  struct UserSchema {
+    std::unordered_set<std::string> preprocessor_flags;
+    std::unordered_set<std::string> common_compile_flags;
+    std::unordered_set<std::string> pch_compile_flags;
+    std::unordered_set<std::string> pch_object_flags;
+    std::unordered_set<std::string> asm_compile_flags;
+    std::unordered_set<std::string> c_compile_flags;
+    std::unordered_set<std::string> cpp_compile_flags;
+    std::unordered_set<std::string> link_flags;
+  };
 
 private:
+  virtual void UpdateConfig(ToolchainConfig &config) { (void)config; }
+  void Initialize();
+
+private:
+  friend class internal::FlagApi<Toolchain>;
+
+  // TODO, Remove this and have a virtual `Verify` function instead
+  // Anti-pattern: ToolchainVerify contains GCC and MSVC specific
+  // implementations in a "Base" toolchain class
   friend class ToolchainVerify<Toolchain>;
 
 private:
@@ -79,8 +103,11 @@ private:
   std::string cpp_compiler_;
   std::string archiver_;
   std::string linker_;
-
   ToolchainConfig config_;
+  FunctionLock lock_;
+
+  //
+  UserSchema user_;
 };
 
 typedef Toolchain::Id ToolchainId;

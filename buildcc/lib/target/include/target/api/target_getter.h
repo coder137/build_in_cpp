@@ -24,6 +24,8 @@
 
 #include "toolchain/toolchain.h"
 
+#include "target/common/target_state.h"
+
 #include "taskflow/taskflow.hpp"
 
 namespace fs = std::filesystem;
@@ -32,6 +34,11 @@ namespace buildcc::internal {
 
 template <typename T> class TargetGetter {
 public:
+  // Target State
+  const TargetState &GetState() const;
+  bool IsBuilt() const;
+  bool IsLocked() const;
+
   const std::string &GetName() const;
   const Toolchain &GetToolchain() const;
   TargetType GetType() const;
