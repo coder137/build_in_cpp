@@ -89,7 +89,5 @@ int main(int ac, char **av) {
                                       "random dir");
   buildcc::env::init(fs::path(BUILD_SCRIPT_SOURCE) / "data" / "random dir",
                      BUILD_TARGET_SOURCE_OUT_OF_ROOT_INTERMEDIATE_DIR);
-
-  gcc.Lock();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

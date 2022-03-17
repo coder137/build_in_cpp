@@ -257,7 +257,5 @@ TEST(TargetTestLibDep, TargetDep_UpdateExistingLibraryTest) {
 int main(int ac, char **av) {
   buildcc::env::init(BUILD_SCRIPT_SOURCE,
                      BUILD_TARGET_LIB_DEP_INTERMEDIATE_DIR);
-
-  gcc.Lock();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

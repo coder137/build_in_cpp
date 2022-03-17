@@ -101,7 +101,5 @@ TEST(TargetBaseTestGroup, TargetConfig_BadLinkCommand) {
 
 int main(int ac, char **av) {
   MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
-
-  gcc.Lock();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

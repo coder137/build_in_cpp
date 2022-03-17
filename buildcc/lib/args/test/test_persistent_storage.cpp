@@ -56,7 +56,5 @@ TEST(PersistentStorageTestGroup, NullptrDelete) {
 
 int main(int ac, char **av) {
   buildcc::env::init(fs::current_path(), fs::current_path());
-
-  gcc.Lock();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

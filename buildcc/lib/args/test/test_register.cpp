@@ -102,7 +102,6 @@ TEST(RegisterTestGroup, Register_Build) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::Toolchain::Id::Gcc, "", "", "", "", "",
                                "");
-  toolchain.Lock();
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
 
@@ -151,7 +150,6 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::Toolchain::Id::Gcc, "", "", "", "", "",
                                "");
-  toolchain.Lock();
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
   buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
@@ -236,7 +234,6 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::Toolchain::Id::Gcc, "", "", "", "", "",
                                "");
-  toolchain.Lock();
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
   buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
@@ -332,7 +329,6 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::Toolchain::Id::Gcc, "", "", "", "", "",
                                "");
-  toolchain.Lock();
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
   buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
@@ -409,7 +405,6 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::Toolchain::Id::Gcc, "", "", "", "", "",
                                "");
-  toolchain.Lock();
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
   buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
@@ -486,7 +481,6 @@ TEST(RegisterTestGroup, Register_Test) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::Toolchain::Id::Gcc, "", "", "", "", "",
                                "");
-  toolchain.Lock();
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
   buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
@@ -572,7 +566,6 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
   buildcc::env::init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::Toolchain::Id::Gcc, "", "", "", "", "",
                                "");
-  toolchain.Lock();
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
   buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,

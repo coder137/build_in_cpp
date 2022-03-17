@@ -319,7 +319,5 @@ TEST(TargetTestSyncGroup, InsertCrash) {
 int main(int ac, char **av) {
   buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_TARGET_SYNC_INTERMEDIATE_DIR);
   fs::remove_all(buildcc::env::get_project_build_dir());
-
-  gcc.Lock();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

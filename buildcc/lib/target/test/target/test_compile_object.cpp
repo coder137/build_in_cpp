@@ -33,7 +33,5 @@ int main(int ac, char **av) {
   buildcc::env::init(fs::current_path(), fs::current_path() / "intermediate" /
                                              "target_compile_object");
   fs::remove_all(buildcc::env::get_project_build_dir());
-
-  gcc.Lock();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
