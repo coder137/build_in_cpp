@@ -58,11 +58,12 @@ public:
   explicit Toolchain(Id id, std::string_view name,
                      std::string_view asm_compiler, std::string_view c_compiler,
                      std::string_view cpp_compiler, std::string_view archiver,
-                     std::string_view linker,
+                     std::string_view linker, bool locked = true,
                      const ToolchainConfig &config = ToolchainConfig())
       : id_(id), name_(name), asm_compiler_(asm_compiler),
         c_compiler_(c_compiler), cpp_compiler_(cpp_compiler),
         archiver_(archiver), linker_(linker), config_(config) {
+    locked ? lock_.Lock() : lock_.Unlock();
     UpdateConfig(config_);
   }
 
