@@ -42,8 +42,6 @@ int main(int argc, char **argv) {
   reg.Clean(clean_cb);
 
   BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
-  // TODO, Add toolchain specific flags here
-  toolchain.Lock();
 
   BuildBuildCC buildcc(
       reg, toolchain,
