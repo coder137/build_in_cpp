@@ -21,7 +21,8 @@ namespace buildcc {
 // PRIVATE
 
 void TargetInfo::Initialize() {
-  toolchain_.GetLockInfo().ExpectsLock("TargetInfo with Toolchain");
+  toolchain_.GetLockInfo().ExpectsLock(
+      "Toolchain should be locked before usage through `Toolchain::Lock`");
 
   std::for_each(toolchain_.GetPreprocessorFlags().begin(),
                 toolchain_.GetPreprocessorFlags().end(),
