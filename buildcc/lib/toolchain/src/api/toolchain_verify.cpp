@@ -157,7 +157,7 @@ public:
 
     matcher_.clear();
     matcher_.insert(
-        fmt::format("{}{}", toolchain_.GetAsmCompiler(), os_executable_ext));
+        fmt::format("{}{}", toolchain_.GetAssembler(), os_executable_ext));
     matcher_.insert(
         fmt::format("{}{}", toolchain_.GetCCompiler(), os_executable_ext));
     matcher_.insert(

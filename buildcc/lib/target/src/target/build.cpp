@@ -87,7 +87,7 @@ void Target::Build() {
       {kLinkFlags, internal::aggregate(GetLinkFlags())},
 
       // Toolchain executables here
-      {kAsmCompiler, fmt::format("{}", fs::path(toolchain_.GetAsmCompiler()))},
+      {kAsmCompiler, fmt::format("{}", fs::path(toolchain_.GetAssembler()))},
       {kCCompiler, fmt::format("{}", fs::path(toolchain_.GetCCompiler()))},
       {kCppCompiler, fmt::format("{}", fs::path(toolchain_.GetCppCompiler()))},
       {kArchiver, fmt::format("{}", fs::path(toolchain_.GetArchiver()))},

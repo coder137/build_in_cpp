@@ -82,7 +82,7 @@ public:
   // Getters
   Id GetId() const { return id_; }
   const std::string &GetName() const { return name_; }
-  const std::string &GetAsmCompiler() const { return binaries_.assembler; }
+  const std::string &GetAssembler() const { return binaries_.assembler; }
   const std::string &GetCCompiler() const { return binaries_.c_compiler; }
   const std::string &GetCppCompiler() const { return binaries_.cpp_compiler; }
   const std::string &GetArchiver() const { return binaries_.archiver; }
