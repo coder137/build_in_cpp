@@ -88,8 +88,8 @@ protected:
   TargetConfig config_;
 
   //
-  UserTargetSchema user_;
   FunctionLock lock_;
+  UserTargetSchema user_;
 
 private:
   void Initialize();
