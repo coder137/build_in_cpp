@@ -29,18 +29,6 @@
 
 namespace buildcc {
 
-// TODO, Make this private
-struct UserToolchainSchema {
-  std::unordered_set<std::string> preprocessor_flags;
-  std::unordered_set<std::string> common_compile_flags;
-  std::unordered_set<std::string> pch_compile_flags;
-  std::unordered_set<std::string> pch_object_flags;
-  std::unordered_set<std::string> asm_compile_flags;
-  std::unordered_set<std::string> c_compile_flags;
-  std::unordered_set<std::string> cpp_compile_flags;
-  std::unordered_set<std::string> link_flags;
-};
-
 // Base toolchain class
 class Toolchain : public internal::FlagApi<Toolchain>,
                   public ToolchainVerify<Toolchain> {
@@ -58,21 +46,18 @@ public:
   explicit Toolchain(Id id, std::string_view name,
                      std::string_view asm_compiler, std::string_view c_compiler,
                      std::string_view cpp_compiler, std::string_view archiver,
-                     std::string_view linker, bool locked = true,
+                     std::string_view linker, bool lock = true,
                      const ToolchainConfig &config = ToolchainConfig())
       : id_(id), name_(name), asm_compiler_(asm_compiler),
         c_compiler_(c_compiler), cpp_compiler_(cpp_compiler),
-        archiver_(archiver), linker_(linker), config_(config) {
-    locked ? lock_.Lock() : lock_.Unlock();
-    UpdateConfig(config_);
+        archiver_(archiver), linker_(linker), config_(config), lock_(lock) {
+    Initialize();
   }
 
   Toolchain(Toolchain &&toolchain) = default;
   Toolchain(const Toolchain &toolchain) = delete;
-  void Lock() {
-    lock_.Lock();
-    // TODO, In the future add some more code here
-  }
+
+  void Lock();
 
   // Getters
   Id GetId() const { return id_; }
@@ -87,7 +72,20 @@ public:
   const ToolchainConfig &GetConfig() const { return config_; }
 
 private:
+  struct UserSchema {
+    std::unordered_set<std::string> preprocessor_flags;
+    std::unordered_set<std::string> common_compile_flags;
+    std::unordered_set<std::string> pch_compile_flags;
+    std::unordered_set<std::string> pch_object_flags;
+    std::unordered_set<std::string> asm_compile_flags;
+    std::unordered_set<std::string> c_compile_flags;
+    std::unordered_set<std::string> cpp_compile_flags;
+    std::unordered_set<std::string> link_flags;
+  };
+
+private:
   virtual void UpdateConfig(ToolchainConfig &config) { (void)config; }
+  void Initialize();
 
 private:
   friend class internal::FlagApi<Toolchain>;
@@ -106,10 +104,10 @@ private:
   std::string archiver_;
   std::string linker_;
   ToolchainConfig config_;
+  FunctionLock lock_;
 
   //
-  UserToolchainSchema user_;
-  FunctionLock lock_;
+  UserSchema user_;
 };
 
 typedef Toolchain::Id ToolchainId;

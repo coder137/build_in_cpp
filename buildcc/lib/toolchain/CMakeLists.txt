@@ -1,15 +1,19 @@
 set(TOOLCHAIN_SRCS
-    include/toolchain/toolchain.h
-
-    include/toolchain/common/file_ext.h
-
+    # COMMON
     src/common/toolchain_config.cpp
     include/toolchain/common/toolchain_config.h
+    include/toolchain/common/file_ext.h
+    include/toolchain/common/function_lock.h
+
+    # API
+    include/toolchain/api/flag_api.h
+
+    src/toolchain/toolchain.cpp
+    include/toolchain/toolchain.h
 
     # Features
     src/api/toolchain_verify.cpp
     include/toolchain/api/toolchain_verify.h
-    include/toolchain/api/flag_api.h
 )
 if (${TESTING})
     add_library(mock_toolchain

@@ -27,8 +27,12 @@ namespace buildcc {
 
 class FunctionLock {
 public:
-  void Lock() { lock_ = true; }
-  void Unlock() { lock_ = false; }
+  FunctionLock(bool initial_value = false) : lock_(initial_value) {}
+
+  void SetLock(bool lock) { lock_ = lock; }
+  void Lock() { SetLock(true); }
+  void Unlock() { SetLock(false); }
+
   bool IsLocked() const { return lock_; }
   // TODO, Make this better
   void ExpectsUnlock(std::string_view tag) const {
