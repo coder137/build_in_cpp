@@ -63,6 +63,7 @@ void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
   // TOOLCHAIN
   target.GlobSources("lib/toolchain/src/api");
   target.GlobSources("lib/toolchain/src/common");
+  target.GlobSources("lib/toolchain/src/toolchain");
   target.AddIncludeDir("lib/toolchain/include");
   target.GlobHeaders("lib/toolchain/include/toolchain");
   target.GlobHeaders("lib/toolchain/include/toolchain/api");
