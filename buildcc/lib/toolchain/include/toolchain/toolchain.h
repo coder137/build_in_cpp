@@ -29,6 +29,19 @@
 
 namespace buildcc {
 
+struct ToolchainBinaries {
+  ToolchainBinaries(std::string_view as, std::string_view c,
+                    std::string_view cpp, std::string_view ar,
+                    std::string_view link)
+      : assembler(as), c_compiler(c), cpp_compiler(cpp), archiver(ar),
+        linker(link) {}
+  std::string assembler;
+  std::string c_compiler;
+  std::string cpp_compiler;
+  std::string archiver;
+  std::string linker;
+};
+
 // Base toolchain class
 class Toolchain : public internal::FlagApi<Toolchain>,
                   public ToolchainVerify<Toolchain> {
@@ -44,15 +57,22 @@ public:
 
 public:
   explicit Toolchain(Id id, std::string_view name,
-                     std::string_view asm_compiler, std::string_view c_compiler,
-                     std::string_view cpp_compiler, std::string_view archiver,
-                     std::string_view linker, bool lock = true,
+                     const ToolchainBinaries &binaries, bool lock = true,
                      const ToolchainConfig &config = ToolchainConfig())
-      : id_(id), name_(name), asm_compiler_(asm_compiler),
-        c_compiler_(c_compiler), cpp_compiler_(cpp_compiler),
-        archiver_(archiver), linker_(linker), config_(config), lock_(lock) {
+      : id_(id), name_(name), binaries_(binaries), lock_(lock),
+        config_(config) {
     Initialize();
   }
+
+  explicit Toolchain(Id id, std::string_view name, std::string_view assembler,
+                     std::string_view c_compiler, std::string_view cpp_compiler,
+                     std::string_view archiver, std::string_view linker,
+                     bool lock = true,
+                     const ToolchainConfig &config = ToolchainConfig())
+      : Toolchain(id, name,
+                  ToolchainBinaries(assembler, c_compiler, cpp_compiler,
+                                    archiver, linker),
+                  lock, config) {}
 
   Toolchain(Toolchain &&toolchain) = default;
   Toolchain(const Toolchain &toolchain) = delete;
@@ -62,11 +82,12 @@ public:
   // Getters
   Id GetId() const { return id_; }
   const std::string &GetName() const { return name_; }
-  const std::string &GetAsmCompiler() const { return asm_compiler_; }
-  const std::string &GetCCompiler() const { return c_compiler_; }
-  const std::string &GetCppCompiler() const { return cpp_compiler_; }
-  const std::string &GetArchiver() const { return archiver_; }
-  const std::string &GetLinker() const { return linker_; }
+  const std::string &GetAsmCompiler() const { return binaries_.assembler; }
+  const std::string &GetCCompiler() const { return binaries_.c_compiler; }
+  const std::string &GetCppCompiler() const { return binaries_.cpp_compiler; }
+  const std::string &GetArchiver() const { return binaries_.archiver; }
+  const std::string &GetLinker() const { return binaries_.linker; }
+  const ToolchainBinaries &GetToolchainBinaries() const { return binaries_; }
 
   const FunctionLock &GetLockInfo() const { return lock_; }
   const ToolchainConfig &GetConfig() const { return config_; }
@@ -89,22 +110,14 @@ private:
 
 private:
   friend class internal::FlagApi<Toolchain>;
-
-  // TODO, Remove this and have a virtual `Verify` function instead
-  // Anti-pattern: ToolchainVerify contains GCC and MSVC specific
-  // implementations in a "Base" toolchain class
   friend class ToolchainVerify<Toolchain>;
 
 private:
   Id id_;
   std::string name_;
-  std::string asm_compiler_;
-  std::string c_compiler_;
-  std::string cpp_compiler_;
-  std::string archiver_;
-  std::string linker_;
-  ToolchainConfig config_;
+  ToolchainBinaries binaries_;
   FunctionLock lock_;
+  ToolchainConfig config_;
 
   //
   UserSchema user_;

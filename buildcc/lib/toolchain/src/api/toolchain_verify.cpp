@@ -258,26 +258,31 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
         "OS not supported");
 
     verified_toolchain_ = verified_toolchains[0];
-    t.asm_compiler_ = (verified_toolchain_.path /
-                       fmt::format("{}{}", t.asm_compiler_, os_executable_ext))
-                          .make_preferred()
-                          .string();
-    t.c_compiler_ = (verified_toolchain_.path /
-                     fmt::format("{}{}", t.c_compiler_, os_executable_ext))
-                        .make_preferred()
-                        .string();
-    t.cpp_compiler_ = (verified_toolchain_.path /
-                       fmt::format("{}{}", t.cpp_compiler_, os_executable_ext))
-                          .make_preferred()
-                          .string();
-    t.archiver_ = (verified_toolchain_.path /
-                   fmt::format("{}{}", t.archiver_, os_executable_ext))
-                      .make_preferred()
-                      .string();
-    t.linker_ = (verified_toolchain_.path /
-                 fmt::format("{}{}", t.linker_, os_executable_ext))
-                    .make_preferred()
-                    .string();
+    t.binaries_.assembler =
+        (verified_toolchain_.path /
+         fmt::format("{}{}", t.binaries_.assembler, os_executable_ext))
+            .make_preferred()
+            .string();
+    t.binaries_.c_compiler =
+        (verified_toolchain_.path /
+         fmt::format("{}{}", t.binaries_.c_compiler, os_executable_ext))
+            .make_preferred()
+            .string();
+    t.binaries_.cpp_compiler =
+        (verified_toolchain_.path /
+         fmt::format("{}{}", t.binaries_.cpp_compiler, os_executable_ext))
+            .make_preferred()
+            .string();
+    t.binaries_.archiver =
+        (verified_toolchain_.path /
+         fmt::format("{}{}", t.binaries_.archiver, os_executable_ext))
+            .make_preferred()
+            .string();
+    t.binaries_.linker =
+        (verified_toolchain_.path /
+         fmt::format("{}{}", t.binaries_.linker, os_executable_ext))
+            .make_preferred()
+            .string();
   }
 
   return verified_toolchains;
