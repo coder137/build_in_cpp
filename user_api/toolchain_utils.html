@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Toolchain" href="toolchain.html" /><link rel="prev" title="Register" href="register.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.14.1"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
         <title>Toolchain Utils - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=a8f031f701c6af50c9919b48f173a5785af06fac" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
     
     
@@ -19,16 +19,18 @@
   --color-code-foreground: black;
   
   }
-  body[data-theme="dark"] {
-    --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-  }
-  @media (prefers-color-scheme: dark) {
-    body:not([data-theme="light"]) {
+  @media not print {
+    body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
     }
   }
 </style></head>
@@ -211,6 +213,12 @@
   <div class="main">
     <div class="content">
       <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
         <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
@@ -259,6 +267,44 @@
 <span id="_CPPv3N7buildcc7FileExt7InvalidE"></span><span id="_CPPv2N7buildcc7FileExt7InvalidE"></span><span class="target" id="namespacebuildcc_1a1d041afa0fa20d0d6e7a09b3fd4695b8a4bbb8f967da6d1a610596d7257179c2b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Invalid</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc7FileExt7InvalidE" title="Permalink to this definition">#</a><br/></dt>
 <dd><p>Not a valid C/C++ family extension. </p>
 </dd></dl>
+</dd></dl>
+</div>
+<div class="section" id="function-lock-h">
+<h2>function_lock.h<a class="headerlink" href="#function-lock-h" title="Permalink to this headline">#</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12FunctionLockE">
+<span id="_CPPv3N7buildcc12FunctionLockE"></span><span id="_CPPv2N7buildcc12FunctionLockE"></span><span id="buildcc::FunctionLock"></span><span class="target" id="classbuildcc_1_1FunctionLock"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">FunctionLock</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc12FunctionLockE" title="Permalink to this definition">#</a><br/></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12FunctionLock12FunctionLockEb">
+<span id="_CPPv3N7buildcc12FunctionLock12FunctionLockEb"></span><span id="_CPPv2N7buildcc12FunctionLock12FunctionLockEb"></span><span id="buildcc::FunctionLock::FunctionLock__b"></span><span class="target" id="classbuildcc_1_1FunctionLock_1a8818f235ab9d83a20c9aabb06cd790b1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FunctionLock</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">initial_value</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc12FunctionLock12FunctionLockEb" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12FunctionLock7SetLockEb">
+<span id="_CPPv3N7buildcc12FunctionLock7SetLockEb"></span><span id="_CPPv2N7buildcc12FunctionLock7SetLockEb"></span><span id="buildcc::FunctionLock::SetLock__b"></span><span class="target" id="classbuildcc_1_1FunctionLock_1a09fca406347c2426fd69cce04f96a2d9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetLock</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">lock</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc12FunctionLock7SetLockEb" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12FunctionLock4LockEv">
+<span id="_CPPv3N7buildcc12FunctionLock4LockEv"></span><span id="_CPPv2N7buildcc12FunctionLock4LockEv"></span><span id="buildcc::FunctionLock::Lock"></span><span class="target" id="classbuildcc_1_1FunctionLock_1a15e72979730c33d611acfc04ecd43946"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Lock</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc12FunctionLock4LockEv" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc12FunctionLock6UnlockEv">
+<span id="_CPPv3N7buildcc12FunctionLock6UnlockEv"></span><span id="_CPPv2N7buildcc12FunctionLock6UnlockEv"></span><span id="buildcc::FunctionLock::Unlock"></span><span class="target" id="classbuildcc_1_1FunctionLock_1a9d618e15b5bb0f72f2f74436a12331b6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Unlock</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc12FunctionLock6UnlockEv" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc12FunctionLock8IsLockedEv">
+<span id="_CPPv3NK7buildcc12FunctionLock8IsLockedEv"></span><span id="_CPPv2NK7buildcc12FunctionLock8IsLockedEv"></span><span id="buildcc::FunctionLock::IsLockedC"></span><span class="target" id="classbuildcc_1_1FunctionLock_1ad38c1b986ceecbe4b25e31cb1e820471"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsLocked</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc12FunctionLock8IsLockedEv" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc12FunctionLock13ExpectsUnlockENSt11string_viewE">
+<span id="_CPPv3NK7buildcc12FunctionLock13ExpectsUnlockENSt11string_viewE"></span><span id="_CPPv2NK7buildcc12FunctionLock13ExpectsUnlockENSt11string_viewE"></span><span id="buildcc::FunctionLock::ExpectsUnlock__std::string_viewC"></span><span class="target" id="classbuildcc_1_1FunctionLock_1a08e54f6a23f9ebfa71d962ea59c26165"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExpectsUnlock</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc12FunctionLock13ExpectsUnlockENSt11string_viewE" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc12FunctionLock11ExpectsLockENSt11string_viewE">
+<span id="_CPPv3NK7buildcc12FunctionLock11ExpectsLockENSt11string_viewE"></span><span id="_CPPv2NK7buildcc12FunctionLock11ExpectsLockENSt11string_viewE"></span><span id="buildcc::FunctionLock::ExpectsLock__std::string_viewC"></span><span class="target" id="classbuildcc_1_1FunctionLock_1a1fb6af563f6c1cbd318bd8c924d4e6fe"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExpectsLock</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc12FunctionLock11ExpectsLockENSt11string_viewE" title="Permalink to this definition">#</a><br/></dt>
+<dd></dd></dl>
+</div>
 </dd></dl>
 </div>
 <div class="section" id="toolchain-config-h">
@@ -445,6 +491,7 @@
             <ul>
 <li><a class="reference internal" href="#">Toolchain Utils</a><ul>
 <li><a class="reference internal" href="#file-ext-h">file_ext.h</a></li>
+<li><a class="reference internal" href="#function-lock-h">function_lock.h</a></li>
 <li><a class="reference internal" href="#toolchain-config-h">toolchain_config.h</a></li>
 </ul>
 </li>

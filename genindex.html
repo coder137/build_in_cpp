@@ -4,9 +4,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.14.1"/><title>Index - BuildCC 0.1.1 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/><title>Index - BuildCC 0.1.1 documentation</title>
 <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=a8f031f701c6af50c9919b48f173a5785af06fac" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
     
     
@@ -18,16 +18,18 @@
   --color-code-foreground: black;
   
   }
-  body[data-theme="dark"] {
-    --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-  }
-  @media (prefers-color-scheme: dark) {
-    body:not([data-theme="light"]) {
+  @media not print {
+    body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
     }
   }
 </style></head>
@@ -210,6 +212,12 @@
   <div class="main">
     <div class="content">
       <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
         <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
@@ -417,6 +425,22 @@
 </li>
         <li><a href="user_api/toolchain_utils.html#_CPPv4N7buildcc7FileExt7InvalidE">buildcc::FileExt::Invalid (C++ enumerator)</a>
 </li>
+        <li><a href="user_api/toolchain_utils.html#_CPPv4N7buildcc12FunctionLockE">buildcc::FunctionLock (C++ class)</a>
+</li>
+        <li><a href="user_api/toolchain_utils.html#_CPPv4NK7buildcc12FunctionLock11ExpectsLockENSt11string_viewE">buildcc::FunctionLock::ExpectsLock (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain_utils.html#_CPPv4NK7buildcc12FunctionLock13ExpectsUnlockENSt11string_viewE">buildcc::FunctionLock::ExpectsUnlock (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain_utils.html#_CPPv4N7buildcc12FunctionLock12FunctionLockEb">buildcc::FunctionLock::FunctionLock (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain_utils.html#_CPPv4NK7buildcc12FunctionLock8IsLockedEv">buildcc::FunctionLock::IsLocked (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain_utils.html#_CPPv4N7buildcc12FunctionLock4LockEv">buildcc::FunctionLock::Lock (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain_utils.html#_CPPv4N7buildcc12FunctionLock7SetLockEb">buildcc::FunctionLock::SetLock (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain_utils.html#_CPPv4N7buildcc12FunctionLock6UnlockEv">buildcc::FunctionLock::Unlock (C++ function)</a>
+</li>
         <li><a href="user_api/generator.html#_CPPv4N7buildcc9GeneratorE">buildcc::Generator (C++ class)</a>
 </li>
         <li><a href="user_api/generator.html#_CPPv4N7buildcc9Generator10AddCommandERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE">buildcc::Generator::AddCommand (C++ function)</a>
@@ -472,6 +496,22 @@
         <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7FlagApi16AddPchObjectFlagERKNSt6stringE">buildcc::internal::FlagApi::AddPchObjectFlag (C++ function)</a>
 </li>
         <li><a href="user_api/target.html#_CPPv4N7buildcc8internal7FlagApi19AddPreprocessorFlagERKNSt6stringE">buildcc::internal::FlagApi::AddPreprocessorFlag (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal7FlagApi18GetAsmCompileFlagsEv">buildcc::internal::FlagApi::GetAsmCompileFlags (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal7FlagApi16GetCCompileFlagsEv">buildcc::internal::FlagApi::GetCCompileFlags (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal7FlagApi21GetCommonCompileFlagsEv">buildcc::internal::FlagApi::GetCommonCompileFlags (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal7FlagApi18GetCppCompileFlagsEv">buildcc::internal::FlagApi::GetCppCompileFlags (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal7FlagApi12GetLinkFlagsEv">buildcc::internal::FlagApi::GetLinkFlags (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal7FlagApi18GetPchCompileFlagsEv">buildcc::internal::FlagApi::GetPchCompileFlags (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal7FlagApi17GetPchObjectFlagsEv">buildcc::internal::FlagApi::GetPchObjectFlags (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal7FlagApi20GetPreprocessorFlagsEv">buildcc::internal::FlagApi::GetPreprocessorFlags (C++ function)</a>
 </li>
         <li><a href="user_api/target.html#_CPPv4I0EN7buildcc8internal10IncludeApiE">buildcc::internal::IncludeApi (C++ class)</a>
 </li>
@@ -531,27 +571,27 @@
 </li>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter16GetPchHeaderPathEv">buildcc::internal::TargetGetter::GetPchHeaderPath (C++ function)</a>
 </li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter8GetStateEv">buildcc::internal::TargetGetter::GetState (C++ function)</a>
+</li>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter13GetTargetPathEv">buildcc::internal::TargetGetter::GetTargetPath (C++ function)</a>
 </li>
         <li><a href="user_api/target.html#_CPPv4N7buildcc8internal12TargetGetter11GetTaskflowEv">buildcc::internal::TargetGetter::GetTaskflow (C++ function)</a>
 </li>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter12GetToolchainEv">buildcc::internal::TargetGetter::GetToolchain (C++ function)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter7GetTypeEv">buildcc::internal::TargetGetter::GetType (C++ function)</a>
 </li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter7IsBuiltEv">buildcc::internal::TargetGetter::IsBuilt (C++ function)</a>
+</li>
+        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetGetter8IsLockedEv">buildcc::internal::TargetGetter::IsLocked (C++ function)</a>
+</li>
         <li><a href="user_api/target.html#_CPPv4I0EN7buildcc8internal16TargetInfoGetterE">buildcc::internal::TargetInfoGetter (C++ class)</a>
-</li>
-        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter18GetAsmCompileFlagsEv">buildcc::internal::TargetInfoGetter::GetAsmCompileFlags (C++ function)</a>
-</li>
-        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter16GetCCompileFlagsEv">buildcc::internal::TargetInfoGetter::GetCCompileFlags (C++ function)</a>
-</li>
-        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter21GetCommonCompileFlagsEv">buildcc::internal::TargetInfoGetter::GetCommonCompileFlags (C++ function)</a>
 </li>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter22GetCompileDependenciesEv">buildcc::internal::TargetInfoGetter::GetCompileDependencies (C++ function)</a>
 </li>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter9GetConfigEv">buildcc::internal::TargetInfoGetter::GetConfig (C++ function)</a>
-</li>
-        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter18GetCppCompileFlagsEv">buildcc::internal::TargetInfoGetter::GetCppCompileFlags (C++ function)</a>
 </li>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter18GetExternalLibDepsEv">buildcc::internal::TargetInfoGetter::GetExternalLibDeps (C++ function)</a>
 </li>
@@ -561,33 +601,17 @@
 </li>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter10GetLibDepsEv">buildcc::internal::TargetInfoGetter::GetLibDeps (C++ function)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter10GetLibDirsEv">buildcc::internal::TargetInfoGetter::GetLibDirs (C++ function)</a>
 </li>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter19GetLinkDependenciesEv">buildcc::internal::TargetInfoGetter::GetLinkDependencies (C++ function)</a>
 </li>
-        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter12GetLinkFlagsEv">buildcc::internal::TargetInfoGetter::GetLinkFlags (C++ function)</a>
-</li>
-        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter18GetPchCompileFlagsEv">buildcc::internal::TargetInfoGetter::GetPchCompileFlags (C++ function)</a>
-</li>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter11GetPchFilesEv">buildcc::internal::TargetInfoGetter::GetPchFiles (C++ function)</a>
 </li>
-        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter17GetPchObjectFlagsEv">buildcc::internal::TargetInfoGetter::GetPchObjectFlags (C++ function)</a>
-</li>
-        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter20GetPreprocessorFlagsEv">buildcc::internal::TargetInfoGetter::GetPreprocessorFlags (C++ function)</a>
-</li>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter14GetSourceFilesEv">buildcc::internal::TargetInfoGetter::GetSourceFiles (C++ function)</a>
-</li>
-        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter8GetStateEv">buildcc::internal::TargetInfoGetter::GetState (C++ function)</a>
 </li>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter17GetTargetBuildDirEv">buildcc::internal::TargetInfoGetter::GetTargetBuildDir (C++ function)</a>
 </li>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter16GetTargetRootDirEv">buildcc::internal::TargetInfoGetter::GetTargetRootDir (C++ function)</a>
-</li>
-        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter7IsBuiltEv">buildcc::internal::TargetInfoGetter::IsBuilt (C++ function)</a>
-</li>
-        <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal16TargetInfoGetter8IsLockedEv">buildcc::internal::TargetInfoGetter::IsLocked (C++ function)</a>
 </li>
         <li><a href="arch/testing.html#_CPPv4N7buildcc1m30GeneratorExpect_CommandChangedEjP9Generator">buildcc::m::GeneratorExpect_CommandChanged (C++ function)</a>
 </li>
@@ -787,6 +811,8 @@
 </li>
         <li><a href="user_api/toolchain.html#_CPPv4NK7buildcc9Toolchain9GetLinkerEv">buildcc::Toolchain::GetLinker (C++ function)</a>
 </li>
+        <li><a href="user_api/toolchain.html#_CPPv4NK7buildcc9Toolchain11GetLockInfoEv">buildcc::Toolchain::GetLockInfo (C++ function)</a>
+</li>
         <li><a href="user_api/toolchain.html#_CPPv4NK7buildcc9Toolchain7GetNameEv">buildcc::Toolchain::GetName (C++ function)</a>
 </li>
         <li><a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain2IdE">buildcc::Toolchain::Id (C++ enum)</a>
@@ -803,7 +829,9 @@
 </li>
         <li><a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain2Id9UndefinedE">buildcc::Toolchain::Id::Undefined (C++ enumerator)</a>
 </li>
-        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain9ToolchainE2IdNSt11string_viewENSt11string_viewENSt11string_viewENSt11string_viewENSt11string_viewENSt11string_viewERK15ToolchainConfig">buildcc::Toolchain::Toolchain (C++ function)</a>, <a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain9ToolchainERK9Toolchain">[1]</a>, <a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain9ToolchainERR9Toolchain">[2]</a>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain4LockEv">buildcc::Toolchain::Lock (C++ function)</a>
+</li>
+        <li><a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain9ToolchainE2IdNSt11string_viewENSt11string_viewENSt11string_viewENSt11string_viewENSt11string_viewENSt11string_viewEbRK15ToolchainConfig">buildcc::Toolchain::Toolchain (C++ function)</a>, <a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain9ToolchainERK9Toolchain">[1]</a>, <a href="user_api/toolchain.html#_CPPv4N7buildcc9Toolchain9ToolchainERR9Toolchain">[2]</a>
 </li>
         <li><a href="user_api/toolchain.html#_CPPv4N7buildcc13Toolchain_gccE">buildcc::Toolchain_gcc (C++ class)</a>
 </li>
