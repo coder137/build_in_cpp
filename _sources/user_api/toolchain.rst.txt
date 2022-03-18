@@ -6,8 +6,6 @@ toolchain.h
 
 .. doxygenclass:: buildcc::Toolchain
 
-.. doxygentypedef:: ToolchainId
-
 .. doxygentypedef:: BaseToolchain
 
 toolchain_verify.h
