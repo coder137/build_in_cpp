@@ -57,26 +57,26 @@ public:
   };
 
 public:
-  explicit Toolchain(Id id, std::string_view name,
-                     const ToolchainBinaries &binaries, bool lock = true,
-                     const ToolchainConfig &config = ToolchainConfig())
+  Toolchain() = default;
+  Toolchain(Id id, std::string_view name, const ToolchainBinaries &binaries,
+            bool lock = true, const ToolchainConfig &config = ToolchainConfig())
       : id_(id), name_(name), binaries_(binaries), lock_(lock),
         config_(config) {
     Initialize();
   }
-
-  explicit Toolchain(Id id, std::string_view name, std::string_view assembler,
-                     std::string_view c_compiler, std::string_view cpp_compiler,
-                     std::string_view archiver, std::string_view linker,
-                     bool lock = true,
-                     const ToolchainConfig &config = ToolchainConfig())
+  Toolchain(Id id, std::string_view name, std::string_view assembler,
+            std::string_view c_compiler, std::string_view cpp_compiler,
+            std::string_view archiver, std::string_view linker,
+            bool lock = true, const ToolchainConfig &config = ToolchainConfig())
       : Toolchain(id, name,
                   ToolchainBinaries(assembler, c_compiler, cpp_compiler,
                                     archiver, linker),
                   lock, config) {}
 
-  Toolchain(Toolchain &&toolchain) = default;
-  Toolchain(const Toolchain &toolchain) = delete;
+  Toolchain(Toolchain &&) = default;
+  Toolchain &operator=(Toolchain &&) = default;
+  Toolchain(const Toolchain &) = delete;
+  Toolchain &operator=(const Toolchain &) = delete;
 
   void Lock();
 
