@@ -45,11 +45,11 @@ struct ToolchainBinaries {
                              std::string_view link)
       : assembler(as), c_compiler(c), cpp_compiler(cpp), archiver(ar),
         linker(link) {}
-  std::string assembler{""};
-  std::string c_compiler{""};
-  std::string cpp_compiler{""};
-  std::string archiver{""};
-  std::string linker{""};
+  std::string assembler;
+  std::string c_compiler;
+  std::string cpp_compiler;
+  std::string archiver;
+  std::string linker;
 };
 
 // Base toolchain class
