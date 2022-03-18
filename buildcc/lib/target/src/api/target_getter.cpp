@@ -33,6 +33,13 @@ template <typename T> bool TargetGetter<T>::IsBuilt() const {
   return t.state_.IsBuilt();
 }
 
+// Target Config
+template <typename T> const TargetConfig &TargetGetter<T>::GetConfig() const {
+  const T &t = static_cast<const T &>(*this);
+
+  return t.config_;
+}
+
 template <typename T> bool TargetGetter<T>::IsLocked() const {
   const T &t = static_cast<const T &>(*this);
 

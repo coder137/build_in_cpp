@@ -24,6 +24,7 @@
 
 #include "toolchain/toolchain.h"
 
+#include "target/common/target_config.h"
 #include "target/common/target_state.h"
 
 #include "taskflow/taskflow.hpp"
@@ -38,6 +39,9 @@ public:
   const TargetState &GetState() const;
   bool IsBuilt() const;
   bool IsLocked() const;
+
+  // Target Config
+  const TargetConfig &GetConfig() const;
 
   const std::string &GetName() const;
   const Toolchain &GetToolchain() const;

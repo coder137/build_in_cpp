@@ -19,7 +19,6 @@
 
 #include "schema/path.h"
 
-#include "target/common/target_config.h"
 #include "target/common/target_state.h"
 
 namespace buildcc::internal {
@@ -33,9 +32,6 @@ public:
   // Target Env
   const fs::path &GetTargetRootDir() const;
   const fs::path &GetTargetBuildDir() const;
-
-  // Target Config
-  const TargetConfig &GetConfig() const;
 
   // Target Storer
   const fs_unordered_set &GetSourceFiles() const;
