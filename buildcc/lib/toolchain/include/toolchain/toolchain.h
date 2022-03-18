@@ -25,6 +25,7 @@
 #include "toolchain/common/toolchain_config.h"
 
 #include "toolchain/api/flag_api.h"
+#include "toolchain/api/toolchain_find.h"
 #include "toolchain/api/toolchain_verify.h"
 
 namespace buildcc {
@@ -54,6 +55,7 @@ struct ToolchainBinaries {
 
 // Base toolchain class
 class Toolchain : public internal::FlagApi<Toolchain>,
+                  public ToolchainFind<Toolchain>,
                   public ToolchainVerify<Toolchain> {
 public:
 public:
