@@ -27,7 +27,7 @@ TEST_GROUP(ToolchainTestGroup)
 
 // NOTE, We are mocking the environment instead of actually querying it
 TEST(ToolchainTestGroup, VerifyToolchain_Gcc) {
-  buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
   std::vector<std::string> version_stdout_data{"version"};
@@ -56,7 +56,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_Gcc) {
 }
 
 TEST(ToolchainTestGroup, VerifyToolchain_Clang) {
-  buildcc::Toolchain clang(buildcc::Toolchain::Id::Clang, "clang", "llvm-as",
+  buildcc::Toolchain clang(buildcc::ToolchainId::Clang, "clang", "llvm-as",
                            "clang", "clang++", "llvm-ar", "lld");
 
   std::vector<std::string> version_stdout_data{"version"};
@@ -85,8 +85,8 @@ TEST(ToolchainTestGroup, VerifyToolchain_Clang) {
 }
 
 TEST(ToolchainTestGroup, VerifyToolchain_Msvc) {
-  buildcc::Toolchain msvc(buildcc::Toolchain::Id::Msvc, "msvc", "cl", "cl",
-                          "cl", "lib", "link");
+  buildcc::Toolchain msvc(buildcc::ToolchainId::Msvc, "msvc", "cl", "cl", "cl",
+                          "lib", "link");
   // Setup ENV
   // VSCMD_VER
   std::string vscmd_ver = std::string("VSCMD_VER=version");
@@ -122,8 +122,8 @@ TEST(ToolchainTestGroup, VerifyToolchain_Msvc) {
 }
 
 TEST(ToolchainTestGroup, VerifyToolchain_BadCompilerId) {
-  buildcc::Toolchain gcc((buildcc::Toolchain::Id)65535, "gcc", "as", "gcc",
-                         "g++", "ar", "ld");
+  buildcc::Toolchain gcc((buildcc::ToolchainId)65535, "gcc", "as", "gcc", "g++",
+                         "ar", "ld");
 
   std::string putenv_str = fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc",
                                        fs::current_path().string());
@@ -146,7 +146,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_BadCompilerId) {
 }
 
 TEST(ToolchainTestGroup, VerifyToolchain_BadAbsolutePath) {
-  buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
   buildcc::VerifyToolchainConfig config;
@@ -161,7 +161,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_BadAbsolutePath) {
 }
 
 TEST(ToolchainTestGroup, VerifyToolchain_PathContainsDir) {
-  buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
   buildcc::VerifyToolchainConfig config;
@@ -176,7 +176,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_PathContainsDir) {
 }
 
 TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_CompilerVersion) {
-  buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
   buildcc::VerifyToolchainConfig config;
@@ -198,7 +198,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_CompilerVersion) {
 
 TEST(ToolchainTestGroup,
      VerifyToolchain_ConditionalAdd_CompilerVersionFailure) {
-  buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
   buildcc::VerifyToolchainConfig config;
@@ -219,7 +219,7 @@ TEST(ToolchainTestGroup,
 }
 
 TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_TargetArch) {
-  buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
   buildcc::VerifyToolchainConfig config;
@@ -240,7 +240,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_TargetArch) {
 }
 
 TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_TargetArchFailure) {
-  buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
   buildcc::VerifyToolchainConfig config;
@@ -261,7 +261,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_TargetArchFailure) {
 }
 
 TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_BothFailure) {
-  buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
   buildcc::VerifyToolchainConfig config;
@@ -283,7 +283,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_BothFailure) {
 }
 
 TEST(ToolchainTestGroup, VerifyToolchain_UpdateFalse) {
-  buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
   buildcc::VerifyToolchainConfig config;
@@ -315,7 +315,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_LockedFolder) {
     FAIL_TEST("Could not set file permissions");
   }
 
-  buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++",
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
   buildcc::VerifyToolchainConfig config;

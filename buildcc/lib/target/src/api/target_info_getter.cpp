@@ -35,14 +35,6 @@ const fs::path &TargetInfoGetter<T>::GetTargetBuildDir() const {
   return t.env_.GetTargetBuildDir();
 }
 
-// Target Config
-template <typename T>
-const TargetConfig &TargetInfoGetter<T>::GetConfig() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.config_;
-}
-
 // Target Storer
 template <typename T>
 const fs_unordered_set &TargetInfoGetter<T>::GetSourceFiles() const {

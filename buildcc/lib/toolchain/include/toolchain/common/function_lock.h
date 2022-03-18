@@ -34,15 +34,13 @@ public:
   void Unlock() { SetLock(false); }
 
   bool IsLocked() const { return lock_; }
-  // TODO, Make this better
-  void ExpectsUnlock(std::string_view tag) const {
+
+  void ExpectsUnlock(std::string_view message) const {
     env::assert_fatal(!lock_,
-                      fmt::format("Cannot use {} when lock == true", tag));
+                      fmt::format("Expects lock == false. {}", message));
   }
-  // TODO, Make this better
-  void ExpectsLock(std::string_view tag) const {
-    env::assert_fatal(lock_,
-                      fmt::format("Cannot use {} when lock == false", tag));
+  void ExpectsLock(std::string_view message) const {
+    env::assert_fatal(lock_, fmt::format("Expects lock == true. {}", message));
   }
 
 private:

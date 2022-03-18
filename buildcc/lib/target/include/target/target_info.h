@@ -61,9 +61,8 @@ class TargetInfo : public internal::SourceApi<TargetInfo>,
                    public internal::SyncApi<TargetInfo>,
                    public internal::TargetInfoGetter<TargetInfo> {
 public:
-  TargetInfo(const BaseToolchain &toolchain, const TargetEnv &env,
-             const TargetConfig &config = TargetConfig())
-      : toolchain_(toolchain), env_(env), config_(config) {
+  TargetInfo(const BaseToolchain &toolchain, const TargetEnv &env)
+      : toolchain_(toolchain), env_(env) {
     Initialize();
   }
 
@@ -85,11 +84,10 @@ private:
 protected:
   const BaseToolchain &toolchain_;
   TargetEnv env_;
-  TargetConfig config_;
 
   //
-  UserTargetSchema user_;
   FunctionLock lock_;
+  UserTargetSchema user_;
 
 private:
   void Initialize();

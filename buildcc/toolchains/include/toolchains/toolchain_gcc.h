@@ -40,7 +40,7 @@ constexpr const char *const kGccPrefixLibDir = "-L";
 class Toolchain_gcc : public Toolchain {
 public:
   Toolchain_gcc()
-      : Toolchain(Toolchain::Id::Gcc, "gcc", "as", "gcc", "g++", "ar", "ld") {}
+      : Toolchain(ToolchainId::Gcc, "gcc", "as", "gcc", "g++", "ar", "ld") {}
   Toolchain_gcc(const Toolchain_gcc &gcc) = delete;
 
 private:

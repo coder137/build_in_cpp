@@ -78,12 +78,12 @@ GetCompilerVersion(const fs::path &absolute_path,
 
   std::optional<std::string> compiler_version;
   switch (toolchain.GetId()) {
-  case buildcc::Toolchain::Id::Gcc:
-  case buildcc::Toolchain::Id::MinGW:
-  case buildcc::Toolchain::Id::Clang:
+  case buildcc::ToolchainId::Gcc:
+  case buildcc::ToolchainId::MinGW:
+  case buildcc::ToolchainId::Clang:
     compiler_version = GetGccCompilerVersion(command);
     break;
-  case buildcc::Toolchain::Id::Msvc:
+  case buildcc::ToolchainId::Msvc:
     compiler_version = GetMsvcCompilerVersion();
     break;
   default:
@@ -127,12 +127,12 @@ GetCompilerArchitecture(const fs::path &absolute_path,
       (absolute_path / toolchain.GetCppCompiler()).make_preferred().string());
   std::optional<std::string> target_arch;
   switch (toolchain.GetId()) {
-  case buildcc::Toolchain::Id::Gcc:
-  case buildcc::Toolchain::Id::MinGW:
-  case buildcc::Toolchain::Id::Clang:
+  case buildcc::ToolchainId::Gcc:
+  case buildcc::ToolchainId::MinGW:
+  case buildcc::ToolchainId::Clang:
     target_arch = GetGccTargetArchitecture(command);
     break;
-  case buildcc::Toolchain::Id::Msvc:
+  case buildcc::ToolchainId::Msvc:
     target_arch = GetMsvcTargetArchitecture();
     break;
   default:
@@ -157,7 +157,7 @@ public:
 
     matcher_.clear();
     matcher_.insert(
-        fmt::format("{}{}", toolchain_.GetAsmCompiler(), os_executable_ext));
+        fmt::format("{}{}", toolchain_.GetAssembler(), os_executable_ext));
     matcher_.insert(
         fmt::format("{}{}", toolchain_.GetCCompiler(), os_executable_ext));
     matcher_.insert(
@@ -258,26 +258,31 @@ ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
         "OS not supported");
 
     verified_toolchain_ = verified_toolchains[0];
-    t.asm_compiler_ = (verified_toolchain_.path /
-                       fmt::format("{}{}", t.asm_compiler_, os_executable_ext))
-                          .make_preferred()
-                          .string();
-    t.c_compiler_ = (verified_toolchain_.path /
-                     fmt::format("{}{}", t.c_compiler_, os_executable_ext))
-                        .make_preferred()
-                        .string();
-    t.cpp_compiler_ = (verified_toolchain_.path /
-                       fmt::format("{}{}", t.cpp_compiler_, os_executable_ext))
-                          .make_preferred()
-                          .string();
-    t.archiver_ = (verified_toolchain_.path /
-                   fmt::format("{}{}", t.archiver_, os_executable_ext))
-                      .make_preferred()
-                      .string();
-    t.linker_ = (verified_toolchain_.path /
-                 fmt::format("{}{}", t.linker_, os_executable_ext))
-                    .make_preferred()
-                    .string();
+    t.binaries_.assembler =
+        (verified_toolchain_.path /
+         fmt::format("{}{}", t.binaries_.assembler, os_executable_ext))
+            .make_preferred()
+            .string();
+    t.binaries_.c_compiler =
+        (verified_toolchain_.path /
+         fmt::format("{}{}", t.binaries_.c_compiler, os_executable_ext))
+            .make_preferred()
+            .string();
+    t.binaries_.cpp_compiler =
+        (verified_toolchain_.path /
+         fmt::format("{}{}", t.binaries_.cpp_compiler, os_executable_ext))
+            .make_preferred()
+            .string();
+    t.binaries_.archiver =
+        (verified_toolchain_.path /
+         fmt::format("{}{}", t.binaries_.archiver, os_executable_ext))
+            .make_preferred()
+            .string();
+    t.binaries_.linker =
+        (verified_toolchain_.path /
+         fmt::format("{}{}", t.binaries_.linker, os_executable_ext))
+            .make_preferred()
+            .string();
   }
 
   return verified_toolchains;

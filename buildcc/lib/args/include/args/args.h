@@ -48,33 +48,32 @@ struct ArgToolchainState {
 struct ArgToolchain {
   ArgToolchain(){};
   ArgToolchain(ToolchainId initial_id, const std::string &initial_name,
-               const std::string &initial_asm_compiler,
+               const ToolchainBinaries &initial_binaries)
+      : id(initial_id), name(initial_name), binaries(initial_binaries) {}
+  ArgToolchain(ToolchainId initial_id, const std::string &initial_name,
+               const std::string &initial_assembler,
                const std::string &initial_c_compiler,
                const std::string &initial_cpp_compiler,
                const std::string &initial_archiver,
                const std::string &initial_linker)
-      : id(initial_id), name(initial_name), asm_compiler(initial_asm_compiler),
-        c_compiler(initial_c_compiler), cpp_compiler(initial_cpp_compiler),
-        archiver(initial_archiver), linker(initial_linker) {}
+      : ArgToolchain(initial_id, initial_name,
+                     ToolchainBinaries(initial_assembler, initial_c_compiler,
+                                       initial_cpp_compiler, initial_archiver,
+                                       initial_linker)) {}
 
   /**
    * @brief Construct a BaseToolchain from the arguments supplied through the
    * command line information
    */
+  // TODO, Update this for lock and ToolchainConfig
   BaseToolchain ConstructToolchain() const {
-    BaseToolchain toolchain(id, name, asm_compiler, c_compiler, cpp_compiler,
-                            archiver, linker);
-    return toolchain;
+    return BaseToolchain(id, name, binaries);
   }
 
   ArgToolchainState state;
   ToolchainId id{ToolchainId::Undefined};
   std::string name{""};
-  std::string asm_compiler{""};
-  std::string c_compiler{""};
-  std::string cpp_compiler{""};
-  std::string archiver{""};
-  std::string linker{""};
+  ToolchainBinaries binaries;
 };
 
 // NOTE, Incomplete without pch_compile_command

@@ -75,7 +75,7 @@ const std::unordered_map<const char *, buildcc::env::LogLevel> kLogLevelMap{
     {"critical", buildcc::env::LogLevel::Critical},
 };
 
-const std::unordered_map<const char *, buildcc::Toolchain::Id> kToolchainIdMap{
+const std::unordered_map<const char *, buildcc::ToolchainId> kToolchainIdMap{
     {"gcc", buildcc::ToolchainId::Gcc},
     {"msvc", buildcc::ToolchainId::Msvc},
     {"mingw", buildcc::ToolchainId::MinGW},
@@ -99,16 +99,16 @@ void Args::AddToolchain(const std::string &name, const std::string &description,
       ->transform(CLI::CheckedTransformer(kToolchainIdMap, CLI::ignore_case))
       ->default_val(initial.id);
   t_user->add_option(kToolchainNameParam, out.name)->default_val(initial.name);
-  t_user->add_option(kToolchainAsmCompilerParam, out.asm_compiler)
-      ->default_val(initial.asm_compiler);
-  t_user->add_option(kToolchainCCompilerParam, out.c_compiler)
-      ->default_val(initial.c_compiler);
-  t_user->add_option(kToolchainCppCompilerParam, out.cpp_compiler)
-      ->default_val(initial.cpp_compiler);
-  t_user->add_option(kToolchainArchiverParam, out.archiver)
-      ->default_val(initial.archiver);
-  t_user->add_option(kToolchainLinkerParam, out.linker)
-      ->default_val(initial.linker);
+  t_user->add_option(kToolchainAsmCompilerParam, out.binaries.assembler)
+      ->default_val(initial.binaries.assembler);
+  t_user->add_option(kToolchainCCompilerParam, out.binaries.c_compiler)
+      ->default_val(initial.binaries.c_compiler);
+  t_user->add_option(kToolchainCppCompilerParam, out.binaries.cpp_compiler)
+      ->default_val(initial.binaries.cpp_compiler);
+  t_user->add_option(kToolchainArchiverParam, out.binaries.archiver)
+      ->default_val(initial.binaries.archiver);
+  t_user->add_option(kToolchainLinkerParam, out.binaries.linker)
+      ->default_val(initial.binaries.linker);
 }
 
 void Args::AddTarget(const std::string &name, const std::string &description,

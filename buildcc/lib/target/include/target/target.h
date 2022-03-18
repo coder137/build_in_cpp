@@ -69,12 +69,10 @@ public:
   explicit Target(const std::string &name, TargetType type,
                   const Toolchain &toolchain, const TargetEnv &env,
                   const TargetConfig &config = TargetConfig())
-      : TargetInfo(
-            toolchain,
-            TargetEnv(env.GetTargetRootDir(),
-                      env.GetTargetBuildDir() / toolchain.GetName() / name),
-            config),
-        name_(name), type_(type),
+      : TargetInfo(toolchain, TargetEnv(env.GetTargetRootDir(),
+                                        env.GetTargetBuildDir() /
+                                            toolchain.GetName() / name)),
+        name_(name), type_(type), config_(config),
         serialization_(env_.GetTargetBuildDir() / fmt::format("{}.bin", name)),
         compile_pch_(*this), compile_object_(*this), link_target_(*this) {
     Initialize();
@@ -139,6 +137,7 @@ private:
 private:
   std::string name_;
   TargetType type_;
+  TargetConfig config_;
   internal::TargetSerialization serialization_;
   internal::CompilePch compile_pch_;
   internal::CompileObject compile_object_;
