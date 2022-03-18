@@ -27,7 +27,7 @@ TEST_GROUP(TargetTestUserDepsGroup)
 };
 // clang-format on
 
-static buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc",
+static buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc",
                               "g++", "ar", "ld");
 
 static const fs::path target_source_intermediate_path =

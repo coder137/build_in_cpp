@@ -78,12 +78,12 @@ GetCompilerVersion(const fs::path &absolute_path,
 
   std::optional<std::string> compiler_version;
   switch (toolchain.GetId()) {
-  case buildcc::Toolchain::Id::Gcc:
-  case buildcc::Toolchain::Id::MinGW:
-  case buildcc::Toolchain::Id::Clang:
+  case buildcc::ToolchainId::Gcc:
+  case buildcc::ToolchainId::MinGW:
+  case buildcc::ToolchainId::Clang:
     compiler_version = GetGccCompilerVersion(command);
     break;
-  case buildcc::Toolchain::Id::Msvc:
+  case buildcc::ToolchainId::Msvc:
     compiler_version = GetMsvcCompilerVersion();
     break;
   default:
@@ -127,12 +127,12 @@ GetCompilerArchitecture(const fs::path &absolute_path,
       (absolute_path / toolchain.GetCppCompiler()).make_preferred().string());
   std::optional<std::string> target_arch;
   switch (toolchain.GetId()) {
-  case buildcc::Toolchain::Id::Gcc:
-  case buildcc::Toolchain::Id::MinGW:
-  case buildcc::Toolchain::Id::Clang:
+  case buildcc::ToolchainId::Gcc:
+  case buildcc::ToolchainId::MinGW:
+  case buildcc::ToolchainId::Clang:
     target_arch = GetGccTargetArchitecture(command);
     break;
-  case buildcc::Toolchain::Id::Msvc:
+  case buildcc::ToolchainId::Msvc:
     target_arch = GetMsvcTargetArchitecture();
     break;
   default:

@@ -75,7 +75,7 @@ const std::unordered_map<const char *, buildcc::env::LogLevel> kLogLevelMap{
     {"critical", buildcc::env::LogLevel::Critical},
 };
 
-const std::unordered_map<const char *, buildcc::Toolchain::Id> kToolchainIdMap{
+const std::unordered_map<const char *, buildcc::ToolchainId> kToolchainIdMap{
     {"gcc", buildcc::ToolchainId::Gcc},
     {"msvc", buildcc::ToolchainId::Msvc},
     {"mingw", buildcc::ToolchainId::MinGW},

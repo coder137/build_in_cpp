@@ -29,6 +29,15 @@
 
 namespace buildcc {
 
+enum class ToolchainId {
+  Gcc = 0,   ///< GCC Toolchain
+  Msvc,      ///< MSVC Toolchain
+  Clang,     ///< Clang Toolchain
+  MinGW,     ///< MinGW Toolchain (Similar to GCC, but for Windows)
+  Custom,    ///< Custom Toolchain not defined in this list
+  Undefined, ///< Default value when unknown
+};
+
 struct ToolchainBinaries {
   explicit ToolchainBinaries() = default;
   explicit ToolchainBinaries(std::string_view as, std::string_view c,
@@ -47,24 +56,15 @@ struct ToolchainBinaries {
 class Toolchain : public internal::FlagApi<Toolchain>,
                   public ToolchainVerify<Toolchain> {
 public:
-  enum class Id {
-    Gcc = 0,   ///< GCC Toolchain
-    Msvc,      ///< MSVC Toolchain
-    Clang,     ///< Clang Toolchain
-    MinGW,     ///< MinGW Toolchain (Similar to GCC, but for Windows)
-    Custom,    ///< Custom Toolchain not defined in this list
-    Undefined, ///< Default value when unknown
-  };
-
 public:
-  Toolchain() = default;
-  Toolchain(Id id, std::string_view name, const ToolchainBinaries &binaries,
-            bool lock = true, const ToolchainConfig &config = ToolchainConfig())
+  Toolchain(ToolchainId id, std::string_view name,
+            const ToolchainBinaries &binaries, bool lock = true,
+            const ToolchainConfig &config = ToolchainConfig())
       : id_(id), name_(name), binaries_(binaries), lock_(lock),
         config_(config) {
     Initialize();
   }
-  Toolchain(Id id, std::string_view name, std::string_view assembler,
+  Toolchain(ToolchainId id, std::string_view name, std::string_view assembler,
             std::string_view c_compiler, std::string_view cpp_compiler,
             std::string_view archiver, std::string_view linker,
             bool lock = true, const ToolchainConfig &config = ToolchainConfig())
@@ -81,7 +81,7 @@ public:
   void Lock();
 
   // Getters
-  Id GetId() const { return id_; }
+  ToolchainId GetId() const { return id_; }
   const std::string &GetName() const { return name_; }
   const std::string &GetAssembler() const { return binaries_.assembler; }
   const std::string &GetCCompiler() const { return binaries_.c_compiler; }
@@ -114,7 +114,7 @@ private:
   friend class ToolchainVerify<Toolchain>;
 
 private:
-  Id id_;
+  ToolchainId id_;
   std::string name_;
   ToolchainBinaries binaries_;
   FunctionLock lock_;
@@ -124,7 +124,6 @@ private:
   UserSchema user_;
 };
 
-typedef Toolchain::Id ToolchainId;
 typedef Toolchain BaseToolchain;
 
 } // namespace buildcc

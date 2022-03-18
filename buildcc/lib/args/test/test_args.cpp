@@ -66,7 +66,7 @@ TEST(ArgsTestGroup, Args_CustomToolchain) {
   // Toolchain
   CHECK_TRUE(gcc_toolchain.state.build);
   CHECK_FALSE(gcc_toolchain.state.test);
-  CHECK(gcc_toolchain.id == buildcc::Toolchain::Id::Gcc);
+  CHECK(gcc_toolchain.id == buildcc::ToolchainId::Gcc);
   STRCMP_EQUAL(gcc_toolchain.name.c_str(), "gcc");
   STRCMP_EQUAL(gcc_toolchain.binaries.assembler.c_str(), "as");
   STRCMP_EQUAL(gcc_toolchain.binaries.c_compiler.c_str(), "gcc");
@@ -104,7 +104,7 @@ TEST(ArgsTestGroup, Args_MultipleCustomToolchain) {
   // GCC
   CHECK_TRUE(gcc_toolchain.state.build);
   CHECK_FALSE(gcc_toolchain.state.test);
-  CHECK(gcc_toolchain.id == buildcc::Toolchain::Id::Gcc);
+  CHECK(gcc_toolchain.id == buildcc::ToolchainId::Gcc);
   STRCMP_EQUAL(gcc_toolchain.name.c_str(), "gcc");
   STRCMP_EQUAL(gcc_toolchain.binaries.assembler.c_str(), "as");
   STRCMP_EQUAL(gcc_toolchain.binaries.c_compiler.c_str(), "gcc");
@@ -115,7 +115,7 @@ TEST(ArgsTestGroup, Args_MultipleCustomToolchain) {
   // MSVC
   CHECK_TRUE(msvc_toolchain.state.build);
   CHECK_TRUE(msvc_toolchain.state.test);
-  CHECK(msvc_toolchain.id == buildcc::Toolchain::Id::Msvc);
+  CHECK(msvc_toolchain.id == buildcc::ToolchainId::Msvc);
   STRCMP_EQUAL(msvc_toolchain.name.c_str(), "msvc");
   STRCMP_EQUAL(msvc_toolchain.binaries.assembler.c_str(), "cl");
   STRCMP_EQUAL(msvc_toolchain.binaries.c_compiler.c_str(), "cl");
@@ -165,7 +165,7 @@ TEST(ArgsTestGroup, Args_CustomTarget) {
   // Toolchain
   CHECK_TRUE(gcc_toolchain.state.build);
   CHECK_FALSE(gcc_toolchain.state.test);
-  CHECK(gcc_toolchain.id == buildcc::Toolchain::Id::Gcc);
+  CHECK(gcc_toolchain.id == buildcc::ToolchainId::Gcc);
   STRCMP_EQUAL(gcc_toolchain.name.c_str(), "gcc");
   STRCMP_EQUAL(gcc_toolchain.binaries.assembler.c_str(), "as");
   STRCMP_EQUAL(gcc_toolchain.binaries.c_compiler.c_str(), "gcc");
@@ -219,7 +219,7 @@ TEST(ArgsTestGroup, Args_MultipleCustomTarget) {
   // Toolchain
   CHECK_TRUE(gcc_toolchain.state.build);
   CHECK_FALSE(gcc_toolchain.state.test);
-  CHECK(gcc_toolchain.id == buildcc::Toolchain::Id::Gcc);
+  CHECK(gcc_toolchain.id == buildcc::ToolchainId::Gcc);
   STRCMP_EQUAL(gcc_toolchain.name.c_str(), "gcc");
   STRCMP_EQUAL(gcc_toolchain.binaries.assembler.c_str(), "as");
   STRCMP_EQUAL(gcc_toolchain.binaries.c_compiler.c_str(), "gcc");
@@ -240,7 +240,7 @@ TEST(ArgsTestGroup, Args_MultipleCustomTarget) {
   // Toolchain
   CHECK_TRUE(msvc_toolchain.state.build);
   CHECK_TRUE(msvc_toolchain.state.test);
-  CHECK(msvc_toolchain.id == buildcc::Toolchain::Id::Msvc);
+  CHECK(msvc_toolchain.id == buildcc::ToolchainId::Msvc);
   STRCMP_EQUAL(msvc_toolchain.name.c_str(), "msvc");
   STRCMP_EQUAL(msvc_toolchain.binaries.assembler.c_str(), "cl");
   STRCMP_EQUAL(msvc_toolchain.binaries.c_compiler.c_str(), "cl");

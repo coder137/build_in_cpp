@@ -30,7 +30,7 @@ TEST_GROUP(TargetTestLibDep)
 };
 // clang-format on
 
-static buildcc::Toolchain gcc(buildcc::Toolchain::Id::Gcc, "gcc", "as", "gcc",
+static buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc",
                               "g++", "ar", "ld");
 
 static const fs::path intermediate_path =

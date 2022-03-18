@@ -41,8 +41,7 @@ constexpr const char *const kMsvcPrefixLibDir = "/LIBPATH:";
 class Toolchain_msvc : public Toolchain {
 public:
   Toolchain_msvc()
-      : Toolchain(Toolchain::Id::Msvc, "msvc", "cl", "cl", "cl", "lib",
-                  "link") {}
+      : Toolchain(ToolchainId::Msvc, "msvc", "cl", "cl", "cl", "lib", "link") {}
   Toolchain_msvc(const Toolchain_msvc &gcc) = delete;
 
 private:
