@@ -25,8 +25,7 @@ TEST_GROUP(ToolchainFindTestGroup)
 };
 // clang-format on
 
-// NOTE, We are mocking the environment instead of actually querying it
-TEST(ToolchainFindTestGroup, VerifyToolchain_Gcc) {
+TEST(ToolchainFindTestGroup, FindToolchain_ThroughEnvVar) {
   buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
@@ -46,10 +45,58 @@ TEST(ToolchainFindTestGroup, VerifyToolchain_Gcc) {
   CHECK_TRUE(!found_toolchains.empty());
 }
 
-int main(int ac, char **av) {
-  //   buildcc::env::m::VectorStringCopier copier;
-  //   mock().installCopier(TEST_VECTOR_STRING_TYPE, copier);
+TEST(ToolchainFindTestGroup, FindToolchain_ThroughAbsolutePath) {
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
+                         "ar", "ld");
 
+  buildcc::ToolchainFindConfig config;
+  config.absolute_search_paths.insert(fs::current_path() / "toolchains" /
+                                      "gcc");
+  config.env_vars.clear();
+
+  buildcc::fs_unordered_set found_toolchains = gcc.Find(config);
+  CHECK_TRUE(!found_toolchains.empty());
+}
+
+TEST(ToolchainFindTestGroup, FindToolchain_DirectoryDoesntExist) {
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
+                         "ar", "ld");
+
+  buildcc::ToolchainFindConfig config;
+  config.absolute_search_paths.insert(fs::current_path() / "toolchains" /
+                                      "directory_doesnt_exist");
+  config.env_vars.clear();
+
+  buildcc::fs_unordered_set found_toolchains = gcc.Find(config);
+  CHECK_TRUE(found_toolchains.empty());
+}
+
+TEST(ToolchainFindTestGroup, FindToolchain_NoDirectoryFound) {
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
+                         "ar", "ld");
+
+  buildcc::ToolchainFindConfig config;
+  config.absolute_search_paths.insert(fs::current_path() / "toolchains" /
+                                      "gcc" / "ar");
+  config.env_vars.clear();
+
+  buildcc::fs_unordered_set found_toolchains = gcc.Find(config);
+  CHECK_TRUE(found_toolchains.empty());
+}
+
+TEST(ToolchainFindTestGroup, FindToolchain_NoToolchainFound) {
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
+                         "ar", "ld");
+
+  buildcc::ToolchainFindConfig config;
+  config.absolute_search_paths.insert(fs::current_path() / "toolchains");
+  config.env_vars.clear();
+
+  buildcc::fs_unordered_set found_toolchains = gcc.Find(config);
+  CHECK_TRUE(found_toolchains.empty());
+}
+
+int main(int ac, char **av) {
   // NOTE, Check the GCC, MSVC and Clang compilers
   // Create directory and populate it with gcc and cl executables
   // Linux
