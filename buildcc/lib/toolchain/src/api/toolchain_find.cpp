@@ -41,9 +41,9 @@ std::vector<std::string> ParseEnvVarToPaths(const std::string &env_var) {
 
 bool ContainsToolchainBinaries(const fs::directory_iterator &directory_iterator,
                                const buildcc::ToolchainBinaries &binaries) {
-  std::unordered_set<std::string> bins{binaries.assembler, binaries.c_compiler,
-                                       binaries.cpp_compiler, binaries.archiver,
-                                       binaries.linker};
+  std::unordered_set<std::string> bins({binaries.assembler, binaries.c_compiler,
+                                        binaries.cpp_compiler,
+                                        binaries.archiver, binaries.linker});
   std::error_code ec;
   for (const auto &dir_iter : directory_iterator) {
     bool is_regular_file = dir_iter.is_regular_file(ec);
