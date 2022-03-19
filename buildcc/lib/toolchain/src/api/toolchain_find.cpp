@@ -62,10 +62,11 @@ bool ContainsToolchainBinaries(const fs::directory_iterator &directory_iterator,
 namespace buildcc {
 
 template <typename T>
-fs_unordered_set ToolchainFind<T>::Find(const ToolchainFindConfig &config) {
+std::vector<fs::path>
+ToolchainFind<T>::Find(const ToolchainFindConfig &config) {
   // Initialization
   T &t = static_cast<T &>(*this);
-  fs_unordered_set found_toolchains;
+  std::vector<fs::path> found_toolchains;
   fs_unordered_set absolute_search_paths(config.absolute_search_paths);
 
   // Parse config envs and add it to absolute search paths
@@ -93,7 +94,7 @@ fs_unordered_set ToolchainFind<T>::Find(const ToolchainFindConfig &config) {
     bool toolchains_matched =
         ContainsToolchainBinaries(directory_iterator, t.GetToolchainBinaries());
     if (toolchains_matched) {
-      found_toolchains.insert(search_path);
+      found_toolchains.push_back(search_path);
     }
   }
 

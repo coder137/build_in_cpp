@@ -41,7 +41,7 @@ TEST(ToolchainFindTestGroup, FindToolchain_ThroughEnvVar) {
   config.env_vars.clear();
   config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
-  buildcc::fs_unordered_set found_toolchains = gcc.Find(config);
+  std::vector<fs::path> found_toolchains = gcc.Find(config);
   CHECK_TRUE(!found_toolchains.empty());
 }
 
@@ -54,7 +54,7 @@ TEST(ToolchainFindTestGroup, FindToolchain_ThroughAbsolutePath) {
                                       "gcc");
   config.env_vars.clear();
 
-  buildcc::fs_unordered_set found_toolchains = gcc.Find(config);
+  std::vector<fs::path> found_toolchains = gcc.Find(config);
   CHECK_TRUE(!found_toolchains.empty());
 }
 
@@ -67,7 +67,7 @@ TEST(ToolchainFindTestGroup, FindToolchain_DirectoryDoesntExist) {
                                       "directory_doesnt_exist");
   config.env_vars.clear();
 
-  buildcc::fs_unordered_set found_toolchains = gcc.Find(config);
+  std::vector<fs::path> found_toolchains = gcc.Find(config);
   CHECK_TRUE(found_toolchains.empty());
 }
 
@@ -80,7 +80,7 @@ TEST(ToolchainFindTestGroup, FindToolchain_NoDirectoryFound) {
                                       "gcc" / "ar");
   config.env_vars.clear();
 
-  buildcc::fs_unordered_set found_toolchains = gcc.Find(config);
+  std::vector<fs::path> found_toolchains = gcc.Find(config);
   CHECK_TRUE(found_toolchains.empty());
 }
 
@@ -92,7 +92,7 @@ TEST(ToolchainFindTestGroup, FindToolchain_NoToolchainFound) {
   config.absolute_search_paths.insert(fs::current_path() / "toolchains");
   config.env_vars.clear();
 
-  buildcc::fs_unordered_set found_toolchains = gcc.Find(config);
+  std::vector<fs::path> found_toolchains = gcc.Find(config);
   CHECK_TRUE(found_toolchains.empty());
 }
 

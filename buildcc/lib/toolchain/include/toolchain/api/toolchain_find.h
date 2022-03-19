@@ -37,7 +37,7 @@ struct ToolchainFindConfig {
 
 template <typename T> class ToolchainFind {
 public:
-  fs_unordered_set
+  std::vector<fs::path>
   Find(const ToolchainFindConfig &config = ToolchainFindConfig());
 };
 
