@@ -36,6 +36,10 @@ namespace buildcc {
  * @param env_vars env_vars contain paths that are seperated by OS delimiter.
  * These are converted to paths and searched similarly to absolute_search_paths
  * <br>
+ * NOTE: env_vars must contain single absolute paths or multiple absolute
+ * paths seperated by OS delimiter <br>
+ * Example: [Windows]   "absolute_path_1;absolute_path_2;..." <br>
+ * Example: [Linux]     "absolute_path_1:absolute_path_2:..." <br>
  */
 struct ToolchainFindConfig {
   ToolchainFindConfig(
