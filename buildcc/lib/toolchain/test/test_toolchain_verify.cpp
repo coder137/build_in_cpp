@@ -56,15 +56,13 @@ private:
 // NOTE, We are mocking the environment instead of actually querying it
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_Success) {
   TestToolchain gcc;
-  {
-    std::string putenv_str = fmt::format(
-        "CUSTOM_BUILDCC_PATH={}/toolchains/gcc", fs::current_path().string());
-    int put = putenv(putenv_str.data());
-    CHECK_TRUE(put == 0);
-    const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
-    CHECK_TRUE(custom_buildcc_path != nullptr);
-    UT_PRINT(custom_buildcc_path);
-  }
+  std::string putenv_str = fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc",
+                                       fs::current_path().string());
+  int put = putenv(putenv_str.data());
+  CHECK_TRUE(put == 0);
+  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
+  CHECK_TRUE(custom_buildcc_path != nullptr);
+  // UT_PRINT(custom_buildcc_path);
 
   mock().expectOneCall("VerifySelectedToolchainPath").onObject(&gcc);
   mock().setData("success", true);
@@ -75,30 +73,28 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Success) {
   buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.env_vars.insert("CUSTOM_BUILDCC_PATH");
-  buildcc::ToolchainCompilerInfo verified_toolchains = gcc.Verify(config);
+  buildcc::ToolchainCompilerInfo verified_toolchain = gcc.Verify(config);
 
-  // CHECK_TRUE(!verified_toolchains.empty());
-  STRCMP_EQUAL(verified_toolchains.compiler_version.c_str(), "version");
-  STRCMP_EQUAL(verified_toolchains.target_arch.c_str(), "arch");
+  // CHECK_TRUE(!verified_toolchain.empty());
+  STRCMP_EQUAL(verified_toolchain.compiler_version.c_str(), "version");
+  STRCMP_EQUAL(verified_toolchain.target_arch.c_str(), "arch");
 }
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_Failure) {
   TestToolchain gcc;
-  {
-    std::string putenv_str = fmt::format(
-        "CUSTOM_BUILDCC_PATH={}/toolchains/gcc", fs::current_path().string());
-    int put = putenv(putenv_str.data());
-    CHECK_TRUE(put == 0);
-    const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
-    CHECK_TRUE(custom_buildcc_path != nullptr);
-    UT_PRINT(custom_buildcc_path);
-  }
+  std::string putenv_str = fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc",
+                                       fs::current_path().string());
+  int put = putenv(putenv_str.data());
+  CHECK_TRUE(put == 0);
+  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
+  CHECK_TRUE(custom_buildcc_path != nullptr);
+  UT_PRINT(custom_buildcc_path);
 
   mock().expectOneCall("VerifySelectedToolchainPath").onObject(&gcc);
   mock().setData("success", false);
-  // mock().setData("path", "dummy/path");
-  // mock().setData("compiler_version", "version");
-  // mock().setData("target_arch", "arch");
+  mock().setData("path", "dummy/path");
+  mock().setData("compiler_version", "version");
+  mock().setData("target_arch", "arch");
 
   buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
