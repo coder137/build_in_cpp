@@ -43,11 +43,11 @@ TEST(ToolchainTestGroup, VerifyToolchain_Gcc) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::VerifyToolchainConfig config;
+  buildcc::ToolchainVerifyConfig config;
   config.env_vars.clear();
-  config.env_vars.push_back("CUSTOM_BUILDCC_PATH");
+  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
-  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
+  std::vector<buildcc::ToolchainCompilerInfo> verified_toolchains =
       gcc.Verify(config);
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_TRUE(!verified_toolchains.empty());
@@ -72,11 +72,11 @@ TEST(ToolchainTestGroup, VerifyToolchain_Clang) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::VerifyToolchainConfig config;
+  buildcc::ToolchainVerifyConfig config;
   config.env_vars.clear();
-  config.env_vars.push_back("CUSTOM_BUILDCC_PATH");
+  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
-  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
+  std::vector<buildcc::ToolchainCompilerInfo> verified_toolchains =
       clang.Verify(config);
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_TRUE(!verified_toolchains.empty());
@@ -108,11 +108,11 @@ TEST(ToolchainTestGroup, VerifyToolchain_Msvc) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::VerifyToolchainConfig config;
+  buildcc::ToolchainVerifyConfig config;
   config.env_vars.clear();
-  config.env_vars.push_back("CUSTOM_BUILDCC_PATH");
+  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
-  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
+  std::vector<buildcc::ToolchainCompilerInfo> verified_toolchains =
       msvc.Verify(config);
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_TRUE(!verified_toolchains.empty());
@@ -133,11 +133,11 @@ TEST(ToolchainTestGroup, VerifyToolchain_BadCompilerId) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::VerifyToolchainConfig config;
+  buildcc::ToolchainVerifyConfig config;
   config.env_vars.clear();
-  config.env_vars.push_back("CUSTOM_BUILDCC_PATH");
+  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
-  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
+  std::vector<buildcc::ToolchainCompilerInfo> verified_toolchains =
       gcc.Verify(config);
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_TRUE(!verified_toolchains.empty());
@@ -149,12 +149,12 @@ TEST(ToolchainTestGroup, VerifyToolchain_BadAbsolutePath) {
   buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
-  buildcc::VerifyToolchainConfig config;
+  buildcc::ToolchainVerifyConfig config;
   config.env_vars.clear();
-  config.absolute_search_paths.push_back(
+  config.absolute_search_paths.insert(
       (fs::current_path() / "does_not_exist").string());
 
-  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
+  std::vector<buildcc::ToolchainCompilerInfo> verified_toolchains =
       gcc.Verify(config);
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_TRUE(verified_toolchains.empty());
@@ -164,12 +164,12 @@ TEST(ToolchainTestGroup, VerifyToolchain_PathContainsDir) {
   buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
-  buildcc::VerifyToolchainConfig config;
+  buildcc::ToolchainVerifyConfig config;
   config.env_vars.clear();
-  config.absolute_search_paths.push_back(
+  config.absolute_search_paths.insert(
       (fs::current_path() / "toolchains").string());
 
-  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
+  std::vector<buildcc::ToolchainCompilerInfo> verified_toolchains =
       gcc.Verify(config);
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_TRUE(verified_toolchains.empty());
@@ -179,9 +179,9 @@ TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_CompilerVersion) {
   buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
-  buildcc::VerifyToolchainConfig config;
+  buildcc::ToolchainVerifyConfig config;
   config.env_vars.clear();
-  config.absolute_search_paths.push_back(
+  config.absolute_search_paths.insert(
       (fs::current_path() / "toolchains" / "gcc").string());
   config.compiler_version = "10.2.1";
 
@@ -190,7 +190,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_CompilerVersion) {
   buildcc::env::m::CommandExpect_Execute(1, true, &compiler_version, nullptr);
   buildcc::env::m::CommandExpect_Execute(1, true, &arch, nullptr);
 
-  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
+  std::vector<buildcc::ToolchainCompilerInfo> verified_toolchains =
       gcc.Verify(config);
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_EQUAL(verified_toolchains.size(), 1);
@@ -201,9 +201,9 @@ TEST(ToolchainTestGroup,
   buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
-  buildcc::VerifyToolchainConfig config;
+  buildcc::ToolchainVerifyConfig config;
   config.env_vars.clear();
-  config.absolute_search_paths.push_back(
+  config.absolute_search_paths.insert(
       (fs::current_path() / "toolchains" / "gcc").string());
   config.compiler_version = "11.0.0";
 
@@ -212,7 +212,7 @@ TEST(ToolchainTestGroup,
   buildcc::env::m::CommandExpect_Execute(1, true, &compiler_version, nullptr);
   buildcc::env::m::CommandExpect_Execute(1, true, &arch, nullptr);
 
-  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
+  std::vector<buildcc::ToolchainCompilerInfo> verified_toolchains =
       gcc.Verify(config);
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_EQUAL(verified_toolchains.size(), 0);
@@ -222,9 +222,9 @@ TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_TargetArch) {
   buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
-  buildcc::VerifyToolchainConfig config;
+  buildcc::ToolchainVerifyConfig config;
   config.env_vars.clear();
-  config.absolute_search_paths.push_back(
+  config.absolute_search_paths.insert(
       (fs::current_path() / "toolchains" / "gcc").string());
   config.target_arch = "arm-none-eabi";
 
@@ -233,7 +233,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_TargetArch) {
   buildcc::env::m::CommandExpect_Execute(1, true, &compiler_version, nullptr);
   buildcc::env::m::CommandExpect_Execute(1, true, &arch, nullptr);
 
-  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
+  std::vector<buildcc::ToolchainCompilerInfo> verified_toolchains =
       gcc.Verify(config);
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_EQUAL(verified_toolchains.size(), 1);
@@ -243,9 +243,9 @@ TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_TargetArchFailure) {
   buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
-  buildcc::VerifyToolchainConfig config;
+  buildcc::ToolchainVerifyConfig config;
   config.env_vars.clear();
-  config.absolute_search_paths.push_back(
+  config.absolute_search_paths.insert(
       (fs::current_path() / "toolchains" / "gcc").string());
   config.target_arch = "none";
 
@@ -254,7 +254,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_TargetArchFailure) {
   buildcc::env::m::CommandExpect_Execute(1, true, &compiler_version, nullptr);
   buildcc::env::m::CommandExpect_Execute(1, true, &arch, nullptr);
 
-  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
+  std::vector<buildcc::ToolchainCompilerInfo> verified_toolchains =
       gcc.Verify(config);
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_EQUAL(verified_toolchains.size(), 0);
@@ -264,9 +264,9 @@ TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_BothFailure) {
   buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
-  buildcc::VerifyToolchainConfig config;
+  buildcc::ToolchainVerifyConfig config;
   config.env_vars.clear();
-  config.absolute_search_paths.push_back(
+  config.absolute_search_paths.insert(
       (fs::current_path() / "toolchains" / "gcc").string());
   config.compiler_version = "none";
   config.target_arch = "none";
@@ -276,7 +276,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_ConditionalAdd_BothFailure) {
   buildcc::env::m::CommandExpect_Execute(1, true, &compiler_version, nullptr);
   buildcc::env::m::CommandExpect_Execute(1, true, &arch, nullptr);
 
-  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
+  std::vector<buildcc::ToolchainCompilerInfo> verified_toolchains =
       gcc.Verify(config);
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_EQUAL(verified_toolchains.size(), 0);
@@ -286,9 +286,9 @@ TEST(ToolchainTestGroup, VerifyToolchain_UpdateFalse) {
   buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
-  buildcc::VerifyToolchainConfig config;
+  buildcc::ToolchainVerifyConfig config;
   config.env_vars.clear();
-  config.absolute_search_paths.push_back(
+  config.absolute_search_paths.insert(
       (fs::current_path() / "toolchains" / "gcc").string());
   // config.compiler_version = "none";
   // config.target_arch = "none";
@@ -299,7 +299,7 @@ TEST(ToolchainTestGroup, VerifyToolchain_UpdateFalse) {
   buildcc::env::m::CommandExpect_Execute(1, true, &compiler_version, nullptr);
   buildcc::env::m::CommandExpect_Execute(1, true, &arch, nullptr);
 
-  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
+  std::vector<buildcc::ToolchainCompilerInfo> verified_toolchains =
       gcc.Verify(config);
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_EQUAL(verified_toolchains.size(), 1);
@@ -318,12 +318,12 @@ TEST(ToolchainTestGroup, VerifyToolchain_LockedFolder) {
   buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
 
-  buildcc::VerifyToolchainConfig config;
+  buildcc::ToolchainVerifyConfig config;
   config.env_vars.clear();
-  config.absolute_search_paths.push_back(
+  config.absolute_search_paths.insert(
       (fs::current_path() / "toolchains" / "gcc").string());
 
-  std::vector<buildcc::VerifiedToolchain> verified_toolchains =
+  std::vector<buildcc::ToolchainCompilerInfo> verified_toolchains =
       gcc.Verify(config);
   UT_PRINT(std::to_string(verified_toolchains.size()).c_str());
   CHECK_TRUE(verified_toolchains.empty());
