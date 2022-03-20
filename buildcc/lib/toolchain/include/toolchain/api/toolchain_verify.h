@@ -21,9 +21,11 @@
 #include <optional>
 #include <vector>
 
+#include "fmt/format.h"
+
 #include "env/logging.h"
 
-#include "fmt/format.h"
+#include "toolchain_find.h"
 
 namespace fs = std::filesystem;
 
@@ -58,10 +60,7 @@ namespace buildcc {
  * @param update Updates the toolchain with absolute paths once verified <br>
  * If multiple toolchains are found, uses the first in the list
  */
-struct VerifyToolchainConfig {
-  std::vector<std::string> absolute_search_paths;
-  std::vector<std::string> env_vars{"PATH"};
-
+struct ToolchainVerifyConfig : public ToolchainFindConfig {
   std::optional<std::string> compiler_version;
   std::optional<std::string> target_arch;
 
@@ -76,7 +75,7 @@ struct VerifyToolchainConfig {
  * @param compiler_version Compiler version of the verified toolchain
  * @param target_arch Target architecture of the verified toolchain
  */
-struct VerifiedToolchain {
+struct ToolchainCompilerInfo {
   fs::path path;
   std::string compiler_version;
   std::string target_arch;
@@ -96,11 +95,11 @@ public:
    * multiple toolchains of similar names with different versions. Collect all
    * of them
    */
-  std::vector<VerifiedToolchain>
-  Verify(const VerifyToolchainConfig &config = VerifyToolchainConfig());
+  std::vector<ToolchainCompilerInfo>
+  Verify(const ToolchainVerifyConfig &config = ToolchainVerifyConfig());
 
 protected:
-  VerifiedToolchain verified_toolchain_;
+  ToolchainCompilerInfo verified_toolchain_;
 };
 
 } // namespace buildcc
@@ -112,9 +111,9 @@ constexpr const char *const kVerifiedToolchainFormat = R"({{
 }})";
 
 template <>
-struct fmt::formatter<buildcc::VerifiedToolchain> : formatter<std::string> {
+struct fmt::formatter<buildcc::ToolchainCompilerInfo> : formatter<std::string> {
   template <typename FormatContext>
-  auto format(const buildcc::VerifiedToolchain &vt, FormatContext &ctx) {
+  auto format(const buildcc::ToolchainCompilerInfo &vt, FormatContext &ctx) {
     std::string verified_toolchain_info =
         fmt::format(kVerifiedToolchainFormat, vt.path.string(),
                     vt.compiler_version, vt.target_arch);

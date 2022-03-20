@@ -108,8 +108,14 @@ private:
   };
 
 private:
-  virtual void UpdateConfig(ToolchainConfig &config) { (void)config; }
   void Initialize();
+
+  virtual void UpdateConfig(ToolchainConfig &config) { (void)config; }
+  virtual std::optional<ToolchainCompilerInfo>
+  VerifySelectedToolchainPath(const fs::path &selected_path) {
+    (void)selected_path;
+    return {};
+  }
 
 private:
   friend class internal::FlagApi<Toolchain>;
