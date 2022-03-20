@@ -50,7 +50,7 @@ struct ToolchainFindConfig {
 template <typename T> class ToolchainFind {
 public:
   std::vector<fs::path>
-  Find(const ToolchainFindConfig &config = ToolchainFindConfig());
+  Find(const ToolchainFindConfig &config = ToolchainFindConfig()) const;
 };
 
 } // namespace buildcc

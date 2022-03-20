@@ -63,9 +63,9 @@ namespace buildcc {
 
 template <typename T>
 std::vector<fs::path>
-ToolchainFind<T>::Find(const ToolchainFindConfig &config) {
+ToolchainFind<T>::Find(const ToolchainFindConfig &config) const {
   // Initialization
-  T &t = static_cast<T &>(*this);
+  const T &t = static_cast<const T &>(*this);
   std::vector<fs::path> found_toolchains;
   fs_unordered_set absolute_search_paths(config.absolute_search_paths);
 
