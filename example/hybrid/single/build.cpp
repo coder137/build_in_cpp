@@ -24,8 +24,7 @@ int main(int argc, char **argv) {
   // 4. Build steps
   // Explicit toolchain - target pairs
   Toolchain_gcc gcc;
-  auto verified_toolchains = gcc.Verify();
-  env::assert_fatal(!verified_toolchains.empty(), "GCC Toolchain not found");
+  gcc.Verify();
 
   ExecutableTarget_gcc hello_world("hello_world", gcc, "");
 
