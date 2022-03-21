@@ -22,7 +22,7 @@
 
 #include <iostream>
 
-#include "toolchain/toolchain.h"
+#include "schema/path.h"
 
 #include "env/assert_fatal.h"
 #include "env/host_os.h"
@@ -30,6 +30,8 @@
 #include "env/util.h"
 
 #include "env/command.h"
+
+#include "toolchain/toolchain.h"
 
 namespace buildcc {
 
@@ -39,17 +41,35 @@ ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
   T &t = static_cast<T &>(*this);
   std::vector<fs::path> toolchain_paths = t.Find(config);
   env::assert_fatal(!toolchain_paths.empty(), "No toolchains found");
+
+  constexpr const char *const executable_ext =
+      env::get_os_executable_extension();
+  env::assert_fatal<executable_ext != nullptr>(
+      "Host executable extension not supported");
+  ToolchainBinaries binaries(
+      fmt::format("{}",
+                  (toolchain_paths[0] /
+                   fmt::format("{}{}", t.binaries_.assembler, executable_ext))),
+      fmt::format(
+          "{}", (toolchain_paths[0] /
+                 fmt::format("{}{}", t.binaries_.c_compiler, executable_ext))),
+      fmt::format("{}", (toolchain_paths[0] /
+                         fmt::format("{}{}", t.binaries_.cpp_compiler,
+                                     executable_ext))),
+      fmt::format("{}",
+                  (toolchain_paths[0] /
+                   fmt::format("{}{}", t.binaries_.archiver, executable_ext))),
+      fmt::format("{}",
+                  (toolchain_paths[0] /
+                   fmt::format("{}{}", t.binaries_.linker, executable_ext))));
+
   std::optional<ToolchainCompilerInfo> op_toolchain_compiler_info =
-      t.VerifySelectedToolchainPath(toolchain_paths[0], config);
+      t.VerifySelectedToolchainPath(binaries, config);
   env::assert_fatal(op_toolchain_compiler_info.has_value(),
                     "Could not verify toolchain");
 
   ToolchainCompilerInfo toolchain_compiler_info =
       op_toolchain_compiler_info.value();
-  constexpr const char *const executable_ext =
-      env::get_os_executable_extension();
-  env::assert_fatal<executable_ext != nullptr>(
-      "Host executable extension not supported");
 
   // Update the compilers
   t.binaries_.assembler =
