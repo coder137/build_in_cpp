@@ -112,10 +112,8 @@ private:
 
   virtual void UpdateConfig(ToolchainConfig &config) { (void)config; }
   virtual std::optional<ToolchainCompilerInfo>
-  VerifySelectedToolchainPath(const ToolchainBinaries &binaries,
-                              const ToolchainFindConfig &verify_config) const {
+  VerifySelectedToolchainPath(const ToolchainBinaries &binaries) const {
     (void)binaries;
-    (void)verify_config;
     return {};
   }
 

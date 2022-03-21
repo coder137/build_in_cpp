@@ -63,8 +63,7 @@ ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
                   (toolchain_paths[0] /
                    fmt::format("{}{}", t.binaries_.linker, executable_ext))));
 
-  std::optional<ToolchainCompilerInfo> op_toolchain_compiler_info =
-      t.VerifySelectedToolchainPath(binaries, config);
+  auto op_toolchain_compiler_info = t.VerifySelectedToolchainPath(binaries);
   env::assert_fatal(op_toolchain_compiler_info.has_value(),
                     "Could not verify toolchain");
 
