@@ -114,12 +114,9 @@ private:
 private:
   void Initialize();
 
-  virtual void UpdateConfig(ToolchainConfig &config) { (void)config; }
+  virtual void UpdateConfig(ToolchainConfig &config);
   virtual std::optional<ToolchainCompilerInfo>
-  VerifySelectedToolchainPath(const ToolchainExecutables &binaries) const {
-    (void)binaries;
-    return {};
-  }
+  VerifySelectedToolchainPath(const ToolchainExecutables &binaries) const;
 
 private:
   friend class internal::FlagApi<Toolchain>;
