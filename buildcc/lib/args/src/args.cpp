@@ -99,16 +99,16 @@ void Args::AddToolchain(const std::string &name, const std::string &description,
       ->transform(CLI::CheckedTransformer(kToolchainIdMap, CLI::ignore_case))
       ->default_val(initial.id);
   t_user->add_option(kToolchainNameParam, out.name)->default_val(initial.name);
-  t_user->add_option(kToolchainAsmCompilerParam, out.binaries.assembler)
-      ->default_val(initial.binaries.assembler);
-  t_user->add_option(kToolchainCCompilerParam, out.binaries.c_compiler)
-      ->default_val(initial.binaries.c_compiler);
-  t_user->add_option(kToolchainCppCompilerParam, out.binaries.cpp_compiler)
-      ->default_val(initial.binaries.cpp_compiler);
-  t_user->add_option(kToolchainArchiverParam, out.binaries.archiver)
-      ->default_val(initial.binaries.archiver);
-  t_user->add_option(kToolchainLinkerParam, out.binaries.linker)
-      ->default_val(initial.binaries.linker);
+  t_user->add_option(kToolchainAsmCompilerParam, out.executables.assembler)
+      ->default_val(initial.executables.assembler);
+  t_user->add_option(kToolchainCCompilerParam, out.executables.c_compiler)
+      ->default_val(initial.executables.c_compiler);
+  t_user->add_option(kToolchainCppCompilerParam, out.executables.cpp_compiler)
+      ->default_val(initial.executables.cpp_compiler);
+  t_user->add_option(kToolchainArchiverParam, out.executables.archiver)
+      ->default_val(initial.executables.archiver);
+  t_user->add_option(kToolchainLinkerParam, out.executables.linker)
+      ->default_val(initial.executables.linker);
 }
 
 void Args::AddTarget(const std::string &name, const std::string &description,
