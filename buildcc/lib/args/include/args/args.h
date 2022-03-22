@@ -48,8 +48,8 @@ struct ArgToolchainState {
 struct ArgToolchain {
   ArgToolchain(){};
   ArgToolchain(ToolchainId initial_id, const std::string &initial_name,
-               const ToolchainExecutables &initial_binaries)
-      : id(initial_id), name(initial_name), binaries(initial_binaries) {}
+               const ToolchainExecutables &initial_executables)
+      : id(initial_id), name(initial_name), executables(initial_executables) {}
   ArgToolchain(ToolchainId initial_id, const std::string &initial_name,
                const std::string &initial_assembler,
                const std::string &initial_c_compiler,
@@ -67,13 +67,13 @@ struct ArgToolchain {
    */
   // TODO, Update this for lock and ToolchainConfig
   BaseToolchain ConstructToolchain() const {
-    return BaseToolchain(id, name, binaries);
+    return BaseToolchain(id, name, executables);
   }
 
   ArgToolchainState state;
   ToolchainId id{ToolchainId::Undefined};
   std::string name{""};
-  ToolchainExecutables binaries;
+  ToolchainExecutables executables;
 };
 
 // NOTE, Incomplete without pch_compile_command
