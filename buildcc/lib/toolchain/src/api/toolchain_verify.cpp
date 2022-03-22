@@ -46,22 +46,22 @@ ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
       env::get_os_executable_extension();
   env::assert_fatal<executable_ext != nullptr>(
       "Host executable extension not supported");
-  ToolchainBinaries binaries(
-      fmt::format("{}",
-                  (toolchain_paths[0] /
-                   fmt::format("{}{}", t.binaries_.assembler, executable_ext))),
+  ToolchainExecutables binaries(
+      fmt::format("{}", (toolchain_paths[0] /
+                         fmt::format("{}{}", t.executables_.assembler,
+                                     executable_ext))),
+      fmt::format("{}", (toolchain_paths[0] /
+                         fmt::format("{}{}", t.executables_.c_compiler,
+                                     executable_ext))),
+      fmt::format("{}", (toolchain_paths[0] /
+                         fmt::format("{}{}", t.executables_.cpp_compiler,
+                                     executable_ext))),
       fmt::format(
           "{}", (toolchain_paths[0] /
-                 fmt::format("{}{}", t.binaries_.c_compiler, executable_ext))),
-      fmt::format("{}", (toolchain_paths[0] /
-                         fmt::format("{}{}", t.binaries_.cpp_compiler,
-                                     executable_ext))),
-      fmt::format("{}",
-                  (toolchain_paths[0] /
-                   fmt::format("{}{}", t.binaries_.archiver, executable_ext))),
-      fmt::format("{}",
-                  (toolchain_paths[0] /
-                   fmt::format("{}{}", t.binaries_.linker, executable_ext))));
+                 fmt::format("{}{}", t.executables_.archiver, executable_ext))),
+      fmt::format(
+          "{}", (toolchain_paths[0] /
+                 fmt::format("{}{}", t.executables_.linker, executable_ext))));
 
   auto op_toolchain_compiler_info = t.VerifySelectedToolchainPath(binaries);
   env::assert_fatal(op_toolchain_compiler_info.has_value(),
@@ -72,30 +72,31 @@ ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
   toolchain_compiler_info.path = toolchain_paths[0];
 
   // Update the compilers
-  t.binaries_.assembler =
+  t.executables_.assembler =
       (toolchain_compiler_info.path /
-       fmt::format("{}{}", t.binaries_.assembler, executable_ext))
+       fmt::format("{}{}", t.executables_.assembler, executable_ext))
           .make_preferred()
           .string();
-  t.binaries_.c_compiler =
+  t.executables_.c_compiler =
       (toolchain_compiler_info.path /
-       fmt::format("{}{}", t.binaries_.c_compiler, executable_ext))
+       fmt::format("{}{}", t.executables_.c_compiler, executable_ext))
           .make_preferred()
           .string();
-  t.binaries_.cpp_compiler =
+  t.executables_.cpp_compiler =
       (toolchain_compiler_info.path /
-       fmt::format("{}{}", t.binaries_.cpp_compiler, executable_ext))
+       fmt::format("{}{}", t.executables_.cpp_compiler, executable_ext))
           .make_preferred()
           .string();
-  t.binaries_.archiver =
+  t.executables_.archiver =
       (toolchain_compiler_info.path /
-       fmt::format("{}{}", t.binaries_.archiver, executable_ext))
+       fmt::format("{}{}", t.executables_.archiver, executable_ext))
           .make_preferred()
           .string();
-  t.binaries_.linker = (toolchain_compiler_info.path /
-                        fmt::format("{}{}", t.binaries_.linker, executable_ext))
-                           .make_preferred()
-                           .string();
+  t.executables_.linker =
+      (toolchain_compiler_info.path /
+       fmt::format("{}{}", t.executables_.linker, executable_ext))
+          .make_preferred()
+          .string();
   return toolchain_compiler_info;
 }
 

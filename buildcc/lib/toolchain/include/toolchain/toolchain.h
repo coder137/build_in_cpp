@@ -39,11 +39,11 @@ enum class ToolchainId {
   Undefined, ///< Default value when unknown
 };
 
-struct ToolchainBinaries {
-  explicit ToolchainBinaries() = default;
-  explicit ToolchainBinaries(std::string_view as, std::string_view c,
-                             std::string_view cpp, std::string_view ar,
-                             std::string_view link)
+struct ToolchainExecutables {
+  explicit ToolchainExecutables() = default;
+  explicit ToolchainExecutables(std::string_view as, std::string_view c,
+                                std::string_view cpp, std::string_view ar,
+                                std::string_view link)
       : assembler(as), c_compiler(c), cpp_compiler(cpp), archiver(ar),
         linker(link) {}
   std::string assembler;
@@ -60,9 +60,9 @@ class Toolchain : public internal::FlagApi<Toolchain>,
 public:
 public:
   Toolchain(ToolchainId id, std::string_view name,
-            const ToolchainBinaries &binaries, bool lock = true,
+            const ToolchainExecutables &binaries, bool lock = true,
             const ToolchainConfig &config = ToolchainConfig())
-      : id_(id), name_(name), binaries_(binaries), lock_(lock),
+      : id_(id), name_(name), executables_(binaries), lock_(lock),
         config_(config) {
     Initialize();
   }
@@ -71,8 +71,8 @@ public:
             std::string_view archiver, std::string_view linker,
             bool lock = true, const ToolchainConfig &config = ToolchainConfig())
       : Toolchain(id, name,
-                  ToolchainBinaries(assembler, c_compiler, cpp_compiler,
-                                    archiver, linker),
+                  ToolchainExecutables(assembler, c_compiler, cpp_compiler,
+                                       archiver, linker),
                   lock, config) {}
 
   Toolchain(Toolchain &&) = default;
@@ -85,12 +85,16 @@ public:
   // Getters
   ToolchainId GetId() const { return id_; }
   const std::string &GetName() const { return name_; }
-  const std::string &GetAssembler() const { return binaries_.assembler; }
-  const std::string &GetCCompiler() const { return binaries_.c_compiler; }
-  const std::string &GetCppCompiler() const { return binaries_.cpp_compiler; }
-  const std::string &GetArchiver() const { return binaries_.archiver; }
-  const std::string &GetLinker() const { return binaries_.linker; }
-  const ToolchainBinaries &GetToolchainBinaries() const { return binaries_; }
+  const std::string &GetAssembler() const { return executables_.assembler; }
+  const std::string &GetCCompiler() const { return executables_.c_compiler; }
+  const std::string &GetCppCompiler() const {
+    return executables_.cpp_compiler;
+  }
+  const std::string &GetArchiver() const { return executables_.archiver; }
+  const std::string &GetLinker() const { return executables_.linker; }
+  const ToolchainExecutables &GetToolchainExecutables() const {
+    return executables_;
+  }
 
   const FunctionLock &GetLockInfo() const { return lock_; }
   const ToolchainConfig &GetConfig() const { return config_; }
@@ -112,7 +116,7 @@ private:
 
   virtual void UpdateConfig(ToolchainConfig &config) { (void)config; }
   virtual std::optional<ToolchainCompilerInfo>
-  VerifySelectedToolchainPath(const ToolchainBinaries &binaries) const {
+  VerifySelectedToolchainPath(const ToolchainExecutables &binaries) const {
     (void)binaries;
     return {};
   }
@@ -124,7 +128,7 @@ private:
 private:
   ToolchainId id_;
   std::string name_;
-  ToolchainBinaries binaries_;
+  ToolchainExecutables executables_;
   FunctionLock lock_;
   ToolchainConfig config_;
 

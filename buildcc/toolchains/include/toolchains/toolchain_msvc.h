@@ -54,7 +54,7 @@ private:
   }
 
   virtual std::optional<ToolchainCompilerInfo>
-  VerifySelectedToolchainPath(const ToolchainBinaries &binaries) const {
+  VerifySelectedToolchainPath(const ToolchainExecutables &binaries) const {
     auto op_compiler_version = GetMsvcCompilerVersion();
     auto op_target_arch = GetMsvcTargetArchitecture();
     if (!op_compiler_version.has_value() || !op_target_arch.has_value()) {

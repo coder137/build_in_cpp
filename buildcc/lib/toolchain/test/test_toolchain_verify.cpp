@@ -35,7 +35,7 @@ public:
 private:
   virtual std::optional<buildcc::ToolchainCompilerInfo>
   VerifySelectedToolchainPath(
-      const buildcc::ToolchainBinaries &binaries) const override {
+      const buildcc::ToolchainExecutables &binaries) const override {
     (void)binaries;
     mock().actualCall("VerifySelectedToolchainPath").onObject(this);
     if (!mock().getData("success").getBoolValue()) {

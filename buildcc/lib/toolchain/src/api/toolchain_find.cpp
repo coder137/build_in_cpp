@@ -40,7 +40,7 @@ std::vector<std::string> ParseEnvVarToPaths(const std::string &env_var) {
 }
 
 bool ContainsToolchainBinaries(const fs::directory_iterator &directory_iterator,
-                               const buildcc::ToolchainBinaries &binaries) {
+                               const buildcc::ToolchainExecutables &binaries) {
   std::unordered_set<std::string> bins({binaries.assembler, binaries.c_compiler,
                                         binaries.cpp_compiler,
                                         binaries.archiver, binaries.linker});
@@ -91,8 +91,8 @@ ToolchainFind<T>::Find(const ToolchainFindConfig &config) const {
       continue;
     }
 
-    bool toolchains_matched =
-        ContainsToolchainBinaries(directory_iterator, t.GetToolchainBinaries());
+    bool toolchains_matched = ContainsToolchainBinaries(
+        directory_iterator, t.GetToolchainExecutables());
     if (toolchains_matched) {
       found_toolchains.push_back(search_path);
     }
