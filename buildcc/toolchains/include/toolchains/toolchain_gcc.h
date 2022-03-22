@@ -50,9 +50,9 @@ GetGccTargetArchitecture(const buildcc::env::Command &command) {
 }
 
 inline std::optional<ToolchainCompilerInfo>
-VerifyGccSelectedToolchainPath(const ToolchainExecutables &binaries) {
+VerifyGccSelectedToolchainPath(const ToolchainExecutables &executables) {
   env::Command command;
-  command.AddDefaultArgument("compiler", binaries.cpp_compiler);
+  command.AddDefaultArgument("compiler", executables.cpp_compiler);
 
   auto op_compiler_version = GetGccCompilerVersion(command);
   auto op_target_arch = GetGccTargetArchitecture(command);
@@ -92,8 +92,8 @@ private:
   }
 
   virtual std::optional<ToolchainCompilerInfo>
-  VerifySelectedToolchainPath(const ToolchainExecutables &binaries) const {
-    return VerifyGccSelectedToolchainPath(binaries);
+  VerifySelectedToolchainPath(const ToolchainExecutables &executables) const {
+    return VerifyGccSelectedToolchainPath(executables);
   }
 };
 

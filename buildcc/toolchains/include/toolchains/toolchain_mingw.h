@@ -54,8 +54,8 @@ private:
     config.prefix_lib_dir = kMingwPrefixLibDir;
   }
   virtual std::optional<ToolchainCompilerInfo>
-  VerifySelectedToolchainPath(const ToolchainExecutables &binaries) const {
-    return VerifyGccSelectedToolchainPath(binaries);
+  VerifySelectedToolchainPath(const ToolchainExecutables &executables) const {
+    return VerifyGccSelectedToolchainPath(executables);
   }
 };
 
