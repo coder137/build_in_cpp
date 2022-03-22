@@ -19,6 +19,8 @@
 
 #include "toolchain/toolchain.h"
 
+#include "toolchain_gcc.h"
+
 namespace buildcc {
 
 constexpr const char *const kMingwObjExt = ".o";
@@ -50,6 +52,10 @@ private:
     config.pch_compile_ext = kMingwPchCompileExt;
     config.prefix_include_dir = kMingwPrefixIncludeDir;
     config.prefix_lib_dir = kMingwPrefixLibDir;
+  }
+  virtual std::optional<ToolchainCompilerInfo>
+  VerifySelectedToolchainPath(const ToolchainBinaries &binaries) const {
+    return VerifyGccSelectedToolchainPath(binaries);
   }
 };
 

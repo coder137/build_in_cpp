@@ -27,6 +27,45 @@ constexpr const char *const kGccPchCompileExt = ".gch";
 constexpr const char *const kGccPrefixIncludeDir = "-I";
 constexpr const char *const kGccPrefixLibDir = "-L";
 
+inline std::optional<std::string>
+GetGccCompilerVersion(const buildcc::env::Command &command) {
+  std::vector<std::string> stdout_data;
+  bool executed = buildcc::env::Command::Execute(
+      command.Construct("{compiler} -dumpversion"), {}, &stdout_data);
+  if (!executed || stdout_data.empty()) {
+    return {};
+  }
+  return stdout_data[0];
+}
+
+inline std::optional<std::string>
+GetGccTargetArchitecture(const buildcc::env::Command &command) {
+  std::vector<std::string> stdout_data;
+  bool executed = buildcc::env::Command::Execute(
+      command.Construct("{compiler} -dumpmachine"), {}, &stdout_data);
+  if (!executed && stdout_data.empty()) {
+    return {};
+  }
+  return stdout_data[0];
+}
+
+inline std::optional<ToolchainCompilerInfo>
+VerifyGccSelectedToolchainPath(const ToolchainBinaries &binaries) {
+  env::Command command;
+  command.AddDefaultArgument("compiler", binaries.cpp_compiler);
+
+  auto op_compiler_version = GetGccCompilerVersion(command);
+  auto op_target_arch = GetGccTargetArchitecture(command);
+  if (!op_compiler_version.has_value() || !op_target_arch.has_value()) {
+    return {};
+  }
+
+  ToolchainCompilerInfo compiler_info;
+  compiler_info.compiler_version = op_compiler_version.value();
+  compiler_info.target_arch = op_target_arch.value();
+  return compiler_info;
+}
+
 /**
  * @brief Generic GCC Toolchain <br>
  * id = ToolchainId::Gcc <br>
@@ -50,6 +89,11 @@ private:
     config.pch_compile_ext = kGccPchCompileExt;
     config.prefix_include_dir = kGccPrefixIncludeDir;
     config.prefix_lib_dir = kGccPrefixLibDir;
+  }
+
+  virtual std::optional<ToolchainCompilerInfo>
+  VerifySelectedToolchainPath(const ToolchainBinaries &binaries) const {
+    return VerifyGccSelectedToolchainPath(binaries);
   }
 };
 
