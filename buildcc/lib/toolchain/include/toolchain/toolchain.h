@@ -60,9 +60,9 @@ class Toolchain : public internal::FlagApi<Toolchain>,
 public:
 public:
   Toolchain(ToolchainId id, std::string_view name,
-            const ToolchainExecutables &binaries, bool lock = true,
+            const ToolchainExecutables &executables, bool lock = true,
             const ToolchainConfig &config = ToolchainConfig())
-      : id_(id), name_(name), executables_(binaries), lock_(lock),
+      : id_(id), name_(name), executables_(executables), lock_(lock),
         config_(config) {
     Initialize();
   }
@@ -116,7 +116,7 @@ private:
 
   virtual void UpdateConfig(ToolchainConfig &config);
   virtual std::optional<ToolchainCompilerInfo>
-  VerifySelectedToolchainPath(const ToolchainExecutables &binaries) const;
+  VerifySelectedToolchainPath(const ToolchainExecutables &executables) const;
 
 private:
   friend class internal::FlagApi<Toolchain>;

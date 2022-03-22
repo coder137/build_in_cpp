@@ -25,8 +25,8 @@ void Toolchain::Lock() { lock_.Lock(); }
 // PRIVATE
 void Toolchain::UpdateConfig(ToolchainConfig &config) { (void)config; }
 std::optional<ToolchainCompilerInfo> Toolchain::VerifySelectedToolchainPath(
-    const ToolchainExecutables &binaries) const {
-  (void)binaries;
+    const ToolchainExecutables &executables) const {
+  (void)executables;
   return {};
 }
 

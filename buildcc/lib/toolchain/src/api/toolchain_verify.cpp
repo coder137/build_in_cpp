@@ -46,7 +46,7 @@ ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
       env::get_os_executable_extension();
   env::assert_fatal<executable_ext != nullptr>(
       "Host executable extension not supported");
-  ToolchainExecutables binaries(
+  ToolchainExecutables exes(
       fmt::format("{}", (toolchain_paths[0] /
                          fmt::format("{}{}", t.executables_.assembler,
                                      executable_ext))),
@@ -63,7 +63,7 @@ ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
           "{}", (toolchain_paths[0] /
                  fmt::format("{}{}", t.executables_.linker, executable_ext))));
 
-  auto op_toolchain_compiler_info = t.VerifySelectedToolchainPath(binaries);
+  auto op_toolchain_compiler_info = t.VerifySelectedToolchainPath(exes);
   env::assert_fatal(op_toolchain_compiler_info.has_value(),
                     "Could not verify toolchain");
 

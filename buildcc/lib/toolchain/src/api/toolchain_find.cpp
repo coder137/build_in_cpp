@@ -39,11 +39,12 @@ std::vector<std::string> ParseEnvVarToPaths(const std::string &env_var) {
   return paths;
 }
 
-bool ContainsToolchainBinaries(const fs::directory_iterator &directory_iterator,
-                               const buildcc::ToolchainExecutables &binaries) {
-  std::unordered_set<std::string> bins({binaries.assembler, binaries.c_compiler,
-                                        binaries.cpp_compiler,
-                                        binaries.archiver, binaries.linker});
+bool ContainsToolchainBinaries(
+    const fs::directory_iterator &directory_iterator,
+    const buildcc::ToolchainExecutables &executables) {
+  std::unordered_set<std::string> exes(
+      {executables.assembler, executables.c_compiler, executables.cpp_compiler,
+       executables.archiver, executables.linker});
   std::error_code ec;
   for (const auto &dir_iter : directory_iterator) {
     bool is_regular_file = dir_iter.is_regular_file(ec);
@@ -52,9 +53,9 @@ bool ContainsToolchainBinaries(const fs::directory_iterator &directory_iterator,
     }
     const auto &filename_without_ext = dir_iter.path().stem().string();
     // NOTE, Must match the entire filename
-    bins.erase(filename_without_ext);
+    exes.erase(filename_without_ext);
   }
-  return bins.empty();
+  return exes.empty();
 }
 
 } // namespace
