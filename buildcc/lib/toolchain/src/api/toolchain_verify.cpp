@@ -69,6 +69,7 @@ ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
 
   ToolchainCompilerInfo toolchain_compiler_info =
       op_toolchain_compiler_info.value();
+  toolchain_compiler_info.path = toolchain_paths[0];
 
   // Update the compilers
   t.binaries_.assembler =
