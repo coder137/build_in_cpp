@@ -25,11 +25,20 @@
 
 #include "env/logging.h"
 
-#include "toolchain_find.h"
+#include "toolchain/common/toolchain_executables.h"
+#include "toolchain/common/toolchain_id.h"
+
+#include "toolchain/api/toolchain_find.h"
 
 namespace fs = std::filesystem;
 
 namespace buildcc {
+
+struct ToolchainVerifyConfig : public ToolchainFindConfig {
+  ToolchainVerifyConfig() = default;
+
+  std::optional<std::string> verification_identifier;
+};
 
 /**
  * @brief Verified Toolchain information
@@ -40,15 +49,34 @@ namespace buildcc {
  * @param target_arch Target architecture of the verified toolchain
  */
 struct ToolchainCompilerInfo {
+  ToolchainCompilerInfo() = default;
+  std::string ToString() const { return fmt::format("{}", *this); }
+
   fs::path path;
   std::string compiler_version;
   std::string target_arch;
-
-  std::string ToString() const { return fmt::format("{}", *this); }
 };
+
+typedef std::function<std::optional<ToolchainCompilerInfo>(
+    const ToolchainExecutables &)>
+    ToolchainVerificationFunc;
 
 template <typename T> class ToolchainVerify {
 public:
+  ToolchainVerify() { Initialize(); }
+
+  /**
+   * @brief
+   *
+   * @param id
+   * @param verification_func
+   * @param identifier Only read when ToolchainId::Custom is passed in
+   */
+  static void
+  AddVerificationFunc(ToolchainId id,
+                      const ToolchainVerificationFunc &verification_func,
+                      const std::optional<std::string> &op_identifier = {});
+
   /**
    * @brief Verify your toolchain executables by searching your operating system
    * paths
@@ -60,10 +88,21 @@ public:
    * of them
    */
   ToolchainCompilerInfo
-  Verify(const ToolchainFindConfig &config = ToolchainFindConfig());
+  Verify(const ToolchainVerifyConfig &config = ToolchainVerifyConfig());
 
 protected:
   ToolchainCompilerInfo verified_toolchain_;
+
+private:
+  void Initialize();
+  static const ToolchainVerificationFunc &
+  GetVerificationFunc(const std::string &identifier);
+  static std::unordered_map<std::string, ToolchainVerificationFunc> &
+  GetStatic() {
+    static std::unordered_map<std::string, ToolchainVerificationFunc>
+        verification_func_map;
+    return verification_func_map;
+  }
 };
 
 } // namespace buildcc
