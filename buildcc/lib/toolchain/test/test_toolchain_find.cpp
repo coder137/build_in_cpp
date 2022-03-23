@@ -97,16 +97,6 @@ TEST(ToolchainFindTestGroup, FindToolchain_NoToolchainFound) {
 }
 
 int main(int ac, char **av) {
-  // NOTE, Check the GCC, MSVC and Clang compilers
-  // Create directory and populate it with gcc and cl executables
-  // Linux
-  // toolchains/gcc
-  // toolchains/clang
-
-  // Windows
-  // toolchains/msvc
-  // toolchains/mingw
-  // TODO, Check executables used in clang
-
+  MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
