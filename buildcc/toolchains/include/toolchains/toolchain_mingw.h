@@ -53,10 +53,6 @@ private:
     config.prefix_include_dir = kMingwPrefixIncludeDir;
     config.prefix_lib_dir = kMingwPrefixLibDir;
   }
-  virtual std::optional<ToolchainCompilerInfo>
-  VerifySelectedToolchainPath(const ToolchainExecutables &executables) const {
-    return VerifyGccSelectedToolchainPath(executables);
-  }
 };
 
 } // namespace buildcc
