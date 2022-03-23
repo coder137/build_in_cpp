@@ -23,35 +23,14 @@
 
 #include "toolchain/common/function_lock.h"
 #include "toolchain/common/toolchain_config.h"
+#include "toolchain/common/toolchain_executables.h"
+#include "toolchain/common/toolchain_id.h"
 
 #include "toolchain/api/flag_api.h"
 #include "toolchain/api/toolchain_find.h"
 #include "toolchain/api/toolchain_verify.h"
 
 namespace buildcc {
-
-enum class ToolchainId {
-  Gcc = 0,   ///< GCC Toolchain
-  Msvc,      ///< MSVC Toolchain
-  Clang,     ///< Clang Toolchain
-  MinGW,     ///< MinGW Toolchain (Similar to GCC, but for Windows)
-  Custom,    ///< Custom Toolchain not defined in this list
-  Undefined, ///< Default value when unknown
-};
-
-struct ToolchainExecutables {
-  explicit ToolchainExecutables() = default;
-  explicit ToolchainExecutables(std::string_view as, std::string_view c,
-                                std::string_view cpp, std::string_view ar,
-                                std::string_view link)
-      : assembler(as), c_compiler(c), cpp_compiler(cpp), archiver(ar),
-        linker(link) {}
-  std::string assembler;
-  std::string c_compiler;
-  std::string cpp_compiler;
-  std::string archiver;
-  std::string linker;
-};
 
 // Base toolchain class
 class Toolchain : public internal::FlagApi<Toolchain>,
@@ -115,8 +94,6 @@ private:
   void Initialize();
 
   virtual void UpdateConfig(ToolchainConfig &config);
-  virtual std::optional<ToolchainCompilerInfo>
-  VerifySelectedToolchainPath(const ToolchainExecutables &executables) const;
 
 private:
   friend class internal::FlagApi<Toolchain>;
