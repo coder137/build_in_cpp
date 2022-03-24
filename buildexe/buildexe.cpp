@@ -60,7 +60,8 @@ int main(int argc, char **argv) {
   // Host Toolchain
   BaseToolchain toolchain =
       buildexe_args.GetHostToolchainArg().ConstructToolchain();
-  find_toolchain_verify(toolchain);
+  toolchain.Verify();
+
   if (buildexe_args.GetBuildMode() == BuildExeMode::Script) {
     host_toolchain_verify(toolchain);
   }

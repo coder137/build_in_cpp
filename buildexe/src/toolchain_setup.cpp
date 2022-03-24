@@ -24,10 +24,6 @@ constexpr const char *const kTag = "BuildExe";
 
 namespace buildcc {
 
-void find_toolchain_verify(BaseToolchain &toolchain) {
-  (void)toolchain.Verify();
-}
-
 void host_toolchain_verify(const BaseToolchain &toolchain) {
   env::log_info(kTag, "*** Starting Toolchain verification ***");
 

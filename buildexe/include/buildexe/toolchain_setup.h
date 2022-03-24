@@ -21,7 +21,6 @@
 
 namespace buildcc {
 
-void find_toolchain_verify(BaseToolchain &toolchain);
 void host_toolchain_verify(const BaseToolchain &toolchain);
 
 } // namespace buildcc
