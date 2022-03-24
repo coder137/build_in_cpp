@@ -210,6 +210,70 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Msvc) {
   STRCMP_EQUAL(compiler_info.target_arch.c_str(), "host_arch_tgt_arch");
 }
 
+TEST(ToolchainVerifyTestGroup, VerifyToolchain_Custom_VerificationSuccess) {
+  buildcc::Toolchain::AddVerificationFunc(
+      buildcc::ToolchainId::Custom,
+      [](const buildcc::ToolchainExecutables &executables)
+          -> std::optional<buildcc::ToolchainCompilerInfo> {
+        (void)executables;
+        buildcc::ToolchainCompilerInfo compiler_info;
+        compiler_info.compiler_version = "custom_compiler_version";
+        compiler_info.target_arch = "custom_target_arch";
+        return compiler_info;
+      },
+      "success_verification_func");
+  buildcc::Toolchain custom(buildcc::ToolchainId::Custom, "custom", "assembler",
+                            "c_compiler", "cpp_compiler", "archiver", "linker");
+  buildcc::ToolchainVerifyConfig config;
+  config.env_vars.clear();
+  config.absolute_search_paths.insert(
+      (fs::current_path() / "toolchains" / "custom"));
+  config.verification_identifier = "success_verification_func";
+  auto compiler_info = custom.Verify(config);
+  STRCMP_EQUAL(compiler_info.compiler_version.c_str(),
+               "custom_compiler_version");
+  STRCMP_EQUAL(compiler_info.target_arch.c_str(), "custom_target_arch");
+}
+
+TEST(ToolchainVerifyTestGroup, VerifyToolchain_Custom_VerificationFailure) {
+  buildcc::Toolchain::AddVerificationFunc(
+      buildcc::ToolchainId::Custom,
+      [](const buildcc::ToolchainExecutables &executables)
+          -> std::optional<buildcc::ToolchainCompilerInfo> {
+        (void)executables;
+        return {};
+      },
+      "failure_verification_func");
+
+  // Adding verification function with the same identifier throws an exception
+  CHECK_THROWS(std::exception,
+               (buildcc::Toolchain::AddVerificationFunc(
+                   buildcc::ToolchainId::Custom,
+                   [](const buildcc::ToolchainExecutables &executables)
+                       -> std::optional<buildcc::ToolchainCompilerInfo> {
+                     (void)executables;
+                     return {};
+                   },
+                   "failure_verification_func")));
+  buildcc::Toolchain custom(buildcc::ToolchainId::Custom, "custom", "assembler",
+                            "c_compiler", "cpp_compiler", "archiver", "linker");
+
+  buildcc::ToolchainVerifyConfig config;
+  config.env_vars.clear();
+  config.absolute_search_paths.insert(
+      (fs::current_path() / "toolchains" / "custom"));
+  // Fails since ToolchainId::Custom expects a verification_identifier
+  CHECK_THROWS(std::exception, custom.Verify(config));
+
+  // Fails since we do not get valid ToolchainCompilerInfo
+  config.verification_identifier = "failure_verification_func";
+  CHECK_THROWS(std::exception, custom.Verify(config));
+
+  // Fails since we have not registered a verification function with this id
+  config.verification_identifier = "unregistered_verification_func";
+  CHECK_THROWS(std::exception, custom.Verify(config));
+}
+
 TEST(ToolchainVerifyTestGroup,
      VerifyToolchain_Msvc_CompilerVersionAndTargetArchFailure) {
   buildcc::Toolchain msvc(buildcc::ToolchainId::Msvc, "msvc", "cl", "cl", "cl",
