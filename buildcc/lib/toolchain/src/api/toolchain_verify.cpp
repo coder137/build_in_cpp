@@ -120,22 +120,26 @@ buildcc::ToolchainExecutables CreateToolchainExecutables(
   buildcc::env::assert_fatal<executable_ext != nullptr>(
       "Host executable extension not supported");
 
-  std::string assembler_path = fmt::format(
-      "{}", (absolute_path / fmt::format("{}{}", current_executables.assembler,
-                                         executable_ext)));
-  std::string c_compiler_path = fmt::format(
-      "{}", (absolute_path / fmt::format("{}{}", current_executables.c_compiler,
-                                         executable_ext)));
-  std::string cpp_compiler_path = fmt::format(
-      "{}",
+  std::string assembler_path =
       (absolute_path /
-       fmt::format("{}{}", current_executables.cpp_compiler, executable_ext)));
-  std::string archiver_path = fmt::format(
-      "{}", (absolute_path / fmt::format("{}{}", current_executables.archiver,
-                                         executable_ext)));
-  std::string linker_path = fmt::format(
-      "{}", (absolute_path /
-             fmt::format("{}{}", current_executables.linker, executable_ext)));
+       fmt::format("{}{}", current_executables.assembler, executable_ext))
+          .string();
+  std::string c_compiler_path =
+      (absolute_path /
+       fmt::format("{}{}", current_executables.c_compiler, executable_ext))
+          .string();
+  std::string cpp_compiler_path =
+      (absolute_path /
+       fmt::format("{}{}", current_executables.cpp_compiler, executable_ext))
+          .string();
+  std::string archiver_path =
+      (absolute_path /
+       fmt::format("{}{}", current_executables.archiver, executable_ext))
+          .string();
+  std::string linker_path =
+      (absolute_path /
+       fmt::format("{}{}", current_executables.linker, executable_ext))
+          .string();
 
   return buildcc::ToolchainExecutables(assembler_path, c_compiler_path,
                                        cpp_compiler_path, archiver_path,
