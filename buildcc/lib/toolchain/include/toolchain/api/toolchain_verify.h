@@ -35,8 +35,6 @@ namespace fs = std::filesystem;
 namespace buildcc {
 
 struct ToolchainVerifyConfig : public ToolchainFindConfig {
-  ToolchainVerifyConfig() = default;
-
   std::optional<std::string> verification_identifier;
 };
 
@@ -49,7 +47,6 @@ struct ToolchainVerifyConfig : public ToolchainFindConfig {
  * @param target_arch Target architecture of the verified toolchain
  */
 struct ToolchainCompilerInfo {
-  ToolchainCompilerInfo() = default;
   std::string ToString() const { return fmt::format("{}", *this); }
 
   fs::path path;
