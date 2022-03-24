@@ -95,11 +95,7 @@ private:
   static const ToolchainVerificationFunc &
   GetVerificationFunc(const std::string &identifier);
   static std::unordered_map<std::string, ToolchainVerificationFunc> &
-  GetStatic() {
-    static std::unordered_map<std::string, ToolchainVerificationFunc>
-        verification_func_map;
-    return verification_func_map;
-  }
+  GetStatic();
 };
 
 } // namespace buildcc

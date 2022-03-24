@@ -257,6 +257,14 @@ ToolchainVerify<T>::GetVerificationFunc(const std::string &identifier) {
   return verification_map.at(identifier);
 }
 
+template <typename T>
+std::unordered_map<std::string, ToolchainVerificationFunc> &
+ToolchainVerify<T>::GetStatic() {
+  static std::unordered_map<std::string, ToolchainVerificationFunc>
+      verification_func_map;
+  return verification_func_map;
+}
+
 template class ToolchainVerify<Toolchain>;
 
 } // namespace buildcc
