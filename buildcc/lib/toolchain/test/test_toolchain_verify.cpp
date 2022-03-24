@@ -101,6 +101,54 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_CompilerVersionEmpty) {
   CHECK_THROWS(std::exception, gcc.Verify(config));
 }
 
+TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_TargetArchFailure) {
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
+                         "ar", "ld");
+
+  std::vector<std::string> version_stdout_data{"version"};
+  std::vector<std::string> arch_stdout_data{"arch"};
+  buildcc::env::m::CommandExpect_Execute(1, true, &version_stdout_data);
+  buildcc::env::m::CommandExpect_Execute(1, false, &arch_stdout_data);
+
+  std::string putenv_str =
+      fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc", fs::current_path());
+  int put = putenv(putenv_str.data());
+  CHECK_TRUE(put == 0);
+  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
+  CHECK_TRUE(custom_buildcc_path != nullptr);
+  UT_PRINT(custom_buildcc_path);
+
+  buildcc::ToolchainVerifyConfig config;
+  config.env_vars.clear();
+  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
+
+  CHECK_THROWS(std::exception, gcc.Verify(config));
+}
+
+TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_TargetArchEmpty) {
+  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
+                         "ar", "ld");
+
+  std::vector<std::string> version_stdout_data{"version"};
+  std::vector<std::string> arch_stdout_data;
+  buildcc::env::m::CommandExpect_Execute(1, true, &version_stdout_data);
+  buildcc::env::m::CommandExpect_Execute(1, true, &arch_stdout_data);
+
+  std::string putenv_str =
+      fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc", fs::current_path());
+  int put = putenv(putenv_str.data());
+  CHECK_TRUE(put == 0);
+  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
+  CHECK_TRUE(custom_buildcc_path != nullptr);
+  UT_PRINT(custom_buildcc_path);
+
+  buildcc::ToolchainVerifyConfig config;
+  config.env_vars.clear();
+  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
+
+  CHECK_THROWS(std::exception, gcc.Verify(config));
+}
+
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_Clang) {
   buildcc::Toolchain clang(buildcc::ToolchainId::Clang, "clang", "llvm-as",
                            "clang", "clang++", "llvm-ar", "lld");
