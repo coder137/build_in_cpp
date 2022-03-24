@@ -286,38 +286,6 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Undefined_AddVerificationFunc) {
                    "undefined_verification_func")));
 }
 
-TEST(ToolchainVerifyTestGroup,
-     VerifyToolchain_Msvc_CompilerVersionAndTargetArchFailure) {
-  buildcc::Toolchain msvc(buildcc::ToolchainId::Msvc, "msvc", "cl", "cl", "cl",
-                          "lib", "link");
-  // Setup ENV
-  // VSCMD_VER
-  // std::string vscmd_ver = std::string("VSCMD_VER=version");
-  // // VSCMD_ARG_HOST_ARCH
-  // std::string host_arch = std::string("VSCMD_ARG_HOST_ARCH=host_arch");
-  // // VSCMD_ARG_TGT_ARCH
-  // std::string tgt_arch = std::string("VSCMD_ARG_TGT_ARCH=tgt_arch");
-
-  // CHECK_TRUE(putenv(vscmd_ver.data()) == 0);
-  // CHECK_TRUE(putenv(host_arch.data()) == 0);
-  // CHECK_TRUE(putenv(tgt_arch.data()) == 0);
-
-  // MSVC Compiler
-  std::string putenv_str =
-      fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/msvc", fs::current_path());
-  int put = putenv(putenv_str.data());
-  CHECK_TRUE(put == 0);
-  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
-  CHECK_TRUE(custom_buildcc_path != nullptr);
-  UT_PRINT(custom_buildcc_path);
-
-  buildcc::ToolchainVerifyConfig config;
-  config.env_vars.clear();
-  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
-
-  CHECK_THROWS(std::exception, msvc.Verify(config));
-}
-
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_BadCompilerId) {
   buildcc::Toolchain gcc((buildcc::ToolchainId)65535, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
@@ -360,6 +328,38 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_PathContainsDir) {
 }
 
 #if defined(__GNUC__) && !defined(__MINGW32__) && !defined(__MINGW64__)
+
+TEST(ToolchainVerifyTestGroup,
+     VerifyToolchain_Msvc_CompilerVersionAndTargetArchFailure) {
+  buildcc::Toolchain msvc(buildcc::ToolchainId::Msvc, "msvc", "cl", "cl", "cl",
+                          "lib", "link");
+  // Setup ENV
+  // VSCMD_VER
+  // std::string vscmd_ver = std::string("VSCMD_VER=version");
+  // // VSCMD_ARG_HOST_ARCH
+  // std::string host_arch = std::string("VSCMD_ARG_HOST_ARCH=host_arch");
+  // // VSCMD_ARG_TGT_ARCH
+  // std::string tgt_arch = std::string("VSCMD_ARG_TGT_ARCH=tgt_arch");
+
+  // CHECK_TRUE(putenv(vscmd_ver.data()) == 0);
+  // CHECK_TRUE(putenv(host_arch.data()) == 0);
+  // CHECK_TRUE(putenv(tgt_arch.data()) == 0);
+
+  // MSVC Compiler
+  std::string putenv_str =
+      fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/msvc", fs::current_path());
+  int put = putenv(putenv_str.data());
+  CHECK_TRUE(put == 0);
+  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
+  CHECK_TRUE(custom_buildcc_path != nullptr);
+  UT_PRINT(custom_buildcc_path);
+
+  buildcc::ToolchainVerifyConfig config;
+  config.env_vars.clear();
+  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
+
+  CHECK_THROWS(std::exception, msvc.Verify(config));
+}
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_LockedFolder) {
   std::error_code err;
