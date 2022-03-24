@@ -17,6 +17,8 @@
 #ifndef TOOLCHAIN_COMMON_TOOLCHAIN_ID_H_
 #define TOOLCHAIN_COMMON_TOOLCHAIN_ID_H_
 
+#include "fmt/format.h"
+
 namespace buildcc {
 
 enum class ToolchainId {
