@@ -32,6 +32,13 @@ if (${TESTING})
         ${TEST_LINK_LIBS}
     )
 
+    add_executable(test_toolchain_id
+        test/test_toolchain_id.cpp
+    )
+    target_link_libraries(test_toolchain_id PRIVATE
+        mock_toolchain
+    )
+
     add_executable(test_toolchain_config
         test/test_toolchain_config.cpp
     )
@@ -53,7 +60,7 @@ if (${TESTING})
         mock_toolchain
     )
 
-
+    add_test(NAME test_toolchain_id COMMAND test_toolchain_id)
     add_test(NAME test_toolchain_config COMMAND test_toolchain_config)
     add_test(NAME test_toolchain_find COMMAND test_toolchain_find
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
