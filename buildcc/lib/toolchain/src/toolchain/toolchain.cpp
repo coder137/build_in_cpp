@@ -22,4 +22,7 @@ void Toolchain::Initialize() { UpdateConfig(config_); }
 
 void Toolchain::Lock() { lock_.Lock(); }
 
+// PRIVATE
+void Toolchain::UpdateConfig(ToolchainConfig &config) { (void)config; }
+
 } // namespace buildcc

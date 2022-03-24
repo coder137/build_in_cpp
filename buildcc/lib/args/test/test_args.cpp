@@ -68,11 +68,11 @@ TEST(ArgsTestGroup, Args_CustomToolchain) {
   CHECK_FALSE(gcc_toolchain.state.test);
   CHECK(gcc_toolchain.id == buildcc::ToolchainId::Gcc);
   STRCMP_EQUAL(gcc_toolchain.name.c_str(), "gcc");
-  STRCMP_EQUAL(gcc_toolchain.binaries.assembler.c_str(), "as");
-  STRCMP_EQUAL(gcc_toolchain.binaries.c_compiler.c_str(), "gcc");
-  STRCMP_EQUAL(gcc_toolchain.binaries.cpp_compiler.c_str(), "g++");
-  STRCMP_EQUAL(gcc_toolchain.binaries.archiver.c_str(), "ar");
-  STRCMP_EQUAL(gcc_toolchain.binaries.linker.c_str(), "ld");
+  STRCMP_EQUAL(gcc_toolchain.executables.assembler.c_str(), "as");
+  STRCMP_EQUAL(gcc_toolchain.executables.c_compiler.c_str(), "gcc");
+  STRCMP_EQUAL(gcc_toolchain.executables.cpp_compiler.c_str(), "g++");
+  STRCMP_EQUAL(gcc_toolchain.executables.archiver.c_str(), "ar");
+  STRCMP_EQUAL(gcc_toolchain.executables.linker.c_str(), "ld");
 }
 
 TEST(ArgsTestGroup, Args_MultipleCustomToolchain) {
@@ -106,22 +106,22 @@ TEST(ArgsTestGroup, Args_MultipleCustomToolchain) {
   CHECK_FALSE(gcc_toolchain.state.test);
   CHECK(gcc_toolchain.id == buildcc::ToolchainId::Gcc);
   STRCMP_EQUAL(gcc_toolchain.name.c_str(), "gcc");
-  STRCMP_EQUAL(gcc_toolchain.binaries.assembler.c_str(), "as");
-  STRCMP_EQUAL(gcc_toolchain.binaries.c_compiler.c_str(), "gcc");
-  STRCMP_EQUAL(gcc_toolchain.binaries.cpp_compiler.c_str(), "g++");
-  STRCMP_EQUAL(gcc_toolchain.binaries.archiver.c_str(), "ar");
-  STRCMP_EQUAL(gcc_toolchain.binaries.linker.c_str(), "ld");
+  STRCMP_EQUAL(gcc_toolchain.executables.assembler.c_str(), "as");
+  STRCMP_EQUAL(gcc_toolchain.executables.c_compiler.c_str(), "gcc");
+  STRCMP_EQUAL(gcc_toolchain.executables.cpp_compiler.c_str(), "g++");
+  STRCMP_EQUAL(gcc_toolchain.executables.archiver.c_str(), "ar");
+  STRCMP_EQUAL(gcc_toolchain.executables.linker.c_str(), "ld");
 
   // MSVC
   CHECK_TRUE(msvc_toolchain.state.build);
   CHECK_TRUE(msvc_toolchain.state.test);
   CHECK(msvc_toolchain.id == buildcc::ToolchainId::Msvc);
   STRCMP_EQUAL(msvc_toolchain.name.c_str(), "msvc");
-  STRCMP_EQUAL(msvc_toolchain.binaries.assembler.c_str(), "cl");
-  STRCMP_EQUAL(msvc_toolchain.binaries.c_compiler.c_str(), "cl");
-  STRCMP_EQUAL(msvc_toolchain.binaries.cpp_compiler.c_str(), "cl");
-  STRCMP_EQUAL(msvc_toolchain.binaries.archiver.c_str(), "lib");
-  STRCMP_EQUAL(msvc_toolchain.binaries.linker.c_str(), "link");
+  STRCMP_EQUAL(msvc_toolchain.executables.assembler.c_str(), "cl");
+  STRCMP_EQUAL(msvc_toolchain.executables.c_compiler.c_str(), "cl");
+  STRCMP_EQUAL(msvc_toolchain.executables.cpp_compiler.c_str(), "cl");
+  STRCMP_EQUAL(msvc_toolchain.executables.archiver.c_str(), "lib");
+  STRCMP_EQUAL(msvc_toolchain.executables.linker.c_str(), "link");
 }
 
 TEST(ArgsTestGroup, Args_DuplicateCustomToolchain) {
@@ -167,11 +167,11 @@ TEST(ArgsTestGroup, Args_CustomTarget) {
   CHECK_FALSE(gcc_toolchain.state.test);
   CHECK(gcc_toolchain.id == buildcc::ToolchainId::Gcc);
   STRCMP_EQUAL(gcc_toolchain.name.c_str(), "gcc");
-  STRCMP_EQUAL(gcc_toolchain.binaries.assembler.c_str(), "as");
-  STRCMP_EQUAL(gcc_toolchain.binaries.c_compiler.c_str(), "gcc");
-  STRCMP_EQUAL(gcc_toolchain.binaries.cpp_compiler.c_str(), "g++");
-  STRCMP_EQUAL(gcc_toolchain.binaries.archiver.c_str(), "ar");
-  STRCMP_EQUAL(gcc_toolchain.binaries.linker.c_str(), "ld");
+  STRCMP_EQUAL(gcc_toolchain.executables.assembler.c_str(), "as");
+  STRCMP_EQUAL(gcc_toolchain.executables.c_compiler.c_str(), "gcc");
+  STRCMP_EQUAL(gcc_toolchain.executables.cpp_compiler.c_str(), "g++");
+  STRCMP_EQUAL(gcc_toolchain.executables.archiver.c_str(), "ar");
+  STRCMP_EQUAL(gcc_toolchain.executables.linker.c_str(), "ld");
 
   // Target
   STRCMP_EQUAL(gcc_target.compile_command.c_str(),
@@ -221,11 +221,11 @@ TEST(ArgsTestGroup, Args_MultipleCustomTarget) {
   CHECK_FALSE(gcc_toolchain.state.test);
   CHECK(gcc_toolchain.id == buildcc::ToolchainId::Gcc);
   STRCMP_EQUAL(gcc_toolchain.name.c_str(), "gcc");
-  STRCMP_EQUAL(gcc_toolchain.binaries.assembler.c_str(), "as");
-  STRCMP_EQUAL(gcc_toolchain.binaries.c_compiler.c_str(), "gcc");
-  STRCMP_EQUAL(gcc_toolchain.binaries.cpp_compiler.c_str(), "g++");
-  STRCMP_EQUAL(gcc_toolchain.binaries.archiver.c_str(), "ar");
-  STRCMP_EQUAL(gcc_toolchain.binaries.linker.c_str(), "ld");
+  STRCMP_EQUAL(gcc_toolchain.executables.assembler.c_str(), "as");
+  STRCMP_EQUAL(gcc_toolchain.executables.c_compiler.c_str(), "gcc");
+  STRCMP_EQUAL(gcc_toolchain.executables.cpp_compiler.c_str(), "g++");
+  STRCMP_EQUAL(gcc_toolchain.executables.archiver.c_str(), "ar");
+  STRCMP_EQUAL(gcc_toolchain.executables.linker.c_str(), "ld");
 
   // Target
   STRCMP_EQUAL(gcc_target.compile_command.c_str(),
@@ -242,11 +242,11 @@ TEST(ArgsTestGroup, Args_MultipleCustomTarget) {
   CHECK_TRUE(msvc_toolchain.state.test);
   CHECK(msvc_toolchain.id == buildcc::ToolchainId::Msvc);
   STRCMP_EQUAL(msvc_toolchain.name.c_str(), "msvc");
-  STRCMP_EQUAL(msvc_toolchain.binaries.assembler.c_str(), "cl");
-  STRCMP_EQUAL(msvc_toolchain.binaries.c_compiler.c_str(), "cl");
-  STRCMP_EQUAL(msvc_toolchain.binaries.cpp_compiler.c_str(), "cl");
-  STRCMP_EQUAL(msvc_toolchain.binaries.archiver.c_str(), "lib");
-  STRCMP_EQUAL(msvc_toolchain.binaries.linker.c_str(), "link");
+  STRCMP_EQUAL(msvc_toolchain.executables.assembler.c_str(), "cl");
+  STRCMP_EQUAL(msvc_toolchain.executables.c_compiler.c_str(), "cl");
+  STRCMP_EQUAL(msvc_toolchain.executables.cpp_compiler.c_str(), "cl");
+  STRCMP_EQUAL(msvc_toolchain.executables.archiver.c_str(), "lib");
+  STRCMP_EQUAL(msvc_toolchain.executables.linker.c_str(), "link");
 
   // Target
   STRCMP_EQUAL(msvc_target.compile_command.c_str(),

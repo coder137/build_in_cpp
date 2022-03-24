@@ -21,51 +21,21 @@
 #include <optional>
 #include <vector>
 
+#include "fmt/format.h"
+
 #include "env/logging.h"
 
-#include "fmt/format.h"
+#include "toolchain/common/toolchain_executables.h"
+#include "toolchain/common/toolchain_id.h"
+
+#include "toolchain/api/toolchain_find.h"
 
 namespace fs = std::filesystem;
 
 namespace buildcc {
 
-/**
- * @brief Configure the behaviour of Toolchain::Verify API. By default searches
- * the directories mentioned in the ENV{PATH} variable to find the toolchain.
- * @param absolute_search_paths absolute_search_paths expect directories that
- * are iterated for exact toolchain matches
- * @param env_vars env_vars contain paths that are seperated by OS delimiter.
- * These are converted to paths and searched similarly to absolute_search_paths
- * <br>
- * NOTE: env_vars must contain single absolute paths or multiple absolute
- * paths seperated by OS delimiter <br>
- * Example: [Windows]   "absolute_path_1;absolute_path_2;..." <br>
- * Example: [Linux]     "absolute_path_1:absolute_path_2:..." <br>
- * @param compiler_version Optionally supply a compiler version if multiple
- * toolchains of the same family/id are installed <br>
- * Example: [GCC/MinGW/Clang]   {compiler} -dumpversion <br>
- * Example: [MSVC]              getenv(VSCMD_VER) <br>
- * For [MSVC] make sure to use `vcvarsall.bat {flavour}` to activate your
- * toolchain
- * @param target_arch Optionally supply a target architecture if multiple
- * toolchains of the same family/id are installed but target different platforms
- * <br>
- * Example: [GCC/MinGW/Clang] {compiler} -dumpmachine <br>
- * Example: [MSVC]            getenv(VSCMD_ARG_HOST_ARCH) +
- * getenv(VSCMD_ARG_TGT_ARCH) <br>
- * For [MSVC] make sure to use `vcvarsall.bat {flavour}` to activate your
- * toolchain
- * @param update Updates the toolchain with absolute paths once verified <br>
- * If multiple toolchains are found, uses the first in the list
- */
-struct VerifyToolchainConfig {
-  std::vector<std::string> absolute_search_paths;
-  std::vector<std::string> env_vars{"PATH"};
-
-  std::optional<std::string> compiler_version;
-  std::optional<std::string> target_arch;
-
-  bool update{true};
+struct ToolchainVerifyConfig : public ToolchainFindConfig {
+  std::optional<std::string> verification_identifier;
 };
 
 /**
@@ -76,16 +46,34 @@ struct VerifyToolchainConfig {
  * @param compiler_version Compiler version of the verified toolchain
  * @param target_arch Target architecture of the verified toolchain
  */
-struct VerifiedToolchain {
+struct ToolchainCompilerInfo {
+  std::string ToString() const { return fmt::format("{}", *this); }
+
   fs::path path;
   std::string compiler_version;
   std::string target_arch;
-
-  std::string ToString() const { return fmt::format("{}", *this); }
 };
+
+typedef std::function<std::optional<ToolchainCompilerInfo>(
+    const ToolchainExecutables &)>
+    ToolchainVerificationFunc;
 
 template <typename T> class ToolchainVerify {
 public:
+  ToolchainVerify() { Initialize(); }
+
+  /**
+   * @brief
+   *
+   * @param id
+   * @param verification_func
+   * @param identifier Only read when ToolchainId::Custom is passed in
+   */
+  static void
+  AddVerificationFunc(ToolchainId id,
+                      const ToolchainVerificationFunc &verification_func,
+                      const std::optional<std::string> &op_identifier = {});
+
   /**
    * @brief Verify your toolchain executables by searching your operating system
    * paths
@@ -96,11 +84,18 @@ public:
    * multiple toolchains of similar names with different versions. Collect all
    * of them
    */
-  std::vector<VerifiedToolchain>
-  Verify(const VerifyToolchainConfig &config = VerifyToolchainConfig());
+  ToolchainCompilerInfo
+  Verify(const ToolchainVerifyConfig &config = ToolchainVerifyConfig());
 
 protected:
-  VerifiedToolchain verified_toolchain_;
+  ToolchainCompilerInfo verified_toolchain_;
+
+private:
+  void Initialize();
+  static const ToolchainVerificationFunc &
+  GetVerificationFunc(const std::string &identifier);
+  static std::unordered_map<std::string, ToolchainVerificationFunc> &
+  GetStatic();
 };
 
 } // namespace buildcc
@@ -112,9 +107,9 @@ constexpr const char *const kVerifiedToolchainFormat = R"({{
 }})";
 
 template <>
-struct fmt::formatter<buildcc::VerifiedToolchain> : formatter<std::string> {
+struct fmt::formatter<buildcc::ToolchainCompilerInfo> : formatter<std::string> {
   template <typename FormatContext>
-  auto format(const buildcc::VerifiedToolchain &vt, FormatContext &ctx) {
+  auto format(const buildcc::ToolchainCompilerInfo &vt, FormatContext &ctx) {
     std::string verified_toolchain_info =
         fmt::format(kVerifiedToolchainFormat, vt.path.string(),
                     vt.compiler_version, vt.target_arch);

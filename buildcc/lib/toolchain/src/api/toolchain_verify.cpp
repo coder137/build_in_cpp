@@ -22,7 +22,7 @@
 
 #include <iostream>
 
-#include "toolchain/toolchain.h"
+#include "schema/path.h"
 
 #include "env/assert_fatal.h"
 #include "env/host_os.h"
@@ -31,261 +31,238 @@
 
 #include "env/command.h"
 
+#include "toolchain/toolchain.h"
+
 namespace {
-// Constants
 
-// Functions
-std::vector<std::string> ParseEnvVarToPaths(const std::string &env_var) {
-  const char *path_env = getenv(env_var.c_str());
-  buildcc::env::assert_fatal(
-      path_env != nullptr,
-      fmt::format("Environment variable '{}' not present", env_var));
-
-  constexpr const char *os_env_delim = buildcc::env::get_os_envvar_delim();
-  buildcc::env::assert_fatal<os_env_delim != nullptr>("OS not supported");
-  std::vector<std::string> paths =
-      buildcc::env::split(path_env, os_env_delim[0]);
-
-  return paths;
-}
-
-std::string GetGccCompilerVersion(const buildcc::env::Command &command) {
+std::optional<std::string>
+GetGccCompilerVersion(const buildcc::env::Command &command) {
   std::vector<std::string> stdout_data;
   bool executed = buildcc::env::Command::Execute(
       command.Construct("{compiler} -dumpversion"), {}, &stdout_data);
-  buildcc::env::assert_fatal(
-      executed, "GetCompilerVersion command not executed successfully");
-  return stdout_data.at(0);
-}
-
-std::string GetMsvcCompilerVersion() {
-  // Done VSCMD_VER
-  const char *vscmd_version = getenv("VSCMD_VER");
-  buildcc::env::assert_fatal(
-      vscmd_version != nullptr,
-      "Setup Visual Studio build tools. Call `vcvarsall.bat {platform}` to "
-      "setup your target and host");
-  return vscmd_version;
+  if (!executed || stdout_data.empty()) {
+    return {};
+  }
+  return stdout_data[0];
 }
 
 std::optional<std::string>
-GetCompilerVersion(const fs::path &absolute_path,
-                   const buildcc::Toolchain &toolchain) {
-  buildcc::env::Command command;
-  command.AddDefaultArgument(
-      "compiler",
-      (absolute_path / toolchain.GetCppCompiler()).make_preferred().string());
-
-  std::optional<std::string> compiler_version;
-  switch (toolchain.GetId()) {
-  case buildcc::ToolchainId::Gcc:
-  case buildcc::ToolchainId::MinGW:
-  case buildcc::ToolchainId::Clang:
-    compiler_version = GetGccCompilerVersion(command);
-    break;
-  case buildcc::ToolchainId::Msvc:
-    compiler_version = GetMsvcCompilerVersion();
-    break;
-  default:
-    buildcc::env::log_warning(__FUNCTION__,
-                              "Operation not supported on this compiler");
-    compiler_version = {};
-    break;
-  }
-  return compiler_version;
-}
-
-std::string GetGccTargetArchitecture(const buildcc::env::Command &command) {
+GetGccTargetArchitecture(const buildcc::env::Command &command) {
   std::vector<std::string> stdout_data;
   bool executed = buildcc::env::Command::Execute(
       command.Construct("{compiler} -dumpmachine"), {}, &stdout_data);
-  buildcc::env::assert_fatal(
-      executed, "GetCompilerArchitecture command not executed successfully");
-  return stdout_data.at(0);
+  if (!executed || stdout_data.empty()) {
+    return {};
+  }
+  return stdout_data[0];
 }
 
-std::string GetMsvcTargetArchitecture() {
+std::optional<buildcc::ToolchainCompilerInfo>
+GccVerificationFunc(const buildcc::ToolchainExecutables &executables) {
+  buildcc::env::Command command;
+  command.AddDefaultArgument("compiler", executables.cpp_compiler);
+
+  auto op_compiler_version = GetGccCompilerVersion(command);
+  auto op_target_arch = GetGccTargetArchitecture(command);
+  if (!op_compiler_version.has_value() || !op_target_arch.has_value()) {
+    return {};
+  }
+
+  buildcc::ToolchainCompilerInfo compiler_info;
+  compiler_info.compiler_version = op_compiler_version.value();
+  compiler_info.target_arch = op_target_arch.value();
+  return compiler_info;
+}
+
+std::optional<std::string> GetMsvcCompilerVersion() {
+  const char *vscmd_version = getenv("VSCMD_VER");
+  if (vscmd_version == nullptr) {
+    return {};
+  }
+  return vscmd_version;
+}
+
+std::optional<std::string> GetMsvcTargetArchitecture() {
   // DONE, Read `VSCMD_ARG_HOST_ARCH` from env path
   // DONE, Read `VSCMD_ARG_TGT_ARCH` from env path
   const char *vs_host_arch = getenv("VSCMD_ARG_HOST_ARCH");
   const char *vs_target_arch = getenv("VSCMD_ARG_TGT_ARCH");
-  buildcc::env::assert_fatal(
-      (vs_host_arch != nullptr) && (vs_target_arch != nullptr),
-      "Setup Visual Studio build tools. Call `vcvarsall.bat {platform}` to "
-      "setup your target and host");
+  if (vs_host_arch == nullptr || vs_target_arch == nullptr) {
+    return {};
+  }
 
-  // DONE, Concat them!
+  // DONE, Concat them
   return fmt::format("{}_{}", vs_host_arch, vs_target_arch);
 }
 
-std::optional<std::string>
-GetCompilerArchitecture(const fs::path &absolute_path,
-                        const buildcc::Toolchain &toolchain) {
-  buildcc::env::Command command;
-  command.AddDefaultArgument(
-      "compiler",
-      (absolute_path / toolchain.GetCppCompiler()).make_preferred().string());
-  std::optional<std::string> target_arch;
-  switch (toolchain.GetId()) {
-  case buildcc::ToolchainId::Gcc:
-  case buildcc::ToolchainId::MinGW:
-  case buildcc::ToolchainId::Clang:
-    target_arch = GetGccTargetArchitecture(command);
-    break;
-  case buildcc::ToolchainId::Msvc:
-    target_arch = GetMsvcTargetArchitecture();
-    break;
-  default:
-    buildcc::env::log_warning(__FUNCTION__,
-                              "Operation not supported on this compiler");
-    target_arch = {};
-    break;
+std::optional<buildcc::ToolchainCompilerInfo>
+MsvcVerificationFunc(const buildcc::ToolchainExecutables &executables) {
+  (void)executables;
+  auto op_compiler_version = GetMsvcCompilerVersion();
+  auto op_target_arch = GetMsvcTargetArchitecture();
+  if (!op_compiler_version.has_value() || !op_target_arch.has_value()) {
+    return {};
   }
-  return target_arch;
+
+  buildcc::ToolchainCompilerInfo compiler_info;
+  compiler_info.compiler_version = op_compiler_version.value();
+  compiler_info.target_arch = op_target_arch.value();
+  return compiler_info;
 }
 
-class ToolchainMatcher {
-public:
-  explicit ToolchainMatcher(const buildcc::Toolchain &toolchain)
-      : toolchain_(toolchain) {}
+//
 
-  void FillWithToolchainFilenames() {
-    constexpr const char *os_executable_ext =
-        buildcc::env::get_os_executable_extension();
-    buildcc::env::assert_fatal<os_executable_ext != nullptr>(
-        "OS not supported");
+buildcc::ToolchainExecutables CreateToolchainExecutables(
+    const fs::path &absolute_path,
+    const buildcc::ToolchainExecutables &current_executables) {
+  constexpr const char *const executable_ext =
+      buildcc::env::get_os_executable_extension();
+  buildcc::env::assert_fatal<executable_ext != nullptr>(
+      "Host executable extension not supported");
 
-    matcher_.clear();
-    matcher_.insert(
-        fmt::format("{}{}", toolchain_.GetAssembler(), os_executable_ext));
-    matcher_.insert(
-        fmt::format("{}{}", toolchain_.GetCCompiler(), os_executable_ext));
-    matcher_.insert(
-        fmt::format("{}{}", toolchain_.GetCppCompiler(), os_executable_ext));
-    matcher_.insert(
-        fmt::format("{}{}", toolchain_.GetArchiver(), os_executable_ext));
-    matcher_.insert(
-        fmt::format("{}{}", toolchain_.GetLinker(), os_executable_ext));
+  std::string assembler_path =
+      (absolute_path /
+       fmt::format("{}{}", current_executables.assembler, executable_ext))
+          .string();
+  std::string c_compiler_path =
+      (absolute_path /
+       fmt::format("{}{}", current_executables.c_compiler, executable_ext))
+          .string();
+  std::string cpp_compiler_path =
+      (absolute_path /
+       fmt::format("{}{}", current_executables.cpp_compiler, executable_ext))
+          .string();
+  std::string archiver_path =
+      (absolute_path /
+       fmt::format("{}{}", current_executables.archiver, executable_ext))
+          .string();
+  std::string linker_path =
+      (absolute_path /
+       fmt::format("{}{}", current_executables.linker, executable_ext))
+          .string();
+
+  return buildcc::ToolchainExecutables(assembler_path, c_compiler_path,
+                                       cpp_compiler_path, archiver_path,
+                                       linker_path);
+}
+
+std::string
+GetToolchainVerifyIdentifier(buildcc::ToolchainId id,
+                             const std::optional<std::string> &op_identifier) {
+  std::string identifier;
+  switch (id) {
+  case buildcc::ToolchainId::Custom:
+    buildcc::env::assert_fatal(
+        op_identifier.has_value(),
+        "Requires verification_identifier value in ToolchainVerifyConfig");
+    identifier = op_identifier.value();
+    break;
+  case buildcc::ToolchainId::Gcc:
+  case buildcc::ToolchainId::Msvc:
+  case buildcc::ToolchainId::Clang:
+  case buildcc::ToolchainId::MinGW:
+    identifier = fmt::format("{}", id);
+    break;
+  case buildcc::ToolchainId::Undefined:
+  default:
+    buildcc::env::assert_fatal<false>(
+        "Undefined toolchain. Use valid ToolchainId");
+    break;
   }
-
-  void Check(const std::string &filename) { matcher_.erase(filename); }
-  bool Found() { return matcher_.empty(); }
-
-private:
-  const buildcc::Toolchain &toolchain_;
-
-  std::unordered_set<std::string> matcher_;
-};
+  return identifier;
+}
 
 } // namespace
 
 namespace buildcc {
 
 template <typename T>
-std::vector<VerifiedToolchain>
-ToolchainVerify<T>::Verify(const VerifyToolchainConfig &config) {
-  // TODO, Convert this to fs::path eventually
-  std::unordered_set<std::string> absolute_search_paths{
-      config.absolute_search_paths.begin(), config.absolute_search_paths.end()};
-
-  // Parse config envs
-  for (const std::string &env_var : config.env_vars) {
-    std::vector<std::string> paths = ParseEnvVarToPaths(env_var);
-    for (const auto &p : paths) {
-      absolute_search_paths.insert(p);
-    }
+void ToolchainVerify<T>::AddVerificationFunc(
+    ToolchainId id, const ToolchainVerificationFunc &verification_func,
+    const std::optional<std::string> &op_identifier) {
+  std::string identifier;
+  switch (id) {
+  case ToolchainId::Gcc:
+  case ToolchainId::Msvc:
+  case ToolchainId::MinGW:
+  case ToolchainId::Clang:
+    identifier = fmt::format("{}", id);
+    break;
+  case ToolchainId::Custom:
+    env::assert_fatal(op_identifier.has_value(),
+                      "Requires optional identifier parameter when "
+                      "ToolchainId::Custom is defined");
+    identifier = op_identifier.value();
+    break;
+  default:
+    env::assert_fatal<false>("Invalid ToolchainId parameter");
+    break;
   }
 
-  std::vector<VerifiedToolchain> verified_toolchains;
+  env::assert_fatal(
+      ToolchainVerify::GetStatic().count(identifier) == 0,
+      fmt::format("Already registered VerificationFunction for identifier '{}'",
+                  identifier));
+  ToolchainVerify::GetStatic()[identifier] = verification_func;
+}
+
+template <typename T>
+ToolchainCompilerInfo
+ToolchainVerify<T>::Verify(const ToolchainVerifyConfig &config) {
   T &t = static_cast<T &>(*this);
+  std::vector<fs::path> toolchain_paths = t.Find(config);
+  env::assert_fatal(!toolchain_paths.empty(), "No toolchains found");
 
-  ToolchainMatcher matcher(t);
-  matcher.FillWithToolchainFilenames();
-  // Iterate over absolute search paths
-  // [Verification] Match ALL toolchains PER directory
-  for (const std::string &pstr : absolute_search_paths) {
-    fs::path p{pstr};
-    if (!fs::exists(p)) {
-      continue;
-    }
+  ToolchainExecutables exes =
+      CreateToolchainExecutables(toolchain_paths[0], t.executables_);
 
-    std::error_code ec;
-    auto directory_iterator = fs::directory_iterator(p, ec);
-    if (ec) {
-      continue;
-    }
+  std::string toolchain_id_identifier =
+      GetToolchainVerifyIdentifier(t.GetId(), config.verification_identifier);
 
-    // For each directory, Check if ALL toolchain filenames are found
-    for (const auto &dir_iter : directory_iterator) {
-      bool is_regular_file = dir_iter.is_regular_file(ec);
-      if (!is_regular_file || ec) {
-        continue;
-      }
-      const auto &filename = dir_iter.path().filename().string();
-      matcher.Check(filename);
-    }
+  const auto &verification_func =
+      T::GetVerificationFunc(toolchain_id_identifier);
+  auto op_toolchain_compiler_info = verification_func(exes);
+  env::assert_fatal(op_toolchain_compiler_info.has_value(),
+                    "Could not verify toolchain");
 
-    // Store verified toolchain path if found
-    if (matcher.Found()) {
-      env::log_info(__FUNCTION__, fmt::format("Found: {}", p.string()));
+  ToolchainCompilerInfo toolchain_compiler_info =
+      op_toolchain_compiler_info.value();
+  toolchain_compiler_info.path = toolchain_paths[0];
 
-      VerifiedToolchain vt;
-      vt.path = p;
-      vt.compiler_version = env::trim(GetCompilerVersion(p, t).value_or(""));
-      vt.target_arch = env::trim(GetCompilerArchitecture(p, t).value_or(""));
+  // Update the compilers
+  t.executables_ = exes;
+  return toolchain_compiler_info;
+}
 
-      // Check add
-      bool add{true};
-      if (config.compiler_version.has_value()) {
-        add = add && (config.compiler_version.value() == vt.compiler_version);
-      }
-      if (config.target_arch.has_value()) {
-        add = add && (config.target_arch.value() == vt.target_arch);
-      }
-      if (add) {
-        verified_toolchains.push_back(vt);
-      }
-    }
+// PRIVATE
+template <typename T> void ToolchainVerify<T>::Initialize() {
+  static bool do_once = true;
 
-    // Reset
-    matcher.FillWithToolchainFilenames();
+  if (do_once) {
+    do_once = false;
+    AddVerificationFunc(ToolchainId::Gcc, GccVerificationFunc);
+    AddVerificationFunc(ToolchainId::Msvc, MsvcVerificationFunc);
+    AddVerificationFunc(ToolchainId::Clang, GccVerificationFunc);
+    AddVerificationFunc(ToolchainId::MinGW, GccVerificationFunc);
   }
+}
 
-  if (config.update && !verified_toolchains.empty()) {
-    constexpr const char *os_executable_ext =
-        buildcc::env::get_os_executable_extension();
-    buildcc::env::assert_fatal<os_executable_ext != nullptr>(
-        "OS not supported");
+template <typename T>
+const ToolchainVerificationFunc &
+ToolchainVerify<T>::GetVerificationFunc(const std::string &identifier) {
+  const auto &verification_map = T::GetStatic();
+  env::assert_fatal(verification_map.count(identifier) == 1,
+                    "Add verification for custom toolchain through "
+                    "Toolchain::AddVerificationFunc API");
+  return verification_map.at(identifier);
+}
 
-    verified_toolchain_ = verified_toolchains[0];
-    t.binaries_.assembler =
-        (verified_toolchain_.path /
-         fmt::format("{}{}", t.binaries_.assembler, os_executable_ext))
-            .make_preferred()
-            .string();
-    t.binaries_.c_compiler =
-        (verified_toolchain_.path /
-         fmt::format("{}{}", t.binaries_.c_compiler, os_executable_ext))
-            .make_preferred()
-            .string();
-    t.binaries_.cpp_compiler =
-        (verified_toolchain_.path /
-         fmt::format("{}{}", t.binaries_.cpp_compiler, os_executable_ext))
-            .make_preferred()
-            .string();
-    t.binaries_.archiver =
-        (verified_toolchain_.path /
-         fmt::format("{}{}", t.binaries_.archiver, os_executable_ext))
-            .make_preferred()
-            .string();
-    t.binaries_.linker =
-        (verified_toolchain_.path /
-         fmt::format("{}{}", t.binaries_.linker, os_executable_ext))
-            .make_preferred()
-            .string();
-  }
-
-  return verified_toolchains;
+template <typename T>
+std::unordered_map<std::string, ToolchainVerificationFunc> &
+ToolchainVerify<T>::GetStatic() {
+  static std::unordered_map<std::string, ToolchainVerificationFunc>
+      verification_func_map;
+  return verification_func_map;
 }
 
 template class ToolchainVerify<Toolchain>;

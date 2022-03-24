@@ -19,6 +19,8 @@
 
 #include "toolchain/toolchain.h"
 
+#include "toolchain_gcc.h"
+
 namespace buildcc {
 
 constexpr const char *const kMingwObjExt = ".o";

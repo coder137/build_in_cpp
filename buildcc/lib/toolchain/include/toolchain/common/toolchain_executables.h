@@ -14,14 +14,27 @@
  * limitations under the License.
  */
 
-#ifndef BUILDEXE_TOOLCHAIN_SETUP_H_
-#define BUILDEXE_TOOLCHAIN_SETUP_H_
+#ifndef TOOLCHAIN_COMMON_TOOLCHAIN_EXECUTABLES_H_
+#define TOOLCHAIN_COMMON_TOOLCHAIN_EXECUTABLES_H_
 
-#include "buildcc.h"
+#include <string>
+#include <string_view>
 
 namespace buildcc {
 
-void host_toolchain_verify(const BaseToolchain &toolchain);
+struct ToolchainExecutables {
+  explicit ToolchainExecutables() = default;
+  explicit ToolchainExecutables(std::string_view as, std::string_view c,
+                                std::string_view cpp, std::string_view ar,
+                                std::string_view link)
+      : assembler(as), c_compiler(c), cpp_compiler(cpp), archiver(ar),
+        linker(link) {}
+  std::string assembler;
+  std::string c_compiler;
+  std::string cpp_compiler;
+  std::string archiver;
+  std::string linker;
+};
 
 } // namespace buildcc
 

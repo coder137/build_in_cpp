@@ -23,44 +23,25 @@
 
 #include "toolchain/common/function_lock.h"
 #include "toolchain/common/toolchain_config.h"
+#include "toolchain/common/toolchain_executables.h"
+#include "toolchain/common/toolchain_id.h"
 
 #include "toolchain/api/flag_api.h"
+#include "toolchain/api/toolchain_find.h"
 #include "toolchain/api/toolchain_verify.h"
 
 namespace buildcc {
 
-enum class ToolchainId {
-  Gcc = 0,   ///< GCC Toolchain
-  Msvc,      ///< MSVC Toolchain
-  Clang,     ///< Clang Toolchain
-  MinGW,     ///< MinGW Toolchain (Similar to GCC, but for Windows)
-  Custom,    ///< Custom Toolchain not defined in this list
-  Undefined, ///< Default value when unknown
-};
-
-struct ToolchainBinaries {
-  explicit ToolchainBinaries() = default;
-  explicit ToolchainBinaries(std::string_view as, std::string_view c,
-                             std::string_view cpp, std::string_view ar,
-                             std::string_view link)
-      : assembler(as), c_compiler(c), cpp_compiler(cpp), archiver(ar),
-        linker(link) {}
-  std::string assembler;
-  std::string c_compiler;
-  std::string cpp_compiler;
-  std::string archiver;
-  std::string linker;
-};
-
 // Base toolchain class
 class Toolchain : public internal::FlagApi<Toolchain>,
+                  public ToolchainFind<Toolchain>,
                   public ToolchainVerify<Toolchain> {
 public:
 public:
   Toolchain(ToolchainId id, std::string_view name,
-            const ToolchainBinaries &binaries, bool lock = true,
+            const ToolchainExecutables &executables, bool lock = true,
             const ToolchainConfig &config = ToolchainConfig())
-      : id_(id), name_(name), binaries_(binaries), lock_(lock),
+      : id_(id), name_(name), executables_(executables), lock_(lock),
         config_(config) {
     Initialize();
   }
@@ -69,8 +50,8 @@ public:
             std::string_view archiver, std::string_view linker,
             bool lock = true, const ToolchainConfig &config = ToolchainConfig())
       : Toolchain(id, name,
-                  ToolchainBinaries(assembler, c_compiler, cpp_compiler,
-                                    archiver, linker),
+                  ToolchainExecutables(assembler, c_compiler, cpp_compiler,
+                                       archiver, linker),
                   lock, config) {}
 
   Toolchain(Toolchain &&) = default;
@@ -83,12 +64,16 @@ public:
   // Getters
   ToolchainId GetId() const { return id_; }
   const std::string &GetName() const { return name_; }
-  const std::string &GetAssembler() const { return binaries_.assembler; }
-  const std::string &GetCCompiler() const { return binaries_.c_compiler; }
-  const std::string &GetCppCompiler() const { return binaries_.cpp_compiler; }
-  const std::string &GetArchiver() const { return binaries_.archiver; }
-  const std::string &GetLinker() const { return binaries_.linker; }
-  const ToolchainBinaries &GetToolchainBinaries() const { return binaries_; }
+  const std::string &GetAssembler() const { return executables_.assembler; }
+  const std::string &GetCCompiler() const { return executables_.c_compiler; }
+  const std::string &GetCppCompiler() const {
+    return executables_.cpp_compiler;
+  }
+  const std::string &GetArchiver() const { return executables_.archiver; }
+  const std::string &GetLinker() const { return executables_.linker; }
+  const ToolchainExecutables &GetToolchainExecutables() const {
+    return executables_;
+  }
 
   const FunctionLock &GetLockInfo() const { return lock_; }
   const ToolchainConfig &GetConfig() const { return config_; }
@@ -106,8 +91,9 @@ private:
   };
 
 private:
-  virtual void UpdateConfig(ToolchainConfig &config) { (void)config; }
   void Initialize();
+
+  virtual void UpdateConfig(ToolchainConfig &config);
 
 private:
   friend class internal::FlagApi<Toolchain>;
@@ -116,7 +102,7 @@ private:
 private:
   ToolchainId id_;
   std::string name_;
-  ToolchainBinaries binaries_;
+  ToolchainExecutables executables_;
   FunctionLock lock_;
   ToolchainConfig config_;
 
