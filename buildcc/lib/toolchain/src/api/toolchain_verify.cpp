@@ -51,7 +51,7 @@ GetGccTargetArchitecture(const buildcc::env::Command &command) {
   std::vector<std::string> stdout_data;
   bool executed = buildcc::env::Command::Execute(
       command.Construct("{compiler} -dumpmachine"), {}, &stdout_data);
-  if (!executed && stdout_data.empty()) {
+  if (!executed || stdout_data.empty()) {
     return {};
   }
   return stdout_data[0];
