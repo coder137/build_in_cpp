@@ -274,6 +274,18 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Custom_VerificationFailure) {
   CHECK_THROWS(std::exception, custom.Verify(config));
 }
 
+TEST(ToolchainVerifyTestGroup, VerifyToolchain_Undefined_AddVerificationFunc) {
+  CHECK_THROWS(std::exception,
+               (buildcc::Toolchain::AddVerificationFunc(
+                   buildcc::ToolchainId::Undefined,
+                   [](const buildcc::ToolchainExecutables &executables)
+                       -> std::optional<buildcc::ToolchainCompilerInfo> {
+                     (void)executables;
+                     return {};
+                   },
+                   "undefined_verification_func")));
+}
+
 TEST(ToolchainVerifyTestGroup,
      VerifyToolchain_Msvc_CompilerVersionAndTargetArchFailure) {
   buildcc::Toolchain msvc(buildcc::ToolchainId::Msvc, "msvc", "cl", "cl", "cl",
