@@ -115,6 +115,8 @@ const fs::path &Args::GetProjectBuildDir() { return project_build_dir_; }
 
 void Args::AddToolchain(const std::string &name, const std::string &description,
                         ArgToolchain &out, const ArgToolchain &initial) {
+  env::assert_fatal(toolchain_ != nullptr,
+                    "Initialize Args using the Args::Init API");
   CLI::App *t_user =
       toolchain_->add_subcommand(name, description)->group(kToolchainGroup);
   t_user->add_flag(kToolchainBuildParam, out.state.build);
@@ -138,6 +140,8 @@ void Args::AddToolchain(const std::string &name, const std::string &description,
 
 void Args::AddTarget(const std::string &name, const std::string &description,
                      ArgTarget &out, const ArgTarget &initial) {
+  env::assert_fatal(target_ != nullptr,
+                    "Initialize Args using the Args::Init API");
   CLI::App *target_user =
       target_->add_subcommand(name, description)->group(kTargetGroup);
   target_user->add_option(kTargetCompileCommandParam, out.compile_command)
