@@ -24,16 +24,51 @@ toolchain_verify.h
 
 .. doxygenstruct:: buildcc::ToolchainCompilerInfo
 
-Example
---------
+.. doxygentypedef:: ToolchainVerificationFunc
+
+Example for Default Toolchain
+------------------------------
 
 .. code-block:: cpp
     :linenos:
 
-    BaseToolchain custom_toolchain(ToolchainId::Custom, "custom_new_toolchain", "asm_compiler", "c_compiler", "cpp_compiler", "archiver", "linker");
+    BaseToolchain arm_gcc(ToolchainId::Gcc, "arm-none-eabi-gcc", "arm-none-eabi-as", "arm-none-eabi-gcc", "arm-none-eabi-g++", "arm-none-eabi-ar", "arm-none-eabi-ld");
 
-    std::vector<VerifiedToolchain> verified_toolchains = custom_toolchain.Verify();
-    env::assert_fatal(!verified_toolchains.empty(), "Toolchain not found");
+    // Toolchain::Find is only used to return a list of paths where the ToolchainExecutables are found
+    // NOTE: All ToolchainExecutables must be found in a single directory for it to be present in the list
+    {
+        ToolchainFindConfig find_config;
+        // Modify it here if needed
+        auto found_toolchains = arm_gcc.Find(find_config);
+    }
+
+    // Runs Toolchain::Find
+    // Selects first found toolchain (update ToolchainVerifyConfig if you want to select a different toolchain for verification)
+    // Runs a pre-added ToolchainId::GCC verification function
+    // If Verification Fails: Terminates the program
+    // Else: Updates the arm_gcc ToolchainExecutables to the full path
+    // i.e `arm-none-eabi-gcc` becomes `{host_absolute_path}/arm-none-eabi-gcc{host_executable_extension}`
+    {
+        ToolchainVerifyConfig verify_config;
+        // Modify it here if needed
+        arm_gcc.Verify(verify_config);
+    }
+
+Example for Custom Toolchain
+----------------------------
+
+.. code-block:: cpp
+    :linenos:
+
+    BaseToolchain custom_toolchain(ToolchainId::Custom, "custom_new_toolchain", "assembler", "c_compiler", "cpp_compiler", "archiver", "linker");
+
+    // Find all the relevant toolchains on your host system
+    std::vector<fs::path> found_toolchains = custom_toolchain.Find();
+
+    // Find all the relevant toolchains on your host system
+    // Selects the first found toolchain
+    // Runs a verification function on the selected toolchain depending on the `ToolchainId`
+    custom_toolchain.Verify();
 
 Specialized Toolchain
 =====================
