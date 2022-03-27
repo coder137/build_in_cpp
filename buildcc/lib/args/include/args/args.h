@@ -85,8 +85,6 @@ struct ArgTarget {
   std::string link_command{""};
 };
 
-class ArgsInstance {};
-
 class Args {
 public:
 public:
