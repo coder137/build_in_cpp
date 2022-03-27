@@ -5,11 +5,7 @@ Environment
 env.h
 -----
 
-.. doxygenfunction:: is_init
-
-.. doxygenfunction:: get_project_root_dir
-
-.. doxygenfunction:: get_project_build_dir
+.. doxygenclass:: buildcc::Project
 
 logging.h
 ---------
