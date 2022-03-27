@@ -7,14 +7,7 @@
 
 namespace buildcc::m {
 
-inline void ArgsDeinit() {
-  auto subcommand_list =
-      buildcc::Args::Ref().get_subcommands([](CLI::App *) { return true; });
-  for (auto *subcommand : subcommand_list) {
-    assert(buildcc::Args::Ref().remove_subcommand(subcommand));
-  }
-  buildcc::Args::Ref().clear();
-}
+inline void ArgsDeinit() { Args::Deinit(); }
 
 } // namespace buildcc::m
 
