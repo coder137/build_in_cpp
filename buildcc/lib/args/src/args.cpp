@@ -104,12 +104,6 @@ void Args::Init() {
   target_ = Ref().add_subcommand(kTargetSubcommand, kTargetDesc);
 }
 
-void Args::Deinit() {
-  toolchain_->clear();
-  target_->clear();
-  Ref().clear();
-}
-
 CLI::App &Args::Ref() { return GetStaticCliApp(); }
 const CLI::App &Args::ConstRef() { return GetStaticCliApp(); }
 
