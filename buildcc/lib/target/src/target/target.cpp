@@ -49,15 +49,15 @@ namespace buildcc {
 void Target::Initialize() {
   // Checks
   env::assert_fatal(
-      env::is_init(),
-      "Environment is not initialized. Use the buildcc::env::init API");
+      Project::IsInit(),
+      "Environment is not initialized. Use the buildcc::Project::Init API");
   env::assert_fatal(IsValidTargetType(type_), "Invalid Target Type");
   fs::create_directories(GetTargetBuildDir());
 
   // String updates
   unique_id_ = fmt::format("[{}] {}", toolchain_.GetName(), name_);
   std::string path = fmt::format(
-      "{}", GetTargetPath().lexically_relative(env::get_project_build_dir()));
+      "{}", GetTargetPath().lexically_relative(Project::GetBuildDir()));
   tf_.name(path);
 }
 

@@ -81,7 +81,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_CompileDeps_Rebuild) {
     // * To make sure that save_file is newer
     buildcc::m::blocking_sleep(1);
     const fs::path new_source =
-        buildcc::env::get_project_root_dir() / "data" / "new_source.cpp";
+        buildcc::Project::GetRootDir() / "data" / "new_source.cpp";
     std::string buf{""};
     buildcc::env::save_file(new_source.string().c_str(), buf, false);
   }
@@ -120,7 +120,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_Rebuild) {
     // * To make sure that save_file is newer
     buildcc::m::blocking_sleep(1);
     const fs::path new_source =
-        buildcc::env::get_project_root_dir() / "data" / "new_source.cpp";
+        buildcc::Project::GetRootDir() / "data" / "new_source.cpp";
     std::string buf{""};
     buildcc::env::save_file(new_source.string().c_str(), buf, false);
   }
@@ -142,7 +142,7 @@ TEST(TargetTestUserDepsGroup, Target_Build_LinkDeps_Rebuild) {
 
 int main(int ac, char **av) {
   fs::remove_all(target_source_intermediate_path);
-  buildcc::env::init(BUILD_SCRIPT_SOURCE,
-                     BUILD_TARGET_USER_DEPS_INTERMEDIATE_DIR);
+  buildcc::Project::Init(BUILD_SCRIPT_SOURCE,
+                         BUILD_TARGET_USER_DEPS_INTERMEDIATE_DIR);
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

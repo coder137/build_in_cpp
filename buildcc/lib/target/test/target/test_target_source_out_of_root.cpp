@@ -87,7 +87,7 @@ TEST(TargetTestSourceOutOfRootGroup, GlobAbsolute_OutOfRootSource) {
 int main(int ac, char **av) {
   std::filesystem::create_directories(fs::path(BUILD_SCRIPT_SOURCE) / "data" /
                                       "random dir");
-  buildcc::env::init(fs::path(BUILD_SCRIPT_SOURCE) / "data" / "random dir",
-                     BUILD_TARGET_SOURCE_OUT_OF_ROOT_INTERMEDIATE_DIR);
+  buildcc::Project::Init(fs::path(BUILD_SCRIPT_SOURCE) / "data" / "random dir",
+                         BUILD_TARGET_SOURCE_OUT_OF_ROOT_INTERMEDIATE_DIR);
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

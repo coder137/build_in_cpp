@@ -12,7 +12,7 @@ int main(void) {
   // this path
   // 2. Intermediate build folder i.e all intermediate generated files should go
   // here
-  env::init(BUILD_SCRIPT_SOURCE, BUILD_SCRIPT_FOLDER);
+  Project::Init(BUILD_SCRIPT_SOURCE, BUILD_SCRIPT_FOLDER);
   env::set_log_level(env::LogLevel::Trace);
 
   Toolchain_gcc gcc;

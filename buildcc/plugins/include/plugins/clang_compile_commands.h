@@ -33,7 +33,7 @@ public:
   void AddTarget(const BaseTarget *target);
 
   /**
-   * @brief Generate clang compile commands file in `env::get_project_build_dir`
+   * @brief Generate clang compile commands file in `Project::GetBuildDir`
    * folder
    */
   void Generate();

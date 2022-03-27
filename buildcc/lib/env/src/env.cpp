@@ -17,20 +17,18 @@
 #include "env/env.h"
 #include "env/logging.h"
 
-namespace {
+// namespace {
 
-fs::path root_dir_{""};
-fs::path build_dir_{""};
-bool init_ = false;
+// fs::path root_dir_{""};
+// fs::path build_dir_{""};
+// bool init_ = false;
 
-} // namespace
+// } // namespace
 
 namespace buildcc {
 
 void Project::Init(const fs::path &project_root_dir,
                    const fs::path &project_build_dir) {
-  // env::init(project_root_dir, project_build_dir);
-
   // State
   fs::path root_dir = project_root_dir;
   fs::path build_dir = project_build_dir;
@@ -46,7 +44,6 @@ void Project::Init(const fs::path &project_root_dir,
   env::set_log_level(env::LogLevel::Info);
 }
 void Project::Deinit() {
-  // env::deinit();
   GetStaticRootDir() = "";
   GetStaticBuildDir() = "";
   GetStaticInit() = false;
@@ -71,30 +68,31 @@ fs::path &Project::GetStaticBuildDir() {
 
 } // namespace buildcc
 
-namespace buildcc::env {
+// namespace buildcc::env {
 
-void init(const fs::path &project_root_dir, const fs::path &project_build_dir) {
-  // State
-  root_dir_ = project_root_dir;
-  build_dir_ = project_build_dir;
-  root_dir_.make_preferred();
-  build_dir_.make_preferred();
+// void init(const fs::path &project_root_dir, const fs::path
+// &project_build_dir) {
+//   // State
+//   root_dir_ = project_root_dir;
+//   build_dir_ = project_build_dir;
+//   root_dir_.make_preferred();
+//   build_dir_.make_preferred();
 
-  init_ = true;
+//   init_ = true;
 
-  // Logging
-  set_log_pattern("%^[%l]%$ %v");
-  set_log_level(LogLevel::Info);
-}
+//   // Logging
+//   set_log_pattern("%^[%l]%$ %v");
+//   set_log_level(LogLevel::Info);
+// }
 
-void deinit() {
-  root_dir_ = "";
-  build_dir_ = "";
-  init_ = false;
-}
+// void deinit() {
+//   root_dir_ = "";
+//   build_dir_ = "";
+//   init_ = false;
+// }
 
-bool is_init(void) { return init_; }
-const fs::path &get_project_root_dir() { return root_dir_; }
-const fs::path &get_project_build_dir() { return build_dir_; }
+// bool is_init(void) { return init_; }
+// const fs::path &get_project_root_dir() { return root_dir_; }
+// const fs::path &get_project_build_dir() { return build_dir_; }
 
-} // namespace buildcc::env
+// } // namespace buildcc::env

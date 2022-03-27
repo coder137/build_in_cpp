@@ -15,7 +15,7 @@ int main() {
   // this path
   // 2. Intermediate build folder i.e all intermediate generated files should go
   // here
-  env::init(BUILD_ROOT, BUILD_INTERMEDIATE_DIR);
+  Project::Init(BUILD_ROOT, BUILD_INTERMEDIATE_DIR);
   env::set_log_level(env::LogLevel::Trace);
 
   Toolchain_mingw mingw;

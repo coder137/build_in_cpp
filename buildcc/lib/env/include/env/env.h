@@ -43,22 +43,22 @@ private:
 
 } // namespace buildcc
 
-namespace buildcc::env {
+// namespace buildcc::env {
 
-/**
- * @brief Initialize project environment
- *
- * @param project_root_dir Root directory for source files
- * @param project_build_dir Directory for intermediate build files
- */
-void init(const fs::path &project_root_dir, const fs::path &project_build_dir);
-void deinit();
+// /**
+//  * @brief Initialize project environment
+//  *
+//  * @param project_root_dir Root directory for source files
+//  * @param project_build_dir Directory for intermediate build files
+//  */
+// void init(const fs::path &project_root_dir, const fs::path
+// &project_build_dir); void deinit();
 
-// Getters
-bool is_init();
-const fs::path &get_project_root_dir();
-const fs::path &get_project_build_dir();
+// // Getters
+// bool is_init();
+// const fs::path &get_project_root_dir();
+// const fs::path &get_project_build_dir();
 
-} // namespace buildcc::env
+// } // namespace buildcc::env
 
 #endif

@@ -79,14 +79,14 @@ void Generator::GenerateTask() {
     // Graph Generation
     for (const auto &i : user_.inputs) {
       std::string name =
-          fmt::format("{}", i.lexically_relative(env::get_project_root_dir()));
+          fmt::format("{}", i.lexically_relative(Project::GetRootDir()));
       tf::Task task = subflow.placeholder().name(name);
       task.precede(command_task);
     }
 
     for (const auto &o : user_.outputs) {
       std::string name =
-          fmt::format("{}", o.lexically_relative(env::get_project_root_dir()));
+          fmt::format("{}", o.lexically_relative(Project::GetRootDir()));
       tf::Task task = subflow.placeholder().name(name);
       task.succeed(command_task);
     }

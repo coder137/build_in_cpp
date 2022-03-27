@@ -82,9 +82,9 @@ CompileObject::GetObjectData(const fs::path &absolute_source) const {
 // PRIVATE
 
 // NOTE: If RELATIVE TargetEnv supplied
-// {target_root_dir} => `env::get_project_root_dir()` /
+// {target_root_dir} => `Project::GetRootDir()` /
 // `target_relative_to_root`
-// {target_build_dir} => `env::get_project_build_dir()` / `toolchain.GetName()`
+// {target_build_dir} => `Project::GetBuildDir()` / `toolchain.GetName()`
 // / `name`
 
 // Scenarios

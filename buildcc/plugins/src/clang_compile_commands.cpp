@@ -66,7 +66,7 @@ void ClangCompileCommands::Generate() {
       // DONE, Get intermediate directory from env
       std::string sf = fmt::format("{}", source);
       const std::string &command = t->GetCompileCommand(source);
-      std::string directory = fmt::format("{}", env::get_project_build_dir());
+      std::string directory = fmt::format("{}", Project::GetBuildDir());
 
       std::string temp = fmt::format(
           clang_compile_command_format, fmt::arg("directory", directory),
@@ -81,7 +81,7 @@ void ClangCompileCommands::Generate() {
   // DONE, Convert to json
   // DONE, Save file
   std::filesystem::path file =
-      std::filesystem::path(buildcc::env::get_project_build_dir()) /
+      std::filesystem::path(buildcc::Project::GetBuildDir()) /
       "compile_commands.json";
   bool saved =
       env::save_file(path_as_string(file).c_str(), compile_commands, false);

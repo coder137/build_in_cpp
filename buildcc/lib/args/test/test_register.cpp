@@ -99,7 +99,7 @@ TEST(RegisterTestGroup, Register_Build) {
   CHECK_TRUE(args.Clean());
 
   // Make dummy toolchain and target
-  buildcc::env::init(fs::current_path(), fs::current_path());
+  buildcc::Project::Init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
                                "");
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
@@ -122,7 +122,7 @@ TEST(RegisterTestGroup, Register_Build) {
         state, [](buildcc::BaseTarget &target) { (void)target; }, target);
   }
 
-  buildcc::env::deinit();
+  buildcc::Project::Deinit();
   mock().checkExpectations();
 }
 
@@ -147,7 +147,7 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
   CHECK_TRUE(args.Clean());
 
   // Make dummy toolchain and target
-  buildcc::env::init(fs::current_path(), fs::current_path());
+  buildcc::Project::Init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
                                "");
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
@@ -206,7 +206,7 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
     reg.Dep(target, dependency);
   }
 
-  buildcc::env::deinit();
+  buildcc::Project::Deinit();
   mock().checkExpectations();
 }
 
@@ -231,7 +231,7 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
   CHECK_TRUE(args.Clean());
 
   // Make dummy toolchain and target
-  buildcc::env::init(fs::current_path(), fs::current_path());
+  buildcc::Project::Init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
                                "");
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
@@ -301,7 +301,7 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
     reg.Dep(target, dependency);
   }
 
-  buildcc::env::deinit();
+  buildcc::Project::Deinit();
   mock().checkExpectations();
 }
 
@@ -326,7 +326,7 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
   CHECK_TRUE(args.Clean());
 
   // Make dummy toolchain and target
-  buildcc::env::init(fs::current_path(), fs::current_path());
+  buildcc::Project::Init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
                                "");
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
@@ -377,7 +377,7 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
     CHECK_THROWS(std::exception, reg.Dep(target, dependency2));
   }
 
-  buildcc::env::deinit();
+  buildcc::Project::Deinit();
   mock().checkExpectations();
 }
 
@@ -402,7 +402,7 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
   CHECK_TRUE(args.Clean());
 
   // Make dummy toolchain and target
-  buildcc::env::init(fs::current_path(), fs::current_path());
+  buildcc::Project::Init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
                                "");
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
@@ -452,7 +452,7 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
     CHECK_THROWS(std::exception, reg.Dep(dependency2, target));
   }
 
-  buildcc::env::deinit();
+  buildcc::Project::Deinit();
   mock().checkExpectations();
 }
 
@@ -478,7 +478,7 @@ TEST(RegisterTestGroup, Register_Test) {
   CHECK_TRUE(args.Clean());
 
   // Make dummy toolchain and target
-  buildcc::env::init(fs::current_path(), fs::current_path());
+  buildcc::Project::Init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
                                "");
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
@@ -537,7 +537,7 @@ TEST(RegisterTestGroup, Register_Test) {
     reg.RunTest();
   }
 
-  buildcc::env::deinit();
+  buildcc::Project::Deinit();
   mock().checkExpectations();
 }
 
@@ -563,7 +563,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
   CHECK_TRUE(args.Clean());
 
   // Make dummy toolchain and target
-  buildcc::env::init(fs::current_path(), fs::current_path());
+  buildcc::Project::Init(fs::current_path(), fs::current_path());
   buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
                                "");
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
@@ -676,7 +676,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
     CHECK_THROWS(std::exception, reg.RunTest());
   }
 
-  buildcc::env::deinit();
+  buildcc::Project::Deinit();
   mock().checkExpectations();
 }
 

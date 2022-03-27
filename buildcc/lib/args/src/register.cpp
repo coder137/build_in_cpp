@@ -119,8 +119,8 @@ void Register::BuildStoreTask(const std::string &unique_id,
 void Register::Initialize() { Env(); }
 
 void Register::Env() {
-  env::init(fs::current_path() / args_.GetProjectRootDir(),
-            fs::current_path() / args_.GetProjectBuildDir());
+  Project::Init(fs::current_path() / args_.GetProjectRootDir(),
+                fs::current_path() / args_.GetProjectBuildDir());
   env::set_log_level(args_.GetLogLevel());
 }
 
