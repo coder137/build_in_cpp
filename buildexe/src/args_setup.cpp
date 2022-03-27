@@ -33,6 +33,7 @@ static const std::unordered_map<const char *, TargetType> kTargetTypeMap{
 };
 
 void BuildExeArgs::Setup() {
+  Args::Init();
   Args::AddToolchain("host", "Host Toolchain", host_toolchain_arg_);
   SetupBuildMode();
   SetupTargetInfo();
