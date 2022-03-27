@@ -86,22 +86,22 @@ int main(int argc, char **argv) {
 }
 
 static void clean_cb() {
-  env::log_info(EXE, fmt::format("Cleaning {}", env::get_project_build_dir()));
-  fs::remove_all(env::get_project_build_dir());
+  env::log_info(EXE, fmt::format("Cleaning {}", Project::GetBuildDir()));
+  fs::remove_all(Project::GetBuildDir());
 }
 
 static void cpp_target_cb(BaseTarget &cpptarget,
                           const BaseGenerator &cpp_generator) {
   const fs::path main_cpp =
       fs::path(cpp_generator.GetValueByIdentifier("main_cpp"))
-          .lexically_relative(env::get_project_root_dir());
+          .lexically_relative(Project::GetRootDir());
   cpptarget.AddSource(main_cpp);
   cpptarget.Build();
 }
 
 static void c_target_cb(BaseTarget &ctarget, const BaseGenerator &c_generator) {
   const fs::path main_c = fs::path(c_generator.GetValueByIdentifier("main_c"))
-                              .lexically_relative(env::get_project_root_dir());
+                              .lexically_relative(Project::GetRootDir());
   ctarget.AddSource(main_c);
   ctarget.Build();
 }

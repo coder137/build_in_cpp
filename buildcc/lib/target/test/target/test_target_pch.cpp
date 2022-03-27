@@ -290,6 +290,7 @@ int main(int ac, char **av) {
       fs::path(BUILD_TARGET_PCH_INTERMEDIATE_DIR) / gcc.GetName();
   fs::remove_all(target_source_intermediate_path);
 
-  buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_TARGET_PCH_INTERMEDIATE_DIR);
+  buildcc::Project::Init(BUILD_SCRIPT_SOURCE,
+                         BUILD_TARGET_PCH_INTERMEDIATE_DIR);
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

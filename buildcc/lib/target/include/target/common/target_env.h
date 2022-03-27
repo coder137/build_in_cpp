@@ -35,14 +35,14 @@ public:
    * @brief Change the relative root path for a particular Generator / Target
    *
    * Absolute root now changes to
-   * `env::get_project_root_dir() / target_relative_to_env_root`
+   * `Project::GetRootDir() / target_relative_to_env_root`
    *
    * Absolute build dir remains the same.
    *
    * Can be used implicitly
    *
    * @param target_relative_to_env_root Change root dir with respect to
-   * env::get_project_root_dir()
+   * Project::GetRootDir()
    */
   TargetEnv(const char *target_relative_to_env_root)
       : TargetEnv(fs::path(target_relative_to_env_root)) {}
@@ -53,12 +53,11 @@ public:
    * Only explicit usage allowed
    *
    * @param target_relative_to_env_root Change root dir with respect to
-   * env::get_project_root_dir()
+   * Project::GetRootDir()
    */
   explicit TargetEnv(const fs::path &target_relative_to_env_root)
-      : target_root_dir_(env::get_project_root_dir() /
-                         target_relative_to_env_root),
-        target_build_dir_(env::get_project_build_dir()), relative_(true) {}
+      : target_root_dir_(Project::GetRootDir() / target_relative_to_env_root),
+        target_build_dir_(Project::GetBuildDir()), relative_(true) {}
 
   /**
    * @brief Change the absolute root and build path for a particular Generator /

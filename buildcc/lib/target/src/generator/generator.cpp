@@ -79,8 +79,8 @@ Generator::GetValueByIdentifier(const std::string &file_identifier) const {
 void Generator::Initialize() {
   // Checks
   env::assert_fatal(
-      env::is_init(),
-      "Environment is not initialized. Use the buildcc::env::init API");
+      Project::IsInit(),
+      "Environment is not initialized. Use the buildcc::Project::Init API");
 
   //
   fs::create_directories(generator_build_dir_);

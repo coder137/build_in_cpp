@@ -18,9 +18,12 @@ toolchain_config.h
 
 .. doxygenstruct:: buildcc::ToolchainConfig
 
-toolchain.h
---------------
+toolchain_id.h
+---------------
 
 .. doxygenenum:: buildcc::ToolchainId
 
-.. doxygenstruct:: buildcc::ToolchainBinaries
+toolchain_executables.h
+-----------------------
+
+.. doxygenstruct:: buildcc::ToolchainExecutables

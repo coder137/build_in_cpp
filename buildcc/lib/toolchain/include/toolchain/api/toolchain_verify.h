@@ -54,9 +54,9 @@ struct ToolchainCompilerInfo {
   std::string target_arch;
 };
 
-typedef std::function<std::optional<ToolchainCompilerInfo>(
-    const ToolchainExecutables &)>
-    ToolchainVerificationFunc;
+// clang-format off
+typedef std::function<std::optional<ToolchainCompilerInfo>(const ToolchainExecutables &)> ToolchainVerificationFunc;
+// clang-format on
 
 template <typename T> class ToolchainVerify {
 public:

@@ -44,8 +44,7 @@ int main(int argc, char **argv) {
   BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
 
   BuildBuildCC buildcc(
-      reg, toolchain,
-      TargetEnv(env::get_project_root_dir(), env::get_project_build_dir()));
+      reg, toolchain, TargetEnv(Project::GetRootDir(), Project::GetBuildDir()));
   buildcc.Setup(custom_toolchain_arg.state);
 
   const auto &buildcc_lib = buildcc.GetBuildcc();

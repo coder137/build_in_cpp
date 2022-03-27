@@ -163,10 +163,8 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
 
   buildcc::m::blocking_sleep(1);
   bool saved = buildcc::env::save_file(
-      (buildcc::env::get_project_root_dir() / "new_source.cpp")
-          .string()
-          .c_str(),
-      "", false);
+      (buildcc::Project::GetRootDir() / "new_source.cpp").string().c_str(), "",
+      false);
   CHECK_TRUE(saved);
 
   // Updated
@@ -366,7 +364,7 @@ TEST(GeneratorTestGroup, Generator_FailedGenerateCommand) {
 
 TEST(GeneratorTestGroup, Generator_FailedStore) {
   constexpr const char *const NAME = "FailedStore";
-  const fs::path test_build_dir = buildcc::env::get_project_build_dir() / NAME;
+  const fs::path test_build_dir = buildcc::Project::GetBuildDir() / NAME;
 
   buildcc::Generator generator(NAME, "", false);
   fs::remove_all(test_build_dir);
@@ -481,6 +479,6 @@ TEST(GeneratorTestGroup, FailedGenerateCommand_Rebuild) {
 
 int main(int ac, char **av) {
   fs::remove_all(BUILD_DIR);
-  buildcc::env::init(fs::current_path() / "data", BUILD_DIR);
+  buildcc::Project::Init(fs::current_path() / "data", BUILD_DIR);
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

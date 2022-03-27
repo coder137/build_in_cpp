@@ -17,38 +17,45 @@
 #include "env/env.h"
 #include "env/logging.h"
 
-namespace {
+namespace buildcc {
 
-fs::path root_dir_{""};
-fs::path build_dir_{""};
-bool init_ = false;
-
-} // namespace
-
-namespace buildcc::env {
-
-void init(const fs::path &project_root_dir, const fs::path &project_build_dir) {
+void Project::Init(const fs::path &project_root_dir,
+                   const fs::path &project_build_dir) {
   // State
-  root_dir_ = project_root_dir;
-  build_dir_ = project_build_dir;
-  root_dir_.make_preferred();
-  build_dir_.make_preferred();
+  fs::path root_dir = project_root_dir;
+  fs::path build_dir = project_build_dir;
+  root_dir.make_preferred();
+  build_dir.make_preferred();
 
-  init_ = true;
+  GetStaticRootDir() = root_dir;
+  GetStaticBuildDir() = build_dir;
+  GetStaticInit() = true;
 
   // Logging
-  set_log_pattern("%^[%l]%$ %v");
-  set_log_level(LogLevel::Info);
+  env::set_log_pattern("%^[%l]%$ %v");
+  env::set_log_level(env::LogLevel::Info);
+}
+void Project::Deinit() {
+  GetStaticRootDir() = "";
+  GetStaticBuildDir() = "";
+  GetStaticInit() = false;
 }
 
-void deinit() {
-  root_dir_ = "";
-  build_dir_ = "";
-  init_ = false;
+bool Project::IsInit() { return GetStaticInit(); }
+const fs::path &Project::GetRootDir() { return GetStaticRootDir(); }
+const fs::path &Project::GetBuildDir() { return GetStaticBuildDir(); }
+
+bool &Project::GetStaticInit() {
+  static bool is_init = false;
+  return is_init;
+}
+fs::path &Project::GetStaticRootDir() {
+  static fs::path root_dir = "";
+  return root_dir;
+}
+fs::path &Project::GetStaticBuildDir() {
+  static fs::path build_dir = "";
+  return build_dir;
 }
 
-bool is_init(void) { return init_; }
-const fs::path &get_project_root_dir() { return root_dir_; }
-const fs::path &get_project_build_dir() { return build_dir_; }
-
-} // namespace buildcc::env
+} // namespace buildcc

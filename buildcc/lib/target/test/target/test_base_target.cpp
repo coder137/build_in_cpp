@@ -27,7 +27,8 @@ static buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc",
 TEST(TargetBaseTestGroup, InvalidTargetType) {
   constexpr const char *const INVALID_NAME = "Invalid.random";
 
-  buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_TARGET_BASE_INTERMEDIATE_DIR);
+  buildcc::Project::Init(BUILD_SCRIPT_SOURCE,
+                         BUILD_TARGET_BASE_INTERMEDIATE_DIR);
   auto intermediate_path =
       fs::path(BUILD_TARGET_BASE_INTERMEDIATE_DIR) / gcc.GetName();
 
@@ -37,7 +38,7 @@ TEST(TargetBaseTestGroup, InvalidTargetType) {
       std::exception,
       buildcc::BaseTarget(INVALID_NAME, (buildcc::TargetType)3, gcc, ""));
 
-  buildcc::env::deinit();
+  buildcc::Project::Deinit();
 }
 
 TEST(TargetBaseTestGroup, NoEnvInit) {
@@ -49,9 +50,10 @@ TEST(TargetBaseTestGroup, NoEnvInit) {
 }
 
 TEST(TargetBaseTestGroup, TargetConfig_BadCompileCommand) {
-  buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_TARGET_BASE_INTERMEDIATE_DIR);
+  buildcc::Project::Init(BUILD_SCRIPT_SOURCE,
+                         BUILD_TARGET_BASE_INTERMEDIATE_DIR);
   fs::path target_source_intermediate_path =
-      buildcc::env::get_project_build_dir() / gcc.GetName();
+      buildcc::Project::GetBuildDir() / gcc.GetName();
 
   constexpr const char *const NAME = "BadCompileCommand.exe";
   auto intermediate_path = target_source_intermediate_path / NAME;
@@ -68,13 +70,14 @@ TEST(TargetBaseTestGroup, TargetConfig_BadCompileCommand) {
     CHECK_THROWS(std::exception, simple.Build());
   }
 
-  buildcc::env::deinit();
+  buildcc::Project::Deinit();
 }
 
 TEST(TargetBaseTestGroup, TargetConfig_BadLinkCommand) {
-  buildcc::env::init(BUILD_SCRIPT_SOURCE, BUILD_TARGET_BASE_INTERMEDIATE_DIR);
+  buildcc::Project::Init(BUILD_SCRIPT_SOURCE,
+                         BUILD_TARGET_BASE_INTERMEDIATE_DIR);
   fs::path target_source_intermediate_path =
-      buildcc::env::get_project_build_dir() / gcc.GetName();
+      buildcc::Project::GetBuildDir() / gcc.GetName();
 
   constexpr const char *const NAME = "BadCompileCommand.exe";
   auto intermediate_path = target_source_intermediate_path / NAME;
@@ -90,7 +93,7 @@ TEST(TargetBaseTestGroup, TargetConfig_BadLinkCommand) {
     CHECK_THROWS(std::exception, simple.Build());
   }
 
-  buildcc::env::deinit();
+  buildcc::Project::Deinit();
   mock().checkExpectations();
 }
 

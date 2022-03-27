@@ -23,22 +23,24 @@
 
 namespace fs = std::filesystem;
 
-namespace buildcc::env {
+namespace buildcc {
 
-/**
- * @brief Initialize project environment
- *
- * @param project_root_dir Root directory for source files
- * @param project_build_dir Directory for intermediate build files
- */
-void init(const fs::path &project_root_dir, const fs::path &project_build_dir);
-void deinit();
+class Project {
+public:
+  static void Init(const fs::path &project_root_dir,
+                   const fs::path &project_build_dir);
+  static void Deinit();
 
-// Getters
-bool is_init();
-const fs::path &get_project_root_dir();
-const fs::path &get_project_build_dir();
+  static bool IsInit();
+  static const fs::path &GetRootDir();
+  static const fs::path &GetBuildDir();
 
-} // namespace buildcc::env
+private:
+  static bool &GetStaticInit();
+  static fs::path &GetStaticRootDir();
+  static fs::path &GetStaticBuildDir();
+};
+
+} // namespace buildcc
 
 #endif

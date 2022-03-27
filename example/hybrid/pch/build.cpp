@@ -69,8 +69,8 @@ int main(int argc, char **argv) {
 }
 
 static void clean_cb() {
-  env::log_info(EXE, fmt::format("Cleaning {}", env::get_project_build_dir()));
-  fs::remove_all(env::get_project_build_dir());
+  env::log_info(EXE, fmt::format("Cleaning {}", Project::GetBuildDir()));
+  fs::remove_all(Project::GetBuildDir());
 }
 
 static void cppflags_build_cb(BaseTarget &cppflags) {
