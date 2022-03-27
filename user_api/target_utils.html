@@ -270,12 +270,12 @@
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc9TargetEnv9TargetEnvEPKc">
 <span id="_CPPv3N7buildcc9TargetEnv9TargetEnvEPKc"></span><span id="_CPPv2N7buildcc9TargetEnv9TargetEnvEPKc"></span><span id="buildcc::TargetEnv::TargetEnv__cCP"></span><span class="target" id="classbuildcc_1_1TargetEnv_1ab64e86c96064250dae4d3fc674e6bc98"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TargetEnv</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target_relative_to_env_root</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc9TargetEnv9TargetEnvEPKc" title="Permalink to this definition">#</a><br/></dt>
 <dd><p>Change the relative root path for a particular <a class="reference internal" href="generator.html#classbuildcc_1_1Generator"><span class="std std-ref">Generator</span></a> / <a class="reference internal" href="target.html#classbuildcc_1_1Target"><span class="std std-ref">Target</span></a>. </p>
-<p>Absolute root now changes to <code class="docutils literal notranslate"><a class="reference internal" href="environment.html#namespacebuildcc_1_1env_1a1cfc1c829e3202467acc21741524226a"><span class="std std-ref"><span class="pre">env::get_project_root_dir()</span></span></a> <span class="pre">/</span> <span class="pre">target_relative_to_env_root</span></code></p>
+<p>Absolute root now changes to <code class="docutils literal notranslate"><a class="reference internal" href="environment.html#classbuildcc_1_1Project_1add561da714b3727a0e713d1b07c86d12"><span class="std std-ref"><span class="pre">Project::GetRootDir()</span></span></a> <span class="pre">/</span> <span class="pre">target_relative_to_env_root</span></code></p>
 <p>Absolute build dir remains the same.</p>
 <p>Can be used implicitly</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>target_relative_to_env_root</strong> – Change root dir with respect to <a class="reference internal" href="environment.html#namespacebuildcc_1_1env_1a1cfc1c829e3202467acc21741524226a"><span class="std std-ref">env::get_project_root_dir()</span></a> </p>
+<dd class="field-odd"><p><strong>target_relative_to_env_root</strong> – Change root dir with respect to <a class="reference internal" href="environment.html#classbuildcc_1_1Project_1add561da714b3727a0e713d1b07c86d12"><span class="std std-ref">Project::GetRootDir()</span></a> </p>
 </dd>
 </dl>
 </dd></dl>
@@ -286,7 +286,7 @@
 <p>Only explicit usage allowed</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>target_relative_to_env_root</strong> – Change root dir with respect to <a class="reference internal" href="environment.html#namespacebuildcc_1_1env_1a1cfc1c829e3202467acc21741524226a"><span class="std std-ref">env::get_project_root_dir()</span></a> </p>
+<dd class="field-odd"><p><strong>target_relative_to_env_root</strong> – Change root dir with respect to <a class="reference internal" href="environment.html#classbuildcc_1_1Project_1add561da714b3727a0e713d1b07c86d12"><span class="std std-ref">Project::GetRootDir()</span></a> </p>
 </dd>
 </dl>
 </dd></dl>
