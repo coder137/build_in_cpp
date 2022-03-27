@@ -8,14 +8,21 @@ toolchain.h
 
 .. doxygentypedef:: BaseToolchain
 
+toolchain_find.h
+-----------------
+
+.. doxygenclass:: buildcc::ToolchainFind
+
+.. doxygenstruct:: buildcc::ToolchainFindConfig
+
 toolchain_verify.h
 ------------------
 
 .. doxygenclass:: buildcc::ToolchainVerify
 
-.. doxygenstruct:: buildcc::VerifyToolchainConfig
+.. doxygenstruct:: buildcc::ToolchainVerifyConfig
 
-.. doxygenstruct:: buildcc::VerifiedToolchain
+.. doxygenstruct:: buildcc::ToolchainCompilerInfo
 
 Example
 --------
