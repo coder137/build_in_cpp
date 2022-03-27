@@ -17,7 +17,6 @@ int main(int argc, char **argv) {
 
   // 2. Initialize your environment
   Register reg;
-  ;
 
   // 3. Pre-build steps
   reg.Clean(clean_cb);
