@@ -93,6 +93,7 @@ public:
   Args(Args &&) = delete;
 
   static void Init();
+  static void Deinit();
 
   /**
    * @brief Parse command line information to CLI11
@@ -144,7 +145,6 @@ public:
 
 private:
   static void RootArgs();
-  static CLI::App &GetStaticCliApp();
 };
 
 } // namespace buildcc

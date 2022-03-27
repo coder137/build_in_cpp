@@ -91,6 +91,7 @@ fs::path project_root_dir_{""};
 fs::path project_build_dir_{"_internal"};
 
 // Internal
+std::unique_ptr<CLI::App> app_;
 CLI::App *toolchain_{nullptr};
 CLI::App *target_{nullptr};
 
@@ -99,13 +100,18 @@ CLI::App *target_{nullptr};
 namespace buildcc {
 
 void Args::Init() {
-  RootArgs();
-  toolchain_ = Ref().add_subcommand(kToolchainSubcommand, kToolchainDesc);
-  target_ = Ref().add_subcommand(kTargetSubcommand, kTargetDesc);
+  if (!app_) {
+    app_ = std::make_unique<CLI::App>("BuildCC buildsystem");
+    toolchain_ = Ref().add_subcommand(kToolchainSubcommand, kToolchainDesc);
+    target_ = Ref().add_subcommand(kTargetSubcommand, kTargetDesc);
+    RootArgs();
+  }
 }
 
-CLI::App &Args::Ref() { return GetStaticCliApp(); }
-const CLI::App &Args::ConstRef() { return GetStaticCliApp(); }
+void Args::Deinit() { app_.reset(nullptr); }
+
+CLI::App &Args::Ref() { return *app_; }
+const CLI::App &Args::ConstRef() { return *app_; }
 
 bool Args::Clean() { return clean_; }
 env::LogLevel Args::GetLogLevel() { return loglevel_; }
@@ -171,11 +177,6 @@ void Args::RootArgs() {
       ->required();
   root_group->add_option(kBuildDirParam, project_build_dir_, kBuildDirDesc)
       ->required();
-}
-
-CLI::App &Args::GetStaticCliApp() {
-  static CLI::App app{"BuildCC buildsystem"};
-  return app;
 }
 
 } // namespace buildcc
