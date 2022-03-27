@@ -1,5 +1,7 @@
 #include "args/register.h"
 
+#include "test_args.h"
+
 #include "expect_command.h"
 
 #include "mock_command_copier.h"
@@ -14,9 +16,10 @@
 // clang-format off
 TEST_GROUP(RegisterTestGroup)
 {
-    void teardown() {
-        mock().clear();
-    }
+  void teardown() {
+    buildcc::m::ArgsDeinit();
+    mock().clear();
+  }
 };
 // clang-format on
 
@@ -24,15 +27,15 @@ TEST(RegisterTestGroup, Register_Initialize) {
   std::vector<const char *> av{"", "--config", "configs/basic_parse.toml"};
   int argc = av.size();
 
-  buildcc::Args args;
-  args.Parse(argc, av.data());
+  buildcc::Args::Init();
+  buildcc::Args::Parse(argc, av.data());
 
-  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-  CHECK_TRUE(args.Clean());
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
 
-  buildcc::Register reg(args);
+  buildcc::Register reg;
 }
 
 TEST(RegisterTestGroup, Register_Clean) {
@@ -40,17 +43,18 @@ TEST(RegisterTestGroup, Register_Clean) {
     std::vector<const char *> av{"", "--config", "configs/basic_parse.toml"};
     int argc = av.size();
 
-    buildcc::Args args;
-    args.Parse(argc, av.data());
+    buildcc::Args::Init();
+    buildcc::Args::Parse(argc, av.data());
 
-    STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-    STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-    CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-    CHECK_TRUE(args.Clean());
+    STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+    STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+    CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+    CHECK_TRUE(buildcc::Args::Clean());
 
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectOneCall("CleanCb");
     reg.Clean([]() { mock().actualCall("CleanCb"); });
+    buildcc::m::ArgsDeinit();
   }
 
   {
@@ -63,16 +67,17 @@ TEST(RegisterTestGroup, Register_Clean) {
     };
     int argc = av.size();
 
-    buildcc::Args args;
-    args.Parse(argc, av.data());
+    buildcc::Args::Init();
+    buildcc::Args::Parse(argc, av.data());
 
-    STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-    STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-    CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-    CHECK_FALSE(args.Clean());
+    STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+    STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+    CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+    CHECK_FALSE(buildcc::Args::Clean());
 
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     reg.Clean([]() { mock().actualCall("CleanCb"); });
+    buildcc::m::ArgsDeinit();
   }
 
   mock().checkExpectations();
@@ -86,17 +91,17 @@ TEST(RegisterTestGroup, Register_Build) {
   };
   int argc = av.size();
 
-  buildcc::Args args;
+  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  args.Parse(argc, av.data());
+  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  buildcc::Args::Parse(argc, av.data());
 
-  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-  CHECK_TRUE(args.Clean());
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
@@ -108,7 +113,7 @@ TEST(RegisterTestGroup, Register_Build) {
   {
     buildcc::ArgToolchainState state{false, false};
 
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     reg.Build(
         state, [](buildcc::BaseTarget &target) { (void)target; }, target);
   }
@@ -116,7 +121,7 @@ TEST(RegisterTestGroup, Register_Build) {
   {
     buildcc::ArgToolchainState state{true, true};
 
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
         state, [](buildcc::BaseTarget &target) { (void)target; }, target);
@@ -134,17 +139,17 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
   };
   int argc = av.size();
 
-  buildcc::Args args;
+  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  args.Parse(argc, av.data());
+  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  buildcc::Args::Parse(argc, av.data());
 
-  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-  CHECK_TRUE(args.Clean());
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
@@ -167,13 +172,13 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
 
   // T0D0
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     CHECK_THROWS(std::exception, reg.Dep(target, dependency));
   }
 
   // T0D1
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_depT");
     reg.Build(
         trueState, [](buildcc::BaseTarget &target) { (void)target; },
@@ -184,7 +189,7 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
 
   // T1D0
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
         trueState, [](buildcc::BaseTarget &target) { (void)target; }, target);
@@ -194,7 +199,7 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
 
   // T1D1
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     mock().expectNCalls(1, "BuildTask_depT");
     reg.Build(
@@ -218,17 +223,17 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
   };
   int argc = av.size();
 
-  buildcc::Args args;
+  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  args.Parse(argc, av.data());
+  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  buildcc::Args::Parse(argc, av.data());
 
-  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-  CHECK_TRUE(args.Clean());
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
@@ -251,7 +256,7 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
 
   // T0D0
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     reg.Build(
         falseState, [](buildcc::BaseTarget &target) { (void)target; }, target);
     reg.Build(
@@ -263,7 +268,7 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
 
   // T0D1
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     reg.Build(
         falseState, [](buildcc::BaseTarget &target) { (void)target; }, target);
     mock().expectNCalls(1, "BuildTask_depT");
@@ -276,7 +281,7 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
 
   // T1D0
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
         trueState, [](buildcc::BaseTarget &target) { (void)target; }, target);
@@ -289,7 +294,7 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
 
   // T1D1
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     mock().expectNCalls(1, "BuildTask_depT");
     reg.Build(
@@ -313,17 +318,17 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
   };
   int argc = av.size();
 
-  buildcc::Args args;
+  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  args.Parse(argc, av.data());
+  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  buildcc::Args::Parse(argc, av.data());
 
-  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-  CHECK_TRUE(args.Clean());
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
@@ -340,7 +345,7 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
 
   // Duplicate dependency with 2 Targets
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     mock().expectNCalls(1, "BuildTask_depT");
     reg.Build(
@@ -355,7 +360,7 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
 
   // Duplicate dependency with 3 Targets
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     mock().expectNCalls(1, "BuildTask_depT");
     mock().expectNCalls(1, "BuildTask_dep2T");
@@ -389,17 +394,17 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
   };
   int argc = av.size();
 
-  buildcc::Args args;
+  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  args.Parse(argc, av.data());
+  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  buildcc::Args::Parse(argc, av.data());
 
-  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-  CHECK_TRUE(args.Clean());
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
@@ -416,7 +421,7 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
 
   // Immediate cyclic depdendency
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     mock().expectNCalls(1, "BuildTask_depT");
     reg.Build(
@@ -431,7 +436,7 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
 
   // Duplicate dependency with 3 Targets
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     mock().expectNCalls(1, "BuildTask_depT");
     mock().expectNCalls(1, "BuildTask_dep2T");
@@ -465,17 +470,17 @@ TEST(RegisterTestGroup, Register_Test) {
   };
   int argc = av.size();
 
-  buildcc::Args args;
+  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  args.Parse(argc, av.data());
+  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  buildcc::Args::Parse(argc, av.data());
 
-  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-  CHECK_TRUE(args.Clean());
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
@@ -498,33 +503,33 @@ TEST(RegisterTestGroup, Register_Test) {
 
   // FF
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     reg.Test(stateFail, "{executable}", target);
   }
 
   // TF
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     reg.Test(state1, "{executable}", target);
   }
 
   // FT
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     reg.Test(state2, "{executable}", target);
   }
 
   // TT
   // Register::Build not called
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     CHECK_THROWS(std::exception,
                  reg.Test(stateSuccess, "{executable}", target));
   }
 
   // Correct Usage
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
         stateSuccess, [](buildcc::BaseTarget &target) { (void)target; },
@@ -550,17 +555,17 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
   };
   int argc = av.size();
 
-  buildcc::Args args;
+  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  args.Parse(argc, av.data());
+  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  buildcc::Args::Parse(argc, av.data());
 
-  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-  CHECK_TRUE(args.Clean());
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
@@ -575,7 +580,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
 
   // TestOutput::Type::DefaultBehaviour
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
         stateSuccess, [](buildcc::BaseTarget &target) { (void)target; },
@@ -592,7 +597,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
 
   // TestOutput::Type::TestPrintOnStderr
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
         stateSuccess, [](buildcc::BaseTarget &target) { (void)target; },
@@ -610,7 +615,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
 
   // TestOutput::Type::TestPrintOnStdout
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
         stateSuccess, [](buildcc::BaseTarget &target) { (void)target; },
@@ -628,7 +633,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
 
   // TestOutput::Type::TestPrintOnStderrAndStdout
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
         stateSuccess, [](buildcc::BaseTarget &target) { (void)target; },
@@ -647,7 +652,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
 
   // TestOutput::Type::UserRedirect
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
         stateSuccess, [](buildcc::BaseTarget &target) { (void)target; },
@@ -664,7 +669,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
 
   // TestOutput::Type::UserRedirect
   {
-    buildcc::Register reg(args);
+    buildcc::Register reg;
     mock().expectNCalls(1, "BuildTask_dummyT");
     reg.Build(
         stateSuccess, [](buildcc::BaseTarget &target) { (void)target; },

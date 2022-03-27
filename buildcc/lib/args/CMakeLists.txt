@@ -8,6 +8,7 @@ add_library(mock_args
 )
 target_include_directories(mock_args PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/mock
 )
 target_compile_options(mock_args PUBLIC 
     ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_FLAGS}

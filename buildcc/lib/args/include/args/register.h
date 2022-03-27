@@ -33,7 +33,8 @@ namespace buildcc {
 
 class Register {
 public:
-  Register(const Args &args) : args_(args) { Initialize(); }
+  // Register(const Args &args) : args_(args) { Initialize(); }
+  Register() { Initialize(); }
   Register(const Register &) = delete;
 
   /**
@@ -154,7 +155,7 @@ private:
   void BuildStoreTask(const std::string &unique_id, const tf::Task &task);
 
 private:
-  const Args &args_;
+  // const Args &args_;
 
   // Build
   tf::Taskflow build_tf_{"Targets"};

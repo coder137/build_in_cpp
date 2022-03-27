@@ -33,7 +33,7 @@ static const std::unordered_map<const char *, TargetType> kTargetTypeMap{
 };
 
 void BuildExeArgs::Setup() {
-  args_.AddToolchain("host", "Host Toolchain", host_toolchain_arg_);
+  Args::AddToolchain("host", "Host Toolchain", host_toolchain_arg_);
   SetupBuildMode();
   SetupTargetInfo();
   SetupTargetInputs();
@@ -42,7 +42,7 @@ void BuildExeArgs::Setup() {
 }
 
 void BuildExeArgs::SetupBuildMode() {
-  args_.Ref()
+  Args::Ref()
       .add_option("--mode", out_mode_, "Provide BuildExe run mode")
       ->transform(CLI::CheckedTransformer(kBuildExeModeMap, CLI::ignore_case))
       ->required();
@@ -51,7 +51,7 @@ void BuildExeArgs::SetupBuildMode() {
 // TODO, Add subcommand [build.info]
 void BuildExeArgs::SetupTargetInfo() {
   constexpr const char *const kProjectInfo = "Project Info";
-  auto &app = args_.Ref();
+  auto &app = Args::Ref();
 
   auto *project_info_app = app.add_option_group(kProjectInfo);
 
@@ -74,7 +74,7 @@ void BuildExeArgs::SetupTargetInfo() {
 // TODO, Add group, group by sources, headers, inncludes on CLI
 void BuildExeArgs::SetupTargetInputs() {
   constexpr const char *const kTargetInputs = "Target Inputs";
-  auto &app = args_.Ref();
+  auto &app = Args::Ref();
 
   auto *target_inputs_app = app.add_option_group(kTargetInputs);
 
@@ -109,13 +109,13 @@ void BuildExeArgs::SetupTargetInputs() {
 }
 
 void BuildExeArgs::SetupScriptMode() {
-  auto *script_args = args_.Ref().add_subcommand("script");
+  auto *script_args = Args::Ref().add_subcommand("script");
   script_args->add_option("--configs", out_scriptinfo_.configs,
                           "Config files for script mode");
 }
 
 void BuildExeArgs::SetupLibs() {
-  auto *libs_app = args_.Ref().add_subcommand("libs", "Libraries");
+  auto *libs_app = Args::Ref().add_subcommand("libs", "Libraries");
   std::error_code ec;
   fs::directory_iterator dir_iter =
       fs::directory_iterator(BuildccHome::GetBuildccLibsDir(), ec);

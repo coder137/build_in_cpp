@@ -88,8 +88,12 @@ struct ArgTarget {
 class Args {
 public:
 public:
-  Args() { Initialize(); }
+  Args() = delete;
   Args(const Args &) = delete;
+  Args(Args &&) = delete;
+
+  static void Init();
+  static void Deinit();
 
   /**
    * @brief Parse command line information to CLI11
@@ -97,17 +101,17 @@ public:
    * @param argc from int main(int argc, char ** argv)
    * @param argv from int main(int argc, char ** argv)
    */
-  void Parse(int argc, const char *const *argv);
+  static void Parse(int argc, const char *const *argv);
 
   /**
    * @brief Modifiable reference to CLI::App (CLI11)
    */
-  CLI::App &Ref() { return app_; }
+  static CLI::App &Ref();
 
   /**
    * @brief Constant reference to CLI::App (CLI11)
    */
-  const CLI::App &ConstRef() const { return app_; }
+  static const CLI::App &ConstRef();
 
   // Setters
 
@@ -117,9 +121,9 @@ public:
    * @param out Receive the toolchain information through the CLI
    * @param initial Set the default toolchain information as a fallback
    */
-  void AddToolchain(const std::string &name, const std::string &description,
-                    ArgToolchain &out,
-                    const ArgToolchain &initial = ArgToolchain());
+  static void AddToolchain(const std::string &name,
+                           const std::string &description, ArgToolchain &out,
+                           const ArgToolchain &initial = ArgToolchain());
 
   /**
    * @brief Add Target config commands with a unique name and description
@@ -129,31 +133,19 @@ public:
    *
    * TODO, Update with other options for TargetConfig
    */
-  void AddTarget(const std::string &name, const std::string &description,
-                 ArgTarget &out, const ArgTarget &initial = ArgTarget());
+  static void AddTarget(const std::string &name, const std::string &description,
+                        ArgTarget &out, const ArgTarget &initial = ArgTarget());
 
   // Getters
-  bool Clean() const { return clean_; }
-  env::LogLevel GetLogLevel() const { return loglevel_; }
+  static bool Clean();
+  static env::LogLevel GetLogLevel();
 
-  const fs::path &GetProjectRootDir() const { return project_root_dir_; }
-  const fs::path &GetProjectBuildDir() const { return project_build_dir_; }
-
-private:
-  void Initialize();
-  void RootArgs();
+  static const fs::path &GetProjectRootDir();
+  static const fs::path &GetProjectBuildDir();
 
 private:
-  // Required parameters
-  bool clean_{false};
-  env::LogLevel loglevel_{env::LogLevel::Info};
-  fs::path project_root_dir_{""};
-  fs::path project_build_dir_{"_internal"};
-
-  // Internal
-  CLI::App app_{"BuildCC buildsystem"};
-  CLI::App *toolchain_{nullptr};
-  CLI::App *target_{nullptr};
+  static void RootArgs();
+  static CLI::App &GetStaticCliApp();
 };
 
 } // namespace buildcc

@@ -84,9 +84,40 @@ const std::unordered_map<const char *, buildcc::ToolchainId> kToolchainIdMap{
     {"undefined", buildcc::ToolchainId::Undefined},
 };
 
+// Static variables
+bool clean_{false};
+buildcc::env::LogLevel loglevel_{buildcc::env::LogLevel::Info};
+fs::path project_root_dir_{""};
+fs::path project_build_dir_{"_internal"};
+
+// Internal
+CLI::App *toolchain_{nullptr};
+CLI::App *target_{nullptr};
+
 } // namespace
 
 namespace buildcc {
+
+void Args::Init() {
+  RootArgs();
+  toolchain_ = Ref().add_subcommand(kToolchainSubcommand, kToolchainDesc);
+  target_ = Ref().add_subcommand(kTargetSubcommand, kTargetDesc);
+}
+
+void Args::Deinit() {
+  toolchain_->clear();
+  target_->clear();
+  Ref().clear();
+}
+
+CLI::App &Args::Ref() { return GetStaticCliApp(); }
+const CLI::App &Args::ConstRef() { return GetStaticCliApp(); }
+
+bool Args::Clean() { return clean_; }
+env::LogLevel Args::GetLogLevel() { return loglevel_; }
+
+const fs::path &Args::GetProjectRootDir() { return project_root_dir_; }
+const fs::path &Args::GetProjectBuildDir() { return project_build_dir_; }
 
 void Args::AddToolchain(const std::string &name, const std::string &description,
                         ArgToolchain &out, const ArgToolchain &initial) {
@@ -123,20 +154,15 @@ void Args::AddTarget(const std::string &name, const std::string &description,
 
 // Private
 
-void Args::Initialize() {
-  RootArgs();
-  toolchain_ = app_.add_subcommand(kToolchainSubcommand, kToolchainDesc);
-  target_ = app_.add_subcommand(kTargetSubcommand, kTargetDesc);
-}
-
 void Args::RootArgs() {
-  app_.set_help_all_flag(kHelpAllParam, kHelpAllDesc);
+  Ref().set_help_all_flag(kHelpAllParam, kHelpAllDesc);
 
-  app_.set_config(kConfigParam, "", kConfigDesc)
+  Ref()
+      .set_config(kConfigParam, "", kConfigDesc)
       ->expected(kMinFiles, kMaxFiles);
 
   // Root flags
-  auto *root_group = app_.add_option_group(kRootGroup);
+  auto *root_group = Ref().add_option_group(kRootGroup);
 
   root_group->add_flag(kCleanParam, clean_, kCleanDesc);
   root_group->add_option(kLoglevelParam, loglevel_, kLoglevelDesc)
@@ -147,6 +173,11 @@ void Args::RootArgs() {
       ->required();
   root_group->add_option(kBuildDirParam, project_build_dir_, kBuildDirDesc)
       ->required();
+}
+
+CLI::App &Args::GetStaticCliApp() {
+  static CLI::App app_{"BuildCC buildsystem"};
+  return app_;
 }
 
 } // namespace buildcc

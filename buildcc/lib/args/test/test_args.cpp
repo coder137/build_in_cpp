@@ -1,5 +1,7 @@
 #include "args/args.h"
 
+#include "test_args.h"
+
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
@@ -9,29 +11,36 @@
 // clang-format off
 TEST_GROUP(ArgsTestGroup)
 {
+  void teardown() {
+    buildcc::m::ArgsDeinit();
+    buildcc::Args::Ref().clear();
+  }
 };
 // clang-format on
 
 TEST(ArgsTestGroup, Args_BasicParse) {
+  UT_PRINT("Args_BasicParse\r\n");
   std::vector<const char *> av{"", "--config", "configs/basic_parse.toml"};
   int argc = av.size();
 
-  buildcc::Args args;
-  args.Parse(argc, av.data());
+  // buildcc::Args::Init();
+  buildcc::Args::Init();
+  buildcc::Args::Parse(argc, av.data());
 
-  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-  CHECK_TRUE(args.Clean());
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
 }
 
 TEST(ArgsTestGroup, Args_BasicExit) {
+  UT_PRINT("Args_BasicExit\r\n");
   std::vector<const char *> av{"", "--config", "configs/basic_parse.toml",
                                "--help"};
   int argc = av.size();
 
-  buildcc::Args args;
-  CHECK_THROWS(std::exception, args.Parse(argc, av.data()));
+  buildcc::Args::Init();
+  CHECK_THROWS(std::exception, buildcc::Args::Parse(argc, av.data()));
 }
 
 TEST(ArgsTestGroup, Args_MultiToml) {
@@ -39,13 +48,13 @@ TEST(ArgsTestGroup, Args_MultiToml) {
                                "--config", "configs/no_clean.toml"};
   int argc = av.size();
 
-  buildcc::Args args;
-  args.Parse(argc, av.data());
+  buildcc::Args::Init();
+  buildcc::Args::Parse(argc, av.data());
 
-  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-  CHECK_FALSE(args.Clean());
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_FALSE(buildcc::Args::Clean());
 }
 
 TEST(ArgsTestGroup, Args_CustomToolchain) {
@@ -53,15 +62,15 @@ TEST(ArgsTestGroup, Args_CustomToolchain) {
                                "--config", "configs/gcc_toolchain.toml"};
   int argc = av.size();
 
-  buildcc::Args args;
+  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
-  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  args.Parse(argc, av.data());
+  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  buildcc::Args::Parse(argc, av.data());
 
-  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-  CHECK_TRUE(args.Clean());
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
 
   // Toolchain
   CHECK_TRUE(gcc_toolchain.state.build);
@@ -87,17 +96,17 @@ TEST(ArgsTestGroup, Args_MultipleCustomToolchain) {
   };
   int argc = av.size();
 
-  buildcc::Args args;
+  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  args.Parse(argc, av.data());
+  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  buildcc::Args::Parse(argc, av.data());
 
-  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-  CHECK_TRUE(args.Clean());
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
 
   // Toolchain
 
@@ -125,17 +134,18 @@ TEST(ArgsTestGroup, Args_MultipleCustomToolchain) {
 }
 
 TEST(ArgsTestGroup, Args_DuplicateCustomToolchain) {
-  buildcc::Args args;
+  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain other_gcc_toolchain;
-  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
 
   // CLI11 Throws an exception when multiple toolchains with same name are added
   // NOTE, This behaviour does not need to be tested since it is provided by
   // CLI11
   // This test is as an example of wrong usage by the user
-  CHECK_THROWS(std::exception, args.AddToolchain("gcc", "Other gcc toolchain",
-                                                 other_gcc_toolchain));
+  CHECK_THROWS(std::exception,
+               (buildcc::Args::AddToolchain("gcc", "Other gcc toolchain ",
+                                            other_gcc_toolchain)));
 }
 
 TEST(ArgsTestGroup, Args_CustomTarget) {
@@ -150,17 +160,17 @@ TEST(ArgsTestGroup, Args_CustomTarget) {
   };
   int argc = av.size();
 
-  buildcc::Args args;
+  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgTarget gcc_target;
-  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  args.AddTarget("gcc", "Generic gcc target", gcc_target);
-  args.Parse(argc, av.data());
+  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  buildcc::Args::AddTarget("gcc", "Generic gcc target", gcc_target);
+  buildcc::Args::Parse(argc, av.data());
 
-  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-  CHECK_TRUE(args.Clean());
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
 
   // Toolchain
   CHECK_TRUE(gcc_toolchain.state.build);
@@ -198,21 +208,21 @@ TEST(ArgsTestGroup, Args_MultipleCustomTarget) {
   };
   int argc = av.size();
 
-  buildcc::Args args;
+  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgTarget gcc_target;
-  args.AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  args.AddTarget("gcc", "Generic gcc target", gcc_target);
+  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  buildcc::Args::AddTarget("gcc", "Generic gcc target", gcc_target);
   buildcc::ArgToolchain msvc_toolchain;
   buildcc::ArgTarget msvc_target;
-  args.AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  args.AddTarget("msvc", "Generic msvc target", msvc_target);
-  args.Parse(argc, av.data());
+  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
+  buildcc::Args::AddTarget("msvc", "Generic msvc target", msvc_target);
+  buildcc::Args::Parse(argc, av.data());
 
-  STRCMP_EQUAL(args.GetProjectRootDir().string().c_str(), "root");
-  STRCMP_EQUAL(args.GetProjectBuildDir().string().c_str(), "build");
-  CHECK(args.GetLogLevel() == buildcc::env::LogLevel::Trace);
-  CHECK_TRUE(args.Clean());
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
 
   // GCC
 

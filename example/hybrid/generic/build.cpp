@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
   // 1. Get arguments
   ArgToolchain custom_toolchain;
   TargetType default_lib_type{TargetType::StaticLibrary};
-  Args args;
+  Args::Init();
 
   try {
     const std::map<std::string, TargetType> lib_type_map_{
@@ -31,21 +31,22 @@ int main(int argc, char **argv) {
         {"DynamicLib", TargetType::DynamicLibrary},
     };
 
-    args.Ref()
+    Args::Ref()
         .add_option("--default_lib_type", default_lib_type, "Default Lib Type")
         ->transform(CLI::CheckedTransformer(lib_type_map_, CLI::ignore_case))
         ->group("Custom");
 
     // NOTE, You can add more custom toolchains as per your requirement
-    args.AddToolchain("user", "User defined toolchain", custom_toolchain);
+    Args::AddToolchain("user", "User defined toolchain", custom_toolchain);
   } catch (const std::exception &e) {
     std::cout << "EXCEPTION " << e.what() << std::endl;
   }
 
-  args.Parse(argc, argv);
+  Args::Parse(argc, argv);
 
   // 2. Initialize your environment
-  Register reg(args);
+  Register reg;
+  ;
 
   // 3. Pre-build steps
   reg.Clean(clean_cb);
