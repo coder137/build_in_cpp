@@ -24,8 +24,6 @@ toolchain_verify.h
 
 .. doxygenstruct:: buildcc::ToolchainCompilerInfo
 
-.. doxygentypedef:: ToolchainVerificationFunc
-
 Example for Default Toolchain
 ------------------------------
 
@@ -62,13 +60,27 @@ Example for Custom Toolchain
 
     BaseToolchain custom_toolchain(ToolchainId::Custom, "custom_new_toolchain", "assembler", "c_compiler", "cpp_compiler", "archiver", "linker");
 
-    // Find all the relevant toolchains on your host system
-    std::vector<fs::path> found_toolchains = custom_toolchain.Find();
+    // Toolchain::Find similar to previous example
 
     // Find all the relevant toolchains on your host system
     // Selects the first found toolchain
     // Runs a verification function on the selected toolchain depending on the `ToolchainId`
-    custom_toolchain.Verify();
+    Toolchain::AddVerificationFunc(ToolchainId::Custom,
+    [](const ToolchainExecutables & executables) {
+        // Use executables to get compiler_version and target_arch
+        if (success) {
+            ToolchainCompilerInfo info;
+            info.compiler_version = "compiler_version";
+            info.target_arch = "target_arch";
+            return info;
+        } else {
+            return {};
+        }
+    } -> std::optional<ToolchainCompilerInfo>, "custom_verification_func")
+
+    ToolchainVerifyConfig verify_config;
+    verify_config.verification_identifier = "custom_verification_func";
+    custom_toolchain.Verify(verify_config);
 
 Specialized Toolchain
 =====================
