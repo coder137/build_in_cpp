@@ -23,6 +23,21 @@
 
 namespace fs = std::filesystem;
 
+namespace buildcc {
+
+class Project {
+public:
+  static void Init(const fs::path &project_root_dir,
+                   const fs::path &project_build_dir);
+  static void Deinit();
+
+  static bool IsInit();
+  static const fs::path &GetRootDir();
+  static const fs::path &GetBuildDir();
+};
+
+} // namespace buildcc
+
 namespace buildcc::env {
 
 /**

@@ -25,6 +25,20 @@ bool init_ = false;
 
 } // namespace
 
+namespace buildcc {
+
+void Project::Init(const fs::path &project_root_dir,
+                   const fs::path &project_build_dir) {
+  env::init(project_root_dir, project_build_dir);
+}
+void Project::Deinit() { env::deinit(); }
+
+bool Project::IsInit() { return env::is_init(); }
+const fs::path &Project::GetRootDir() { return env::get_project_root_dir(); }
+const fs::path &Project::GetBuildDir() { return env::get_project_build_dir(); }
+
+} // namespace buildcc
+
 namespace buildcc::env {
 
 void init(const fs::path &project_root_dir, const fs::path &project_build_dir) {
