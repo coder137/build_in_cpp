@@ -26,6 +26,9 @@ if (${TESTING})
     target_link_options(mock_env PUBLIC ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS})
 
     # Tests
+    add_executable(test_static_project test/test_static_project.cpp)
+    target_link_libraries(test_static_project PRIVATE mock_env)
+
     add_executable(test_env_util test/test_env_util.cpp)
     target_link_libraries(test_env_util PRIVATE mock_env)
 
@@ -35,6 +38,7 @@ if (${TESTING})
     add_executable(test_command test/test_command.cpp)
     target_link_libraries(test_command PRIVATE mock_env)
 
+    add_test(NAME test_static_project COMMAND test_static_project)
     add_test(NAME test_env_util COMMAND test_env_util)
     add_test(NAME test_task_state COMMAND test_task_state)
     add_test(NAME test_command COMMAND test_command)

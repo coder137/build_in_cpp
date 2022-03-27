@@ -34,6 +34,11 @@ public:
   static bool IsInit();
   static const fs::path &GetRootDir();
   static const fs::path &GetBuildDir();
+
+private:
+  static bool &GetStaticInit();
+  static fs::path &GetStaticRootDir();
+  static fs::path &GetStaticBuildDir();
 };
 
 } // namespace buildcc

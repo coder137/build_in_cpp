@@ -29,13 +29,45 @@ namespace buildcc {
 
 void Project::Init(const fs::path &project_root_dir,
                    const fs::path &project_build_dir) {
-  env::init(project_root_dir, project_build_dir);
-}
-void Project::Deinit() { env::deinit(); }
+  // env::init(project_root_dir, project_build_dir);
 
-bool Project::IsInit() { return env::is_init(); }
-const fs::path &Project::GetRootDir() { return env::get_project_root_dir(); }
-const fs::path &Project::GetBuildDir() { return env::get_project_build_dir(); }
+  // State
+  fs::path root_dir = project_root_dir;
+  fs::path build_dir = project_build_dir;
+  root_dir.make_preferred();
+  build_dir.make_preferred();
+
+  GetStaticRootDir() = root_dir;
+  GetStaticBuildDir() = build_dir;
+  GetStaticInit() = true;
+
+  // Logging
+  env::set_log_pattern("%^[%l]%$ %v");
+  env::set_log_level(env::LogLevel::Info);
+}
+void Project::Deinit() {
+  // env::deinit();
+  GetStaticRootDir() = "";
+  GetStaticBuildDir() = "";
+  GetStaticInit() = false;
+}
+
+bool Project::IsInit() { return GetStaticInit(); }
+const fs::path &Project::GetRootDir() { return GetStaticRootDir(); }
+const fs::path &Project::GetBuildDir() { return GetStaticBuildDir(); }
+
+bool &Project::GetStaticInit() {
+  static bool is_init = false;
+  return is_init;
+}
+fs::path &Project::GetStaticRootDir() {
+  static fs::path root_dir = "";
+  return root_dir;
+}
+fs::path &Project::GetStaticBuildDir() {
+  static fs::path build_dir = "";
+  return build_dir;
+}
 
 } // namespace buildcc
 
