@@ -174,8 +174,8 @@ void Args::RootArgs() {
 }
 
 CLI::App &Args::GetStaticCliApp() {
-  static CLI::App app_{"BuildCC buildsystem"};
-  return app_;
+  static CLI::App app{"BuildCC buildsystem"};
+  return app;
 }
 
 } // namespace buildcc
