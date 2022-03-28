@@ -202,6 +202,13 @@ Args::Instance &Args::Instance::AddTarget(const std::string &name,
   return *this;
 }
 
+Args::Instance &Args::Instance::AddCustomCallback(
+    const std::function<void(CLI::App &)> &add_cb) {
+  auto &app = MyRef();
+  add_cb(app);
+  return *this;
+}
+
 Args::Instance &Args::Instance::AddCustomData(ArgCustom &data) {
   auto &app = MyRef();
   data.Add(app);

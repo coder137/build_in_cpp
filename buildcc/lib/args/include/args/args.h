@@ -123,6 +123,13 @@ private:
                         ArgTarget &out, const ArgTarget &initial = ArgTarget());
 
     /**
+     * @brief Custom callback for data
+     *
+     * @param add_cb Add callback that exposes underlying CLI::App
+     */
+    Instance &AddCustomCallback(const std::function<void(CLI::App &)> &add_cb);
+
+    /**
      * @brief Add custom data
      *
      * @param data Derive from `buildcc::ArgCustom` and override the `Add` API
