@@ -90,13 +90,13 @@ buildcc::env::LogLevel loglevel_{buildcc::env::LogLevel::Info};
 fs::path project_root_dir_{""};
 fs::path project_build_dir_{"_internal"};
 
-struct ArgsInstance {
+struct ArgsInternal {
   CLI::App app_{"BuildCC Buildsystem"};
   CLI::App *toolchain_{nullptr};
   CLI::App *target_{nullptr};
 };
 
-std::unique_ptr<ArgsInstance> args_instance_;
+std::unique_ptr<ArgsInternal> args_instance_;
 
 } // namespace
 
@@ -104,7 +104,7 @@ namespace buildcc {
 
 void Args::Init() {
   if (!args_instance_) {
-    args_instance_ = std::make_unique<ArgsInstance>();
+    args_instance_ = std::make_unique<ArgsInternal>();
     args_instance_->toolchain_ =
         Ref().add_subcommand(kToolchainSubcommand, kToolchainDesc);
     args_instance_->target_ =
