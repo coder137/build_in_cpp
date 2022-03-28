@@ -20,9 +20,10 @@ TEST(ArgsTestGroup, Args_BasicParse) {
   std::vector<const char *> av{"", "--config", "configs/basic_parse.toml"};
   int argc = av.size();
 
-  buildcc::Args::Init();
-  buildcc::Args::Init(); // Second init does nothing when already initialized
-  buildcc::Args::Parse(argc, av.data());
+  (void)buildcc::Args::Init();
+  auto &instance = buildcc::Args::Init(); // Second init does nothing when
+                                          // already initialized
+  instance.Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
@@ -38,8 +39,8 @@ TEST(ArgsTestGroup, Args_BasicExit) {
                                "--help"};
   int argc = av.size();
 
-  buildcc::Args::Init();
-  CHECK_THROWS(std::exception, buildcc::Args::Parse(argc, av.data()));
+  auto &instance = buildcc::Args::Init();
+  CHECK_THROWS(std::exception, instance.Parse(argc, av.data()));
 }
 
 TEST(ArgsTestGroup, Args_MultiToml) {
@@ -47,8 +48,7 @@ TEST(ArgsTestGroup, Args_MultiToml) {
                                "--config", "configs/no_clean.toml"};
   int argc = av.size();
 
-  buildcc::Args::Init();
-  buildcc::Args::Parse(argc, av.data());
+  buildcc::Args::Init().Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
@@ -61,10 +61,10 @@ TEST(ArgsTestGroup, Args_CustomToolchain) {
                                "--config", "configs/gcc_toolchain.toml"};
   int argc = av.size();
 
-  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
-  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  buildcc::Args::Parse(argc, av.data());
+  buildcc::Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain)
+      .Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
@@ -95,12 +95,12 @@ TEST(ArgsTestGroup, Args_MultipleCustomToolchain) {
   };
   int argc = av.size();
 
-  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  buildcc::Args::Parse(argc, av.data());
+  buildcc::Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain)
+      .AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain)
+      .Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
@@ -133,18 +133,18 @@ TEST(ArgsTestGroup, Args_MultipleCustomToolchain) {
 }
 
 TEST(ArgsTestGroup, Args_DuplicateCustomToolchain) {
-  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain other_gcc_toolchain;
-  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
+  auto &instance = buildcc::Args::Init().AddToolchain(
+      "gcc", "Generic gcc toolchain", gcc_toolchain);
 
   // CLI11 Throws an exception when multiple toolchains with same name are added
   // NOTE, This behaviour does not need to be tested since it is provided by
   // CLI11
   // This test is as an example of wrong usage by the user
   CHECK_THROWS(std::exception,
-               (buildcc::Args::AddToolchain("gcc", "Other gcc toolchain ",
-                                            other_gcc_toolchain)));
+               (instance.AddToolchain("gcc", "Other gcc toolchain ",
+                                      other_gcc_toolchain)));
 }
 
 TEST(ArgsTestGroup, Args_CustomTarget) {
@@ -159,12 +159,12 @@ TEST(ArgsTestGroup, Args_CustomTarget) {
   };
   int argc = av.size();
 
-  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgTarget gcc_target;
-  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  buildcc::Args::AddTarget("gcc", "Generic gcc target", gcc_target);
-  buildcc::Args::Parse(argc, av.data());
+  buildcc::Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain)
+      .AddTarget("gcc", "Generic gcc target", gcc_target)
+      .Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
@@ -207,16 +207,17 @@ TEST(ArgsTestGroup, Args_MultipleCustomTarget) {
   };
   int argc = av.size();
 
-  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgTarget gcc_target;
-  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  buildcc::Args::AddTarget("gcc", "Generic gcc target", gcc_target);
   buildcc::ArgToolchain msvc_toolchain;
   buildcc::ArgTarget msvc_target;
-  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  buildcc::Args::AddTarget("msvc", "Generic msvc target", msvc_target);
-  buildcc::Args::Parse(argc, av.data());
+
+  buildcc::Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain)
+      .AddTarget("gcc", "Generic gcc target", gcc_target)
+      .AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain)
+      .AddTarget("msvc", "Generic msvc target", msvc_target)
+      .Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
