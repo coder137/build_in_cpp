@@ -25,8 +25,7 @@ TEST(RegisterTestGroup, Register_Initialize) {
   std::vector<const char *> av{"", "--config", "configs/basic_parse.toml"};
   int argc = av.size();
 
-  buildcc::Args::Init();
-  buildcc::Args::Parse(argc, av.data());
+  buildcc::Args::Init().Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
@@ -41,8 +40,7 @@ TEST(RegisterTestGroup, Register_Clean) {
     std::vector<const char *> av{"", "--config", "configs/basic_parse.toml"};
     int argc = av.size();
 
-    buildcc::Args::Init();
-    buildcc::Args::Parse(argc, av.data());
+    buildcc::Args::Init().Parse(argc, av.data());
 
     STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
     STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
@@ -65,8 +63,7 @@ TEST(RegisterTestGroup, Register_Clean) {
     };
     int argc = av.size();
 
-    buildcc::Args::Init();
-    buildcc::Args::Parse(argc, av.data());
+    buildcc::Args::Init().Parse(argc, av.data());
 
     STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
     STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
@@ -89,12 +86,12 @@ TEST(RegisterTestGroup, Register_Build) {
   };
   int argc = av.size();
 
-  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  buildcc::Args::Parse(argc, av.data());
+  buildcc::Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain)
+      .AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain)
+      .Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
@@ -137,12 +134,12 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
   };
   int argc = av.size();
 
-  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  buildcc::Args::Parse(argc, av.data());
+  buildcc::Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain)
+      .AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain)
+      .Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
@@ -221,12 +218,12 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
   };
   int argc = av.size();
 
-  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  buildcc::Args::Parse(argc, av.data());
+  buildcc::Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain)
+      .AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain)
+      .Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
@@ -316,12 +313,12 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
   };
   int argc = av.size();
 
-  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  buildcc::Args::Parse(argc, av.data());
+  buildcc::Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain)
+      .AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain)
+      .Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
@@ -392,12 +389,12 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
   };
   int argc = av.size();
 
-  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  buildcc::Args::Parse(argc, av.data());
+  buildcc::Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain)
+      .AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain)
+      .Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
@@ -468,12 +465,12 @@ TEST(RegisterTestGroup, Register_Test) {
   };
   int argc = av.size();
 
-  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  buildcc::Args::Parse(argc, av.data());
+  buildcc::Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain)
+      .AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain)
+      .Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
@@ -553,12 +550,12 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
   };
   int argc = av.size();
 
-  buildcc::Args::Init();
   buildcc::ArgToolchain gcc_toolchain;
   buildcc::ArgToolchain msvc_toolchain;
-  buildcc::Args::AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain);
-  buildcc::Args::AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain);
-  buildcc::Args::Parse(argc, av.data());
+  buildcc::Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain)
+      .AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain)
+      .Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
