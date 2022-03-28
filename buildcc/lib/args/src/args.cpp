@@ -90,11 +90,6 @@ buildcc::env::LogLevel loglevel_{buildcc::env::LogLevel::Info};
 fs::path project_root_dir_{""};
 fs::path project_build_dir_{"_internal"};
 
-// Internal
-// std::unique_ptr<CLI::App> app_;
-// CLI::App *toolchain_{nullptr};
-// CLI::App *target_{nullptr};
-
 struct ArgsInstance {
   CLI::App app_{"BuildCC Buildsystem"};
   CLI::App *toolchain_{nullptr};
