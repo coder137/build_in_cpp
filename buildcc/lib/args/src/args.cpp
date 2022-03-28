@@ -84,12 +84,56 @@ const std::unordered_map<const char *, buildcc::ToolchainId> kToolchainIdMap{
     {"undefined", buildcc::ToolchainId::Undefined},
 };
 
+// Static variables
+bool clean_{false};
+buildcc::env::LogLevel loglevel_{buildcc::env::LogLevel::Info};
+fs::path project_root_dir_{""};
+fs::path project_build_dir_{"_internal"};
+
+// Internal
+// std::unique_ptr<CLI::App> app_;
+// CLI::App *toolchain_{nullptr};
+// CLI::App *target_{nullptr};
+
+struct ArgsInstance {
+  CLI::App app_{"BuildCC Buildsystem"};
+  CLI::App *toolchain_{nullptr};
+  CLI::App *target_{nullptr};
+};
+
+std::unique_ptr<ArgsInstance> args_instance_;
+
 } // namespace
 
 namespace buildcc {
 
+void Args::Init() {
+  if (!args_instance_) {
+    args_instance_ = std::make_unique<ArgsInstance>();
+    args_instance_->toolchain_ =
+        Ref().add_subcommand(kToolchainSubcommand, kToolchainDesc);
+    args_instance_->target_ =
+        Ref().add_subcommand(kTargetSubcommand, kTargetDesc);
+    RootArgs();
+  }
+}
+
+void Args::Deinit() { args_instance_.reset(nullptr); }
+
+CLI::App &Args::Ref() { return args_instance_->app_; }
+const CLI::App &Args::ConstRef() { return args_instance_->app_; }
+
+bool Args::Clean() { return clean_; }
+env::LogLevel Args::GetLogLevel() { return loglevel_; }
+
+const fs::path &Args::GetProjectRootDir() { return project_root_dir_; }
+const fs::path &Args::GetProjectBuildDir() { return project_build_dir_; }
+
 void Args::AddToolchain(const std::string &name, const std::string &description,
                         ArgToolchain &out, const ArgToolchain &initial) {
+  CLI::App *toolchain_ = args_instance_->toolchain_;
+  env::assert_fatal(toolchain_ != nullptr,
+                    "Initialize Args using the Args::Init API");
   CLI::App *t_user =
       toolchain_->add_subcommand(name, description)->group(kToolchainGroup);
   t_user->add_flag(kToolchainBuildParam, out.state.build);
@@ -113,6 +157,9 @@ void Args::AddToolchain(const std::string &name, const std::string &description,
 
 void Args::AddTarget(const std::string &name, const std::string &description,
                      ArgTarget &out, const ArgTarget &initial) {
+  CLI::App *target_ = args_instance_->target_;
+  env::assert_fatal(target_ != nullptr,
+                    "Initialize Args using the Args::Init API");
   CLI::App *target_user =
       target_->add_subcommand(name, description)->group(kTargetGroup);
   target_user->add_option(kTargetCompileCommandParam, out.compile_command)
@@ -123,20 +170,15 @@ void Args::AddTarget(const std::string &name, const std::string &description,
 
 // Private
 
-void Args::Initialize() {
-  RootArgs();
-  toolchain_ = app_.add_subcommand(kToolchainSubcommand, kToolchainDesc);
-  target_ = app_.add_subcommand(kTargetSubcommand, kTargetDesc);
-}
-
 void Args::RootArgs() {
-  app_.set_help_all_flag(kHelpAllParam, kHelpAllDesc);
+  Ref().set_help_all_flag(kHelpAllParam, kHelpAllDesc);
 
-  app_.set_config(kConfigParam, "", kConfigDesc)
+  Ref()
+      .set_config(kConfigParam, "", kConfigDesc)
       ->expected(kMinFiles, kMaxFiles);
 
   // Root flags
-  auto *root_group = app_.add_option_group(kRootGroup);
+  auto *root_group = Ref().add_option_group(kRootGroup);
 
   root_group->add_flag(kCleanParam, clean_, kCleanDesc);
   root_group->add_option(kLoglevelParam, loglevel_, kLoglevelDesc)

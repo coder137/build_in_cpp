@@ -27,6 +27,9 @@ namespace buildcc {
 
 class Project {
 public:
+  Project() = delete;
+  Project(const Project &) = delete;
+  Project(Project &&) = delete;
   static void Init(const fs::path &project_root_dir,
                    const fs::path &project_build_dir);
   static void Deinit();

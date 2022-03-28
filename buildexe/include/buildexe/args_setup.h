@@ -62,10 +62,9 @@ struct LibInfo {
 class BuildExeArgs {
 public:
   void Setup();
-  void Parse(int argc, char **argv) { args_.Parse(argc, argv); }
+  void Parse(int argc, char **argv) { Args::Parse(argc, argv); }
 
   // Getters
-  const Args &GetArgs() const { return args_; }
   const ArgToolchain &GetHostToolchainArg() const {
     return host_toolchain_arg_;
   }
@@ -87,7 +86,6 @@ private:
   void SetupLibs();
 
 private:
-  Args args_;
   ArgToolchain host_toolchain_arg_;
   ArgTargetInfo out_targetinfo_;
   ArgTargetInputs out_targetinputs_;

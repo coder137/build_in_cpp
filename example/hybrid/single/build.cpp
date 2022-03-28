@@ -10,13 +10,13 @@ static void hello_world_build_cb(BaseTarget &target);
 
 int main(int argc, char **argv) {
   // 1. Get arguments
-  Args args;
+  Args::Init();
   ArgToolchain arg_gcc;
-  args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
-  args.Parse(argc, argv);
+  Args::AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
+  Args::Parse(argc, argv);
 
   // 2. Initialize your environment
-  Register reg(args);
+  Register reg;
 
   // 3. Pre-build steps
   reg.Clean(clean_cb);

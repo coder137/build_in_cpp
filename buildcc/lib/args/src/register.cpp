@@ -61,7 +61,7 @@ void DepDetectCyclicDependency(const tf::Task &target_task,
 namespace buildcc {
 
 void Register::Clean(const std::function<void(void)> &clean_cb) {
-  if (args_.Clean()) {
+  if (Args::Clean()) {
     clean_cb();
   }
 }
@@ -119,9 +119,9 @@ void Register::BuildStoreTask(const std::string &unique_id,
 void Register::Initialize() { Env(); }
 
 void Register::Env() {
-  Project::Init(fs::current_path() / args_.GetProjectRootDir(),
-                fs::current_path() / args_.GetProjectBuildDir());
-  env::set_log_level(args_.GetLogLevel());
+  Project::Init(fs::current_path() / Args::GetProjectRootDir(),
+                fs::current_path() / Args::GetProjectBuildDir());
+  env::set_log_level(Args::GetLogLevel());
 }
 
 //

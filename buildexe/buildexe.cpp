@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
   // TODO, Add libraries (git cloned)
   // TODO, Add extension (git cloned)
 
-  Register reg(buildexe_args.GetArgs());
+  Register reg;
   reg.Clean(clean_cb);
 
   // Host Toolchain

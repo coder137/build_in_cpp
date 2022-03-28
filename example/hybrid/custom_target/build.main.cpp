@@ -9,19 +9,19 @@ static constexpr std::string_view EXE = "build";
 
 int main(int argc, char **argv) {
   // 1. Get arguments
-  Args args;
+  Args::Init();
   ArgToolchain arg_gcc;
   ArgToolchain arg_msvc;
   ArgToolchain toolchain_clang_gnu;
   ArgTarget target_clang_gnu;
-  args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
-  args.AddToolchain("msvc", "Generic msvc toolchain", arg_msvc);
-  args.AddToolchain("clang_gnu", "Clang GNU toolchain", toolchain_clang_gnu);
-  args.AddTarget("clang_gnu", "Clang GNU target", target_clang_gnu);
-  args.Parse(argc, argv);
+  Args::AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
+  Args::AddToolchain("msvc", "Generic msvc toolchain", arg_msvc);
+  Args::AddToolchain("clang_gnu", "Clang GNU toolchain", toolchain_clang_gnu);
+  Args::AddTarget("clang_gnu", "Clang GNU target", target_clang_gnu);
+  Args::Parse(argc, argv);
 
   // 2. Initialize your environment
-  Register reg(args);
+  Register reg;
 
   // 3. Pre-build steps
   reg.Clean(clean_cb);
