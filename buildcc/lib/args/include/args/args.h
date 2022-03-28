@@ -86,13 +86,52 @@ struct ArgTarget {
 };
 
 class Args {
-public:
+private:
+  class Instance {
+  public:
+    Instance() = default;
+
+    /**
+     * @brief Parse command line information to CLI11
+     *
+     * @param argc from int main(int argc, char ** argv)
+     * @param argv from int main(int argc, char ** argv)
+     */
+    void Parse(int argc, const char *const *argv);
+
+    /**
+     * @brief Add toolchain with a unique name and description
+     *
+     * @param out Receive the toolchain information through the CLI
+     * @param initial Set the default toolchain information as a fallback
+     */
+    Instance &AddToolchain(const std::string &name,
+                           const std::string &description, ArgToolchain &out,
+                           const ArgToolchain &initial = ArgToolchain());
+
+    /**
+     * @brief Add toolchain with a unique name and description
+     *
+     * @param out Receive the toolchain information through the CLI
+     * @param initial Set the default toolchain information as a fallback
+     */
+    Instance &AddTarget(const std::string &name, const std::string &description,
+                        ArgTarget &out, const ArgTarget &initial = ArgTarget());
+  };
+
+  struct Internal {
+    Instance instance;
+    CLI::App app{"BuildCC Buildsystem"};
+    CLI::App *toolchain{nullptr};
+    CLI::App *target{nullptr};
+  };
+
 public:
   Args() = delete;
   Args(const Args &) = delete;
   Args(Args &&) = delete;
 
-  static void Init();
+  static Instance &Init();
   static void Deinit();
 
   /**
@@ -145,6 +184,9 @@ public:
 
 private:
   static void RootArgs();
+
+private:
+  static std::unique_ptr<Internal> internal_;
 };
 
 } // namespace buildcc

@@ -90,33 +90,27 @@ buildcc::env::LogLevel loglevel_{buildcc::env::LogLevel::Info};
 fs::path project_root_dir_{""};
 fs::path project_build_dir_{"_internal"};
 
-struct ArgsInternal {
-  CLI::App app_{"BuildCC Buildsystem"};
-  CLI::App *toolchain_{nullptr};
-  CLI::App *target_{nullptr};
-};
-
-std::unique_ptr<ArgsInternal> args_internal_;
-
 } // namespace
 
 namespace buildcc {
 
-void Args::Init() {
-  if (!args_internal_) {
-    args_internal_ = std::make_unique<ArgsInternal>();
-    args_internal_->toolchain_ =
+std::unique_ptr<Args::Internal> Args::internal_;
+
+Args::Instance &Args::Init() {
+  if (!internal_) {
+    internal_ = std::make_unique<Internal>();
+    internal_->toolchain =
         Ref().add_subcommand(kToolchainSubcommand, kToolchainDesc);
-    args_internal_->target_ =
-        Ref().add_subcommand(kTargetSubcommand, kTargetDesc);
+    internal_->target = Ref().add_subcommand(kTargetSubcommand, kTargetDesc);
     RootArgs();
   }
+  return internal_->instance;
 }
 
-void Args::Deinit() { args_internal_.reset(nullptr); }
+void Args::Deinit() { internal_.reset(nullptr); }
 
-CLI::App &Args::Ref() { return args_internal_->app_; }
-const CLI::App &Args::ConstRef() { return args_internal_->app_; }
+CLI::App &Args::Ref() { return internal_->app; }
+const CLI::App &Args::ConstRef() { return internal_->app; }
 
 bool Args::Clean() { return clean_; }
 env::LogLevel Args::GetLogLevel() { return loglevel_; }
@@ -126,41 +120,18 @@ const fs::path &Args::GetProjectBuildDir() { return project_build_dir_; }
 
 void Args::AddToolchain(const std::string &name, const std::string &description,
                         ArgToolchain &out, const ArgToolchain &initial) {
-  CLI::App *toolchain_ = args_internal_->toolchain_;
-  env::assert_fatal(toolchain_ != nullptr,
-                    "Initialize Args using the Args::Init API");
-  CLI::App *t_user =
-      toolchain_->add_subcommand(name, description)->group(kToolchainGroup);
-  t_user->add_flag(kToolchainBuildParam, out.state.build);
-  t_user->add_flag(kToolchainTestParam, out.state.test);
-
-  t_user->add_option(kToolchainIdParam, out.id, kToolchainIdDesc)
-      ->transform(CLI::CheckedTransformer(kToolchainIdMap, CLI::ignore_case))
-      ->default_val(initial.id);
-  t_user->add_option(kToolchainNameParam, out.name)->default_val(initial.name);
-  t_user->add_option(kToolchainAsmCompilerParam, out.executables.assembler)
-      ->default_val(initial.executables.assembler);
-  t_user->add_option(kToolchainCCompilerParam, out.executables.c_compiler)
-      ->default_val(initial.executables.c_compiler);
-  t_user->add_option(kToolchainCppCompilerParam, out.executables.cpp_compiler)
-      ->default_val(initial.executables.cpp_compiler);
-  t_user->add_option(kToolchainArchiverParam, out.executables.archiver)
-      ->default_val(initial.executables.archiver);
-  t_user->add_option(kToolchainLinkerParam, out.executables.linker)
-      ->default_val(initial.executables.linker);
+  (void)name;
+  (void)description;
+  (void)out;
+  (void)initial;
 }
 
 void Args::AddTarget(const std::string &name, const std::string &description,
                      ArgTarget &out, const ArgTarget &initial) {
-  CLI::App *target_ = args_internal_->target_;
-  env::assert_fatal(target_ != nullptr,
-                    "Initialize Args using the Args::Init API");
-  CLI::App *target_user =
-      target_->add_subcommand(name, description)->group(kTargetGroup);
-  target_user->add_option(kTargetCompileCommandParam, out.compile_command)
-      ->default_val(initial.compile_command);
-  target_user->add_option(kTargetLinkCommandParam, out.link_command)
-      ->default_val(initial.link_command);
+  (void)name;
+  (void)description;
+  (void)out;
+  (void)initial;
 }
 
 // Private
@@ -184,6 +155,65 @@ void Args::RootArgs() {
       ->required();
   root_group->add_option(kBuildDirParam, project_build_dir_, kBuildDirDesc)
       ->required();
+}
+
+// Args::Instance
+
+/**
+ * @brief Add toolchain with a unique name and description
+ *
+ * @param out Receive the toolchain information through the CLI
+ * @param initial Set the default toolchain information as a fallback
+ */
+Args::Instance &Args::Instance::AddToolchain(const std::string &name,
+                                             const std::string &description,
+                                             ArgToolchain &out,
+                                             const ArgToolchain &initial) {
+  CLI::App *toolchain = internal_->toolchain;
+  env::assert_fatal(toolchain != nullptr,
+                    "Initialize Args using the Args::Init API");
+  CLI::App *t_user =
+      toolchain->add_subcommand(name, description)->group(kToolchainGroup);
+  t_user->add_flag(kToolchainBuildParam, out.state.build);
+  t_user->add_flag(kToolchainTestParam, out.state.test);
+
+  t_user->add_option(kToolchainIdParam, out.id, kToolchainIdDesc)
+      ->transform(CLI::CheckedTransformer(kToolchainIdMap, CLI::ignore_case))
+      ->default_val(initial.id);
+  t_user->add_option(kToolchainNameParam, out.name)->default_val(initial.name);
+  t_user->add_option(kToolchainAsmCompilerParam, out.executables.assembler)
+      ->default_val(initial.executables.assembler);
+  t_user->add_option(kToolchainCCompilerParam, out.executables.c_compiler)
+      ->default_val(initial.executables.c_compiler);
+  t_user->add_option(kToolchainCppCompilerParam, out.executables.cpp_compiler)
+      ->default_val(initial.executables.cpp_compiler);
+  t_user->add_option(kToolchainArchiverParam, out.executables.archiver)
+      ->default_val(initial.executables.archiver);
+  t_user->add_option(kToolchainLinkerParam, out.executables.linker)
+      ->default_val(initial.executables.linker);
+  return *this;
+}
+
+/**
+ * @brief Add toolchain with a unique name and description
+ *
+ * @param out Receive the toolchain information through the CLI
+ * @param initial Set the default toolchain information as a fallback
+ */
+Args::Instance &Args::Instance::AddTarget(const std::string &name,
+                                          const std::string &description,
+                                          ArgTarget &out,
+                                          const ArgTarget &initial) {
+  CLI::App *target = internal_->target;
+  env::assert_fatal(target != nullptr,
+                    "Initialize Args using the Args::Init API");
+  CLI::App *targetuser =
+      target->add_subcommand(name, description)->group(kTargetGroup);
+  targetuser->add_option(kTargetCompileCommandParam, out.compile_command)
+      ->default_val(initial.compile_command);
+  targetuser->add_option(kTargetLinkCommandParam, out.link_command)
+      ->default_val(initial.link_command);
+  return *this;
 }
 
 } // namespace buildcc
