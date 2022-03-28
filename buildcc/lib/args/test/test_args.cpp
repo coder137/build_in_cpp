@@ -29,8 +29,6 @@ TEST(ArgsTestGroup, Args_BasicParse) {
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
   CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
   CHECK_TRUE(buildcc::Args::Clean());
-  buildcc::Args::Ref().name("new_name");
-  STRCMP_EQUAL(buildcc::Args::Ref().get_name().c_str(), "new_name");
 }
 
 TEST(ArgsTestGroup, Args_BasicExit) {
