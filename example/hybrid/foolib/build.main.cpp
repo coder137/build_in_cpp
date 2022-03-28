@@ -11,12 +11,12 @@ constexpr std::string_view EXE = "build";
 
 int main(int argc, char **argv) {
   // 1. Get arguments
-  Args::Init();
   ArgToolchain arg_gcc;
   ArgToolchain arg_msvc;
-  Args::AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
-  Args::AddToolchain("msvc", "Generic msvc toolchain", arg_msvc);
-  Args::Parse(argc, argv);
+  Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", arg_gcc)
+      .AddToolchain("msvc", "Generic msvc toolchain", arg_msvc)
+      .Parse(argc, argv);
 
   // 2. Initialize your environment
   Register reg;
