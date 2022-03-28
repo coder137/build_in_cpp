@@ -39,7 +39,6 @@ int main(int argc, char **argv) {
   Args::Parse(argc, argv);
 
   Register reg;
-  ;
   reg.Clean(clean_cb);
 
   BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
