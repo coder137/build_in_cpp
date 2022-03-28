@@ -21,12 +21,15 @@ TEST(ArgsTestGroup, Args_BasicParse) {
   int argc = av.size();
 
   buildcc::Args::Init();
+  buildcc::Args::Init(); // Second init does nothing when already initialized
   buildcc::Args::Parse(argc, av.data());
 
   STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
   CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
   CHECK_TRUE(buildcc::Args::Clean());
+  buildcc::Args::Ref().name("new_name");
+  STRCMP_EQUAL(buildcc::Args::Ref().get_name().c_str(), "new_name");
 }
 
 TEST(ArgsTestGroup, Args_BasicExit) {
