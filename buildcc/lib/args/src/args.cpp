@@ -118,22 +118,6 @@ env::LogLevel Args::GetLogLevel() { return loglevel_; }
 const fs::path &Args::GetProjectRootDir() { return project_root_dir_; }
 const fs::path &Args::GetProjectBuildDir() { return project_build_dir_; }
 
-void Args::AddToolchain(const std::string &name, const std::string &description,
-                        ArgToolchain &out, const ArgToolchain &initial) {
-  (void)name;
-  (void)description;
-  (void)out;
-  (void)initial;
-}
-
-void Args::AddTarget(const std::string &name, const std::string &description,
-                     ArgTarget &out, const ArgTarget &initial) {
-  (void)name;
-  (void)description;
-  (void)out;
-  (void)initial;
-}
-
 // Private
 
 void Args::RootArgs() {

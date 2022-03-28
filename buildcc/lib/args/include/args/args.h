@@ -135,14 +135,6 @@ public:
   static void Deinit();
 
   /**
-   * @brief Parse command line information to CLI11
-   *
-   * @param argc from int main(int argc, char ** argv)
-   * @param argv from int main(int argc, char ** argv)
-   */
-  static void Parse(int argc, const char *const *argv);
-
-  /**
    * @brief Modifiable reference to CLI::App (CLI11)
    */
   static CLI::App &Ref();
@@ -151,29 +143,6 @@ public:
    * @brief Constant reference to CLI::App (CLI11)
    */
   static const CLI::App &ConstRef();
-
-  // Setters
-
-  /**
-   * @brief Add toolchain with a unique name and description
-   *
-   * @param out Receive the toolchain information through the CLI
-   * @param initial Set the default toolchain information as a fallback
-   */
-  static void AddToolchain(const std::string &name,
-                           const std::string &description, ArgToolchain &out,
-                           const ArgToolchain &initial = ArgToolchain());
-
-  /**
-   * @brief Add Target config commands with a unique name and description
-   *
-   * @param out Receive the target command information through the CLI
-   * @param initial Set the default target command information as a fallback
-   *
-   * TODO, Update with other options for TargetConfig
-   */
-  static void AddTarget(const std::string &name, const std::string &description,
-                        ArgTarget &out, const ArgTarget &initial = ArgTarget());
 
   // Getters
   static bool Clean();

@@ -4,11 +4,6 @@
 
 namespace buildcc {
 
-void Args::Parse(int argc, const char *const *argv) {
-  (void)argc;
-  (void)argv;
-}
-
 void Args::Instance::Parse(int argc, const char *const *argv) {
   try {
     Ref().parse(argc, argv);
