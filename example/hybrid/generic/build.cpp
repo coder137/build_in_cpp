@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
   // 1. Get arguments
   ArgToolchain custom_toolchain;
   TargetType default_lib_type{TargetType::StaticLibrary};
-  Args::Init();
+  auto &instance = Args::Init();
 
   try {
     const std::map<std::string, TargetType> lib_type_map_{
@@ -37,12 +37,12 @@ int main(int argc, char **argv) {
         ->group("Custom");
 
     // NOTE, You can add more custom toolchains as per your requirement
-    Args::AddToolchain("user", "User defined toolchain", custom_toolchain);
+    instance.AddToolchain("user", "User defined toolchain", custom_toolchain);
   } catch (const std::exception &e) {
     std::cout << "EXCEPTION " << e.what() << std::endl;
   }
 
-  Args::Parse(argc, argv);
+  instance.Parse(argc, argv);
 
   // 2. Initialize your environment
   Register reg;
