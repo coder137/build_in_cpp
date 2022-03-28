@@ -19,10 +19,11 @@
 namespace buildcc {
 
 void Args::Instance::Parse(int argc, const char *const *argv) {
+  auto &app = Ref();
   try {
-    Ref().parse(argc, argv);
+    app.parse(argc, argv);
   } catch (const CLI::ParseError &e) {
-    exit(ConstRef().exit(e));
+    exit(app.exit(e));
   }
 }
 

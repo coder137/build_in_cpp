@@ -110,7 +110,7 @@ Args::Instance &Args::Init() {
 void Args::Deinit() { internal_.reset(nullptr); }
 
 CLI::App &Args::Ref() { return internal_->app; }
-const CLI::App &Args::ConstRef() { return internal_->app; }
+// const CLI::App &Args::ConstRef() { return internal_->app; }
 
 bool Args::Clean() { return clean_; }
 env::LogLevel Args::GetLogLevel() { return loglevel_; }

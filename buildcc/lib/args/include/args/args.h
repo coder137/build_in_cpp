@@ -153,7 +153,7 @@ public:
   /**
    * @brief Constant reference to CLI::App (CLI11)
    */
-  static const CLI::App &ConstRef();
+  // static const CLI::App &ConstRef();
 
   // Getters
   static bool Clean();
