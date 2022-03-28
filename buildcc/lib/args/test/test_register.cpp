@@ -1,7 +1,5 @@
 #include "args/register.h"
 
-#include "test_args.h"
-
 #include "expect_command.h"
 
 #include "mock_command_copier.h"
@@ -17,7 +15,7 @@
 TEST_GROUP(RegisterTestGroup)
 {
   void teardown() {
-    buildcc::m::ArgsDeinit();
+    buildcc::Args::Deinit();
     mock().clear();
   }
 };
@@ -54,7 +52,7 @@ TEST(RegisterTestGroup, Register_Clean) {
     buildcc::Register reg;
     mock().expectOneCall("CleanCb");
     reg.Clean([]() { mock().actualCall("CleanCb"); });
-    buildcc::m::ArgsDeinit();
+    buildcc::Args::Deinit();
   }
 
   {
@@ -77,7 +75,7 @@ TEST(RegisterTestGroup, Register_Clean) {
 
     buildcc::Register reg;
     reg.Clean([]() { mock().actualCall("CleanCb"); });
-    buildcc::m::ArgsDeinit();
+    buildcc::Args::Deinit();
   }
 
   mock().checkExpectations();
@@ -686,7 +684,7 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
 }
 
 int main(int ac, char **av) {
-  MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
+  MemoryLeakWarningPlugin::destroyGlobalDetector();
   buildcc::env::m::VectorStringCopier copier;
   mock().installCopier(TEST_VECTOR_STRING_TYPE, copier);
   return CommandLineTestRunner::RunAllTests(ac, av);

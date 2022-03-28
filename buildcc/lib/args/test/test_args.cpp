@@ -1,7 +1,5 @@
 #include "args/args.h"
 
-#include "test_args.h"
-
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
@@ -12,8 +10,7 @@
 TEST_GROUP(ArgsTestGroup)
 {
   void teardown() {
-    buildcc::m::ArgsDeinit();
-    buildcc::Args::Ref().clear();
+    buildcc::Args::Deinit();
   }
 };
 // clang-format on
@@ -23,7 +20,6 @@ TEST(ArgsTestGroup, Args_BasicParse) {
   std::vector<const char *> av{"", "--config", "configs/basic_parse.toml"};
   int argc = av.size();
 
-  // buildcc::Args::Init();
   buildcc::Args::Init();
   buildcc::Args::Parse(argc, av.data());
 
@@ -268,6 +264,6 @@ TEST(ArgsTestGroup, Args_MultipleCustomTarget) {
 }
 
 int main(int ac, char **av) {
-  MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
+  MemoryLeakWarningPlugin::destroyGlobalDetector();
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
