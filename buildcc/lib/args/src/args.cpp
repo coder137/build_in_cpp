@@ -141,6 +141,8 @@ void Args::RootArgs() {
       ->required();
 }
 
+CLI::App &Args::MyRef() { return internal_->app; }
+
 // Args::Instance
 
 /**
@@ -197,6 +199,12 @@ Args::Instance &Args::Instance::AddTarget(const std::string &name,
       ->default_val(initial.compile_command);
   targetuser->add_option(kTargetLinkCommandParam, out.link_command)
       ->default_val(initial.link_command);
+  return *this;
+}
+
+Args::Instance &Args::Instance::AddCustomData(ArgCustom &data) {
+  auto &app = MyRef();
+  data.Add(app);
   return *this;
 }
 

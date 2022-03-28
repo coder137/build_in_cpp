@@ -85,6 +85,10 @@ struct ArgTarget {
   std::string link_command{""};
 };
 
+struct ArgCustom {
+  virtual void Add(CLI::App &app) = 0;
+};
+
 class Args {
 private:
   class Instance {
@@ -117,6 +121,13 @@ private:
      */
     Instance &AddTarget(const std::string &name, const std::string &description,
                         ArgTarget &out, const ArgTarget &initial = ArgTarget());
+
+    /**
+     * @brief Add custom data
+     *
+     * @param data Derive from `buildcc::ArgCustom` and override the `Add` API
+     */
+    Instance &AddCustomData(ArgCustom &data);
   };
 
   struct Internal {
@@ -153,6 +164,7 @@ public:
 
 private:
   static void RootArgs();
+  static CLI::App &MyRef();
 
 private:
   static std::unique_ptr<Internal> internal_;
