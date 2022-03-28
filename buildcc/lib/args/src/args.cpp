@@ -96,27 +96,27 @@ struct ArgsInternal {
   CLI::App *target_{nullptr};
 };
 
-std::unique_ptr<ArgsInternal> args_instance_;
+std::unique_ptr<ArgsInternal> args_internal_;
 
 } // namespace
 
 namespace buildcc {
 
 void Args::Init() {
-  if (!args_instance_) {
-    args_instance_ = std::make_unique<ArgsInternal>();
-    args_instance_->toolchain_ =
+  if (!args_internal_) {
+    args_internal_ = std::make_unique<ArgsInternal>();
+    args_internal_->toolchain_ =
         Ref().add_subcommand(kToolchainSubcommand, kToolchainDesc);
-    args_instance_->target_ =
+    args_internal_->target_ =
         Ref().add_subcommand(kTargetSubcommand, kTargetDesc);
     RootArgs();
   }
 }
 
-void Args::Deinit() { args_instance_.reset(nullptr); }
+void Args::Deinit() { args_internal_.reset(nullptr); }
 
-CLI::App &Args::Ref() { return args_instance_->app_; }
-const CLI::App &Args::ConstRef() { return args_instance_->app_; }
+CLI::App &Args::Ref() { return args_internal_->app_; }
+const CLI::App &Args::ConstRef() { return args_internal_->app_; }
 
 bool Args::Clean() { return clean_; }
 env::LogLevel Args::GetLogLevel() { return loglevel_; }
@@ -126,7 +126,7 @@ const fs::path &Args::GetProjectBuildDir() { return project_build_dir_; }
 
 void Args::AddToolchain(const std::string &name, const std::string &description,
                         ArgToolchain &out, const ArgToolchain &initial) {
-  CLI::App *toolchain_ = args_instance_->toolchain_;
+  CLI::App *toolchain_ = args_internal_->toolchain_;
   env::assert_fatal(toolchain_ != nullptr,
                     "Initialize Args using the Args::Init API");
   CLI::App *t_user =
@@ -152,7 +152,7 @@ void Args::AddToolchain(const std::string &name, const std::string &description,
 
 void Args::AddTarget(const std::string &name, const std::string &description,
                      ArgTarget &out, const ArgTarget &initial) {
-  CLI::App *target_ = args_instance_->target_;
+  CLI::App *target_ = args_internal_->target_;
   env::assert_fatal(target_ != nullptr,
                     "Initialize Args using the Args::Init API");
   CLI::App *target_user =
