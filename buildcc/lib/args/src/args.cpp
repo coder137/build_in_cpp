@@ -91,27 +91,37 @@ fs::path project_root_dir_{""};
 fs::path project_build_dir_{"_internal"};
 
 // Internal
-std::unique_ptr<CLI::App> app_;
-CLI::App *toolchain_{nullptr};
-CLI::App *target_{nullptr};
+// std::unique_ptr<CLI::App> app_;
+// CLI::App *toolchain_{nullptr};
+// CLI::App *target_{nullptr};
+
+struct ArgsInstance {
+  CLI::App app_{"BuildCC Buildsystem"};
+  CLI::App *toolchain_{nullptr};
+  CLI::App *target_{nullptr};
+};
+
+std::unique_ptr<ArgsInstance> args_instance_;
 
 } // namespace
 
 namespace buildcc {
 
 void Args::Init() {
-  if (!app_) {
-    app_ = std::make_unique<CLI::App>("BuildCC buildsystem");
-    toolchain_ = Ref().add_subcommand(kToolchainSubcommand, kToolchainDesc);
-    target_ = Ref().add_subcommand(kTargetSubcommand, kTargetDesc);
+  if (!args_instance_) {
+    args_instance_ = std::make_unique<ArgsInstance>();
+    args_instance_->toolchain_ =
+        Ref().add_subcommand(kToolchainSubcommand, kToolchainDesc);
+    args_instance_->target_ =
+        Ref().add_subcommand(kTargetSubcommand, kTargetDesc);
     RootArgs();
   }
 }
 
-void Args::Deinit() { app_.reset(nullptr); }
+void Args::Deinit() { args_instance_.reset(nullptr); }
 
-CLI::App &Args::Ref() { return *app_; }
-const CLI::App &Args::ConstRef() { return *app_; }
+CLI::App &Args::Ref() { return args_instance_->app_; }
+const CLI::App &Args::ConstRef() { return args_instance_->app_; }
 
 bool Args::Clean() { return clean_; }
 env::LogLevel Args::GetLogLevel() { return loglevel_; }
@@ -121,6 +131,7 @@ const fs::path &Args::GetProjectBuildDir() { return project_build_dir_; }
 
 void Args::AddToolchain(const std::string &name, const std::string &description,
                         ArgToolchain &out, const ArgToolchain &initial) {
+  CLI::App *toolchain_ = args_instance_->toolchain_;
   env::assert_fatal(toolchain_ != nullptr,
                     "Initialize Args using the Args::Init API");
   CLI::App *t_user =
@@ -146,6 +157,7 @@ void Args::AddToolchain(const std::string &name, const std::string &description,
 
 void Args::AddTarget(const std::string &name, const std::string &description,
                      ArgTarget &out, const ArgTarget &initial) {
+  CLI::App *target_ = args_instance_->target_;
   env::assert_fatal(target_ != nullptr,
                     "Initialize Args using the Args::Init API");
   CLI::App *target_user =
