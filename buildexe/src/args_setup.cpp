@@ -32,14 +32,15 @@ static const std::unordered_map<const char *, TargetType> kTargetTypeMap{
     {"dynamicLibrary", TargetType::DynamicLibrary},
 };
 
-void BuildExeArgs::Setup() {
-  Args::Init();
-  Args::AddToolchain("host", "Host Toolchain", host_toolchain_arg_);
+void BuildExeArgs::Setup(int argc, char **argv) {
+  auto &instance =
+      Args::Init().AddToolchain("host", "Host Toolchain", host_toolchain_arg_);
   SetupBuildMode();
   SetupTargetInfo();
   SetupTargetInputs();
   SetupScriptMode();
   SetupLibs();
+  instance.Parse(argc, argv);
 }
 
 void BuildExeArgs::SetupBuildMode() {

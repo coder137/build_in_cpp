@@ -61,8 +61,7 @@ struct LibInfo {
 
 class BuildExeArgs {
 public:
-  void Setup();
-  void Parse(int argc, char **argv) { Args::Parse(argc, argv); }
+  void Setup(int argc, char **argv);
 
   // Getters
   const ArgToolchain &GetHostToolchainArg() const {

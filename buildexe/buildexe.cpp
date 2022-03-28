@@ -42,8 +42,7 @@ int main(int argc, char **argv) {
 
   //
   BuildExeArgs buildexe_args;
-  buildexe_args.Setup();
-  buildexe_args.Parse(argc, argv);
+  buildexe_args.Setup(argc, argv);
 
   // TODO, Add Verification subcommand here for OS, Compiler etc!
   // os win, linux considerations
