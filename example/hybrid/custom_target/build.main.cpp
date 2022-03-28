@@ -9,16 +9,16 @@ static constexpr std::string_view EXE = "build";
 
 int main(int argc, char **argv) {
   // 1. Get arguments
-  Args::Init();
   ArgToolchain arg_gcc;
   ArgToolchain arg_msvc;
   ArgToolchain toolchain_clang_gnu;
   ArgTarget target_clang_gnu;
-  Args::AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
-  Args::AddToolchain("msvc", "Generic msvc toolchain", arg_msvc);
-  Args::AddToolchain("clang_gnu", "Clang GNU toolchain", toolchain_clang_gnu);
-  Args::AddTarget("clang_gnu", "Clang GNU target", target_clang_gnu);
-  Args::Parse(argc, argv);
+  Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", arg_gcc)
+      .AddToolchain("msvc", "Generic msvc toolchain", arg_msvc)
+      .AddToolchain("clang_gnu", "Clang GNU toolchain", toolchain_clang_gnu)
+      .AddTarget("clang_gnu", "Clang GNU target", target_clang_gnu)
+      .Parse(argc, argv);
 
   // 2. Initialize your environment
   Register reg;
