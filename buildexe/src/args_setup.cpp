@@ -33,91 +33,74 @@ static const std::unordered_map<const char *, TargetType> kTargetTypeMap{
 };
 
 void BuildExeArgs::Setup(int argc, char **argv) {
-  auto &instance =
-      Args::Init().AddToolchain("host", "Host Toolchain", host_toolchain_arg_);
-  SetupBuildMode();
-  SetupTargetInfo();
-  SetupTargetInputs();
-  SetupScriptMode();
-  SetupLibs();
-  instance.Parse(argc, argv);
+  Args::Init()
+      .AddToolchain("host", "Host Toolchain", host_toolchain_arg_)
+      .AddCustomData(out_targetinfo_)
+      .AddCustomData(out_targetinputs_)
+      .AddCustomData(out_scriptinfo_)
+      .AddCustomCallback([&](CLI::App &app) {
+        SetupBuildMode(app);
+        SetupLibs(app);
+      })
+      .Parse(argc, argv);
 }
 
-void BuildExeArgs::SetupBuildMode() {
-  Args::Ref()
-      .add_option("--mode", out_mode_, "Provide BuildExe run mode")
+void BuildExeArgs::SetupBuildMode(CLI::App &app) {
+  app.add_option("--mode", out_mode_, "Provide BuildExe run mode")
       ->transform(CLI::CheckedTransformer(kBuildExeModeMap, CLI::ignore_case))
       ->required();
 }
 
-// TODO, Add subcommand [build.info]
-void BuildExeArgs::SetupTargetInfo() {
+void ArgTargetInfo::Add(CLI::App &app) {
   constexpr const char *const kProjectInfo = "Project Info";
-  auto &app = Args::Ref();
-
   auto *project_info_app = app.add_option_group(kProjectInfo);
 
-  project_info_app
-      ->add_option("--name", out_targetinfo_.name, "Provide Target name")
+  project_info_app->add_option("--name", name, "Provide Target name")
       ->required();
 
-  project_info_app
-      ->add_option("--type", out_targetinfo_.type, "Provide Target Type")
+  project_info_app->add_option("--type", type, "Provide Target Type")
       ->transform(CLI::CheckedTransformer(kTargetTypeMap, CLI::ignore_case))
       ->required();
 
   project_info_app
-      ->add_option("--relative_to_root", out_targetinfo_.relative_to_root,
+      ->add_option("--relative_to_root", relative_to_root,
                    "Provide Target relative to root")
       ->required();
 }
 
-// TODO, Add subcommand [build.inputs]
-// TODO, Add group, group by sources, headers, inncludes on CLI
-void BuildExeArgs::SetupTargetInputs() {
+void ArgTargetInputs::Add(CLI::App &app) {
   constexpr const char *const kTargetInputs = "Target Inputs";
-  auto &app = Args::Ref();
-
   auto *target_inputs_app = app.add_option_group(kTargetInputs);
 
-  target_inputs_app->add_option("--srcs", out_targetinputs_.source_files,
-                                "Provide source files");
-  target_inputs_app->add_option("--includes", out_targetinputs_.include_dirs,
+  target_inputs_app->add_option("--srcs", source_files, "Provide source files");
+  target_inputs_app->add_option("--includes", include_dirs,
                                 "Provide include dirs");
 
-  target_inputs_app->add_option("--lib_dirs", out_targetinputs_.lib_dirs,
-                                "Provide lib dirs");
-  target_inputs_app->add_option("--external_libs",
-                                out_targetinputs_.external_lib_deps,
+  target_inputs_app->add_option("--lib_dirs", lib_dirs, "Provide lib dirs");
+  target_inputs_app->add_option("--external_libs", external_lib_deps,
                                 "Provide external libs");
 
-  target_inputs_app->add_option("--preprocessor_flags",
-                                out_targetinputs_.preprocessor_flags,
+  target_inputs_app->add_option("--preprocessor_flags", preprocessor_flags,
                                 "Provide Preprocessor flags");
-  target_inputs_app->add_option("--common_compile_flags",
-                                out_targetinputs_.common_compile_flags,
+  target_inputs_app->add_option("--common_compile_flags", common_compile_flags,
                                 "Provide CommonCompile Flags");
-  target_inputs_app->add_option("--asm_compile_flags",
-                                out_targetinputs_.asm_compile_flags,
+  target_inputs_app->add_option("--asm_compile_flags", asm_compile_flags,
                                 "Provide AsmCompile Flags");
-  target_inputs_app->add_option("--c_compile_flags",
-                                out_targetinputs_.c_compile_flags,
+  target_inputs_app->add_option("--c_compile_flags", c_compile_flags,
                                 "Provide CCompile Flags");
-  target_inputs_app->add_option("--cpp_compile_flags",
-                                out_targetinputs_.cpp_compile_flags,
+  target_inputs_app->add_option("--cpp_compile_flags", cpp_compile_flags,
                                 "Provide CppCompile Flags");
-  target_inputs_app->add_option("--link_flags", out_targetinputs_.link_flags,
+  target_inputs_app->add_option("--link_flags", link_flags,
                                 "Provide Link Flags");
+};
+
+void ArgScriptInfo::Add(CLI::App &app) {
+  auto *script_args = app.add_subcommand("script");
+  script_args->add_option("--configs", configs, "Config files for script mode");
 }
 
-void BuildExeArgs::SetupScriptMode() {
-  auto *script_args = Args::Ref().add_subcommand("script");
-  script_args->add_option("--configs", out_scriptinfo_.configs,
-                          "Config files for script mode");
-}
-
-void BuildExeArgs::SetupLibs() {
-  auto *libs_app = Args::Ref().add_subcommand("libs", "Libraries");
+void BuildExeArgs::SetupLibs(CLI::App &app) {
+  auto *libs_app = app.add_subcommand("libs", "Libraries");
   std::error_code ec;
   fs::directory_iterator dir_iter =
       fs::directory_iterator(BuildccHome::GetBuildccLibsDir(), ec);

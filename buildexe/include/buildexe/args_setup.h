@@ -26,13 +26,17 @@ enum class BuildExeMode {
   Script,
 };
 
-struct ArgTargetInfo {
+struct ArgTargetInfo : public ArgCustom {
+  void Add(CLI::App &app) override;
+
   std::string name;
   TargetType type;
   fs::path relative_to_root;
 };
 
-struct ArgTargetInputs {
+struct ArgTargetInputs : public ArgCustom {
+  void Add(CLI::App &app) override;
+
   // Sources
   std::vector<fs::path> source_files;
   std::vector<fs::path> include_dirs;
@@ -50,10 +54,13 @@ struct ArgTargetInputs {
   std::vector<std::string> link_flags;
 };
 
-struct ArgScriptInfo {
+struct ArgScriptInfo : public ArgCustom {
+  void Add(CLI::App &app) override;
+
   std::vector<std::string> configs;
 };
 
+// TODO, Update this later
 struct LibInfo {
   std::string lib_name;
   std::string absolute_lib_path;
@@ -78,11 +85,8 @@ public:
   }
 
 private:
-  void SetupBuildMode();
-  void SetupTargetInfo();
-  void SetupTargetInputs();
-  void SetupScriptMode();
-  void SetupLibs();
+  void SetupBuildMode(CLI::App &app);
+  void SetupLibs(CLI::App & app);
 
 private:
   ArgToolchain host_toolchain_arg_;
