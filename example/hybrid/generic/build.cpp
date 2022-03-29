@@ -15,6 +15,7 @@ constexpr std::string_view EXE = "build";
 
 // Function Prototypes
 static void clean_cb();
+static void args_lib_type_cb(CLI::App &app, TargetType &lib_type);
 static void foolib_build_cb(BaseTarget &foolib_target);
 static void generic_build_cb(BaseTarget &generic_target,
                              BaseTarget &foolib_target);
@@ -23,26 +24,11 @@ int main(int argc, char **argv) {
   // 1. Get arguments
   ArgToolchain custom_toolchain;
   TargetType default_lib_type{TargetType::StaticLibrary};
-  Args::Init();
-
-  try {
-    const std::map<std::string, TargetType> lib_type_map_{
-        {"StaticLib", TargetType::StaticLibrary},
-        {"DynamicLib", TargetType::DynamicLibrary},
-    };
-
-    Args::Ref()
-        .add_option("--default_lib_type", default_lib_type, "Default Lib Type")
-        ->transform(CLI::CheckedTransformer(lib_type_map_, CLI::ignore_case))
-        ->group("Custom");
-
-    // NOTE, You can add more custom toolchains as per your requirement
-    Args::AddToolchain("user", "User defined toolchain", custom_toolchain);
-  } catch (const std::exception &e) {
-    std::cout << "EXCEPTION " << e.what() << std::endl;
-  }
-
-  Args::Parse(argc, argv);
+  Args::Init()
+      .AddToolchain("user", "User defined toolchain", custom_toolchain)
+      .AddCustomCallback(
+          [&](CLI::App &app) { args_lib_type_cb(app, default_lib_type); })
+      .Parse(argc, argv);
 
   // 2. Initialize your environment
   Register reg;
@@ -117,6 +103,17 @@ int main(int argc, char **argv) {
 static void clean_cb() {
   env::log_info(EXE, fmt::format("Cleaning {}", Project::GetBuildDir()));
   fs::remove_all(Project::GetBuildDir());
+}
+
+void args_lib_type_cb(CLI::App &app, TargetType &lib_type) {
+  const std::map<std::string, TargetType> lib_type_map_{
+      {"StaticLib", TargetType::StaticLibrary},
+      {"DynamicLib", TargetType::DynamicLibrary},
+  };
+
+  app.add_option("--default_lib_type", lib_type, "Default Lib Type")
+      ->transform(CLI::CheckedTransformer(lib_type_map_, CLI::ignore_case))
+      ->group("Custom");
 }
 
 static void foolib_build_cb(BaseTarget &foolib_target) {

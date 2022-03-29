@@ -10,10 +10,10 @@ static void hello_world_build_cb(BaseTarget &target);
 
 int main(int argc, char **argv) {
   // 1. Get arguments
-  Args::Init();
   ArgToolchain arg_gcc;
-  Args::AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
-  Args::Parse(argc, argv);
+  Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", arg_gcc)
+      .Parse(argc, argv);
 
   // 2. Initialize your environment
   Register reg;

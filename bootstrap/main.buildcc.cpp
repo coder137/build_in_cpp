@@ -33,13 +33,12 @@ static void hybrid_simple_example_cb(BaseTarget &target,
                                      const BaseTarget &libbuildcc);
 
 int main(int argc, char **argv) {
-  Args::Init();
   ArgToolchain custom_toolchain_arg;
-  Args::AddToolchain("host", "Host Toolchain", custom_toolchain_arg);
-  Args::Parse(argc, argv);
+  Args::Init()
+      .AddToolchain("host", "Host Toolchain", custom_toolchain_arg)
+      .Parse(argc, argv);
 
   Register reg;
-  ;
   reg.Clean(clean_cb);
 
   BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();

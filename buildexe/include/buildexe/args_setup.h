@@ -26,13 +26,17 @@ enum class BuildExeMode {
   Script,
 };
 
-struct ArgTargetInfo {
+struct ArgTargetInfo : public ArgCustom {
+  void Add(CLI::App &app) override;
+
   std::string name;
   TargetType type;
   fs::path relative_to_root;
 };
 
-struct ArgTargetInputs {
+struct ArgTargetInputs : public ArgCustom {
+  void Add(CLI::App &app) override;
+
   // Sources
   std::vector<fs::path> source_files;
   std::vector<fs::path> include_dirs;
@@ -50,7 +54,9 @@ struct ArgTargetInputs {
   std::vector<std::string> link_flags;
 };
 
-struct ArgScriptInfo {
+struct ArgScriptInfo : public ArgCustom {
+  void Add(CLI::App &app) override;
+
   std::vector<std::string> configs;
 };
 
@@ -59,10 +65,16 @@ struct LibInfo {
   std::string absolute_lib_path;
 };
 
+struct ArgLibsInfo : public ArgCustom {
+  void Add(CLI::App &app) override;
+
+  std::vector<LibInfo> libs_info;
+  std::vector<fs::path> lib_build_files;
+};
+
 class BuildExeArgs {
 public:
-  void Setup();
-  void Parse(int argc, char **argv) { Args::Parse(argc, argv); }
+  void Setup(int argc, char **argv);
 
   // Getters
   const ArgToolchain &GetHostToolchainArg() const {
@@ -73,28 +85,23 @@ public:
   const ArgScriptInfo &GetScriptInfo() const { return out_scriptinfo_; }
   BuildExeMode GetBuildMode() const { return out_mode_; }
 
-  const std::vector<LibInfo> &GetLibsInfo() const { return libs_info_; }
+  const std::vector<LibInfo> &GetLibsInfo() const {
+    return out_libsinfo_.libs_info;
+  }
   const std::vector<fs::path> &GetLibBuildFiles() const {
-    return lib_build_files_;
+    return out_libsinfo_.lib_build_files;
   }
 
 private:
-  void SetupBuildMode();
-  void SetupTargetInfo();
-  void SetupTargetInputs();
-  void SetupScriptMode();
-  void SetupLibs();
+  void SetupBuildMode(CLI::App &app);
 
 private:
   ArgToolchain host_toolchain_arg_;
   ArgTargetInfo out_targetinfo_;
   ArgTargetInputs out_targetinputs_;
   ArgScriptInfo out_scriptinfo_;
-
+  ArgLibsInfo out_libsinfo_;
   BuildExeMode out_mode_;
-
-  std::vector<LibInfo> libs_info_;
-  std::vector<fs::path> lib_build_files_;
 };
 
 } // namespace buildcc
