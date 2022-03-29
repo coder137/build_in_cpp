@@ -38,10 +38,8 @@ void BuildExeArgs::Setup(int argc, char **argv) {
       .AddCustomData(out_targetinfo_)
       .AddCustomData(out_targetinputs_)
       .AddCustomData(out_scriptinfo_)
-      .AddCustomCallback([&](CLI::App &app) {
-        SetupBuildMode(app);
-        SetupLibs(app);
-      })
+      .AddCustomData(out_libsinfo_)
+      .AddCustomCallback([&](CLI::App &app) { SetupBuildMode(app); })
       .Parse(argc, argv);
 }
 
@@ -99,7 +97,7 @@ void ArgScriptInfo::Add(CLI::App &app) {
   script_args->add_option("--configs", configs, "Config files for script mode");
 }
 
-void BuildExeArgs::SetupLibs(CLI::App &app) {
+void ArgLibsInfo::Add(CLI::App &app) {
   auto *libs_app = app.add_subcommand("libs", "Libraries");
   std::error_code ec;
   fs::directory_iterator dir_iter =
@@ -117,13 +115,13 @@ void BuildExeArgs::SetupLibs(CLI::App &app) {
     LibInfo lib_info;
     lib_info.lib_name = lib_name;
     lib_info.absolute_lib_path = fmt::format("{}", lib_path);
-    libs_info_.push_back(lib_info);
+    libs_info.push_back(lib_info);
 
     auto add_lib_files_cb_func = [lib_path,
                                   this](const std::vector<std::string> &paths) {
       for (const auto &p : paths) {
-        fs::path absolute_file_path = lib_path / p;
-        lib_build_files_.push_back(absolute_file_path);
+        fs::path absolute_file_path = (lib_path / p).make_preferred();
+        lib_build_files.push_back(absolute_file_path);
       }
     };
 

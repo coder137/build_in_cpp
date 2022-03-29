@@ -60,10 +60,16 @@ struct ArgScriptInfo : public ArgCustom {
   std::vector<std::string> configs;
 };
 
-// TODO, Update this later
 struct LibInfo {
   std::string lib_name;
   std::string absolute_lib_path;
+};
+
+struct ArgLibsInfo : public ArgCustom {
+  void Add(CLI::App &app) override;
+
+  std::vector<LibInfo> libs_info;
+  std::vector<fs::path> lib_build_files;
 };
 
 class BuildExeArgs {
@@ -79,25 +85,23 @@ public:
   const ArgScriptInfo &GetScriptInfo() const { return out_scriptinfo_; }
   BuildExeMode GetBuildMode() const { return out_mode_; }
 
-  const std::vector<LibInfo> &GetLibsInfo() const { return libs_info_; }
+  const std::vector<LibInfo> &GetLibsInfo() const {
+    return out_libsinfo_.libs_info;
+  }
   const std::vector<fs::path> &GetLibBuildFiles() const {
-    return lib_build_files_;
+    return out_libsinfo_.lib_build_files;
   }
 
 private:
   void SetupBuildMode(CLI::App &app);
-  void SetupLibs(CLI::App & app);
 
 private:
   ArgToolchain host_toolchain_arg_;
   ArgTargetInfo out_targetinfo_;
   ArgTargetInputs out_targetinputs_;
   ArgScriptInfo out_scriptinfo_;
-
+  ArgLibsInfo out_libsinfo_;
   BuildExeMode out_mode_;
-
-  std::vector<LibInfo> libs_info_;
-  std::vector<fs::path> lib_build_files_;
 };
 
 } // namespace buildcc
