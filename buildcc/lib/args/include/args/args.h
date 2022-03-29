@@ -151,6 +151,7 @@ public:
   static void Deinit();
 
   // Getters
+  static bool IsParsed();
   static bool Clean();
   static env::LogLevel GetLogLevel();
 
@@ -159,7 +160,8 @@ public:
 
 private:
   static void RootArgs();
-  static CLI::App &Ref();
+  static Internal &RefInternal();
+  static CLI::App &RefApp();
 
 private:
   static std::unique_ptr<Internal> internal_;
