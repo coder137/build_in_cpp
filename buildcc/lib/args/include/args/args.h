@@ -152,16 +152,6 @@ public:
   static Instance &Init();
   static void Deinit();
 
-  /**
-   * @brief Modifiable reference to CLI::App (CLI11)
-   */
-  static CLI::App &Ref();
-
-  /**
-   * @brief Constant reference to CLI::App (CLI11)
-   */
-  // static const CLI::App &ConstRef();
-
   // Getters
   static bool Clean();
   static env::LogLevel GetLogLevel();
@@ -171,7 +161,7 @@ public:
 
 private:
   static void RootArgs();
-  static CLI::App &MyRef();
+  static CLI::App &Ref();
 
 private:
   static std::unique_ptr<Internal> internal_;

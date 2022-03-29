@@ -109,9 +109,6 @@ Args::Instance &Args::Init() {
 
 void Args::Deinit() { internal_.reset(nullptr); }
 
-CLI::App &Args::Ref() { return internal_->app; }
-// const CLI::App &Args::ConstRef() { return internal_->app; }
-
 bool Args::Clean() { return clean_; }
 env::LogLevel Args::GetLogLevel() { return loglevel_; }
 
@@ -121,14 +118,13 @@ const fs::path &Args::GetProjectBuildDir() { return project_build_dir_; }
 // Private
 
 void Args::RootArgs() {
-  Ref().set_help_all_flag(kHelpAllParam, kHelpAllDesc);
+  auto &app = Ref();
+  app.set_help_all_flag(kHelpAllParam, kHelpAllDesc);
 
-  Ref()
-      .set_config(kConfigParam, "", kConfigDesc)
-      ->expected(kMinFiles, kMaxFiles);
+  app.set_config(kConfigParam, "", kConfigDesc)->expected(kMinFiles, kMaxFiles);
 
   // Root flags
-  auto *root_group = Ref().add_option_group(kRootGroup);
+  auto *root_group = app.add_option_group(kRootGroup);
 
   root_group->add_flag(kCleanParam, clean_, kCleanDesc);
   root_group->add_option(kLoglevelParam, loglevel_, kLoglevelDesc)
@@ -141,7 +137,7 @@ void Args::RootArgs() {
       ->required();
 }
 
-CLI::App &Args::MyRef() { return internal_->app; }
+CLI::App &Args::Ref() { return internal_->app; }
 
 // Args::Instance
 
@@ -204,13 +200,13 @@ Args::Instance &Args::Instance::AddTarget(const std::string &name,
 
 Args::Instance &Args::Instance::AddCustomCallback(
     const std::function<void(CLI::App &)> &add_cb) {
-  auto &app = MyRef();
+  auto &app = Ref();
   add_cb(app);
   return *this;
 }
 
 Args::Instance &Args::Instance::AddCustomData(ArgCustom &data) {
-  auto &app = MyRef();
+  auto &app = Ref();
   data.Add(app);
   return *this;
 }
