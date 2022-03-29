@@ -93,15 +93,13 @@ class Args {
 private:
   class Instance {
   public:
-    Instance() = default;
-
     /**
      * @brief Parse command line information to CLI11
      *
      * @param argc from int main(int argc, char ** argv)
      * @param argv from int main(int argc, char ** argv)
      */
-    void Parse(int argc, const char *const *argv);
+    static void Parse(int argc, const char *const *argv);
 
     /**
      * @brief Add toolchain with a unique name and description
