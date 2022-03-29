@@ -151,6 +151,7 @@ public:
   static void Deinit();
 
   // Getters
+  static bool IsInit();
   static bool IsParsed();
   static bool Clean();
   static env::LogLevel GetLogLevel();
