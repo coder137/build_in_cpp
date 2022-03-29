@@ -8,9 +8,13 @@ args.h
 
 .. doxygenclass:: buildcc::Args::Instance
 
+.. doxygenstruct:: buildcc::ArgCustom
+
 .. doxygenstruct:: buildcc::ArgToolchainState
 
 .. doxygenstruct:: buildcc::ArgToolchain
+
+.. doxygenstruct:: buildcc::ArgTarget
 
 Example
 ---------
@@ -18,30 +22,41 @@ Example
 .. code-block:: cpp
     :linenos:
 
-    int main(int argc, char ** argv) {
-        Args args;
-        ArgToolchain arg_gcc_toolchain;
-        args.AddToolchain("gcc", "Generic GCC toolchain", arg_gcc_toolchain);
+    using namespace buildcc;
 
-        // TODO, Add ArgTarget example (Currently incomplete)
-        args.Parse(argc, argv);
+    struct CustomData : ArgCustom {
+        void Add(CLI::App & app) override {
+            // setup your app from data1, data2, data3, data...
+            // NOTE: The Add method should not be invoked by the user
+            // NOTE: The Add method is only expected to be invoked once, not multiple times.
+        }
+
+        std::string data1;
+        int data2;
+        float data3;
+        // etc
+    };
+
+    int main(int argc, char ** argv) {
+        ArgToolchain arg_gcc_toolchain;
+        ArgCustomData custom_data;
+        Args::Init()
+            .AddToolchain("gcc", "Generic GCC toolchain", arg_gcc_toolchain)
+            .AddCustomCallback([](CLI::App &app) {});
+            .AddCustomData(custom_data);
+            .Parse(argc, argv);
 
         // Root
-        args.GetProjectRootDir(); // Contains ``root_dir`` value
-        args.GetProjectBuildDir(); // Contains ``build_dir`` value
-        args.GetLogLevel(); // Contains ``loglevel`` enum
-        args.Clean(); // Contains ``clean`` value
+        Args::GetProjectRootDir(); // Contains ``root_dir`` value
+        Args::GetProjectBuildDir(); // Contains ``build_dir`` value
+        Args::GetLogLevel(); // Contains ``loglevel`` enum
+        Args::Clean(); // Contains ``clean`` value
 
         // Toolchain
         // .build, .test
         arg_gcc_toolchain.state;
         // .id, .name, .asm_compiler, .c_compiler, .cpp_compiler, .archiver, .linker -> BaseToolchain
         BaseToolchain gcc_toolchain = arg_gcc_toolchain.ConstructToolchain();
-
-        // Underlying CLI11 library
-        auto & app = args.Ref();
-        const auto & app = args.ConstRef();
-
         return 0;
     }
 
