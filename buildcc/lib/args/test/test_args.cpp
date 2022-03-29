@@ -16,7 +16,6 @@ TEST_GROUP(ArgsTestGroup)
 // clang-format on
 
 TEST(ArgsTestGroup, Args_BasicParse) {
-  UT_PRINT("Args_BasicParse\r\n");
   std::vector<const char *> av{"", "--config", "configs/basic_parse.toml"};
   int argc = av.size();
 
@@ -263,6 +262,64 @@ TEST(ArgsTestGroup, Args_MultipleCustomTarget) {
   STRCMP_EQUAL(msvc_target.link_command.c_str(),
                "{linker} {link_flags} {lib_dirs} /OUT:{output} {lib_deps} "
                "{compiled_sources}");
+}
+
+TEST(ArgsTestGroup, Args_CustomCallback) {
+  std::vector<const char *> av{"",
+                               "--config",
+                               "configs/basic_parse.toml",
+                               "--random_bool",
+                               "true",
+                               "--random_string",
+                               "hello world"};
+  int argc = av.size();
+
+  bool random_bool{false};
+  std::string random_string;
+  auto &instance = buildcc::Args::Init();
+  instance.AddCustomCallback([&](CLI::App &app) {
+    app.add_option("--random_bool", random_bool, "Random bool");
+    app.add_option("--random_string", random_string, "Random string");
+  });
+  instance.Parse(argc, av.data());
+
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
+  CHECK_TRUE(random_bool);
+  STRCMP_EQUAL(random_string.c_str(), "hello world");
+}
+
+TEST(ArgsTestGroup, Args_CustomData) {
+  struct RandomGroupedData : public buildcc::ArgCustom {
+    void Add(CLI::App &app) override {
+      app.add_option("--random_bool", random_bool, "Random bool");
+      app.add_option("--random_string", random_string, "Random string");
+    }
+
+    bool random_bool{false};
+    std::string random_string;
+  };
+
+  std::vector<const char *> av{"",
+                               "--config",
+                               "configs/basic_parse.toml",
+                               "--random_bool",
+                               "true",
+                               "--random_string",
+                               "hello world"};
+  int argc = av.size();
+
+  RandomGroupedData grouped_data;
+  buildcc::Args::Init().AddCustomData(grouped_data).Parse(argc, av.data());
+
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
+  CHECK_TRUE(grouped_data.random_bool);
+  STRCMP_EQUAL(grouped_data.random_string.c_str(), "hello world");
 }
 
 int main(int ac, char **av) {
