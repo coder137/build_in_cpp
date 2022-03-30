@@ -115,7 +115,12 @@ Args::Instance &Args::Init() {
 void Args::Deinit() { internal_.reset(nullptr); }
 
 bool Args::IsInit() { return static_cast<bool>(internal_); }
-bool Args::IsParsed() { return RefApp().parsed(); }
+bool Args::IsParsed() {
+  if (!IsInit()) {
+    return false;
+  }
+  return RefApp().parsed();
+}
 bool Args::Clean() { return clean_; }
 env::LogLevel Args::GetLogLevel() { return loglevel_; }
 

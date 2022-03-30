@@ -20,7 +20,7 @@ TEST(ArgsTestGroup, Args_BasicParse) {
   int argc = av.size();
 
   CHECK_FALSE(buildcc::Args::IsInit());
-  CHECK_THROWS(std::exception, buildcc::Args::IsParsed());
+  CHECK_FALSE(buildcc::Args::IsParsed());
 
   (void)buildcc::Args::Init();
   auto &instance = buildcc::Args::Init(); // Second init does nothing when
