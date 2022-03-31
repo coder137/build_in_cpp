@@ -27,6 +27,11 @@
 namespace fs = std::filesystem;
 
 namespace {
+constexpr const char *const kRegkNotInit =
+    "Initialize Reg using the Reg::Init API";
+}
+
+namespace {
 
 void DepDetectDuplicate(const tf::Task &target_task, const std::string &match) {
   target_task.for_each_dependent([&](const tf::Task &t) {
@@ -59,6 +64,37 @@ void DepDetectCyclicDependency(const tf::Task &target_task,
 } // namespace
 
 namespace buildcc {
+
+bool Reg::is_init_{false};
+Register Reg::reg_;
+
+void Reg::Init() {
+  if (!is_init_) {
+    env::assert_fatal(Args::IsParsed(), "Setup your Args");
+    Project::Init(fs::current_path() / Args::GetProjectRootDir(),
+                  fs::current_path() / Args::GetProjectBuildDir());
+    env::set_log_level(Args::GetLogLevel());
+    is_init_ = true;
+  }
+}
+
+Reg::ToolchainInstance Reg::Toolchain(const ArgToolchainState &condition) {
+  env::assert_fatal(is_init_, kRegkNotInit);
+  return ToolchainInstance(condition);
+}
+
+Reg::CallbackInstance Reg::Call(bool condition) {
+  env::assert_fatal(is_init_, kRegkNotInit);
+  return CallbackInstance(condition);
+}
+
+Reg::CallbackInstance &
+Reg::CallbackInstance::Func(const std::function<void(void)> &cb) {
+  if (condition_ && cb) {
+    cb();
+  }
+  return *this;
+}
 
 void Register::Clean(const std::function<void(void)> &clean_cb) {
   if (Args::Clean()) {
@@ -114,14 +150,6 @@ void Register::BuildStoreTask(const std::string &unique_id,
   env::assert_fatal(
       stored, fmt::format("Duplicate `Register::Build` call detected for '{}'",
                           unique_id));
-}
-
-void Register::Initialize() { Env(); }
-
-void Register::Env() {
-  Project::Init(fs::current_path() / Args::GetProjectRootDir(),
-                fs::current_path() / Args::GetProjectBuildDir());
-  env::set_log_level(Args::GetLogLevel());
 }
 
 //

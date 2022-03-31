@@ -33,7 +33,7 @@ namespace buildcc {
 
 class Register {
 public:
-  Register() { Initialize(); }
+  Register() = default;
   Register(const Register &) = delete;
 
   /**
@@ -143,11 +143,6 @@ public:
 
 private:
 private:
-  void Initialize();
-
-  // Setup env:: defaults
-  void Env();
-
   // BuildTasks
   tf::Task BuildTargetTask(BaseTarget &target);
   tf::Task BuildGeneratorTask(BaseGenerator &generator);
@@ -164,6 +159,55 @@ private:
 
   //
   tf::Executor executor_;
+};
+
+class Reg {
+private:
+  class ToolchainInstance {
+  public:
+    ToolchainInstance(const ArgToolchainState &condition)
+        : condition_(condition) {}
+    template <typename C, typename... Params>
+    ToolchainInstance &Build(const C &build_cb, BaseTarget &target,
+                             Params &&...params) {
+      reg_.Build(condition_, target, std::forward<Params>(params)...);
+      return *this;
+    }
+
+    ToolchainInstance &Dep(const internal::BuilderInterface &target,
+                           const internal::BuilderInterface &dependency) {
+      reg_.Dep(target, dependency);
+      return *this;
+    }
+
+    ToolchainInstance &Test(const std::string &command,
+                            const BaseTarget &target,
+                            const TestConfig &config = TestConfig()) {
+      reg_.Test(condition_, command, target, config);
+      return *this;
+    }
+
+  private:
+    ArgToolchainState condition_;
+  };
+
+  class CallbackInstance {
+  public:
+    CallbackInstance(bool condition = true) : condition_(condition) {}
+    CallbackInstance &Func(const std::function<void(void)> &cb);
+
+  private:
+    bool condition_;
+  };
+
+public:
+  static void Init();
+  static CallbackInstance Call(bool condition = true);
+  static ToolchainInstance Toolchain(const ArgToolchainState &condition);
+
+private:
+  static bool is_init_;
+  static Register reg_;
 };
 
 } // namespace buildcc
