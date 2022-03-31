@@ -78,9 +78,36 @@ void Reg::Init() {
   }
 }
 
+void Reg::Run() {
+  reg_.RunBuild();
+  reg_.RunTest();
+}
+
 Reg::ToolchainInstance Reg::Toolchain(const ArgToolchainState &condition) {
   env::assert_fatal(is_init_, kRegkNotInit);
   return ToolchainInstance(condition);
+}
+
+Reg::ToolchainInstance &
+Reg::ToolchainInstance::Func(const std::function<void(void)> &cb) {
+  if (condition_.build && cb) {
+    cb();
+  }
+  return *this;
+}
+
+Reg::ToolchainInstance &
+Reg::ToolchainInstance::Dep(const internal::BuilderInterface &target,
+                            const internal::BuilderInterface &dependency) {
+  reg_.Dep(target, dependency);
+  return *this;
+}
+
+Reg::ToolchainInstance &Reg::ToolchainInstance::Test(const std::string &command,
+                                                     const BaseTarget &target,
+                                                     const TestConfig &config) {
+  reg_.Test(condition_, command, target, config);
+  return *this;
 }
 
 Reg::CallbackInstance Reg::Call(bool condition) {

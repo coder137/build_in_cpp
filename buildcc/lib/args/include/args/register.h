@@ -167,25 +167,19 @@ private:
   public:
     ToolchainInstance(const ArgToolchainState &condition)
         : condition_(condition) {}
+
+    ToolchainInstance &Func(const std::function<void(void)> &cb);
     template <typename C, typename... Params>
     ToolchainInstance &Build(const C &build_cb, BaseTarget &target,
                              Params &&...params) {
-      reg_.Build(condition_, target, std::forward<Params>(params)...);
+      reg_.Build(condition_, build_cb, target, std::forward<Params>(params)...);
       return *this;
     }
-
     ToolchainInstance &Dep(const internal::BuilderInterface &target,
-                           const internal::BuilderInterface &dependency) {
-      reg_.Dep(target, dependency);
-      return *this;
-    }
-
+                           const internal::BuilderInterface &dependency);
     ToolchainInstance &Test(const std::string &command,
                             const BaseTarget &target,
-                            const TestConfig &config = TestConfig()) {
-      reg_.Test(condition_, command, target, config);
-      return *this;
-    }
+                            const TestConfig &config = TestConfig());
 
   private:
     ArgToolchainState condition_;
@@ -202,6 +196,7 @@ private:
 
 public:
   static void Init();
+  static void Run();
   static CallbackInstance Call(bool condition = true);
   static ToolchainInstance Toolchain(const ArgToolchainState &condition);
 
