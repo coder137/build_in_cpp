@@ -168,7 +168,13 @@ private:
     ToolchainInstance(const ArgToolchainState &condition)
         : condition_(condition) {}
 
-    ToolchainInstance &Func(const std::function<void(void)> &cb);
+    template <typename C, typename... Params>
+    ToolchainInstance &Func(const C &cb, Params &&...params) {
+      if (condition_.build) {
+        cb(std::forward<Params>(params)...);
+      }
+      return *this;
+    }
     template <typename C, typename... Params>
     ToolchainInstance &Build(const C &build_cb, BaseTarget &target,
                              Params &&...params) {

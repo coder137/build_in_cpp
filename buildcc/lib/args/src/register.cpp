@@ -89,14 +89,6 @@ Reg::ToolchainInstance Reg::Toolchain(const ArgToolchainState &condition) {
 }
 
 Reg::ToolchainInstance &
-Reg::ToolchainInstance::Func(const std::function<void(void)> &cb) {
-  if (condition_.build && cb) {
-    cb();
-  }
-  return *this;
-}
-
-Reg::ToolchainInstance &
 Reg::ToolchainInstance::Dep(const internal::BuilderInterface &target,
                             const internal::BuilderInterface &dependency) {
   reg_.Dep(target, dependency);
