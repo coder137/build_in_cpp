@@ -186,7 +186,8 @@ private:
     template <typename C, typename... Params>
     ToolchainInstance &Build(const C &build_cb, BaseTarget &target,
                              Params &&...params) {
-      reg_.Build(condition_, build_cb, target, std::forward<Params>(params)...);
+      Ref().Build(condition_, build_cb, target,
+                  std::forward<Params>(params)...);
       return *this;
     }
     ToolchainInstance &Dep(const internal::BuilderInterface &target,
@@ -216,7 +217,7 @@ private:
     CallbackInstance &Build(const C &build_cb, BaseGenerator &generator,
                             Params &&...params) {
       if (condition_) {
-        reg_.Build(build_cb, generator, std::forward<Params>(params)...);
+        Ref().Build(build_cb, generator, std::forward<Params>(params)...);
       }
       return *this;
     }
@@ -234,8 +235,11 @@ public:
   static ToolchainInstance Toolchain(const ArgToolchainState &condition);
 
 private:
+  static Register &Ref();
+
+private:
   static bool is_init_;
-  static Register reg_;
+  static std::unique_ptr<Register> reg_;
 };
 
 } // namespace buildcc
