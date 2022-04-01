@@ -19,23 +19,22 @@ int main(int argc, char **argv) {
       .Parse(argc, argv);
 
   // 2. Initialize your environment
-  Register reg;
+  Reg::Init();
 
   // 3. Pre-build steps
-  reg.Clean(clean_cb);
+  Reg::Call(Args::Clean()).Func(clean_cb);
 
   // 4. Build steps
   Toolchain_gcc gcc;
-  Toolchain_msvc msvc;
-
   ExecutableTarget_gcc g_foolib("cppflags", gcc, "");
-  ExecutableTarget_msvc m_foolib("cppflags", msvc, "");
+  Reg::Toolchain(arg_gcc.state).Build(foolib_build_cb, g_foolib);
 
-  reg.Build(arg_gcc.state, foolib_build_cb, g_foolib);
-  reg.Build(arg_msvc.state, foolib_build_cb, m_foolib);
+  Toolchain_msvc msvc;
+  ExecutableTarget_msvc m_foolib("cppflags", msvc, "");
+  Reg::Toolchain(arg_msvc.state).Build(foolib_build_cb, m_foolib);
 
   // 5.
-  reg.RunBuild();
+  Reg::Run();
 
   // 6.
   plugin::ClangCompileCommands({&g_foolib, &m_foolib}).Generate();

@@ -16,29 +16,24 @@ int main(int argc, char **argv) {
       .Parse(argc, argv);
 
   // 2. Initialize your environment
-  Register reg;
+  Reg::Init();
 
   // 3. Pre-build steps
-  reg.Clean(clean_cb);
+  Reg::Call(Args::Clean()).Func(clean_cb);
 
   // 4. Build steps
   // Explicit toolchain - target pairs
   Toolchain_gcc gcc;
-  gcc.Verify();
-
   ExecutableTarget_gcc hello_world("hello_world", gcc, "");
 
   // Select your builds and tests using the .toml files
-  reg.Build(arg_gcc.state, hello_world_build_cb, hello_world);
+  Reg::Toolchain(arg_gcc.state)
+      .Func([&]() { gcc.Verify(); })
+      .Build(hello_world_build_cb, hello_world)
+      .Test("{executable}", hello_world);
 
-  // 5. Test steps
-  reg.Test(arg_gcc.state, "{executable}", hello_world);
-
-  // 6. Build Target
-  reg.RunBuild();
-
-  // 7. Test Target
-  reg.RunTest();
+  // 6. Build and Test Target
+  Reg::Run();
 
   // 8. Post Build steps
   // - Clang Compile Commands
