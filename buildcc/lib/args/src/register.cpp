@@ -78,6 +78,11 @@ void Reg::Init() {
   }
 }
 
+void Reg::Deinit() {
+  Project::Deinit();
+  is_init_ = false;
+}
+
 void Reg::Run(const RegConfig &config) {
   if (config.pre_build_cb) {
     config.pre_build_cb();

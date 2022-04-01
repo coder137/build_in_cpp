@@ -227,6 +227,7 @@ private:
 
 public:
   static void Init();
+  static void Deinit();
   static void Run(const RegConfig &config = RegConfig());
   static const tf::Taskflow &GetTaskflow();
   static CallbackInstance Call(bool condition = true);
