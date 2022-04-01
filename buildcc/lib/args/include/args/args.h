@@ -27,6 +27,8 @@
 
 #include "toolchain/toolchain.h"
 
+#include "target/common/target_config.h"
+
 namespace fs = std::filesystem;
 
 namespace buildcc {
@@ -81,8 +83,15 @@ struct ArgToolchain {
 struct ArgTarget {
   ArgTarget(){};
 
-  std::string compile_command{""};
-  std::string link_command{""};
+  TargetConfig GetTargetConfig() {
+    TargetConfig config;
+    config.compile_command = compile_command;
+    config.link_command = link_command;
+    return config;
+  }
+
+  std::string compile_command;
+  std::string link_command;
 };
 
 struct ArgCustom {
