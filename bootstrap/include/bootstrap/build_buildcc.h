@@ -59,9 +59,8 @@ public:
   static constexpr const char *const kBuildccLibName = "libbuildcc";
 
 public:
-  BuildBuildCC(Register &reg, const BaseToolchain &toolchain,
-               const TargetEnv &env)
-      : reg_(reg), toolchain_(toolchain), env_(env) {}
+  BuildBuildCC(const BaseToolchain &toolchain, const TargetEnv &env)
+      : toolchain_(toolchain), env_(env) {}
   BuildBuildCC(const BuildBuildCC &) = delete;
 
   void Setup(const ArgToolchainState &state);
@@ -75,7 +74,6 @@ public:
   }
 
 private:
-  Register &reg_;
   const BaseToolchain &toolchain_;
   TargetEnv env_;
 

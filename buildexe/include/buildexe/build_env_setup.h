@@ -31,9 +31,9 @@ public:
   static constexpr const char *const kUserTargetName = "UserTarget";
 
 public:
-  BuildEnvSetup(Register &reg, const BaseToolchain &toolchain,
+  BuildEnvSetup(const BaseToolchain &toolchain,
                 const BuildExeArgs &buildexe_args)
-      : reg_(reg), toolchain_(toolchain), buildexe_args_(buildexe_args) {
+      : toolchain_(toolchain), buildexe_args_(buildexe_args) {
     state_.build = true;
   }
 
@@ -62,7 +62,6 @@ private:
   void DepUserTargetOnBuildcc();
 
 private:
-  Register &reg_;
   const BaseToolchain &toolchain_;
   const BuildExeArgs &buildexe_args_;
 
