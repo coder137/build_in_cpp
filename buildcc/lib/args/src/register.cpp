@@ -78,10 +78,21 @@ void Reg::Init() {
   }
 }
 
-void Reg::Run() {
+void Reg::Run(const RegConfig &config) {
+  if (config.pre_build_cb) {
+    config.pre_build_cb();
+  }
   reg_.RunBuild();
+  if (config.post_build_cb) {
+    config.post_build_cb();
+  }
   reg_.RunTest();
+  if (config.post_test_cb) {
+    config.post_test_cb();
+  }
 }
+
+const tf::Taskflow &Reg::GetTaskflow() { return reg_.GetTaskflow(); }
 
 Reg::ToolchainInstance Reg::Toolchain(const ArgToolchainState &condition) {
   env::assert_fatal(is_init_, kRegkNotInit);
@@ -105,14 +116,6 @@ Reg::ToolchainInstance &Reg::ToolchainInstance::Test(const std::string &command,
 Reg::CallbackInstance Reg::Call(bool condition) {
   env::assert_fatal(is_init_, kRegkNotInit);
   return CallbackInstance(condition);
-}
-
-Reg::CallbackInstance &
-Reg::CallbackInstance::Func(const std::function<void(void)> &cb) {
-  if (condition_ && cb) {
-    cb();
-  }
-  return *this;
 }
 
 void Register::Clean(const std::function<void(void)> &clean_cb) {

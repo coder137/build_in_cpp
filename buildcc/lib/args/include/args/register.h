@@ -161,6 +161,12 @@ private:
   tf::Executor executor_;
 };
 
+struct RegConfig {
+  std::function<void(void)> pre_build_cb;
+  std::function<void(void)> post_build_cb;
+  std::function<void(void)> post_test_cb;
+};
+
 class Reg {
 private:
   class ToolchainInstance {
@@ -168,6 +174,7 @@ private:
     ToolchainInstance(const ArgToolchainState &condition)
         : condition_(condition) {}
 
+    // Duplicated code
     template <typename C, typename... Params>
     ToolchainInstance &Func(const C &cb, Params &&...params) {
       if (condition_.build) {
@@ -175,6 +182,7 @@ private:
       }
       return *this;
     }
+
     template <typename C, typename... Params>
     ToolchainInstance &Build(const C &build_cb, BaseTarget &target,
                              Params &&...params) {
@@ -194,7 +202,15 @@ private:
   class CallbackInstance {
   public:
     CallbackInstance(bool condition = true) : condition_(condition) {}
-    CallbackInstance &Func(const std::function<void(void)> &cb);
+
+    // Duplicated code
+    template <typename C, typename... Params>
+    CallbackInstance &Func(const C &cb, Params &&...params) {
+      if (condition_) {
+        cb(std::forward<Params>(params)...);
+      }
+      return *this;
+    }
 
   private:
     bool condition_;
@@ -202,7 +218,8 @@ private:
 
 public:
   static void Init();
-  static void Run();
+  static void Run(const RegConfig &config = RegConfig());
+  static const tf::Taskflow &GetTaskflow();
   static CallbackInstance Call(bool condition = true);
   static ToolchainInstance Toolchain(const ArgToolchainState &condition);
 
