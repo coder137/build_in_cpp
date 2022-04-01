@@ -212,6 +212,15 @@ private:
       return *this;
     }
 
+    template <typename C, typename... Params>
+    CallbackInstance &Build(const C &build_cb, BaseGenerator &generator,
+                            Params &&...params) {
+      if (condition_) {
+        reg_.Build(build_cb, generator, std::forward<Params>(params)...);
+      }
+      return *this;
+    }
+
   private:
     bool condition_;
   };
