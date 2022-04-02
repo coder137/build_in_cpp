@@ -149,12 +149,7 @@ private:
   tf::Taskflow build_tf_{"Targets"};
 
   std::unordered_map<std::string, tf::Task> build_;
-
-  // Tests
   std::unordered_map<std::string, TestInfo> tests_;
-
-  //
-  tf::Executor executor_;
 };
 
 class Reg::CallbackInstance {

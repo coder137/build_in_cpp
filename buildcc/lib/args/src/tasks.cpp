@@ -30,10 +30,11 @@ tf::Task Reg::Instance::BuildGeneratorTask(BaseGenerator &generator) {
 }
 
 void Reg::Instance::RunBuild() {
-  env::log_info(__FUNCTION__, fmt::format("Running with {} workers",
-                                          executor_.num_workers()));
-  executor_.run(build_tf_);
-  executor_.wait_for_all();
+  tf::Executor executor;
+  env::log_info(__FUNCTION__,
+                fmt::format("Running with {} workers", executor.num_workers()));
+  executor.run(build_tf_);
+  executor.wait_for_all();
   env::assert_fatal(env::get_task_state() == env::TaskState::SUCCESS,
                     "Task state is not successful!");
 }
@@ -44,8 +45,9 @@ void Reg::Instance::RunTest() {
       tests_.begin(), tests_.end(),
       [](const std::pair<std::string, TestInfo> &p) { p.second.TestRunner(); });
 
-  executor_.run(test_tf);
-  executor_.wait_for_all();
+  tf::Executor executor;
+  executor.run(test_tf);
+  executor.wait_for_all();
 }
 
 } // namespace buildcc
