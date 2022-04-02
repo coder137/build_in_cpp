@@ -50,8 +50,7 @@ private:
   static Instance &Ref();
 
 private:
-  static bool is_init_;
-  static std::unique_ptr<Instance> reg_;
+  static std::unique_ptr<Instance> instance_;
 };
 
 class Reg::Instance {

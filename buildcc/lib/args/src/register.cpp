@@ -65,24 +65,21 @@ void DepDetectCyclicDependency(const tf::Task &target_task,
 
 namespace buildcc {
 
-bool Reg::is_init_{false};
-std::unique_ptr<Reg::Instance> Reg::reg_;
+std::unique_ptr<Reg::Instance> Reg::instance_;
 
 void Reg::Init() {
-  if (!is_init_) {
-    reg_ = std::make_unique<Instance>();
+  if (!instance_) {
+    instance_ = std::make_unique<Instance>();
     env::assert_fatal(Args::IsParsed(), "Setup your Args");
     Project::Init(fs::current_path() / Args::GetProjectRootDir(),
                   fs::current_path() / Args::GetProjectBuildDir());
     env::set_log_level(Args::GetLogLevel());
-    is_init_ = true;
   }
 }
 
 void Reg::Deinit() {
-  reg_.reset(nullptr);
+  instance_.reset(nullptr);
   Project::Deinit();
-  is_init_ = false;
 }
 
 void Reg::Run(const std::function<void(void)> &post_build_cb) {
@@ -97,12 +94,14 @@ void Reg::Run(const std::function<void(void)> &post_build_cb) {
 const tf::Taskflow &Reg::GetTaskflow() { return Ref().GetTaskflow(); }
 
 Reg::Instance &Reg::Ref() {
-  env::assert_fatal(reg_ != nullptr, kRegkNotInit);
-  return *reg_;
+  env::assert_fatal(instance_ != nullptr, kRegkNotInit);
+  return *instance_;
 }
 
+// Reg::ToolchainInstance
+
 Reg::ToolchainInstance Reg::Toolchain(const ArgToolchainState &condition) {
-  env::assert_fatal(is_init_, kRegkNotInit);
+  env::assert_fatal(instance_ != nullptr, kRegkNotInit);
   return ToolchainInstance(condition);
 }
 
@@ -124,10 +123,14 @@ Reg::ToolchainInstance &Reg::ToolchainInstance::Test(const std::string &command,
   return *this;
 }
 
+// Reg::CallbackInstance
+
 Reg::CallbackInstance Reg::Call(bool condition) {
-  env::assert_fatal(is_init_, kRegkNotInit);
+  env::assert_fatal(instance_ != nullptr, kRegkNotInit);
   return CallbackInstance(condition);
 }
+
+// Reg::Instance
 
 void Reg::Instance::Dep(const internal::BuilderInterface &target,
                         const internal::BuilderInterface &dependency) {
