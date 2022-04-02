@@ -66,11 +66,11 @@ void DepDetectCyclicDependency(const tf::Task &target_task,
 namespace buildcc {
 
 bool Reg::is_init_{false};
-std::unique_ptr<Reg::Register> Reg::reg_;
+std::unique_ptr<Reg::Instance> Reg::reg_;
 
 void Reg::Init() {
   if (!is_init_) {
-    reg_ = std::make_unique<Register>();
+    reg_ = std::make_unique<Instance>();
     env::assert_fatal(Args::IsParsed(), "Setup your Args");
     Project::Init(fs::current_path() / Args::GetProjectRootDir(),
                   fs::current_path() / Args::GetProjectBuildDir());
@@ -96,7 +96,7 @@ void Reg::Run(const std::function<void(void)> &post_build_cb) {
 
 const tf::Taskflow &Reg::GetTaskflow() { return Ref().GetTaskflow(); }
 
-Reg::Register &Reg::Ref() {
+Reg::Instance &Reg::Ref() {
   env::assert_fatal(reg_ != nullptr, kRegkNotInit);
   return *reg_;
 }
@@ -125,19 +125,19 @@ Reg::CallbackInstance Reg::Call(bool condition) {
   return CallbackInstance(condition);
 }
 
-void Reg::Register::Clean(const std::function<void(void)> &clean_cb) {
+void Reg::Instance::Clean(const std::function<void(void)> &clean_cb) {
   if (Args::Clean()) {
     clean_cb();
   }
 }
 
-void Reg::Register::Dep(const internal::BuilderInterface &target,
+void Reg::Instance::Dep(const internal::BuilderInterface &target,
                         const internal::BuilderInterface &dependency) {
   const auto target_iter = build_.find(target.GetUniqueId());
   const auto dep_iter = build_.find(dependency.GetUniqueId());
   env::assert_fatal(!(target_iter == build_.end() || dep_iter == build_.end()),
-                    "Call Register::Build API on target and "
-                    "dependency before Register::Dep API");
+                    "Call Instance::Build API on target and "
+                    "dependency before Instance::Dep API");
 
   //  empty tasks -> not built so skip
   if (target_iter->second.empty() || dep_iter->second.empty()) {
@@ -152,7 +152,7 @@ void Reg::Register::Dep(const internal::BuilderInterface &target,
   target_iter->second.succeed(dep_iter->second);
 }
 
-void Reg::Register::Test(const ArgToolchainState &toolchain_state,
+void Reg::Instance::Test(const ArgToolchainState &toolchain_state,
                          const std::string &command, const BaseTarget &target,
                          const TestConfig &config) {
   if (!(toolchain_state.build && toolchain_state.test)) {
@@ -162,7 +162,7 @@ void Reg::Register::Test(const ArgToolchainState &toolchain_state,
   const auto target_iter = build_.find(target.GetUniqueId());
   env::assert_fatal(
       !(target_iter == build_.end()),
-      "Call Register::Build API on target before Register::Test API");
+      "Call Instance::Build API on target before Instance::Test API");
 
   const bool added =
       tests_.emplace(target.GetUniqueId(), TestInfo(target, command, config))
@@ -173,11 +173,11 @@ void Reg::Register::Test(const ArgToolchainState &toolchain_state,
 
 // Private
 
-void Reg::Register::BuildStoreTask(const std::string &unique_id,
+void Reg::Instance::BuildStoreTask(const std::string &unique_id,
                                    const tf::Task &task) {
   const bool stored = build_.emplace(unique_id, task).second;
   env::assert_fatal(
-      stored, fmt::format("Duplicate `Register::Build` call detected for '{}'",
+      stored, fmt::format("Duplicate `Instance::Build` call detected for '{}'",
                           unique_id));
 }
 

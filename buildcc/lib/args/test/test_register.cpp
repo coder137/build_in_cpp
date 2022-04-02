@@ -527,7 +527,7 @@ TEST(RegisterTestGroup, Register_Test) {
   }
 
   // TT
-  // Register::Build not called
+  // Reg::Instance::Build not called
   {
     buildcc::Reg::Init();
     CHECK_THROWS(

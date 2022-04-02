@@ -34,8 +34,7 @@ namespace fs = std::filesystem;
 namespace buildcc {
 
 /**
- * @brief Toolchain State used by the Register module to selectively build or
- * test targets
+ * @brief Toolchain State used to selectively build and test targets
  */
 struct ArgToolchainState {
   bool build{false};

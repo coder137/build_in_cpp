@@ -33,8 +33,7 @@ namespace buildcc {
 
 class Reg {
 private:
-  // TODO, Rename to Instance
-  class Register;
+  class Instance;
   class CallbackInstance;
   class ToolchainInstance;
 
@@ -48,14 +47,14 @@ public:
   static const tf::Taskflow &GetTaskflow();
 
 private:
-  static Register &Ref();
+  static Instance &Ref();
 
 private:
   static bool is_init_;
-  static std::unique_ptr<Register> reg_;
+  static std::unique_ptr<Instance> reg_;
 };
 
-class Reg::Register {
+class Reg::Instance {
 public:
   /**
    * @brief Folders and files that need to be cleaned when `clean == true`
@@ -96,7 +95,7 @@ public:
   }
 
   /**
-   * @brief Register the Target to be built
+   * @brief Reg::Instance for Target to be built
    */
   template <typename C, typename... Params>
   void Build(const ArgToolchainState &toolchain_state, const C &build_cb,
@@ -113,7 +112,7 @@ public:
   }
 
   /**
-   * @brief Register the generator to be built
+   * @brief Reg::Instance for Generator to be built
    */
   template <typename C, typename... Params>
   void Build(const C &build_cb, BaseGenerator &generator, Params &&...params) {
@@ -124,7 +123,7 @@ public:
 
   /**
    * @brief Setup dependency between 2 Targets
-   * PreReq: Call `Register::Build` before calling `Register::Dep`
+   * PreReq: Call `Reg::Instance::Build` before calling `Reg::Instance::Dep`
    *
    * Target runs after dependency is built
    */
@@ -132,8 +131,8 @@ public:
            const internal::BuilderInterface &dependency);
 
   /**
-   * @brief Register the Target to be run
-   * PreReq: Call `Register::Build` before calling `Register::Test`
+   * @brief Instance the Target to be run
+   * PreReq: Call `Reg::Instance::Build` before calling `Reg::Instance::Test`
    * PreReq: Requires ArgToolchainState::build && ArgToolchainState::test to be
    * true
    *
@@ -147,13 +146,13 @@ public:
 
   /**
    * @brief Builds the targets that have been dynamically added through
-   * `Register::Build`
+   * `Reg::Instance::Build`
    */
   void RunBuild();
 
   /**
    * @brief Runs the targets that have been dynamically added through
-   * `Register::Test`
+   * `Reg::Instance::Test`
    */
   void RunTest();
 
