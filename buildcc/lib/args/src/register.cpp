@@ -66,7 +66,7 @@ void DepDetectCyclicDependency(const tf::Task &target_task,
 namespace buildcc {
 
 bool Reg::is_init_{false};
-std::unique_ptr<Register> Reg::reg_;
+std::unique_ptr<Reg::Register> Reg::reg_;
 
 void Reg::Init() {
   if (!is_init_) {
@@ -85,24 +85,18 @@ void Reg::Deinit() {
   is_init_ = false;
 }
 
-void Reg::Run(const RegConfig &config) {
+void Reg::Run(const std::function<void(void)> &post_build_cb) {
   auto &ref = Ref();
-  if (config.pre_build_cb) {
-    config.pre_build_cb();
-  }
   ref.RunBuild();
-  if (config.post_build_cb) {
-    config.post_build_cb();
+  if (post_build_cb) {
+    post_build_cb();
   }
   ref.RunTest();
-  if (config.post_test_cb) {
-    config.post_test_cb();
-  }
 }
 
 const tf::Taskflow &Reg::GetTaskflow() { return Ref().GetTaskflow(); }
 
-Register &Reg::Ref() {
+Reg::Register &Reg::Ref() {
   env::assert_fatal(reg_ != nullptr, kRegkNotInit);
   return *reg_;
 }
@@ -131,14 +125,14 @@ Reg::CallbackInstance Reg::Call(bool condition) {
   return CallbackInstance(condition);
 }
 
-void Register::Clean(const std::function<void(void)> &clean_cb) {
+void Reg::Register::Clean(const std::function<void(void)> &clean_cb) {
   if (Args::Clean()) {
     clean_cb();
   }
 }
 
-void Register::Dep(const internal::BuilderInterface &target,
-                   const internal::BuilderInterface &dependency) {
+void Reg::Register::Dep(const internal::BuilderInterface &target,
+                        const internal::BuilderInterface &dependency) {
   const auto target_iter = build_.find(target.GetUniqueId());
   const auto dep_iter = build_.find(dependency.GetUniqueId());
   env::assert_fatal(!(target_iter == build_.end() || dep_iter == build_.end()),
@@ -158,9 +152,9 @@ void Register::Dep(const internal::BuilderInterface &target,
   target_iter->second.succeed(dep_iter->second);
 }
 
-void Register::Test(const ArgToolchainState &toolchain_state,
-                    const std::string &command, const BaseTarget &target,
-                    const TestConfig &config) {
+void Reg::Register::Test(const ArgToolchainState &toolchain_state,
+                         const std::string &command, const BaseTarget &target,
+                         const TestConfig &config) {
   if (!(toolchain_state.build && toolchain_state.test)) {
     return;
   }
@@ -179,8 +173,8 @@ void Register::Test(const ArgToolchainState &toolchain_state,
 
 // Private
 
-void Register::BuildStoreTask(const std::string &unique_id,
-                              const tf::Task &task) {
+void Reg::Register::BuildStoreTask(const std::string &unique_id,
+                                   const tf::Task &task) {
   const bool stored = build_.emplace(unique_id, task).second;
   env::assert_fatal(
       stored, fmt::format("Duplicate `Register::Build` call detected for '{}'",

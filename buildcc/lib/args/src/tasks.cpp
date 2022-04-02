@@ -20,16 +20,16 @@
 
 namespace buildcc {
 
-tf::Task Register::BuildTargetTask(BaseTarget &target) {
+tf::Task Reg::Register::BuildTargetTask(BaseTarget &target) {
   return build_tf_.composed_of(target.GetTaskflow()).name(target.GetUniqueId());
 }
 
-tf::Task Register::BuildGeneratorTask(BaseGenerator &generator) {
+tf::Task Reg::Register::BuildGeneratorTask(BaseGenerator &generator) {
   return build_tf_.composed_of(generator.GetTaskflow())
       .name(generator.GetUniqueId());
 }
 
-void Register::RunBuild() {
+void Reg::Register::RunBuild() {
   env::log_info(__FUNCTION__, fmt::format("Running with {} workers",
                                           executor_.num_workers()));
   executor_.run(build_tf_);
@@ -38,7 +38,7 @@ void Register::RunBuild() {
                     "Task state is not successful!");
 }
 
-void Register::RunTest() {
+void Reg::Register::RunTest() {
   tf::Taskflow test_tf{"Tests"};
   test_tf.for_each(
       tests_.begin(), tests_.end(),

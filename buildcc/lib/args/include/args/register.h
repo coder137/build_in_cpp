@@ -31,11 +31,32 @@
 
 namespace buildcc {
 
-class Register {
-public:
-  Register() = default;
-  Register(const Register &) = delete;
+class Reg {
+private:
+  // TODO, Rename to Instance
+  class Register;
+  class CallbackInstance;
+  class ToolchainInstance;
 
+public:
+  static void Init();
+  static void Deinit();
+  static void Run(const std::function<void(void)> &post_build_cb = []() {});
+  static CallbackInstance Call(bool condition = true);
+  static ToolchainInstance Toolchain(const ArgToolchainState &condition);
+
+  static const tf::Taskflow &GetTaskflow();
+
+private:
+  static Register &Ref();
+
+private:
+  static bool is_init_;
+  static std::unique_ptr<Register> reg_;
+};
+
+class Reg::Register {
+public:
   /**
    * @brief Folders and files that need to be cleaned when `clean == true`
    */
@@ -161,85 +182,59 @@ private:
   tf::Executor executor_;
 };
 
-struct RegConfig {
-  std::function<void(void)> pre_build_cb;
-  std::function<void(void)> post_build_cb;
-  std::function<void(void)> post_test_cb;
+class Reg::CallbackInstance {
+public:
+  CallbackInstance(bool condition = true) : condition_(condition) {}
+
+  // Duplicated code
+  template <typename C, typename... Params>
+  CallbackInstance &Func(const C &cb, Params &&...params) {
+    if (condition_) {
+      cb(std::forward<Params>(params)...);
+    }
+    return *this;
+  }
+
+  template <typename C, typename... Params>
+  CallbackInstance &Build(const C &build_cb, BaseGenerator &generator,
+                          Params &&...params) {
+    if (condition_) {
+      Ref().Build(build_cb, generator, std::forward<Params>(params)...);
+    }
+    return *this;
+  }
+
+private:
+  bool condition_;
 };
 
-class Reg {
-private:
-  class ToolchainInstance {
-  public:
-    ToolchainInstance(const ArgToolchainState &condition)
-        : condition_(condition) {}
-
-    // Duplicated code
-    template <typename C, typename... Params>
-    ToolchainInstance &Func(const C &cb, Params &&...params) {
-      if (condition_.build) {
-        cb(std::forward<Params>(params)...);
-      }
-      return *this;
-    }
-
-    template <typename C, typename... Params>
-    ToolchainInstance &Build(const C &build_cb, BaseTarget &target,
-                             Params &&...params) {
-      Ref().Build(condition_, build_cb, target,
-                  std::forward<Params>(params)...);
-      return *this;
-    }
-    ToolchainInstance &Dep(const internal::BuilderInterface &target,
-                           const internal::BuilderInterface &dependency);
-    ToolchainInstance &Test(const std::string &command,
-                            const BaseTarget &target,
-                            const TestConfig &config = TestConfig());
-
-  private:
-    ArgToolchainState condition_;
-  };
-
-  class CallbackInstance {
-  public:
-    CallbackInstance(bool condition = true) : condition_(condition) {}
-
-    // Duplicated code
-    template <typename C, typename... Params>
-    CallbackInstance &Func(const C &cb, Params &&...params) {
-      if (condition_) {
-        cb(std::forward<Params>(params)...);
-      }
-      return *this;
-    }
-
-    template <typename C, typename... Params>
-    CallbackInstance &Build(const C &build_cb, BaseGenerator &generator,
-                            Params &&...params) {
-      if (condition_) {
-        Ref().Build(build_cb, generator, std::forward<Params>(params)...);
-      }
-      return *this;
-    }
-
-  private:
-    bool condition_;
-  };
-
+class Reg::ToolchainInstance {
 public:
-  static void Init();
-  static void Deinit();
-  static void Run(const RegConfig &config = RegConfig());
-  static const tf::Taskflow &GetTaskflow();
-  static CallbackInstance Call(bool condition = true);
-  static ToolchainInstance Toolchain(const ArgToolchainState &condition);
+  ToolchainInstance(const ArgToolchainState &condition)
+      : condition_(condition) {}
+
+  // Duplicated code
+  template <typename C, typename... Params>
+  ToolchainInstance &Func(const C &cb, Params &&...params) {
+    if (condition_.build) {
+      cb(std::forward<Params>(params)...);
+    }
+    return *this;
+  }
+
+  template <typename C, typename... Params>
+  ToolchainInstance &Build(const C &build_cb, BaseTarget &target,
+                           Params &&...params) {
+    Ref().Build(condition_, build_cb, target, std::forward<Params>(params)...);
+    return *this;
+  }
+  ToolchainInstance &Dep(const internal::BuilderInterface &target,
+                         const internal::BuilderInterface &dependency);
+  ToolchainInstance &Test(const std::string &command, const BaseTarget &target,
+                          const TestConfig &config = TestConfig());
 
 private:
-  static Register &Ref();
-
-private:
-  static bool is_init_;
-  static std::unique_ptr<Register> reg_;
+  ArgToolchainState condition_;
 };
 
 } // namespace buildcc
