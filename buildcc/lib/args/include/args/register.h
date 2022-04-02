@@ -57,16 +57,11 @@ private:
 class Reg::Instance {
 public:
   /**
-   * @brief Folders and files that need to be cleaned when `clean == true`
-   */
-  void Clean(const std::function<void(void)> &clean_cb);
-
-  /**
    * @brief Generic register callback with variable arguments
    * Can be used to organize code into functional chunks
    */
   template <typename C, typename... Params>
-  void Callback(const C &build_cb, Params &&...params) {
+  static void Callback(const C &build_cb, Params &&...params) {
     build_cb(std::forward<Params>(params)...);
   }
 
@@ -76,22 +71,11 @@ public:
    * Can be used to add Toolchain-Target specific information
    */
   template <typename C, typename... Params>
-  void CallbackIf(bool expression, const C &build_cb, Params &&...params) {
+  static void CallbackIf(bool expression, const C &build_cb,
+                         Params &&...params) {
     if (expression) {
       Callback(build_cb, std::forward<Params>(params)...);
     }
-  }
-
-  /**
-   * @brief Generic register callback that is run when `toolchain_state.build ==
-   * true`
-   * Can be used to add Toolchain-Target specific information
-   */
-  template <typename C, typename... Params>
-  void CallbackIf(const ArgToolchainState &toolchain_state, const C &build_cb,
-                  Params &&...params) {
-    CallbackIf(toolchain_state.build, build_cb,
-               std::forward<Params>(params)...);
   }
 
   /**
@@ -100,14 +84,12 @@ public:
   template <typename C, typename... Params>
   void Build(const ArgToolchainState &toolchain_state, const C &build_cb,
              BaseTarget &target, Params &&...params) {
+    // TODO, No empty task when .build is false
     tf::Task task;
-    CallbackIf(
-        toolchain_state,
-        [&](BaseTarget &ltarget, Params &&...lparams) {
-          build_cb(ltarget, std::forward<Params>(lparams)...);
-          task = BuildTargetTask(ltarget);
-        },
-        target, std::forward<Params>(params)...);
+    if (toolchain_state.build) {
+      build_cb(target, std::forward<Params>(params)...);
+      task = BuildTargetTask(target);
+    }
     BuildStoreTask(target.GetUniqueId(), task);
   }
 
@@ -115,10 +97,13 @@ public:
    * @brief Reg::Instance for Generator to be built
    */
   template <typename C, typename... Params>
-  void Build(const C &build_cb, BaseGenerator &generator, Params &&...params) {
-    build_cb(generator, std::forward<Params>(params)...);
-    tf::Task task = BuildGeneratorTask(generator);
-    BuildStoreTask(generator.GetUniqueId(), task);
+  void Build(bool condition, const C &build_cb, BaseGenerator &generator,
+             Params &&...params) {
+    if (condition) {
+      build_cb(generator, std::forward<Params>(params)...);
+      tf::Task task = BuildGeneratorTask(generator);
+      BuildStoreTask(generator.GetUniqueId(), task);
+    }
   }
 
   /**
@@ -188,18 +173,15 @@ public:
   // Duplicated code
   template <typename C, typename... Params>
   CallbackInstance &Func(const C &cb, Params &&...params) {
-    if (condition_) {
-      cb(std::forward<Params>(params)...);
-    }
+    Instance::CallbackIf(condition_, cb, std::forward<Params>(params)...);
     return *this;
   }
 
   template <typename C, typename... Params>
   CallbackInstance &Build(const C &build_cb, BaseGenerator &generator,
                           Params &&...params) {
-    if (condition_) {
-      Ref().Build(build_cb, generator, std::forward<Params>(params)...);
-    }
+    Ref().Build(condition_, build_cb, generator,
+                std::forward<Params>(params)...);
     return *this;
   }
 
@@ -212,12 +194,9 @@ public:
   ToolchainInstance(const ArgToolchainState &condition)
       : condition_(condition) {}
 
-  // Duplicated code
   template <typename C, typename... Params>
   ToolchainInstance &Func(const C &cb, Params &&...params) {
-    if (condition_.build) {
-      cb(std::forward<Params>(params)...);
-    }
+    Instance::CallbackIf(condition_.build, cb, std::forward<Params>(params)...);
     return *this;
   }
 

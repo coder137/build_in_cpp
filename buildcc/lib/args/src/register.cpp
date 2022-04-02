@@ -125,12 +125,6 @@ Reg::CallbackInstance Reg::Call(bool condition) {
   return CallbackInstance(condition);
 }
 
-void Reg::Instance::Clean(const std::function<void(void)> &clean_cb) {
-  if (Args::Clean()) {
-    clean_cb();
-  }
-}
-
 void Reg::Instance::Dep(const internal::BuilderInterface &target,
                         const internal::BuilderInterface &dependency) {
   const auto target_iter = build_.find(target.GetUniqueId());
