@@ -82,14 +82,9 @@ public:
    * @brief Reg::Instance for Target to be built
    */
   template <typename C, typename... Params>
-  void Build(const ArgToolchainState &toolchain_state, const C &build_cb,
-             BaseTarget &target, Params &&...params) {
-    // TODO, No empty task when .build is false
-    tf::Task task;
-    if (toolchain_state.build) {
-      build_cb(target, std::forward<Params>(params)...);
-      task = BuildTargetTask(target);
-    }
+  void Build(const C &build_cb, BaseTarget &target, Params &&...params) {
+    build_cb(target, std::forward<Params>(params)...);
+    tf::Task task = BuildTargetTask(target);
     BuildStoreTask(target.GetUniqueId(), task);
   }
 
@@ -97,13 +92,10 @@ public:
    * @brief Reg::Instance for Generator to be built
    */
   template <typename C, typename... Params>
-  void Build(bool condition, const C &build_cb, BaseGenerator &generator,
-             Params &&...params) {
-    if (condition) {
-      build_cb(generator, std::forward<Params>(params)...);
-      tf::Task task = BuildGeneratorTask(generator);
-      BuildStoreTask(generator.GetUniqueId(), task);
-    }
+  void Build(const C &build_cb, BaseGenerator &generator, Params &&...params) {
+    build_cb(generator, std::forward<Params>(params)...);
+    tf::Task task = BuildGeneratorTask(generator);
+    BuildStoreTask(generator.GetUniqueId(), task);
   }
 
   /**
@@ -125,8 +117,7 @@ public:
    * We can add more fmt::format arguments using the TestConfig arguments
    * parameter
    */
-  void Test(const ArgToolchainState &toolchain_state,
-            const std::string &command, const BaseTarget &target,
+  void Test(const std::string &command, const BaseTarget &target,
             const TestConfig &config = TestConfig());
 
   /**
@@ -180,8 +171,9 @@ public:
   template <typename C, typename... Params>
   CallbackInstance &Build(const C &build_cb, BaseGenerator &generator,
                           Params &&...params) {
-    Ref().Build(condition_, build_cb, generator,
-                std::forward<Params>(params)...);
+    if (condition_) {
+      Ref().Build(build_cb, generator, std::forward<Params>(params)...);
+    };
     return *this;
   }
 
@@ -203,7 +195,9 @@ public:
   template <typename C, typename... Params>
   ToolchainInstance &Build(const C &build_cb, BaseTarget &target,
                            Params &&...params) {
-    Ref().Build(condition_, build_cb, target, std::forward<Params>(params)...);
+    if (condition_.build) {
+      Ref().Build(build_cb, target, std::forward<Params>(params)...);
+    }
     return *this;
   }
   ToolchainInstance &Dep(const internal::BuilderInterface &target,

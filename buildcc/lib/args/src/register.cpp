@@ -109,14 +109,18 @@ Reg::ToolchainInstance Reg::Toolchain(const ArgToolchainState &condition) {
 Reg::ToolchainInstance &
 Reg::ToolchainInstance::Dep(const internal::BuilderInterface &target,
                             const internal::BuilderInterface &dependency) {
-  Ref().Dep(target, dependency);
+  if (condition_.build) {
+    Ref().Dep(target, dependency);
+  }
   return *this;
 }
 
 Reg::ToolchainInstance &Reg::ToolchainInstance::Test(const std::string &command,
                                                      const BaseTarget &target,
                                                      const TestConfig &config) {
-  Ref().Test(condition_, command, target, config);
+  if (condition_.build && condition_.test) {
+    Ref().Test(command, target, config);
+  }
   return *this;
 }
 
@@ -133,11 +137,6 @@ void Reg::Instance::Dep(const internal::BuilderInterface &target,
                     "Call Instance::Build API on target and "
                     "dependency before Instance::Dep API");
 
-  //  empty tasks -> not built so skip
-  if (target_iter->second.empty() || dep_iter->second.empty()) {
-    return;
-  }
-
   const std::string &dep_unique_id = dependency.GetUniqueId();
   DepDetectDuplicate(target_iter->second, dep_unique_id);
   DepDetectCyclicDependency(target_iter->second, dep_unique_id);
@@ -146,13 +145,8 @@ void Reg::Instance::Dep(const internal::BuilderInterface &target,
   target_iter->second.succeed(dep_iter->second);
 }
 
-void Reg::Instance::Test(const ArgToolchainState &toolchain_state,
-                         const std::string &command, const BaseTarget &target,
+void Reg::Instance::Test(const std::string &command, const BaseTarget &target,
                          const TestConfig &config) {
-  if (!(toolchain_state.build && toolchain_state.test)) {
-    return;
-  }
-
   const auto target_iter = build_.find(target.GetUniqueId());
   env::assert_fatal(
       !(target_iter == build_.end()),

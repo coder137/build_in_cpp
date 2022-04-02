@@ -279,9 +279,13 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
     buildcc::Reg::Toolchain(falseState)
         .Build([](buildcc::BaseTarget &target) { (void)target; }, target);
     mock().expectNCalls(1, "BuildTask_depT");
-    buildcc::Reg::Toolchain(trueState)
-        .Build([](buildcc::BaseTarget &target) { (void)target; }, dependency)
-        .Dep(target, dependency);
+    // In this case, target is not built so Dep throws
+    // Bad usage
+    CHECK_THROWS(std::exception,
+                 buildcc::Reg::Toolchain(trueState)
+                     .Build([](buildcc::BaseTarget &target) { (void)target; },
+                            dependency)
+                     .Dep(target, dependency));
     buildcc::Reg::Deinit();
   }
 
@@ -293,7 +297,11 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
         [](buildcc::BaseTarget &target) { (void)target; }, target);
     buildcc::Reg::Toolchain(falseState)
         .Build([](buildcc::BaseTarget &target) { (void)target; }, dependency);
-    buildcc::Reg::Toolchain(trueState).Dep(target, dependency);
+
+    // In this case dependency is not built
+    // Bad usage
+    CHECK_THROWS(std::exception,
+                 buildcc::Reg::Toolchain(trueState).Dep(target, dependency));
     buildcc::Reg::Deinit();
   }
 
