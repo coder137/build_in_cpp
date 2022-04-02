@@ -53,11 +53,7 @@ int main(int argc, char **argv) {
       .Test("{executable}", generic_target);
 
   // Build Target
-  RegConfig reg_config;
-  reg_config.post_build_cb = [&]() {
-    post_build_cb(generic_target, foolib_target);
-  };
-  Reg::Run(reg_config);
+  Reg::Run([&]() { post_build_cb(generic_target, foolib_target); });
 
   // - Clang Compile Commands
   plugin::ClangCompileCommands({&foolib_target, &generic_target}).Generate();
