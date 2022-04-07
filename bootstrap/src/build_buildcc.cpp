@@ -200,47 +200,36 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
       kSchemaGenName, kSchemaGenName,
       TargetEnv(env_.GetTargetRootDir() / "buildcc" / "schema",
                 env_.GetTargetBuildDir() / toolchain_.GetName()));
-  Reg::Call().Build(schema_gen_cb, schema_gen, flatc_exe);
-
-  auto &toolchain_instance = Reg::Toolchain(state)
-                                 .Func(global_flags_cb, flatc_exe, toolchain_)
-                                 .Build(build_flatc_exe_cb, flatc_exe);
-  toolchain_instance.Dep(schema_gen, flatc_exe);
 
   // Flatbuffers HO lib
   auto &flatbuffers_ho_lib = storage_.Add<TargetInfo>(
       kFlatbuffersHoName, toolchain_,
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "flatbuffers",
                 env_.GetTargetBuildDir()));
-  toolchain_instance.Func(flatbuffers_ho_cb, flatbuffers_ho_lib);
 
   // CLI11 HO lib
   auto &cli11_ho_lib = storage_.Add<TargetInfo>(
       kCli11HoName, toolchain_,
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "CLI11",
                 env_.GetTargetBuildDir()));
-  toolchain_instance.Func(cli11_ho_cb, cli11_ho_lib);
 
   // fmt HO lib
   auto &fmt_ho_lib = storage_.Add<TargetInfo>(
       kFmtHoName, toolchain_,
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "fmt",
                 env_.GetTargetBuildDir()));
-  toolchain_instance.Func(fmt_ho_cb, fmt_ho_lib);
 
   // spdlog HO lib
   auto &spdlog_ho_lib = storage_.Add<TargetInfo>(
       kSpdlogHoName, toolchain_,
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "spdlog",
                 env_.GetTargetBuildDir()));
-  toolchain_instance.Func(spdlog_ho_cb, spdlog_ho_lib);
 
   // taskflow HO lib
   auto &taskflow_ho_lib = storage_.Add<TargetInfo>(
       kTaskflowHoName, toolchain_,
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "taskflow",
                 env_.GetTargetBuildDir()));
-  toolchain_instance.Func(taskflow_ho_cb, taskflow_ho_lib);
 
   // Tiny-process-library lib
   // TODO, Make this a generic selection between StaticTarget and
@@ -250,16 +239,27 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
       TargetEnv(env_.GetTargetRootDir() / "third_party" /
                     "tiny-process-library",
                 env_.GetTargetBuildDir()));
-  toolchain_instance.Func(global_flags_cb, tpl_lib, toolchain_);
-  toolchain_instance.Build(tpl_cb, tpl_lib);
 
+  // BuildCC lib
   // TODO, Make this a generic selection between StaticTarget and
   // DynamicTarget
   auto &buildcc_lib = storage_.Add<StaticTarget_generic>(
       kBuildccLibName, kBuildccLibName, toolchain_,
       TargetEnv(env_.GetTargetRootDir() / "buildcc", env_.GetTargetBuildDir()));
-  toolchain_instance.Func(global_flags_cb, buildcc_lib, toolchain_);
-  toolchain_instance
+
+  Reg::Toolchain(state)
+      .Func(global_flags_cb, flatc_exe, toolchain_)
+      .Build(build_flatc_exe_cb, flatc_exe)
+      .Build(schema_gen_cb, schema_gen, flatc_exe)
+      .Dep(schema_gen, flatc_exe)
+      .Func(flatbuffers_ho_cb, flatbuffers_ho_lib)
+      .Func(cli11_ho_cb, cli11_ho_lib)
+      .Func(fmt_ho_cb, fmt_ho_lib)
+      .Func(spdlog_ho_cb, spdlog_ho_lib)
+      .Func(taskflow_ho_cb, taskflow_ho_lib)
+      .Func(global_flags_cb, tpl_lib, toolchain_)
+      .Build(tpl_cb, tpl_lib)
+      .Func(global_flags_cb, buildcc_lib, toolchain_)
       .Build(buildcc_cb, buildcc_lib, schema_gen, flatbuffers_ho_lib,
              fmt_ho_lib, spdlog_ho_lib, cli11_ho_lib, taskflow_ho_lib, tpl_lib)
       .Dep(buildcc_lib, schema_gen)
