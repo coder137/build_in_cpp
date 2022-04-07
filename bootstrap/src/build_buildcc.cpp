@@ -131,7 +131,6 @@ void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
   if constexpr (env::is_win()) {
     // TODO, Clang
     switch (target.GetToolchain().GetId()) {
-    case ToolchainId::Gcc:
     case ToolchainId::MinGW: {
       target.AddPreprocessorFlag("-DFMT_HEADER_ONLY=1");
       target.AddPreprocessorFlag("-DSPDLOG_FMT_EXTERNAL");
@@ -196,16 +195,16 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "flatbuffers",
                 env_.GetTargetBuildDir()));
 
-  auto &toolchain_instance = Reg::Toolchain(state)
-                                 .Func(global_flags_cb, flatc_exe, toolchain_)
-                                 .Build(build_flatc_exe_cb, flatc_exe);
-
   // Schema
   auto &schema_gen = storage_.Add<BaseGenerator>(
       kSchemaGenName, kSchemaGenName,
       TargetEnv(env_.GetTargetRootDir() / "buildcc" / "schema",
                 env_.GetTargetBuildDir() / toolchain_.GetName()));
   Reg::Call().Build(schema_gen_cb, schema_gen, flatc_exe);
+
+  auto &toolchain_instance = Reg::Toolchain(state)
+                                 .Func(global_flags_cb, flatc_exe, toolchain_)
+                                 .Build(build_flatc_exe_cb, flatc_exe);
   toolchain_instance.Dep(schema_gen, flatc_exe);
 
   // Flatbuffers HO lib
@@ -252,9 +251,7 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
                     "tiny-process-library",
                 env_.GetTargetBuildDir()));
   toolchain_instance.Func(global_flags_cb, tpl_lib, toolchain_);
-  TplConfig tpl_config;
-  tpl_config.os_id = get_host_os();
-  toolchain_instance.Build(tpl_cb, tpl_lib, tpl_config);
+  toolchain_instance.Build(tpl_cb, tpl_lib);
 
   // TODO, Make this a generic selection between StaticTarget and
   // DynamicTarget
