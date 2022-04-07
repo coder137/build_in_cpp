@@ -187,17 +187,29 @@ public:
   }
 
   template <typename C, typename... Params>
+  ToolchainInstance &Build(const C &build_cb, BaseGenerator &generator,
+                           Params &&...params) {
+    return BuildInternal(build_cb, generator, std::forward<Params>(params)...);
+  }
+  template <typename C, typename... Params>
   ToolchainInstance &Build(const C &build_cb, BaseTarget &target,
                            Params &&...params) {
-    if (condition_.build) {
-      Ref().Build(build_cb, target, std::forward<Params>(params)...);
-    }
-    return *this;
+    return BuildInternal(build_cb, target, std::forward<Params>(params)...);
   }
   ToolchainInstance &Dep(const internal::BuilderInterface &target,
                          const internal::BuilderInterface &dependency);
   ToolchainInstance &Test(const std::string &command, const BaseTarget &target,
                           const TestConfig &config = TestConfig());
+
+private:
+  template <typename C, typename T, typename... Params>
+  ToolchainInstance &BuildInternal(const C &build_cb, T &t,
+                                   Params &&...params) {
+    if (condition_.build) {
+      Ref().Build(build_cb, t, std::forward<Params>(params)...);
+    }
+    return *this;
+  }
 
 private:
   ArgToolchainState condition_;
