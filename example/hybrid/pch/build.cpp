@@ -21,39 +21,33 @@ int main(int argc, char **argv) {
       .Parse(argc, argv);
 
   // 2. Initialize your environment
-  Register reg;
+  Reg::Init();
 
   // 3. Pre-build steps
-  reg.Clean(clean_cb);
+  Reg::Call(Args::Clean()).Func(clean_cb);
 
   // 4. Build steps
   // Explicit toolchain - target pairs
   Toolchain_gcc gcc;
-  Toolchain_msvc msvc;
-
   ExecutableTarget_gcc g_cppflags("cppflags", gcc, "files");
   ExecutableTarget_gcc g_cflags("cflags", gcc, "files");
+
+  Reg::Toolchain(arg_gcc.state)
+      .Build(cppflags_build_cb, g_cppflags)
+      .Build(cflags_build_cb, g_cflags)
+      .Test("{executable}", g_cppflags)
+      .Test("{executable}", g_cflags);
+
+  Toolchain_msvc msvc;
   ExecutableTarget_msvc m_cppflags("cppflags", msvc, "files");
   ExecutableTarget_msvc m_cflags("cflags", msvc, "files");
+  Reg::Toolchain(arg_msvc.state)
+      .Build(cppflags_build_cb, m_cppflags)
+      .Build(cflags_build_cb, m_cflags)
+      .Test("{executable}", m_cppflags)
+      .Test("{executable}", m_cflags);
 
-  // Select your builds and tests using the .toml files
-  reg.Build(arg_gcc.state, cppflags_build_cb, g_cppflags);
-  reg.Build(arg_msvc.state, cppflags_build_cb, m_cppflags);
-  reg.Build(arg_gcc.state, cflags_build_cb, g_cflags);
-  reg.Build(arg_msvc.state, cflags_build_cb, m_cflags);
-
-  // 5. Test steps
-  // NOTE, For now they are just dummy callbacks
-  reg.Test(arg_gcc.state, "{executable}", g_cppflags);
-  reg.Test(arg_msvc.state, "{executable}", m_cppflags);
-  reg.Test(arg_gcc.state, "{executable}", g_cflags);
-  reg.Test(arg_msvc.state, "{executable}", m_cflags);
-
-  // 6. Build Target
-  reg.RunBuild();
-
-  // 7. Test Target
-  reg.RunTest();
+  Reg::Run();
 
   // 8. Post Build steps
 
@@ -61,7 +55,7 @@ int main(int argc, char **argv) {
   plugin::ClangCompileCommands({&g_cflags, &g_cppflags}).Generate();
 
   // - Plugin Graph
-  std::string output = reg.GetTaskflow().dump();
+  std::string output = Reg::GetTaskflow().dump();
   const bool saved = env::save_file("graph.dot", output, false);
   env::assert_fatal(saved, "Could not save graph.dot file");
 

@@ -16,49 +16,42 @@ static void clean_cb();
 static void hello_world_build_cb(BaseTarget &target, BaseTarget &fmt_lib);
 
 int main(int argc, char **argv) {
-  // 1. Get arguments
-  Args::Init();
+  // Get arguments
   ArgToolchain arg_gcc;
-  Args::AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
-  Args::Parse(argc, argv);
+  Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", arg_gcc)
+      .Parse(argc, argv);
 
-  // 2. Initialize your environment
-  Register reg;
+  // Initialize your environment
+  Reg::Init();
 
-  // 3. Pre-build steps
-  reg.Clean(clean_cb);
+  // Pre-build steps
+  Reg::Call(Args::Clean()).Func(clean_cb);
 
-  // 4. Build steps
+  // Build steps
   // Explicit toolchain - target pairs
   Toolchain_gcc gcc;
-  auto verified_toolchains = gcc.Verify();
-  env::assert_fatal(!verified_toolchains.empty(), "GCC Toolchain not found");
 
   StaticTarget_gcc fmt_lib(
       "libfmt", gcc,
       TargetEnv(BuildExeLibDir::fmt, Project::GetBuildDir() / "fmt"));
   FmtConfig fmt_config;
-  reg.Build(arg_gcc.state, build_fmt_cb, fmt_lib, fmt_config);
-
   ExecutableTarget_gcc hello_world("hello_world", gcc, "");
-  reg.Build(arg_gcc.state, hello_world_build_cb, hello_world, fmt_lib);
+  Reg::Toolchain(arg_gcc.state)
+      .Func([&]() { gcc.Verify(); })
+      .Build(build_fmt_cb, fmt_lib, fmt_config)
+      .Build(hello_world_build_cb, hello_world, fmt_lib)
+      .Dep(hello_world, fmt_lib)
+      .Test("{executable}", hello_world);
 
-  reg.Dep(hello_world, fmt_lib);
+  // Build Target
+  Reg::Run();
 
-  // 5. Test steps
-  reg.Test(arg_gcc.state, "{executable}", hello_world);
-
-  // 6. Build Target
-  reg.RunBuild();
-
-  // 7. Test Target
-  reg.RunTest();
-
-  // 8. Post Build steps
+  // Post Build steps
   // - Clang Compile Commands
   plugin::ClangCompileCommands({&hello_world}).Generate();
   // - Graphviz dump
-  std::cout << reg.GetTaskflow().dump() << std::endl;
+  std::cout << Reg::GetTaskflow().dump() << std::endl;
 
   return 0;
 }

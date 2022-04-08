@@ -20,8 +20,11 @@ static void foolib_build_cb(BaseTarget &foolib_target);
 static void generic_build_cb(BaseTarget &generic_target,
                              BaseTarget &foolib_target);
 
+static void post_build_cb(BaseTarget &generic_target,
+                          BaseTarget &foolib_target);
+
 int main(int argc, char **argv) {
-  // 1. Get arguments
+  // Get arguments
   ArgToolchain custom_toolchain;
   TargetType default_lib_type{TargetType::StaticLibrary};
   Args::Init()
@@ -30,70 +33,33 @@ int main(int argc, char **argv) {
           [&](CLI::App &app) { args_lib_type_cb(app, default_lib_type); })
       .Parse(argc, argv);
 
-  // 2. Initialize your environment
-  Register reg;
+  // Initialize your environment
+  Reg::Init();
 
-  // 3. Pre-build steps
-  reg.Clean(clean_cb);
+  // Pre-build steps
+  Reg::Call(Args::Clean()).Func(clean_cb);
 
-  // 4. Build steps
+  // Build steps
   // Toolchain + Generic Target
   BaseToolchain toolchain = custom_toolchain.ConstructToolchain();
   Target_generic foolib_target("libfoo", default_lib_type, toolchain, "");
-  reg.Build(custom_toolchain.state, foolib_build_cb, foolib_target);
-
-  // Target specific settings
   Target_generic generic_target("generic", TargetType::Executable, toolchain,
                                 "src");
-  reg.Build(custom_toolchain.state, generic_build_cb, generic_target,
-            foolib_target);
-  reg.Dep(generic_target, foolib_target);
+  Reg::Toolchain(custom_toolchain.state)
+      .Func([&]() { toolchain.Verify(); })
+      .Build(foolib_build_cb, foolib_target)
+      .Build(generic_build_cb, generic_target, foolib_target)
+      .Dep(generic_target, foolib_target)
+      .Test("{executable}", generic_target);
 
-  // 5. Test steps
-  reg.Test(custom_toolchain.state, "{executable}", generic_target);
-
-  // 6. Build Target
-  reg.RunBuild();
-
-  // 7. Post Build steps
-  // For Static Lib do nothing
-  // For Dynamic Lib we need to handle special cases
-  // - MSVC behaviour
-  // - Copy to executable location
-  if (default_lib_type == TargetType::DynamicLibrary) {
-
-    // MSVC special case
-    fs::path copy_from_path;
-    fs::path copy_to_path;
-    if (toolchain.GetId() == ToolchainId::Msvc) {
-      copy_from_path =
-          fmt::format("{}.dll", path_as_string(foolib_target.GetTargetPath()));
-      copy_to_path =
-          generic_target.GetTargetBuildDir() /
-          fmt::format("{}.dll",
-                      foolib_target.GetTargetPath().filename().string());
-    } else {
-      copy_from_path = foolib_target.GetTargetPath();
-      copy_to_path =
-          generic_target.GetTargetBuildDir() /
-          (foolib_target.GetName() + foolib_target.GetConfig().target_ext);
-    }
-
-    // Copy case
-    if (generic_target.IsBuilt()) {
-      fs::remove(copy_to_path);
-      fs::copy(copy_from_path, copy_to_path);
-    }
-  }
-
-  // 8. Test Target
-  reg.RunTest();
+  // Build Target
+  Reg::Run([&]() { post_build_cb(generic_target, foolib_target); });
 
   // - Clang Compile Commands
   plugin::ClangCompileCommands({&foolib_target, &generic_target}).Generate();
 
   // - Plugin Graph
-  std::string output = reg.GetTaskflow().dump();
+  std::string output = Reg::GetTaskflow().dump();
   const bool saved = env::save_file("graph.dot", output, false);
   env::assert_fatal(saved, "Could not save graph.dot file");
 
@@ -130,4 +96,36 @@ static void generic_build_cb(BaseTarget &generic_target,
   generic_target.AddLibDep(foolib_target);
   generic_target.AddSource("main.cpp");
   generic_target.Build();
+}
+
+void post_build_cb(BaseTarget &generic_target, BaseTarget &foolib_target) {
+  // For Static Lib do nothing
+  // For Dynamic Lib we need to handle special cases
+  // - MSVC behaviour
+  // - Copy to executable location
+  if (foolib_target.GetType() == TargetType::DynamicLibrary) {
+    // MSVC special case
+    fs::path copy_from_path;
+    fs::path copy_to_path;
+    if (foolib_target.GetToolchain().GetId() == ToolchainId::Msvc) {
+      copy_from_path =
+          fmt::format("{}.dll", path_as_string(foolib_target.GetTargetPath()));
+      copy_to_path =
+          generic_target.GetTargetBuildDir() /
+          fmt::format("{}.dll",
+                      foolib_target.GetTargetPath().filename().string());
+    } else {
+      copy_from_path = foolib_target.GetTargetPath();
+      copy_to_path =
+          generic_target.GetTargetBuildDir() /
+          (foolib_target.GetName() + foolib_target.GetConfig().target_ext);
+    }
+
+    // Copy case
+    // TODO, This should be baked into the `Target` API
+    if (generic_target.IsBuilt()) {
+      fs::remove(copy_to_path);
+      fs::copy(copy_from_path, copy_to_path);
+    }
+  }
 }

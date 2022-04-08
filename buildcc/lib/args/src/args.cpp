@@ -18,6 +18,10 @@
 
 namespace {
 
+// Error messages
+constexpr const char *const kArgsNotInit =
+    "Initialize Args using the Args::Init API";
+
 // Groups
 constexpr const char *const kRootGroup = "Root";
 
@@ -99,9 +103,10 @@ std::unique_ptr<Args::Internal> Args::internal_;
 Args::Instance &Args::Init() {
   if (!internal_) {
     internal_ = std::make_unique<Internal>();
+    auto &app = RefApp();
     internal_->toolchain =
-        Ref().add_subcommand(kToolchainSubcommand, kToolchainDesc);
-    internal_->target = Ref().add_subcommand(kTargetSubcommand, kTargetDesc);
+        app.add_subcommand(kToolchainSubcommand, kToolchainDesc);
+    internal_->target = app.add_subcommand(kTargetSubcommand, kTargetDesc);
     RootArgs();
   }
   return internal_->instance;
@@ -109,6 +114,13 @@ Args::Instance &Args::Init() {
 
 void Args::Deinit() { internal_.reset(nullptr); }
 
+bool Args::IsInit() { return static_cast<bool>(internal_); }
+bool Args::IsParsed() {
+  if (!IsInit()) {
+    return false;
+  }
+  return RefApp().parsed();
+}
 bool Args::Clean() { return clean_; }
 env::LogLevel Args::GetLogLevel() { return loglevel_; }
 
@@ -118,7 +130,7 @@ const fs::path &Args::GetProjectBuildDir() { return project_build_dir_; }
 // Private
 
 void Args::RootArgs() {
-  auto &app = Ref();
+  auto &app = RefApp();
   app.set_help_all_flag(kHelpAllParam, kHelpAllDesc);
 
   app.set_config(kConfigParam, "", kConfigDesc)->expected(kMinFiles, kMaxFiles);
@@ -137,7 +149,11 @@ void Args::RootArgs() {
       ->required();
 }
 
-CLI::App &Args::Ref() { return internal_->app; }
+Args::Internal &Args::RefInternal() {
+  env::assert_fatal(internal_ != nullptr, kArgsNotInit);
+  return *internal_;
+}
+CLI::App &Args::RefApp() { return RefInternal().app; }
 
 // Args::Instance
 
@@ -151,9 +167,7 @@ Args::Instance &Args::Instance::AddToolchain(const std::string &name,
                                              const std::string &description,
                                              ArgToolchain &out,
                                              const ArgToolchain &initial) {
-  CLI::App *toolchain = internal_->toolchain;
-  env::assert_fatal(toolchain != nullptr,
-                    "Initialize Args using the Args::Init API");
+  CLI::App *toolchain = RefInternal().toolchain;
   CLI::App *t_user =
       toolchain->add_subcommand(name, description)->group(kToolchainGroup);
   t_user->add_flag(kToolchainBuildParam, out.state.build);
@@ -186,9 +200,7 @@ Args::Instance &Args::Instance::AddTarget(const std::string &name,
                                           const std::string &description,
                                           ArgTarget &out,
                                           const ArgTarget &initial) {
-  CLI::App *target = internal_->target;
-  env::assert_fatal(target != nullptr,
-                    "Initialize Args using the Args::Init API");
+  CLI::App *target = RefInternal().target;
   CLI::App *targetuser =
       target->add_subcommand(name, description)->group(kTargetGroup);
   targetuser->add_option(kTargetCompileCommandParam, out.compile_command)
@@ -200,13 +212,13 @@ Args::Instance &Args::Instance::AddTarget(const std::string &name,
 
 Args::Instance &Args::Instance::AddCustomCallback(
     const std::function<void(CLI::App &)> &add_cb) {
-  auto &app = Ref();
+  auto &app = RefApp();
   add_cb(app);
   return *this;
 }
 
 Args::Instance &Args::Instance::AddCustomData(ArgCustom &data) {
-  auto &app = Ref();
+  auto &app = RefApp();
   data.Add(app);
   return *this;
 }

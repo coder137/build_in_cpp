@@ -19,6 +19,9 @@ TEST(ArgsTestGroup, Args_BasicParse) {
   std::vector<const char *> av{"", "--config", "configs/basic_parse.toml"};
   int argc = av.size();
 
+  CHECK_FALSE(buildcc::Args::IsInit());
+  CHECK_FALSE(buildcc::Args::IsParsed());
+
   (void)buildcc::Args::Init();
   auto &instance = buildcc::Args::Init(); // Second init does nothing when
                                           // already initialized
@@ -28,6 +31,8 @@ TEST(ArgsTestGroup, Args_BasicParse) {
   STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
   CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
   CHECK_TRUE(buildcc::Args::Clean());
+  CHECK_TRUE(buildcc::Args::IsInit());
+  CHECK_TRUE(buildcc::Args::IsParsed());
 }
 
 TEST(ArgsTestGroup, Args_BasicExit) {

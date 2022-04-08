@@ -15,7 +15,7 @@ static void cpp_generator_cb(BaseGenerator &generator);
 static void c_generator_cb(BaseGenerator &generator);
 
 int main(int argc, char **argv) {
-  // 1. Get arguments
+  // Get arguments
   ArgToolchain arg_gcc;
   ArgToolchain arg_msvc;
   Args::Init()
@@ -23,54 +23,45 @@ int main(int argc, char **argv) {
       .AddToolchain("msvc", "Generic msvc toolchain", arg_msvc)
       .Parse(argc, argv);
 
-  // 2. Initialize your environment
-  Register reg;
+  // Initialize your environment
+  Reg::Init();
 
-  // 3. Pre-build steps
-  reg.Clean(clean_cb);
+  // Pre-build steps
+  Reg::Call(Args::Clean()).Func(clean_cb);
 
-  // 4. Build steps
+  // Generator
+  BaseGenerator cpp_generator("cpp_generator", "");
+  BaseGenerator c_generator("c_generator", "");
+  Reg::Call()
+      .Build(cpp_generator_cb, cpp_generator)
+      .Build(c_generator_cb, c_generator);
+
+  // Build steps
   // Explicit toolchain - target pairs
   Toolchain_gcc gcc;
-  Toolchain_msvc msvc;
-
-  // CPP
-  BaseGenerator cpp_generator("cpp_generator", "");
-  reg.Build(cpp_generator_cb, cpp_generator);
-
   ExecutableTarget_gcc g_cpptarget("cpptarget", gcc, "");
-  reg.Build(arg_gcc.state, cpp_target_cb, g_cpptarget, cpp_generator);
-
-  ExecutableTarget_msvc m_cpptarget("cpptarget", msvc, "");
-  reg.Build(arg_msvc.state, cpp_target_cb, m_cpptarget, cpp_generator);
-
-  reg.Dep(g_cpptarget, cpp_generator);
-  reg.Dep(m_cpptarget, cpp_generator);
-
-  // C
-  BaseGenerator c_generator("c_generator", "");
-  reg.Build(c_generator_cb, c_generator);
-
   ExecutableTarget_gcc g_ctarget("ctarget", gcc, "");
-  reg.Build(arg_gcc.state, c_target_cb, g_ctarget, c_generator);
+  Reg::Toolchain(arg_gcc.state)
+      .Build(cpp_target_cb, g_cpptarget, cpp_generator)
+      .Build(c_target_cb, g_ctarget, c_generator)
+      .Dep(g_cpptarget, cpp_generator)
+      .Dep(g_ctarget, c_generator)
+      .Test("{executable}", g_cpptarget)
+      .Test("{executable}", g_ctarget);
 
+  Toolchain_msvc msvc;
+  ExecutableTarget_msvc m_cpptarget("cpptarget", msvc, "");
   ExecutableTarget_msvc m_ctarget("ctarget", msvc, "");
-  reg.Build(arg_msvc.state, c_target_cb, m_ctarget, c_generator);
+  Reg::Toolchain(arg_msvc.state)
+      .Build(cpp_target_cb, m_cpptarget, cpp_generator)
+      .Build(c_target_cb, m_ctarget, c_generator)
+      .Dep(m_cpptarget, cpp_generator)
+      .Dep(m_ctarget, c_generator)
+      .Test("{executable}", m_cpptarget)
+      .Test("{executable}", m_ctarget);
 
-  reg.Dep(g_ctarget, c_generator);
-  reg.Dep(m_ctarget, c_generator);
-
-  // Tests
-  reg.Test(arg_gcc.state, "{executable}", g_cpptarget);
-  reg.Test(arg_gcc.state, "{executable}", g_ctarget);
-  reg.Test(arg_msvc.state, "{executable}", m_cpptarget);
-  reg.Test(arg_msvc.state, "{executable}", m_ctarget);
-
-  // 6. Build Target
-  reg.RunBuild();
-
-  // 7. Test Target
-  reg.RunTest();
+  // Build and Test
+  Reg::Run();
 
   // - Clang Compile Commands
   plugin::ClangCompileCommands(
@@ -78,7 +69,7 @@ int main(int argc, char **argv) {
       .Generate();
 
   // - Plugin Graph
-  std::string output = reg.GetTaskflow().dump();
+  std::string output = Reg::GetTaskflow().dump();
   const bool saved = env::save_file("graph.dot", output, false);
   env::assert_fatal(saved, "Could not save graph.dot file");
 

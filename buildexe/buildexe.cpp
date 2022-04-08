@@ -53,8 +53,8 @@ int main(int argc, char **argv) {
   // TODO, Add libraries (git cloned)
   // TODO, Add extension (git cloned)
 
-  Register reg;
-  reg.Clean(clean_cb);
+  Reg::Init();
+  Reg::Call(Args::Clean()).Func(clean_cb);
 
   // Host Toolchain
   BaseToolchain toolchain =
@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
   }
 
   // Build Target
-  BuildEnvSetup build_setup(reg, toolchain, buildexe_args);
+  BuildEnvSetup build_setup(toolchain, buildexe_args);
   build_setup.ConstructTarget();
 
   // Run Target if script mode

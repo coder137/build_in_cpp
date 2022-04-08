@@ -27,6 +27,11 @@
 namespace fs = std::filesystem;
 
 namespace {
+constexpr const char *const kRegkNotInit =
+    "Initialize Reg using the Reg::Init API";
+}
+
+namespace {
 
 void DepDetectDuplicate(const tf::Task &target_task, const std::string &match) {
   target_task.for_each_dependent([&](const tf::Task &t) {
@@ -60,24 +65,80 @@ void DepDetectCyclicDependency(const tf::Task &target_task,
 
 namespace buildcc {
 
-void Register::Clean(const std::function<void(void)> &clean_cb) {
-  if (Args::Clean()) {
-    clean_cb();
+std::unique_ptr<Reg::Instance> Reg::instance_;
+
+void Reg::Init() {
+  if (!instance_) {
+    instance_ = std::make_unique<Instance>();
+    env::assert_fatal(Args::IsParsed(), "Setup your Args");
+    Project::Init(fs::current_path() / Args::GetProjectRootDir(),
+                  fs::current_path() / Args::GetProjectBuildDir());
+    env::set_log_level(Args::GetLogLevel());
   }
 }
 
-void Register::Dep(const internal::BuilderInterface &target,
-                   const internal::BuilderInterface &dependency) {
+void Reg::Deinit() {
+  instance_.reset(nullptr);
+  Project::Deinit();
+}
+
+void Reg::Run(const std::function<void(void)> &post_build_cb) {
+  auto &ref = Ref();
+  ref.RunBuild();
+  if (post_build_cb) {
+    post_build_cb();
+  }
+  ref.RunTest();
+}
+
+const tf::Taskflow &Reg::GetTaskflow() { return Ref().GetTaskflow(); }
+
+Reg::Instance &Reg::Ref() {
+  env::assert_fatal(instance_ != nullptr, kRegkNotInit);
+  return *instance_;
+}
+
+// Reg::ToolchainInstance
+
+Reg::ToolchainInstance Reg::Toolchain(const ArgToolchainState &condition) {
+  env::assert_fatal(instance_ != nullptr, kRegkNotInit);
+  return ToolchainInstance(condition);
+}
+
+Reg::ToolchainInstance &
+Reg::ToolchainInstance::Dep(const internal::BuilderInterface &target,
+                            const internal::BuilderInterface &dependency) {
+  if (condition_.build) {
+    Ref().Dep(target, dependency);
+  }
+  return *this;
+}
+
+Reg::ToolchainInstance &Reg::ToolchainInstance::Test(const std::string &command,
+                                                     const BaseTarget &target,
+                                                     const TestConfig &config) {
+  if (condition_.build && condition_.test) {
+    Ref().Test(command, target, config);
+  }
+  return *this;
+}
+
+// Reg::CallbackInstance
+
+Reg::CallbackInstance Reg::Call(bool condition) {
+  env::assert_fatal(instance_ != nullptr, kRegkNotInit);
+  return CallbackInstance(condition);
+}
+
+// Reg::Instance
+
+void Reg::Instance::Dep(const internal::BuilderInterface &target,
+                        const internal::BuilderInterface &dependency) {
   const auto target_iter = build_.find(target.GetUniqueId());
   const auto dep_iter = build_.find(dependency.GetUniqueId());
   env::assert_fatal(!(target_iter == build_.end() || dep_iter == build_.end()),
-                    "Call Register::Build API on target and "
-                    "dependency before Register::Dep API");
-
-  //  empty tasks -> not built so skip
-  if (target_iter->second.empty() || dep_iter->second.empty()) {
-    return;
-  }
+                    "Call Instance::Build API on target and "
+                    "dependency before Instance::Dep API");
 
   const std::string &dep_unique_id = dependency.GetUniqueId();
   DepDetectDuplicate(target_iter->second, dep_unique_id);
@@ -87,17 +148,12 @@ void Register::Dep(const internal::BuilderInterface &target,
   target_iter->second.succeed(dep_iter->second);
 }
 
-void Register::Test(const ArgToolchainState &toolchain_state,
-                    const std::string &command, const BaseTarget &target,
-                    const TestConfig &config) {
-  if (!(toolchain_state.build && toolchain_state.test)) {
-    return;
-  }
-
+void Reg::Instance::Test(const std::string &command, const BaseTarget &target,
+                         const TestConfig &config) {
   const auto target_iter = build_.find(target.GetUniqueId());
   env::assert_fatal(
       !(target_iter == build_.end()),
-      "Call Register::Build API on target before Register::Test API");
+      "Call Instance::Build API on target before Instance::Test API");
 
   const bool added =
       tests_.emplace(target.GetUniqueId(), TestInfo(target, command, config))
@@ -108,20 +164,12 @@ void Register::Test(const ArgToolchainState &toolchain_state,
 
 // Private
 
-void Register::BuildStoreTask(const std::string &unique_id,
-                              const tf::Task &task) {
+void Reg::Instance::BuildStoreTask(const std::string &unique_id,
+                                   const tf::Task &task) {
   const bool stored = build_.emplace(unique_id, task).second;
   env::assert_fatal(
-      stored, fmt::format("Duplicate `Register::Build` call detected for '{}'",
+      stored, fmt::format("Duplicate `Instance::Build` call detected for '{}'",
                           unique_id));
-}
-
-void Register::Initialize() { Env(); }
-
-void Register::Env() {
-  Project::Init(fs::current_path() / Args::GetProjectRootDir(),
-                fs::current_path() / Args::GetProjectBuildDir());
-  env::set_log_level(Args::GetLogLevel());
 }
 
 //

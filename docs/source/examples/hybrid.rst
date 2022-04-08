@@ -14,20 +14,18 @@ We are only using a single Toolchain - Target pair
     :linenos:
 
     int main(int argc, char ** argv) {
-        // Args module to get data from the command line or .toml file passed in through --config
-        Args args;
-
         // Register your [toolchain.{name}]
         // In this case it will be [toolchain.gcc]
         ArgToolchain arg_gcc;
-        args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
 
-        // Parse the arguments from the command line
-        args.Parse(argc, argv);
+        // Args module to get data from the command line or .toml file passed in through --config
+        Args::Init()
+            .AddToolchain("gcc", "Generic gcc toolchain", arg_gcc)
+            .Parse(argc, argv);
 
         // Register module 
-        Register reg(args);
-        reg.Clean(clean_cb);
+        Reg::Init();
+        Reg::Call(Args::Clean()).Func(clean_cb);
 
         // TODO, Write your target builds here
         // See examples below
@@ -75,14 +73,13 @@ Compile a single source with a single GCC compiler.
         ExecutableTarget_gcc hello_world("hello_world", gcc, "");
 
         // Select your builds and tests using the .toml files
-        reg.Build(arg_gcc.state, hello_world_build_cb, hello_world);
-        reg.Test(arg_gcc.state, "{executable}", hello_world);
+        Reg::Toolchain(arg_gcc.state)
+            .Func([&]() { gcc.Verify(); })
+            .Build(arg_gcc.state, hello_world_build_cb, hello_world)
+            .Test(arg_gcc.state, "{executable}", hello_world);
 
-        // Build Target
-        reg.RunBuild();
-
-        // Test Target
-        reg.RunTest();
+        // Build and Test Target
+        Reg::Run();
     }
 
     static void hello_world_build_cb(BaseTarget &target) {
@@ -100,23 +97,21 @@ We are using multiple Toolchain - Target pairs
     :linenos:
 
     int main(int argc, char ** argv) {
-        // Args module to get data from the command line or .toml file passed in through --config
-        Args args;
-
         // Register your [toolchain.{name}]
         // In this case it will be [toolchain.gcc] and [toolchain.msvc]
         ArgToolchain arg_gcc;
         ArgToolchain arg_msvc;
-        args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
-        args.AddToolchain("msvc", "Generic msvc toolchain", arg_msvc);
+
+        // Args module to get data from the command line or .toml file passed in through --config
+        Args::Init()
+            .AddToolchain("gcc", "Generic gcc toolchain", arg_gcc)
+            .AddToolchain("msvc", "Generic msvc toolchain", arg_msvc)
+            .Parse(argc, argv);
         // NOTE, You can add more toolchains here as per your project requirement
 
-        // Parse the arguments from the command line
-        args.Parse(argc, argv);
-
         // Register module 
-        Register reg(args);
-        reg.Clean(clean_cb);
+        Reg::Init();
+        Reg::Call(Args::Clean()).Func(clean_cb);
 
         // TODO, Write your target builds here
         // See examples below
@@ -167,30 +162,30 @@ Similar to lowlevel GCC Flags example for both the GCC and MSVC compiler
         // See Multiple Boilerplate
 
         Toolchain_gcc gcc;
-        Toolchain_msvc msvc;
-
         ExecutableTarget_gcc g_cppflags("cppflags", gcc, "files");
-        ExecutableTarget_msvc m_cppflags("cppflags", msvc, "files");
         ExecutableTarget_gcc g_cflags("cflags", gcc, "files");
-        ExecutableTarget_msvc m_cflags("cflags", msvc, "files");
-
         // Select your builds and tests using the .toml files
-        reg.Build(arg_gcc.state, cppflags_build_cb, g_cppflags);
-        reg.Build(arg_msvc.state, cppflags_build_cb, m_cppflags);
-        reg.Build(arg_gcc.state, cflags_build_cb, g_cflags);
-        reg.Build(arg_msvc.state, cflags_build_cb, m_cflags);
+        Reg::Toolchain(arg_gcc.state)
+            .Func([&](){ gcc.Verify(); })
+            .Build(cppflags_build_cb, g_cppflags)
+            .Build(cflags_build_cb, g_cflags)
+            .Test("{executable}", g_cppflags)
+            .Test("{executable}", g_cflags);
 
-        // Test steps
-        reg.Test(arg_gcc.state, "{executable}", g_cppflags);
-        reg.Test(arg_msvc.state, "{executable}", m_cppflags);
-        reg.Test(arg_gcc.state, "{executable}", g_cflags);
-        reg.Test(arg_msvc.state, "{executable}", m_cflags);
+        Toolchain_msvc msvc;
+        ExecutableTarget_msvc m_cppflags("cppflags", msvc, "files");
+        ExecutableTarget_msvc m_cflags("cflags", msvc, "files");
+        Reg::Toolchain(arg_msvc.state)
+            .Func([&](){ msvc.Verify(); })
+            .Build(cppflags_build_cb, m_cppflags)
+            .Build(cflags_build_cb, m_cflags)
+            .Test("{executable}", m_cppflags)
+            .Test("{executable}", m_cflags);
 
-        // Build Target
-        reg.RunBuild();
+        // Build and Test target
+        Reg::Run();
 
-        // Test Target
-        reg.RunTest();
+        return 0;
     }
 
     static void cppflags_build_cb(BaseTarget &cppflags) {
@@ -301,7 +296,6 @@ For end users consuming third party libraries
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 18
 
     #include "build.foo.h"
 
@@ -312,13 +306,16 @@ For end users consuming third party libraries
         Toolchain_gcc gcc;
         Toolchain_msvc msvc;
 
-        ExecutableTarget_gcc g_foolib("foolib", gcc, "");
-        ExecutableTarget_msvc m_foolib("foolib", msvc, "");
+        ExecutableTarget_gcc g_foolib("foolib", gcc, TargetEnv("..."));
+        ExecutableTarget_msvc m_foolib("foolib", msvc, TargetEnv("...");
 
-        reg.Build(arg_gcc.state, foolib_build_cb, g_foolib);
-        reg.Build(arg_msvc.state, foolib_build_cb, m_foolib);
+        Reg::Toolchain(arg_gcc.state)
+            .Build(foolib_build_cb, g_foolib);
+        
+        Reg::Toolchain(arg_msvc.state)
+            .Build(foolib_build_cb, m_foolib);
 
-        reg.RunBuild();
+        Reg::Run();
     }
 
     static void foolib_build_cb(BaseTarget &target) {
@@ -334,48 +331,43 @@ For super customized targets and toolchains
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 12,13,30,34,35,36
 
     int main(int argc, char ** argv) {
 
-        Args args;
         ArgToolchain arg_gcc;
         ArgToolchain arg_msvc;
         ArgToolchain toolchain_clang_gnu;
         ArgTarget target_clang_gnu;
-        args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
-        args.AddToolchain("msvc", "Generic msvc toolchain", arg_msvc);
 
-        // Add your custom toolchain - target to the command line
-        args.AddToolchain("clang_gnu", "Clang GNU toolchain", toolchain_clang_gnu);
-        args.AddTarget("clang_gnu", "Clang GNU target", target_clang_gnu);
-
-        args.Parse(argc, argv);
+        Args::Init()
+            .AddToolchain("gcc", "Generic gcc toolchain", arg_gcc)
+            .AddToolchain("msvc", "Generic msvc toolchain", arg_msvc)
+            .AddToolchain("clang_gnu", "Clang GNU toolchain", toolchain_clang_gnu)
+            .AddTarget("clang_gnu", "Clang GNU target", target_clang_gnu)
+            .Parse(argc, argv);
 
         // Additional boilerplate
 
         // Supplied at compile time
         Toolchain_gcc gcc;
         Toolchain_msvc msvc;
-
-        ExecutableTarget_gcc g_foolib("foolib", gcc, "");
-        ExecutableTarget_msvc m_foolib("foolib", msvc, "");
-
-        reg.Build(arg_gcc.state, foolib_build_cb, g_foolib);
-        reg.Build(arg_msvc.state, foolib_build_cb, m_foolib);
-
         // Get custom toolchain from the command line, supplied at run time
         BaseToolchain clang = toolchain_clang_gnu.ConstructToolchain();
 
+        ExecutableTarget_gcc g_foolib("foolib", gcc, "");
+        ExecutableTarget_msvc m_foolib("foolib", msvc, "");
         // Get compile_command and link_command from the command line
-        TargetConfig config;
-        config.compile_command = target_clang_gnu.compile_command;
-        config.link_command = target_clang_gnu.link_command;
-        Target_custom c_foolib("CFoolib.exe", TargetType::Executable, clang, "", config);
-        reg.Build(toolchain_clang_gnu.state, foolib_build_cb, c_foolib);
+        Target_custom c_foolib("CFoolib.exe", TargetType::Executable, clang, "", target_clang_gnu.GetTargetConfig());
+
+        Reg::Toolchain(arg_gcc.state)
+            .Build(foolib_build_cb, g_foolib);
+        Reg::Toolchain(arg_msvc.state)
+            .Build(foolib_build_cb, m_foolib);
+        Reg::Toolchain(toolchain_clang_gnu.state)
+            .Build( foolib_build_cb, c_foolib);
         
         // Build targets
-        reg.RunBuild();
+        Reg::Run();
     }
 
     static void foolib_build_cb(BaseTarget &target) {
@@ -387,7 +379,6 @@ For super customized targets and toolchains
 
 .. code-block:: toml
     :linenos:
-    :emphasize-lines: 4,18
 
     # See Multiple boilerplate .toml file
 
@@ -418,7 +409,6 @@ Precompile header usage with GCC and MSVC compilers
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 8,9,10,36,37,38
 
     // Modified Lowlevel GCC Flags example for PCH
     
@@ -487,7 +477,6 @@ Chain **Generators** and **Targets** using the ``Register`` module
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 7,8,17,18
 
     int main(int argc, char ** argv) {
         // See Multiple Boilerplate
@@ -496,17 +485,19 @@ Chain **Generators** and **Targets** using the ``Register`` module
         Toolchain_msvc msvc;
 
         BaseGenerator cpp_generator("cpp_generator", "");
-        reg.Build(cpp_generator_cb, cpp_generator);
+        Reg::Call().Build(cpp_generator_cb, cpp_generator);
 
         ExecutableTarget_gcc g_cpptarget("cpptarget", gcc, "");
-        reg.Build(arg_gcc.state, cpp_target_cb, g_cpptarget, cpp_generator);
+        Reg::Toolchain(arg_gcc.state)
+            .Func([&](){ gcc.Verify(); })
+            .Build(cpp_target_cb, g_cpptarget, cpp_generator)
+            .Dep(g_cpptarget, cpp_generator);
 
         ExecutableTarget_msvc m_cpptarget("cpptarget", msvc, "");
-        reg.Build(arg_msvc.state, cpp_target_cb, m_cpptarget, cpp_generator);
-        
-        // cpp_generator runs before g_cpptarget and m_cpptarget
-        reg.Dep(g_cpptarget, cpp_generator);
-        reg.Dep(m_cpptarget, cpp_generator);
+        Reg::Toolchain(arg_msvc.state)
+            .Func([&](){ msvc.Verify(); })
+            .Build(cpp_target_cb, m_cpptarget, cpp_generator)
+            .Dep(m_cpptarget, cpp_generator);
     }
 
     // Use a python generator to create main.cpp
@@ -537,7 +528,6 @@ Target Info
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 8,9
 
     int main(int argc, char ** argv) {
         // See Multiple boilerplate
@@ -546,14 +536,17 @@ Target Info
         Toolchain_msvc msvc;
 
         // TargetInfo
-        TargetInfo genericadd_ho("files");
-        reg.Callback(genericadd_ho_cb, genericadd_ho);
-
+        TargetInfo g_genericadd_ho(gcc, "files");
         ExecutableTarget_gcc g_genericadd1("generic_add_1", gcc, "files");
-        ExecutableTarget_msvc m_genericadd1("generic_add_1", msvc, "files");
+        Reg::Toolchain(arg_gcc.state)
+            .Func(genericadd_ho_cb, g_genericadd_ho)
+            .Build(genericadd1_build_cb, g_genericadd1, g_genericadd_ho);
 
-        reg.Build(arg_gcc.state, genericadd1_build_cb, g_genericadd1, genericadd_ho);
-        reg.Build(arg_msvc.state, genericadd1_build_cb, m_genericadd1, genericadd_ho);
+        TargetInfo m_genericadd_ho(msvc, "files");
+        ExecutableTarget_msvc m_genericadd1("generic_add_1", msvc, "files");
+        Reg::Toolchain(arg_msvc.state)
+            .Func(genericadd_ho_cb, m_genericadd_ho)
+            .Build(genericadd1_build_cb, m_genericadd1, m_genericadd_ho);
     }
 
     // HO library contains include dirs and header files which are copied into executable target

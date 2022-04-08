@@ -20,32 +20,34 @@
 
 namespace buildcc {
 
-tf::Task Register::BuildTargetTask(BaseTarget &target) {
+tf::Task Reg::Instance::BuildTargetTask(BaseTarget &target) {
   return build_tf_.composed_of(target.GetTaskflow()).name(target.GetUniqueId());
 }
 
-tf::Task Register::BuildGeneratorTask(BaseGenerator &generator) {
+tf::Task Reg::Instance::BuildGeneratorTask(BaseGenerator &generator) {
   return build_tf_.composed_of(generator.GetTaskflow())
       .name(generator.GetUniqueId());
 }
 
-void Register::RunBuild() {
-  env::log_info(__FUNCTION__, fmt::format("Running with {} workers",
-                                          executor_.num_workers()));
-  executor_.run(build_tf_);
-  executor_.wait_for_all();
+void Reg::Instance::RunBuild() {
+  tf::Executor executor;
+  env::log_info(__FUNCTION__,
+                fmt::format("Running with {} workers", executor.num_workers()));
+  executor.run(build_tf_);
+  executor.wait_for_all();
   env::assert_fatal(env::get_task_state() == env::TaskState::SUCCESS,
                     "Task state is not successful!");
 }
 
-void Register::RunTest() {
+void Reg::Instance::RunTest() {
   tf::Taskflow test_tf{"Tests"};
   test_tf.for_each(
       tests_.begin(), tests_.end(),
       [](const std::pair<std::string, TestInfo> &p) { p.second.TestRunner(); });
 
-  executor_.run(test_tf);
-  executor_.wait_for_all();
+  tf::Executor executor;
+  executor.run(test_tf);
+  executor.wait_for_all();
 }
 
 } // namespace buildcc

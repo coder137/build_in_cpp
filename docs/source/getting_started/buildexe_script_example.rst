@@ -84,7 +84,6 @@ We then setup our main **toolchain**-**target** pairs. Highlighted below
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 25,26,27,29,30
     :caption: build.helloworld.cpp
 
     #include "buildcc.h"
@@ -96,32 +95,33 @@ We then setup our main **toolchain**-**target** pairs. Highlighted below
     void hello_world_build_cb(BaseTarget & target);
 
     int main(int argc, char ** argv) {
-        // Step 1. Setup your args
-        Args args;
+        // Setup your args
         ArgToolchain arg_gcc;
-        args.AddToolchain("gcc", "GCC toolchain", arg_gcc);
-        args.Parse(argc, argv);
 
-        // Step 2. Register
-        Register reg(args);
+        Args::Init()
+            .AddToolchain("gcc", "GCC toolchain", arg_gcc)
+            .Parse(argc, argv);
 
-        // Step 3. Pre build steps
+        // Register
+        Reg::Init();
+
+        // Pre build steps
         // for example. clean your environment
-        reg.Clean(clean_cb);
+        Reg::Call(Args::Clean()).Func(clean_cb);
 
-        // Step 4. Build steps
+        // Build steps
         // Main setup
         Toolchain_gcc gcc;
-        auto verified_gcc_toolchains = gcc.Verify();
-        env::assert_fatal(!verified_gcc_toolchains.empty(), "GCC toolchain not found");
-
         ExecutableTarget_gcc hello_world("hello_world", gcc, "");
-        reg.Build(arg_gcc.state, hello_world_build_cb, hello_world);
 
-        // Step 5. Build your targets
-        reg.RunBuild();
+        Reg::Toolchain(arg_gcc.state)
+            .Func([&](){ gcc.Verify() })
+            .Build(hello_world_build_cb, hello_world);
 
-        // Step 6. Post build steps
+        // Build your targets
+        Reg::Run();
+
+        // Post build steps
         // for example. clang compile commands database
         plugin::ClangCompileCommands({&hello_world}).Generate();
 

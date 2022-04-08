@@ -29,7 +29,7 @@ void BuildEnvSetup::ConstructTarget() {
     // user target
     ConstructUserTarget();
   }
-  reg_.RunBuild();
+  Reg::Run();
 }
 
 void BuildEnvSetup::RunUserTarget(const ArgScriptInfo &arg_script_info) {
@@ -76,7 +76,7 @@ void BuildEnvSetup::ConstructUserTargetWithBuildcc() {
 void BuildEnvSetup::BuildccTargetSetup() {
   const fs::path &buildcc_base = BuildccHome::GetBuildccBaseDir();
   auto &buildcc_package = storage_.Add<BuildBuildCC>(
-      kBuildccPackageName, reg_, toolchain_,
+      kBuildccPackageName, toolchain_,
       TargetEnv(buildcc_base, buildcc_base / "_build_exe"));
   buildcc_package.Setup(state_);
 }
@@ -206,12 +206,12 @@ struct BuildExeLibDir {{
 }
 
 void BuildEnvSetup::UserTargetBuild() {
-  reg_.Build(
-      state_, [](BaseTarget &target) { target.Build(); }, GetUserTarget());
+  Reg::Toolchain(state_).Build([](BaseTarget &target) { target.Build(); },
+                               GetUserTarget());
 }
 
 void BuildEnvSetup::DepUserTargetOnBuildcc() {
-  reg_.Dep(GetUserTarget(), GetBuildcc());
+  Reg::Toolchain(state_).Dep(GetUserTarget(), GetBuildcc());
 }
 
 } // namespace buildcc

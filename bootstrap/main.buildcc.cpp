@@ -38,31 +38,32 @@ int main(int argc, char **argv) {
       .AddToolchain("host", "Host Toolchain", custom_toolchain_arg)
       .Parse(argc, argv);
 
-  Register reg;
-  reg.Clean(clean_cb);
+  Reg::Init();
+  Reg::Call(Args::Clean()).Func(clean_cb);
 
   BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
+  toolchain.Verify();
 
   BuildBuildCC buildcc(
-      reg, toolchain, TargetEnv(Project::GetRootDir(), Project::GetBuildDir()));
+      toolchain, TargetEnv(Project::GetRootDir(), Project::GetBuildDir()));
   buildcc.Setup(custom_toolchain_arg.state);
 
   const auto &buildcc_lib = buildcc.GetBuildcc();
   ExecutableTarget_generic buildcc_hybrid_simple_example(
       "buildcc_hybrid_simple_example", toolchain, "example/hybrid/simple");
-  reg.Build(custom_toolchain_arg.state, hybrid_simple_example_cb,
-            buildcc_hybrid_simple_example, buildcc_lib);
-  reg.Dep(buildcc_hybrid_simple_example, buildcc_lib);
+  Reg::Toolchain(custom_toolchain_arg.state)
+      .Build(hybrid_simple_example_cb, buildcc_hybrid_simple_example,
+             buildcc_lib)
+      .Dep(buildcc_hybrid_simple_example, buildcc_lib);
 
   // Runners
-  reg.RunBuild();
-  reg.RunTest();
+  Reg::Run();
 
   // - Clang Compile Commands
   plugin::ClangCompileCommands({&buildcc_lib}).Generate();
 
   // - Plugin Graph
-  std::string output = reg.GetTaskflow().dump();
+  std::string output = Reg::GetTaskflow().dump();
   const bool saved = env::save_file("graph.dot", output, false);
   env::assert_fatal(saved, "Could not save graph.dot file");
 

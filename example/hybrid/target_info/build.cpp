@@ -13,7 +13,7 @@ static void genericadd2_build_cb(BaseTarget &genericadd,
                                  const TargetInfo &genericadd_ho);
 
 int main(int argc, char **argv) {
-  // 1. Get arguments
+  // Get arguments
   ArgToolchain arg_gcc;
   ArgToolchain arg_msvc;
   Args::Init()
@@ -21,61 +21,47 @@ int main(int argc, char **argv) {
       .AddToolchain("msvc", "Generic msvc toolchain", arg_msvc)
       .Parse(argc, argv);
 
-  // 2. Initialize your environment
-  Register reg;
+  // Initialize your environment
+  Reg::Init();
 
-  // 3. Pre-build steps
-  reg.Clean(clean_cb);
+  // Pre-build steps
+  Reg::Call(Args::Clean()).Func(clean_cb);
 
-  // 4. Build steps
+  // Build steps
   // Explicit toolchain - target pairs
   Toolchain_gcc gcc;
-  Toolchain_msvc msvc;
-
-  // TargetInfo
   TargetInfo gcc_genericadd_ho(gcc, "files");
-  TargetInfo msvc_genericadd_ho(msvc, "files");
-  reg.Callback(genericadd_ho_cb, gcc_genericadd_ho);
-  reg.Callback(genericadd_ho_cb, msvc_genericadd_ho);
-
   ExecutableTarget_gcc g_genericadd1("generic_add_1", gcc, "files");
-  ExecutableTarget_msvc m_genericadd1("generic_add_1", msvc, "files");
-
   ExecutableTarget_gcc g_genericadd2("generic_add_2", gcc, "files");
+  Reg::Toolchain(arg_gcc.state)
+      .Func([&]() { gcc.Verify(); })
+      .Func(genericadd_ho_cb, gcc_genericadd_ho)
+      .Build(genericadd1_build_cb, g_genericadd1, gcc_genericadd_ho)
+      .Build(genericadd2_build_cb, g_genericadd2, gcc_genericadd_ho)
+      .Test("{executable}", g_genericadd1)
+      .Test("{executable}", g_genericadd2);
+
+  Toolchain_msvc msvc;
+  TargetInfo msvc_genericadd_ho(msvc, "files");
+  ExecutableTarget_msvc m_genericadd1("generic_add_1", msvc, "files");
   ExecutableTarget_msvc m_genericadd2("generic_add_2", msvc, "files");
+  Reg::Toolchain(arg_msvc.state)
+      .Func([&]() { msvc.Verify(); })
+      .Func(genericadd_ho_cb, msvc_genericadd_ho)
+      .Build(genericadd1_build_cb, m_genericadd1, msvc_genericadd_ho)
+      .Build(genericadd2_build_cb, m_genericadd2, msvc_genericadd_ho)
+      .Test("{executable}", m_genericadd1)
+      .Test("{executable}", m_genericadd2);
 
-  // Select your builds and tests using the .toml files
-  reg.Build(arg_gcc.state, genericadd1_build_cb, g_genericadd1,
-            gcc_genericadd_ho);
-  reg.Build(arg_gcc.state, genericadd2_build_cb, g_genericadd2,
-            gcc_genericadd_ho);
+  // Run
+  Reg::Run();
 
-  reg.Build(arg_msvc.state, genericadd1_build_cb, m_genericadd1,
-            msvc_genericadd_ho);
-  reg.Build(arg_msvc.state, genericadd2_build_cb, m_genericadd2,
-            msvc_genericadd_ho);
-
-  // 5. Test steps
-  // NOTE, For now they are just dummy callbacks
-  reg.Test(arg_gcc.state, "{executable}", g_genericadd1);
-  reg.Test(arg_msvc.state, "{executable}", m_genericadd1);
-
-  reg.Test(arg_gcc.state, "{executable}", g_genericadd2);
-  reg.Test(arg_msvc.state, "{executable}", m_genericadd2);
-
-  // 6. Build Target
-  reg.RunBuild();
-
-  // 7. Test Target
-  reg.RunTest();
-
-  // 8. Post Build steps
-
+  // Post Build steps
   // - Clang Compile Commands
   plugin::ClangCompileCommands({&g_genericadd1, &m_genericadd1}).Generate();
 
   // - Plugin Graph
-  std::string output = reg.GetTaskflow().dump();
+  std::string output = Reg::GetTaskflow().dump();
   const bool saved = env::save_file("graph.dot", output, false);
   env::assert_fatal(saved, "Could not save graph.dot file");
 
