@@ -34,6 +34,7 @@ TEST(RegisterTestGroup, Register_Initialize) {
   CHECK_TRUE(buildcc::Args::Clean());
 
   buildcc::Reg::Init();
+  buildcc::Reg::Init(); // Second init does nothing
 }
 
 TEST(RegisterTestGroup, Register_Clean) {
@@ -118,7 +119,9 @@ TEST(RegisterTestGroup, Register_Build) {
     buildcc::Reg::Init();
     buildcc::Reg::Toolchain(state).Build(
         [](buildcc::BaseTarget &target) { (void)target; }, target);
+    CHECK_TRUE(!buildcc::Reg::GetTaskflow().empty());
     buildcc::Reg::Deinit();
+    CHECK_THROWS(std::exception, buildcc::Reg::GetTaskflow());
   }
 
   {
