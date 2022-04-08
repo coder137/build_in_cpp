@@ -99,56 +99,8 @@ struct ArgCustom {
 
 class Args {
 private:
-  class Instance {
-  public:
-    /**
-     * @brief Parse command line information to CLI11
-     *
-     * @param argc from int main(int argc, char ** argv)
-     * @param argv from int main(int argc, char ** argv)
-     */
-    static void Parse(int argc, const char *const *argv);
-
-    /**
-     * @brief Add toolchain with a unique name and description
-     *
-     * @param out Receive the toolchain information through the CLI
-     * @param initial Set the default toolchain information as a fallback
-     */
-    Instance &AddToolchain(const std::string &name,
-                           const std::string &description, ArgToolchain &out,
-                           const ArgToolchain &initial = ArgToolchain());
-
-    /**
-     * @brief Add toolchain with a unique name and description
-     *
-     * @param out Receive the toolchain information through the CLI
-     * @param initial Set the default toolchain information as a fallback
-     */
-    Instance &AddTarget(const std::string &name, const std::string &description,
-                        ArgTarget &out, const ArgTarget &initial = ArgTarget());
-
-    /**
-     * @brief Custom callback for data
-     *
-     * @param add_cb Add callback that exposes underlying CLI::App
-     */
-    Instance &AddCustomCallback(const std::function<void(CLI::App &)> &add_cb);
-
-    /**
-     * @brief Add custom data
-     *
-     * @param data Derive from `buildcc::ArgCustom` and override the `Add` API
-     */
-    Instance &AddCustomData(ArgCustom &data);
-  };
-
-  struct Internal {
-    Instance instance;
-    CLI::App app{"BuildCC Buildsystem"};
-    CLI::App *toolchain{nullptr};
-    CLI::App *target{nullptr};
-  };
+  class Instance;
+  struct Internal;
 
 public:
   Args() = delete;
@@ -174,6 +126,57 @@ private:
 
 private:
   static std::unique_ptr<Internal> internal_;
+};
+
+class Args::Instance {
+public:
+  /**
+   * @brief Parse command line information to CLI11
+   *
+   * @param argc from int main(int argc, char ** argv)
+   * @param argv from int main(int argc, char ** argv)
+   */
+  static void Parse(int argc, const char *const *argv);
+
+  /**
+   * @brief Add toolchain with a unique name and description
+   *
+   * @param out Receive the toolchain information through the CLI
+   * @param initial Set the default toolchain information as a fallback
+   */
+  Instance &AddToolchain(const std::string &name,
+                         const std::string &description, ArgToolchain &out,
+                         const ArgToolchain &initial = ArgToolchain());
+
+  /**
+   * @brief Add toolchain with a unique name and description
+   *
+   * @param out Receive the toolchain information through the CLI
+   * @param initial Set the default toolchain information as a fallback
+   */
+  Instance &AddTarget(const std::string &name, const std::string &description,
+                      ArgTarget &out, const ArgTarget &initial = ArgTarget());
+
+  /**
+   * @brief Custom callback for data
+   *
+   * @param add_cb Add callback that exposes underlying CLI::App
+   */
+  Instance &AddCustomCallback(const std::function<void(CLI::App &)> &add_cb);
+
+  /**
+   * @brief Add custom data
+   *
+   * @param data Derive from `buildcc::ArgCustom` and override the `Add` API
+   */
+  Instance &AddCustomData(ArgCustom &data);
+};
+
+struct Args::Internal {
+  Instance instance;
+  CLI::App app{"BuildCC Buildsystem"};
+  CLI::App *toolchain{nullptr};
+  CLI::App *target{nullptr};
 };
 
 } // namespace buildcc
