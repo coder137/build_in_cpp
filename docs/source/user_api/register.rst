@@ -5,7 +5,6 @@ register.h
 -----------
 
 .. doxygenclass:: buildcc::Reg
-    :members:
 
 test_info.h
 -------------

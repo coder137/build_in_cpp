@@ -6,8 +6,6 @@ args.h
 
 .. doxygenclass:: buildcc::Args
 
-.. doxygenclass:: buildcc::Args::Instance
-
 .. doxygenstruct:: buildcc::ArgCustom
 
 .. doxygenstruct:: buildcc::ArgToolchainState
