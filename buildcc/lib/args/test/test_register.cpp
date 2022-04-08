@@ -138,6 +138,49 @@ TEST(RegisterTestGroup, Register_Build) {
   mock().checkExpectations();
 }
 
+TEST(RegisterTestGroup, Register_Run_PostCb) {
+  std::vector<const char *> av{
+      "",
+      "--config",
+      "configs/basic_parse.toml",
+  };
+  int argc = av.size();
+
+  buildcc::ArgToolchain gcc_toolchain;
+  buildcc::ArgToolchain msvc_toolchain;
+  buildcc::Args::Init()
+      .AddToolchain("gcc", "Generic gcc toolchain", gcc_toolchain)
+      .AddToolchain("msvc", "Generic msvc toolchain", msvc_toolchain)
+      .Parse(argc, av.data());
+
+  STRCMP_EQUAL(buildcc::Args::GetProjectRootDir().string().c_str(), "root");
+  STRCMP_EQUAL(buildcc::Args::GetProjectBuildDir().string().c_str(), "build");
+  CHECK(buildcc::Args::GetLogLevel() == buildcc::env::LogLevel::Trace);
+  CHECK_TRUE(buildcc::Args::Clean());
+
+  // Make dummy toolchain and target
+  buildcc::Project::Init(fs::current_path(), fs::current_path());
+  buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
+                               "");
+  buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
+                             toolchain, "");
+
+  {
+    buildcc::ArgToolchainState state{false, false};
+
+    buildcc::Reg::Init();
+    buildcc::Reg::Toolchain(state).Build(
+        [](buildcc::BaseTarget &target) { (void)target; }, target);
+
+    mock().expectOneCall("Build_PostCb");
+    buildcc::Reg::Run([]() { mock().actualCall("Build_PostCb"); });
+    buildcc::Reg::Deinit();
+  }
+
+  buildcc::Project::Deinit();
+  mock().checkExpectations();
+}
+
 TEST(RegisterTestGroup, Register_NoBuildAndDep) {
   std::vector<const char *> av{
       "",
