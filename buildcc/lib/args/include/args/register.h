@@ -40,7 +40,8 @@ private:
 public:
   static void Init();
   static void Deinit();
-  static void Run(const std::function<void(void)> &post_build_cb = []() {});
+  static void Run(const std::function<void(void)> &post_build_cb =
+                      std::function<void(void)>());
   static CallbackInstance Call(bool condition = true);
   static ToolchainInstance Toolchain(const ArgToolchainState &condition);
 
