@@ -146,7 +146,7 @@ void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
     }
   }
 
-  if constexpr (env::is_linux()) {
+  if constexpr (env::is_linux() || env::is_unix() || env::is_clang()) {
     // TODO, Clang
     switch (target.GetToolchain().GetId()) {
     case ToolchainId::Gcc: {
