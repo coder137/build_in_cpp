@@ -210,23 +210,22 @@ Write your C++ "script"
     static void hello_world_build_cb(BaseTarget &target, BaseTarget &fmt_lib);
 
     int main(int argc, char **argv) {
-        // 1. Get arguments
-        Args args;
+        // Get arguments
         ArgToolchain arg_gcc;
-        args.AddToolchain("gcc", "Generic gcc toolchain", arg_gcc);
-        args.Parse(argc, argv);
 
-        // 2. Initialize your environment
-        Register reg(args);
+        Args::Init()
+            .AddToolchain("gcc", "Generic gcc toolchain", arg_gcc)
+            .Parse(argc, argv);
 
-        // 3. Pre-build steps
-        reg.Clean(clean_cb);
+        // Initialize your environment
+        Reg::Init();
 
-        // 4. Build steps
+        // Pre-build steps
+        Reg::Call(Args::Clean().Func(clean_cb);
+
+        // Build steps
         // Explicit toolchain - target pairs
         Toolchain_gcc gcc;
-        auto verified_toolchains = gcc.Verify();
-        env::assert_fatal(!verified_toolchains.empty(), "GCC Toolchain not found");
 
         // Setup your [Library]Target_[toolchain] fmtlib instance
         // Update your TargetEnv to point to `BuildExeLibDir::fmt` folder
@@ -237,29 +236,24 @@ Write your C++ "script"
         
         // We use the build.fmt.h and build.fmt.cpp APIs to define how we build our fmtlib
         FmtConfig fmt_config;
-        reg.Build(arg_gcc.state, build_fmt_cb, fmt_lib, fmt_config);
 
         // Define our hello world executable
         ExecutableTarget_gcc hello_world("hello_world", gcc, "");
-        reg.Build(arg_gcc.state, hello_world_build_cb, hello_world, fmt_lib);
-        
+
         // Fmt lib is a dependency to the Hello world executable
         // This means that fmt lib is guaranteed to be built before the hello world executable
-        reg.Dep(hello_world, fmt_lib);
+        Reg::Toolchain(arg_gcc.state)
+            .Build(arg_gcc.state, build_fmt_cb, fmt_lib, fmt_config)
+            .Build(hello_world_build_cb, hello_world, fmt_lib)
+            .Dep(hello_world, fmt_lib)
+            .Test("{executable}", hello_world);;
+        
 
-        // 5. Test steps i.e Hello world is automatically run
-        reg.Test(arg_gcc.state, "{executable}", hello_world);
-
-        // 6. Build Target
+        // Build and Test Target
         // Builds libfmt.a and ./hello_world
-        reg.RunBuild();
+        Reg::Run();
 
-        // 7. Test Target
-        // Executes ./hello_world
-        // Output -> Hello World
-        reg.RunTest();
-
-        // 8. Post Build steps
+        // Post Build steps
         // - Clang Compile Commands
         plugin::ClangCompileCommands({&hello_world}).Generate();
         // - Graphviz dump

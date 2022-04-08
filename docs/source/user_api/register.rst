@@ -4,9 +4,8 @@ Register
 register.h
 -----------
 
-.. doxygenclass:: buildcc::Register
-    :members: Register, Clean, Callback, CallbackIf, Build, Dep, Test, RunBuild, RunTest
-
+.. doxygenclass:: buildcc::Reg
+    :members:
 
 test_info.h
 -------------
@@ -26,19 +25,20 @@ Example
     static void callback_usage_func(const BigObj & cobj, BigObj & obj);
 
     int main(int argc, char ** argv) {
-        Args args;
-        args.Parse(argc, argv);
+        Args::Init()
+            .Parse(argc, argv);
 
-        Register reg(args);
-        reg.Clean([](){
-            fs::remove_all(env::get_project_build_dir());
-        });
+        Reg::Init();
+        Reg::Call(Args::Clean()).Func([](){
+            fs::remove_all(Project::GetBuildDir());
+        })
+
         
         BigObj obj;
-        reg.Callback(callback_usage_func, BigObj(), obj);
+        Reg::Call().Func(callback_usage_func, BigObj(), obj)
 
         bool expression = true; // false
-        reg.CallbackIf(expression, callback_usage_func, BigObj(), obj);
+        Reg::Call(expression).Func(callback_usage_func, BigObj(), obj)
 
         // Example snippets of these given in Target API
         // Build
