@@ -192,7 +192,6 @@ Write your C++ "script"
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 4,8,38,39,40,43,44,47,48,52,79
 
     #include "buildcc.h"
 

@@ -296,7 +296,6 @@ For end users consuming third party libraries
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 18
 
     #include "build.foo.h"
 
@@ -332,7 +331,6 @@ For super customized targets and toolchains
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 12,13,30,34,35,36
 
     int main(int argc, char ** argv) {
 
@@ -381,7 +379,6 @@ For super customized targets and toolchains
 
 .. code-block:: toml
     :linenos:
-    :emphasize-lines: 4,18
 
     # See Multiple boilerplate .toml file
 
@@ -412,7 +409,6 @@ Precompile header usage with GCC and MSVC compilers
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 8,9,10,36,37,38
 
     // Modified Lowlevel GCC Flags example for PCH
     
@@ -481,7 +477,6 @@ Chain **Generators** and **Targets** using the ``Register`` module
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 7,8,17,18
 
     int main(int argc, char ** argv) {
         // See Multiple Boilerplate
@@ -533,7 +528,6 @@ Target Info
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 8,9
 
     int main(int argc, char ** argv) {
         // See Multiple boilerplate

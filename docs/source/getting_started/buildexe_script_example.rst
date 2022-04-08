@@ -84,7 +84,6 @@ We then setup our main **toolchain**-**target** pairs. Highlighted below
 
 .. code-block:: cpp
     :linenos:
-    :emphasize-lines: 25,26,27,29,30
     :caption: build.helloworld.cpp
 
     #include "buildcc.h"
