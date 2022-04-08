@@ -4,11 +4,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="BuildExe “Immediate” example" href="buildexe_immediate_example.html" /><link rel="prev" title="BuildExe Setup" href="buildexe_setup.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.03.04"/>
+    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
         <title>BuildExe “Script” example - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
 
@@ -35,10 +35,12 @@
   }
 </style></head>
   <body>
+    
     <script>
       document.body.dataset.theme = localStorage.getItem("theme") || "auto";
     </script>
     
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -343,49 +345,50 @@ We cannot use a cross compiler here.</p>
 <span class="linenos"> 7</span><span class="kt">void</span><span class="w"> </span><span class="nf">hello_world_build_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">target</span><span class="p">);</span><span class="w"></span>
 <span class="linenos"> 8</span>
 <span class="linenos"> 9</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">10</span><span class="w">    </span><span class="c1">// Step 1. Setup your args</span>
-<span class="linenos">11</span><span class="w">    </span><span class="n">Args</span><span class="w"> </span><span class="n">args</span><span class="p">;</span><span class="w"></span>
-<span class="linenos">12</span><span class="w">    </span><span class="n">ArgToolchain</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">;</span><span class="w"></span>
-<span class="linenos">13</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">AddToolchain</span><span class="p">(</span><span class="s">"gcc"</span><span class="p">,</span><span class="w"> </span><span class="s">"GCC toolchain"</span><span class="p">,</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">14</span><span class="w">    </span><span class="n">args</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">15</span>
-<span class="linenos">16</span><span class="w">    </span><span class="c1">// Step 2. Register</span>
-<span class="linenos">17</span><span class="w">    </span><span class="n">Register</span><span class="w"> </span><span class="n">reg</span><span class="p">(</span><span class="n">args</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">18</span>
-<span class="linenos">19</span><span class="w">    </span><span class="c1">// Step 3. Pre build steps</span>
-<span class="linenos">20</span><span class="w">    </span><span class="c1">// for example. clean your environment</span>
-<span class="linenos">21</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Clean</span><span class="p">(</span><span class="n">clean_cb</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">22</span>
-<span class="linenos">23</span><span class="w">    </span><span class="c1">// Step 4. Build steps</span>
-<span class="linenos">24</span><span class="w">    </span><span class="c1">// Main setup</span>
-<span class="hll"><span class="linenos">25</span><span class="w">    </span><span class="n">Toolchain_gcc</span><span class="w"> </span><span class="n">gcc</span><span class="p">;</span><span class="w"></span>
-</span><span class="hll"><span class="linenos">26</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">verified_gcc_toolchains</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gcc</span><span class="p">.</span><span class="n">Verify</span><span class="p">();</span><span class="w"></span>
-</span><span class="hll"><span class="linenos">27</span><span class="w">    </span><span class="n">env</span><span class="o">::</span><span class="n">assert_fatal</span><span class="p">(</span><span class="o">!</span><span class="n">verified_gcc_toolchains</span><span class="p">.</span><span class="n">empty</span><span class="p">(),</span><span class="w"> </span><span class="s">"GCC toolchain not found"</span><span class="p">);</span><span class="w"></span>
-</span><span class="linenos">28</span>
-<span class="hll"><span class="linenos">29</span><span class="w">    </span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">hello_world</span><span class="p">(</span><span class="s">"hello_world"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
-</span><span class="hll"><span class="linenos">30</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_gcc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">hello_world_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">hello_world</span><span class="p">);</span><span class="w"></span>
-</span><span class="linenos">31</span>
-<span class="linenos">32</span><span class="w">    </span><span class="c1">// Step 5. Build your targets</span>
-<span class="linenos">33</span><span class="w">    </span><span class="n">reg</span><span class="p">.</span><span class="n">RunBuild</span><span class="p">();</span><span class="w"></span>
-<span class="linenos">34</span>
-<span class="linenos">35</span><span class="w">    </span><span class="c1">// Step 6. Post build steps</span>
-<span class="linenos">36</span><span class="w">    </span><span class="c1">// for example. clang compile commands database</span>
-<span class="linenos">37</span><span class="w">    </span><span class="n">plugin</span><span class="o">::</span><span class="n">ClangCompileCommands</span><span class="p">({</span><span class="o">&amp;</span><span class="n">hello_world</span><span class="p">}).</span><span class="n">Generate</span><span class="p">();</span><span class="w"></span>
-<span class="linenos">38</span>
-<span class="linenos">39</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
-<span class="linenos">40</span><span class="p">}</span><span class="w"></span>
-<span class="linenos">41</span>
-<span class="linenos">42</span><span class="kt">void</span><span class="w"> </span><span class="nf">clean_cb</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">43</span><span class="w">    </span><span class="n">fs</span><span class="o">::</span><span class="n">remove_all</span><span class="p">(</span><span class="n">env</span><span class="o">::</span><span class="n">get_project_build_dir</span><span class="p">());</span><span class="w"></span>
-<span class="linenos">44</span><span class="p">}</span><span class="w"></span>
-<span class="linenos">45</span>
-<span class="linenos">46</span><span class="kt">void</span><span class="w"> </span><span class="nf">hello_world_build_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">target</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">47</span><span class="w">    </span><span class="c1">// Add your source</span>
-<span class="linenos">48</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/main.cpp"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">49</span>
-<span class="linenos">50</span><span class="w">    </span><span class="c1">// Initializes the target build tasks</span>
-<span class="linenos">51</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
-<span class="linenos">52</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">    </span><span class="c1">// Setup your args</span>
+<span class="linenos">11</span><span class="w">    </span><span class="n">ArgToolchain</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="w">    </span><span class="n">Args</span><span class="o">::</span><span class="n">Init</span><span class="p">()</span><span class="w"></span>
+<span class="linenos">14</span><span class="w">        </span><span class="p">.</span><span class="n">AddToolchain</span><span class="p">(</span><span class="s">"gcc"</span><span class="p">,</span><span class="w"> </span><span class="s">"GCC toolchain"</span><span class="p">,</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">15</span><span class="w">        </span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="w">    </span><span class="c1">// Register</span>
+<span class="linenos">18</span><span class="w">    </span><span class="n">Reg</span><span class="o">::</span><span class="n">Init</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="w">    </span><span class="c1">// Pre build steps</span>
+<span class="linenos">21</span><span class="w">    </span><span class="c1">// for example. clean your environment</span>
+<span class="linenos">22</span><span class="w">    </span><span class="n">Reg</span><span class="o">::</span><span class="n">Call</span><span class="p">(</span><span class="n">Args</span><span class="o">::</span><span class="n">Clean</span><span class="p">()).</span><span class="n">Func</span><span class="p">(</span><span class="n">clean_cb</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="w">    </span><span class="c1">// Build steps</span>
+<span class="linenos">25</span><span class="w">    </span><span class="c1">// Main setup</span>
+<span class="linenos">26</span><span class="w">    </span><span class="n">Toolchain_gcc</span><span class="w"> </span><span class="n">gcc</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">27</span><span class="w">    </span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">hello_world</span><span class="p">(</span><span class="s">"hello_world"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">28</span>
+<span class="linenos">29</span><span class="w">    </span><span class="n">Reg</span><span class="o">::</span><span class="n">Toolchain</span><span class="p">(</span><span class="n">arg_gcc</span><span class="p">.</span><span class="n">state</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">30</span><span class="w">        </span><span class="p">.</span><span class="n">Func</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](){</span><span class="w"> </span><span class="n">gcc</span><span class="p">.</span><span class="n">Verify</span><span class="p">()</span><span class="w"> </span><span class="p">})</span><span class="w"></span>
+<span class="linenos">31</span><span class="w">        </span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">hello_world_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">hello_world</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="w">    </span><span class="c1">// Build your targets</span>
+<span class="linenos">34</span><span class="w">    </span><span class="n">Reg</span><span class="o">::</span><span class="n">Run</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">35</span>
+<span class="linenos">36</span><span class="w">    </span><span class="c1">// Post build steps</span>
+<span class="linenos">37</span><span class="w">    </span><span class="c1">// for example. clang compile commands database</span>
+<span class="linenos">38</span><span class="w">    </span><span class="n">plugin</span><span class="o">::</span><span class="n">ClangCompileCommands</span><span class="p">({</span><span class="o">&amp;</span><span class="n">hello_world</span><span class="p">}).</span><span class="n">Generate</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">39</span>
+<span class="linenos">40</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">41</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">42</span>
+<span class="linenos">43</span><span class="kt">void</span><span class="w"> </span><span class="nf">clean_cb</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">44</span><span class="w">    </span><span class="n">fs</span><span class="o">::</span><span class="n">remove_all</span><span class="p">(</span><span class="n">env</span><span class="o">::</span><span class="n">get_project_build_dir</span><span class="p">());</span><span class="w"></span>
+<span class="linenos">45</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">46</span>
+<span class="linenos">47</span><span class="kt">void</span><span class="w"> </span><span class="nf">hello_world_build_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">target</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">48</span><span class="w">    </span><span class="c1">// Add your source</span>
+<span class="linenos">49</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/main.cpp"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">50</span>
+<span class="linenos">51</span><span class="w">    </span><span class="c1">// Initializes the target build tasks</span>
+<span class="linenos">52</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">53</span><span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
