@@ -38,6 +38,10 @@ private:
   class ToolchainInstance;
 
 public:
+  Reg() = delete;
+  Reg(const Reg &) = delete;
+  Reg(Reg &&) = delete;
+
   static void Init();
   static void Deinit();
   static void Run(const std::function<void(void)> &post_build_cb =
