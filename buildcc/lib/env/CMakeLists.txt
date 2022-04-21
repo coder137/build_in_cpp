@@ -38,10 +38,14 @@ if (${TESTING})
     add_executable(test_command test/test_command.cpp)
     target_link_libraries(test_command PRIVATE mock_env)
 
+    add_executable(test_storage test/test_storage.cpp)
+    target_link_libraries(test_storage PRIVATE mock_env)
+
     add_test(NAME test_static_project COMMAND test_static_project)
     add_test(NAME test_env_util COMMAND test_env_util)
     add_test(NAME test_task_state COMMAND test_task_state)
     add_test(NAME test_command COMMAND test_command)
+    add_test(NAME test_storage COMMAND test_storage)
 endif()
 
 set(ENV_SRCS
