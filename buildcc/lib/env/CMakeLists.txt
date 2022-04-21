@@ -6,6 +6,7 @@ if (${TESTING})
 
         src/env.cpp
         src/task_state.cpp
+        src/storage.cpp
 
         src/command.cpp
         mock/execute.cpp
@@ -68,6 +69,9 @@ set(ENV_SRCS
     src/command.cpp
     src/execute.cpp
     include/env/command.h
+
+    src/storage.cpp
+    include/env/storage.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})

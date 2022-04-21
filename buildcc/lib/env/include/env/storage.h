@@ -18,6 +18,7 @@
 #define ENV_STORAGE_H_
 
 #include <functional>
+#include <memory>
 #include <string>
 #include <typeinfo>
 #include <unordered_map>
@@ -90,6 +91,34 @@ private:
 
 private:
   std::unordered_map<std::string, PtrMetadata> ptrs_;
+};
+
+class Storage {
+public:
+  Storage() = delete;
+  Storage(const Storage &) = delete;
+  Storage(Storage &&) = delete;
+
+  static void Init() { internal_ = std::make_unique<ScopedStorage>(); }
+  static void Deinit() { internal_.reset(nullptr); }
+
+  template <typename T, typename... Params>
+  static T &Add(const std::string &identifier, Params &&...params) {
+    return internal_->Add<T, Params...>(identifier,
+                                        std::forward<Params>(params)...);
+  }
+
+  template <typename T>
+  static const T &ConstRef(const std::string &identifier) {
+    return internal_->ConstRef<T>(identifier);
+  }
+
+  template <typename T> static T &Ref(const std::string &identifier) {
+    return internal_->Ref<T>(identifier);
+  }
+
+private:
+  static std::unique_ptr<ScopedStorage> internal_;
 };
 
 } // namespace buildcc
