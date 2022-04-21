@@ -27,6 +27,7 @@
 #include "env/host_compiler.h"
 #include "env/util.h"
 #include "env/command.h"
+#include "env/storage.h"
 
 // Base
 #include "toolchain/toolchain.h"
@@ -57,6 +58,5 @@
 // BuildCC Modules
 #include "args/args.h"
 #include "args/register.h"
-#include "args/persistent_storage.h"
 
 #endif

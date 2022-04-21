@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-#ifndef ARGS_PERSISTENT_STORAGE_H_
-#define ARGS_PERSISTENT_STORAGE_H_
+#ifndef ENV_STORAGE_H_
+#define ENV_STORAGE_H_
 
 #include <functional>
+#include <memory>
 #include <string>
 #include <typeinfo>
 #include <unordered_map>
@@ -28,16 +29,18 @@
 
 namespace buildcc {
 
-class PersistentStorage {
+class ScopedStorage {
 public:
-  PersistentStorage() {}
-  ~PersistentStorage() {
+  ScopedStorage() {}
+  ~ScopedStorage() {
     for (const auto &ptr_iter : ptrs_) {
       ptr_iter.second.destructor();
     }
     ptrs_.clear();
     env::assert_fatal(ptrs_.empty(), "Memory not deallocated");
   }
+
+  ScopedStorage(const ScopedStorage &) = delete;
 
   template <typename T, typename... Params>
   T &Add(const std::string &identifier, Params &&...params) {
@@ -69,7 +72,7 @@ public:
   // https://stackoverflow.com/questions/123758/how-do-i-remove-code-duplication-between-similar-const-and-non-const-member-func/123995
   template <typename T> T &Ref(const std::string &identifier) {
     return const_cast<T &>(
-        static_cast<const PersistentStorage &>(*this).ConstRef<T>(identifier));
+        static_cast<const ScopedStorage &>(*this).ConstRef<T>(identifier));
   }
 
 private:
@@ -88,6 +91,34 @@ private:
 
 private:
   std::unordered_map<std::string, PtrMetadata> ptrs_;
+};
+
+class Storage {
+public:
+  Storage() = delete;
+  Storage(const Storage &) = delete;
+  Storage(Storage &&) = delete;
+
+  static void Init() { internal_ = std::make_unique<ScopedStorage>(); }
+  static void Deinit() { internal_.reset(nullptr); }
+
+  template <typename T, typename... Params>
+  static T &Add(const std::string &identifier, Params &&...params) {
+    return internal_->Add<T, Params...>(identifier,
+                                        std::forward<Params>(params)...);
+  }
+
+  template <typename T>
+  static const T &ConstRef(const std::string &identifier) {
+    return internal_->ConstRef<T>(identifier);
+  }
+
+  template <typename T> static T &Ref(const std::string &identifier) {
+    return internal_->Ref<T>(identifier);
+  }
+
+private:
+  static std::unique_ptr<ScopedStorage> internal_;
 };
 
 } // namespace buildcc

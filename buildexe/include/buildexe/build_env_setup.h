@@ -66,7 +66,7 @@ private:
   const BuildExeArgs &buildexe_args_;
 
   ArgToolchainState state_;
-  PersistentStorage storage_;
+  ScopedStorage storage_;
 };
 
 } // namespace buildcc
