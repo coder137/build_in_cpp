@@ -77,7 +77,7 @@ private:
   const BaseToolchain &toolchain_;
   TargetEnv env_;
 
-  PersistentStorage storage_;
+  ScopedStorage storage_;
 };
 
 } // namespace buildcc
