@@ -11,19 +11,32 @@
 TEST_GROUP(ScopedStorageTestGroup)
 {
 };
+
+TEST_GROUP(StorageTestGroup)
+{
+  void setup() {
+    buildcc::Storage::Init();
+  }
+  void teardown() {
+    buildcc::Storage::Deinit();
+  }
+};
 // clang-format on
 
 class BigObj {};
 
 class BigObjWithParameters {
 public:
-  BigObjWithParameters(const std::string &name, int id, const BigObj &obj) {
-    (void)name;
+  BigObjWithParameters(const std::string &name, int id, const BigObj &obj)
+      : name_(name) {
     (void)id;
     (void)obj;
   }
 
-  std::string GetName() const { return __FUNCTION__; }
+  const std::string &GetName() const { return name_; }
+
+private:
+  std::string name_;
 };
 
 static BigObj obj;
@@ -57,6 +70,20 @@ std::string &toReference(std::string *pointer) { return *pointer; }
 TEST(ScopedStorageTestGroup, NullptrDelete) {
   buildcc::ScopedStorage storage;
   storage.Remove<std::string>(nullptr);
+}
+
+TEST(StorageTestGroup, BasicUsage) {
+  buildcc::Storage::Add<BigObjWithParameters>("identifier", "name", 10, obj);
+  buildcc::Storage::Add<BigObjWithParameters>("identifier2", "name2", 12, obj);
+
+  // Usage
+  const auto &bigobj =
+      buildcc::Storage::ConstRef<BigObjWithParameters>("identifier").GetName();
+  const auto &bigobj2 =
+      buildcc::Storage::Ref<BigObjWithParameters>("identifier2").GetName();
+
+  STRCMP_EQUAL(bigobj.c_str(), "name");
+  STRCMP_EQUAL(bigobj2.c_str(), "name2");
 }
 
 int main(int ac, char **av) {
