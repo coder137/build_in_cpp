@@ -31,7 +31,7 @@ namespace buildcc::env {
  * exit)
  * During Unit Test -> throw std::exception
  */
-void assert_handle_fatal();
+[[noreturn]] void assert_handle_fatal();
 
 /**
  * @brief Compile time expr asserts fatally when false

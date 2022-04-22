@@ -35,12 +35,12 @@ bool IsRunningOnThread() {
 
 namespace buildcc::env {
 
-void assert_handle_fatal() {
+[[noreturn]] void assert_handle_fatal() {
   if (!IsRunningOnThread()) {
     std::exit(1);
+  } else {
+    throw std::exception();
   }
-
-  throw std::exception();
 }
 
 } // namespace buildcc::env
