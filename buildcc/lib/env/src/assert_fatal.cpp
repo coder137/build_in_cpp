@@ -20,6 +20,6 @@
 
 namespace buildcc::env {
 
-[[noreturn]] void assert_handle_fatal() { std::terminate(); }
+[[noreturn]] void assert_handle_fatal() { std::exit(1); }
 
 } // namespace buildcc::env
