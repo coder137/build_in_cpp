@@ -25,7 +25,7 @@
 #include <unordered_set>
 
 // Env
-#include "env/assert_throw.h"
+#include "env/assert_fatal.h"
 
 // Third party
 #include "fmt/format.h"
@@ -51,7 +51,7 @@ public:
         std::filesystem::last_write_time(pathname, errcode)
             .time_since_epoch()
             .count();
-    env::assert_throw(errcode.value() == 0,
+    env::assert_fatal(errcode.value() == 0,
                       fmt::format("{} not found", pathname));
 
     return Path(pathname, last_write_timestamp);

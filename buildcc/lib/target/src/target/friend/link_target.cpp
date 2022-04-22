@@ -98,7 +98,7 @@ void LinkTarget::BuildLink() {
 
   if (target_.dirty_) {
     bool success = env::Command::Execute(command_);
-    env::assert_throw(success, "Failed to link target");
+    env::assert_fatal(success, "Failed to link target");
     target_.serialization_.UpdateTargetCompiled();
   }
 }
