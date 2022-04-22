@@ -124,7 +124,7 @@ void CompileObject::Task() {
               try {
                 bool success = env::Command::Execute(
                     GetObjectData(s.GetPathname()).command);
-                env::assert_throw(success, "Could not compile source");
+                env::assert_fatal(success, "Could not compile source");
                 target_.serialization_.AddSource(s);
               } catch (...) {
                 target_.SetTaskStateFailure();
@@ -170,7 +170,7 @@ void Target::EndTask() {
     if (dirty_) {
       try {
         serialization_.UpdateStore(user_);
-        env::assert_throw(serialization_.StoreToFile(),
+        env::assert_fatal(serialization_.StoreToFile(),
                           fmt::format("Store failed for {}", GetName()));
         state_.BuildCompleted();
       } catch (...) {

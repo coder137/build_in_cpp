@@ -17,9 +17,30 @@
 #include "env/assert_fatal.h"
 
 #include <exception>
+#include <thread>
+
+namespace {
+
+std::thread::id main_id = std::this_thread::get_id();
+
+bool IsRunningOnThread() {
+  bool threaded = true;
+  if (std::this_thread::get_id() == main_id) {
+    threaded = false;
+  }
+  return threaded;
+}
+
+} // namespace
 
 namespace buildcc::env {
 
-[[noreturn]] void assert_handle_fatal() { std::terminate(); }
+[[noreturn]] void assert_handle_fatal() {
+  if (!IsRunningOnThread()) {
+    std::exit(1);
+  } else {
+    throw std::exception();
+  }
+}
 
 } // namespace buildcc::env

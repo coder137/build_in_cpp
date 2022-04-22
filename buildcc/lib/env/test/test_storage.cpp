@@ -86,6 +86,14 @@ TEST(StorageTestGroup, BasicUsage) {
   STRCMP_EQUAL(bigobj2.c_str(), "name2");
 }
 
+TEST(StorageTestGroup, UsageWithoutInit) {
+  buildcc::Storage::Deinit();
+
+  CHECK_THROWS(std::exception, buildcc::Storage::Add<int>("integer"));
+  CHECK_THROWS(std::exception, buildcc::Storage::Ref<int>("integer"));
+  CHECK_THROWS(std::exception, buildcc::Storage::ConstRef<int>("integer"));
+}
+
 int main(int ac, char **av) {
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

@@ -52,7 +52,7 @@ void Generator::GenerateTask() {
     auto run_command = [this](const std::string &command) {
       try {
         bool success = env::Command::Execute(command);
-        env::assert_throw(success, fmt::format("{} failed", command));
+        env::assert_fatal(success, fmt::format("{} failed", command));
       } catch (...) {
         std::lock_guard<std::mutex> guard(task_state_mutex_);
         task_state_ = env::TaskState::FAILURE;
@@ -104,7 +104,7 @@ void Generator::GenerateTask() {
       if (dirty_) {
         try {
           serialization_.UpdateStore(user_);
-          env::assert_throw(serialization_.StoreToFile(),
+          env::assert_fatal(serialization_.StoreToFile(),
                             fmt::format("Store failed for {}", name_));
         } catch (...) {
           task_state_ = env::TaskState::FAILURE;

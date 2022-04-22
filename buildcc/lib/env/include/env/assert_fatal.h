@@ -24,7 +24,11 @@
 namespace buildcc::env {
 
 /**
- * @brief During Release -> std::terminate
+ * @brief During Release ->
+ * NOT THREADED : std::exit
+ * THREADED : throw std::exception (it is wrong to exit
+ * when in a threaded state. We want to handle the exception and gracefully
+ * exit)
  * During Unit Test -> throw std::exception
  */
 [[noreturn]] void assert_handle_fatal();

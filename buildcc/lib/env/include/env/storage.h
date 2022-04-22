@@ -104,18 +104,20 @@ public:
 
   template <typename T, typename... Params>
   static T &Add(const std::string &identifier, Params &&...params) {
-    return internal_->Add<T, Params...>(identifier,
-                                        std::forward<Params>(params)...);
+    return Ref().Add<T, Params...>(identifier, std::forward<Params>(params)...);
   }
 
   template <typename T>
   static const T &ConstRef(const std::string &identifier) {
-    return internal_->ConstRef<T>(identifier);
+    return Ref().ConstRef<T>(identifier);
   }
 
   template <typename T> static T &Ref(const std::string &identifier) {
-    return internal_->Ref<T>(identifier);
+    return Ref().Ref<T>(identifier);
   }
+
+private:
+  static ScopedStorage &Ref();
 
 private:
   static std::unique_ptr<ScopedStorage> internal_;
