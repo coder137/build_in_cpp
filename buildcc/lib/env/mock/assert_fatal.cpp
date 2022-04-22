@@ -4,6 +4,6 @@
 
 namespace buildcc::env {
 
-[[noreturn]] void assert_handle_fatal() { throw std::exception(); }
+void assert_handle_fatal() { throw std::exception(); }
 
 } // namespace buildcc::env

@@ -27,7 +27,7 @@ namespace buildcc::env {
  * @brief During Release -> std::exit
  * During Unit Test -> throw std::exception
  */
-[[noreturn]] void assert_handle_fatal();
+void assert_handle_fatal();
 
 /**
  * @brief Compile time expr asserts fatally when false
