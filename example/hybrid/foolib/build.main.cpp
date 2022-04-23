@@ -5,12 +5,12 @@
 using namespace buildcc;
 
 static void clean_cb();
-static void foolib_build_cb(BaseTarget &target);
+static void main_build_cb(BaseTarget &target, const TargetInfo &foolib);
 
 constexpr std::string_view EXE = "build";
 
 int main(int argc, char **argv) {
-  // 1. Get arguments
+  // Get arguments
   ArgToolchain arg_gcc;
   ArgToolchain arg_msvc;
   Args::Init()
@@ -18,26 +18,32 @@ int main(int argc, char **argv) {
       .AddToolchain("msvc", "Generic msvc toolchain", arg_msvc)
       .Parse(argc, argv);
 
-  // 2. Initialize your environment
+  // Initialize your environment
   Reg::Init();
 
-  // 3. Pre-build steps
+  // Pre-build steps
   Reg::Call(Args::Clean()).Func(clean_cb);
 
-  // 4. Build steps
+  // Build steps
   Toolchain_gcc gcc;
-  ExecutableTarget_gcc g_foolib("foolib", gcc, "");
-  Reg::Toolchain(arg_gcc.state).Build(foolib_build_cb, g_foolib);
+  TargetInfo g_foo(gcc, "");
+  ExecutableTarget_gcc g_main("one_executable", gcc, "");
+  Reg::Toolchain(arg_gcc.state)
+      .Func(fooTarget, g_foo)
+      .Build(main_build_cb, g_main, g_foo);
 
   Toolchain_msvc msvc;
-  ExecutableTarget_msvc m_foolib("foolib", msvc, "");
-  Reg::Toolchain(arg_msvc.state).Build(foolib_build_cb, m_foolib);
+  TargetInfo m_foo(msvc, "");
+  ExecutableTarget_msvc m_main("one_executable", msvc, "");
+  Reg::Toolchain(arg_msvc.state)
+      .Func(fooTarget, m_foo)
+      .Build(main_build_cb, m_main, m_foo);
 
-  // 5.
+  //
   Reg::Run();
 
-  // 6.
-  plugin::ClangCompileCommands({&g_foolib, &m_foolib}).Generate();
+  //
+  plugin::ClangCompileCommands({&g_main, &m_main}).Generate();
 
   return 0;
 }
@@ -47,8 +53,12 @@ static void clean_cb() {
   fs::remove_all(Project::GetBuildDir());
 }
 
-static void foolib_build_cb(BaseTarget &target) {
-  fooTarget(target, "");
+static void main_build_cb(BaseTarget &target, const TargetInfo &foolib) {
   target.AddSource("main.cpp");
+  target.Insert(foolib, {
+                            SyncOption::SourceFiles,
+                            SyncOption::HeaderFiles,
+                            SyncOption::IncludeDirs,
+                        });
   target.Build();
 }
