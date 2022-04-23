@@ -2,4 +2,4 @@
 
 #include "buildcc.h"
 
-void fooTarget(buildcc::BaseTarget &target, const fs::path &relative_path);
+void fooTarget(buildcc::TargetInfo &target);
