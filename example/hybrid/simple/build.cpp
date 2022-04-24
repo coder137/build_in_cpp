@@ -12,7 +12,7 @@ static void cppflags_build_cb(BaseTarget &cppflags);
 static void cflags_build_cb(BaseTarget &cflags);
 
 int main(int argc, char **argv) {
-  // 1. Get arguments
+  // Get arguments
   ArgToolchain arg_gcc;
   ArgToolchain arg_msvc;
   Args::Init()
@@ -20,13 +20,13 @@ int main(int argc, char **argv) {
       .AddToolchain("msvc", "Generic msvc toolchain", arg_msvc)
       .Parse(argc, argv);
 
-  // 2. Initialize your environment
+  // Initialize your environment
   Reg::Init();
 
-  // 3. Pre-build steps
+  // Pre-build steps
   Reg::Call(Args::Clean()).Func(clean_cb);
 
-  // 4. Build steps
+  // Build steps
   // Explicit toolchain - target pairs
   Toolchain_gcc gcc;
   ExecutableTarget_gcc g_cppflags("cppflags", gcc, "files");
@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
 
   Reg::Run();
 
-  // 8. Post Build steps
+  // Post Build steps
 
   // - Clang Compile Commands
   plugin::ClangCompileCommands({&g_cflags, &g_cppflags, &m_cflags, &m_cppflags})
