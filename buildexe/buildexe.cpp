@@ -67,7 +67,8 @@ int main(int argc, char **argv) {
 
   // Build Target
   BuildEnvSetup build_setup(toolchain, buildexe_args);
-  build_setup.ConstructTarget();
+  Reg::Toolchain(ArgToolchainState(true)).BuildPackage(build_setup);
+  Reg::Run();
 
   // Run Target if script mode
   if (buildexe_args.GetBuildMode() == BuildExeMode::Script) {

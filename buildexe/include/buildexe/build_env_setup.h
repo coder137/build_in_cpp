@@ -33,11 +33,9 @@ public:
 public:
   BuildEnvSetup(const BaseToolchain &toolchain,
                 const BuildExeArgs &buildexe_args)
-      : toolchain_(toolchain), buildexe_args_(buildexe_args) {
-    state_.build = true;
-  }
+      : toolchain_(toolchain), buildexe_args_(buildexe_args) {}
 
-  void ConstructTarget();
+  void Setup(const ArgToolchainState &state);
 
   void RunUserTarget(const ArgScriptInfo &arg_script_info);
 
