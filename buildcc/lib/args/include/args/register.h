@@ -201,6 +201,9 @@ public:
                            Params &&...params) {
     return BuildInternal(build_cb, target, std::forward<Params>(params)...);
   }
+  template <typename P> ToolchainInstance &BuildPackage(P &package) {
+    return Func([&]() { package.Setup(condition_); });
+  }
   ToolchainInstance &Dep(const internal::BuilderInterface &target,
                          const internal::BuilderInterface &dependency);
   ToolchainInstance &Test(const std::string &command, const BaseTarget &target,
