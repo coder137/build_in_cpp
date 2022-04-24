@@ -42,7 +42,8 @@ int main(int argc, char **argv) {
   // Build steps
   // Toolchain + Generic Target
   BaseToolchain toolchain = custom_toolchain.ConstructToolchain();
-  Target_generic foolib_target("libfoo", default_lib_type, toolchain, "");
+  Target_generic foolib_target("libfoo", default_lib_type, toolchain,
+                               "../foolib");
   Target_generic generic_target("generic", TargetType::Executable, toolchain,
                                 "src");
   Reg::Toolchain(custom_toolchain.state)
@@ -83,18 +84,17 @@ void args_lib_type_cb(CLI::App &app, TargetType &lib_type) {
 }
 
 static void foolib_build_cb(BaseTarget &foolib_target) {
-  fooTarget(foolib_target, Project::GetRootDir() / ".." / "foolib");
+  fooTarget(foolib_target);
   foolib_target.Build();
 }
 
 static void generic_build_cb(BaseTarget &generic_target,
                              BaseTarget &foolib_target) {
-  const auto &foolib_include_dirs = foolib_target.GetIncludeDirs();
-  std::for_each(
-      foolib_include_dirs.cbegin(), foolib_include_dirs.cend(),
-      [&](const fs::path &p) { generic_target.AddIncludeDir(p, true); });
-  generic_target.AddLibDep(foolib_target);
   generic_target.AddSource("main.cpp");
+  generic_target.AddLibDep(foolib_target);
+  generic_target.Insert(foolib_target, {
+                                           SyncOption::IncludeDirs,
+                                       });
   generic_target.Build();
 }
 

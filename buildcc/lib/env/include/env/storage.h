@@ -61,6 +61,8 @@ public:
   template <typename T> void Remove(T *ptr) { delete ptr; }
 
   template <typename T> const T &ConstRef(const std::string &identifier) const {
+    env::assert_fatal(ptrs_.find(identifier) != ptrs_.end(),
+                      fmt::format("Could not find '{}'", identifier));
     const PtrMetadata &metadata = ptrs_.at(identifier);
     env::assert_fatal(
         typeid(T).name() == metadata.typeid_name,

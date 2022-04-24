@@ -5,12 +5,12 @@
 using namespace buildcc;
 
 static void clean_cb();
-static void foolib_build_cb(BaseTarget &target);
+static void foolib_build_cb(BaseTarget &target, const TargetInfo &foolib);
 
 constexpr const char *const EXE = "build";
 
 int main(int argc, char **argv) {
-  // 1. Get arguments
+  // Get arguments
   ArgToolchain arg_gcc;
   ArgToolchain arg_msvc;
   Args::Init()
@@ -18,26 +18,32 @@ int main(int argc, char **argv) {
       .AddToolchain("msvc", "Generic msvc toolchain", arg_msvc)
       .Parse(argc, argv);
 
-  // 2. Initialize your environment
+  // Initialize your environment
   Reg::Init();
 
-  // 3. Pre-build steps
+  // Pre-build steps
   Reg::Call(Args::Clean()).Func(clean_cb);
 
-  // 4. Build steps
+  // Build steps
   Toolchain_gcc gcc;
-  ExecutableTarget_gcc g_foolib("cppflags", gcc, "");
-  Reg::Toolchain(arg_gcc.state).Build(foolib_build_cb, g_foolib);
+  TargetInfo g_foo(gcc, "../foolib");
+  ExecutableTarget_gcc g_external("cppflags", gcc, "");
+  Reg::Toolchain(arg_gcc.state)
+      .Func(fooTarget, g_foo)
+      .Build(foolib_build_cb, g_external, g_foo);
 
   Toolchain_msvc msvc;
-  ExecutableTarget_msvc m_foolib("cppflags", msvc, "");
-  Reg::Toolchain(arg_msvc.state).Build(foolib_build_cb, m_foolib);
+  ExecutableTarget_msvc m_external("cppflags", msvc, "");
+  TargetInfo m_foo(gcc, "../foolib");
+  Reg::Toolchain(arg_msvc.state)
+      .Func(fooTarget, m_foo)
+      .Build(foolib_build_cb, m_external, m_foo);
 
-  // 5.
+  //
   Reg::Run();
 
-  // 6.
-  plugin::ClangCompileCommands({&g_foolib, &m_foolib}).Generate();
+  //
+  plugin::ClangCompileCommands({&g_external, &m_external}).Generate();
 
   return 0;
 }
@@ -47,8 +53,12 @@ static void clean_cb() {
   fs::remove_all(Project::GetBuildDir());
 }
 
-static void foolib_build_cb(BaseTarget &target) {
-  fooTarget(target, "../foolib");
+static void foolib_build_cb(BaseTarget &target, const TargetInfo &foolib) {
   target.AddSource("main.cpp");
+  target.Insert(foolib, {
+                            SyncOption::SourceFiles,
+                            SyncOption::HeaderFiles,
+                            SyncOption::IncludeDirs,
+                        });
   target.Build();
 }

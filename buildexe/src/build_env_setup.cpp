@@ -21,7 +21,8 @@ namespace buildcc {
 
 constexpr const char *const kTag = "BuildExe";
 
-void BuildEnvSetup::ConstructTarget() {
+void BuildEnvSetup::Setup(const ArgToolchainState &state) {
+  state_ = state;
   if (buildexe_args_.GetBuildMode() == BuildExeMode::Script) {
     // buildcc and user target
     ConstructUserTargetWithBuildcc();
@@ -29,7 +30,6 @@ void BuildEnvSetup::ConstructTarget() {
     // user target
     ConstructUserTarget();
   }
-  Reg::Run();
 }
 
 void BuildEnvSetup::RunUserTarget(const ArgScriptInfo &arg_script_info) {

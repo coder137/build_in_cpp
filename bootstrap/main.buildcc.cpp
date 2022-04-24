@@ -42,16 +42,16 @@ int main(int argc, char **argv) {
   Reg::Call(Args::Clean()).Func(clean_cb);
 
   BaseToolchain toolchain = custom_toolchain_arg.ConstructToolchain();
-  toolchain.Verify();
 
   BuildBuildCC buildcc(
       toolchain, TargetEnv(Project::GetRootDir(), Project::GetBuildDir()));
-  buildcc.Setup(custom_toolchain_arg.state);
+  auto &buildcc_lib = buildcc.GetBuildcc();
 
-  const auto &buildcc_lib = buildcc.GetBuildcc();
   ExecutableTarget_generic buildcc_hybrid_simple_example(
       "buildcc_hybrid_simple_example", toolchain, "example/hybrid/simple");
   Reg::Toolchain(custom_toolchain_arg.state)
+      .Func([&]() { toolchain.Verify(); })
+      .BuildPackage(buildcc)
       .Build(hybrid_simple_example_cb, buildcc_hybrid_simple_example,
              buildcc_lib)
       .Dep(buildcc_hybrid_simple_example, buildcc_lib);
