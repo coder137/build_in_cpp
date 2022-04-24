@@ -37,8 +37,9 @@ namespace buildcc {
  * @brief Toolchain State used to selectively build and test targets
  */
 struct ArgToolchainState {
-  bool build{false};
-  bool test{false};
+  ArgToolchainState(bool b = false, bool t = false) : build(b), test(t) {}
+  bool build;
+  bool test;
 };
 
 /**
@@ -47,7 +48,7 @@ struct ArgToolchainState {
  * Bundled with Toolchain State
  */
 struct ArgToolchain {
-  ArgToolchain(){};
+  ArgToolchain() = default;
   ArgToolchain(ToolchainId initial_id, const std::string &initial_name,
                const ToolchainExecutables &initial_executables)
       : id(initial_id), name(initial_name), executables(initial_executables) {}
