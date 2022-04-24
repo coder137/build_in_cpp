@@ -60,7 +60,9 @@ public:
 
 public:
   BuildBuildCC(const BaseToolchain &toolchain, const TargetEnv &env)
-      : toolchain_(toolchain), env_(env) {}
+      : toolchain_(toolchain), env_(env) {
+    Initialize();
+  }
   BuildBuildCC(const BuildBuildCC &) = delete;
 
   void Setup(const ArgToolchainState &state);
@@ -71,6 +73,24 @@ public:
   }
   StaticTarget_generic &GetBuildcc() {
     return storage_.Ref<StaticTarget_generic>(kBuildccLibName);
+  }
+
+private:
+  void Initialize();
+  ExecutableTarget_generic &GetFlatc() {
+    return storage_.Ref<ExecutableTarget_generic>(kFlatcExeName);
+  }
+  BaseGenerator &GetSchemaGen() {
+    return storage_.Ref<BaseGenerator>(kSchemaGenName);
+  }
+  TargetInfo &GetFlatbuffersHo() {
+    return storage_.Ref<TargetInfo>(kFlatbuffersHoName);
+  }
+  TargetInfo &GetCli11Ho() { return storage_.Ref<TargetInfo>(kCli11HoName); }
+  TargetInfo &GetFmtHo() { return storage_.Ref<TargetInfo>(kFmtHoName); }
+  TargetInfo &GetSpdlogHo() { return storage_.Ref<TargetInfo>(kSpdlogHoName); }
+  TargetInfo &GetTaskflowHo() {
+    return storage_.Ref<TargetInfo>(kTaskflowHoName);
   }
 
 private:
