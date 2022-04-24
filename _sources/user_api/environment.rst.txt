@@ -33,19 +33,6 @@ assert_fatal.h
 
 .. doxygendefine:: ASSERT_FATAL
 
-assert_throw.h
---------------
-
-.. doxygenfunction:: assert_throw([[maybe_unused]] const char *)
-
-.. doxygenfunction:: assert_throw(const std::string &)
-
-.. doxygenfunction:: assert_throw(bool, const char *)
-
-.. doxygenfunction:: assert_throw(bool, const std::string &)
-
-.. doxygendefine:: ASSERT_THROW
-
 command.h
 ---------
 
