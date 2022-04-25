@@ -118,13 +118,12 @@ public:
   Storage(const Storage &) = delete;
   Storage(Storage &&) = delete;
 
-  static void Init() { internal_ = std::make_unique<ScopedStorage>(); }
-  static void Deinit() { internal_.reset(nullptr); }
-
   template <typename T, typename... Params>
   static T &Add(const std::string &identifier, Params &&...params) {
     return Ref().Add<T, Params...>(identifier, std::forward<Params>(params)...);
   }
+
+  static void Clear() { Ref().Clear(); }
 
   template <typename T>
   static const T &ConstRef(const std::string &identifier) {
@@ -147,7 +146,7 @@ private:
   static ScopedStorage &Ref();
 
 private:
-  static std::unique_ptr<ScopedStorage> internal_;
+  static ScopedStorage internal_;
 };
 
 } // namespace buildcc

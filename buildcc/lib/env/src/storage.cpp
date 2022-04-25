@@ -18,12 +18,8 @@
 
 namespace buildcc {
 
-std::unique_ptr<ScopedStorage> Storage::internal_;
+ScopedStorage Storage::internal_;
 
-ScopedStorage &Storage::Ref() {
-  env::assert_fatal(internal_ != nullptr,
-                    "Initialize Storage using the Storage::Init API");
-  return *internal_;
-}
+ScopedStorage &Storage::Ref() { return internal_; }
 
 } // namespace buildcc

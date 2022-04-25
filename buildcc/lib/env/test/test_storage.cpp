@@ -15,10 +15,11 @@ TEST_GROUP(ScopedStorageTestGroup)
 TEST_GROUP(StorageTestGroup)
 {
   void setup() {
-    buildcc::Storage::Init();
+    MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
   }
   void teardown() {
-    buildcc::Storage::Deinit();
+    buildcc::Storage::Clear();
+    MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
   }
 };
 // clang-format on
@@ -102,14 +103,14 @@ TEST(StorageTestGroup, BasicUsage) {
 
   STRCMP_EQUAL(bigobj.c_str(), "name");
   STRCMP_EQUAL(bigobj2.c_str(), "name2");
-}
 
-TEST(StorageTestGroup, UsageWithoutInit) {
-  buildcc::Storage::Deinit();
+  CHECK_TRUE(buildcc::Storage::Contains("identifier"));
+  CHECK_FALSE(buildcc::Storage::Contains("identifier_does_not_exist"));
 
-  CHECK_THROWS(std::exception, buildcc::Storage::Add<int>("integer"));
-  CHECK_THROWS(std::exception, buildcc::Storage::Ref<int>("integer"));
-  CHECK_THROWS(std::exception, buildcc::Storage::ConstRef<int>("integer"));
+  CHECK_TRUE(buildcc::Storage::Valid<BigObjWithParameters>("identifier"));
+  CHECK_FALSE(
+      buildcc::Storage::Valid<BigObjWithParameters>("wrong_identifier"));
+  CHECK_FALSE(buildcc::Storage::Valid<BigObj>("identifier"));
 }
 
 int main(int ac, char **av) {
