@@ -32,13 +32,7 @@ namespace buildcc {
 class ScopedStorage {
 public:
   ScopedStorage() {}
-  ~ScopedStorage() {
-    for (const auto &ptr_iter : ptrs_) {
-      ptr_iter.second.destructor();
-    }
-    ptrs_.clear();
-    env::assert_fatal(ptrs_.empty(), "Memory not deallocated");
-  }
+  ~ScopedStorage() { Clear(); }
 
   ScopedStorage(const ScopedStorage &) = delete;
 
@@ -56,6 +50,13 @@ public:
     };
     ptrs_.emplace(identifier, metadata);
     return *ptr;
+  }
+
+  void Clear() {
+    for (const auto &ptr_iter : ptrs_) {
+      ptr_iter.second.destructor();
+    }
+    ptrs_.clear();
   }
 
   template <typename T> const T &ConstRef(const std::string &identifier) const {

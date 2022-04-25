@@ -64,6 +64,10 @@ TEST(ScopedStorageTestGroup, BasicUsage) {
   CHECK_TRUE(storage.Valid<BigObjWithParameters>("identifier"));
   CHECK_FALSE(storage.Valid<BigObjWithParameters>("wrong_identifier"));
   CHECK_FALSE(storage.Valid<int>("identifier"));
+
+  storage.Clear();
+  CHECK_FALSE(storage.Contains("identifier"));
+
   // Automatic cleanup here
 }
 
@@ -83,6 +87,8 @@ TEST(ScopedStorageTestGroup, NullptrDelete) {
   MyScopedStorage storage;
   storage.Remove<std::string>(nullptr);
 }
+
+//
 
 TEST(StorageTestGroup, BasicUsage) {
   buildcc::Storage::Add<BigObjWithParameters>("identifier", "name", 10, obj);
