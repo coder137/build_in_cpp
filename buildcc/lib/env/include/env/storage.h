@@ -58,10 +58,12 @@ public:
     return *ptr;
   }
 
+  // TODO, Remove this
+  // Replace above with delete ptr;
   template <typename T> void Remove(T *ptr) { delete ptr; }
 
   template <typename T> const T &ConstRef(const std::string &identifier) const {
-    env::assert_fatal(ptrs_.find(identifier) != ptrs_.end(),
+    env::assert_fatal(Contains(identifier),
                       fmt::format("Could not find '{}'", identifier));
     const PtrMetadata &metadata = ptrs_.at(identifier);
     env::assert_fatal(
@@ -77,12 +79,27 @@ public:
         static_cast<const ScopedStorage &>(*this).ConstRef<T>(identifier));
   }
 
+  bool Contains(const std::string &identifier) const {
+    return (ptrs_.find(identifier) != ptrs_.end());
+  }
+
+  template <typename T> bool Valid(const std::string &identifier) const {
+    if (!Contains(identifier)) {
+      return false;
+    }
+    const PtrMetadata &metadata = ptrs_.at(identifier);
+    if (typeid(T).name() != metadata.typeid_name) {
+      return false;
+    }
+    return true;
+  }
+
 private:
   /**
    * @brief
    * @param ptr Can hold data of any type
-   * @param typeid_name We cannot store a template type so this is the next best
-   * thing
+   * @param typeid_name We cannot store a template type so this is the next
+   * best thing
    * @param desstructor Destructor callback to delete ptr
    */
   struct PtrMetadata {
@@ -116,6 +133,14 @@ public:
 
   template <typename T> static T &Ref(const std::string &identifier) {
     return Ref().Ref<T>(identifier);
+  }
+
+  static bool Contains(const std::string &identifier) {
+    return Ref().Contains(identifier);
+  }
+
+  template <typename T> static bool Valid(const std::string &identifier) {
+    return Ref().Valid<T>(identifier);
   }
 
 private:
