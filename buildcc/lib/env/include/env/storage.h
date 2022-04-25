@@ -58,10 +58,6 @@ public:
     return *ptr;
   }
 
-  // TODO, Remove this
-  // Replace above with delete ptr;
-  template <typename T> void Remove(T *ptr) { delete ptr; }
-
   template <typename T> const T &ConstRef(const std::string &identifier) const {
     env::assert_fatal(Contains(identifier),
                       fmt::format("Could not find '{}'", identifier));
@@ -93,6 +89,9 @@ public:
     }
     return true;
   }
+
+protected:
+  template <typename T> void Remove(T *ptr) { delete ptr; }
 
 private:
   /**

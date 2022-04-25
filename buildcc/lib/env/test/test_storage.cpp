@@ -23,6 +23,14 @@ TEST_GROUP(StorageTestGroup)
 };
 // clang-format on
 
+class MyScopedStorage : public buildcc::ScopedStorage {
+public:
+  // We want to unit test this
+  template <typename T> void Remove(T *ptr) {
+    this->ScopedStorage::Remove<T>(ptr);
+  }
+};
+
 class BigObj {};
 
 class BigObjWithParameters {
@@ -42,7 +50,7 @@ private:
 static BigObj obj;
 
 TEST(ScopedStorageTestGroup, BasicUsage) {
-  buildcc::ScopedStorage storage;
+  MyScopedStorage storage;
   storage.Add<BigObjWithParameters>("identifier", "name", 10, obj);
   storage.Add<BigObjWithParameters>("identifier2", "name2", 12, obj);
 
@@ -50,11 +58,17 @@ TEST(ScopedStorageTestGroup, BasicUsage) {
   storage.ConstRef<BigObjWithParameters>("identifier").GetName();
   storage.Ref<BigObjWithParameters>("identifier2").GetName();
 
+  CHECK_TRUE(storage.Contains("identifier"));
+  CHECK_FALSE(storage.Contains("identifier_does_not_exist"));
+
+  CHECK_TRUE(storage.Valid<BigObjWithParameters>("identifier"));
+  CHECK_FALSE(storage.Valid<BigObjWithParameters>("wrong_identifier"));
+  CHECK_FALSE(storage.Valid<int>("identifier"));
   // Automatic cleanup here
 }
 
 TEST(ScopedStorageTestGroup, IncorrectUsage) {
-  buildcc::ScopedStorage storage;
+  MyScopedStorage storage;
   storage.Add<BigObjWithParameters>("identifier", "name", 10, obj);
 
   // We try to cast to a different type!
@@ -65,10 +79,8 @@ TEST(ScopedStorageTestGroup, IncorrectUsage) {
                storage.Ref<BigObjWithParameters>("identifier2"));
 }
 
-std::string &toReference(std::string *pointer) { return *pointer; }
-
 TEST(ScopedStorageTestGroup, NullptrDelete) {
-  buildcc::ScopedStorage storage;
+  MyScopedStorage storage;
   storage.Remove<std::string>(nullptr);
 }
 
