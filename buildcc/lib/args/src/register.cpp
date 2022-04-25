@@ -23,6 +23,7 @@
 
 #include "env/assert_fatal.h"
 #include "env/env.h"
+#include "env/storage.h"
 
 namespace fs = std::filesystem;
 
@@ -67,13 +68,28 @@ namespace buildcc {
 
 std::unique_ptr<Reg::Instance> Reg::instance_;
 
+void SystemInit() {
+  Project::Init(fs::current_path() / Args::GetProjectRootDir(),
+                fs::current_path() / Args::GetProjectBuildDir());
+  env::set_log_level(Args::GetLogLevel());
+
+  // Top down (what is init first gets deinit last)
+  std::atexit([]() {
+    Project::Deinit();
+    Reg::Deinit();
+    Args::Deinit();
+    Storage::Clear();
+  });
+}
+
 void Reg::Init() {
   if (!instance_) {
     instance_ = std::make_unique<Instance>();
+    env::assert_fatal(static_cast<bool>(instance_), "Reg::Init failed");
     env::assert_fatal(Args::IsParsed(), "Setup your Args");
-    Project::Init(fs::current_path() / Args::GetProjectRootDir(),
-                  fs::current_path() / Args::GetProjectBuildDir());
-    env::set_log_level(Args::GetLogLevel());
+
+    // Initialize everything else here
+    SystemInit();
   }
 }
 
