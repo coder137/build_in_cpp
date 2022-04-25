@@ -41,6 +41,11 @@ class Toolchain_gcc : public Toolchain {
 public:
   Toolchain_gcc()
       : Toolchain(ToolchainId::Gcc, "gcc", "as", "gcc", "g++", "ar", "ld") {}
+  Toolchain_gcc(const std::string &name, const std::string &assembler,
+                const std::string &c_compiler, const std::string &cpp_compiler,
+                const std::string &archiver, const std::string &linker)
+      : Toolchain(ToolchainId::Gcc, name, assembler, c_compiler, cpp_compiler,
+                  archiver, linker) {}
   Toolchain_gcc(const Toolchain_gcc &gcc) = delete;
 
 private:

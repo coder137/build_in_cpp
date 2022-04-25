@@ -39,7 +39,7 @@ constexpr const char *const kMingwPrefixLibDir = "-L";
  * archiver = "ar" <br>
  * linker = "ld" <br>
  */
-class Toolchain_mingw : public BaseToolchain {
+class Toolchain_mingw : public Toolchain {
 public:
   Toolchain_mingw()
       : Toolchain(ToolchainId::MinGW, "gcc", "as", "gcc", "g++", "ar", "ld") {}
