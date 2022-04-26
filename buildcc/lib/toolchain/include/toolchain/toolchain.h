@@ -38,7 +38,6 @@ class Toolchain : public internal::FlagApi<Toolchain>,
                   public ToolchainFind<Toolchain>,
                   public ToolchainVerify<Toolchain> {
 public:
-public:
   // TODO, Remove ToolchainId from here
   Toolchain(ToolchainId id, std::string_view name,
             const ToolchainExecutables &executables, bool lock = true,
