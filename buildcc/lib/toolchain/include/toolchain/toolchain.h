@@ -17,6 +17,7 @@
 #ifndef TOOLCHAIN_TOOLCHAIN_H_
 #define TOOLCHAIN_TOOLCHAIN_H_
 
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -38,6 +39,7 @@ class Toolchain : public internal::FlagApi<Toolchain>,
                   public ToolchainVerify<Toolchain> {
 public:
 public:
+  // TODO, Remove ToolchainId from here
   Toolchain(ToolchainId id, std::string_view name,
             const ToolchainExecutables &executables, bool lock = true,
             const ToolchainConfig &config = ToolchainConfig())
@@ -94,6 +96,9 @@ private:
   void Initialize();
 
   virtual void UpdateConfig(ToolchainConfig &config);
+  // TODO, Make this pure virtual
+  virtual std::optional<ToolchainCompilerInfo>
+  GetToolchainInfo(const ToolchainExecutables &executables) const;
 
 private:
   friend class internal::FlagApi<Toolchain>;

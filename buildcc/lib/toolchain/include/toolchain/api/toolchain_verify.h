@@ -60,19 +60,7 @@ typedef std::function<std::optional<ToolchainCompilerInfo>(const ToolchainExecut
 
 template <typename T> class ToolchainVerify {
 public:
-  ToolchainVerify() { Initialize(); }
-
-  /**
-   * @brief
-   *
-   * @param id
-   * @param verification_func
-   * @param identifier Only read when ToolchainId::Custom is passed in
-   */
-  static void
-  AddVerificationFunc(ToolchainId id,
-                      const ToolchainVerificationFunc &verification_func,
-                      const std::optional<std::string> &op_identifier = {});
+  ToolchainVerify() = default;
 
   /**
    * @brief Verify your toolchain executables by searching your operating system
@@ -86,16 +74,6 @@ public:
    */
   ToolchainCompilerInfo
   Verify(const ToolchainVerifyConfig &config = ToolchainVerifyConfig());
-
-protected:
-  ToolchainCompilerInfo verified_toolchain_;
-
-private:
-  void Initialize();
-  static const ToolchainVerificationFunc &
-  GetVerificationFunc(const std::string &identifier);
-  static std::unordered_map<std::string, ToolchainVerificationFunc> &
-  GetStatic();
 };
 
 } // namespace buildcc

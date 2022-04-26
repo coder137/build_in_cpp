@@ -25,4 +25,12 @@ void Toolchain::Lock() { lock_.Lock(); }
 // PRIVATE
 void Toolchain::UpdateConfig(ToolchainConfig &config) { (void)config; }
 
+std::optional<ToolchainCompilerInfo>
+Toolchain::GetToolchainInfo(const ToolchainExecutables &executables) const {
+  (void)executables;
+  env::log_critical(__FUNCTION__,
+                    "GetToolchainInfo virtual function not implemented");
+  return {};
+}
+
 } // namespace buildcc
