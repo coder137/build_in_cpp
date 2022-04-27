@@ -29,7 +29,13 @@ namespace buildcc {
 
 class Toolchain_generic {
 public:
-  // Compile time
+  /**
+   * @brief Compile time way to create a generic toolchain instance
+   *
+   * @return Toolchain& Returns the BaseToolchain with necessary virtual
+   * function overrides
+   * Asserts fatal if ToolchainId is not supported
+   */
   template <ToolchainId id, typename... Params>
   static Toolchain &New(const std::string &identifier, Params &&...params) {
     Toolchain *toolchain{nullptr};
@@ -53,7 +59,13 @@ public:
     return *toolchain;
   }
 
-  // Run time
+  /**
+   * @brief Runtime time way to create a generic toolchain instance
+   *
+   * @return Toolchain& Returns the BaseToolchain with necessary virtual
+   * function overrides
+   * Asserts fatal if ToolchainId is not supported
+   */
   static Toolchain &New(ToolchainId id, const std::string &identifier,
                         std::optional<ToolchainExecutables> op_executables = {},
                         std::optional<ToolchainConfig> op_config = {}) {
