@@ -68,7 +68,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_BaseToolchain_Failure) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
@@ -92,7 +92,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
@@ -119,7 +119,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_CompilerVersionFailure) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
@@ -143,7 +143,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_CompilerVersionEmpty) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
@@ -167,7 +167,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_TargetArchFailure) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
@@ -191,7 +191,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_TargetArchEmpty) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
@@ -202,7 +202,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_BadAbsolutePath) {
   MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++", "ar",
                     "ld");
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.absolute_search_paths.insert((fs::current_path() / "does_not_exist"));
 
@@ -213,7 +213,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_PathContainsDir) {
   MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++", "ar",
                     "ld");
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.absolute_search_paths.insert((fs::current_path() / "toolchains"));
 
@@ -233,7 +233,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_LockedFolder) {
   MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++", "ar",
                     "ld");
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.absolute_search_paths.insert(
       (fs::current_path() / "toolchains" / "gcc"));
