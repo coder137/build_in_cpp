@@ -33,20 +33,14 @@ namespace buildcc {
  */
 class Toolchain_msvc : public Toolchain {
 public:
-  // Compile time basic constructor
-  Toolchain_msvc(const std::string &name = "msvc")
-      : Toolchain(ToolchainId::Msvc, name, "cl", "cl", "cl", "lib", "link") {}
-
   // Run time basic constructor
-  Toolchain_msvc(
-      const std::string &name = "msvc",
-      std::optional<std::reference_wrapper<const ToolchainExecutables>>
-          op_executables = {},
-      std::optional<std::reference_wrapper<const ToolchainConfig>> op_config =
-          {})
+  Toolchain_msvc(const std::string &name = "msvc",
+                 std::optional<ToolchainExecutables> op_executables = {},
+                 std::optional<ToolchainConfig> op_config = {})
       : Toolchain(ToolchainId::Gcc, name,
-                  op_executables.value_or(ToolchainExecutables()).get(),
-                  op_config.value_or(ToolchainConfig()).get()) {}
+                  op_executables.value_or(
+                      ToolchainExecutables("cl", "cl", "cl", "lib", "link")),
+                  op_config.value_or(ToolchainConfig())) {}
 
   Toolchain_msvc(const Toolchain_msvc &gcc) = delete;
 

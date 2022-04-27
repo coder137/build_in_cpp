@@ -35,20 +35,14 @@ namespace buildcc {
  */
 class Toolchain_mingw : public Toolchain {
 public:
-  // Compile time basic constructor
-  Toolchain_mingw(const std::string &name = "gcc")
-      : Toolchain(ToolchainId::MinGW, name, "as", "gcc", "g++", "ar", "ld") {}
-
   // Run time basic constructor
-  Toolchain_mingw(
-      const std::string &name = "gcc",
-      std::optional<std::reference_wrapper<const ToolchainExecutables>>
-          op_executables = {},
-      std::optional<std::reference_wrapper<const ToolchainConfig>> op_config =
-          {})
+  Toolchain_mingw(const std::string &name = "gcc",
+                  std::optional<ToolchainExecutables> op_executables = {},
+                  std::optional<ToolchainConfig> op_config = {})
       : Toolchain(ToolchainId::MinGW, name,
-                  op_executables.value_or(ToolchainExecutables()).get(),
-                  op_config.value_or(ToolchainConfig()).get()) {}
+                  op_executables.value_or(
+                      ToolchainExecutables("as", "gcc", "g++", "ar", "ld")),
+                  op_config.value_or(ToolchainConfig())) {}
 
   Toolchain_mingw(const Toolchain_mingw &) = delete;
 
