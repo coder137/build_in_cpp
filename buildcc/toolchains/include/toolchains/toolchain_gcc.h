@@ -42,6 +42,7 @@ public:
                       ToolchainExecutables("as", "gcc", "g++", "ar", "ld")),
                   op_config.value_or(ToolchainConfig())) {}
 
+  virtual ~Toolchain_gcc() = default;
   Toolchain_gcc(const Toolchain_gcc &gcc) = delete;
 
 private:

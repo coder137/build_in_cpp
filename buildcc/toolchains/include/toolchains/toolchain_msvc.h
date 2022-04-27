@@ -42,6 +42,7 @@ public:
                       ToolchainExecutables("cl", "cl", "cl", "lib", "link")),
                   op_config.value_or(ToolchainConfig())) {}
 
+  virtual ~Toolchain_msvc() = default;
   Toolchain_msvc(const Toolchain_msvc &gcc) = delete;
 
 private:

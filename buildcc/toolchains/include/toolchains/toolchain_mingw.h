@@ -44,6 +44,7 @@ public:
                       ToolchainExecutables("as", "gcc", "g++", "ar", "ld")),
                   op_config.value_or(ToolchainConfig())) {}
 
+  virtual ~Toolchain_mingw() = default;
   Toolchain_mingw(const Toolchain_mingw &) = delete;
 
 private:
