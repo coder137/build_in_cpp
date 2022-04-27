@@ -40,20 +40,20 @@ class Toolchain : public internal::FlagApi<Toolchain>,
 public:
   // TODO, Remove ToolchainId from here
   Toolchain(ToolchainId id, std::string_view name,
-            const ToolchainExecutables &executables, bool lock = true,
+            const ToolchainExecutables &executables,
             const ToolchainConfig &config = ToolchainConfig())
-      : id_(id), name_(name), executables_(executables), lock_(lock),
-        config_(config) {
+      : id_(id), name_(name), executables_(executables), config_(config),
+        lock_(false) {
     Initialize();
   }
   Toolchain(ToolchainId id, std::string_view name, std::string_view assembler,
             std::string_view c_compiler, std::string_view cpp_compiler,
             std::string_view archiver, std::string_view linker,
-            bool lock = true, const ToolchainConfig &config = ToolchainConfig())
+            const ToolchainConfig &config = ToolchainConfig())
       : Toolchain(id, name,
                   ToolchainExecutables(assembler, c_compiler, cpp_compiler,
                                        archiver, linker),
-                  lock, config) {}
+                  config) {}
 
   Toolchain(Toolchain &&) = default;
   Toolchain &operator=(Toolchain &&) = default;
@@ -107,8 +107,8 @@ private:
   ToolchainId id_;
   std::string name_;
   ToolchainExecutables executables_;
-  FunctionLock lock_;
   ToolchainConfig config_;
+  FunctionLock lock_;
 
   //
   UserSchema user_;
