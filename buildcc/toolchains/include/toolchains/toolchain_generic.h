@@ -29,27 +29,53 @@ namespace buildcc {
 
 class Toolchain_generic {
 public:
+  // Compile time
   template <ToolchainId id, typename... Params>
   static Toolchain &New(const std::string &identifier, Params &&...params) {
     Toolchain *toolchain{nullptr};
 
     if constexpr (id == ToolchainId::Gcc) {
-      toolchain =
-          AddIf<Toolchain_gcc>(identifier, std::forward<Params>(params)...);
+      toolchain = AddIf<Toolchain_gcc>(identifier, identifier,
+                                       std::forward<Params>(params)...);
     }
 
     if constexpr (id == ToolchainId::Msvc) {
-      toolchain =
-          AddIf<Toolchain_msvc>(identifier, std::forward<Params>(params)...);
+      toolchain = AddIf<Toolchain_msvc>(identifier, identifier,
+                                        std::forward<Params>(params)...);
     }
 
     if constexpr (id == ToolchainId::MinGW) {
-      toolchain =
-          AddIf<Toolchain_mingw>(identifier, std::forward<Params>(params)...);
+      toolchain = AddIf<Toolchain_mingw>(identifier, identifier,
+                                         std::forward<Params>(params)...);
     }
 
     env::assert_fatal(toolchain, "Toolchain could not be created");
     return *toolchain;
+  }
+
+  // Run time
+  static Toolchain &
+  New(ToolchainId id, const std::string &identifier,
+      std::optional<std::reference_wrapper<const ToolchainExecutables>>
+          op_executables,
+      std::optional<std::reference_wrapper<const ToolchainConfig>> op_config) {
+    Toolchain *toolchain{nullptr};
+    switch (id) {
+    case ToolchainId::Gcc:
+      toolchain = AddIf<Toolchain_gcc>(identifier, identifier, op_executables,
+                                       op_config);
+      break;
+    case ToolchainId::Msvc:
+      toolchain = AddIf<Toolchain_msvc>(identifier, identifier, op_executables,
+                                        op_config);
+      break;
+    case ToolchainId::MinGW:
+      toolchain = AddIf<Toolchain_mingw>(identifier, identifier, op_executables,
+                                         op_config);
+      break;
+    default:
+      break;
+    }
   }
 
 private:
