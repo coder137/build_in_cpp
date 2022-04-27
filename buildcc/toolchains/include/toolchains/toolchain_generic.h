@@ -54,11 +54,9 @@ public:
   }
 
   // Run time
-  static Toolchain &
-  New(ToolchainId id, const std::string &identifier,
-      std::optional<std::reference_wrapper<const ToolchainExecutables>>
-          op_executables,
-      std::optional<std::reference_wrapper<const ToolchainConfig>> op_config) {
+  static Toolchain &New(ToolchainId id, const std::string &identifier,
+                        std::optional<ToolchainExecutables> op_executables = {},
+                        std::optional<ToolchainConfig> op_config = {}) {
     Toolchain *toolchain{nullptr};
     switch (id) {
     case ToolchainId::Gcc:
@@ -76,6 +74,8 @@ public:
     default:
       break;
     }
+    env::assert_fatal(toolchain, "Toolchain could not be created");
+    return *toolchain;
   }
 
 private:
