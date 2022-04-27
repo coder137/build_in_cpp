@@ -23,10 +23,6 @@
 
 namespace buildcc {
 
-typedef std::function<std::optional<ToolchainCompilerInfo>(
-    const ToolchainExecutables &)>
-    ToolchainInfoFunc;
-
 class Toolchain_custom : public Toolchain {
 public:
   Toolchain_custom(const std::string &name,
