@@ -33,6 +33,10 @@
 
 namespace buildcc {
 
+// clang-format off
+typedef std::function<std::optional<ToolchainCompilerInfo>(const ToolchainExecutables &)> ToolchainInfoFunc;
+// clang-format on
+
 // Base toolchain class
 class Toolchain : public internal::FlagApi<Toolchain>,
                   public ToolchainFind<Toolchain>,
@@ -46,10 +50,13 @@ public:
         lock_(false) {
     Initialize();
   }
-  Toolchain(ToolchainId id, std::string_view name, std::string_view assembler,
-            std::string_view c_compiler, std::string_view cpp_compiler,
-            std::string_view archiver, std::string_view linker,
-            const ToolchainConfig &config = ToolchainConfig())
+
+  [[deprecated]] Toolchain(ToolchainId id, std::string_view name,
+                           std::string_view assembler,
+                           std::string_view c_compiler,
+                           std::string_view cpp_compiler,
+                           std::string_view archiver, std::string_view linker,
+                           const ToolchainConfig &config = ToolchainConfig())
       : Toolchain(id, name,
                   ToolchainExecutables(assembler, c_compiler, cpp_compiler,
                                        archiver, linker),
@@ -78,6 +85,12 @@ public:
 
   const FunctionLock &GetLockInfo() const { return lock_; }
   const ToolchainConfig &GetConfig() const { return config_; }
+
+protected:
+  ToolchainId &RefId() { return id_; }
+  std::string &RefName() { return name_; }
+  ToolchainExecutables &RefExecutables() { return executables_; }
+  ToolchainConfig &RefConfig() { return config_; }
 
 private:
   struct UserSchema {
