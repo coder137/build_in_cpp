@@ -39,6 +39,8 @@
 #include "toolchains/toolchain_gcc.h"
 #include "toolchains/toolchain_msvc.h"
 #include "toolchains/toolchain_mingw.h"
+#include "toolchains/toolchain_generic.h"
+#include "toolchains/toolchain_custom.h"
 
 // TODO, Add more specialized toolchains here
 
