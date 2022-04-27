@@ -75,7 +75,7 @@ namespace buildcc {
 
 template <typename T>
 ToolchainCompilerInfo
-ToolchainVerify<T>::Verify(const ToolchainVerifyConfig &config) {
+ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
   T &t = static_cast<T &>(*this);
   std::vector<fs::path> toolchain_paths = t.Find(config);
   env::assert_fatal(!toolchain_paths.empty(), "No toolchains found");

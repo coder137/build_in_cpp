@@ -34,10 +34,6 @@ namespace fs = std::filesystem;
 
 namespace buildcc {
 
-struct ToolchainVerifyConfig : public ToolchainFindConfig {
-  std::optional<std::string> verification_identifier;
-};
-
 /**
  * @brief Verified Toolchain information
  * @param path Absolute host path where ALL the toolchain executables are found
@@ -54,10 +50,6 @@ struct ToolchainCompilerInfo {
   std::string target_arch;
 };
 
-// clang-format off
-typedef std::function<std::optional<ToolchainCompilerInfo>(const ToolchainExecutables &)> ToolchainVerificationFunc;
-// clang-format on
-
 template <typename T> class ToolchainVerify {
 public:
   ToolchainVerify() = default;
@@ -73,7 +65,7 @@ public:
    * of them
    */
   ToolchainCompilerInfo
-  Verify(const ToolchainVerifyConfig &config = ToolchainVerifyConfig());
+  Verify(const ToolchainFindConfig &config = ToolchainFindConfig());
 };
 
 } // namespace buildcc
