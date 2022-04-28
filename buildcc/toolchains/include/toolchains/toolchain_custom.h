@@ -29,20 +29,6 @@ public:
                    const ToolchainExecutables &executables,
                    const ToolchainConfig &config = ToolchainConfig())
       : Toolchain(ToolchainId::Custom, name, executables, config) {}
-
-  void SetToolchainInfoFunc(const ToolchainInfoFunc &cb) { info_func_ = cb; }
-
-private:
-  std::optional<ToolchainCompilerInfo>
-  GetToolchainInfo(const ToolchainExecutables &executables) const override {
-    if (info_func_) {
-      return info_func_(executables);
-    }
-    return {};
-  }
-
-private:
-  ToolchainInfoFunc info_func_;
 };
 
 } // namespace buildcc
