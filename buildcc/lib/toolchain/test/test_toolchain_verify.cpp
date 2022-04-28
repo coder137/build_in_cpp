@@ -29,11 +29,10 @@ TEST_GROUP(ToolchainVerifyTestGroup)
 class MockToolchain : public buildcc::Toolchain {
 public:
   MockToolchain(buildcc::ToolchainId id, const std::string &name,
-                const std::string &assembler, const std::string &c_compiler,
-                const std::string &cpp_compiler, const std::string &archiver,
-                const std::string &linker)
-      : buildcc::Toolchain(id, name, assembler, c_compiler, cpp_compiler,
-                           archiver, linker) {}
+                const buildcc::ToolchainExecutables &executables =
+                    buildcc::ToolchainExecutables("as", "gcc", "g++", "ar",
+                                                  "ld"))
+      : buildcc::Toolchain(id, name, executables) {}
 
 private:
   // Example implementation
@@ -76,8 +75,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_BaseToolchain_Failure) {
 }
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc) {
-  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++", "ar",
-                    "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
   std::vector<std::string> version_stdout_data{"version"};
   std::vector<std::string> arch_stdout_data{"arch"};
@@ -103,8 +101,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc) {
 }
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_CompilerVersionFailure) {
-  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++", "ar",
-                    "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
   std::vector<std::string> version_stdout_data{"version"};
   std::vector<std::string> arch_stdout_data{"arch"};
@@ -127,8 +124,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_CompilerVersionFailure) {
 }
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_CompilerVersionEmpty) {
-  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++", "ar",
-                    "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
   std::vector<std::string> version_stdout_data;
   std::vector<std::string> arch_stdout_data{"arch"};
@@ -151,8 +147,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_CompilerVersionEmpty) {
 }
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_TargetArchFailure) {
-  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++", "ar",
-                    "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
   std::vector<std::string> version_stdout_data{"version"};
   std::vector<std::string> arch_stdout_data{"arch"};
@@ -175,8 +170,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_TargetArchFailure) {
 }
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_TargetArchEmpty) {
-  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++", "ar",
-                    "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
   std::vector<std::string> version_stdout_data{"version"};
   std::vector<std::string> arch_stdout_data;
@@ -199,8 +193,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_TargetArchEmpty) {
 }
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_BadAbsolutePath) {
-  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++", "ar",
-                    "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
   buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
@@ -210,8 +203,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_BadAbsolutePath) {
 }
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_PathContainsDir) {
-  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++", "ar",
-                    "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
   buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
@@ -230,8 +222,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_LockedFolder) {
     FAIL_TEST("Could not set file permissions");
   }
 
-  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++", "ar",
-                    "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
   buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
@@ -248,6 +239,39 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_LockedFolder) {
 }
 
 #endif
+
+TEST(ToolchainVerifyTestGroup, CustomToolchainInfo) {
+  buildcc::Toolchain toolchain(
+      buildcc::ToolchainId::Gcc, "gcc",
+      buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
+  toolchain.SetToolchainInfoFunc(
+      [](const buildcc::ToolchainExecutables &executables)
+          -> std::optional<buildcc::ToolchainCompilerInfo> {
+        (void)executables;
+        mock().actualCall("SetToolchainInfoFunc");
+        buildcc::ToolchainCompilerInfo info;
+        info.compiler_version = "version";
+        info.target_arch = "arch";
+        return info;
+      });
+
+  std::string putenv_str =
+      fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc", fs::current_path());
+  int put = putenv(putenv_str.data());
+  CHECK_TRUE(put == 0);
+  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
+  CHECK_TRUE(custom_buildcc_path != nullptr);
+  UT_PRINT(custom_buildcc_path);
+
+  buildcc::ToolchainFindConfig config;
+  config.env_vars.clear();
+  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
+
+  mock().expectOneCall("SetToolchainInfoFunc");
+  auto info = toolchain.Verify(config);
+  STRCMP_EQUAL(info.compiler_version.c_str(), "version");
+  STRCMP_EQUAL(info.target_arch.c_str(), "arch");
+}
 
 int main(int ac, char **av) {
   buildcc::env::m::VectorStringCopier copier;

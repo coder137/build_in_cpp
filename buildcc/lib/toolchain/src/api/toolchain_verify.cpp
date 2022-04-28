@@ -99,8 +99,9 @@ ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
 template <typename T>
 std::optional<ToolchainCompilerInfo> ToolchainVerify<T>::GetToolchainInfo(
     const ToolchainExecutables &executables) const {
-  if (info_func_) {
-    info_func_(executables);
+  const auto &cb = GetToolchainInfoFunc();
+  if (cb) {
+    return cb(executables);
   }
   env::log_critical(__FUNCTION__,
                     "GetToolchainInfo virtual function not implemented");
