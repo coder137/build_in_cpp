@@ -95,6 +95,18 @@ ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
   return toolchain_compiler_info;
 }
 
+// PRIVATE
+template <typename T>
+std::optional<ToolchainCompilerInfo> ToolchainVerify<T>::GetToolchainInfo(
+    const ToolchainExecutables &executables) const {
+  if (info_func_) {
+    info_func_(executables);
+  }
+  env::log_critical(__FUNCTION__,
+                    "GetToolchainInfo virtual function not implemented");
+  return {};
+}
+
 template class ToolchainVerify<Toolchain>;
 
 } // namespace buildcc

@@ -33,10 +33,6 @@
 
 namespace buildcc {
 
-// clang-format off
-typedef std::function<std::optional<ToolchainCompilerInfo>(const ToolchainExecutables &)> ToolchainInfoFunc;
-// clang-format on
-
 // Base toolchain class
 class Toolchain : public internal::FlagApi<Toolchain>,
                   public ToolchainFind<Toolchain>,
@@ -108,9 +104,6 @@ private:
   void Initialize();
 
   virtual void UpdateConfig(ToolchainConfig &config);
-  // TODO, Make this pure virtual
-  virtual std::optional<ToolchainCompilerInfo>
-  GetToolchainInfo(const ToolchainExecutables &executables) const;
 
 private:
   friend class internal::FlagApi<Toolchain>;
