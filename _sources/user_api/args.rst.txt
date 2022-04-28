@@ -54,7 +54,8 @@ Example
         // .build, .test
         arg_gcc_toolchain.state;
         // .id, .name, .asm_compiler, .c_compiler, .cpp_compiler, .archiver, .linker -> BaseToolchain
-        BaseToolchain gcc_toolchain = arg_gcc_toolchain.ConstructToolchain();
+        auto &gcc_toolchain = arg_gcc_toolchain;
+        gcc_toolchain.SetToolchainInfoFunc(GlobalToolchainInfo::Get(gcc_toolchain.id));
         return 0;
     }
 
