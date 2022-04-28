@@ -14,12 +14,23 @@
  * limitations under the License.
  */
 
-#include "env/storage.h"
+#ifndef TOOLCHAINS_TOOLCHAIN_CUSTOM_H_
+#define TOOLCHAINS_TOOLCHAIN_CUSTOM_H_
+
+#include "toolchain/toolchain.h"
+
+#include <functional>
 
 namespace buildcc {
 
-ScopedStorage Storage::internal_;
-
-ScopedStorage &Storage::Ref() { return internal_; }
+class Toolchain_custom : public Toolchain {
+public:
+  Toolchain_custom(const std::string &name,
+                   const ToolchainExecutables &executables,
+                   const ToolchainConfig &config = ToolchainConfig())
+      : Toolchain(ToolchainId::Custom, name, executables, config) {}
+};
 
 } // namespace buildcc
+
+#endif

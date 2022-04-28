@@ -21,12 +21,6 @@
 
 namespace buildcc {
 
-constexpr const char *const kGccObjExt = ".o";
-constexpr const char *const kGccPchHeaderExt = ".h";
-constexpr const char *const kGccPchCompileExt = ".gch";
-constexpr const char *const kGccPrefixIncludeDir = "-I";
-constexpr const char *const kGccPrefixLibDir = "-L";
-
 /**
  * @brief Generic GCC Toolchain <br>
  * id = ToolchainId::Gcc <br>
@@ -39,18 +33,22 @@ constexpr const char *const kGccPrefixLibDir = "-L";
  */
 class Toolchain_gcc : public Toolchain {
 public:
-  Toolchain_gcc()
-      : Toolchain(ToolchainId::Gcc, "gcc", "as", "gcc", "g++", "ar", "ld") {}
+  // Run time basic constructor
+  Toolchain_gcc(const std::string &name = "gcc",
+                std::optional<ToolchainExecutables> op_executables = {},
+                std::optional<ToolchainConfig> op_config = {})
+      : Toolchain(ToolchainId::Gcc, name,
+                  op_executables.value_or(
+                      ToolchainExecutables("as", "gcc", "g++", "ar", "ld")),
+                  op_config.value_or(ToolchainConfig())) {}
+
+  virtual ~Toolchain_gcc() = default;
   Toolchain_gcc(const Toolchain_gcc &gcc) = delete;
 
 private:
-  void UpdateConfig(ToolchainConfig &config) override {
-    config.obj_ext = kGccObjExt;
-    config.pch_header_ext = kGccPchHeaderExt;
-    config.pch_compile_ext = kGccPchCompileExt;
-    config.prefix_include_dir = kGccPrefixIncludeDir;
-    config.prefix_lib_dir = kGccPrefixLibDir;
-  }
+  void UpdateConfig(ToolchainConfig &config) override;
+  std::optional<ToolchainCompilerInfo>
+  GetToolchainInfo(const ToolchainExecutables &executables) const override;
 };
 
 } // namespace buildcc

@@ -23,12 +23,6 @@
 
 namespace buildcc {
 
-constexpr const char *const kMingwObjExt = ".o";
-constexpr const char *const kMingwPchHeaderExt = ".h";
-constexpr const char *const kMingwPchCompileExt = ".gch";
-constexpr const char *const kMingwPrefixIncludeDir = "-I";
-constexpr const char *const kMingwPrefixLibDir = "-L";
-
 /**
  * @brief Generic MinGW Toolchain <br>
  * id = ToolchainId::MinGW <br>
@@ -39,20 +33,24 @@ constexpr const char *const kMingwPrefixLibDir = "-L";
  * archiver = "ar" <br>
  * linker = "ld" <br>
  */
-class Toolchain_mingw : public BaseToolchain {
+class Toolchain_mingw : public Toolchain {
 public:
-  Toolchain_mingw()
-      : Toolchain(ToolchainId::MinGW, "gcc", "as", "gcc", "g++", "ar", "ld") {}
+  // Run time basic constructor
+  Toolchain_mingw(const std::string &name = "gcc",
+                  std::optional<ToolchainExecutables> op_executables = {},
+                  std::optional<ToolchainConfig> op_config = {})
+      : Toolchain(ToolchainId::MinGW, name,
+                  op_executables.value_or(
+                      ToolchainExecutables("as", "gcc", "g++", "ar", "ld")),
+                  op_config.value_or(ToolchainConfig())) {}
+
+  virtual ~Toolchain_mingw() = default;
   Toolchain_mingw(const Toolchain_mingw &) = delete;
 
 private:
-  void UpdateConfig(ToolchainConfig &config) {
-    config.obj_ext = kMingwObjExt;
-    config.pch_header_ext = kMingwPchHeaderExt;
-    config.pch_compile_ext = kMingwPchCompileExt;
-    config.prefix_include_dir = kMingwPrefixIncludeDir;
-    config.prefix_lib_dir = kMingwPrefixLibDir;
-  }
+  void UpdateConfig(ToolchainConfig &config) override;
+  std::optional<ToolchainCompilerInfo>
+  GetToolchainInfo(const ToolchainExecutables &executables) const override;
 };
 
 } // namespace buildcc

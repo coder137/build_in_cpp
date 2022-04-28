@@ -17,6 +17,7 @@
 #ifndef TOOLCHAIN_TOOLCHAIN_H_
 #define TOOLCHAIN_TOOLCHAIN_H_
 
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -37,22 +38,25 @@ class Toolchain : public internal::FlagApi<Toolchain>,
                   public ToolchainFind<Toolchain>,
                   public ToolchainVerify<Toolchain> {
 public:
-public:
+  // TODO, Remove ToolchainId from here
   Toolchain(ToolchainId id, std::string_view name,
-            const ToolchainExecutables &executables, bool lock = true,
+            const ToolchainExecutables &executables,
             const ToolchainConfig &config = ToolchainConfig())
-      : id_(id), name_(name), executables_(executables), lock_(lock),
-        config_(config) {
+      : id_(id), name_(name), executables_(executables), config_(config),
+        lock_(false) {
     Initialize();
   }
-  Toolchain(ToolchainId id, std::string_view name, std::string_view assembler,
-            std::string_view c_compiler, std::string_view cpp_compiler,
-            std::string_view archiver, std::string_view linker,
-            bool lock = true, const ToolchainConfig &config = ToolchainConfig())
+
+  [[deprecated]] Toolchain(ToolchainId id, std::string_view name,
+                           std::string_view assembler,
+                           std::string_view c_compiler,
+                           std::string_view cpp_compiler,
+                           std::string_view archiver, std::string_view linker,
+                           const ToolchainConfig &config = ToolchainConfig())
       : Toolchain(id, name,
                   ToolchainExecutables(assembler, c_compiler, cpp_compiler,
                                        archiver, linker),
-                  lock, config) {}
+                  config) {}
 
   Toolchain(Toolchain &&) = default;
   Toolchain &operator=(Toolchain &&) = default;
@@ -77,6 +81,12 @@ public:
 
   const FunctionLock &GetLockInfo() const { return lock_; }
   const ToolchainConfig &GetConfig() const { return config_; }
+
+protected:
+  ToolchainId &RefId() { return id_; }
+  std::string &RefName() { return name_; }
+  ToolchainExecutables &RefExecutables() { return executables_; }
+  ToolchainConfig &RefConfig() { return config_; }
 
 private:
   struct UserSchema {
@@ -103,8 +113,8 @@ private:
   ToolchainId id_;
   std::string name_;
   ToolchainExecutables executables_;
-  FunctionLock lock_;
   ToolchainConfig config_;
+  FunctionLock lock_;
 
   //
   UserSchema user_;

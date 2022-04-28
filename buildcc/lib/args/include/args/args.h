@@ -47,35 +47,31 @@ struct ArgToolchainState {
  * command line
  * Bundled with Toolchain State
  */
-struct ArgToolchain {
-  ArgToolchain() = default;
+class ArgToolchain : public Toolchain {
+public:
+  ArgToolchain()
+      : Toolchain(ToolchainId::Undefined, "", ToolchainExecutables()){};
   ArgToolchain(ToolchainId initial_id, const std::string &initial_name,
                const ToolchainExecutables &initial_executables)
-      : id(initial_id), name(initial_name), executables(initial_executables) {}
-  ArgToolchain(ToolchainId initial_id, const std::string &initial_name,
-               const std::string &initial_assembler,
-               const std::string &initial_c_compiler,
-               const std::string &initial_cpp_compiler,
-               const std::string &initial_archiver,
-               const std::string &initial_linker)
-      : ArgToolchain(initial_id, initial_name,
-                     ToolchainExecutables(initial_assembler, initial_c_compiler,
-                                          initial_cpp_compiler,
-                                          initial_archiver, initial_linker)) {}
+      : Toolchain(initial_id, initial_name, initial_executables) {}
+  [[deprecated]] ArgToolchain(ToolchainId initial_id,
+                              const std::string &initial_name,
+                              const std::string &initial_assembler,
+                              const std::string &initial_c_compiler,
+                              const std::string &initial_cpp_compiler,
+                              const std::string &initial_archiver,
+                              const std::string &initial_linker)
+      : Toolchain(initial_id, initial_name,
+                  ToolchainExecutables(initial_assembler, initial_c_compiler,
+                                       initial_cpp_compiler, initial_archiver,
+                                       initial_linker)) {}
 
-  /**
-   * @brief Construct a BaseToolchain from the arguments supplied through the
-   * command line information
-   */
-  // TODO, Update this for lock and ToolchainConfig
-  BaseToolchain ConstructToolchain() const {
-    return BaseToolchain(id, name, executables);
-  }
-
+public:
   ArgToolchainState state;
-  ToolchainId id{ToolchainId::Undefined};
-  std::string name{""};
-  ToolchainExecutables executables;
+  ToolchainId &id = RefId();
+  std::string &name = RefName();
+  ToolchainExecutables &executables = RefExecutables();
+  ToolchainConfig &config = RefConfig();
 };
 
 // NOTE, Incomplete without pch_compile_command

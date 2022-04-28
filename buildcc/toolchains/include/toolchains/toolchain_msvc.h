@@ -21,13 +21,6 @@
 
 namespace buildcc {
 
-constexpr const char *const kMsvcObjExt = ".obj";
-constexpr const char *const kMsvcPchHeaderExt = ".h";
-constexpr const char *const kMsvcPchCompileExt = ".pch";
-
-constexpr const char *const kMsvcPrefixIncludeDir = "/I";
-constexpr const char *const kMsvcPrefixLibDir = "/LIBPATH:";
-
 /**
  * @brief Generic GCC Toolchain <br>
  * id = ToolchainId::Msvc <br>
@@ -40,18 +33,22 @@ constexpr const char *const kMsvcPrefixLibDir = "/LIBPATH:";
  */
 class Toolchain_msvc : public Toolchain {
 public:
-  Toolchain_msvc()
-      : Toolchain(ToolchainId::Msvc, "msvc", "cl", "cl", "cl", "lib", "link") {}
+  // Run time basic constructor
+  Toolchain_msvc(const std::string &name = "msvc",
+                 std::optional<ToolchainExecutables> op_executables = {},
+                 std::optional<ToolchainConfig> op_config = {})
+      : Toolchain(ToolchainId::Msvc, name,
+                  op_executables.value_or(
+                      ToolchainExecutables("cl", "cl", "cl", "lib", "link")),
+                  op_config.value_or(ToolchainConfig())) {}
+
+  virtual ~Toolchain_msvc() = default;
   Toolchain_msvc(const Toolchain_msvc &gcc) = delete;
 
 private:
-  void UpdateConfig(ToolchainConfig &config) {
-    config.obj_ext = kMsvcObjExt;
-    config.pch_header_ext = kMsvcPchHeaderExt;
-    config.pch_compile_ext = kMsvcPchCompileExt;
-    config.prefix_include_dir = kMsvcPrefixIncludeDir;
-    config.prefix_lib_dir = kMsvcPrefixLibDir;
-  }
+  void UpdateConfig(ToolchainConfig &config) override;
+  std::optional<ToolchainCompilerInfo>
+  GetToolchainInfo(const ToolchainExecutables &executables) const override;
 };
 
 } // namespace buildcc

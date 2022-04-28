@@ -352,7 +352,8 @@ For super customized targets and toolchains
         Toolchain_gcc gcc;
         Toolchain_msvc msvc;
         // Get custom toolchain from the command line, supplied at run time
-        BaseToolchain clang = toolchain_clang_gnu.ConstructToolchain();
+        auto &clang = toolchain_clang_gnu;
+        clang.SetToolchainInfoFunc(GlobalToolchainInfo::Get(clang.id));
 
         ExecutableTarget_gcc g_foolib("foolib", gcc, "");
         ExecutableTarget_msvc m_foolib("foolib", msvc, "");

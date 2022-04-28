@@ -32,13 +32,7 @@ namespace buildcc {
 class ScopedStorage {
 public:
   ScopedStorage() {}
-  ~ScopedStorage() {
-    for (const auto &ptr_iter : ptrs_) {
-      ptr_iter.second.destructor();
-    }
-    ptrs_.clear();
-    env::assert_fatal(ptrs_.empty(), "Memory not deallocated");
-  }
+  ~ScopedStorage() { Clear(); }
 
   ScopedStorage(const ScopedStorage &) = delete;
 
@@ -58,10 +52,15 @@ public:
     return *ptr;
   }
 
-  template <typename T> void Remove(T *ptr) { delete ptr; }
+  void Clear() {
+    for (const auto &ptr_iter : ptrs_) {
+      ptr_iter.second.destructor();
+    }
+    ptrs_.clear();
+  }
 
   template <typename T> const T &ConstRef(const std::string &identifier) const {
-    env::assert_fatal(ptrs_.find(identifier) != ptrs_.end(),
+    env::assert_fatal(Contains(identifier),
                       fmt::format("Could not find '{}'", identifier));
     const PtrMetadata &metadata = ptrs_.at(identifier);
     env::assert_fatal(
@@ -77,12 +76,30 @@ public:
         static_cast<const ScopedStorage &>(*this).ConstRef<T>(identifier));
   }
 
+  bool Contains(const std::string &identifier) const {
+    return (ptrs_.find(identifier) != ptrs_.end());
+  }
+
+  template <typename T> bool Valid(const std::string &identifier) const {
+    if (!Contains(identifier)) {
+      return false;
+    }
+    const PtrMetadata &metadata = ptrs_.at(identifier);
+    if (typeid(T).name() != metadata.typeid_name) {
+      return false;
+    }
+    return true;
+  }
+
+protected:
+  template <typename T> void Remove(T *ptr) { delete ptr; }
+
 private:
   /**
    * @brief
    * @param ptr Can hold data of any type
-   * @param typeid_name We cannot store a template type so this is the next best
-   * thing
+   * @param typeid_name We cannot store a template type so this is the next
+   * best thing
    * @param desstructor Destructor callback to delete ptr
    */
   struct PtrMetadata {
@@ -101,13 +118,12 @@ public:
   Storage(const Storage &) = delete;
   Storage(Storage &&) = delete;
 
-  static void Init() { internal_ = std::make_unique<ScopedStorage>(); }
-  static void Deinit() { internal_.reset(nullptr); }
-
   template <typename T, typename... Params>
   static T &Add(const std::string &identifier, Params &&...params) {
     return Ref().Add<T, Params...>(identifier, std::forward<Params>(params)...);
   }
+
+  static void Clear() { Ref().Clear(); }
 
   template <typename T>
   static const T &ConstRef(const std::string &identifier) {
@@ -118,11 +134,19 @@ public:
     return Ref().Ref<T>(identifier);
   }
 
+  static bool Contains(const std::string &identifier) {
+    return Ref().Contains(identifier);
+  }
+
+  template <typename T> static bool Valid(const std::string &identifier) {
+    return Ref().Valid<T>(identifier);
+  }
+
 private:
   static ScopedStorage &Ref();
 
 private:
-  static std::unique_ptr<ScopedStorage> internal_;
+  static ScopedStorage internal_;
 };
 
 } // namespace buildcc

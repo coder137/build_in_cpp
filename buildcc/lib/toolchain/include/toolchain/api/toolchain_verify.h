@@ -34,10 +34,6 @@ namespace fs = std::filesystem;
 
 namespace buildcc {
 
-struct ToolchainVerifyConfig : public ToolchainFindConfig {
-  std::optional<std::string> verification_identifier;
-};
-
 /**
  * @brief Verified Toolchain information
  * @param path Absolute host path where ALL the toolchain executables are found
@@ -55,24 +51,12 @@ struct ToolchainCompilerInfo {
 };
 
 // clang-format off
-typedef std::function<std::optional<ToolchainCompilerInfo>(const ToolchainExecutables &)> ToolchainVerificationFunc;
+typedef std::function<std::optional<ToolchainCompilerInfo>(const ToolchainExecutables &)> ToolchainInfoFunc;
 // clang-format on
 
 template <typename T> class ToolchainVerify {
 public:
-  ToolchainVerify() { Initialize(); }
-
-  /**
-   * @brief
-   *
-   * @param id
-   * @param verification_func
-   * @param identifier Only read when ToolchainId::Custom is passed in
-   */
-  static void
-  AddVerificationFunc(ToolchainId id,
-                      const ToolchainVerificationFunc &verification_func,
-                      const std::optional<std::string> &op_identifier = {});
+  ToolchainVerify() = default;
 
   /**
    * @brief Verify your toolchain executables by searching your operating system
@@ -85,17 +69,23 @@ public:
    * of them
    */
   ToolchainCompilerInfo
-  Verify(const ToolchainVerifyConfig &config = ToolchainVerifyConfig());
+  Verify(const ToolchainFindConfig &config = ToolchainFindConfig());
 
-protected:
-  ToolchainCompilerInfo verified_toolchain_;
+  /**
+   * @brief Set ToolchainInfo callback for run time objects
+   */
+  void SetToolchainInfoFunc(const ToolchainInfoFunc &cb) { info_func_ = cb; }
+  const ToolchainInfoFunc &GetToolchainInfoFunc() const { return info_func_; }
 
 private:
-  void Initialize();
-  static const ToolchainVerificationFunc &
-  GetVerificationFunc(const std::string &identifier);
-  static std::unordered_map<std::string, ToolchainVerificationFunc> &
-  GetStatic();
+  /**
+   * @brief ToolchainInfo callback for compile time polymorphic objects
+   */
+  virtual std::optional<ToolchainCompilerInfo>
+  GetToolchainInfo(const ToolchainExecutables &executables) const;
+
+private:
+  ToolchainInfoFunc info_func_;
 };
 
 } // namespace buildcc

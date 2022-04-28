@@ -57,8 +57,8 @@ int main(int argc, char **argv) {
   Reg::Call(Args::Clean()).Func(clean_cb);
 
   // Host Toolchain
-  BaseToolchain toolchain =
-      buildexe_args.GetHostToolchainArg().ConstructToolchain();
+  auto &toolchain = buildexe_args.GetHostToolchainArg();
+  toolchain.SetToolchainInfoFunc(GlobalToolchainInfo::Get(toolchain.id));
   toolchain.Verify();
 
   if (buildexe_args.GetBuildMode() == BuildExeMode::Script) {

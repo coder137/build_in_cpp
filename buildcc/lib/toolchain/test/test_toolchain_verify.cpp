@@ -2,6 +2,7 @@
 
 #include "toolchain/toolchain.h"
 
+#include "env/command.h"
 #include "env/host_os.h"
 
 #include "expect_command.h"
@@ -25,10 +26,56 @@ TEST_GROUP(ToolchainVerifyTestGroup)
 };
 // clang-format on
 
+class MockToolchain : public buildcc::Toolchain {
+public:
+  MockToolchain(buildcc::ToolchainId id, const std::string &name,
+                const buildcc::ToolchainExecutables &executables =
+                    buildcc::ToolchainExecutables("as", "gcc", "g++", "ar",
+                                                  "ld"))
+      : buildcc::Toolchain(id, name, executables) {}
+
+private:
+  // Example implementation
+  std::optional<buildcc::ToolchainCompilerInfo> GetToolchainInfo(
+      const buildcc::ToolchainExecutables &executables) const override {
+    (void)executables;
+    std::vector<std::string> version_stdout;
+    std::vector<std::string> arch_stdout;
+    bool version_done = buildcc::env::Command::Execute("", {}, &version_stdout);
+    bool arch_done = buildcc::env::Command::Execute("", {}, &arch_stdout);
+    if (!version_done || !arch_done || version_stdout.empty() ||
+        arch_stdout.empty()) {
+      return {};
+    }
+    buildcc::ToolchainCompilerInfo info;
+    info.compiler_version = version_stdout[0];
+    info.target_arch = arch_stdout[0];
+    return info;
+  }
+};
+
 // NOTE, We are mocking the environment instead of actually querying it
-TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc) {
+TEST(ToolchainVerifyTestGroup, VerifyToolchain_BaseToolchain_Failure) {
   buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
                          "ar", "ld");
+
+  std::string putenv_str =
+      fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc", fs::current_path());
+  int put = putenv(putenv_str.data());
+  CHECK_TRUE(put == 0);
+  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
+  CHECK_TRUE(custom_buildcc_path != nullptr);
+  UT_PRINT(custom_buildcc_path);
+
+  buildcc::ToolchainFindConfig config;
+  config.env_vars.clear();
+  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
+
+  CHECK_THROWS(std::exception, gcc.Verify(config));
+}
+
+TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc) {
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
   std::vector<std::string> version_stdout_data{"version"};
   std::vector<std::string> arch_stdout_data{"arch"};
@@ -43,7 +90,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
@@ -54,8 +101,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc) {
 }
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_CompilerVersionFailure) {
-  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
-                         "ar", "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
   std::vector<std::string> version_stdout_data{"version"};
   std::vector<std::string> arch_stdout_data{"arch"};
@@ -70,7 +116,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_CompilerVersionFailure) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
@@ -78,8 +124,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_CompilerVersionFailure) {
 }
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_CompilerVersionEmpty) {
-  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
-                         "ar", "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
   std::vector<std::string> version_stdout_data;
   std::vector<std::string> arch_stdout_data{"arch"};
@@ -94,7 +139,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_CompilerVersionEmpty) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
@@ -102,8 +147,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_CompilerVersionEmpty) {
 }
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_TargetArchFailure) {
-  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
-                         "ar", "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
   std::vector<std::string> version_stdout_data{"version"};
   std::vector<std::string> arch_stdout_data{"arch"};
@@ -118,7 +162,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_TargetArchFailure) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
@@ -126,8 +170,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_TargetArchFailure) {
 }
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_TargetArchEmpty) {
-  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
-                         "ar", "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
   std::vector<std::string> version_stdout_data{"version"};
   std::vector<std::string> arch_stdout_data;
@@ -142,163 +185,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_Gcc_TargetArchEmpty) {
   CHECK_TRUE(custom_buildcc_path != nullptr);
   UT_PRINT(custom_buildcc_path);
 
-  buildcc::ToolchainVerifyConfig config;
-  config.env_vars.clear();
-  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
-
-  CHECK_THROWS(std::exception, gcc.Verify(config));
-}
-
-TEST(ToolchainVerifyTestGroup, VerifyToolchain_Clang) {
-  buildcc::Toolchain clang(buildcc::ToolchainId::Clang, "clang", "llvm-as",
-                           "clang", "clang++", "llvm-ar", "lld");
-
-  std::vector<std::string> version_stdout_data{"version"};
-  std::vector<std::string> arch_stdout_data{"arch"};
-  buildcc::env::m::CommandExpect_Execute(1, true, &version_stdout_data);
-  buildcc::env::m::CommandExpect_Execute(1, true, &arch_stdout_data);
-
-  std::string putenv_str = fmt::format(
-      "CUSTOM_BUILDCC_PATH={}/toolchains/clang", fs::current_path());
-  int put = putenv(putenv_str.data());
-  CHECK_TRUE(put == 0);
-  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
-  CHECK_TRUE(custom_buildcc_path != nullptr);
-  UT_PRINT(custom_buildcc_path);
-
-  buildcc::ToolchainVerifyConfig config;
-  config.env_vars.clear();
-  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
-
-  buildcc::ToolchainCompilerInfo compiler_info = clang.Verify(config);
-
-  STRCMP_EQUAL(compiler_info.compiler_version.c_str(), "version");
-  STRCMP_EQUAL(compiler_info.target_arch.c_str(), "arch");
-}
-
-TEST(ToolchainVerifyTestGroup, VerifyToolchain_Msvc) {
-  buildcc::Toolchain msvc(buildcc::ToolchainId::Msvc, "msvc", "cl", "cl", "cl",
-                          "lib", "link");
-  // Setup ENV
-  // VSCMD_VER
-  std::string vscmd_ver = std::string("VSCMD_VER=version");
-  // VSCMD_ARG_HOST_ARCH
-  std::string host_arch = std::string("VSCMD_ARG_HOST_ARCH=host_arch");
-  // VSCMD_ARG_TGT_ARCH
-  std::string tgt_arch = std::string("VSCMD_ARG_TGT_ARCH=tgt_arch");
-
-  CHECK_TRUE(putenv(vscmd_ver.data()) == 0);
-  CHECK_TRUE(putenv(host_arch.data()) == 0);
-  CHECK_TRUE(putenv(tgt_arch.data()) == 0);
-
-  // MSVC Compiler
-  std::string putenv_str =
-      fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/msvc", fs::current_path());
-  int put = putenv(putenv_str.data());
-  CHECK_TRUE(put == 0);
-  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
-  CHECK_TRUE(custom_buildcc_path != nullptr);
-  UT_PRINT(custom_buildcc_path);
-
-  buildcc::ToolchainVerifyConfig config;
-  config.env_vars.clear();
-  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
-
-  buildcc::ToolchainCompilerInfo compiler_info = msvc.Verify(config);
-
-  STRCMP_EQUAL(compiler_info.compiler_version.c_str(), "version");
-  STRCMP_EQUAL(compiler_info.target_arch.c_str(), "host_arch_tgt_arch");
-}
-
-TEST(ToolchainVerifyTestGroup, VerifyToolchain_Custom_VerificationSuccess) {
-  buildcc::Toolchain::AddVerificationFunc(
-      buildcc::ToolchainId::Custom,
-      [](const buildcc::ToolchainExecutables &executables)
-          -> std::optional<buildcc::ToolchainCompilerInfo> {
-        (void)executables;
-        buildcc::ToolchainCompilerInfo compiler_info;
-        compiler_info.compiler_version = "custom_compiler_version";
-        compiler_info.target_arch = "custom_target_arch";
-        return compiler_info;
-      },
-      "success_verification_func");
-  buildcc::Toolchain custom(buildcc::ToolchainId::Custom, "custom", "assembler",
-                            "c_compiler", "cpp_compiler", "archiver", "linker");
-  buildcc::ToolchainVerifyConfig config;
-  config.env_vars.clear();
-  config.absolute_search_paths.insert(
-      (fs::current_path() / "toolchains" / "custom"));
-  config.verification_identifier = "success_verification_func";
-  auto compiler_info = custom.Verify(config);
-  STRCMP_EQUAL(compiler_info.compiler_version.c_str(),
-               "custom_compiler_version");
-  STRCMP_EQUAL(compiler_info.target_arch.c_str(), "custom_target_arch");
-}
-
-TEST(ToolchainVerifyTestGroup, VerifyToolchain_Custom_VerificationFailure) {
-  buildcc::Toolchain::AddVerificationFunc(
-      buildcc::ToolchainId::Custom,
-      [](const buildcc::ToolchainExecutables &executables)
-          -> std::optional<buildcc::ToolchainCompilerInfo> {
-        (void)executables;
-        return {};
-      },
-      "failure_verification_func");
-
-  // Adding verification function with the same identifier throws an exception
-  CHECK_THROWS(std::exception,
-               (buildcc::Toolchain::AddVerificationFunc(
-                   buildcc::ToolchainId::Custom,
-                   [](const buildcc::ToolchainExecutables &executables)
-                       -> std::optional<buildcc::ToolchainCompilerInfo> {
-                     (void)executables;
-                     return {};
-                   },
-                   "failure_verification_func")));
-  buildcc::Toolchain custom(buildcc::ToolchainId::Custom, "custom", "assembler",
-                            "c_compiler", "cpp_compiler", "archiver", "linker");
-
-  buildcc::ToolchainVerifyConfig config;
-  config.env_vars.clear();
-  config.absolute_search_paths.insert(
-      (fs::current_path() / "toolchains" / "custom"));
-  // Fails since ToolchainId::Custom expects a verification_identifier
-  CHECK_THROWS(std::exception, custom.Verify(config));
-
-  // Fails since we do not get valid ToolchainCompilerInfo
-  config.verification_identifier = "failure_verification_func";
-  CHECK_THROWS(std::exception, custom.Verify(config));
-
-  // Fails since we have not registered a verification function with this id
-  config.verification_identifier = "unregistered_verification_func";
-  CHECK_THROWS(std::exception, custom.Verify(config));
-}
-
-TEST(ToolchainVerifyTestGroup, VerifyToolchain_Undefined_AddVerificationFunc) {
-  CHECK_THROWS(std::exception,
-               (buildcc::Toolchain::AddVerificationFunc(
-                   buildcc::ToolchainId::Undefined,
-                   [](const buildcc::ToolchainExecutables &executables)
-                       -> std::optional<buildcc::ToolchainCompilerInfo> {
-                     (void)executables;
-                     return {};
-                   },
-                   "undefined_verification_func")));
-}
-
-TEST(ToolchainVerifyTestGroup, VerifyToolchain_BadCompilerId) {
-  buildcc::Toolchain gcc((buildcc::ToolchainId)65535, "gcc", "as", "gcc", "g++",
-                         "ar", "ld");
-
-  std::string putenv_str =
-      fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc", fs::current_path());
-  int put = putenv(putenv_str.data());
-  CHECK_TRUE(put == 0);
-  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
-  CHECK_TRUE(custom_buildcc_path != nullptr);
-  UT_PRINT(custom_buildcc_path);
-
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
@@ -306,10 +193,9 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_BadCompilerId) {
 }
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_BadAbsolutePath) {
-  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
-                         "ar", "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.absolute_search_paths.insert((fs::current_path() / "does_not_exist"));
 
@@ -317,10 +203,9 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_BadAbsolutePath) {
 }
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_PathContainsDir) {
-  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
-                         "ar", "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.absolute_search_paths.insert((fs::current_path() / "toolchains"));
 
@@ -328,38 +213,6 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_PathContainsDir) {
 }
 
 #if defined(__GNUC__) && !defined(__MINGW32__) && !defined(__MINGW64__)
-
-TEST(ToolchainVerifyTestGroup,
-     VerifyToolchain_Msvc_CompilerVersionAndTargetArchFailure) {
-  buildcc::Toolchain msvc(buildcc::ToolchainId::Msvc, "msvc", "cl", "cl", "cl",
-                          "lib", "link");
-  // Setup ENV
-  // VSCMD_VER
-  // std::string vscmd_ver = std::string("VSCMD_VER=version");
-  // // VSCMD_ARG_HOST_ARCH
-  // std::string host_arch = std::string("VSCMD_ARG_HOST_ARCH=host_arch");
-  // // VSCMD_ARG_TGT_ARCH
-  // std::string tgt_arch = std::string("VSCMD_ARG_TGT_ARCH=tgt_arch");
-
-  // CHECK_TRUE(putenv(vscmd_ver.data()) == 0);
-  // CHECK_TRUE(putenv(host_arch.data()) == 0);
-  // CHECK_TRUE(putenv(tgt_arch.data()) == 0);
-
-  // MSVC Compiler
-  std::string putenv_str =
-      fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/msvc", fs::current_path());
-  int put = putenv(putenv_str.data());
-  CHECK_TRUE(put == 0);
-  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
-  CHECK_TRUE(custom_buildcc_path != nullptr);
-  UT_PRINT(custom_buildcc_path);
-
-  buildcc::ToolchainVerifyConfig config;
-  config.env_vars.clear();
-  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
-
-  CHECK_THROWS(std::exception, msvc.Verify(config));
-}
 
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_LockedFolder) {
   std::error_code err;
@@ -369,10 +222,9 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_LockedFolder) {
     FAIL_TEST("Could not set file permissions");
   }
 
-  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
-                         "ar", "ld");
+  MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
-  buildcc::ToolchainVerifyConfig config;
+  buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
   config.absolute_search_paths.insert(
       (fs::current_path() / "toolchains" / "gcc"));
@@ -387,6 +239,39 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_LockedFolder) {
 }
 
 #endif
+
+TEST(ToolchainVerifyTestGroup, CustomToolchainInfo) {
+  buildcc::Toolchain toolchain(
+      buildcc::ToolchainId::Gcc, "gcc",
+      buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
+  toolchain.SetToolchainInfoFunc(
+      [](const buildcc::ToolchainExecutables &executables)
+          -> std::optional<buildcc::ToolchainCompilerInfo> {
+        (void)executables;
+        mock().actualCall("SetToolchainInfoFunc");
+        buildcc::ToolchainCompilerInfo info;
+        info.compiler_version = "version";
+        info.target_arch = "arch";
+        return info;
+      });
+
+  std::string putenv_str =
+      fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc", fs::current_path());
+  int put = putenv(putenv_str.data());
+  CHECK_TRUE(put == 0);
+  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
+  CHECK_TRUE(custom_buildcc_path != nullptr);
+  UT_PRINT(custom_buildcc_path);
+
+  buildcc::ToolchainFindConfig config;
+  config.env_vars.clear();
+  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
+
+  mock().expectOneCall("SetToolchainInfoFunc");
+  auto info = toolchain.Verify(config);
+  STRCMP_EQUAL(info.compiler_version.c_str(), "version");
+  STRCMP_EQUAL(info.target_arch.c_str(), "arch");
+}
 
 int main(int ac, char **av) {
   buildcc::env::m::VectorStringCopier copier;

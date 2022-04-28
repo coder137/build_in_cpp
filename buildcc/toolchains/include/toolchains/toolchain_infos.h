@@ -14,12 +14,24 @@
  * limitations under the License.
  */
 
-#include "env/storage.h"
+#ifndef TOOLCHAINS_TOOLCHAIN_INFOS_H_
+#define TOOLCHAINS_TOOLCHAIN_INFOS_H_
+
+#include <unordered_map>
+
+#include "toolchain/toolchain.h"
 
 namespace buildcc {
 
-ScopedStorage Storage::internal_;
+class GlobalToolchainInfo {
+public:
+  static const ToolchainInfoFunc &Get(ToolchainId id);
 
-ScopedStorage &Storage::Ref() { return internal_; }
+private:
+  static std::unordered_map<ToolchainId, ToolchainInfoFunc>
+      global_toolchain_info_func_;
+};
 
 } // namespace buildcc
+
+#endif

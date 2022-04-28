@@ -15,13 +15,22 @@ TEST_GROUP(ScopedStorageTestGroup)
 TEST_GROUP(StorageTestGroup)
 {
   void setup() {
-    buildcc::Storage::Init();
+    MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
   }
   void teardown() {
-    buildcc::Storage::Deinit();
+    buildcc::Storage::Clear();
+    MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
   }
 };
 // clang-format on
+
+class MyScopedStorage : public buildcc::ScopedStorage {
+public:
+  // We want to unit test this
+  template <typename T> void Remove(T *ptr) {
+    this->ScopedStorage::Remove<T>(ptr);
+  }
+};
 
 class BigObj {};
 
@@ -42,7 +51,7 @@ private:
 static BigObj obj;
 
 TEST(ScopedStorageTestGroup, BasicUsage) {
-  buildcc::ScopedStorage storage;
+  MyScopedStorage storage;
   storage.Add<BigObjWithParameters>("identifier", "name", 10, obj);
   storage.Add<BigObjWithParameters>("identifier2", "name2", 12, obj);
 
@@ -50,11 +59,21 @@ TEST(ScopedStorageTestGroup, BasicUsage) {
   storage.ConstRef<BigObjWithParameters>("identifier").GetName();
   storage.Ref<BigObjWithParameters>("identifier2").GetName();
 
+  CHECK_TRUE(storage.Contains("identifier"));
+  CHECK_FALSE(storage.Contains("identifier_does_not_exist"));
+
+  CHECK_TRUE(storage.Valid<BigObjWithParameters>("identifier"));
+  CHECK_FALSE(storage.Valid<BigObjWithParameters>("wrong_identifier"));
+  CHECK_FALSE(storage.Valid<int>("identifier"));
+
+  storage.Clear();
+  CHECK_FALSE(storage.Contains("identifier"));
+
   // Automatic cleanup here
 }
 
 TEST(ScopedStorageTestGroup, IncorrectUsage) {
-  buildcc::ScopedStorage storage;
+  MyScopedStorage storage;
   storage.Add<BigObjWithParameters>("identifier", "name", 10, obj);
 
   // We try to cast to a different type!
@@ -65,12 +84,12 @@ TEST(ScopedStorageTestGroup, IncorrectUsage) {
                storage.Ref<BigObjWithParameters>("identifier2"));
 }
 
-std::string &toReference(std::string *pointer) { return *pointer; }
-
 TEST(ScopedStorageTestGroup, NullptrDelete) {
-  buildcc::ScopedStorage storage;
+  MyScopedStorage storage;
   storage.Remove<std::string>(nullptr);
 }
+
+//
 
 TEST(StorageTestGroup, BasicUsage) {
   buildcc::Storage::Add<BigObjWithParameters>("identifier", "name", 10, obj);
@@ -84,14 +103,14 @@ TEST(StorageTestGroup, BasicUsage) {
 
   STRCMP_EQUAL(bigobj.c_str(), "name");
   STRCMP_EQUAL(bigobj2.c_str(), "name2");
-}
 
-TEST(StorageTestGroup, UsageWithoutInit) {
-  buildcc::Storage::Deinit();
+  CHECK_TRUE(buildcc::Storage::Contains("identifier"));
+  CHECK_FALSE(buildcc::Storage::Contains("identifier_does_not_exist"));
 
-  CHECK_THROWS(std::exception, buildcc::Storage::Add<int>("integer"));
-  CHECK_THROWS(std::exception, buildcc::Storage::Ref<int>("integer"));
-  CHECK_THROWS(std::exception, buildcc::Storage::ConstRef<int>("integer"));
+  CHECK_TRUE(buildcc::Storage::Valid<BigObjWithParameters>("identifier"));
+  CHECK_FALSE(
+      buildcc::Storage::Valid<BigObjWithParameters>("wrong_identifier"));
+  CHECK_FALSE(buildcc::Storage::Valid<BigObj>("identifier"));
 }
 
 int main(int ac, char **av) {

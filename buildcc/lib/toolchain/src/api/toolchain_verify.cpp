@@ -35,83 +35,6 @@
 
 namespace {
 
-std::optional<std::string>
-GetGccCompilerVersion(const buildcc::env::Command &command) {
-  std::vector<std::string> stdout_data;
-  bool executed = buildcc::env::Command::Execute(
-      command.Construct("{compiler} -dumpversion"), {}, &stdout_data);
-  if (!executed || stdout_data.empty()) {
-    return {};
-  }
-  return stdout_data[0];
-}
-
-std::optional<std::string>
-GetGccTargetArchitecture(const buildcc::env::Command &command) {
-  std::vector<std::string> stdout_data;
-  bool executed = buildcc::env::Command::Execute(
-      command.Construct("{compiler} -dumpmachine"), {}, &stdout_data);
-  if (!executed || stdout_data.empty()) {
-    return {};
-  }
-  return stdout_data[0];
-}
-
-std::optional<buildcc::ToolchainCompilerInfo>
-GccVerificationFunc(const buildcc::ToolchainExecutables &executables) {
-  buildcc::env::Command command;
-  command.AddDefaultArgument("compiler", executables.cpp_compiler);
-
-  auto op_compiler_version = GetGccCompilerVersion(command);
-  auto op_target_arch = GetGccTargetArchitecture(command);
-  if (!op_compiler_version.has_value() || !op_target_arch.has_value()) {
-    return {};
-  }
-
-  buildcc::ToolchainCompilerInfo compiler_info;
-  compiler_info.compiler_version = op_compiler_version.value();
-  compiler_info.target_arch = op_target_arch.value();
-  return compiler_info;
-}
-
-std::optional<std::string> GetMsvcCompilerVersion() {
-  const char *vscmd_version = getenv("VSCMD_VER");
-  if (vscmd_version == nullptr) {
-    return {};
-  }
-  return vscmd_version;
-}
-
-std::optional<std::string> GetMsvcTargetArchitecture() {
-  // DONE, Read `VSCMD_ARG_HOST_ARCH` from env path
-  // DONE, Read `VSCMD_ARG_TGT_ARCH` from env path
-  const char *vs_host_arch = getenv("VSCMD_ARG_HOST_ARCH");
-  const char *vs_target_arch = getenv("VSCMD_ARG_TGT_ARCH");
-  if (vs_host_arch == nullptr || vs_target_arch == nullptr) {
-    return {};
-  }
-
-  // DONE, Concat them
-  return fmt::format("{}_{}", vs_host_arch, vs_target_arch);
-}
-
-std::optional<buildcc::ToolchainCompilerInfo>
-MsvcVerificationFunc(const buildcc::ToolchainExecutables &executables) {
-  (void)executables;
-  auto op_compiler_version = GetMsvcCompilerVersion();
-  auto op_target_arch = GetMsvcTargetArchitecture();
-  if (!op_compiler_version.has_value() || !op_target_arch.has_value()) {
-    return {};
-  }
-
-  buildcc::ToolchainCompilerInfo compiler_info;
-  compiler_info.compiler_version = op_compiler_version.value();
-  compiler_info.target_arch = op_target_arch.value();
-  return compiler_info;
-}
-
-//
-
 buildcc::ToolchainExecutables CreateToolchainExecutables(
     const fs::path &absolute_path,
     const buildcc::ToolchainExecutables &current_executables) {
@@ -146,82 +69,20 @@ buildcc::ToolchainExecutables CreateToolchainExecutables(
                                        linker_path);
 }
 
-std::string
-GetToolchainVerifyIdentifier(buildcc::ToolchainId id,
-                             const std::optional<std::string> &op_identifier) {
-  std::string identifier;
-  switch (id) {
-  case buildcc::ToolchainId::Custom:
-    buildcc::env::assert_fatal(
-        op_identifier.has_value(),
-        "Requires verification_identifier value in ToolchainVerifyConfig");
-    identifier = op_identifier.value();
-    break;
-  case buildcc::ToolchainId::Gcc:
-  case buildcc::ToolchainId::Msvc:
-  case buildcc::ToolchainId::Clang:
-  case buildcc::ToolchainId::MinGW:
-    identifier = fmt::format("{}", id);
-    break;
-  case buildcc::ToolchainId::Undefined:
-  default:
-    buildcc::env::assert_fatal<false>(
-        "Undefined toolchain. Use valid ToolchainId");
-    break;
-  }
-  return identifier;
-}
-
 } // namespace
 
 namespace buildcc {
 
 template <typename T>
-void ToolchainVerify<T>::AddVerificationFunc(
-    ToolchainId id, const ToolchainVerificationFunc &verification_func,
-    const std::optional<std::string> &op_identifier) {
-  std::string identifier;
-  switch (id) {
-  case ToolchainId::Gcc:
-  case ToolchainId::Msvc:
-  case ToolchainId::MinGW:
-  case ToolchainId::Clang:
-    identifier = fmt::format("{}", id);
-    break;
-  case ToolchainId::Custom:
-    env::assert_fatal(op_identifier.has_value(),
-                      "Requires optional identifier parameter when "
-                      "ToolchainId::Custom is defined");
-    identifier = op_identifier.value();
-    break;
-  default:
-    env::assert_fatal<false>("Invalid ToolchainId parameter");
-    break;
-  }
-
-  env::assert_fatal(
-      ToolchainVerify::GetStatic().count(identifier) == 0,
-      fmt::format("Already registered VerificationFunction for identifier '{}'",
-                  identifier));
-  ToolchainVerify::GetStatic()[identifier] = verification_func;
-}
-
-template <typename T>
 ToolchainCompilerInfo
-ToolchainVerify<T>::Verify(const ToolchainVerifyConfig &config) {
+ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
   T &t = static_cast<T &>(*this);
   std::vector<fs::path> toolchain_paths = t.Find(config);
   env::assert_fatal(!toolchain_paths.empty(), "No toolchains found");
 
   ToolchainExecutables exes =
       CreateToolchainExecutables(toolchain_paths[0], t.executables_);
-
-  std::string toolchain_id_identifier =
-      GetToolchainVerifyIdentifier(t.GetId(), config.verification_identifier);
-
-  const auto &verification_func =
-      T::GetVerificationFunc(toolchain_id_identifier);
-  auto op_toolchain_compiler_info = verification_func(exes);
+  auto op_toolchain_compiler_info = t.GetToolchainInfo(exes);
   env::assert_fatal(op_toolchain_compiler_info.has_value(),
                     "Could not verify toolchain");
 
@@ -235,34 +96,16 @@ ToolchainVerify<T>::Verify(const ToolchainVerifyConfig &config) {
 }
 
 // PRIVATE
-template <typename T> void ToolchainVerify<T>::Initialize() {
-  static bool do_once = true;
-
-  if (do_once) {
-    do_once = false;
-    AddVerificationFunc(ToolchainId::Gcc, GccVerificationFunc);
-    AddVerificationFunc(ToolchainId::Msvc, MsvcVerificationFunc);
-    AddVerificationFunc(ToolchainId::Clang, GccVerificationFunc);
-    AddVerificationFunc(ToolchainId::MinGW, GccVerificationFunc);
+template <typename T>
+std::optional<ToolchainCompilerInfo> ToolchainVerify<T>::GetToolchainInfo(
+    const ToolchainExecutables &executables) const {
+  const auto &cb = GetToolchainInfoFunc();
+  if (cb) {
+    return cb(executables);
   }
-}
-
-template <typename T>
-const ToolchainVerificationFunc &
-ToolchainVerify<T>::GetVerificationFunc(const std::string &identifier) {
-  const auto &verification_map = T::GetStatic();
-  env::assert_fatal(verification_map.count(identifier) == 1,
-                    "Add verification for custom toolchain through "
-                    "Toolchain::AddVerificationFunc API");
-  return verification_map.at(identifier);
-}
-
-template <typename T>
-std::unordered_map<std::string, ToolchainVerificationFunc> &
-ToolchainVerify<T>::GetStatic() {
-  static std::unordered_map<std::string, ToolchainVerificationFunc>
-      verification_func_map;
-  return verification_func_map;
+  env::log_critical(__FUNCTION__,
+                    "GetToolchainInfo virtual function not implemented");
+  return {};
 }
 
 template class ToolchainVerify<Toolchain>;

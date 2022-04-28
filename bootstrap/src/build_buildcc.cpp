@@ -90,6 +90,7 @@ void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
   target.GlobHeaders("lib/args/include/args");
 
   // Specialized Toolchains
+  target.GlobSources("toolchains/src");
   target.AddIncludeDir("toolchains/include");
   target.GlobHeaders("toolchains/include/toolchains");
 
