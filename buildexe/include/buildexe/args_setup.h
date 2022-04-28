@@ -77,9 +77,7 @@ public:
   void Setup(int argc, char **argv);
 
   // Getters
-  const ArgToolchain &GetHostToolchainArg() const {
-    return host_toolchain_arg_;
-  }
+  ArgToolchain &GetHostToolchainArg() { return host_toolchain_arg_; }
   const ArgTargetInfo &GetTargetInfo() const { return out_targetinfo_; }
   const ArgTargetInputs &GetTargetInputs() const { return out_targetinputs_; }
   const ArgScriptInfo &GetScriptInfo() const { return out_scriptinfo_; }
