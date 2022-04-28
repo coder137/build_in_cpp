@@ -37,7 +37,7 @@ public:
   Toolchain_msvc(const std::string &name = "msvc",
                  std::optional<ToolchainExecutables> op_executables = {},
                  std::optional<ToolchainConfig> op_config = {})
-      : Toolchain(ToolchainId::Gcc, name,
+      : Toolchain(ToolchainId::Msvc, name,
                   op_executables.value_or(
                       ToolchainExecutables("cl", "cl", "cl", "lib", "link")),
                   op_config.value_or(ToolchainConfig())) {}
