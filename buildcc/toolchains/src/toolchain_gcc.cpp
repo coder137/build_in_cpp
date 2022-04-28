@@ -17,6 +17,8 @@
 #include "toolchains/toolchain_gcc.h"
 #include "toolchains/toolchain_mingw.h"
 
+#include "toolchains/toolchain_infos.h"
+
 #include "env/command.h"
 
 namespace {
@@ -35,45 +37,6 @@ void UpdateGccConfig(buildcc::ToolchainConfig &config) {
   config.prefix_lib_dir = kGccPrefixLibDir;
 }
 
-std::optional<std::string>
-GetGccCompilerVersion(const buildcc::env::Command &command) {
-  std::vector<std::string> stdout_data;
-  bool executed = buildcc::env::Command::Execute(
-      command.Construct("{compiler} -dumpversion"), {}, &stdout_data);
-  if (!executed || stdout_data.empty()) {
-    return {};
-  }
-  return stdout_data[0];
-}
-
-std::optional<std::string>
-GetGccTargetArchitecture(const buildcc::env::Command &command) {
-  std::vector<std::string> stdout_data;
-  bool executed = buildcc::env::Command::Execute(
-      command.Construct("{compiler} -dumpmachine"), {}, &stdout_data);
-  if (!executed || stdout_data.empty()) {
-    return {};
-  }
-  return stdout_data[0];
-}
-
-std::optional<buildcc::ToolchainCompilerInfo>
-GetGccToolchainInfo(const buildcc::ToolchainExecutables &executables) {
-  buildcc::env::Command command;
-  command.AddDefaultArgument("compiler", executables.cpp_compiler);
-
-  auto op_compiler_version = GetGccCompilerVersion(command);
-  auto op_target_arch = GetGccTargetArchitecture(command);
-  if (!op_compiler_version.has_value() || !op_target_arch.has_value()) {
-    return {};
-  }
-
-  buildcc::ToolchainCompilerInfo compiler_info;
-  compiler_info.compiler_version = op_compiler_version.value();
-  compiler_info.target_arch = op_target_arch.value();
-  return compiler_info;
-}
-
 } // namespace
 
 namespace buildcc {
@@ -84,7 +47,7 @@ void Toolchain_gcc::UpdateConfig(ToolchainConfig &config) {
 
 std::optional<ToolchainCompilerInfo>
 Toolchain_gcc::GetToolchainInfo(const ToolchainExecutables &executables) const {
-  return GetGccToolchainInfo(executables);
+  return GlobalToolchainInfo::Get(ToolchainId::Gcc)(executables);
 }
 
 void Toolchain_mingw::UpdateConfig(ToolchainConfig &config) {
@@ -93,7 +56,7 @@ void Toolchain_mingw::UpdateConfig(ToolchainConfig &config) {
 
 std::optional<ToolchainCompilerInfo> Toolchain_mingw::GetToolchainInfo(
     const ToolchainExecutables &executables) const {
-  return GetGccToolchainInfo(executables);
+  return GlobalToolchainInfo::Get(ToolchainId::MinGW)(executables);
 }
 
 } // namespace buildcc
