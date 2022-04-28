@@ -7,6 +7,9 @@ set(TOOLCHAIN_SPECIALIZED_SRCS
     include/toolchains/toolchain_msvc.h
 
     include/toolchains/toolchain_generic.h
+
+    src/toolchain_infos.cpp
+    include/toolchains/toolchain_infos.h
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})
