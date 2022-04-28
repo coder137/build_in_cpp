@@ -47,7 +47,8 @@ struct ArgToolchainState {
  * command line
  * Bundled with Toolchain State
  */
-struct ArgToolchain : public Toolchain {
+class ArgToolchain : public Toolchain {
+public:
   ArgToolchain()
       : Toolchain(ToolchainId::Undefined, "", ToolchainExecutables()){};
   ArgToolchain(ToolchainId initial_id, const std::string &initial_name,
@@ -65,6 +66,7 @@ struct ArgToolchain : public Toolchain {
                                        initial_cpp_compiler, initial_archiver,
                                        initial_linker)) {}
 
+public:
   ArgToolchainState state;
   ToolchainId &id = RefId();
   std::string &name = RefName();
