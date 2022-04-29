@@ -58,7 +58,6 @@ int main(int argc, char **argv) {
 
   // Host Toolchain
   auto &toolchain = buildexe_args.GetHostToolchainArg();
-  toolchain.SetToolchainInfoFunc(GlobalToolchainInfo::Get(toolchain.id));
   toolchain.Verify();
 
   if (buildexe_args.GetBuildMode() == BuildExeMode::Script) {

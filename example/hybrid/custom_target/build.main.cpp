@@ -37,7 +37,6 @@ int main(int argc, char **argv) {
 
   // * NOTE, This is how we add our custom toolchain
   auto &clang = arg_toolchain_clang_gnu;
-  clang.SetToolchainInfoFunc(GlobalToolchainInfo::Get(clang.id));
   Target_custom c_foolib("CFoolib.exe", TargetType::Executable, clang, "",
                          arg_target_clang_gnu.GetTargetConfig());
   Reg::Toolchain(clang.state).Build(foolib_build_cb, c_foolib);
