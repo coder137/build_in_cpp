@@ -36,15 +36,7 @@
 #include "target/target.h"
 
 // Specialized Toolchain
-#include "toolchains/toolchain_gcc.h"
-#include "toolchains/toolchain_msvc.h"
-#include "toolchains/toolchain_mingw.h"
-#include "toolchains/toolchain_generic.h"
-#include "toolchains/toolchain_custom.h"
-
-#include "toolchains/toolchain_infos.h"
-
-// TODO, Add more specialized toolchains here
+#include "toolchains/toolchain_specialized.h"
 
 // Specialized Targets
 #include "targets/target_gcc.h"
