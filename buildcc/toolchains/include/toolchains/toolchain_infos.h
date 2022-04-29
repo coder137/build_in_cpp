@@ -25,10 +25,10 @@ namespace buildcc {
 
 class GlobalToolchainInfo {
 public:
-  static const ToolchainInfoFunc &Get(ToolchainId id);
+  static const ToolchainInfoCb &Get(ToolchainId id);
 
 private:
-  static std::unordered_map<ToolchainId, ToolchainInfoFunc>
+  static std::unordered_map<ToolchainId, ToolchainInfoCb>
       global_toolchain_info_func_;
 };
 

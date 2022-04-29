@@ -244,11 +244,11 @@ TEST(ToolchainVerifyTestGroup, CustomToolchainInfo) {
   buildcc::Toolchain toolchain(
       buildcc::ToolchainId::Gcc, "gcc",
       buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
-  toolchain.SetToolchainInfoFunc(
+  toolchain.SetToolchainInfoCb(
       [](const buildcc::ToolchainExecutables &executables)
           -> std::optional<buildcc::ToolchainCompilerInfo> {
         (void)executables;
-        mock().actualCall("SetToolchainInfoFunc");
+        mock().actualCall("SetToolchainInfoCb");
         buildcc::ToolchainCompilerInfo info;
         info.compiler_version = "version";
         info.target_arch = "arch";
@@ -267,7 +267,7 @@ TEST(ToolchainVerifyTestGroup, CustomToolchainInfo) {
   config.env_vars.clear();
   config.env_vars.insert("CUSTOM_BUILDCC_PATH");
 
-  mock().expectOneCall("SetToolchainInfoFunc");
+  mock().expectOneCall("SetToolchainInfoCb");
   auto info = toolchain.Verify(config);
   STRCMP_EQUAL(info.compiler_version.c_str(), "version");
   STRCMP_EQUAL(info.target_arch.c_str(), "arch");

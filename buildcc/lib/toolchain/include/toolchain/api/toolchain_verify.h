@@ -51,7 +51,7 @@ struct ToolchainCompilerInfo {
 };
 
 // clang-format off
-typedef std::function<std::optional<ToolchainCompilerInfo>(const ToolchainExecutables &)> ToolchainInfoFunc;
+typedef std::function<std::optional<ToolchainCompilerInfo>(const ToolchainExecutables &)> ToolchainInfoCb;
 // clang-format on
 
 template <typename T> class ToolchainVerify {
@@ -74,8 +74,8 @@ public:
   /**
    * @brief Set ToolchainInfo callback for run time objects
    */
-  void SetToolchainInfoFunc(const ToolchainInfoFunc &cb) { info_func_ = cb; }
-  const ToolchainInfoFunc &GetToolchainInfoFunc() const { return info_func_; }
+  void SetToolchainInfoCb(const ToolchainInfoCb &cb) { info_func_ = cb; }
+  const ToolchainInfoCb &GetToolchainInfoCb() const { return info_func_; }
 
 private:
   /**
@@ -85,7 +85,7 @@ private:
   GetToolchainInfo(const ToolchainExecutables &executables) const;
 
 private:
-  ToolchainInfoFunc info_func_;
+  ToolchainInfoCb info_func_;
 };
 
 } // namespace buildcc

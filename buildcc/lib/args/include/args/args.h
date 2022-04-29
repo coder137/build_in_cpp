@@ -84,11 +84,10 @@ private:
       return GlobalToolchainInfo::Get(id)(executables);
       break;
     case ToolchainId::Custom:
-      ASSERT_FATAL(GetToolchainInfoFunc(),
-                   "For ToolchainId::Custom "
-                   "add ToolchainInfoFunc using the "
-                   "Toolchain::SetToolchainInfoFunc API");
-      return GetToolchainInfoFunc()(executables);
+      ASSERT_FATAL(GetToolchainInfoCb(), "For ToolchainId::Custom "
+                                         "add ToolchainInfoCb using the "
+                                         "Toolchain::SetToolchainInfoCb API");
+      return GetToolchainInfoCb()(executables);
       break;
     default:
       break;

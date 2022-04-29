@@ -118,7 +118,7 @@ namespace buildcc {
 
 // TODO, Shift this to toolchain.h
 // Create a global_toolchain.h file which manages global toolchain state
-std::unordered_map<ToolchainId, ToolchainInfoFunc>
+std::unordered_map<ToolchainId, ToolchainInfoCb>
     GlobalToolchainInfo::global_toolchain_info_func_{
         {ToolchainId::Gcc, GetGccToolchainInfo},
         {ToolchainId::MinGW, GetGccToolchainInfo},
@@ -128,7 +128,7 @@ std::unordered_map<ToolchainId, ToolchainInfoFunc>
         {ToolchainId::Undefined, GetErrorToolchainInfo},
     };
 
-const ToolchainInfoFunc &GlobalToolchainInfo::Get(ToolchainId id) {
+const ToolchainInfoCb &GlobalToolchainInfo::Get(ToolchainId id) {
   env::assert_fatal(global_toolchain_info_func_.find(id) !=
                         global_toolchain_info_func_.end(),
                     "Invalid ToolchainId");

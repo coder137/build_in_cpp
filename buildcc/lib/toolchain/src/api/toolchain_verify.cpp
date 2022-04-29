@@ -99,7 +99,7 @@ ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
 template <typename T>
 std::optional<ToolchainCompilerInfo> ToolchainVerify<T>::GetToolchainInfo(
     const ToolchainExecutables &executables) const {
-  const auto &cb = GetToolchainInfoFunc();
+  const auto &cb = GetToolchainInfoCb();
   if (cb) {
     return cb(executables);
   }
