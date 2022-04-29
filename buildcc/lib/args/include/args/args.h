@@ -54,17 +54,6 @@ public:
   ArgToolchain(ToolchainId initial_id, const std::string &initial_name,
                const ToolchainExecutables &initial_executables)
       : Toolchain(initial_id, initial_name, initial_executables) {}
-  [[deprecated]] ArgToolchain(ToolchainId initial_id,
-                              const std::string &initial_name,
-                              const std::string &initial_assembler,
-                              const std::string &initial_c_compiler,
-                              const std::string &initial_cpp_compiler,
-                              const std::string &initial_archiver,
-                              const std::string &initial_linker)
-      : Toolchain(initial_id, initial_name,
-                  ToolchainExecutables(initial_assembler, initial_c_compiler,
-                                       initial_cpp_compiler, initial_archiver,
-                                       initial_linker)) {}
 
 public:
   ArgToolchainState state;
