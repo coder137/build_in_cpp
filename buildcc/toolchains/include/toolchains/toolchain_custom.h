@@ -23,13 +23,7 @@
 
 namespace buildcc {
 
-class Toolchain_custom : public Toolchain {
-public:
-  Toolchain_custom(const std::string &name,
-                   const ToolchainExecutables &executables,
-                   const ToolchainConfig &config = ToolchainConfig())
-      : Toolchain(ToolchainId::Custom, name, executables, config) {}
-};
+typedef Toolchain Toolchain_custom;
 
 } // namespace buildcc
 
