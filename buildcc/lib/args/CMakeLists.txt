@@ -20,6 +20,7 @@ target_link_libraries(mock_args PUBLIC
     CLI11::CLI11
 
     mock_target
+    mock_toolchain_specialized
 
     CppUTest
     CppUTestExt
@@ -82,6 +83,8 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     )
     target_link_libraries(args PRIVATE
         target
+
+        toolchain_specialized
     )
     target_compile_options(args PRIVATE ${BUILD_COMPILE_FLAGS})
     target_link_options(args PRIVATE ${BUILD_LINK_FLAGS})

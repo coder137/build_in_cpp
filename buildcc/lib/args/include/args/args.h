@@ -25,7 +25,7 @@
 // BuildCC
 #include "env/logging.h"
 
-#include "toolchain/toolchain.h"
+#include "toolchains/toolchain_specialized.h"
 
 #include "target/common/target_config.h"
 
@@ -72,6 +72,30 @@ public:
   std::string &name = RefName();
   ToolchainExecutables &executables = RefExecutables();
   ToolchainConfig &config = RefConfig();
+
+private:
+  std::optional<ToolchainCompilerInfo>
+  GetToolchainInfo(const ToolchainExecutables &executables) const override {
+    switch (id) {
+    case ToolchainId::Gcc:
+    case ToolchainId::MinGW:
+    case ToolchainId::Msvc:
+    case ToolchainId::Clang:
+      return GlobalToolchainInfo::Get(id)(executables);
+      break;
+    case ToolchainId::Custom:
+      ASSERT_FATAL(GetToolchainInfoFunc(),
+                   "For ToolchainId::Custom "
+                   "add ToolchainInfoFunc using the "
+                   "Toolchain::SetToolchainInfoFunc API");
+      return GetToolchainInfoFunc()(executables);
+      break;
+    default:
+      break;
+    }
+
+    return {};
+  }
 };
 
 // NOTE, Incomplete without pch_compile_command
