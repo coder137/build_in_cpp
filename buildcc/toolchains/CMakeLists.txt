@@ -10,7 +10,31 @@ set(TOOLCHAIN_SPECIALIZED_SRCS
 
     src/toolchain_infos.cpp
     include/toolchains/toolchain_infos.h
+
+    include/toolchains/toolchain_specialized.h
 )
+
+if (${TESTING})
+    add_library(mock_toolchain_specialized
+        ${TOOLCHAIN_SPECIALIZED_SRCS}
+    )
+    target_include_directories(mock_toolchain_specialized PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+    )
+    target_compile_options(mock_toolchain_specialized PUBLIC 
+    ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_FLAGS}
+    )
+    target_link_options(mock_toolchain_specialized PUBLIC 
+        ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS}
+    )
+    target_link_libraries(mock_toolchain_specialized PUBLIC 
+        mock_toolchain
+
+        CppUTest
+        CppUTestExt
+        ${TEST_LINK_LIBS}
+    )
+endif()
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})
     target_sources(buildcc PRIVATE
