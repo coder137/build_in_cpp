@@ -52,8 +52,10 @@ public:
   ArgToolchain()
       : Toolchain(ToolchainId::Undefined, "", ToolchainExecutables()){};
   ArgToolchain(ToolchainId initial_id, const std::string &initial_name,
-               const ToolchainExecutables &initial_executables)
-      : Toolchain(initial_id, initial_name, initial_executables) {}
+               const ToolchainExecutables &initial_executables,
+               const ToolchainConfig &initial_config)
+      : Toolchain(initial_id, initial_name, initial_executables,
+                  initial_config) {}
 
 public:
   ArgToolchainState state;
