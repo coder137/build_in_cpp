@@ -66,26 +66,7 @@ public:
 
 private:
   std::optional<ToolchainCompilerInfo>
-  GetToolchainInfo(const ToolchainExecutables &executables) const override {
-    switch (id) {
-    case ToolchainId::Gcc:
-    case ToolchainId::MinGW:
-    case ToolchainId::Msvc:
-    case ToolchainId::Clang:
-      return GlobalToolchainInfo::Get(id)(executables);
-      break;
-    case ToolchainId::Custom:
-      ASSERT_FATAL(GetToolchainInfoCb(), "For ToolchainId::Custom "
-                                         "add ToolchainInfoCb using the "
-                                         "Toolchain::SetToolchainInfoCb API");
-      return GetToolchainInfoCb()(executables);
-      break;
-    default:
-      break;
-    }
-
-    return {};
-  }
+  GetToolchainInfo(const ToolchainExecutables &exes) const override;
 };
 
 // NOTE, Incomplete without pch_compile_command
