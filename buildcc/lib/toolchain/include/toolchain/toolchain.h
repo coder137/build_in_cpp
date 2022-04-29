@@ -58,6 +58,7 @@ public:
                                        archiver, linker),
                   config) {}
 
+  virtual ~Toolchain() = default;
   Toolchain(Toolchain &&) = default;
   Toolchain &operator=(Toolchain &&) = default;
   Toolchain(const Toolchain &) = delete;
