@@ -43,9 +43,7 @@ public:
             const ToolchainExecutables &executables,
             const ToolchainConfig &config = ToolchainConfig())
       : id_(id), name_(name), executables_(executables), config_(config),
-        lock_(false) {
-    Initialize();
-  }
+        lock_(false) {}
 
   [[deprecated]] Toolchain(ToolchainId id, std::string_view name,
                            std::string_view assembler,
@@ -100,11 +98,6 @@ private:
     std::unordered_set<std::string> cpp_compile_flags;
     std::unordered_set<std::string> link_flags;
   };
-
-private:
-  void Initialize();
-
-  virtual void UpdateConfig(ToolchainConfig &config);
 
 private:
   friend class internal::FlagApi<Toolchain>;

@@ -16,13 +16,10 @@
 
 #include "toolchain/toolchain.h"
 
+#include <iostream>
+
 namespace buildcc {
 
-void Toolchain::Initialize() { UpdateConfig(config_); }
-
 void Toolchain::Lock() { lock_.Lock(); }
-
-// PRIVATE
-void Toolchain::UpdateConfig(ToolchainConfig &config) { (void)config; }
 
 } // namespace buildcc
