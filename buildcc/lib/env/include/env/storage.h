@@ -100,10 +100,10 @@ private:
    * @param ptr Can hold data of any type
    * @param typeid_name We cannot store a template type so this is the next
    * best thing
-   * @param desstructor Destructor callback to delete ptr
+   * @param destructor Destructor callback to delete ptr
    */
   struct PtrMetadata {
-    void *ptr;
+    void *ptr{nullptr};
     std::string typeid_name;
     std::function<void(void)> destructor;
   };
