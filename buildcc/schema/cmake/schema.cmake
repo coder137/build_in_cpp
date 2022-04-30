@@ -18,7 +18,7 @@ if (${TESTING})
     )
     target_link_libraries(mock_schema PUBLIC
         mock_env
-        flatbuffers_header_only
+        flatbuffers
     
         CppUTest
         CppUTestExt
@@ -77,7 +77,7 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     target_compile_options(schema PRIVATE ${BUILD_COMPILE_FLAGS})
     target_link_options(schema PRIVATE ${BUILD_LINK_FLAGS})
     target_link_libraries(schema PRIVATE
-        flatbuffers_header_only
+        flatbuffers
     )
     add_dependencies(schema fbs_to_header)
 endif()
