@@ -35,6 +35,27 @@ public:
       : buildcc::Toolchain(id, name, executables) {}
 };
 
+// NOTE, We are mocking the environment instead of actually querying it
+TEST(ToolchainVerifyTestGroup, VerifyToolchain_BaseToolchain_Failure) {
+  MockToolchain gcc(
+      buildcc::ToolchainId::Gcc, "gcc",
+      buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
+
+  std::string putenv_str =
+      fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc", fs::current_path());
+  int put = putenv(putenv_str.data());
+  CHECK_TRUE(put == 0);
+  const char *custom_buildcc_path = getenv("CUSTOM_BUILDCC_PATH");
+  CHECK_TRUE(custom_buildcc_path != nullptr);
+  UT_PRINT(custom_buildcc_path);
+
+  buildcc::ToolchainFindConfig config;
+  config.env_vars.clear();
+  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
+
+  CHECK_THROWS(std::exception, gcc.Verify(config));
+}
+
 TEST(ToolchainVerifyTestGroup, VerifyToolchain_BadAbsolutePath) {
   MockToolchain gcc(buildcc::ToolchainId::Gcc, "gcc");
 
