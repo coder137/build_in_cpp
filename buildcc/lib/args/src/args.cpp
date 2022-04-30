@@ -170,9 +170,12 @@ Args::Instance &Args::Instance::AddToolchain(const std::string &name,
   CLI::App *toolchain = RefInternal().toolchain;
   CLI::App *t_user =
       toolchain->add_subcommand(name, description)->group(kToolchainGroup);
+
+  // State
   t_user->add_flag(kToolchainBuildParam, out.state.build);
   t_user->add_flag(kToolchainTestParam, out.state.test);
 
+  // Id, Name, Executables
   t_user->add_option(kToolchainIdParam, out.id, kToolchainIdDesc)
       ->transform(CLI::CheckedTransformer(kToolchainIdMap, CLI::ignore_case))
       ->default_val(initial.id);
@@ -187,6 +190,8 @@ Args::Instance &Args::Instance::AddToolchain(const std::string &name,
       ->default_val(initial.executables.archiver);
   t_user->add_option(kToolchainLinkerParam, out.executables.linker)
       ->default_val(initial.executables.linker);
+
+  // TODO, Add toolchain config
   return *this;
 }
 

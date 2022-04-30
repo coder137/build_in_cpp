@@ -23,13 +23,27 @@
 
 namespace buildcc {
 
-class GlobalToolchainInfo {
+class GlobalToolchainMetadata {
 public:
-  static const ToolchainInfoFunc &Get(ToolchainId id);
+  static const ToolchainConfig &GetConfig(ToolchainId id);
+  static const ToolchainInfoCb &GetInfoCb(ToolchainId id);
 
 private:
-  static std::unordered_map<ToolchainId, ToolchainInfoFunc>
-      global_toolchain_info_func_;
+  struct ToolchainMetadata {
+    ToolchainMetadata(const ToolchainConfig &config, const ToolchainInfoCb &cb)
+        : config_(config), cb_(cb) {}
+
+    ToolchainConfig config_;
+    ToolchainInfoCb cb_;
+  };
+
+private:
+  static void Expect(ToolchainId id);
+  static const ToolchainMetadata &Get(ToolchainId id);
+
+private:
+  static std::unordered_map<ToolchainId, ToolchainMetadata>
+      global_toolchain_metadata_;
 };
 
 } // namespace buildcc

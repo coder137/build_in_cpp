@@ -40,15 +40,15 @@ public:
       : Toolchain(ToolchainId::Gcc, name,
                   op_executables.value_or(
                       ToolchainExecutables("as", "gcc", "g++", "ar", "ld")),
-                  op_config.value_or(ToolchainConfig())) {}
+                  op_config.value_or(ToolchainConfig())) {
+    Initialize();
+  }
 
   virtual ~Toolchain_gcc() = default;
-  Toolchain_gcc(const Toolchain_gcc &gcc) = delete;
+  Toolchain_gcc(const Toolchain_gcc &) = delete;
 
 private:
-  void UpdateConfig(ToolchainConfig &config) override;
-  std::optional<ToolchainCompilerInfo>
-  GetToolchainInfo(const ToolchainExecutables &executables) const override;
+  void Initialize();
 };
 
 } // namespace buildcc

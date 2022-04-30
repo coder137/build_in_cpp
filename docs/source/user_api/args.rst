@@ -10,7 +10,7 @@ args.h
 
 .. doxygenstruct:: buildcc::ArgToolchainState
 
-.. doxygenstruct:: buildcc::ArgToolchain
+.. doxygenclass:: buildcc::ArgToolchain
 
 .. doxygenstruct:: buildcc::ArgTarget
 

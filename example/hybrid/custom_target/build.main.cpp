@@ -36,11 +36,11 @@ int main(int argc, char **argv) {
   Reg::Toolchain(arg_msvc.state).Build(foolib_build_cb, m_foolib);
 
   // * NOTE, This is how we add our custom toolchain
-  auto &clang = arg_toolchain_clang_gnu;
-  clang.SetToolchainInfoFunc(GlobalToolchainInfo::Get(clang.id));
+  auto &clang = arg_toolchain_clang_gnu.ConstructToolchain();
   Target_custom c_foolib("CFoolib.exe", TargetType::Executable, clang, "",
                          arg_target_clang_gnu.GetTargetConfig());
-  Reg::Toolchain(clang.state).Build(foolib_build_cb, c_foolib);
+  Reg::Toolchain(arg_toolchain_clang_gnu.state)
+      .Build(foolib_build_cb, c_foolib);
 
   //
   Reg::Run();

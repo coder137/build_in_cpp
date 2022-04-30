@@ -23,6 +23,20 @@
 namespace {
 
 // GCC
+constexpr const char *const kGccObjExt = ".o";
+constexpr const char *const kGccPchHeaderExt = ".h";
+constexpr const char *const kGccPchCompileExt = ".gch";
+constexpr const char *const kGccPrefixIncludeDir = "-I";
+constexpr const char *const kGccPrefixLibDir = "-L";
+buildcc::ToolchainConfig GetGccToolchainConfig() {
+  buildcc::ToolchainConfig config;
+  config.obj_ext = kGccObjExt;
+  config.pch_header_ext = kGccPchHeaderExt;
+  config.pch_compile_ext = kGccPchCompileExt;
+  config.prefix_include_dir = kGccPrefixIncludeDir;
+  config.prefix_lib_dir = kGccPrefixLibDir;
+  return config;
+}
 
 std::optional<std::string>
 GetGccCompilerVersion(const buildcc::env::Command &command) {
@@ -64,6 +78,21 @@ GetGccToolchainInfo(const buildcc::ToolchainExecutables &executables) {
 }
 
 // MSVC
+
+constexpr const char *const kMsvcObjExt = ".obj";
+constexpr const char *const kMsvcPchHeaderExt = ".h";
+constexpr const char *const kMsvcPchCompileExt = ".pch";
+constexpr const char *const kMsvcPrefixIncludeDir = "/I";
+constexpr const char *const kMsvcPrefixLibDir = "/LIBPATH:";
+buildcc::ToolchainConfig GetMsvcToolchainConfig() {
+  buildcc::ToolchainConfig config;
+  config.obj_ext = kMsvcObjExt;
+  config.pch_header_ext = kMsvcPchHeaderExt;
+  config.pch_compile_ext = kMsvcPchCompileExt;
+  config.prefix_include_dir = kMsvcPrefixIncludeDir;
+  config.prefix_lib_dir = kMsvcPrefixLibDir;
+  return config;
+}
 
 std::optional<std::string> GetMsvcCompilerVersion() {
   const char *vscmd_version = getenv("VSCMD_VER");
@@ -108,7 +137,8 @@ GetErrorToolchainInfo(const buildcc::ToolchainExecutables &executables) {
   (void)executables;
   buildcc::env::log_critical(__FUNCTION__,
                              "ToolchainInfo does not exist for particular "
-                             "ToolchainId. Supply your own through 3 methods.");
+                             "ToolchainId. Supply your own through "
+                             "Toolchain::SetToolchainInfoCb method.");
   return {};
 }
 
@@ -116,23 +146,40 @@ GetErrorToolchainInfo(const buildcc::ToolchainExecutables &executables) {
 
 namespace buildcc {
 
-// TODO, Shift this to toolchain.h
-// Create a global_toolchain.h file which manages global toolchain state
-std::unordered_map<ToolchainId, ToolchainInfoFunc>
-    GlobalToolchainInfo::global_toolchain_info_func_{
-        {ToolchainId::Gcc, GetGccToolchainInfo},
-        {ToolchainId::MinGW, GetGccToolchainInfo},
-        {ToolchainId::Clang, GetGccToolchainInfo},
-        {ToolchainId::Msvc, GetMsvcToolchainInfo},
-        {ToolchainId::Custom, GetErrorToolchainInfo},
-        {ToolchainId::Undefined, GetErrorToolchainInfo},
+std::unordered_map<ToolchainId, GlobalToolchainMetadata::ToolchainMetadata>
+    GlobalToolchainMetadata::global_toolchain_metadata_{
+        {ToolchainId::Gcc,
+         ToolchainMetadata(GetGccToolchainConfig(), GetGccToolchainInfo)},
+        {ToolchainId::MinGW,
+         ToolchainMetadata(GetGccToolchainConfig(), GetGccToolchainInfo)},
+        {ToolchainId::Clang,
+         ToolchainMetadata(GetGccToolchainConfig(), GetGccToolchainInfo)},
+        {ToolchainId::Msvc,
+         ToolchainMetadata(GetMsvcToolchainConfig(), GetMsvcToolchainInfo)},
+        {ToolchainId::Custom,
+         ToolchainMetadata(ToolchainConfig(), GetErrorToolchainInfo)},
+        {ToolchainId::Undefined,
+         ToolchainMetadata(ToolchainConfig(), GetErrorToolchainInfo)},
     };
 
-const ToolchainInfoFunc &GlobalToolchainInfo::Get(ToolchainId id) {
-  env::assert_fatal(global_toolchain_info_func_.find(id) !=
-                        global_toolchain_info_func_.end(),
+const ToolchainConfig &GlobalToolchainMetadata::GetConfig(ToolchainId id) {
+  Expect(id);
+  return Get(id).config_;
+}
+const ToolchainInfoCb &GlobalToolchainMetadata::GetInfoCb(ToolchainId id) {
+  Expect(id);
+  return Get(id).cb_;
+}
+
+// PRIVATE
+void GlobalToolchainMetadata::Expect(ToolchainId id) {
+  env::assert_fatal(global_toolchain_metadata_.find(id) !=
+                        global_toolchain_metadata_.end(),
                     "Invalid ToolchainId");
-  return global_toolchain_info_func_[id];
+}
+const GlobalToolchainMetadata::ToolchainMetadata &
+GlobalToolchainMetadata::Get(ToolchainId id) {
+  return global_toolchain_metadata_.at(id);
 }
 
 } // namespace buildcc

@@ -25,7 +25,7 @@
 // BuildCC
 #include "env/logging.h"
 
-#include "toolchain/toolchain.h"
+#include "toolchains/toolchain_specialized.h"
 
 #include "target/common/target_config.h"
 
@@ -47,31 +47,27 @@ struct ArgToolchainState {
  * command line
  * Bundled with Toolchain State
  */
-class ArgToolchain : public Toolchain {
+class ArgToolchain {
 public:
   ArgToolchain()
-      : Toolchain(ToolchainId::Undefined, "", ToolchainExecutables()){};
+      : ArgToolchain(ToolchainId::Undefined, "", ToolchainExecutables(),
+                     ToolchainConfig()) {}
   ArgToolchain(ToolchainId initial_id, const std::string &initial_name,
-               const ToolchainExecutables &initial_executables)
-      : Toolchain(initial_id, initial_name, initial_executables) {}
-  [[deprecated]] ArgToolchain(ToolchainId initial_id,
-                              const std::string &initial_name,
-                              const std::string &initial_assembler,
-                              const std::string &initial_c_compiler,
-                              const std::string &initial_cpp_compiler,
-                              const std::string &initial_archiver,
-                              const std::string &initial_linker)
-      : Toolchain(initial_id, initial_name,
-                  ToolchainExecutables(initial_assembler, initial_c_compiler,
-                                       initial_cpp_compiler, initial_archiver,
-                                       initial_linker)) {}
+               const ToolchainExecutables &initial_executables,
+               const ToolchainConfig &initial_config)
+      : id(initial_id), name(initial_name), executables(initial_executables),
+        config(initial_config) {}
+
+  Toolchain &ConstructToolchain() {
+    return Toolchain_generic::New(id, name, executables, config);
+  }
 
 public:
   ArgToolchainState state;
-  ToolchainId &id = RefId();
-  std::string &name = RefName();
-  ToolchainExecutables &executables = RefExecutables();
-  ToolchainConfig &config = RefConfig();
+  ToolchainId id;
+  std::string name;
+  ToolchainExecutables executables;
+  ToolchainConfig config;
 };
 
 // NOTE, Incomplete without pch_compile_command

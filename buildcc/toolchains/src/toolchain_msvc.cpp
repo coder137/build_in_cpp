@@ -18,29 +18,11 @@
 
 #include "toolchains/toolchain_infos.h"
 
-namespace {
-
-constexpr const char *const kMsvcObjExt = ".obj";
-constexpr const char *const kMsvcPchHeaderExt = ".h";
-constexpr const char *const kMsvcPchCompileExt = ".pch";
-constexpr const char *const kMsvcPrefixIncludeDir = "/I";
-constexpr const char *const kMsvcPrefixLibDir = "/LIBPATH:";
-
-} // namespace
-
 namespace buildcc {
 
-void Toolchain_msvc::UpdateConfig(ToolchainConfig &config) {
-  config.obj_ext = kMsvcObjExt;
-  config.pch_header_ext = kMsvcPchHeaderExt;
-  config.pch_compile_ext = kMsvcPchCompileExt;
-  config.prefix_include_dir = kMsvcPrefixIncludeDir;
-  config.prefix_lib_dir = kMsvcPrefixLibDir;
-}
-
-std::optional<ToolchainCompilerInfo> Toolchain_msvc::GetToolchainInfo(
-    const ToolchainExecutables &executables) const {
-  return GlobalToolchainInfo::Get(ToolchainId::Msvc)(executables);
+void Toolchain_msvc::Initialize() {
+  RefConfig() = GlobalToolchainMetadata::GetConfig(ToolchainId::Msvc);
+  SetToolchainInfoCb(GlobalToolchainMetadata::GetInfoCb(ToolchainId::Msvc));
 }
 
 } // namespace buildcc

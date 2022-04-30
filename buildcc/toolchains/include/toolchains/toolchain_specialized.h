@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-#include "toolchains/toolchain_gcc.h"
-#include "toolchains/toolchain_mingw.h"
+#ifndef TOOLCHAINS_TOOLCHAIN_SPECIALIZED_H_
+#define TOOLCHAINS_TOOLCHAIN_SPECIALIZED_H_
 
-#include "toolchains/toolchain_infos.h"
+// Common
+#include "toolchain_infos.h"
 
-#include "env/command.h"
+// Toolchain specialized implementation
+#include "toolchain_gcc.h"
+#include "toolchain_mingw.h"
+#include "toolchain_msvc.h"
 
-namespace buildcc {
+// Aggregation
+#include "toolchain_custom.h"
+#include "toolchain_generic.h"
 
-void Toolchain_gcc::Initialize() {
-  RefConfig() = GlobalToolchainMetadata::GetConfig(ToolchainId::Gcc);
-  SetToolchainInfoCb(GlobalToolchainMetadata::GetInfoCb(ToolchainId::Gcc));
-}
-
-void Toolchain_mingw::Initialize() {
-  RefConfig() = GlobalToolchainMetadata::GetConfig(ToolchainId::MinGW);
-  SetToolchainInfoCb(GlobalToolchainMetadata::GetInfoCb(ToolchainId::MinGW));
-}
-
-} // namespace buildcc
+#endif

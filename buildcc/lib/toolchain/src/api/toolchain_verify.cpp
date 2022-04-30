@@ -82,7 +82,10 @@ ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
 
   ToolchainExecutables exes =
       CreateToolchainExecutables(toolchain_paths[0], t.executables_);
-  auto op_toolchain_compiler_info = t.GetToolchainInfo(exes);
+  std::optional<ToolchainCompilerInfo> op_toolchain_compiler_info{};
+  if (GetToolchainInfoCb()) {
+    op_toolchain_compiler_info = GetToolchainInfoCb()(exes);
+  }
   env::assert_fatal(op_toolchain_compiler_info.has_value(),
                     "Could not verify toolchain");
 
@@ -93,19 +96,6 @@ ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
   // Update the compilers
   t.executables_ = exes;
   return toolchain_compiler_info;
-}
-
-// PRIVATE
-template <typename T>
-std::optional<ToolchainCompilerInfo> ToolchainVerify<T>::GetToolchainInfo(
-    const ToolchainExecutables &executables) const {
-  const auto &cb = GetToolchainInfoFunc();
-  if (cb) {
-    return cb(executables);
-  }
-  env::log_critical(__FUNCTION__,
-                    "GetToolchainInfo virtual function not implemented");
-  return {};
 }
 
 template class ToolchainVerify<Toolchain>;

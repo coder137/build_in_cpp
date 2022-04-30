@@ -20,8 +20,6 @@ toolchain_verify.h
 
 .. doxygenclass:: buildcc::ToolchainVerify
 
-.. doxygenstruct:: buildcc::ToolchainVerifyConfig
-
 .. doxygenstruct:: buildcc::ToolchainCompilerInfo
 
 Example for Default Toolchain
