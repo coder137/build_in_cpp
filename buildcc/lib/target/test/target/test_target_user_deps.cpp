@@ -27,8 +27,9 @@ TEST_GROUP(TargetTestUserDepsGroup)
 };
 // clang-format on
 
-static buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc",
-                              "g++", "ar", "ld");
+static buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc",
+                              buildcc::ToolchainExecutables("as", "gcc", "g++",
+                                                            "ar", "ld"));
 
 static const fs::path target_source_intermediate_path =
     fs::path(BUILD_TARGET_USER_DEPS_INTERMEDIATE_DIR) / gcc.GetName();

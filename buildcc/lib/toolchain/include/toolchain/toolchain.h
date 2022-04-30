@@ -45,17 +45,6 @@ public:
       : id_(id), name_(name), executables_(executables), config_(config),
         lock_(false) {}
 
-  [[deprecated]] Toolchain(ToolchainId id, std::string_view name,
-                           std::string_view assembler,
-                           std::string_view c_compiler,
-                           std::string_view cpp_compiler,
-                           std::string_view archiver, std::string_view linker,
-                           const ToolchainConfig &config = ToolchainConfig())
-      : Toolchain(id, name,
-                  ToolchainExecutables(assembler, c_compiler, cpp_compiler,
-                                       archiver, linker),
-                  config) {}
-
   virtual ~Toolchain() = default;
   Toolchain(Toolchain &&) = default;
   Toolchain &operator=(Toolchain &&) = default;

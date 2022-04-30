@@ -108,8 +108,9 @@ TEST(RegisterTestGroup, Register_Build) {
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
-  buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
-                               "");
+  buildcc::Toolchain toolchain(
+      buildcc::ToolchainId::Gcc, "",
+      buildcc::ToolchainExecutables("", "", "", "", ""));
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
 
@@ -160,8 +161,9 @@ TEST(RegisterTestGroup, Register_Run_PostCb) {
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
-  buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
-                               "");
+  buildcc::Toolchain toolchain(
+      buildcc::ToolchainId::Gcc, "",
+      buildcc::ToolchainExecutables("", "", "", "", ""));
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
 
@@ -203,8 +205,9 @@ TEST(RegisterTestGroup, Register_NoBuildAndDep) {
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
-  buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
-                               "");
+  buildcc::Toolchain toolchain(
+      buildcc::ToolchainId::Gcc, "",
+      buildcc::ToolchainExecutables("", "", "", "", ""));
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
   buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
@@ -292,8 +295,9 @@ TEST(RegisterTestGroup, Register_BuildAndDep) {
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
-  buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
-                               "");
+  buildcc::Toolchain toolchain(
+      buildcc::ToolchainId::Gcc, "",
+      buildcc::ToolchainExecutables("", "", "", "", ""));
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
   buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
@@ -389,8 +393,9 @@ TEST(RegisterTestGroup, Register_DepDuplicate) {
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
-  buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
-                               "");
+  buildcc::Toolchain toolchain(
+      buildcc::ToolchainId::Gcc, "",
+      buildcc::ToolchainExecutables("", "", "", "", ""));
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
   buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
@@ -465,8 +470,9 @@ TEST(RegisterTestGroup, Register_DepCyclic) {
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
-  buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
-                               "");
+  buildcc::Toolchain toolchain(
+      buildcc::ToolchainId::Gcc, "",
+      buildcc::ToolchainExecutables("", "", "", "", ""));
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
   buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
@@ -542,8 +548,9 @@ TEST(RegisterTestGroup, Register_Test) {
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
-  buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
-                               "");
+  buildcc::Toolchain toolchain(
+      buildcc::ToolchainId::Gcc, "",
+      buildcc::ToolchainExecutables("", "", "", "", ""));
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
   buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,
@@ -632,8 +639,9 @@ TEST(RegisterTestGroup, Register_TestWithOutput) {
 
   // Make dummy toolchain and target
   buildcc::Project::Init(fs::current_path(), fs::current_path());
-  buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "", "", "", "", "",
-                               "");
+  buildcc::Toolchain toolchain(
+      buildcc::ToolchainId::Gcc, "",
+      buildcc::ToolchainExecutables("", "", "", "", ""));
   buildcc::BaseTarget target("dummyT", buildcc::TargetType::Executable,
                              toolchain, "");
   buildcc::BaseTarget dependency("depT", buildcc::TargetType::Executable,

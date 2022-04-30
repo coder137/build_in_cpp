@@ -25,8 +25,9 @@ TEST_GROUP(TargetTestLock)
 };
 // clang-format on
 
-static buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc",
-                              "g++", "ar", "ld");
+static buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc",
+                              buildcc::ToolchainExecutables("as", "gcc", "g++",
+                                                            "ar", "ld"));
 
 TEST(TargetTestLock, LockState) {
   constexpr const char *const NAME = "LockState.exe";

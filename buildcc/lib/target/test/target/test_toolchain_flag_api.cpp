@@ -15,8 +15,9 @@ TEST_GROUP(ToolchainFlagApiTestGroup)
 // clang-format on
 
 TEST(ToolchainFlagApiTestGroup, BasicToolchainTest_Lock) {
-  buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc",
-                               "g++", "ar", "ld");
+  buildcc::Toolchain toolchain(
+      buildcc::ToolchainId::Gcc, "gcc",
+      buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
   toolchain.Lock();
   CHECK_THROWS(std::exception, toolchain.AddPreprocessorFlag("-preprocessor"));
   CHECK_THROWS(std::exception, toolchain.AddAsmCompileFlag("-asm"));
@@ -29,8 +30,9 @@ TEST(ToolchainFlagApiTestGroup, BasicToolchainTest_Lock) {
 }
 
 TEST(ToolchainFlagApiTestGroup, BasicToolchainTest_Unlock) {
-  buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc",
-                               "g++", "ar", "ld");
+  buildcc::Toolchain toolchain(
+      buildcc::ToolchainId::Gcc, "gcc",
+      buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
   toolchain.AddPreprocessorFlag("-preprocessor");
   toolchain.AddAsmCompileFlag("-asm");
   toolchain.AddPchCompileFlag("-pchcompile");
@@ -55,8 +57,9 @@ TEST(ToolchainFlagApiTestGroup, BasicToolchainTest_Unlock) {
 }
 
 TEST(ToolchainFlagApiTestGroup, BasicTargetTest) {
-  buildcc::Toolchain toolchain(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc",
-                               "g++", "ar", "ld");
+  buildcc::Toolchain toolchain(
+      buildcc::ToolchainId::Gcc, "gcc",
+      buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
 
   toolchain.AddPreprocessorFlag("-preprocessor");
   toolchain.AddAsmCompileFlag("-asm");

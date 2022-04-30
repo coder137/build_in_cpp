@@ -11,20 +11,19 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
         $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
     )
     target_link_libraries(buildcc PUBLIC
-        fmt::fmt-header-only
-        flatbuffers_header_only
+        fmt::fmt
+        flatbuffers
         Taskflow
         CLI11::CLI11
     )
     target_link_libraries(buildcc PRIVATE
-        spdlog::spdlog_header_only
+        spdlog::spdlog
         tiny-process-library::tiny-process-library
     )
     target_compile_options(buildcc PRIVATE ${BUILD_COMPILE_FLAGS})
     target_link_options(buildcc PRIVATE ${BUILD_LINK_FLAGS})
     if(${BUILDCC_PRECOMPILE_HEADERS})
         target_precompile_headers(buildcc INTERFACE buildcc.h)    
-        target_precompile_headers(buildcc INTERFACE ${FBS_DIR}/pch/pch.h)
     endif()
 endif()
 
@@ -65,7 +64,6 @@ if (${BUILDCC_BUILD_AS_INTERFACE})
     )
     if(${BUILDCC_PRECOMPILE_HEADERS})
         target_precompile_headers(buildcc_i INTERFACE buildcc.h)    
-        target_precompile_headers(buildcc_i INTERFACE ${FBS_DIR}/pch/pch.h)
     endif()
 endif()
 

@@ -170,11 +170,11 @@ _BuildCC_ is licensed under the Apache License, Version 2.0. See [LICENSE](LICEN
 
 > Developers who would like to suggest an alternative library, raise an issue with the **license** and **advantages** clearly outlined.
 
-- [Fmtlib](https://github.com/fmtlib/fmt) (Formatting) [MIT License] [Header Only]
-- [Spdlog](https://github.com/gabime/spdlog) (Logging) [MIT License] [Header Only]
+- [Fmtlib](https://github.com/fmtlib/fmt) (Formatting) [MIT License]
+- [Spdlog](https://github.com/gabime/spdlog) (Logging) [MIT License]
 - [Tiny Process Library](https://gitlab.com/eidheim/tiny-process-library) (Process handling) [MIT License]
 - [Taskflow](https://github.com/taskflow/taskflow) (Parallel Programming) [MIT License] [Header Only]
   - See also [3rd-Party](https://github.com/taskflow/taskflow/tree/master/3rd-party) used by Taskflow
-- [Flatbuffers](https://github.com/google/flatbuffers) (Serialization) [Apache-2.0 License] [Header Only]
+- [Flatbuffers](https://github.com/google/flatbuffers) (Serialization) [Apache-2.0 License]
 - [CLI11](https://github.com/CLIUtils/CLI11) (Argument Parsing) [BSD-3-Clause License] [Header Only]
 - [CppUTest](https://github.com/cpputest/cpputest) (Unit Testing/Mocking) [BSD-3-Clause License]
