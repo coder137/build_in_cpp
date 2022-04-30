@@ -40,13 +40,15 @@ public:
       : Toolchain(ToolchainId::Msvc, name,
                   op_executables.value_or(
                       ToolchainExecutables("cl", "cl", "cl", "lib", "link")),
-                  op_config.value_or(ToolchainConfig())) {}
+                  op_config.value_or(ToolchainConfig())) {
+    Initialize();
+  }
 
   virtual ~Toolchain_msvc() = default;
   Toolchain_msvc(const Toolchain_msvc &gcc) = delete;
 
 private:
-  void UpdateConfig(ToolchainConfig &config) override;
+  void Initialize();
   std::optional<ToolchainCompilerInfo>
   GetToolchainInfo(const ToolchainExecutables &executables) const override;
 };

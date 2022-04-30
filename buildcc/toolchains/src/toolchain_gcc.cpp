@@ -21,42 +21,24 @@
 
 #include "env/command.h"
 
-namespace {
-
-constexpr const char *const kGccObjExt = ".o";
-constexpr const char *const kGccPchHeaderExt = ".h";
-constexpr const char *const kGccPchCompileExt = ".gch";
-constexpr const char *const kGccPrefixIncludeDir = "-I";
-constexpr const char *const kGccPrefixLibDir = "-L";
-
-void UpdateGccConfig(buildcc::ToolchainConfig &config) {
-  config.obj_ext = kGccObjExt;
-  config.pch_header_ext = kGccPchHeaderExt;
-  config.pch_compile_ext = kGccPchCompileExt;
-  config.prefix_include_dir = kGccPrefixIncludeDir;
-  config.prefix_lib_dir = kGccPrefixLibDir;
-}
-
-} // namespace
-
 namespace buildcc {
 
-void Toolchain_gcc::UpdateConfig(ToolchainConfig &config) {
-  UpdateGccConfig(config);
+void Toolchain_gcc::Initialize() {
+  RefConfig() = GlobalToolchainMetadata::GetConfig(ToolchainId::Gcc);
 }
 
 std::optional<ToolchainCompilerInfo>
 Toolchain_gcc::GetToolchainInfo(const ToolchainExecutables &executables) const {
-  return GlobalToolchainInfo::Get(ToolchainId::Gcc)(executables);
+  return GlobalToolchainMetadata::GetInfoCb(ToolchainId::Gcc)(executables);
 }
 
-void Toolchain_mingw::UpdateConfig(ToolchainConfig &config) {
-  UpdateGccConfig(config);
+void Toolchain_mingw::Initialize() {
+  RefConfig() = GlobalToolchainMetadata::GetConfig(ToolchainId::Gcc);
 }
 
 std::optional<ToolchainCompilerInfo> Toolchain_mingw::GetToolchainInfo(
     const ToolchainExecutables &executables) const {
-  return GlobalToolchainInfo::Get(ToolchainId::MinGW)(executables);
+  return GlobalToolchainMetadata::GetInfoCb(ToolchainId::MinGW)(executables);
 }
 
 } // namespace buildcc
