@@ -45,7 +45,7 @@ public:
   }
 
   virtual ~Toolchain_msvc() = default;
-  Toolchain_msvc(const Toolchain_msvc &gcc) = delete;
+  Toolchain_msvc(const Toolchain_msvc &) = delete;
 
 private:
   void Initialize();

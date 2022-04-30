@@ -19,11 +19,25 @@
 
 #include "toolchain/toolchain.h"
 
-#include <functional>
-
 namespace buildcc {
 
-typedef Toolchain Toolchain_custom;
+class Toolchain_custom : public Toolchain {
+public:
+  // Run time basic constructor
+  Toolchain_custom(const std::string &name,
+                   const ToolchainExecutables &executables,
+                   std::optional<ToolchainConfig> op_config = {})
+      : Toolchain(ToolchainId::Gcc, name, executables,
+                  op_config.value_or(ToolchainConfig())) {
+    Initialize();
+  }
+
+  virtual ~Toolchain_custom() = default;
+  Toolchain_custom(const Toolchain_custom &) = delete;
+
+private:
+  void Initialize();
+};
 
 } // namespace buildcc
 

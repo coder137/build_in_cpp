@@ -1,4 +1,7 @@
 set(TOOLCHAIN_SPECIALIZED_SRCS
+    src/toolchain_infos.cpp
+    include/toolchains/toolchain_infos.h
+
     src/toolchain_gcc.cpp
     include/toolchains/toolchain_gcc.h
     include/toolchains/toolchain_mingw.h
@@ -6,10 +9,9 @@ set(TOOLCHAIN_SPECIALIZED_SRCS
     src/toolchain_msvc.cpp
     include/toolchains/toolchain_msvc.h
 
+    src/toolchain_aggregate.cpp
     include/toolchains/toolchain_generic.h
-
-    src/toolchain_infos.cpp
-    include/toolchains/toolchain_infos.h
+    include/toolchains/toolchain_custom.h
 
     include/toolchains/toolchain_specialized.h
 )

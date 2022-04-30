@@ -45,7 +45,7 @@ public:
   }
 
   virtual ~Toolchain_gcc() = default;
-  Toolchain_gcc(const Toolchain_gcc &gcc) = delete;
+  Toolchain_gcc(const Toolchain_gcc &) = delete;
 
 private:
   void Initialize();

@@ -1,4 +1,5 @@
 #include "env/host_os_util.h"
+#include "env/storage.h"
 #include "env/util.h"
 
 #include "expect_command.h"
