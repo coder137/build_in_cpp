@@ -11,13 +11,13 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
         $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
     )
     target_link_libraries(buildcc PUBLIC
-        fmt::fmt-header-only
+        fmt::fmt
         flatbuffers_header_only
         Taskflow
         CLI11::CLI11
     )
     target_link_libraries(buildcc PRIVATE
-        spdlog::spdlog_header_only
+        spdlog::spdlog
         tiny-process-library::tiny-process-library
     )
     target_compile_options(buildcc PRIVATE ${BUILD_COMPILE_FLAGS})
