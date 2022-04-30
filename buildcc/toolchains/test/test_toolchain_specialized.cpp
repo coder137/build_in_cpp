@@ -212,6 +212,59 @@ TEST(ToolchainSpecializedTestGroup, Global) {
           .has_value());
 }
 
+TEST(ToolchainSpecializedTestGroup, Generic) {
+  MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
+
+  {
+    auto &gcc =
+        buildcc::Toolchain_generic::New(buildcc::ToolchainId::Gcc, "gcc");
+    STRCMP_EQUAL(gcc.GetName().c_str(), "gcc");
+    STRCMP_EQUAL(gcc.GetAssembler().c_str(), "as");
+    STRCMP_EQUAL(gcc.GetCCompiler().c_str(), "gcc");
+    STRCMP_EQUAL(gcc.GetCppCompiler().c_str(), "g++");
+    STRCMP_EQUAL(gcc.GetArchiver().c_str(), "ar");
+    STRCMP_EQUAL(gcc.GetLinker().c_str(), "ld");
+  }
+
+  {
+    auto &mingw =
+        buildcc::Toolchain_generic::New(buildcc::ToolchainId::MinGW, "mingw");
+    STRCMP_EQUAL(mingw.GetName().c_str(), "mingw");
+    STRCMP_EQUAL(mingw.GetAssembler().c_str(), "as");
+    STRCMP_EQUAL(mingw.GetCCompiler().c_str(), "gcc");
+    STRCMP_EQUAL(mingw.GetCppCompiler().c_str(), "g++");
+    STRCMP_EQUAL(mingw.GetArchiver().c_str(), "ar");
+    STRCMP_EQUAL(mingw.GetLinker().c_str(), "ld");
+  }
+
+  {
+    auto &msvc =
+        buildcc::Toolchain_generic::New(buildcc::ToolchainId::Msvc, "msvc");
+    STRCMP_EQUAL(msvc.GetName().c_str(), "msvc");
+    STRCMP_EQUAL(msvc.GetAssembler().c_str(), "cl");
+    STRCMP_EQUAL(msvc.GetCCompiler().c_str(), "cl");
+    STRCMP_EQUAL(msvc.GetCppCompiler().c_str(), "cl");
+    STRCMP_EQUAL(msvc.GetArchiver().c_str(), "lib");
+    STRCMP_EQUAL(msvc.GetLinker().c_str(), "link");
+
+    const auto &toolchain_config = msvc.GetConfig();
+    STRCMP_EQUAL(toolchain_config.obj_ext.c_str(), ".obj");
+    STRCMP_EQUAL(toolchain_config.pch_header_ext.c_str(), ".h");
+    STRCMP_EQUAL(toolchain_config.pch_compile_ext.c_str(), ".pch");
+    STRCMP_EQUAL(toolchain_config.prefix_include_dir.c_str(), "/I");
+    STRCMP_EQUAL(toolchain_config.prefix_lib_dir.c_str(), "/LIBPATH:");
+  }
+
+  {
+    CHECK_THROWS(std::exception,
+                 buildcc::Toolchain_generic::New(
+                     buildcc::ToolchainId::Undefined, "undefined"));
+  }
+
+  buildcc::Storage::Clear();
+  MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
+}
+
 //
 
 void convert_executables_to_full_path(buildcc::ToolchainExecutables &exes,
