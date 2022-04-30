@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
 
   // Build steps
   // Toolchain + Generic Target
-  auto &toolchain = custom_toolchain;
+  auto &toolchain = custom_toolchain.ConstructToolchain();
   Target_generic foolib_target("libfoo", default_lib_type, toolchain,
                                "../foolib");
   Target_generic generic_target("generic", TargetType::Executable, toolchain,

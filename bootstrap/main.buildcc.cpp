@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
   Reg::Init();
   Reg::Call(Args::Clean()).Func(clean_cb);
 
-  auto &toolchain = custom_toolchain_arg;
+  auto &toolchain = custom_toolchain_arg.ConstructToolchain();
   BuildBuildCC buildcc(
       toolchain, TargetEnv(Project::GetRootDir(), Project::GetBuildDir()));
   auto &buildcc_lib = buildcc.GetBuildcc();
