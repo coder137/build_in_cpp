@@ -20,6 +20,7 @@
 #include <filesystem>
 #include <initializer_list>
 #include <string>
+#include <vector>
 
 #include "env/host_os.h"
 
