@@ -74,8 +74,8 @@ public:
   /**
    * @brief Set ToolchainInfo callback for run time objects
    */
-  void SetToolchainInfoCb(const ToolchainInfoCb &cb) { info_func_ = cb; }
-  const ToolchainInfoCb &GetToolchainInfoCb() const { return info_func_; }
+  void SetToolchainInfoCb(const ToolchainInfoCb &cb) { info_cb_ = cb; }
+  const ToolchainInfoCb &GetToolchainInfoCb() const { return info_cb_; }
 
 private:
   /**
@@ -85,7 +85,7 @@ private:
   GetToolchainInfo(const ToolchainExecutables &executables) const;
 
 private:
-  ToolchainInfoCb info_func_;
+  ToolchainInfoCb info_cb_;
 };
 
 } // namespace buildcc
