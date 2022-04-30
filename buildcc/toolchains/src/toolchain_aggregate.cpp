@@ -72,9 +72,9 @@ Toolchain &Toolchain_generic::New(
     env::assert_fatal(op_executables.has_value(),
                       "ToolchainId::Custom and ToolchainId::Clang require "
                       "executables to be provided");
-    toolchain =
-        AddIf<Toolchain>(identifier, id, identifier, op_executables.value(),
-                         op_config.value_or(ToolchainConfig()));
+    toolchain = AddIf<Toolchain_custom>(identifier, id, identifier,
+                                        op_executables.value(),
+                                        op_config.value_or(ToolchainConfig()));
     break;
   default:
     break;

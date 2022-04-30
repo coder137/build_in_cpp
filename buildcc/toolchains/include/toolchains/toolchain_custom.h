@@ -24,10 +24,10 @@ namespace buildcc {
 class Toolchain_custom : public Toolchain {
 public:
   // Run time basic constructor
-  Toolchain_custom(const std::string &name,
+  Toolchain_custom(ToolchainId id, const std::string &name,
                    const ToolchainExecutables &executables,
                    std::optional<ToolchainConfig> op_config = {})
-      : Toolchain(ToolchainId::Gcc, name, executables,
+      : Toolchain(id, name, executables,
                   op_config.value_or(ToolchainConfig())) {
     Initialize();
   }

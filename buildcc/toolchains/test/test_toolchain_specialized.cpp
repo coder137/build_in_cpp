@@ -216,6 +216,32 @@ TEST(ToolchainSpecializedTestGroup, MSVC_Fail) {
 
 #endif
 
+TEST(ToolchainSpecializedTestGroup, Clang) {
+  buildcc::Toolchain_custom clang(
+      buildcc::ToolchainId::Clang, "clang",
+      buildcc::ToolchainExecutables("llvm-as", "clang", "clang++", "llvm-ar",
+                                    "ld"));
+  STRCMP_EQUAL(clang.GetName().c_str(), "clang");
+  STRCMP_EQUAL(clang.GetAssembler().c_str(), "llvm-as");
+  STRCMP_EQUAL(clang.GetCCompiler().c_str(), "clang");
+  STRCMP_EQUAL(clang.GetCppCompiler().c_str(), "clang++");
+  STRCMP_EQUAL(clang.GetArchiver().c_str(), "llvm-ar");
+  STRCMP_EQUAL(clang.GetLinker().c_str(), "ld");
+
+  fs::path current_directory = fs::current_path();
+  buildcc::ToolchainFindConfig find_config;
+  find_config.env_vars.clear();
+  find_config.absolute_search_paths.insert(current_directory);
+
+  std::vector<std::string> version_stdout{"version"};
+  std::vector<std::string> arch_stdout{"arch"};
+  buildcc::env::m::CommandExpect_Execute(1, true, &version_stdout);
+  buildcc::env::m::CommandExpect_Execute(1, true, &arch_stdout);
+  auto info = clang.Verify(find_config);
+  STRCMP_EQUAL(info.compiler_version.c_str(), "version");
+  STRCMP_EQUAL(info.target_arch.c_str(), "arch");
+}
+
 TEST(ToolchainSpecializedTestGroup, Global) {
   CHECK_THROWS(std::exception, buildcc::GlobalToolchainMetadata::GetConfig(
                                    (buildcc::ToolchainId)65535));
@@ -244,6 +270,10 @@ TEST(ToolchainSpecializedTestGroup, Generic) {
     STRCMP_EQUAL(gcc.GetCppCompiler().c_str(), "g++");
     STRCMP_EQUAL(gcc.GetArchiver().c_str(), "ar");
     STRCMP_EQUAL(gcc.GetLinker().c_str(), "ld");
+
+    // Already defined with same identifier
+    CHECK_THROWS(std::exception, buildcc::Toolchain_generic::New(
+                                     buildcc::ToolchainId::Gcc, "gcc"));
   }
 
   {
@@ -273,6 +303,24 @@ TEST(ToolchainSpecializedTestGroup, Generic) {
     STRCMP_EQUAL(toolchain_config.pch_compile_ext.c_str(), ".pch");
     STRCMP_EQUAL(toolchain_config.prefix_include_dir.c_str(), "/I");
     STRCMP_EQUAL(toolchain_config.prefix_lib_dir.c_str(), "/LIBPATH:");
+  }
+
+  {
+    auto &clang = buildcc::Toolchain_generic::New(
+        buildcc::ToolchainId::Clang, "clang",
+        buildcc::ToolchainExecutables("llvm-as", "clang", "clang++", "llvm-ar",
+                                      "ld"));
+    STRCMP_EQUAL(clang.GetName().c_str(), "clang");
+    STRCMP_EQUAL(clang.GetAssembler().c_str(), "llvm-as");
+    STRCMP_EQUAL(clang.GetCCompiler().c_str(), "clang");
+    STRCMP_EQUAL(clang.GetCppCompiler().c_str(), "clang++");
+    STRCMP_EQUAL(clang.GetArchiver().c_str(), "llvm-ar");
+    STRCMP_EQUAL(clang.GetLinker().c_str(), "ld");
+  }
+
+  {
+    CHECK_THROWS(std::exception, buildcc::Toolchain_generic::New(
+                                     buildcc::ToolchainId::Custom, "custom"));
   }
 
   {
@@ -326,5 +374,10 @@ int main(int ac, char **av) {
   buildcc::ToolchainExecutables msvc_exes("cl", "cl", "cl", "lib", "link");
   convert_executables_to_full_path(msvc_exes, ext);
   create_dummy_executables(msvc_exes);
+
+  buildcc::ToolchainExecutables clang_exes("llvm-as", "clang", "clang++",
+                                           "llvm-ar", "ld");
+  convert_executables_to_full_path(clang_exes, ext);
+  create_dummy_executables(clang_exes);
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
