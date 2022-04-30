@@ -117,6 +117,8 @@ TEST(ToolchainSpecializedTestGroup, MINGW) {
   STRCMP_EQUAL(info.target_arch.c_str(), "arch");
 }
 
+#if defined(__GNUC__) && !defined(__MINGW32__) && !defined(__MINGW64__)
+
 TEST(ToolchainSpecializedTestGroup, MSVC) {
   buildcc::Toolchain_msvc msvc;
   STRCMP_EQUAL(msvc.GetName().c_str(), "msvc");
@@ -138,9 +140,12 @@ TEST(ToolchainSpecializedTestGroup, MSVC) {
   find_config.env_vars.clear();
   find_config.absolute_search_paths.insert(current_directory);
 
-  CHECK_EQUAL(putenv("VSCMD_VER=version"), 0);
-  CHECK_EQUAL(putenv("VSCMD_ARG_HOST_ARCH=host"), 0);
-  CHECK_EQUAL(putenv("VSCMD_ARG_TGT_ARCH=target"), 0);
+  char vscmd_ver[] = "VSCMD_VER=version";
+  char vscmd_arg_host_arch[] = "VSCMD_ARG_HOST_ARCH=host";
+  char vscmd_arg_tgt_arch[] = "VSCMD_ARG_TGT_ARCH=target";
+  CHECK_EQUAL(putenv(vscmd_ver), 0);
+  CHECK_EQUAL(putenv(vscmd_arg_host_arch), 0);
+  CHECK_EQUAL(putenv(vscmd_arg_tgt_arch), 0);
   auto info = msvc.Verify(find_config);
   STRCMP_EQUAL(info.compiler_version.c_str(), "version");
   STRCMP_EQUAL(info.target_arch.c_str(), "host_target");
@@ -168,33 +173,47 @@ TEST(ToolchainSpecializedTestGroup, MSVC_Fail) {
   find_config.absolute_search_paths.insert(current_directory);
 
   {
-    CHECK_EQUAL(putenv("VSCMD_VER="), 0);
-    CHECK_EQUAL(putenv("VSCMD_ARG_HOST_ARCH="), 0);
-    CHECK_EQUAL(putenv("VSCMD_ARG_TGT_ARCH="), 0);
+    char vscmd_ver[] = "VSCMD_VER";
+    char vscmd_arg_host_arch[] = "VSCMD_ARG_HOST_ARCH";
+    char vscmd_arg_tgt_arch[] = "VSCMD_ARG_TGT_ARCH";
+    CHECK_EQUAL(putenv(vscmd_ver), 0);
+    CHECK_EQUAL(putenv(vscmd_arg_host_arch), 0);
+    CHECK_EQUAL(putenv(vscmd_arg_tgt_arch), 0);
     CHECK_THROWS(std::exception, msvc.Verify(find_config));
   }
 
   {
-    CHECK_EQUAL(putenv("VSCMD_VER="), 0);
-    CHECK_EQUAL(putenv("VSCMD_ARG_HOST_ARCH=host"), 0);
-    CHECK_EQUAL(putenv("VSCMD_ARG_TGT_ARCH="), 0);
+    char vscmd_ver[] = "VSCMD_VER";
+    char vscmd_arg_host_arch[] = "VSCMD_ARG_HOST_ARCH=host";
+    char vscmd_arg_tgt_arch[] = "VSCMD_ARG_TGT_ARCH";
+    CHECK_EQUAL(putenv(vscmd_ver), 0);
+    CHECK_EQUAL(putenv(vscmd_arg_host_arch), 0);
+    CHECK_EQUAL(putenv(vscmd_arg_tgt_arch), 0);
     CHECK_THROWS(std::exception, msvc.Verify(find_config));
   }
 
   {
-    CHECK_EQUAL(putenv("VSCMD_VER="), 0);
-    CHECK_EQUAL(putenv("VSCMD_ARG_HOST_ARCH="), 0);
-    CHECK_EQUAL(putenv("VSCMD_ARG_TGT_ARCH=target"), 0);
+    char vscmd_ver[] = "VSCMD_VER";
+    char vscmd_arg_host_arch[] = "VSCMD_ARG_HOST_ARCH";
+    char vscmd_arg_tgt_arch[] = "VSCMD_ARG_TGT_ARCH=target";
+    CHECK_EQUAL(putenv(vscmd_ver), 0);
+    CHECK_EQUAL(putenv(vscmd_arg_host_arch), 0);
+    CHECK_EQUAL(putenv(vscmd_arg_tgt_arch), 0);
     CHECK_THROWS(std::exception, msvc.Verify(find_config));
   }
 
   {
-    CHECK_EQUAL(putenv("VSCMD_VER=version"), 0);
-    CHECK_EQUAL(putenv("VSCMD_ARG_HOST_ARCH="), 0);
-    CHECK_EQUAL(putenv("VSCMD_ARG_TGT_ARCH="), 0);
+    char vscmd_ver[] = "VSCMD_VER=version";
+    char vscmd_arg_host_arch[] = "VSCMD_ARG_HOST_ARCH";
+    char vscmd_arg_tgt_arch[] = "VSCMD_ARG_TGT_ARCH";
+    CHECK_EQUAL(putenv(vscmd_ver), 0);
+    CHECK_EQUAL(putenv(vscmd_arg_host_arch), 0);
+    CHECK_EQUAL(putenv(vscmd_arg_tgt_arch), 0);
     CHECK_THROWS(std::exception, msvc.Verify(find_config));
   }
 }
+
+#endif
 
 TEST(ToolchainSpecializedTestGroup, Global) {
   CHECK_THROWS(std::exception, buildcc::GlobalToolchainMetadata::GetConfig(
