@@ -26,8 +26,9 @@ TEST_GROUP(ToolchainFindTestGroup)
 // clang-format on
 
 TEST(ToolchainFindTestGroup, FindToolchain_ThroughEnvVar) {
-  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
-                         "ar", "ld");
+  buildcc::Toolchain gcc(
+      buildcc::ToolchainId::Gcc, "gcc",
+      buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
 
   std::string putenv_str = fmt::format("CUSTOM_BUILDCC_PATH={}/toolchains/gcc",
                                        fs::current_path().string());
@@ -46,8 +47,9 @@ TEST(ToolchainFindTestGroup, FindToolchain_ThroughEnvVar) {
 }
 
 TEST(ToolchainFindTestGroup, FindToolchain_ThroughAbsolutePath) {
-  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
-                         "ar", "ld");
+  buildcc::Toolchain gcc(
+      buildcc::ToolchainId::Gcc, "gcc",
+      buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
 
   buildcc::ToolchainFindConfig config;
   config.absolute_search_paths.insert(fs::current_path() / "toolchains" /
@@ -59,8 +61,9 @@ TEST(ToolchainFindTestGroup, FindToolchain_ThroughAbsolutePath) {
 }
 
 TEST(ToolchainFindTestGroup, FindToolchain_DirectoryDoesntExist) {
-  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
-                         "ar", "ld");
+  buildcc::Toolchain gcc(
+      buildcc::ToolchainId::Gcc, "gcc",
+      buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
 
   buildcc::ToolchainFindConfig config;
   config.absolute_search_paths.insert(fs::current_path() / "toolchains" /
@@ -72,8 +75,9 @@ TEST(ToolchainFindTestGroup, FindToolchain_DirectoryDoesntExist) {
 }
 
 TEST(ToolchainFindTestGroup, FindToolchain_NoDirectoryFound) {
-  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
-                         "ar", "ld");
+  buildcc::Toolchain gcc(
+      buildcc::ToolchainId::Gcc, "gcc",
+      buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
 
   buildcc::ToolchainFindConfig config;
   config.absolute_search_paths.insert(fs::current_path() / "toolchains" /
@@ -85,8 +89,9 @@ TEST(ToolchainFindTestGroup, FindToolchain_NoDirectoryFound) {
 }
 
 TEST(ToolchainFindTestGroup, FindToolchain_NoToolchainFound) {
-  buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc", "g++",
-                         "ar", "ld");
+  buildcc::Toolchain gcc(
+      buildcc::ToolchainId::Gcc, "gcc",
+      buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
 
   buildcc::ToolchainFindConfig config;
   config.absolute_search_paths.insert(fs::current_path() / "toolchains");

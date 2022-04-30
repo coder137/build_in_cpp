@@ -25,8 +25,9 @@ TEST_GROUP(TargetTestFailureStates)
 };
 // clang-format on
 
-static buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc", "as", "gcc",
-                              "g++", "ar", "ld");
+static buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc",
+                              buildcc::ToolchainExecutables("as", "gcc", "g++",
+                                                            "ar", "ld"));
 
 TEST(TargetTestFailureStates, StartTaskEnvFailure) {
   buildcc::env::set_task_state(buildcc::env::TaskState::FAILURE);
