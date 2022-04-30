@@ -286,7 +286,7 @@ We can then <code class="docutils literal notranslate"><span class="pre">add_sub
 <span class="w">        </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/mock/include</span>
 <span class="w">    </span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">mock_env</span><span class="w"> </span><span class="s">PUBLIC</span>
-<span class="w">        </span><span class="s">fmt::fmt-header-only</span>
+<span class="w">        </span><span class="s">fmt::fmt</span>
 <span class="w">        </span><span class="s">Taskflow</span>
 
 <span class="w">        </span><span class="s">CppUTest</span>
@@ -351,11 +351,11 @@ We can then <code class="docutils literal notranslate"><span class="pre">add_sub
 <span class="w">        </span><span class="o">$&lt;</span><span class="nv">BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="o">$&lt;</span><span class="nv">INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}</span><span class="o">&gt;</span>
 <span class="w">    </span><span class="p">)</span>
-<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">env</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">fmt::fmt-header-only</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">env</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="s">fmt::fmt</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">env</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nv">BUILD_COMPILE_FLAGS</span><span class="o">}</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_link_options</span><span class="p">(</span><span class="s">env</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nv">BUILD_LINK_FLAGS</span><span class="o">}</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">env</span><span class="w"> </span><span class="s">PRIVATE</span>
-<span class="w">        </span><span class="s">spdlog::spdlog_header_only</span>
+<span class="w">        </span><span class="s">spdlog::spdlog</span>
 <span class="w">        </span><span class="s">tiny-process-library::tiny-process-library</span>
 <span class="w">    </span><span class="p">)</span>
 <span class="nb">endif</span><span class="p">()</span>
