@@ -78,13 +78,6 @@ public:
   const ToolchainInfoCb &GetToolchainInfoCb() const { return info_cb_; }
 
 private:
-  /**
-   * @brief ToolchainInfo callback for compile time polymorphic objects
-   */
-  virtual std::optional<ToolchainCompilerInfo>
-  GetToolchainInfo(const ToolchainExecutables &executables) const;
-
-private:
   ToolchainInfoCb info_cb_;
 };
 

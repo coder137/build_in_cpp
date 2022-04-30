@@ -51,8 +51,6 @@ public:
 
 private:
   void Initialize();
-  std::optional<ToolchainCompilerInfo>
-  GetToolchainInfo(const ToolchainExecutables &executables) const override;
 };
 
 } // namespace buildcc

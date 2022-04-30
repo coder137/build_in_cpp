@@ -25,20 +25,12 @@ namespace buildcc {
 
 void Toolchain_gcc::Initialize() {
   RefConfig() = GlobalToolchainMetadata::GetConfig(ToolchainId::Gcc);
-}
-
-std::optional<ToolchainCompilerInfo>
-Toolchain_gcc::GetToolchainInfo(const ToolchainExecutables &executables) const {
-  return GlobalToolchainMetadata::GetInfoCb(ToolchainId::Gcc)(executables);
+  SetToolchainInfoCb(GlobalToolchainMetadata::GetInfoCb(ToolchainId::Gcc));
 }
 
 void Toolchain_mingw::Initialize() {
-  RefConfig() = GlobalToolchainMetadata::GetConfig(ToolchainId::Gcc);
-}
-
-std::optional<ToolchainCompilerInfo> Toolchain_mingw::GetToolchainInfo(
-    const ToolchainExecutables &executables) const {
-  return GlobalToolchainMetadata::GetInfoCb(ToolchainId::MinGW)(executables);
+  RefConfig() = GlobalToolchainMetadata::GetConfig(ToolchainId::MinGW);
+  SetToolchainInfoCb(GlobalToolchainMetadata::GetInfoCb(ToolchainId::MinGW));
 }
 
 } // namespace buildcc

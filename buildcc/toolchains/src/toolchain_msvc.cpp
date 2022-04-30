@@ -22,11 +22,7 @@ namespace buildcc {
 
 void Toolchain_msvc::Initialize() {
   RefConfig() = GlobalToolchainMetadata::GetConfig(ToolchainId::Msvc);
-}
-
-std::optional<ToolchainCompilerInfo> Toolchain_msvc::GetToolchainInfo(
-    const ToolchainExecutables &executables) const {
-  return GlobalToolchainMetadata::GetInfoCb(ToolchainId::Msvc)(executables);
+  SetToolchainInfoCb(GlobalToolchainMetadata::GetInfoCb(ToolchainId::Msvc));
 }
 
 } // namespace buildcc
