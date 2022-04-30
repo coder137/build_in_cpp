@@ -155,30 +155,6 @@ Args::Internal &Args::RefInternal() {
 }
 CLI::App &Args::RefApp() { return RefInternal().app; }
 
-// ArgsToolchain
-
-std::optional<ToolchainCompilerInfo>
-ArgToolchain::GetToolchainInfo(const ToolchainExecutables &exes) const {
-  switch (id) {
-  case ToolchainId::Gcc:
-  case ToolchainId::MinGW:
-  case ToolchainId::Msvc:
-  case ToolchainId::Clang:
-    return GlobalToolchainInfo::Get(id)(exes);
-    break;
-  case ToolchainId::Custom:
-    ASSERT_FATAL(GetToolchainInfoCb(), "For ToolchainId::Custom "
-                                       "add ToolchainInfoCb using the "
-                                       "Toolchain::SetToolchainInfoCb API");
-    return GetToolchainInfoCb()(exes);
-    break;
-  default:
-    break;
-  }
-
-  return {};
-}
-
 // Args::Instance
 
 /**

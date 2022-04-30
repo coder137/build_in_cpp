@@ -47,26 +47,27 @@ struct ArgToolchainState {
  * command line
  * Bundled with Toolchain State
  */
-class ArgToolchain : public Toolchain {
+class ArgToolchain {
 public:
   ArgToolchain()
-      : Toolchain(ToolchainId::Undefined, "", ToolchainExecutables()){};
+      : ArgToolchain(ToolchainId::Undefined, "", ToolchainExecutables(),
+                     ToolchainConfig()) {}
   ArgToolchain(ToolchainId initial_id, const std::string &initial_name,
                const ToolchainExecutables &initial_executables,
                const ToolchainConfig &initial_config)
-      : Toolchain(initial_id, initial_name, initial_executables,
-                  initial_config) {}
+      : id(initial_id), name(initial_name), executables(initial_executables),
+        config(initial_config) {}
+
+  Toolchain &ConstructToolchain() {
+    return Toolchain_generic::New(id, name, executables, config);
+  }
 
 public:
   ArgToolchainState state;
-  ToolchainId &id = RefId();
-  std::string &name = RefName();
-  ToolchainExecutables &executables = RefExecutables();
-  ToolchainConfig &config = RefConfig();
-
-private:
-  std::optional<ToolchainCompilerInfo>
-  GetToolchainInfo(const ToolchainExecutables &exes) const override;
+  ToolchainId id;
+  std::string name;
+  ToolchainExecutables executables;
+  ToolchainConfig config;
 };
 
 // NOTE, Incomplete without pch_compile_command
