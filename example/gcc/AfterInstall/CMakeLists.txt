@@ -12,7 +12,7 @@ project(simple)
 # fmt is imported by spdlog by default
 find_package(fmt_package NAMES "fmt" REQUIRED)
 find_package(spdlog_package NAMES "spdlog" REQUIRED)
-find_package(flatbuffers_package NAMES "flatbuffers" REQUIRED)
+find_package(flatbuffers_package NAMES "Flatbuffers" "flatbuffers" REQUIRED)
 find_package(taskflow_package NAMES "Taskflow" "taskflow" REQUIRED)
 find_package(CLI11_package NAMES "CLI11" REQUIRED)
 find_package(tiny_process_library_package NAMES "tiny-process-library" REQUIRED)
