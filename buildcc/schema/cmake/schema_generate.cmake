@@ -3,11 +3,13 @@ set(SCHEMA_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/generated CACHE PATH "Generate 
 
 set(FBS_FILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/path.fbs
+    ${CMAKE_CURRENT_SOURCE_DIR}/custom_generator.fbs
     ${CMAKE_CURRENT_SOURCE_DIR}/generator.fbs
     ${CMAKE_CURRENT_SOURCE_DIR}/target.fbs
 )
 set(FBS_GEN_FILES
     ${SCHEMA_BUILD_DIR}/path_generated.h
+    ${SCHEMA_BUILD_DIR}/custom_generator_generated.h
     ${SCHEMA_BUILD_DIR}/generator_generated.h
     ${SCHEMA_BUILD_DIR}/target_generated.h
 )
