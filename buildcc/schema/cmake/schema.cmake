@@ -1,6 +1,7 @@
 # schema test
 if (${TESTING})
     add_library(mock_schema STATIC
+        src/custom_generator_serialization.cpp
         src/generator_serialization.cpp
         src/target_serialization.cpp
 
@@ -8,6 +9,7 @@ if (${TESTING})
         include/schema/interface/serialization_interface.h
 
         include/schema/path.h
+        include/schema/custom_generator_serialization.h
         include/schema/generator_serialization.h
         include/schema/target_serialization.h
     )
