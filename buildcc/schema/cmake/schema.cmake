@@ -36,6 +36,7 @@ if (${TESTING})
 endif()
 
 set(SCHEMA_SRCS
+    src/custom_generator_serialization.cpp
     src/generator_serialization.cpp
     src/target_serialization.cpp
 
