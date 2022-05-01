@@ -42,7 +42,8 @@ bool CustomGeneratorSerialization::Load(const std::string &serialized_data) {
     return false;
   }
 
-  extract_path(custom_generator->recheck_path_dep(), load_.recheck_path_dep);
+  extract_path(custom_generator->recheck_path_dep(),
+               load_.internal_recheck_path_dep);
   extract(custom_generator->recheck_string_dep(), load_.recheck_string_dep);
   return true;
 }
@@ -51,8 +52,8 @@ bool CustomGeneratorSerialization::Store(
     const fs::path &absolute_serialized_file) {
   flatbuffers::FlatBufferBuilder builder;
 
-  auto fbs_recheck_path_dep =
-      internal::create_fbs_vector_path(builder, store_.recheck_path_dep);
+  auto fbs_recheck_path_dep = internal::create_fbs_vector_path(
+      builder, store_.internal_recheck_path_dep);
   auto fbs_recheck_string_dep =
       internal::create_fbs_vector_string(builder, store_.recheck_string_dep);
 

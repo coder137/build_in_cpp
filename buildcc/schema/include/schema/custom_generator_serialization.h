@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef SCHEMA_GENERATOR_SERIALIZATION_H_
-#define SCHEMA_GENERATOR_SERIALIZATION_H_
+#ifndef SCHEMA_CUSTOM_GENERATOR_SERIALIZATION_H_
+#define SCHEMA_CUSTOM_GENERATOR_SERIALIZATION_H_
 
 #include <string>
 #include <unordered_set>
@@ -29,7 +29,7 @@ namespace buildcc::internal {
 
 struct CustomGeneratorSchema {
   std::string name;
-  path_unordered_set recheck_path_dep;
+  path_unordered_set internal_recheck_path_dep;
   std::unordered_set<std::string> recheck_string_dep;
 };
 
