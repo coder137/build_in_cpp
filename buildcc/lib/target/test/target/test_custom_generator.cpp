@@ -39,7 +39,7 @@ BasicGenerateCb(tf::Subflow &subflow, buildcc::CustomGeneratorContext &ctx) {
 
 TEST(CustomGeneratorTestGroup, Basic) {
   buildcc::CustomGenerator cgen("custom_generator", "");
-  cgen.AddRegenerateCb(BasicGenerateCb);
+  cgen.AddGenerateCb(BasicGenerateCb);
   cgen.Build();
 
   mock().expectOneCall("BasicGenerateCb");
@@ -48,7 +48,7 @@ TEST(CustomGeneratorTestGroup, Basic) {
 
 TEST(CustomGeneratorTestGroup, Basic2) {
   buildcc::CustomGenerator cgen("custom_generator2", "");
-  cgen.AddRegenerateCb(BasicGenerateCb);
+  cgen.AddGenerateCb(BasicGenerateCb);
   cgen.AddRelInputOutput("id1", {}, {});
   cgen.AddRelInputOutput("id2", {}, {});
   cgen.Build();
@@ -84,7 +84,7 @@ TEST(CustomGeneratorTestGroup, RealGenerate) {
   constexpr const char *const kGenName = "real_generator";
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddRegenerateCb(RealGenerateCb);
+    cgen.AddGenerateCb(RealGenerateCb);
     cgen.AddRelInputOutput("id1", {"{gen_root_dir}/dummy_main.cpp"},
                            {"{gen_build_dir}/dummy_main.o"});
     cgen.AddRelInputOutput("id2", {}, {});
@@ -107,7 +107,7 @@ TEST(CustomGeneratorTestGroup, RealGenerate) {
 
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddRegenerateCb(RealGenerateCb);
+    cgen.AddGenerateCb(RealGenerateCb);
     cgen.AddRelInputOutput("id1", {"{gen_root_dir}/dummy_main.cpp"},
                            {"{gen_build_dir}/dummy_main.o"});
     cgen.AddRelInputOutput("id2", {}, {});

@@ -86,7 +86,7 @@ private:
 };
 
 // clang-format off
-typedef std::function<std::unordered_map<std::string, tf::Task>(tf::Subflow &, CustomGeneratorContext &)> RegenerateCb;
+typedef std::function<std::unordered_map<std::string, tf::Task>(tf::Subflow &, CustomGeneratorContext &)> GenerateCb;
 // clang-format on
 
 class CustomGenerator : public internal::BuilderInterface {
@@ -114,7 +114,7 @@ public:
                          const fs_unordered_set &outputs);
 
   // TODO, Rename this to GenerateCb
-  void AddRegenerateCb(const RegenerateCb &regenerate_cb);
+  void AddGenerateCb(const GenerateCb &regenerate_cb);
 
   void Build() override;
 
@@ -156,7 +156,7 @@ private:
   std::mutex task_state_mutex_;
   env::Command command_;
   tf::Taskflow tf_;
-  RegenerateCb regenerate_cb_;
+  GenerateCb regenerate_cb_;
 };
 
 // TODO, Make this private

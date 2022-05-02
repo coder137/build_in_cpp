@@ -47,7 +47,7 @@ void CustomGenerator::AddRelInputOutput(const std::string &id,
   user_.rels_map.emplace(id, std::move(schema));
 }
 
-void CustomGenerator::AddRegenerateCb(const RegenerateCb &regenerate_cb) {
+void CustomGenerator::AddGenerateCb(const GenerateCb &regenerate_cb) {
   regenerate_cb_ = regenerate_cb;
 }
 
@@ -87,7 +87,7 @@ void CustomGenerator::GenerateTask() {
       BuildGenerate(ctx_.selected_user_schema, dummy_selected_user_schema_);
       ASSERT_FATAL(regenerate_cb_,
                    "Supply your custom regenerate callback using the "
-                   "CustomGenerator::AddRegenerateCb API");
+                   "CustomGenerator::AddGenerateCb API");
 
       auto task_map = regenerate_cb_(subflow, ctx_);
 
@@ -98,12 +98,12 @@ void CustomGenerator::GenerateTask() {
         const auto &id = selected_miter.first;
         env::assert_fatal(
             task_map.find(id) != task_map.end(),
-            "Incorrect implementation of CustomGenerator::RegenerateCb. Please "
+            "Incorrect implementation of CustomGenerator::GenerateCb. Please "
             "make sure all the map ids have a Task associated with it.");
         tf::Task gtask = task_map.at(id);
         env::assert_fatal(
             !gtask.empty(),
-            "Incorrect implementation of CustomGenerator::RegenerateCb. Task "
+            "Incorrect implementation of CustomGenerator::GenerateCb. Task "
             "returned is empty");
         gtask.name(id);
 
