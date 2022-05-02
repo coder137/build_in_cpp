@@ -27,10 +27,14 @@
 
 namespace buildcc::internal {
 
+struct RelInputOutputSchema {
+  path_unordered_set internal_inputs;
+  fs_unordered_set outputs;
+};
+
 struct CustomGeneratorSchema {
   std::string name;
-  path_unordered_set internal_recheck_path_dep;
-  std::unordered_set<std::string> recheck_string_dep;
+  std::unordered_map<std::string, RelInputOutputSchema> internal_rels_map;
 };
 
 class CustomGeneratorSerialization : public SerializationInterface {

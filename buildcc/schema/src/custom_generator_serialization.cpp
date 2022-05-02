@@ -42,9 +42,24 @@ bool CustomGeneratorSerialization::Load(const std::string &serialized_data) {
     return false;
   }
 
-  extract_path(custom_generator->recheck_path_dep(),
-               load_.internal_recheck_path_dep);
-  extract(custom_generator->recheck_string_dep(), load_.recheck_string_dep);
+  const auto *fbs_rels = custom_generator->rels();
+  if (fbs_rels == nullptr) {
+    return false;
+  }
+
+  for (const auto *rel_io : *fbs_rels) {
+    if (rel_io == nullptr) {
+      return false;
+    }
+    RelInputOutputSchema schema;
+    if (rel_io->id()->c_str() == nullptr) {
+      return false;
+    }
+    extract_path(rel_io->inputs(), schema.internal_inputs);
+    extract(rel_io->outputs(), schema.outputs);
+    // load_.internal_rels.push_back(schema);
+    load_.internal_rels_map.emplace(rel_io->id()->c_str(), std::move(schema));
+  }
   return true;
 }
 
@@ -52,14 +67,21 @@ bool CustomGeneratorSerialization::Store(
     const fs::path &absolute_serialized_file) {
   flatbuffers::FlatBufferBuilder builder;
 
-  auto fbs_recheck_path_dep = internal::create_fbs_vector_path(
-      builder, store_.internal_recheck_path_dep);
-  auto fbs_recheck_string_dep =
-      internal::create_fbs_vector_string(builder, store_.recheck_string_dep);
+  std::vector<flatbuffers::Offset<fbs::RelInputOutput>> fbs_rels;
+  for (const auto &rel_miter : store_.internal_rels_map) {
+    const auto &id = rel_miter.first;
+    const auto &rel_io = rel_miter.second;
+    auto fbs_internal_inputs =
+        internal::create_fbs_vector_path(builder, rel_io.internal_inputs);
+    auto fbs_outputs =
+        internal::create_fbs_vector_string(builder, rel_io.outputs);
+    auto fbs_rel = fbs::CreateRelInputOutputDirect(
+        builder, id.c_str(), &fbs_internal_inputs, &fbs_outputs);
+    fbs_rels.push_back(fbs_rel);
+  }
 
-  auto fbs_generator = fbs::CreateCustomGeneratorDirect(
-      builder, store_.name.c_str(), &fbs_recheck_path_dep,
-      &fbs_recheck_string_dep);
+  auto fbs_generator =
+      fbs::CreateCustomGeneratorDirect(builder, store_.name.c_str(), &fbs_rels);
   fbs::FinishCustomGeneratorBuffer(builder, fbs_generator);
 
   return env::save_file(path_as_string(absolute_serialized_file).c_str(),
