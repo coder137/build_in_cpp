@@ -39,10 +39,10 @@ void CustomGenerator::AddRelInputOutput(const std::string &id,
                     fmt::format("Duplicate id {} detected", id));
   UserRelInputOutputSchema schema;
   for (const auto &i : inputs) {
-    schema.inputs.emplace(command_.Construct(i));
+    schema.inputs.emplace(command_.Construct(path_as_string(i)));
   }
   for (const auto &o : outputs) {
-    schema.outputs.emplace(command_.Construct(o));
+    schema.outputs.emplace(command_.Construct(path_as_string(o)));
   }
   user_.rels_map.emplace(id, std::move(schema));
 }
