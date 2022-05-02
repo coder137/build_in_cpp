@@ -172,8 +172,10 @@ TEST(CustomGeneratorTestGroup, RealGenerate) {
   {
     buildcc::CustomGenerator cgen(kGenName, "");
     cgen.AddGenerateCb(RealGenerateCb);
-    cgen.AddRelInputOutput("id1", {"{gen_root_dir}/dummy_main.cpp"}, {});
-    cgen.AddRelInputOutput("id2", {"{gen_root_dir}/dummy_main.c"}, {});
+    cgen.AddRelInputOutput("id1", {"{gen_root_dir}/dummy_main.cpp"},
+                           {"{gen_build_dir}/dummy_main.o"});
+    cgen.AddRelInputOutput("id2", {"{gen_root_dir}/dummy_main.c"},
+                           {"{gen_build_dir}/dummy_main.o"});
     cgen.Build();
 
     mock().expectOneCall("RealGenerateCb");
