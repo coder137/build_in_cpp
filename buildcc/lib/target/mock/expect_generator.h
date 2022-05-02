@@ -5,6 +5,8 @@
 
 namespace buildcc::m {
 
+void CustomGeneratorRunner(CustomGenerator &custom_generator);
+
 /**
  * @brief Runs the generator using Taskflow with 1 thread
  * CppUTest cannot mock with multiple threads

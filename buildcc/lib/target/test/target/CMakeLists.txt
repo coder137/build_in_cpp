@@ -42,11 +42,19 @@ target_link_libraries(test_target_state PRIVATE target_interface)
 add_test(NAME test_target_state COMMAND test_target_state)
 
 # Generator
+add_executable(test_custom_generator
+    test_custom_generator.cpp
+)
+target_link_libraries(test_custom_generator PRIVATE target_interface)
+
 add_executable(test_generator
     test_generator.cpp
 )
 target_link_libraries(test_generator PRIVATE target_interface)
 
+add_test(NAME test_custom_generator COMMAND test_custom_generator
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
 add_test(NAME test_generator COMMAND test_generator
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
