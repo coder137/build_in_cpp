@@ -34,6 +34,7 @@ set(COMMON_TARGET_SRCS
     include/target/api/target_getter.h
 
     # Generator
+    src/custom_generator/custom_generator.cpp
     src/generator/generator.cpp
     include/target/generator.h
 
