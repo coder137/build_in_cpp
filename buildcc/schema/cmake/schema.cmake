@@ -32,7 +32,14 @@ if (${TESTING})
     target_link_options(mock_schema PUBLIC ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS})
 
     # Tests
-    add_dependencies(mock_schema fbs_to_header)
+    add_executable(test_custom_generator_serialization
+        test/test_custom_generator_serialization.cpp
+    )
+    target_link_libraries(test_custom_generator_serialization PRIVATE mock_schema)
+
+    add_test(NAME test_custom_generator_serialization COMMAND test_custom_generator_serialization
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
+    )
 endif()
 
 set(SCHEMA_SRCS
