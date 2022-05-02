@@ -38,26 +38,18 @@ bool CustomGeneratorSerialization::Verify(const std::string &serialized_data) {
 bool CustomGeneratorSerialization::Load(const std::string &serialized_data) {
   const auto *custom_generator =
       fbs::GetCustomGenerator((const void *)serialized_data.c_str());
-  if (custom_generator == nullptr) {
-    return false;
-  }
+  // Verified, does not need a nullptr check
 
   const auto *fbs_rels = custom_generator->rels();
   if (fbs_rels == nullptr) {
     return false;
   }
 
+  // rel_io->id is a required parameter, hence rel_io cannot be nullptr
   for (const auto *rel_io : *fbs_rels) {
-    if (rel_io == nullptr) {
-      return false;
-    }
     RelInputOutputSchema schema;
-    if (rel_io->id()->c_str() == nullptr) {
-      return false;
-    }
     extract_path(rel_io->inputs(), schema.internal_inputs);
     extract(rel_io->outputs(), schema.outputs);
-    // load_.internal_rels.push_back(schema);
     load_.internal_rels_map.emplace(rel_io->id()->c_str(), std::move(schema));
   }
   return true;
