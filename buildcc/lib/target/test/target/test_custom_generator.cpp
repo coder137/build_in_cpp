@@ -18,6 +18,7 @@
 TEST_GROUP(CustomGeneratorTestGroup)
 {
     void teardown() {
+      mock().checkExpectations();
       mock().clear();
     }
 };
@@ -40,15 +41,6 @@ BasicGenerateCb(tf::Subflow &subflow, buildcc::CustomGeneratorContext &ctx) {
 TEST(CustomGeneratorTestGroup, Basic) {
   buildcc::CustomGenerator cgen("custom_generator", "");
   cgen.AddGenerateCb(BasicGenerateCb);
-  cgen.Build();
-
-  mock().expectOneCall("BasicGenerateCb");
-  buildcc::m::CustomGeneratorRunner(cgen);
-}
-
-TEST(CustomGeneratorTestGroup, Basic2) {
-  buildcc::CustomGenerator cgen("custom_generator2", "");
-  cgen.AddGenerateCb(BasicGenerateCb);
   cgen.AddRelInputOutput("id1", {}, {});
   cgen.AddRelInputOutput("id2", {}, {});
   cgen.Build();
@@ -57,6 +49,97 @@ TEST(CustomGeneratorTestGroup, Basic2) {
   mock().expectOneCall("id1");
   mock().expectOneCall("id2");
   buildcc::m::CustomGeneratorRunner(cgen);
+}
+
+// tf::Task should not be empty
+static std::unordered_map<std::string, tf::Task>
+BadGenerateCb_EmptyTask(tf::Subflow &subflow,
+                        buildcc::CustomGeneratorContext &ctx) {
+  (void)subflow;
+  std::unordered_map<std::string, tf::Task> uom;
+  for (const auto &miter : ctx.selected_user_schema) {
+    tf::Task task;
+    uom.emplace(miter.first, task);
+  }
+  return uom;
+}
+
+// Does not provide existing ids, plus adds random id that does not exist
+static std::unordered_map<std::string, tf::Task>
+BadGenerateCb_WrongId(tf::Subflow &subflow,
+                      buildcc::CustomGeneratorContext &ctx) {
+  (void)ctx;
+  std::unordered_map<std::string, tf::Task> uom;
+  auto task = subflow.placeholder();
+  uom.emplace("random_id_that_does_not_exist", task);
+  return uom;
+}
+
+TEST(CustomGeneratorTestGroup, FailureCases) {
+  {
+    buildcc::CustomGenerator cgen("failure_no_cb", "");
+    buildcc::GenerateCb cb;
+    cgen.AddGenerateCb(cb);
+    CHECK_THROWS(std::exception, cgen.Build());
+  }
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+
+  {
+    buildcc::CustomGenerator cgen("failure_empty_task_cb", "");
+    cgen.AddGenerateCb(BadGenerateCb_EmptyTask);
+    cgen.AddRelInputOutput("id1", {"{gen_root_dir}/dummy_main.cpp"},
+                           {"{gen_build_dir}/dummy_main.o"});
+    cgen.Build();
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    CHECK_TRUE(buildcc::env::get_task_state() ==
+               buildcc::env::TaskState::FAILURE);
+  }
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+
+  {
+    buildcc::CustomGenerator cgen("failure_wrong_id_cb", "");
+    cgen.AddGenerateCb(BadGenerateCb_WrongId);
+    cgen.AddRelInputOutput("id1", {"{gen_root_dir}/dummy_main.cpp"},
+                           {"{gen_build_dir}/dummy_main.o"});
+    cgen.Build();
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    CHECK_TRUE(buildcc::env::get_task_state() ==
+               buildcc::env::TaskState::FAILURE);
+  }
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+
+  {
+    buildcc::CustomGenerator cgen("failure_cannot_save", "");
+    fs::create_directory(
+        cgen.GetBinaryPath()); // make a folder so that file cannot be saved
+
+    cgen.AddGenerateCb(BasicGenerateCb);
+    cgen.AddRelInputOutput("id1", {}, {});
+    cgen.AddRelInputOutput("id2", {}, {});
+    cgen.Build();
+
+    mock().expectOneCall("BasicGenerateCb");
+    mock().expectOneCall("id1");
+    mock().expectOneCall("id2");
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    CHECK_TRUE(buildcc::env::get_task_state() ==
+               buildcc::env::TaskState::FAILURE);
+  }
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+
+  {
+    buildcc::CustomGenerator cgen("gen_task_not_run_no_io", "");
+    cgen.AddGenerateCb(BasicGenerateCb);
+    cgen.Build();
+    buildcc::m::CustomGeneratorRunner(cgen);
+  }
 }
 
 static std::unordered_map<std::string, tf::Task>

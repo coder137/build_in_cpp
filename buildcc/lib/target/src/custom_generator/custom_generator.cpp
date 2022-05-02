@@ -52,6 +52,9 @@ void CustomGenerator::AddGenerateCb(const GenerateCb &regenerate_cb) {
 }
 
 void CustomGenerator::Build() {
+  ASSERT_FATAL(regenerate_cb_,
+               "Supply your custom regenerate callback using the "
+               "CustomGenerator::AddGenerateCb API");
   (void)serialization_.LoadFromFile();
 
   GenerateTask();
@@ -85,43 +88,42 @@ void CustomGenerator::GenerateTask() {
     try {
       Convert();
       BuildGenerate(ctx_.selected_user_schema, dummy_selected_user_schema_);
-      ASSERT_FATAL(regenerate_cb_,
-                   "Supply your custom regenerate callback using the "
-                   "CustomGenerator::AddGenerateCb API");
 
-      auto task_map = regenerate_cb_(subflow, ctx_);
+      if (!ctx_.selected_user_schema.empty()) {
+        auto task_map = regenerate_cb_(subflow, ctx_);
 
-      // DONE, Graph Generation
+        // Selected
+        for (const auto &selected_miter : ctx_.selected_user_schema) {
+          const auto &id = selected_miter.first;
+          env::assert_fatal(
+              task_map.find(id) != task_map.end(),
+              "Incorrect implementation of CustomGenerator::GenerateCb. Please "
+              "make sure all the map ids have a Task associated with it.");
+          tf::Task gtask = task_map.at(id);
+          env::assert_fatal(
+              !gtask.empty(),
+              "Incorrect implementation of CustomGenerator::GenerateCb. Task "
+              "returned is empty");
+          gtask.name(id);
 
-      // Selected
-      for (const auto &selected_miter : ctx_.selected_user_schema) {
-        const auto &id = selected_miter.first;
-        env::assert_fatal(
-            task_map.find(id) != task_map.end(),
-            "Incorrect implementation of CustomGenerator::GenerateCb. Please "
-            "make sure all the map ids have a Task associated with it.");
-        tf::Task gtask = task_map.at(id);
-        env::assert_fatal(
-            !gtask.empty(),
-            "Incorrect implementation of CustomGenerator::GenerateCb. Task "
-            "returned is empty");
-        gtask.name(id);
-
-        const auto &inputs = selected_miter.second.inputs;
-        for (const auto &i : inputs) {
-          std::string name =
-              fmt::format("{}", i.lexically_relative(Project::GetRootDir()));
-          auto itask = subflow.placeholder().name(name);
-          itask.precede(gtask);
-        }
-        const auto &outputs = selected_miter.second.outputs;
-        for (const auto &o : outputs) {
-          std::string name =
-              fmt::format("{}", o.lexically_relative(Project::GetRootDir()));
-          tf::Task otask = subflow.placeholder().name(name);
-          otask.succeed(gtask);
+          const auto &inputs = selected_miter.second.inputs;
+          for (const auto &i : inputs) {
+            std::string name =
+                fmt::format("{}", i.lexically_relative(Project::GetRootDir()));
+            auto itask = subflow.placeholder().name(name);
+            itask.precede(gtask);
+          }
+          const auto &outputs = selected_miter.second.outputs;
+          for (const auto &o : outputs) {
+            std::string name =
+                fmt::format("{}", o.lexically_relative(Project::GetRootDir()));
+            tf::Task otask = subflow.placeholder().name(name);
+            otask.succeed(gtask);
+          }
         }
       }
+
+      // DONE, Graph Generation
 
       // TODO, Dummy Selected
       // for (const auto &dummy_selected_miter : dummy_selected_user_schema_) {
