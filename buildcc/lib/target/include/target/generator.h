@@ -61,11 +61,14 @@ struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
 
 class CustomGeneratorContext {
 public:
-  CustomGeneratorContext(const env::Command &c) : command(c) {}
+  CustomGeneratorContext(
+      const env::Command &c,
+      const std::unordered_map<std::string, UserRelInputOutputSchema> &schema)
+      : command(c), selected_schema(schema) {}
 
   void Success(const std::string &id) {
     std::lock_guard<std::mutex> m(success_schema_mutex_);
-    success_schema_.emplace(id, selected_user_schema.at(id));
+    success_schema_.emplace(id, selected_schema.at(id));
   }
 
   void Failure() { env::set_task_state(env::TaskState::FAILURE); }
@@ -77,8 +80,8 @@ public:
 
 public:
   const env::Command &command;
-  std::unordered_map<std::string, UserRelInputOutputSchema>
-      selected_user_schema;
+  const std::unordered_map<std::string, UserRelInputOutputSchema>
+      &selected_schema;
 
 private:
   std::mutex success_schema_mutex_;
@@ -96,7 +99,7 @@ public:
       : name_(name),
         env_(env.GetTargetRootDir(), env.GetTargetBuildDir() / name),
         serialization_(env_.GetTargetBuildDir() / fmt::format("{}.bin", name)),
-        parallel_(parallel), ctx_(command_) {
+        parallel_(parallel), ctx_(command_, selected_user_schema_) {
     Initialize();
   }
   virtual ~CustomGenerator() = default;
@@ -149,6 +152,8 @@ private:
 
   // Serialization
   UserCustomGeneratorSchema user_;
+  std::unordered_map<std::string, UserRelInputOutputSchema>
+      selected_user_schema_;
   std::unordered_map<std::string, UserRelInputOutputSchema>
       dummy_selected_user_schema_;
 

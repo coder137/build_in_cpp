@@ -87,13 +87,13 @@ void CustomGenerator::GenerateTask() {
 
     try {
       Convert();
-      BuildGenerate(ctx_.selected_user_schema, dummy_selected_user_schema_);
+      BuildGenerate(selected_user_schema_, dummy_selected_user_schema_);
 
-      if (!ctx_.selected_user_schema.empty()) {
+      if (dirty_) {
         auto task_map = regenerate_cb_(subflow, ctx_);
 
         // Selected
-        for (const auto &selected_miter : ctx_.selected_user_schema) {
+        for (const auto &selected_miter : ctx_.selected_schema) {
           const auto &id = selected_miter.first;
           env::assert_fatal(
               task_map.find(id) != task_map.end(),

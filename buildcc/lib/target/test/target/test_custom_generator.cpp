@@ -30,7 +30,7 @@ static std::unordered_map<std::string, tf::Task>
 BasicGenerateCb(tf::Subflow &subflow, buildcc::CustomGeneratorContext &ctx) {
   mock().actualCall("BasicGenerateCb");
   std::unordered_map<std::string, tf::Task> uom;
-  for (const auto &miter : ctx.selected_user_schema) {
+  for (const auto &miter : ctx.selected_schema) {
     mock().actualCall(miter.first.c_str());
     auto task = subflow.placeholder();
     uom.emplace(miter.first, task);
@@ -39,10 +39,10 @@ BasicGenerateCb(tf::Subflow &subflow, buildcc::CustomGeneratorContext &ctx) {
 }
 
 TEST(CustomGeneratorTestGroup, Basic) {
-  buildcc::CustomGenerator cgen("custom_generator", "");
+  buildcc::CustomGenerator cgen("basic", "");
   cgen.AddGenerateCb(BasicGenerateCb);
-  cgen.AddRelInputOutput("id1", {}, {});
-  cgen.AddRelInputOutput("id2", {}, {});
+  cgen.AddRelInputOutput("id1", {"{gen_root_dir}/dummy_main.c"}, {});
+  cgen.AddRelInputOutput("id2", {"{gen_root_dir}/dummy_main.cpp"}, {});
   cgen.Build();
 
   mock().expectOneCall("BasicGenerateCb");
@@ -57,7 +57,7 @@ BadGenerateCb_EmptyTask(tf::Subflow &subflow,
                         buildcc::CustomGeneratorContext &ctx) {
   (void)subflow;
   std::unordered_map<std::string, tf::Task> uom;
-  for (const auto &miter : ctx.selected_user_schema) {
+  for (const auto &miter : ctx.selected_schema) {
     tf::Task task;
     uom.emplace(miter.first, task);
   }
@@ -138,15 +138,19 @@ TEST(CustomGeneratorTestGroup, FailureCases) {
     buildcc::CustomGenerator cgen("gen_task_not_run_no_io", "");
     cgen.AddGenerateCb(BasicGenerateCb);
     cgen.Build();
+
+    mock().expectOneCall("BasicGenerateCb");
     buildcc::m::CustomGeneratorRunner(cgen);
   }
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
 }
 
 static std::unordered_map<std::string, tf::Task>
 RealGenerateCb(tf::Subflow &subflow, buildcc::CustomGeneratorContext &ctx) {
   mock().actualCall("RealGenerateCb");
   std::unordered_map<std::string, tf::Task> uom;
-  for (const auto &miter : ctx.selected_user_schema) {
+  for (const auto &miter : ctx.selected_schema) {
     auto task = subflow.emplace([&]() {
       try {
         bool executed = buildcc::env::Command::Execute("");
@@ -168,9 +172,8 @@ TEST(CustomGeneratorTestGroup, RealGenerate) {
   {
     buildcc::CustomGenerator cgen(kGenName, "");
     cgen.AddGenerateCb(RealGenerateCb);
-    cgen.AddRelInputOutput("id1", {"{gen_root_dir}/dummy_main.cpp"},
-                           {"{gen_build_dir}/dummy_main.o"});
-    cgen.AddRelInputOutput("id2", {}, {});
+    cgen.AddRelInputOutput("id1", {"{gen_root_dir}/dummy_main.cpp"}, {});
+    cgen.AddRelInputOutput("id2", {"{gen_root_dir}/dummy_main.c"}, {});
     cgen.Build();
 
     mock().expectOneCall("RealGenerateCb");
@@ -191,9 +194,8 @@ TEST(CustomGeneratorTestGroup, RealGenerate) {
   {
     buildcc::CustomGenerator cgen(kGenName, "");
     cgen.AddGenerateCb(RealGenerateCb);
-    cgen.AddRelInputOutput("id1", {"{gen_root_dir}/dummy_main.cpp"},
-                           {"{gen_build_dir}/dummy_main.o"});
-    cgen.AddRelInputOutput("id2", {}, {});
+    cgen.AddRelInputOutput("id1", {"{gen_root_dir}/dummy_main.cpp"}, {});
+    cgen.AddRelInputOutput("id2", {"{gen_root_dir}/dummy_main.c"}, {});
     cgen.Build();
 
     mock().expectOneCall("RealGenerateCb");
@@ -203,6 +205,9 @@ TEST(CustomGeneratorTestGroup, RealGenerate) {
     mock().expectOneCall("id2:SUCCESS");
     buildcc::m::CustomGeneratorRunner(cgen);
 
+    CHECK_TRUE(buildcc::env::get_task_state() ==
+               buildcc::env::TaskState::FAILURE);
+
     buildcc::internal::CustomGeneratorSerialization serialization(
         cgen.GetBinaryPath());
     CHECK_TRUE(serialization.LoadFromFile());
@@ -210,6 +215,8 @@ TEST(CustomGeneratorTestGroup, RealGenerate) {
 
     fs::remove_all(cgen.GetBinaryPath());
   }
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
 }
 
 int main(int ac, char **av) {
