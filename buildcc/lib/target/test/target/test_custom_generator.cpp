@@ -20,6 +20,7 @@ TEST_GROUP(CustomGeneratorTestGroup)
     void teardown() {
       mock().checkExpectations();
       mock().clear();
+      buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
     }
 };
 // clang-format on
@@ -140,6 +141,17 @@ TEST(CustomGeneratorTestGroup, FailureCases) {
     cgen.Build();
 
     mock().expectOneCall("BasicGenerateCb");
+    buildcc::m::CustomGeneratorRunner(cgen);
+  }
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+
+  {
+    buildcc::env::set_task_state(buildcc::env::TaskState::FAILURE);
+
+    buildcc::CustomGenerator cgen("gen_task_state_failure", "");
+    cgen.AddGenerateCb(BasicGenerateCb);
+    cgen.Build();
     buildcc::m::CustomGeneratorRunner(cgen);
   }
 
