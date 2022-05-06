@@ -152,36 +152,44 @@ void CustomGenerator::GenerateTask() {
       Convert();
       BuildGenerate(selected_user_schema_, dummy_selected_user_schema_);
 
-      if (dirty_) {
-        std::unordered_map<std::string, tf::Task> task_map;
+      std::unordered_map<std::string, tf::Task> task_map;
 
-        for (const auto &selected_miter : selected_user_schema_) {
-          const auto &id = selected_miter.first;
-          const auto &info = selected_miter.second;
-
-          tf::Task task = subflow.emplace([&]() {
-            try {
-              CustomGeneratorContext ctx(command_, info.inputs, info.outputs);
-              bool success = info.generate_cb(ctx);
-              env::assert_fatal(success, "Generate Cb failed for id {}");
-              AddSuccessSchema(id, info);
-            } catch (...) {
-              env::set_task_state(env::TaskState::FAILURE);
-            }
-          });
-          task.name(id);
-          task_map.emplace(id, task);
-        }
-
-        if (dependency_cb_) {
-          dependency_cb_(task_map);
-        }
-
-        // TODO, Create Selected graph
+      // Create task for selected schema
+      for (const auto &selected_miter : selected_user_schema_) {
+        const auto &id = selected_miter.first;
+        const auto &info = selected_miter.second;
+        tf::Task task =
+            subflow
+                .emplace([&]() {
+                  try {
+                    CustomGeneratorContext ctx(command_, info.inputs,
+                                               info.outputs);
+                    bool success = info.generate_cb(ctx);
+                    env::assert_fatal(success, "Generate Cb failed for id {}");
+                    AddSuccessSchema(id, info);
+                  } catch (...) {
+                    env::set_task_state(env::TaskState::FAILURE);
+                  }
+                })
+                .name(id);
+        task_map.emplace(id, task);
       }
 
-      // TODO, Create Dummy Selected graph
+      // Create placeholder task for dummy/not selected schema
+      for (const auto &dummy_selected_miter : dummy_selected_user_schema_) {
+        const auto &id = dummy_selected_miter.first;
+        tf::Task task = subflow.placeholder().name(id);
+        task_map.emplace(id, task);
+      }
 
+      // Dependencies between ids
+      if (dependency_cb_) {
+        dependency_cb_(task_map);
+      }
+
+      // TODO, Create Selected graph, See Target task
+      // TODO, Create Dummy Selected graph, See Target task
+      // We need to map (Inputs -> FN (id) -> Outputs)
     } catch (...) {
       env::set_task_state(env::TaskState::FAILURE);
     }
