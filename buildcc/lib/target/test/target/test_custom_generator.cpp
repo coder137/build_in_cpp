@@ -34,7 +34,8 @@ static bool BasicGenerateCb(const buildcc::CustomGeneratorContext &ctx) {
 
 TEST(CustomGeneratorTestGroup, Basic) {
   buildcc::CustomGenerator cgen("basic", "");
-  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"}, {}, BasicGenerateCb);
+  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
+                  {"{gen_build_dir}/dummy_main.o"}, BasicGenerateCb);
   cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
                   BasicGenerateCb);
   cgen.Build();
@@ -53,7 +54,11 @@ TEST(CustomGeneratorTestGroup, Basic) {
     CHECK_EQUAL(internal_map.size(), 2);
     const auto &id1_info = internal_map.at("id1");
     CHECK_EQUAL(id1_info.internal_inputs.size(), 1);
-    CHECK_EQUAL(id1_info.outputs.size(), 0);
+    CHECK_EQUAL(id1_info.outputs.size(), 1);
+
+    const auto &id2_info = internal_map.at("id2");
+    CHECK_EQUAL(id2_info.internal_inputs.size(), 1);
+    CHECK_EQUAL(id2_info.outputs.size(), 0);
   }
 }
 
