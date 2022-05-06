@@ -40,57 +40,42 @@
 
 namespace buildcc {
 
-struct UserRelInputOutputSchema {
+class CustomGeneratorContext {
+public:
+  CustomGeneratorContext(const env::Command &c, const fs_unordered_set &i,
+                         const fs_unordered_set &o)
+      : command(c), input(i), output(o) {}
+
+public:
+  const env::Command &command;
+  const fs_unordered_set &input;
+  const fs_unordered_set &output;
+};
+
+// clang-format off
+typedef std::function<bool(CustomGeneratorContext &)> GenerateCb;
+
+typedef std::function<void(std::unordered_map<std::string, tf::Task> &)> DependencyCb;
+// clang-format on
+
+struct UserRelInputOutputSchema : internal::RelInputOutputSchema {
   fs_unordered_set inputs;
-  fs_unordered_set outputs;
+  GenerateCb generate_cb;
 };
 
 struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
   std::unordered_map<std::string, UserRelInputOutputSchema> rels_map;
 
   void ConvertToInternal() {
-    for (const auto &r_miter : rels_map) {
-      internal::RelInputOutputSchema internal_schema;
-      internal_schema.outputs = r_miter.second.outputs;
-      internal_schema.internal_inputs = internal::path_schema_convert(
+    for (auto &r_miter : rels_map) {
+      r_miter.second.internal_inputs = path_schema_convert(
           r_miter.second.inputs, internal::Path::CreateExistingPath);
-      internal_rels_map.emplace(r_miter.first, std::move(internal_schema));
+      auto p = internal_rels_map.emplace(r_miter.first, r_miter.second);
+      env::assert_fatal(p.second,
+                        fmt::format("Could not save {}", r_miter.first));
     }
   }
 };
-
-class CustomGeneratorContext {
-public:
-  CustomGeneratorContext(
-      const env::Command &c,
-      const std::unordered_map<std::string, UserRelInputOutputSchema> &schema)
-      : command(c), selected_schema(schema) {}
-
-  void Success(const std::string &id) {
-    std::lock_guard<std::mutex> m(success_schema_mutex_);
-    success_schema_.emplace(id, selected_schema.at(id));
-  }
-
-  void Failure() { env::set_task_state(env::TaskState::FAILURE); }
-
-  const std::unordered_map<std::string, UserRelInputOutputSchema> &
-  GetSuccessSchema() {
-    return success_schema_;
-  }
-
-public:
-  const env::Command &command;
-  const std::unordered_map<std::string, UserRelInputOutputSchema>
-      &selected_schema;
-
-private:
-  std::mutex success_schema_mutex_;
-  std::unordered_map<std::string, UserRelInputOutputSchema> success_schema_;
-};
-
-// clang-format off
-typedef std::function<std::unordered_map<std::string, tf::Task>(tf::Subflow &, CustomGeneratorContext &)> GenerateCb;
-// clang-format on
 
 class CustomGenerator : public internal::BuilderInterface {
 public:
@@ -99,7 +84,7 @@ public:
       : name_(name),
         env_(env.GetTargetRootDir(), env.GetTargetBuildDir() / name),
         serialization_(env_.GetTargetBuildDir() / fmt::format("{}.bin", name)),
-        parallel_(parallel), ctx_(command_, selected_user_schema_) {
+        parallel_(parallel) {
     Initialize();
   }
   virtual ~CustomGenerator() = default;
@@ -113,11 +98,12 @@ public:
   void AddDefaultArguments(
       const std::unordered_map<std::string, std::string> &arguments);
 
-  void AddRelInputOutput(const std::string &id, const fs_unordered_set &inputs,
-                         const fs_unordered_set &outputs);
+  void AddGenInfo(const std::string &id, const fs_unordered_set &inputs,
+                  const fs_unordered_set &outputs,
+                  const GenerateCb &generate_cb);
 
-  // TODO, Rename this to GenerateCb
-  void AddGenerateCb(const GenerateCb &regenerate_cb);
+  // Callbacks
+  void AddDependencyCb(const DependencyCb &dependency_cb);
 
   void Build() override;
 
@@ -136,6 +122,10 @@ private:
                          &gen_selected_map,
                      std::unordered_map<std::string, UserRelInputOutputSchema>
                          &dummy_gen_selected_map);
+
+  void AddSuccessSchema(const std::string &id,
+                        const UserRelInputOutputSchema &schema);
+
   // Recheck states
   void PathRemoved() {}
   void PathAdded() {}
@@ -148,7 +138,6 @@ private:
   TargetEnv env_;
   internal::CustomGeneratorSerialization serialization_;
   bool parallel_;
-  CustomGeneratorContext ctx_;
 
   // Serialization
   UserCustomGeneratorSchema user_;
@@ -157,11 +146,16 @@ private:
   std::unordered_map<std::string, UserRelInputOutputSchema>
       dummy_selected_user_schema_;
 
+  std::mutex success_schema_mutex_;
+  std::unordered_map<std::string, UserRelInputOutputSchema> success_schema_;
+
   // Internal
   std::mutex task_state_mutex_;
   env::Command command_;
   tf::Taskflow tf_;
-  GenerateCb regenerate_cb_;
+
+  // Callbacks
+  DependencyCb dependency_cb_;
 };
 
 // TODO, Make this private

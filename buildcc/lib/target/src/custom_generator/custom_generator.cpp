@@ -32,11 +32,14 @@ void CustomGenerator::AddDefaultArguments(
   command_.AddDefaultArguments(arguments);
 }
 
-void CustomGenerator::AddRelInputOutput(const std::string &id,
-                                        const fs_unordered_set &inputs,
-                                        const fs_unordered_set &outputs) {
+void CustomGenerator::AddGenInfo(const std::string &id,
+                                 const fs_unordered_set &inputs,
+                                 const fs_unordered_set &outputs,
+                                 const GenerateCb &generate_cb) {
   env::assert_fatal(user_.rels_map.find(id) == user_.rels_map.end(),
                     fmt::format("Duplicate id {} detected", id));
+  ASSERT_FATAL(generate_cb, "Invalid callback provided");
+
   UserRelInputOutputSchema schema;
   for (const auto &i : inputs) {
     schema.inputs.emplace(command_.Construct(path_as_string(i)));
@@ -44,17 +47,15 @@ void CustomGenerator::AddRelInputOutput(const std::string &id,
   for (const auto &o : outputs) {
     schema.outputs.emplace(command_.Construct(path_as_string(o)));
   }
+  schema.generate_cb = generate_cb;
   user_.rels_map.emplace(id, std::move(schema));
 }
 
-void CustomGenerator::AddGenerateCb(const GenerateCb &regenerate_cb) {
-  regenerate_cb_ = regenerate_cb;
+void CustomGenerator::AddDependencyCb(const DependencyCb &dependency_cb) {
+  dependency_cb_ = dependency_cb;
 }
 
 void CustomGenerator::Build() {
-  ASSERT_FATAL(regenerate_cb_,
-               "Supply your custom regenerate callback using the "
-               "CustomGenerator::AddGenerateCb API");
   (void)serialization_.LoadFromFile();
 
   GenerateTask();
@@ -77,89 +78,6 @@ void CustomGenerator::Initialize() {
   //
   unique_id_ = name_;
   tf_.name(name_);
-}
-
-void CustomGenerator::GenerateTask() {
-  tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
-    if (env::get_task_state() != env::TaskState::SUCCESS) {
-      return;
-    }
-
-    try {
-      Convert();
-      BuildGenerate(selected_user_schema_, dummy_selected_user_schema_);
-
-      if (dirty_) {
-        auto task_map = regenerate_cb_(subflow, ctx_);
-
-        // Selected
-        for (const auto &selected_miter : ctx_.selected_schema) {
-          const auto &id = selected_miter.first;
-          env::assert_fatal(
-              task_map.find(id) != task_map.end(),
-              "Incorrect implementation of CustomGenerator::GenerateCb. Please "
-              "make sure all the map ids have a Task associated with it.");
-          tf::Task gtask = task_map.at(id);
-          env::assert_fatal(
-              !gtask.empty(),
-              "Incorrect implementation of CustomGenerator::GenerateCb. Task "
-              "returned is empty");
-          gtask.name(id);
-
-          const auto &inputs = selected_miter.second.inputs;
-          for (const auto &i : inputs) {
-            std::string name =
-                fmt::format("{}", i.lexically_relative(Project::GetRootDir()));
-            auto itask = subflow.placeholder().name(name);
-            itask.precede(gtask);
-          }
-          const auto &outputs = selected_miter.second.outputs;
-          for (const auto &o : outputs) {
-            std::string name =
-                fmt::format("{}", o.lexically_relative(Project::GetRootDir()));
-            tf::Task otask = subflow.placeholder().name(name);
-            otask.succeed(gtask);
-          }
-        }
-      }
-
-      // DONE, Graph Generation
-
-      // TODO, Dummy Selected
-      // for (const auto &dummy_selected_miter : dummy_selected_user_schema_) {
-      // }
-
-    } catch (...) {
-      env::set_task_state(env::TaskState::FAILURE);
-    }
-  });
-  generate_task.name(kGenerateTaskName);
-
-  tf::Task end_task = tf_.emplace([this]() {
-    // Even if env::TaskState::FAILURE we still need to partially store the
-    // built files
-    if (dirty_) {
-      try {
-        UserCustomGeneratorSchema user_final_schema;
-        user_final_schema.rels_map.insert(dummy_selected_user_schema_.begin(),
-                                          dummy_selected_user_schema_.end());
-        const auto &success_schema = ctx_.GetSuccessSchema();
-        user_final_schema.rels_map.insert(success_schema.begin(),
-                                          success_schema.end());
-
-        user_final_schema.ConvertToInternal();
-        serialization_.UpdateStore(user_final_schema);
-        env::assert_fatal(serialization_.StoreToFile(),
-                          fmt::format("Store failed for {}", name_));
-      } catch (...) {
-        env::set_task_state(env::TaskState::FAILURE);
-      }
-    }
-  });
-  end_task.name(kEndGeneratorTaskName);
-
-  // Dependencies
-  generate_task.precede(end_task);
 }
 
 void CustomGenerator::Convert() { user_.ConvertToInternal(); }
@@ -216,6 +134,84 @@ void CustomGenerator::BuildGenerate(
       }
     }
   }
+}
+
+void CustomGenerator::AddSuccessSchema(const std::string &id,
+                                       const UserRelInputOutputSchema &schema) {
+  std::lock_guard<std::mutex> guard(success_schema_mutex_);
+  success_schema_.emplace(id, schema);
+}
+
+void CustomGenerator::GenerateTask() {
+  tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
+    if (env::get_task_state() != env::TaskState::SUCCESS) {
+      return;
+    }
+
+    try {
+      Convert();
+      BuildGenerate(selected_user_schema_, dummy_selected_user_schema_);
+
+      if (dirty_) {
+        std::unordered_map<std::string, tf::Task> task_map;
+
+        for (const auto &selected_miter : selected_user_schema_) {
+          const auto &id = selected_miter.first;
+          const auto &info = selected_miter.second;
+
+          tf::Task task = subflow.emplace([&]() {
+            try {
+              CustomGeneratorContext ctx(command_, info.inputs, info.outputs);
+              bool success = info.generate_cb(ctx);
+              env::assert_fatal(success, "Generate Cb failed for id {}");
+              AddSuccessSchema(id, info);
+            } catch (...) {
+              env::set_task_state(env::TaskState::FAILURE);
+            }
+          });
+          task.name(id);
+          task_map.emplace(id, task);
+        }
+
+        if (dependency_cb_) {
+          dependency_cb_(task_map);
+        }
+
+        // TODO, Create Selected graph
+      }
+
+      // TODO, Create Dummy Selected graph
+
+    } catch (...) {
+      env::set_task_state(env::TaskState::FAILURE);
+    }
+  });
+  generate_task.name(kGenerateTaskName);
+
+  tf::Task end_task = tf_.emplace([this]() {
+    // Even if env::TaskState::FAILURE we still need to partially store the
+    // built files
+    if (dirty_) {
+      try {
+        UserCustomGeneratorSchema user_final_schema;
+        user_final_schema.rels_map.insert(dummy_selected_user_schema_.begin(),
+                                          dummy_selected_user_schema_.end());
+        user_final_schema.rels_map.insert(success_schema_.begin(),
+                                          success_schema_.end());
+
+        user_final_schema.ConvertToInternal();
+        serialization_.UpdateStore(user_final_schema);
+        env::assert_fatal(serialization_.StoreToFile(),
+                          fmt::format("Store failed for {}", name_));
+      } catch (...) {
+        env::set_task_state(env::TaskState::FAILURE);
+      }
+    }
+  });
+  end_task.name(kEndGeneratorTaskName);
+
+  // Dependencies
+  generate_task.precede(end_task);
 }
 
 } // namespace buildcc
