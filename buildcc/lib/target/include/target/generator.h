@@ -44,12 +44,12 @@ class CustomGeneratorContext {
 public:
   CustomGeneratorContext(const env::Command &c, const fs_unordered_set &i,
                          const fs_unordered_set &o)
-      : command(c), input(i), output(o) {}
+      : command(c), inputs(i), outputs(o) {}
 
 public:
   const env::Command &command;
-  const fs_unordered_set &input;
-  const fs_unordered_set &output;
+  const fs_unordered_set &inputs;
+  const fs_unordered_set &outputs;
 };
 
 // clang-format off
@@ -141,10 +141,6 @@ private:
 
   // Serialization
   UserCustomGeneratorSchema user_;
-  std::unordered_map<std::string, UserRelInputOutputSchema>
-      selected_user_schema_;
-  std::unordered_map<std::string, UserRelInputOutputSchema>
-      dummy_selected_user_schema_;
 
   std::mutex success_schema_mutex_;
   std::unordered_map<std::string, UserRelInputOutputSchema> success_schema_;

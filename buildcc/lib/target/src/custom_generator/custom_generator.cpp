@@ -149,13 +149,18 @@ void CustomGenerator::GenerateTask() {
     }
 
     try {
+      std::unordered_map<std::string, UserRelInputOutputSchema>
+          selected_user_schema;
+      std::unordered_map<std::string, UserRelInputOutputSchema>
+          dummy_selected_user_schema;
       Convert();
-      BuildGenerate(selected_user_schema_, dummy_selected_user_schema_);
+      BuildGenerate(selected_user_schema, dummy_selected_user_schema);
+
+      // TODO, Additional dummy recheck
 
       std::unordered_map<std::string, tf::Task> task_map;
-
       // Create task for selected schema
-      for (const auto &selected_miter : selected_user_schema_) {
+      for (const auto &selected_miter : selected_user_schema) {
         const auto &id = selected_miter.first;
         const auto &info = selected_miter.second;
         tf::Task task =
@@ -176,7 +181,7 @@ void CustomGenerator::GenerateTask() {
       }
 
       // Create placeholder task for dummy/not selected schema
-      for (const auto &dummy_selected_miter : dummy_selected_user_schema_) {
+      for (const auto &dummy_selected_miter : dummy_selected_user_schema) {
         const auto &id = dummy_selected_miter.first;
         tf::Task task = subflow.placeholder().name(id);
         task_map.emplace(id, task);
@@ -187,23 +192,14 @@ void CustomGenerator::GenerateTask() {
         dependency_cb_(task_map);
       }
 
-      // TODO, Create Selected graph, See Target task
-      // TODO, Create Dummy Selected graph, See Target task
-      // We need to map (Inputs -> FN (id) -> Outputs)
-    } catch (...) {
-      env::set_task_state(env::TaskState::FAILURE);
-    }
-  });
-  generate_task.name(kGenerateTaskName);
+      // NOTE, Do not call detach otherwise this will fail
+      subflow.join();
 
-  tf::Task end_task = tf_.emplace([this]() {
-    // Even if env::TaskState::FAILURE we still need to partially store the
-    // built files
-    if (dirty_) {
-      try {
+      // Store dummy_selected and successfully run schema
+      if (dirty_) {
         UserCustomGeneratorSchema user_final_schema;
-        user_final_schema.rels_map.insert(dummy_selected_user_schema_.begin(),
-                                          dummy_selected_user_schema_.end());
+        user_final_schema.rels_map.insert(dummy_selected_user_schema.begin(),
+                                          dummy_selected_user_schema.end());
         user_final_schema.rels_map.insert(success_schema_.begin(),
                                           success_schema_.end());
 
@@ -211,15 +207,14 @@ void CustomGenerator::GenerateTask() {
         serialization_.UpdateStore(user_final_schema);
         env::assert_fatal(serialization_.StoreToFile(),
                           fmt::format("Store failed for {}", name_));
-      } catch (...) {
-        env::set_task_state(env::TaskState::FAILURE);
       }
+
+    } catch (...) {
+      env::set_task_state(env::TaskState::FAILURE);
     }
   });
-  end_task.name(kEndGeneratorTaskName);
-
-  // Dependencies
-  generate_task.precede(end_task);
+  // TODO, Instead of "Generate" name the task of user's choice
+  generate_task.name(kGenerateTaskName);
 }
 
 } // namespace buildcc
