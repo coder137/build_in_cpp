@@ -75,7 +75,6 @@ struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
   }
 };
 
-// TODO, Add comments to functions
 class CustomGenerator : public internal::BuilderInterface {
 public:
   CustomGenerator(const std::string &name, const TargetEnv &env,
@@ -97,11 +96,34 @@ public:
   void AddDefaultArguments(
       const std::unordered_map<std::string, std::string> &arguments);
 
+  /**
+   * @brief Single Generator task for inputs->generate_cb->outputs
+   *
+   * @param id Unique id associated with Generator task
+   * @param inputs File inputs
+   * @param outputs File outputs
+   * @param generate_cb User-defined generate callback to build outputs from the
+   * provided inputs
+   */
   void AddGenInfo(const std::string &id, const fs_unordered_set &inputs,
                   const fs_unordered_set &outputs,
                   const GenerateCb &generate_cb);
 
   // Callbacks
+  /**
+   * @brief Setup dependencies between Tasks using their `id`
+   * For example: `task_map["id1"].precede(task_map["id2"])`
+   *
+   * IMPORTANT: Successor tasks will not automatically run if dependent task is
+   * run.
+   * The Dependency callback only sets precedence (order in which your tasks
+   * should run)
+   * Default behaviour when dependency callback is not supplied: All task `id`s
+   * run in parallel.
+   *
+   * @param dependency_cb Unordered map of `id` and `task`
+   * The map can be safely mutated.
+   */
   void AddDependencyCb(const DependencyCb &dependency_cb);
 
   void Build() override;
