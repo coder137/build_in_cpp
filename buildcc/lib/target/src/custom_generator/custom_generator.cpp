@@ -94,10 +94,18 @@ void CustomGenerator::BuildGenerate(
     const auto &curr_rels = user_.internal_rels_map;
     const auto &prev_rels = serialization_.GetLoad().internal_rels_map;
 
-    // TODO, MAP REMOVED condition Check if prev_rels exists in curr_rels
+    // DONE, MAP REMOVED condition Check if prev_rels exists in curr_rels
     // If prev_rels does not exist in curr_rels, has been removed from existing
     // build
     // We need this condition to only set the dirty_ flag
+    for (const auto &prev_miter : prev_rels) {
+      const auto &id = prev_miter.first;
+      if (curr_rels.find(id) == curr_rels.end()) {
+        // MAP REMOVED condition
+        dirty_;
+        break;
+      }
+    }
 
     // DONE, MAP ADDED condition Check if curr_rels exists in prev_rels
     // If curr_rels does not exist in prev_rels, has been added to existing
