@@ -125,12 +125,9 @@ private:
                         const UserRelInputOutputSchema &schema);
 
   // Recheck states
-  // TODO,
-  void PathRemoved() {}
-  void PathAdded() {}
-  void PathUpdated() {}
-
-  void StringChanged() {}
+  void IdRemoved();
+  void IdAdded();
+  void IdUpdated();
 
 private:
   std::string name_;
