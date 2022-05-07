@@ -102,7 +102,8 @@ void CustomGenerator::BuildGenerate(
       const auto &id = prev_miter.first;
       if (curr_rels.find(id) == curr_rels.end()) {
         // MAP REMOVED condition
-        dirty_;
+        IdRemoved();
+        dirty_ = true;
         break;
       }
     }
@@ -119,6 +120,7 @@ void CustomGenerator::BuildGenerate(
       const auto &id = curr_miter.first;
       if (prev_rels.find(id) == prev_rels.end()) {
         // MAP ADDED condition
+        IdAdded();
         gen_selected_map.emplace(curr_miter.first,
                                  user_.rels_map.at(curr_miter.first));
         dirty_ = true;
@@ -131,6 +133,7 @@ void CustomGenerator::BuildGenerate(
 
         if (path_state != internal::PathState::kNoChange || changed) {
           // MAP UPDATED condition
+          IdUpdated();
           gen_selected_map.emplace(curr_miter.first,
                                    user_.rels_map.at(curr_miter.first));
           dirty_ = true;
