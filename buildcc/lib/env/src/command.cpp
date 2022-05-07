@@ -61,7 +61,14 @@ std::string Command::Construct(
                 });
 
   // Construct your command
-  return fmt::vformat(pattern, store);
+  std::string ret;
+  try {
+    ret = fmt::vformat(pattern, store);
+  } catch (const std::exception &e) {
+    env::assert_fatal<false>(
+        fmt::format("Construct command failed: {}", e.what()));
+  }
+  return ret;
 }
 
 } // namespace buildcc::env
