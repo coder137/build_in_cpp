@@ -37,6 +37,7 @@
 namespace buildcc {
 
 // TODO, Shift to a different file
+// TODO, Check if we need the "id" here as well
 class CustomGeneratorContext {
 public:
   CustomGeneratorContext(const env::Command &c, const fs_unordered_set &i,
