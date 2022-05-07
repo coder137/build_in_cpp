@@ -1,5 +1,8 @@
 add_library(mock_target STATIC
     ${COMMON_TARGET_SRCS}
+    # Custom Generator mocks
+    mock/custom_generator/runner.cpp
+    mock/custom_generator/recheck_states.cpp
 
     # Generator mocks
     src/generator/task.cpp

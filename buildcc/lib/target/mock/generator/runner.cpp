@@ -4,12 +4,6 @@
 
 namespace buildcc::m {
 
-void CustomGeneratorRunner(CustomGenerator &custom_generator) {
-  tf::Executor executor(1);
-  executor.run(custom_generator.GetTaskflow());
-  executor.wait_for_all();
-}
-
 void GeneratorRunner(Generator &generator) {
   tf::Executor executor(1);
   executor.run(generator.GetTaskflow());
