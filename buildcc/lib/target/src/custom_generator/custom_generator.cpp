@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "target/generator.h"
+#include "target/custom_generator.h"
 
 namespace {
 constexpr const char *const kStartGeneratorTaskName = "Start Generator";
@@ -163,8 +163,6 @@ void CustomGenerator::GenerateTask() {
           dummy_selected_user_schema;
       Convert();
       BuildGenerate(selected_user_schema, dummy_selected_user_schema);
-
-      // TODO, Additional dummy recheck
 
       std::unordered_map<std::string, tf::Task> task_map;
       // Create task for selected schema
