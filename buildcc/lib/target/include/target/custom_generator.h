@@ -77,12 +77,10 @@ struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
 
 class CustomGenerator : public internal::BuilderInterface {
 public:
-  CustomGenerator(const std::string &name, const TargetEnv &env,
-                  bool parallel = false)
+  CustomGenerator(const std::string &name, const TargetEnv &env)
       : name_(name),
         env_(env.GetTargetRootDir(), env.GetTargetBuildDir() / name),
-        serialization_(env_.GetTargetBuildDir() / fmt::format("{}.bin", name)),
-        parallel_(parallel) {
+        serialization_(env_.GetTargetBuildDir() / fmt::format("{}.bin", name)) {
     Initialize();
   }
   virtual ~CustomGenerator() = default;
@@ -156,7 +154,6 @@ private:
   std::string name_;
   TargetEnv env_;
   internal::CustomGeneratorSerialization serialization_;
-  bool parallel_;
 
   // Serialization
   UserCustomGeneratorSchema user_;
