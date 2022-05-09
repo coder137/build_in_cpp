@@ -80,8 +80,6 @@ void CustomGenerator::Initialize() {
   tf_.name(name_);
 }
 
-void CustomGenerator::Convert() { user_.ConvertToInternal(); }
-
 void CustomGenerator::BuildGenerate(
     std::unordered_map<std::string, UserRelInputOutputSchema> &gen_selected_map,
     std::unordered_map<std::string, UserRelInputOutputSchema>
@@ -91,8 +89,8 @@ void CustomGenerator::BuildGenerate(
     dirty_ = true;
   } else {
     // DONE, Conditionally select internal_rels depending on what has changed
-    const auto &curr_rels = user_.internal_rels_map;
     const auto &prev_rels = serialization_.GetLoad().internal_rels_map;
+    const auto &curr_rels = user_.rels_map;
 
     // DONE, MAP REMOVED condition Check if prev_rels exists in curr_rels
     // If prev_rels does not exist in curr_rels, has been removed from existing
@@ -111,37 +109,18 @@ void CustomGenerator::BuildGenerate(
     // DONE, MAP ADDED condition Check if curr_rels exists in prev_rels
     // If curr_rels does not exist in prev_rels, has been added to existing
     // build
-
-    // DONE, MAP UPDATED condition, Check if curr_rels exists in prev_rels
-    // If curr_rels exists in prev_rels, but the
-    // * INPUT has been removed, added or changed
-    // * OUTPUT has been removed or added
     for (const auto &curr_miter : curr_rels) {
       const auto &id = curr_miter.first;
       if (prev_rels.find(id) == prev_rels.end()) {
         // MAP ADDED condition
         IdAdded();
-        gen_selected_map.emplace(curr_miter.first,
-                                 user_.rels_map.at(curr_miter.first));
+        gen_selected_map.emplace(curr_miter.first, curr_miter.second);
         dirty_ = true;
       } else {
-        // Check internal_inputs
-        auto path_state = CheckPaths(prev_rels.at(id).internal_inputs,
-                                     curr_miter.second.internal_inputs);
-        auto changed =
-            CheckChanged(prev_rels.at(id).outputs, curr_miter.second.outputs);
-
-        if (path_state != internal::PathState::kNoChange || changed) {
-          // MAP UPDATED condition
-          IdUpdated();
-          gen_selected_map.emplace(curr_miter.first,
-                                   user_.rels_map.at(curr_miter.first));
-          dirty_ = true;
-        } else {
-          // MAP NO CHANGE condition
-          dummy_gen_selected_map.emplace(curr_miter.first,
-                                         user_.rels_map.at(curr_miter.first));
-        }
+        // MAP UPDATED condition (*checked later)
+        // This is because tasks can have dependencies amongst each other we can
+        // compute task level rebuilds later
+        dummy_gen_selected_map.emplace(curr_miter.first, curr_miter.second);
       }
     }
   }
@@ -164,7 +143,6 @@ void CustomGenerator::GenerateTask() {
           selected_user_schema;
       std::unordered_map<std::string, UserRelInputOutputSchema>
           dummy_selected_user_schema;
-      Convert();
       BuildGenerate(selected_user_schema, dummy_selected_user_schema);
 
       std::unordered_map<std::string, tf::Task> task_map;
@@ -189,10 +167,35 @@ void CustomGenerator::GenerateTask() {
         task_map.emplace(id, task);
       }
 
-      // Create placeholder task for dummy/not selected schema
       for (const auto &dummy_selected_miter : dummy_selected_user_schema) {
         const auto &id = dummy_selected_miter.first;
-        tf::Task task = subflow.placeholder().name(id);
+        const auto &info = dummy_selected_miter.second;
+        serialization_.GetLoad().internal_rels_map.at(id);
+
+        tf::Task task = subflow.emplace([&]() {
+          try {
+            auto curr_internal_inputs = internal::path_schema_convert(
+                info.inputs, internal::Path::CreateExistingPath);
+            auto previous_info =
+                serialization_.GetLoad().internal_rels_map.at(id);
+            bool rebuild =
+                internal::CheckPaths(previous_info.internal_inputs,
+                                     curr_internal_inputs) !=
+                    internal::PathState::kNoChange ||
+                internal::CheckChanged(previous_info.outputs, info.outputs);
+            if (!rebuild) {
+              return;
+            }
+
+            // TODO, Duplicated code from above
+            CustomGeneratorContext ctx(command_, info.inputs, info.outputs);
+            bool success = info.generate_cb(ctx);
+            env::assert_fatal(success, "Generate Cb failed for id {}");
+            AddSuccessSchema(id, info);
+          } catch (...) {
+            env::set_task_state(env::TaskState::FAILURE);
+          }
+        });
         task_map.emplace(id, task);
       }
 
@@ -207,8 +210,6 @@ void CustomGenerator::GenerateTask() {
       // Store dummy_selected and successfully run schema
       if (dirty_) {
         UserCustomGeneratorSchema user_final_schema;
-        user_final_schema.rels_map.insert(dummy_selected_user_schema.begin(),
-                                          dummy_selected_user_schema.end());
         user_final_schema.rels_map.insert(success_schema_.begin(),
                                           success_schema_.end());
 

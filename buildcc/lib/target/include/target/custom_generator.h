@@ -138,7 +138,6 @@ private:
   void Initialize();
 
   void GenerateTask();
-  void Convert();
   void BuildGenerate(std::unordered_map<std::string, UserRelInputOutputSchema>
                          &gen_selected_map,
                      std::unordered_map<std::string, UserRelInputOutputSchema>
@@ -165,7 +164,6 @@ private:
   std::unordered_map<std::string, UserRelInputOutputSchema> success_schema_;
 
   // Internal
-  std::mutex task_state_mutex_;
   env::Command command_;
   tf::Taskflow tf_;
 
