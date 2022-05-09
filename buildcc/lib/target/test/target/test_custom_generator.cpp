@@ -2,6 +2,7 @@
 
 #include "expect_command.h"
 #include "expect_custom_generator.h"
+#include "test_target_util.h"
 
 // #include "test_target_util.h"
 // #include "taskflow/taskflow.hpp"
@@ -350,6 +351,8 @@ TEST(CustomGeneratorTestGroup, RealGenerate_RemoveAndAdd) {
     auto imap = serialization.GetLoad().internal_rels_map;
     CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
     CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+
+    CHECK_THROWS(std::out_of_range, imap.at("id2"));
   }
 
   // Map Added Failure
@@ -403,6 +406,150 @@ TEST(CustomGeneratorTestGroup, RealGenerate_RemoveAndAdd) {
 
     CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
     CHECK_EQUAL(imap.at("id2").outputs.size(), 1);
+  }
+}
+
+TEST(CustomGeneratorTestGroup, RealGenerate_Update_Failure) {
+  constexpr const char *const kGenName = "real_generator_update_failure";
+
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    buildcc::env::save_file(
+        (cgen.GetBuildDir() / "dummy_main.c").string().c_str(), "", false);
+    buildcc::env::save_file(
+        (cgen.GetBuildDir() / "dummy_main.cpp").string().c_str(), "", false);
+
+    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.cpp"},
+                    {"{gen_build_dir}/other_dummy_main.o"}, RealGenerateCb);
+    cgen.Build();
+
+    mock().expectOneCall("RealGenerateCb");
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    mock().expectOneCall("RealGenerateCb");
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
+    auto imap = serialization.GetLoad().internal_rels_map;
+    CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
+    CHECK_EQUAL(imap.at("id2").internal_inputs.size(), 1);
+
+    CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+    CHECK_EQUAL(imap.at("id2").outputs.size(), 1);
+  }
+
+  buildcc::m::blocking_sleep(1);
+
+  // Updated Input file Failure
+  UT_PRINT("Updated Input file: Failure\r\n");
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    buildcc::env::save_file(
+        (cgen.GetBuildDir() / "dummy_main.cpp").string().c_str(), "", false);
+
+    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.cpp"},
+                    {"{gen_build_dir}/other_dummy_main.o"}, RealGenerateCb);
+    cgen.Build();
+
+    mock().expectOneCall("RealGenerateCb");
+    buildcc::env::m::CommandExpect_Execute(1, false);
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 1);
+    auto imap = serialization.GetLoad().internal_rels_map;
+    CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
+    CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
+  }
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+}
+
+TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
+  constexpr const char *const kGenName = "real_generator_update_success";
+
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    buildcc::env::save_file(
+        (cgen.GetBuildDir() / "dummy_main.c").string().c_str(), "", false);
+    buildcc::env::save_file(
+        (cgen.GetBuildDir() / "dummy_main.cpp").string().c_str(), "", false);
+
+    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.cpp"},
+                    {"{gen_build_dir}/other_dummy_main.o"}, RealGenerateCb);
+    cgen.Build();
+
+    mock().expectOneCall("RealGenerateCb");
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    mock().expectOneCall("RealGenerateCb");
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
+    auto imap = serialization.GetLoad().internal_rels_map;
+    CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
+    CHECK_EQUAL(imap.at("id2").internal_inputs.size(), 1);
+
+    CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+    CHECK_EQUAL(imap.at("id2").outputs.size(), 1);
+  }
+
+  buildcc::m::blocking_sleep(1);
+
+  // Updated Input file Success
+  UT_PRINT("Updated Input file: Success\r\n");
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    buildcc::env::save_file(
+        (cgen.GetBuildDir() / "dummy_main.cpp").string().c_str(), "", false);
+
+    std::uint64_t last_write_timestamp = static_cast<uint64_t>(
+        fs::last_write_time(cgen.GetBuildDir() / "dummy_main.cpp")
+            .time_since_epoch()
+            .count());
+
+    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.cpp"},
+                    {"{gen_build_dir}/other_dummy_main.o"}, RealGenerateCb);
+    cgen.Build();
+
+    mock().expectOneCall("RealGenerateCb");
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
+    auto imap = serialization.GetLoad().internal_rels_map;
+    CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
+    CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+
+    CHECK_EQUAL(imap.at("id2").internal_inputs.size(), 1);
+    CHECK_EQUAL(imap.at("id2").outputs.size(), 1);
+
+    CHECK_EQUAL(
+        last_write_timestamp,
+        imap.at("id2").internal_inputs.begin()->GetLastWriteTimestamp());
+
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }
 }
 

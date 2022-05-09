@@ -132,6 +132,8 @@ public:
   const fs::path &GetBinaryPath() const {
     return serialization_.GetSerializedFile();
   }
+  const fs::path &GetRootDir() const { return env_.GetTargetRootDir(); }
+  const fs::path &GetBuildDir() const { return env_.GetTargetBuildDir(); }
   tf::Taskflow &GetTaskflow() { return tf_; }
 
 private:

@@ -188,7 +188,6 @@ void CustomGenerator::GenerateTask() {
         user_final_schema.rels_map.insert(success_schema_.begin(),
                                           success_schema_.end());
 
-        // TODO, Update this
         user_final_schema.ConvertToInternal();
         serialization_.UpdateStore(user_final_schema);
         env::assert_fatal(serialization_.StoreToFile(),
@@ -218,6 +217,7 @@ template <bool run> void CustomGenerator::TaskRunner(const std::string &id) {
   }
 
   if (rerun) {
+    dirty_ = true;
     buildcc::CustomGeneratorContext ctx(command_, current_info.inputs,
                                         current_info.outputs);
     bool success = current_info.generate_cb(ctx);
