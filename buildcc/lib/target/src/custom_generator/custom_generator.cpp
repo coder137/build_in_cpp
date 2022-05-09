@@ -221,7 +221,7 @@ template <bool run> void CustomGenerator::TaskRunner(const std::string &id) {
     buildcc::CustomGeneratorContext ctx(command_, current_info.inputs,
                                         current_info.outputs);
     bool success = current_info.generate_cb(ctx);
-    env::assert_fatal(success, "Generate Cb failed for id {}");
+    env::assert_fatal(success, fmt::format("Generate Cb failed for id {}", id));
   }
 
   std::lock_guard<std::mutex> guard(success_schema_mutex_);
