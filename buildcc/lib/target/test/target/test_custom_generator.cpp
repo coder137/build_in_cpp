@@ -164,7 +164,7 @@ static void DependencyCb(std::unordered_map<std::string, tf::Task> &task_map) {
 }
 
 TEST(CustomGeneratorTestGroup, AddDependency_BasicCheck) {
-  constexpr const char *const kGenName = "add_dependency";
+  constexpr const char *const kGenName = "add_dependency_basic_check";
   {
     buildcc::CustomGenerator cgen(kGenName, "");
     cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
@@ -184,8 +184,43 @@ TEST(CustomGeneratorTestGroup, AddDependency_BasicCheck) {
         cgen.GetBinaryPath());
     CHECK_TRUE(serialization.LoadFromFile());
     CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
+  }
+}
 
-    fs::remove_all(cgen.GetBinaryPath());
+static bool FileDep1Cb(const buildcc::CustomGeneratorContext &ctx) {
+  mock().actualCall("FileDep1Cb");
+  for (const auto &o : ctx.outputs) {
+    CHECK_TRUE(buildcc::env::save_file(o.string().c_str(), "", false));
+  }
+  return true;
+}
+
+static bool FileDep2Cb(const buildcc::CustomGeneratorContext &ctx) {
+  mock().actualCall("FileDep2Cb");
+  for (const auto &i : ctx.inputs) {
+    CHECK_TRUE(fs::exists(i));
+  }
+  return true;
+}
+
+TEST(CustomGeneratorTestGroup, AddDependency_FileDep) {
+  constexpr const char *const kGenName = "add_dependency_file_dep";
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, FileDep1Cb);
+    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.o"}, {}, FileDep2Cb);
+    cgen.AddDependencyCb(DependencyCb);
+    cgen.Build();
+
+    mock().expectOneCall("FileDep1Cb");
+    mock().expectOneCall("FileDep2Cb");
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
   }
 }
 
