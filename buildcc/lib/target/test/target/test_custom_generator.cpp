@@ -551,6 +551,35 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
 
     CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }
+
+  // Updated Output file Success
+  UT_PRINT("Updated Output file: Success\r\n");
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+
+    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.cpp"},
+                    {"{gen_build_dir}/rename_dummy_main.o"}, RealGenerateCb);
+    cgen.Build();
+
+    mock().expectOneCall("RealGenerateCb");
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
+    auto imap = serialization.GetLoad().internal_rels_map;
+    CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
+    CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+
+    CHECK_EQUAL(imap.at("id2").internal_inputs.size(), 1);
+    CHECK_EQUAL(imap.at("id2").outputs.size(), 1);
+
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
+  }
 }
 
 int main(int ac, char **av) {
