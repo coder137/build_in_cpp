@@ -147,6 +147,48 @@ TEST(CustomGeneratorTestGroup, FailureCases) {
   buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
 }
 
+static bool Dep1Cb(const buildcc::CustomGeneratorContext &ctx) {
+  (void)ctx;
+  mock().actualCall("Dep1Cb");
+  return buildcc::env::Command::Execute("");
+}
+
+static bool Dep2Cb(const buildcc::CustomGeneratorContext &ctx) {
+  (void)ctx;
+  mock().actualCall("Dep2Cb");
+  return buildcc::env::Command::Execute("");
+}
+
+static void DependencyCb(std::unordered_map<std::string, tf::Task> &task_map) {
+  task_map["id1"].precede(task_map["id2"]);
+}
+
+TEST(CustomGeneratorTestGroup, AddDependency_BasicCheck) {
+  constexpr const char *const kGenName = "add_dependency";
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, Dep2Cb);
+    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
+                    {"{gen_build_dir}/dummy_main.o"}, Dep1Cb);
+    cgen.AddDependencyCb(DependencyCb);
+    cgen.Build();
+
+    mock().expectOneCall("Dep1Cb");
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    mock().expectOneCall("Dep2Cb");
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
+
+    fs::remove_all(cgen.GetBinaryPath());
+  }
+}
+
 static bool RealGenerateCb(const buildcc::CustomGeneratorContext &ctx) {
   (void)ctx;
   mock().actualCall("RealGenerateCb");
