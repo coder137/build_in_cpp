@@ -160,7 +160,7 @@ static bool Dep2Cb(const buildcc::CustomGeneratorContext &ctx) {
 }
 
 static void DependencyCb(std::unordered_map<std::string, tf::Task> &task_map) {
-  task_map["id1"].precede(task_map["id2"]);
+  task_map.at("id1").precede(task_map.at("id2"));
 }
 
 TEST(CustomGeneratorTestGroup, AddDependency_BasicCheck) {
@@ -230,8 +230,8 @@ static bool RealGenerateCb(const buildcc::CustomGeneratorContext &ctx) {
   return buildcc::env::Command::Execute("");
 }
 
-TEST(CustomGeneratorTestGroup, RealGenerate) {
-  constexpr const char *const kGenName = "real_generator";
+TEST(CustomGeneratorTestGroup, RealGenerate_Basic) {
+  constexpr const char *const kGenName = "real_generator_basic";
   {
     buildcc::CustomGenerator cgen(kGenName, "");
     cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
@@ -279,6 +279,127 @@ TEST(CustomGeneratorTestGroup, RealGenerate) {
   }
 
   buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+}
+
+TEST(CustomGeneratorTestGroup, RealGenerate_RemoveAndAdd) {
+  constexpr const char *const kGenName = "real_generator_remove_and_add";
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.Build();
+
+    mock().expectOneCall("RealGenerateCb");
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    mock().expectOneCall("RealGenerateCb");
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
+    auto imap = serialization.GetLoad().internal_rels_map;
+    CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
+    CHECK_EQUAL(imap.at("id2").internal_inputs.size(), 1);
+
+    CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+    CHECK_EQUAL(imap.at("id2").outputs.size(), 1);
+  }
+
+  // Same, no change
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.Build();
+
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
+    auto imap = serialization.GetLoad().internal_rels_map;
+    CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
+    CHECK_EQUAL(imap.at("id2").internal_inputs.size(), 1);
+
+    CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+    CHECK_EQUAL(imap.at("id2").outputs.size(), 1);
+  }
+
+  // Map Removed
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+
+    cgen.Build();
+
+    buildcc::m::CustomGeneratorExpect_IdRemoved(1, &cgen);
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 1);
+    auto imap = serialization.GetLoad().internal_rels_map;
+    CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
+    CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+  }
+
+  // // Map Added Failure
+  // {
+  //   buildcc::CustomGenerator cgen(kGenName, "");
+  //   cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
+  //                   {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+  //   cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
+  //                   {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+  //   cgen.Build();
+
+  //   buildcc::m::CustomGeneratorExpect_IdAdded(1, &cgen);
+  //   mock().expectOneCall("RealGenerateCb");
+  //   buildcc::env::m::CommandExpect_Execute(1, false);
+  //   buildcc::m::CustomGeneratorRunner(cgen);
+
+  //   buildcc::internal::CustomGeneratorSerialization serialization(
+  //       cgen.GetBinaryPath());
+  //   CHECK_TRUE(serialization.LoadFromFile());
+  //   CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 1);
+  //   auto imap = serialization.GetLoad().internal_rels_map;
+  //   CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
+  //   CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+  // }
+
+  // // Map Added Success
+  // {
+  //   buildcc::CustomGenerator cgen(kGenName, "");
+  //   cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
+  //                   {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+  //   cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
+  //                   {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+  //   cgen.Build();
+
+  //   buildcc::m::CustomGeneratorExpect_IdAdded(1, &cgen);
+  //   mock().expectOneCall("RealGenerateCb");
+  //   buildcc::env::m::CommandExpect_Execute(1, true);
+  //   buildcc::m::CustomGeneratorRunner(cgen);
+
+  //   buildcc::internal::CustomGeneratorSerialization serialization(
+  //       cgen.GetBinaryPath());
+  //   CHECK_TRUE(serialization.LoadFromFile());
+  //   CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
+  //   auto imap = serialization.GetLoad().internal_rels_map;
+  //   CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
+  //   CHECK_EQUAL(imap.at("id2").internal_inputs.size(), 1);
+
+  //   CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+  //   CHECK_EQUAL(imap.at("id2").outputs.size(), 1);
+  // }
 }
 
 int main(int ac, char **av) {
