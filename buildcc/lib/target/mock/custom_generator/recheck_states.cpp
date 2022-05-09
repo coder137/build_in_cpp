@@ -25,13 +25,16 @@ void CustomGenerator::IdUpdated() {
 
 namespace m {
 
-void GeneratorExpect_IdRemoved(unsigned int calls, CustomGenerator *generator) {
+void CustomGeneratorExpect_IdRemoved(unsigned int calls,
+                                     CustomGenerator *generator) {
   mock().expectNCalls(calls, ID_REMOVED_FUNCTION).onObject(generator);
 }
-void GeneratorExpect_IdAdded(unsigned int calls, CustomGenerator *generator) {
+void CustomGeneratorExpect_IdAdded(unsigned int calls,
+                                   CustomGenerator *generator) {
   mock().expectNCalls(calls, ID_ADDED_FUNCTION).onObject(generator);
 }
-void GeneratorExpect_IdUpdated(unsigned int calls, CustomGenerator *generator) {
+void CustomGeneratorExpect_IdUpdated(unsigned int calls,
+                                     CustomGenerator *generator) {
   mock().expectNCalls(calls, ID_UPDATED_FUNCTION).onObject(generator);
 }
 
