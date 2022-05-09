@@ -352,54 +352,58 @@ TEST(CustomGeneratorTestGroup, RealGenerate_RemoveAndAdd) {
     CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
   }
 
-  // // Map Added Failure
-  // {
-  //   buildcc::CustomGenerator cgen(kGenName, "");
-  //   cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
-  //                   {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
-  //   cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
-  //                   {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
-  //   cgen.Build();
+  // Map Added Failure
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.Build();
 
-  //   buildcc::m::CustomGeneratorExpect_IdAdded(1, &cgen);
-  //   mock().expectOneCall("RealGenerateCb");
-  //   buildcc::env::m::CommandExpect_Execute(1, false);
-  //   buildcc::m::CustomGeneratorRunner(cgen);
+    buildcc::m::CustomGeneratorExpect_IdAdded(1, &cgen);
+    mock().expectOneCall("RealGenerateCb");
+    buildcc::env::m::CommandExpect_Execute(1, false);
+    buildcc::m::CustomGeneratorRunner(cgen);
 
-  //   buildcc::internal::CustomGeneratorSerialization serialization(
-  //       cgen.GetBinaryPath());
-  //   CHECK_TRUE(serialization.LoadFromFile());
-  //   CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 1);
-  //   auto imap = serialization.GetLoad().internal_rels_map;
-  //   CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
-  //   CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
-  // }
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 1);
+    auto imap = serialization.GetLoad().internal_rels_map;
+    CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
+    CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+    CHECK_THROWS(std::out_of_range, imap.at("id2"));
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
+  }
 
-  // // Map Added Success
-  // {
-  //   buildcc::CustomGenerator cgen(kGenName, "");
-  //   cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
-  //                   {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
-  //   cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
-  //                   {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
-  //   cgen.Build();
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
 
-  //   buildcc::m::CustomGeneratorExpect_IdAdded(1, &cgen);
-  //   mock().expectOneCall("RealGenerateCb");
-  //   buildcc::env::m::CommandExpect_Execute(1, true);
-  //   buildcc::m::CustomGeneratorRunner(cgen);
+  // Map Added Success
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.Build();
 
-  //   buildcc::internal::CustomGeneratorSerialization serialization(
-  //       cgen.GetBinaryPath());
-  //   CHECK_TRUE(serialization.LoadFromFile());
-  //   CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
-  //   auto imap = serialization.GetLoad().internal_rels_map;
-  //   CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
-  //   CHECK_EQUAL(imap.at("id2").internal_inputs.size(), 1);
+    buildcc::m::CustomGeneratorExpect_IdAdded(1, &cgen);
+    mock().expectOneCall("RealGenerateCb");
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::m::CustomGeneratorRunner(cgen);
 
-  //   CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
-  //   CHECK_EQUAL(imap.at("id2").outputs.size(), 1);
-  // }
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
+    auto imap = serialization.GetLoad().internal_rels_map;
+    CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
+    CHECK_EQUAL(imap.at("id2").internal_inputs.size(), 1);
+
+    CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+    CHECK_EQUAL(imap.at("id2").outputs.size(), 1);
+  }
 }
 
 int main(int ac, char **av) {
