@@ -158,15 +158,19 @@ void CustomGenerator::GenerateTask() {
       for (auto &dummy_selected_miter : dummy_selected_user_schema) {
         const auto &id = dummy_selected_miter.first;
         auto &current_info = dummy_selected_miter.second;
-        tf::Task task = subflow.emplace([&]() {
-          try {
-            current_info.internal_inputs = internal::path_schema_convert(
-                current_info.inputs, internal::Path::CreateExistingPath);
-            TaskRunner<false>(id);
-          } catch (...) {
-            env::set_task_state(env::TaskState::FAILURE);
-          }
-        });
+        tf::Task task = subflow
+                            .emplace([&]() {
+                              try {
+                                user_.rels_map.at(id).internal_inputs =
+                                    internal::path_schema_convert(
+                                        current_info.inputs,
+                                        internal::Path::CreateExistingPath);
+                                TaskRunner<false>(id);
+                              } catch (...) {
+                                env::set_task_state(env::TaskState::FAILURE);
+                              }
+                            })
+                            .name(id);
         task_map.emplace(id, task);
       }
 
@@ -184,6 +188,7 @@ void CustomGenerator::GenerateTask() {
         user_final_schema.rels_map.insert(success_schema_.begin(),
                                           success_schema_.end());
 
+        // TODO, Update this
         user_final_schema.ConvertToInternal();
         serialization_.UpdateStore(user_final_schema);
         env::assert_fatal(serialization_.StoreToFile(),
@@ -200,25 +205,25 @@ void CustomGenerator::GenerateTask() {
 
 template <bool run> void CustomGenerator::TaskRunner(const std::string &id) {
   const auto &current_info = user_.rels_map.at(id);
-  if constexpr (!run) {
+  bool rerun = false;
+  if constexpr (run) {
+    rerun = true;
+  } else {
     const auto &previous_info =
         serialization_.GetLoad().internal_rels_map.at(id);
-    bool rerun =
-        internal::CheckPaths(previous_info.internal_inputs,
-                             current_info.internal_inputs) !=
-            internal::PathState::kNoChange ||
-        internal::CheckChanged(previous_info.outputs, current_info.outputs);
-
-    // run && rerun == false, skip running the task
-    if (!rerun) {
-      return;
-    }
+    rerun = internal::CheckPaths(previous_info.internal_inputs,
+                                 current_info.internal_inputs) !=
+                internal::PathState::kNoChange ||
+            internal::CheckChanged(previous_info.outputs, current_info.outputs);
   }
 
-  buildcc::CustomGeneratorContext ctx(command_, current_info.inputs,
-                                      current_info.outputs);
-  bool success = current_info.generate_cb(ctx);
-  env::assert_fatal(success, "Generate Cb failed for id {}");
+  if (rerun) {
+    buildcc::CustomGeneratorContext ctx(command_, current_info.inputs,
+                                        current_info.outputs);
+    bool success = current_info.generate_cb(ctx);
+    env::assert_fatal(success, "Generate Cb failed for id {}");
+  }
+
   std::lock_guard<std::mutex> guard(success_schema_mutex_);
   success_schema_.emplace(id, current_info);
 }
