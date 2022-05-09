@@ -137,14 +137,13 @@ public:
 private:
   void Initialize();
 
+  template <bool run> void TaskRunner(const std::string &id);
+
   void GenerateTask();
   void BuildGenerate(std::unordered_map<std::string, UserRelInputOutputSchema>
                          &gen_selected_map,
                      std::unordered_map<std::string, UserRelInputOutputSchema>
                          &dummy_gen_selected_map);
-
-  void AddSuccessSchema(const std::string &id,
-                        const UserRelInputOutputSchema &schema);
 
   // Recheck states
   void IdRemoved();
