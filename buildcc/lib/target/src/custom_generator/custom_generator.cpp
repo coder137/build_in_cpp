@@ -176,7 +176,12 @@ void CustomGenerator::GenerateTask() {
 
       // Dependencies between ids
       if (dependency_cb_) {
-        dependency_cb_(task_map);
+        try {
+          dependency_cb_(task_map);
+        } catch (...) {
+          env::log_critical(__FUNCTION__, "Dependency callback failed");
+          env::set_task_state(env::TaskState::FAILURE);
+        }
       }
 
       // NOTE, Do not call detach otherwise this will fail

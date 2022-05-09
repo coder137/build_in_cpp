@@ -225,6 +225,136 @@ TEST(CustomGeneratorTestGroup, AddDependency_FileDep) {
   }
 }
 
+TEST(CustomGeneratorTestGroup, AddDependency_FileDep_WithRebuild) {
+  constexpr const char *const kGenName = "add_dependency_file_dep_with_rebuild";
+
+  fs::path kInputFile =
+      (BUILD_DIR / kGenName / "dummy_main.c").make_preferred();
+  UT_PRINT(kInputFile.string().c_str());
+  fs::create_directories(BUILD_DIR / kGenName);
+  CHECK_TRUE(buildcc::env::save_file(kInputFile.string().c_str(), "", false));
+
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, FileDep1Cb);
+    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.o"}, {}, FileDep2Cb);
+    cgen.AddDependencyCb(DependencyCb);
+    cgen.Build();
+
+    mock().expectOneCall("FileDep1Cb");
+    mock().expectOneCall("FileDep2Cb");
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
+
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
+  }
+
+  // Same, no change
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, FileDep1Cb);
+    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.o"}, {}, FileDep2Cb);
+    cgen.AddDependencyCb(DependencyCb);
+    cgen.Build();
+
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
+
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
+  }
+
+  // reset
+  fs::remove_all(BUILD_DIR / kGenName / "dummy_main.o");
+
+  // Remove id1, should cause id2 to fail
+  // NOTE, dirty_ == false is not made true when id2 is run, however id removed
+  // sets dirty_ == true
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.o"}, {}, FileDep2Cb);
+    cgen.AddDependencyCb(DependencyCb);
+    cgen.Build();
+
+    buildcc::m::CustomGeneratorExpect_IdRemoved(1, &cgen);
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 0);
+
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
+  }
+
+  // reset
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+  fs::remove_all(BUILD_DIR / kGenName / "dummy_main.o");
+
+  // Added
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, FileDep1Cb);
+    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.o"}, {}, FileDep2Cb);
+    cgen.AddDependencyCb(DependencyCb);
+    cgen.Build();
+
+    buildcc::m::CustomGeneratorExpect_IdAdded(1, &cgen);
+    buildcc::m::CustomGeneratorExpect_IdAdded(1, &cgen);
+    mock().expectOneCall("FileDep1Cb");
+    mock().expectOneCall("FileDep2Cb");
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
+
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
+  }
+
+  // reset
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+  fs::remove_all(BUILD_DIR / kGenName / "dummy_main.o");
+
+  buildcc::m::blocking_sleep(1);
+  buildcc::env::save_file(kInputFile.string().c_str(), "", false);
+
+  // Update id1:dummy_main.c -> updated dummy_main.o -> should rerun id2 as well
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+
+    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
+                    {"{gen_build_dir}/dummy_main.o"}, FileDep1Cb);
+    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.o"}, {}, FileDep2Cb);
+    cgen.AddDependencyCb(DependencyCb);
+    cgen.Build();
+
+    mock().expectOneCall("FileDep1Cb");
+    mock().expectOneCall("FileDep2Cb");
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_rels_map.size(), 2);
+
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
+  }
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+}
+
 static bool RealGenerateCb(const buildcc::CustomGeneratorContext &ctx) {
   (void)ctx;
   mock().actualCall("RealGenerateCb");
@@ -581,6 +711,8 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
     CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }
 }
+
+// TODO, Add default arguments
 
 int main(int ac, char **av) {
   fs::remove_all(BUILD_DIR);
