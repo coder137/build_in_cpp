@@ -29,7 +29,10 @@ namespace buildcc {
 
 void CustomGenerator::AddDefaultArguments(
     const std::unordered_map<std::string, std::string> &arguments) {
-  command_.AddDefaultArguments(arguments);
+  for (const auto &arg_iter : arguments) {
+    command_.AddDefaultArgument(arg_iter.first,
+                                command_.Construct(arg_iter.second));
+  }
 }
 
 void CustomGenerator::AddGenInfo(const std::string &id,
