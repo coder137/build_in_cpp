@@ -74,26 +74,15 @@ TEST(CustomGeneratorTestGroup, Basic_Failure) {
   mock().expectOneCall("BasicGenerateCb").andReturnValue(false);
   buildcc::m::CustomGeneratorRunner(cgen);
 
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
+
   // Load
   buildcc::internal::CustomGeneratorSerialization serialization(
       cgen.GetBinaryPath());
   CHECK_TRUE(serialization.LoadFromFile());
 
-  const auto &id1_info = serialization.GetLoad().internal_rels_map.at("id1");
-  CHECK_EQUAL(id1_info.internal_inputs.size(), 1);
-  CHECK_EQUAL(id1_info.outputs.size(), 0);
-
-  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
-
-  // Serialization check
-  {
-    buildcc::internal::CustomGeneratorSerialization serialization(
-        cgen.GetBinaryPath());
-    CHECK_TRUE(serialization.LoadFromFile());
-
-    const auto &internal_map = serialization.GetLoad().internal_rels_map;
-    CHECK_EQUAL(internal_map.size(), 1);
-  }
+  const auto &internal_map = serialization.GetLoad().internal_rels_map;
+  CHECK_EQUAL(internal_map.size(), 1);
 }
 
 TEST(CustomGeneratorTestGroup, DefaultArgumentUsage) {
