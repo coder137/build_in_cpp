@@ -37,7 +37,7 @@ if (${TESTING})
         ${TEST_LINK_LIBS}
     )
 
-    add_executable(test_toolchain_specialized test/test_toolchain_specialized)
+    add_executable(test_toolchain_specialized test/test_toolchain_specialized.cpp)
     target_link_libraries(test_toolchain_specialized PRIVATE mock_toolchain_specialized)
 
     add_test(NAME test_toolchain_specialized COMMAND test_toolchain_specialized)
