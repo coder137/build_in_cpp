@@ -96,6 +96,40 @@ TEST(CustomGeneratorTestGroup, Basic_Failure) {
   }
 }
 
+TEST(CustomGeneratorTestGroup, DefaultArgumentUsage) {
+  buildcc::CustomGenerator cgen("default_argument_usage", "");
+  cgen.AddDefaultArguments({
+      {"dummy_main_c", "{gen_root_dir}/dummy_main.c"},
+      {"dummy_main_o", "{gen_build_dir}/dummy_main.o"},
+      {"dummy_main_cpp", "{gen_root_dir}/dummy_main.cpp"},
+  });
+  cgen.AddGenInfo("id1", {"{dummy_main_c}"}, {"{dummy_main_o}"},
+                  BasicGenerateCb);
+  cgen.AddGenInfo("id2", {"{dummy_main_cpp}"}, {}, BasicGenerateCb);
+  cgen.Build();
+
+  mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+  mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+  buildcc::m::CustomGeneratorRunner(cgen);
+
+  // Serialization check
+  {
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+
+    const auto &internal_map = serialization.GetLoad().internal_rels_map;
+    CHECK_EQUAL(internal_map.size(), 2);
+    const auto &id1_info = internal_map.at("id1");
+    CHECK_EQUAL(id1_info.internal_inputs.size(), 1);
+    CHECK_EQUAL(id1_info.outputs.size(), 1);
+
+    const auto &id2_info = internal_map.at("id2");
+    CHECK_EQUAL(id2_info.internal_inputs.size(), 1);
+    CHECK_EQUAL(id2_info.outputs.size(), 0);
+  }
+}
+
 TEST(CustomGeneratorTestGroup, FailureCases) {
   {
     buildcc::CustomGenerator cgen("failure_no_cb", "");
@@ -711,8 +745,6 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
     CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }
 }
-
-// TODO, Add default arguments
 
 int main(int ac, char **av) {
   fs::remove_all(BUILD_DIR);
