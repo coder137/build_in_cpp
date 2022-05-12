@@ -83,10 +83,10 @@ void Generator::Initialize() {
       "Environment is not initialized. Use the buildcc::Project::Init API");
 
   //
-  fs::create_directories(generator_build_dir_);
+  fs::create_directories(env_.GetTargetBuildDir());
   command_.AddDefaultArguments({
-      {"gen_root_dir", path_as_string(generator_root_dir_)},
-      {"gen_build_dir", path_as_string(generator_build_dir_)},
+      {"gen_root_dir", path_as_string(env_.GetTargetRootDir())},
+      {"gen_build_dir", path_as_string(env_.GetTargetBuildDir())},
   });
 
   //

@@ -28,6 +28,7 @@
 
 #include "env/command.h"
 
+#include "target/custom_generator.h"
 #include "target/interface/builder_interface.h"
 
 #include "schema/generator_serialization.h"
@@ -46,9 +47,9 @@ class Generator : public internal::BuilderInterface {
 public:
   Generator(const std::string &name, const TargetEnv &env,
             bool parallel = false)
-      : name_(name), generator_root_dir_(env.GetTargetRootDir()),
-        generator_build_dir_(env.GetTargetBuildDir() / name),
-        serialization_(generator_build_dir_ / fmt::format("{}.bin", name)),
+      : name_(name),
+        env_(env.GetTargetRootDir(), env.GetTargetBuildDir() / name),
+        serialization_(env_.GetTargetBuildDir() / fmt::format("{}.bin", name)),
         parallel_(parallel) {
     Initialize();
   }
@@ -134,8 +135,7 @@ private:
 private:
   // Constructor
   std::string name_;
-  fs::path generator_root_dir_;
-  fs::path generator_build_dir_;
+  TargetEnv env_;
   internal::GeneratorSerialization serialization_;
   bool parallel_{false};
 
