@@ -45,12 +45,13 @@ bool CustomGeneratorSerialization::Load(const std::string &serialized_data) {
     return false;
   }
 
-  // rel_io->id is a required parameter, hence rel_io cannot be nullptr
-  for (const auto *rel_io : *fbs_gen_info) {
-    GenInfo gen_info;
-    extract_path(rel_io->inputs(), gen_info.internal_inputs);
-    extract(rel_io->outputs(), gen_info.outputs);
-    load_.internal_rels_map.emplace(rel_io->id()->c_str(), std::move(gen_info));
+  // gen_info->id is a required parameter, hence gen_info cannot be nullptr
+  for (const auto *gen_info : *fbs_gen_info) {
+    GenInfo current_info;
+    extract_path(gen_info->inputs(), current_info.internal_inputs);
+    extract(gen_info->outputs(), current_info.outputs);
+    load_.internal_rels_map.emplace(gen_info->id()->c_str(),
+                                    std::move(current_info));
   }
   return true;
 }
@@ -62,11 +63,11 @@ bool CustomGeneratorSerialization::Store(
   std::vector<flatbuffers::Offset<fbs::GenInfo>> fbs_gen_info;
   for (const auto &rel_miter : store_.internal_rels_map) {
     const auto &id = rel_miter.first;
-    const auto &rel_io = rel_miter.second;
+    const auto &gen_info = rel_miter.second;
     auto fbs_internal_inputs =
-        internal::create_fbs_vector_path(builder, rel_io.internal_inputs);
+        internal::create_fbs_vector_path(builder, gen_info.internal_inputs);
     auto fbs_outputs =
-        internal::create_fbs_vector_string(builder, rel_io.outputs);
+        internal::create_fbs_vector_string(builder, gen_info.outputs);
     auto fbs_rel = fbs::CreateGenInfoDirect(builder, id.c_str(),
                                             &fbs_internal_inputs, &fbs_outputs);
     fbs_gen_info.push_back(fbs_rel);
