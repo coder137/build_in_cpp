@@ -62,6 +62,70 @@ TEST(TestBuilderInterfaceGroup, IncorrectUpdateRecheckCb) {
   CHECK_THROWS(std::exception, tbi.RecheckPathIncorrectUpdateCb());
 }
 
+TEST(TestBuilderInterfaceGroup, CheckChanged) {
+  std::vector<std::string> previous{"", "v1"};
+  std::vector<std::string> current{"", "v1"};
+  CHECK_FALSE(buildcc::internal::CheckChanged(previous, current));
+
+  current.clear();
+  current.push_back("");
+  CHECK_TRUE(buildcc::internal::CheckChanged(previous, current));
+}
+
+TEST(TestBuilderInterfaceGroup, CheckPaths) {
+  {
+    auto pathstate = buildcc::internal::CheckPaths(
+        {
+            buildcc::internal::Path::CreateNewPath("", 0x1234),
+            buildcc::internal::Path::CreateNewPath("v1", 0x2345),
+        },
+        {
+            buildcc::internal::Path::CreateNewPath("", 0x1234),
+            buildcc::internal::Path::CreateNewPath("v1", 0x2345),
+        });
+    CHECK_TRUE(pathstate == buildcc::internal::PathState::kNoChange);
+  }
+
+  {
+    auto pathstate = buildcc::internal::CheckPaths(
+        {
+            buildcc::internal::Path::CreateNewPath("", 0x1234),
+            buildcc::internal::Path::CreateNewPath("v1", 0x2345),
+        },
+        {
+            buildcc::internal::Path::CreateNewPath("", 0x1234),
+        });
+    CHECK_TRUE(pathstate == buildcc::internal::PathState::kRemoved);
+  }
+
+  {
+    auto pathstate = buildcc::internal::CheckPaths(
+        {
+            buildcc::internal::Path::CreateNewPath("", 0x1234),
+            buildcc::internal::Path::CreateNewPath("v1", 0x2345),
+        },
+        {
+            buildcc::internal::Path::CreateNewPath("", 0x1234),
+            buildcc::internal::Path::CreateNewPath("v1", 0x2345),
+            buildcc::internal::Path::CreateNewPath("v2", 0x3456),
+        });
+    CHECK_TRUE(pathstate == buildcc::internal::PathState::kAdded);
+  }
+
+  {
+    auto pathstate = buildcc::internal::CheckPaths(
+        {
+            buildcc::internal::Path::CreateNewPath("", 0x1234),
+            buildcc::internal::Path::CreateNewPath("v1", 0x2345),
+        },
+        {
+            buildcc::internal::Path::CreateNewPath("", 0x1234),
+            buildcc::internal::Path::CreateNewPath("v1", 0x3456),
+        });
+    CHECK_TRUE(pathstate == buildcc::internal::PathState::kUpdated);
+  }
+}
+
 int main(int ac, char **av) {
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

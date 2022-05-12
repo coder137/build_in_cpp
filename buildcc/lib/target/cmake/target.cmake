@@ -1,6 +1,8 @@
 set(TARGET_SRCS 
     ${COMMON_TARGET_SRCS}
 
+    src/custom_generator/recheck_states.cpp
+
     src/generator/task.cpp
     src/generator/recheck_states.cpp
 

@@ -31,6 +31,7 @@
 
 // Base
 #include "toolchain/toolchain.h"
+#include "target/custom_generator.h"
 #include "target/generator.h"
 #include "target/target_info.h"
 #include "target/target.h"

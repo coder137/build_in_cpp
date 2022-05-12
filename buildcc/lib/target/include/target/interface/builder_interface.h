@@ -27,6 +27,66 @@
 
 namespace buildcc::internal {
 
+enum PathState {
+  kNoChange,
+  kRemoved,
+  kAdded,
+  kUpdated,
+};
+
+template <typename T>
+inline bool CheckChanged(const T &previous, const T &current) {
+  bool changed = false;
+  if (previous != current) {
+    changed = true;
+  }
+  return changed;
+}
+
+/**
+ * @brief
+ *
+ * @return PathState Returns first state found if `Removed`, `Added` or
+ * `Updated`
+ * If none of the above states are true then it returns `NoChange`
+ */
+inline PathState CheckPaths(const internal::path_unordered_set &previous_path,
+                            const internal::path_unordered_set &current_path) {
+  PathState state{PathState::kNoChange};
+
+  // * Old path is removed
+  const bool removed = std::any_of(
+      previous_path.begin(), previous_path.end(), [&](const internal::Path &p) {
+        return current_path.find(p) == current_path.end();
+      });
+  if (removed) {
+    state = PathState::kRemoved;
+  } else {
+    (void)std::any_of(current_path.cbegin(), current_path.cend(),
+                      [&](const internal::Path &p) -> bool {
+                        bool dirty = false;
+                        const auto find = previous_path.find(p);
+                        const bool added_cond = (find == previous_path.end());
+                        if (added_cond) {
+                          dirty = true;
+                          state = kAdded;
+                        } else {
+                          const bool updated_cond =
+                              (p.GetLastWriteTimestamp() >
+                               find->GetLastWriteTimestamp());
+                          if (updated_cond) {
+                            dirty = true;
+                            state = kUpdated;
+                          } else {
+                            dirty = false;
+                          }
+                        }
+                        return dirty;
+                      });
+  }
+  return state;
+}
+
 // TODO, 1. Consider updating Recheck* APIs - do not modify internal `dirty_`
 // flag
 // TODO, 2. Consider removing dependency on target/common/util.h

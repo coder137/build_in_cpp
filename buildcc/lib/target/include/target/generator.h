@@ -17,7 +17,6 @@
 #ifndef TARGET_GENERATOR_H_
 #define TARGET_GENERATOR_H_
 
-#include <functional>
 #include <mutex>
 #include <string>
 #include <unordered_map>
@@ -25,7 +24,6 @@
 
 #include "taskflow/taskflow.hpp"
 
-#include "env/env.h"
 #include "env/task_state.h"
 
 #include "env/command.h"
@@ -54,8 +52,8 @@ public:
         parallel_(parallel) {
     Initialize();
   }
-  virtual ~Generator() {}
-  Generator(const Generator &generator) = delete;
+  virtual ~Generator() = default;
+  Generator(const Generator &) = delete;
 
   /**
    * @brief Add default arguments for input, output and command requirements

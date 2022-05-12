@@ -21,16 +21,17 @@ target_link_libraries(mock_plugins PUBLIC
 )
 
 # Tests
-add_executable(test_buildcc_find
-    test/test_buildcc_find.cpp
-)
-target_link_libraries(test_buildcc_find PRIVATE
-    mock_plugins
-)
+# Removed test_buildcc_find till it is not complete
+# add_executable(test_buildcc_find
+#     test/test_buildcc_find.cpp
+# )
+# target_link_libraries(test_buildcc_find PRIVATE
+#     mock_plugins
+# )
 
-add_test(NAME test_buildcc_find COMMAND test_buildcc_find
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
-)
+# add_test(NAME test_buildcc_find COMMAND test_buildcc_find
+#     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
+# )
 
 endif()
 
