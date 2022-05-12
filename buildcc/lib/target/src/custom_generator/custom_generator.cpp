@@ -43,7 +43,7 @@ void CustomGenerator::AddGenInfo(const std::string &id,
                     fmt::format("Duplicate id {} detected", id));
   ASSERT_FATAL(generate_cb, "Invalid callback provided");
 
-  UserRelInputOutputSchema schema;
+  UserGenInfo schema;
   for (const auto &i : inputs) {
     schema.inputs.emplace(command_.Construct(path_as_string(i)));
   }
@@ -84,9 +84,8 @@ void CustomGenerator::Initialize() {
 }
 
 void CustomGenerator::BuildGenerate(
-    std::unordered_map<std::string, UserRelInputOutputSchema> &gen_selected_map,
-    std::unordered_map<std::string, UserRelInputOutputSchema>
-        &dummy_gen_selected_map) {
+    std::unordered_map<std::string, UserGenInfo> &gen_selected_map,
+    std::unordered_map<std::string, UserGenInfo> &dummy_gen_selected_map) {
   if (!serialization_.IsLoaded()) {
     gen_selected_map = user_.rels_map;
     dirty_ = true;
@@ -136,10 +135,8 @@ void CustomGenerator::GenerateTask() {
     }
 
     try {
-      std::unordered_map<std::string, UserRelInputOutputSchema>
-          selected_user_schema;
-      std::unordered_map<std::string, UserRelInputOutputSchema>
-          dummy_selected_user_schema;
+      std::unordered_map<std::string, UserGenInfo> selected_user_schema;
+      std::unordered_map<std::string, UserGenInfo> dummy_selected_user_schema;
       BuildGenerate(selected_user_schema, dummy_selected_user_schema);
 
       std::unordered_map<std::string, tf::Task> task_map;

@@ -56,13 +56,13 @@ typedef std::function<bool(CustomGeneratorContext &)> GenerateCb;
 typedef std::function<void(std::unordered_map<std::string, tf::Task> &)> DependencyCb;
 // clang-format on
 
-struct UserRelInputOutputSchema : internal::GenInfo {
+struct UserGenInfo : internal::GenInfo {
   fs_unordered_set inputs;
   GenerateCb generate_cb;
 };
 
 struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
-  std::unordered_map<std::string, UserRelInputOutputSchema> rels_map;
+  std::unordered_map<std::string, UserGenInfo> rels_map;
 
   void ConvertToInternal() {
     for (auto &r_miter : rels_map) {
@@ -140,10 +140,9 @@ private:
   template <bool run> void TaskRunner(const std::string &id);
 
   void GenerateTask();
-  void BuildGenerate(std::unordered_map<std::string, UserRelInputOutputSchema>
-                         &gen_selected_map,
-                     std::unordered_map<std::string, UserRelInputOutputSchema>
-                         &dummy_gen_selected_map);
+  void BuildGenerate(
+      std::unordered_map<std::string, UserGenInfo> &gen_selected_map,
+      std::unordered_map<std::string, UserGenInfo> &dummy_gen_selected_map);
 
   // Recheck states
   void IdRemoved();
@@ -159,7 +158,7 @@ private:
   UserCustomGeneratorSchema user_;
 
   std::mutex success_schema_mutex_;
-  std::unordered_map<std::string, UserRelInputOutputSchema> success_schema_;
+  std::unordered_map<std::string, UserGenInfo> success_schema_;
 
   // Internal
   env::Command command_;
