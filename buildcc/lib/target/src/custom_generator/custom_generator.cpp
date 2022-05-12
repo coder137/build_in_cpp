@@ -39,7 +39,7 @@ void CustomGenerator::AddGenInfo(const std::string &id,
                                  const fs_unordered_set &inputs,
                                  const fs_unordered_set &outputs,
                                  const GenerateCb &generate_cb) {
-  env::assert_fatal(user_.rels_map.find(id) == user_.rels_map.end(),
+  env::assert_fatal(user_.gen_info_map.find(id) == user_.gen_info_map.end(),
                     fmt::format("Duplicate id {} detected", id));
   ASSERT_FATAL(generate_cb, "Invalid callback provided");
 
@@ -51,7 +51,7 @@ void CustomGenerator::AddGenInfo(const std::string &id,
     schema.outputs.emplace(command_.Construct(path_as_string(o)));
   }
   schema.generate_cb = generate_cb;
-  user_.rels_map.emplace(id, std::move(schema));
+  user_.gen_info_map.emplace(id, std::move(schema));
 }
 
 void CustomGenerator::AddDependencyCb(const DependencyCb &dependency_cb) {
@@ -87,12 +87,12 @@ void CustomGenerator::BuildGenerate(
     std::unordered_map<std::string, UserGenInfo> &gen_selected_map,
     std::unordered_map<std::string, UserGenInfo> &dummy_gen_selected_map) {
   if (!serialization_.IsLoaded()) {
-    gen_selected_map = user_.rels_map;
+    gen_selected_map = user_.gen_info_map;
     dirty_ = true;
   } else {
     // DONE, Conditionally select internal_rels depending on what has changed
     const auto &prev_rels = serialization_.GetLoad().internal_gen_info_map;
-    const auto &curr_rels = user_.rels_map;
+    const auto &curr_rels = user_.gen_info_map;
 
     // DONE, MAP REMOVED condition Check if prev_rels exists in curr_rels
     // If prev_rels does not exist in curr_rels, has been removed from existing
@@ -161,7 +161,7 @@ void CustomGenerator::GenerateTask() {
         tf::Task task = subflow
                             .emplace([&]() {
                               try {
-                                user_.rels_map.at(id).internal_inputs =
+                                user_.gen_info_map.at(id).internal_inputs =
                                     internal::path_schema_convert(
                                         current_info.inputs,
                                         internal::Path::CreateExistingPath);
@@ -190,8 +190,8 @@ void CustomGenerator::GenerateTask() {
       // Store dummy_selected and successfully run schema
       if (dirty_) {
         UserCustomGeneratorSchema user_final_schema;
-        user_final_schema.rels_map.insert(success_schema_.begin(),
-                                          success_schema_.end());
+        user_final_schema.gen_info_map.insert(success_schema_.begin(),
+                                              success_schema_.end());
 
         user_final_schema.ConvertToInternal();
         serialization_.UpdateStore(user_final_schema);
@@ -208,7 +208,7 @@ void CustomGenerator::GenerateTask() {
 }
 
 template <bool run> void CustomGenerator::TaskRunner(const std::string &id) {
-  const auto &current_info = user_.rels_map.at(id);
+  const auto &current_info = user_.gen_info_map.at(id);
   bool rerun = false;
   if constexpr (run) {
     rerun = true;

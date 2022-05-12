@@ -62,10 +62,10 @@ struct UserGenInfo : internal::GenInfo {
 };
 
 struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
-  std::unordered_map<std::string, UserGenInfo> rels_map;
+  std::unordered_map<std::string, UserGenInfo> gen_info_map;
 
   void ConvertToInternal() {
-    for (auto &r_miter : rels_map) {
+    for (auto &r_miter : gen_info_map) {
       r_miter.second.internal_inputs = path_schema_convert(
           r_miter.second.inputs, internal::Path::CreateExistingPath);
       auto p = internal_gen_info_map.emplace(r_miter.first, r_miter.second);
