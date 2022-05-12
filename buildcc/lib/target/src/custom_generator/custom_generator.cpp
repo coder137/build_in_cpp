@@ -90,17 +90,19 @@ void CustomGenerator::BuildGenerate(
     gen_selected_map = user_.gen_info_map;
     dirty_ = true;
   } else {
-    // DONE, Conditionally select internal_rels depending on what has changed
-    const auto &prev_rels = serialization_.GetLoad().internal_gen_info_map;
-    const auto &curr_rels = user_.gen_info_map;
+    // DONE, Conditionally select internal_gen_info_map depending on what has
+    // changed
+    const auto &prev_gen_info_map =
+        serialization_.GetLoad().internal_gen_info_map;
+    const auto &curr_gen_info_map = user_.gen_info_map;
 
-    // DONE, MAP REMOVED condition Check if prev_rels exists in curr_rels
-    // If prev_rels does not exist in curr_rels, has been removed from existing
-    // build
-    // We need this condition to only set the dirty_ flag
-    for (const auto &prev_miter : prev_rels) {
+    // DONE, MAP REMOVED condition Check if prev_gen_info_map exists in
+    // curr_gen_info_map If prev_gen_info_map does not exist in
+    // curr_gen_info_map, has been removed from existing build We need this
+    // condition to only set the dirty_ flag
+    for (const auto &prev_miter : prev_gen_info_map) {
       const auto &id = prev_miter.first;
-      if (curr_rels.find(id) == curr_rels.end()) {
+      if (curr_gen_info_map.find(id) == curr_gen_info_map.end()) {
         // MAP REMOVED condition
         IdRemoved();
         dirty_ = true;
@@ -108,12 +110,12 @@ void CustomGenerator::BuildGenerate(
       }
     }
 
-    // DONE, MAP ADDED condition Check if curr_rels exists in prev_rels
-    // If curr_rels does not exist in prev_rels, has been added to existing
-    // build
-    for (const auto &curr_miter : curr_rels) {
+    // DONE, MAP ADDED condition Check if curr_gen_info_map exists in
+    // prev_gen_info_map If curr_gen_info_map does not exist in
+    // prev_gen_info_map, has been added to existing build
+    for (const auto &curr_miter : curr_gen_info_map) {
       const auto &id = curr_miter.first;
-      if (prev_rels.find(id) == prev_rels.end()) {
+      if (prev_gen_info_map.find(id) == prev_gen_info_map.end()) {
         // MAP ADDED condition
         IdAdded();
         gen_selected_map.emplace(curr_miter.first, curr_miter.second);
