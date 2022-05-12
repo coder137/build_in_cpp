@@ -47,10 +47,7 @@ class Generator : public internal::BuilderInterface {
 public:
   Generator(const std::string &name, const TargetEnv &env,
             bool parallel = false)
-      : name_(name),
-        env_(env.GetTargetRootDir(), env.GetTargetBuildDir() / name),
-        serialization_(env_.GetTargetBuildDir() / fmt::format("{}.bin", name)),
-        parallel_(parallel) {
+      : generator_(name, env), parallel_(parallel) {
     Initialize();
   }
   virtual ~Generator() = default;
@@ -106,13 +103,9 @@ public:
   void Build() override;
 
   // Getter
-  const fs::path &GetBinaryPath() const {
-    return serialization_.GetSerializedFile();
-  }
-  tf::Taskflow &GetTaskflow() { return tf_; }
-
-  const std::string &GetName() const { return name_; }
-  env::TaskState GetTaskState() const { return task_state_; }
+  const fs::path &GetBinaryPath() const { return generator_.GetBinaryPath(); }
+  tf::Taskflow &GetTaskflow() { return generator_.GetTaskflow(); }
+  const std::string &GetName() const { return generator_.GetName(); }
 
   const std::string &
   GetValueByIdentifier(const std::string &file_identifier) const;
@@ -133,20 +126,13 @@ private:
   void CommandChanged();
 
 private:
-  // Constructor
-  std::string name_;
-  TargetEnv env_;
-  internal::GeneratorSerialization serialization_;
+  CustomGenerator generator_;
   bool parallel_{false};
 
-  // Serialization
-  UserGeneratorSchema user_;
-
-  // Internal
-  std::mutex task_state_mutex_;
-  env::TaskState task_state_{env::TaskState::SUCCESS};
-  env::Command command_;
-  tf::Taskflow tf_;
+  //
+  internal::fs_unordered_set inputs_;
+  internal::fs_unordered_set outputs_;
+  std::vector<std::string> commands_;
 };
 
 typedef Generator BaseGenerator;

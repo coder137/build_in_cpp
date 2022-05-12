@@ -24,34 +24,34 @@ namespace buildcc {
 
 void Generator::AddDefaultArguments(
     const std::unordered_map<std::string, std::string> &arguments) {
-  command_.AddDefaultArguments(arguments);
+  generator_.AddDefaultArguments(arguments);
 }
 
 void Generator::AddInput(const std::string &absolute_input_pattern,
                          const char *identifier) {
   std::string absolute_input_string =
-      command_.Construct(absolute_input_pattern);
+      generator_.Construct(absolute_input_pattern);
   const auto absolute_input_path =
       internal::Path::CreateNewPath(absolute_input_string);
-  user_.inputs.insert(absolute_input_path.GetPathname());
+  inputs_.insert(absolute_input_path.GetPathname());
 
   if (identifier != nullptr) {
-    command_.AddDefaultArgument(identifier,
-                                absolute_input_path.GetPathAsString());
+    generator_.AddDefaultArgument(identifier,
+                                  absolute_input_path.GetPathAsString());
   }
 }
 
 void Generator::AddOutput(const std::string &absolute_output_pattern,
                           const char *identifier) {
   std::string absolute_output_string =
-      command_.Construct(absolute_output_pattern);
+      generator_.Construct(absolute_output_pattern);
   const auto absolute_output_path =
       internal::Path::CreateNewPath(absolute_output_string);
-  user_.outputs.insert(absolute_output_path.GetPathname());
+  outputs_.insert(absolute_output_path.GetPathname());
 
   if (identifier != nullptr) {
-    command_.AddDefaultArgument(identifier,
-                                absolute_output_path.GetPathAsString());
+    generator_.AddDefaultArgument(identifier,
+                                  absolute_output_path.GetPathAsString());
   }
 }
 
@@ -59,59 +59,37 @@ void Generator::AddCommand(
     const std::string &command_pattern,
     const std::unordered_map<const char *, std::string> &arguments) {
   std::string constructed_command =
-      command_.Construct(command_pattern, arguments);
-  user_.commands.emplace_back(std::move(constructed_command));
+      generator_.Construct(command_pattern, arguments);
+  commands_.emplace_back(std::move(constructed_command));
 }
 
 void Generator::Build() {
-  (void)serialization_.LoadFromFile();
-
-  GenerateTask();
+  generator_.AddGenInfo("Generate", inputs_, outputs_,
+                        [&](const CustomGeneratorContext &ctx) -> bool {
+                          (void)ctx;
+                          bool success = true;
+                          try {
+                            for (const auto &c : commands_) {
+                              bool executed = env::Command::Execute(c);
+                              env::assert_fatal(
+                                  executed,
+                                  fmt::format("Failed to run command {}"));
+                            }
+                          } catch (...) {
+                            success = false;
+                          }
+                          return success;
+                        });
+  generator_.Build();
 }
 
 const std::string &
 Generator::GetValueByIdentifier(const std::string &file_identifier) const {
-  return command_.GetDefaultValueByKey(file_identifier);
+  return generator_.GetValueByIdentifier(file_identifier);
 }
 
 // PRIVATE
 
-void Generator::Initialize() {
-  // Checks
-  env::assert_fatal(
-      Project::IsInit(),
-      "Environment is not initialized. Use the buildcc::Project::Init API");
-
-  //
-  fs::create_directories(env_.GetTargetBuildDir());
-  command_.AddDefaultArguments({
-      {"gen_root_dir", path_as_string(env_.GetTargetRootDir())},
-      {"gen_build_dir", path_as_string(env_.GetTargetBuildDir())},
-  });
-
-  //
-  unique_id_ = name_;
-  tf_.name(name_);
-}
-
-void Generator::Convert() {
-  user_.internal_inputs = internal::path_schema_convert(
-      user_.inputs, internal::Path::CreateExistingPath);
-}
-
-void Generator::BuildGenerate() {
-  if (!serialization_.IsLoaded()) {
-    dirty_ = true;
-  } else {
-    RecheckPaths(
-        serialization_.GetLoad().internal_inputs, user_.internal_inputs,
-        [&]() { InputRemoved(); }, [&]() { InputAdded(); },
-        [&]() { InputUpdated(); });
-    RecheckChanged(serialization_.GetLoad().outputs, user_.outputs,
-                   [&]() { OutputChanged(); });
-    RecheckChanged(serialization_.GetLoad().commands, user_.commands,
-                   [&]() { CommandChanged(); });
-  }
-}
+void Generator::Initialize() { unique_id_ = generator_.GetUniqueId(); }
 
 } // namespace buildcc
