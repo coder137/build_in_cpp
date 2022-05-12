@@ -27,12 +27,27 @@ constexpr const char *const kGenerateTaskName = "Generate";
 
 namespace buildcc {
 
+void CustomGenerator::AddDefaultArgument(const std::string &identifier,
+                                         const std::string &pattern) {
+  command_.AddDefaultArgument(identifier, command_.Construct(pattern));
+}
+
 void CustomGenerator::AddDefaultArguments(
     const std::unordered_map<std::string, std::string> &arguments) {
   for (const auto &arg_iter : arguments) {
-    command_.AddDefaultArgument(arg_iter.first,
-                                command_.Construct(arg_iter.second));
+    AddDefaultArgument(arg_iter.first, arg_iter.second);
   }
+}
+
+std::string CustomGenerator::Construct(
+    const std::string &pattern,
+    const std::unordered_map<const char *, std::string> &arguments) {
+  return command_.Construct(pattern, arguments);
+}
+
+const std::string &CustomGenerator::GetValueByIdentifier(
+    const std::string &file_identifier) const {
+  return command_.GetDefaultValueByKey(file_identifier);
 }
 
 void CustomGenerator::AddGenInfo(const std::string &id,
@@ -145,9 +160,15 @@ void CustomGenerator::GenerateTask() {
       // Create task for selected schema
       for (const auto &selected_miter : selected_user_schema) {
         const auto &id = selected_miter.first;
+        const auto &current_info = selected_miter.second;
         tf::Task task = subflow
                             .emplace([&]() {
                               try {
+                                // TODO, Shift to TaskRunner
+                                user_.gen_info_map.at(id).internal_inputs =
+                                    internal::path_schema_convert(
+                                        current_info.inputs,
+                                        internal::Path::CreateExistingPath);
                                 TaskRunner<true>(id);
                               } catch (...) {
                                 env::set_task_state(env::TaskState::FAILURE);
@@ -159,10 +180,11 @@ void CustomGenerator::GenerateTask() {
 
       for (auto &dummy_selected_miter : dummy_selected_user_schema) {
         const auto &id = dummy_selected_miter.first;
-        auto &current_info = dummy_selected_miter.second;
+        const auto &current_info = dummy_selected_miter.second;
         tf::Task task = subflow
                             .emplace([&]() {
                               try {
+                                // TODO, Shift to TaskRunner
                                 user_.gen_info_map.at(id).internal_inputs =
                                     internal::path_schema_convert(
                                         current_info.inputs,

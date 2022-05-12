@@ -86,13 +86,16 @@ public:
   virtual ~CustomGenerator() = default;
   CustomGenerator(const CustomGenerator &) = delete;
 
-  /**
-   * @brief Add default arguments for input, output and command requirements
-   *
-   * @param arguments Key-Value pair for arguments
-   */
+  // From env::Command module, forwarding here
+  void AddDefaultArgument(const std::string &identifier,
+                          const std::string &pattern);
   void AddDefaultArguments(
       const std::unordered_map<std::string, std::string> &arguments);
+  std::string Construct(
+      const std::string &pattern,
+      const std::unordered_map<const char *, std::string> &arguments = {});
+  const std::string &
+  GetValueByIdentifier(const std::string &file_identifier) const;
 
   /**
    * @brief Single Generator task for inputs->generate_cb->outputs
@@ -127,6 +130,7 @@ public:
   void Build() override;
 
   // Getters
+  const std::string &GetName() const { return name_; }
   const fs::path &GetBinaryPath() const {
     return serialization_.GetSerializedFile();
   }
