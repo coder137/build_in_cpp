@@ -61,16 +61,16 @@ bool CustomGeneratorSerialization::Store(
   flatbuffers::FlatBufferBuilder builder;
 
   std::vector<flatbuffers::Offset<fbs::GenInfo>> fbs_gen_info;
-  for (const auto &rel_miter : store_.internal_gen_info_map) {
-    const auto &id = rel_miter.first;
-    const auto &gen_info = rel_miter.second;
+  for (const auto &gen_info_iter : store_.internal_gen_info_map) {
+    const auto &id = gen_info_iter.first;
+    const auto &gen_info = gen_info_iter.second;
     auto fbs_internal_inputs =
         internal::create_fbs_vector_path(builder, gen_info.internal_inputs);
     auto fbs_outputs =
         internal::create_fbs_vector_string(builder, gen_info.outputs);
-    auto fbs_rel = fbs::CreateGenInfoDirect(builder, id.c_str(),
-                                            &fbs_internal_inputs, &fbs_outputs);
-    fbs_gen_info.push_back(fbs_rel);
+    auto fbs_current_info = fbs::CreateGenInfoDirect(
+        builder, id.c_str(), &fbs_internal_inputs, &fbs_outputs);
+    fbs_gen_info.push_back(fbs_current_info);
   }
 
   auto fbs_generator = fbs::CreateCustomGeneratorDirect(
