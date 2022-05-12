@@ -17,7 +17,7 @@ include "path.fbs";
 namespace schema.internal;
 
 // Relational input and output files
-table RelInputOutput {
+table GenInfo {
     id:string (key);
     inputs:[Path];
     outputs:[string];
@@ -26,7 +26,7 @@ table RelInputOutput {
 // Custom generator regenerate conditions
 table CustomGenerator {
     name:string (key);
-    rels:[RelInputOutput];
+    rels:[GenInfo];
 }
 
 root_type CustomGenerator;
