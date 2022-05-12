@@ -56,7 +56,7 @@ typedef std::function<bool(CustomGeneratorContext &)> GenerateCb;
 typedef std::function<void(std::unordered_map<std::string, tf::Task> &)> DependencyCb;
 // clang-format on
 
-struct UserRelInputOutputSchema : internal::RelInputOutputSchema {
+struct UserRelInputOutputSchema : internal::GenInfo {
   fs_unordered_set inputs;
   GenerateCb generate_cb;
 };
