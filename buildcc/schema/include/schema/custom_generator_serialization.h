@@ -34,7 +34,7 @@ struct GenInfo {
 
 struct CustomGeneratorSchema {
   std::string name;
-  std::unordered_map<std::string, GenInfo> internal_rels_map;
+  std::unordered_map<std::string, GenInfo> internal_gen_info_map;
 };
 
 class CustomGeneratorSerialization : public SerializationInterface {

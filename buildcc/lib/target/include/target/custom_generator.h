@@ -68,7 +68,7 @@ struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
     for (auto &r_miter : rels_map) {
       r_miter.second.internal_inputs = path_schema_convert(
           r_miter.second.inputs, internal::Path::CreateExistingPath);
-      auto p = internal_rels_map.emplace(r_miter.first, r_miter.second);
+      auto p = internal_gen_info_map.emplace(r_miter.first, r_miter.second);
       env::assert_fatal(p.second,
                         fmt::format("Could not save {}", r_miter.first));
     }

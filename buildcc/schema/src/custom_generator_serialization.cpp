@@ -50,8 +50,8 @@ bool CustomGeneratorSerialization::Load(const std::string &serialized_data) {
     GenInfo current_info;
     extract_path(gen_info->inputs(), current_info.internal_inputs);
     extract(gen_info->outputs(), current_info.outputs);
-    load_.internal_rels_map.emplace(gen_info->id()->c_str(),
-                                    std::move(current_info));
+    load_.internal_gen_info_map.emplace(gen_info->id()->c_str(),
+                                        std::move(current_info));
   }
   return true;
 }
@@ -61,7 +61,7 @@ bool CustomGeneratorSerialization::Store(
   flatbuffers::FlatBufferBuilder builder;
 
   std::vector<flatbuffers::Offset<fbs::GenInfo>> fbs_gen_info;
-  for (const auto &rel_miter : store_.internal_rels_map) {
+  for (const auto &rel_miter : store_.internal_gen_info_map) {
     const auto &id = rel_miter.first;
     const auto &gen_info = rel_miter.second;
     auto fbs_internal_inputs =

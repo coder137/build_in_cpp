@@ -92,7 +92,7 @@ void CustomGenerator::BuildGenerate(
     dirty_ = true;
   } else {
     // DONE, Conditionally select internal_rels depending on what has changed
-    const auto &prev_rels = serialization_.GetLoad().internal_rels_map;
+    const auto &prev_rels = serialization_.GetLoad().internal_gen_info_map;
     const auto &curr_rels = user_.rels_map;
 
     // DONE, MAP REMOVED condition Check if prev_rels exists in curr_rels
@@ -217,7 +217,7 @@ template <bool run> void CustomGenerator::TaskRunner(const std::string &id) {
     rerun = true;
   } else {
     const auto &previous_info =
-        serialization_.GetLoad().internal_rels_map.at(id);
+        serialization_.GetLoad().internal_gen_info_map.at(id);
     rerun = internal::CheckPaths(previous_info.internal_inputs,
                                  current_info.internal_inputs) !=
                 internal::PathState::kNoChange ||
