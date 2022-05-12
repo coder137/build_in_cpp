@@ -26,7 +26,7 @@ table GenInfo {
 // Custom generator regenerate conditions
 table CustomGenerator {
     name:string (key);
-    rels:[GenInfo];
+    info:[GenInfo];
 }
 
 root_type CustomGenerator;

@@ -40,7 +40,7 @@ bool CustomGeneratorSerialization::Load(const std::string &serialized_data) {
       fbs::GetCustomGenerator((const void *)serialized_data.c_str());
   // Verified, does not need a nullptr check
 
-  const auto *fbs_gen_info = custom_generator->rels();
+  const auto *fbs_gen_info = custom_generator->info();
   if (fbs_gen_info == nullptr) {
     return false;
   }
