@@ -58,14 +58,15 @@ void Generator::Build() {
              [&](const CustomGeneratorContext &ctx) -> bool {
                (void)ctx;
                bool success = true;
-               try {
-                 for (const auto &c : commands_) {
-                   bool executed = env::Command::Execute(c);
-                   env::assert_fatal(executed,
-                                     fmt::format("Failed to run command {}"));
+               for (const auto &c : commands_) {
+                 bool executed = env::Command::Execute(c);
+                 if (!executed) {
+                   success = false;
+                   env::log_critical(
+                       __FUNCTION__,
+                       fmt::format("Failed to run command {}", c));
+                   break;
                  }
-               } catch (...) {
-                 success = false;
                }
                return success;
              });
