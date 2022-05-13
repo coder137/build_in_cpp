@@ -30,6 +30,7 @@ namespace buildcc::internal {
 struct GenInfo {
   path_unordered_set internal_inputs;
   fs_unordered_set outputs;
+  std::vector<uint8_t> userblob;
 };
 
 struct CustomGeneratorSchema {

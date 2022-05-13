@@ -50,6 +50,7 @@ bool CustomGeneratorSerialization::Load(const std::string &serialized_data) {
     GenInfo current_info;
     extract_path(gen_info->inputs(), current_info.internal_inputs);
     extract(gen_info->outputs(), current_info.outputs);
+    extract(gen_info->userblob(), current_info.userblob);
     load_.internal_gen_info_map.emplace(gen_info->id()->c_str(),
                                         std::move(current_info));
   }
@@ -68,8 +69,9 @@ bool CustomGeneratorSerialization::Store(
         internal::create_fbs_vector_path(builder, gen_info.internal_inputs);
     auto fbs_outputs =
         internal::create_fbs_vector_string(builder, gen_info.outputs);
-    auto fbs_current_info = fbs::CreateGenInfoDirect(
-        builder, id.c_str(), &fbs_internal_inputs, &fbs_outputs);
+    auto fbs_current_info =
+        fbs::CreateGenInfoDirect(builder, id.c_str(), &fbs_internal_inputs,
+                                 &fbs_outputs, &gen_info.userblob);
     fbs_gen_info.push_back(fbs_current_info);
   }
 
