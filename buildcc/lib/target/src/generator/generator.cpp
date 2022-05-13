@@ -18,7 +18,63 @@
 
 #include <algorithm>
 
+#include "flatbuffers/flexbuffers.h"
+
 #include "env/assert_fatal.h"
+
+namespace {
+
+class GeneratorBlobHandler : public buildcc::CustomBlobHandler {
+public:
+  GeneratorBlobHandler(const std::vector<std::string> &commands)
+      : commands_(commands) {}
+
+private:
+  std::vector<std::string> commands_;
+
+  bool Verify(const std::vector<uint8_t> &serialized_data) const override {
+    auto flex_ref = flexbuffers::GetRoot(serialized_data);
+    if (!flex_ref.IsVector()) {
+      return false;
+    }
+    auto flex_vect = flex_ref.AsVector();
+    for (size_t i = 0; i < flex_vect.size(); i++) {
+      if (!flex_vect[i].IsString()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  bool IsEqual(const std::vector<uint8_t> &previous,
+               const std::vector<uint8_t> &current) const override {
+    return Deserialize(previous) == Deserialize(current);
+  }
+
+  std::vector<uint8_t> Serialize() const override {
+    flexbuffers::Builder builder;
+    builder.Vector([&]() {
+      for (const auto &c : commands_) {
+        builder.Add(c);
+      }
+    });
+    builder.Finish();
+    return builder.GetBuffer();
+  }
+
+  // serialized_data has already been verified
+  static std::vector<std::string>
+  Deserialize(const std::vector<uint8_t> &serialized_data) {
+    std::vector<std::string> deserialized;
+    auto flex_vect = flexbuffers::GetRoot(serialized_data).AsVector();
+    for (size_t i = 0; i < flex_vect.size(); i++) {
+      deserialized.emplace_back(flex_vect[i].AsString().str());
+    }
+    return deserialized;
+  }
+};
+
+} // namespace
 
 namespace buildcc {
 
@@ -54,22 +110,23 @@ void Generator::AddCommand(
 }
 
 void Generator::Build() {
-  AddGenInfo("Generate", inputs_, outputs_,
-             [&](const CustomGeneratorContext &ctx) -> bool {
-               (void)ctx;
-               bool success = true;
-               for (const auto &c : commands_) {
-                 bool executed = env::Command::Execute(c);
-                 if (!executed) {
-                   success = false;
-                   env::log_critical(
-                       __FUNCTION__,
-                       fmt::format("Failed to run command {}", c));
-                   break;
-                 }
-               }
-               return success;
-             });
+  AddGenInfo(
+      "Generate", inputs_, outputs_,
+      [&](const CustomGeneratorContext &ctx) -> bool {
+        (void)ctx;
+        bool success = true;
+        for (const auto &c : commands_) {
+          bool executed = env::Command::Execute(c);
+          if (!executed) {
+            success = false;
+            env::log_critical(__FUNCTION__,
+                              fmt::format("Failed to run command {}", c));
+            break;
+          }
+        }
+        return success;
+      },
+      std::make_shared<GeneratorBlobHandler>(commands_));
   this->CustomGenerator::Build();
 }
 
