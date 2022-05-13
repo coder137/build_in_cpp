@@ -161,15 +161,10 @@ void CustomGenerator::GenerateTask() {
       // Create task for selected schema
       for (const auto &selected_miter : selected_user_schema) {
         const auto &id = selected_miter.first;
-        const auto &current_info = selected_miter.second;
+        // const auto &current_info = selected_miter.second;
         tf::Task task = subflow
                             .emplace([&]() {
                               try {
-                                // TODO, Shift to TaskRunner
-                                user_.gen_info_map.at(id).internal_inputs =
-                                    internal::path_schema_convert(
-                                        current_info.inputs,
-                                        internal::Path::CreateExistingPath);
                                 TaskRunner<true>(id);
                               } catch (...) {
                                 env::set_task_state(env::TaskState::FAILURE);
@@ -181,15 +176,10 @@ void CustomGenerator::GenerateTask() {
 
       for (auto &dummy_selected_miter : dummy_selected_user_schema) {
         const auto &id = dummy_selected_miter.first;
-        const auto &current_info = dummy_selected_miter.second;
+        // const auto &current_info = dummy_selected_miter.second;
         tf::Task task = subflow
                             .emplace([&]() {
                               try {
-                                // TODO, Shift to TaskRunner
-                                user_.gen_info_map.at(id).internal_inputs =
-                                    internal::path_schema_convert(
-                                        current_info.inputs,
-                                        internal::Path::CreateExistingPath);
                                 TaskRunner<false>(id);
                               } catch (...) {
                                 env::set_task_state(env::TaskState::FAILURE);
@@ -233,6 +223,18 @@ void CustomGenerator::GenerateTask() {
 }
 
 template <bool run> void CustomGenerator::TaskRunner(const std::string &id) {
+  // Convert
+  {
+    auto &current_gen_info = user_.gen_info_map.at(id);
+    current_gen_info.internal_inputs = internal::path_schema_convert(
+        current_gen_info.inputs, internal::Path::CreateExistingPath);
+    current_gen_info.userblob =
+        current_gen_info.blob_handler != nullptr
+            ? current_gen_info.blob_handler->GetSerializedData()
+            : std::vector<uint8_t>();
+  }
+
+  // Run
   const auto &current_info = user_.gen_info_map.at(id);
   bool rerun = false;
   if constexpr (run) {

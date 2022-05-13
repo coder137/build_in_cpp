@@ -4,9 +4,9 @@
 #include "expect_custom_generator.h"
 #include "test_target_util.h"
 
-// #include "test_target_util.h"
-// #include "taskflow/taskflow.hpp"
-// #include "env/util.h"
+#include "flatbuffers/flexbuffers.h"
+
+#include <memory>
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
@@ -733,6 +733,79 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
 
     CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }
+}
+
+class MyCustomBlobHandler : public buildcc::CustomBlobHandler {
+public:
+  MyCustomBlobHandler(int32_t my_recheck_value)
+      : recheck_value(my_recheck_value) {}
+
+private:
+  int32_t recheck_value = 0;
+
+private:
+  bool Verify(const std::vector<uint8_t> &serialized_data) const override {
+    return flexbuffers::GetRoot(serialized_data).IsInt();
+  }
+
+  bool IsEqual(const std::vector<uint8_t> &previous,
+               const std::vector<uint8_t> &current) const override {
+    return Deserialize(previous) == Deserialize(current);
+  }
+
+  std::vector<uint8_t> Serialize() const override {
+    flexbuffers::Builder builder;
+    builder.Add(recheck_value);
+    builder.Finish();
+    return builder.GetBuffer();
+  }
+
+  int32_t Deserialize(const std::vector<uint8_t> &serialized_data) const {
+    buildcc::env::assert_fatal(
+        Verify(serialized_data),
+        "Deserialize function failed due to wrong serialized_data");
+    return flexbuffers::GetRoot(serialized_data).AsInt32();
+  }
+};
+
+TEST(CustomGeneratorTestGroup, RealGenerate_BasicBlobRecheck) {
+  constexpr const char *const kGenName = "real_generator_basic_blob_recheck";
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb,
+                    std::make_shared<MyCustomBlobHandler>(12));
+    cgen.Build();
+
+    mock().expectOneCall("RealGenerateCb");
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_gen_info_map.size(), 1);
+  }
+
+  // Rebuild
+  {
+    buildcc::CustomGenerator cgen(kGenName, "");
+    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
+                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb,
+                    std::make_shared<MyCustomBlobHandler>(200));
+    cgen.Build();
+
+    mock().expectOneCall("RealGenerateCb");
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::m::CustomGeneratorRunner(cgen);
+
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+    CHECK_EQUAL(serialization.GetLoad().internal_gen_info_map.size(), 1);
+  }
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
 }
 
 int main(int ac, char **av) {

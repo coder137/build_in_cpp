@@ -69,10 +69,19 @@ public:
     return !IsEqual(previous, current);
   };
 
+  std::vector<uint8_t> GetSerializedData() {
+    auto serialized_data = Serialize();
+    env::assert_fatal(
+        Verify(serialized_data),
+        "Serialized data is corrupted or Serialize function is incorrect");
+    return serialized_data;
+  }
+
 private:
   virtual bool Verify(const std::vector<uint8_t> &serialized_data) const = 0;
   virtual bool IsEqual(const std::vector<uint8_t> &previous,
                        const std::vector<uint8_t> &current) const = 0;
+  virtual std::vector<uint8_t> Serialize() const = 0;
 };
 
 struct UserGenInfo : internal::GenInfo {
