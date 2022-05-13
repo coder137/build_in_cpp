@@ -760,10 +760,8 @@ private:
     return builder.GetBuffer();
   }
 
+  // serialized_data has already been verified
   int32_t Deserialize(const std::vector<uint8_t> &serialized_data) const {
-    buildcc::env::assert_fatal(
-        Verify(serialized_data),
-        "Deserialize function failed due to wrong serialized_data");
     return flexbuffers::GetRoot(serialized_data).AsInt32();
   }
 };
