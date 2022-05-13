@@ -56,9 +56,29 @@ typedef std::function<bool(CustomGeneratorContext &)> GenerateCb;
 typedef std::function<void(std::unordered_map<std::string, tf::Task> &)> DependencyCb;
 // clang-format on
 
+class CustomBlobHandler {
+public:
+  bool CheckChanged(const std::vector<uint8_t> &previous,
+                    const std::vector<uint8_t> &current) const {
+    env::assert_fatal(
+        Verify(previous),
+        "Stored blob is corrupted or User verification is incorrect");
+    env::assert_fatal(
+        Verify(current),
+        "Current blob is corrupted or User verification is incorrect");
+    return !IsEqual(previous, current);
+  };
+
+private:
+  virtual bool Verify(const std::vector<uint8_t> &serialized_data) const = 0;
+  virtual bool IsEqual(const std::vector<uint8_t> &previous,
+                       const std::vector<uint8_t> &current) const = 0;
+};
+
 struct UserGenInfo : internal::GenInfo {
   fs_unordered_set inputs;
   GenerateCb generate_cb;
+  std::shared_ptr<CustomBlobHandler> blob_handler{nullptr};
 };
 
 struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
@@ -87,6 +107,7 @@ public:
   CustomGenerator(const CustomGenerator &) = delete;
 
   // From env::Command module, forwarding here
+  // TODO, Create a Mixin
   void AddDefaultArgument(const std::string &identifier,
                           const std::string &pattern);
   void AddDefaultArguments(
@@ -108,7 +129,8 @@ public:
    */
   void AddGenInfo(const std::string &id, const fs_unordered_set &inputs,
                   const fs_unordered_set &outputs,
-                  const GenerateCb &generate_cb);
+                  const GenerateCb &generate_cb,
+                  std::shared_ptr<CustomBlobHandler> blob_handler = nullptr);
 
   // Callbacks
   /**

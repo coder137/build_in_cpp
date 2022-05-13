@@ -50,10 +50,10 @@ const std::string &CustomGenerator::GetValueByIdentifier(
   return command_.GetDefaultValueByKey(file_identifier);
 }
 
-void CustomGenerator::AddGenInfo(const std::string &id,
-                                 const fs_unordered_set &inputs,
-                                 const fs_unordered_set &outputs,
-                                 const GenerateCb &generate_cb) {
+void CustomGenerator::AddGenInfo(
+    const std::string &id, const fs_unordered_set &inputs,
+    const fs_unordered_set &outputs, const GenerateCb &generate_cb,
+    std::shared_ptr<CustomBlobHandler> blob_handler) {
   env::assert_fatal(user_.gen_info_map.find(id) == user_.gen_info_map.end(),
                     fmt::format("Duplicate id {} detected", id));
   ASSERT_FATAL(generate_cb, "Invalid callback provided");
@@ -66,6 +66,7 @@ void CustomGenerator::AddGenInfo(const std::string &id,
     schema.outputs.emplace(command_.Construct(path_as_string(o)));
   }
   schema.generate_cb = generate_cb;
+  schema.blob_handler = std::move(blob_handler);
   user_.gen_info_map.emplace(id, std::move(schema));
 }
 
@@ -243,6 +244,10 @@ template <bool run> void CustomGenerator::TaskRunner(const std::string &id) {
                                  current_info.internal_inputs) !=
                 internal::PathState::kNoChange ||
             internal::CheckChanged(previous_info.outputs, current_info.outputs);
+    if (!rerun && current_info.blob_handler != nullptr) {
+      rerun = current_info.blob_handler->CheckChanged(previous_info.userblob,
+                                                      current_info.userblob);
+    }
   }
 
   if (rerun) {
