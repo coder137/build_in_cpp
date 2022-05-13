@@ -43,23 +43,13 @@ struct UserGeneratorSchema : public internal::GeneratorSchema {
   fs_unordered_set inputs;
 };
 
-class Generator : public internal::BuilderInterface {
+class Generator : public CustomGenerator {
 public:
   Generator(const std::string &name, const TargetEnv &env,
             bool parallel = false)
-      : generator_(name, env), parallel_(parallel) {
-    Initialize();
-  }
+      : CustomGenerator(name, env), parallel_(parallel) {}
   virtual ~Generator() = default;
   Generator(const Generator &) = delete;
-
-  /**
-   * @brief Add default arguments for input, output and command requirements
-   *
-   * @param arguments Key-Value pair for arguments
-   */
-  void AddDefaultArguments(
-      const std::unordered_map<std::string, std::string> &arguments);
 
   /**
    * @brief Add absolute input path pattern to generator
@@ -102,21 +92,13 @@ public:
    */
   void Build() override;
 
-  // Getter
-  const fs::path &GetBinaryPath() const { return generator_.GetBinaryPath(); }
-  tf::Taskflow &GetTaskflow() { return generator_.GetTaskflow(); }
-  const std::string &GetName() const { return generator_.GetName(); }
-
-  const std::string &
-  GetValueByIdentifier(const std::string &file_identifier) const;
+  // Restrict access to certain custom generator APIs
+private:
+  using CustomGenerator::AddDependencyCb;
+  using CustomGenerator::AddGenInfo;
+  using CustomGenerator::Build;
 
 private:
-  void Initialize();
-
-  void GenerateTask();
-  void Convert();
-  void BuildGenerate();
-
   // Recheck states
   void InputRemoved();
   void InputAdded();
@@ -126,7 +108,6 @@ private:
   void CommandChanged();
 
 private:
-  CustomGenerator generator_;
   bool parallel_{false};
 
   //

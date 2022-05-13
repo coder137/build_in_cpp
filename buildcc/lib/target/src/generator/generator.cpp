@@ -22,74 +22,56 @@
 
 namespace buildcc {
 
-void Generator::AddDefaultArguments(
-    const std::unordered_map<std::string, std::string> &arguments) {
-  generator_.AddDefaultArguments(arguments);
-}
-
 void Generator::AddInput(const std::string &absolute_input_pattern,
                          const char *identifier) {
-  std::string absolute_input_string =
-      generator_.Construct(absolute_input_pattern);
+  std::string absolute_input_string = Construct(absolute_input_pattern);
   const auto absolute_input_path =
       internal::Path::CreateNewPath(absolute_input_string);
   inputs_.insert(absolute_input_path.GetPathname());
 
   if (identifier != nullptr) {
-    generator_.AddDefaultArgument(identifier,
-                                  absolute_input_path.GetPathAsString());
+    AddDefaultArgument(identifier, absolute_input_path.GetPathAsString());
   }
 }
 
 void Generator::AddOutput(const std::string &absolute_output_pattern,
                           const char *identifier) {
-  std::string absolute_output_string =
-      generator_.Construct(absolute_output_pattern);
+  std::string absolute_output_string = Construct(absolute_output_pattern);
   const auto absolute_output_path =
       internal::Path::CreateNewPath(absolute_output_string);
   outputs_.insert(absolute_output_path.GetPathname());
 
   if (identifier != nullptr) {
-    generator_.AddDefaultArgument(identifier,
-                                  absolute_output_path.GetPathAsString());
+    AddDefaultArgument(identifier, absolute_output_path.GetPathAsString());
   }
 }
 
 void Generator::AddCommand(
     const std::string &command_pattern,
     const std::unordered_map<const char *, std::string> &arguments) {
-  std::string constructed_command =
-      generator_.Construct(command_pattern, arguments);
+  std::string constructed_command = Construct(command_pattern, arguments);
   commands_.emplace_back(std::move(constructed_command));
 }
 
 void Generator::Build() {
-  generator_.AddGenInfo("Generate", inputs_, outputs_,
-                        [&](const CustomGeneratorContext &ctx) -> bool {
-                          (void)ctx;
-                          bool success = true;
-                          try {
-                            for (const auto &c : commands_) {
-                              bool executed = env::Command::Execute(c);
-                              env::assert_fatal(
-                                  executed,
-                                  fmt::format("Failed to run command {}"));
-                            }
-                          } catch (...) {
-                            success = false;
-                          }
-                          return success;
-                        });
-  generator_.Build();
-}
-
-const std::string &
-Generator::GetValueByIdentifier(const std::string &file_identifier) const {
-  return generator_.GetValueByIdentifier(file_identifier);
+  AddGenInfo("Generate", inputs_, outputs_,
+             [&](const CustomGeneratorContext &ctx) -> bool {
+               (void)ctx;
+               bool success = true;
+               try {
+                 for (const auto &c : commands_) {
+                   bool executed = env::Command::Execute(c);
+                   env::assert_fatal(executed,
+                                     fmt::format("Failed to run command {}"));
+                 }
+               } catch (...) {
+                 success = false;
+               }
+               return success;
+             });
+  this->CustomGenerator::Build();
 }
 
 // PRIVATE
-
-void Generator::Initialize() { unique_id_ = generator_.GetUniqueId(); }
 
 } // namespace buildcc
