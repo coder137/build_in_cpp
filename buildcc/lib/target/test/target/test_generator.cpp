@@ -235,8 +235,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
   mock().checkExpectations();
 }
 
-// TODO, Add implementation for this
-IGNORE_TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
+TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
   constexpr const char *const NAME = "Rebuild_Commands";
   {
     buildcc::Generator generator(NAME, "");
@@ -262,7 +261,6 @@ IGNORE_TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
                              {"compiler", "gcc"},
                          });
 
-    // buildcc::m::GeneratorExpect_CommandChanged(1, &generator);
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
     buildcc::m::GeneratorRunner(generator);
@@ -275,7 +273,6 @@ IGNORE_TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
     generator.AddCommand("gcc -o {gen_build_dir}/dummy_main.exe "
                          "{gen_root_dir}/dummy_main.c");
 
-    // buildcc::m::GeneratorExpect_CommandChanged(1, &generator);
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
     buildcc::m::GeneratorRunner(generator);
