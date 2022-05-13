@@ -21,6 +21,7 @@ table GenInfo {
     id:string (key);
     inputs:[Path];
     outputs:[string];
+    userblob:[ubyte];
 }
 
 // Custom generator regenerate conditions
