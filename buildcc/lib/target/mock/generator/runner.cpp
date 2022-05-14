@@ -4,7 +4,7 @@
 
 namespace buildcc::m {
 
-void GeneratorRunner(Generator &generator) {
+void GeneratorRunner(FileGenerator &generator) {
   tf::Executor executor(1);
   executor.run(generator.GetTaskflow());
   executor.wait_for_all();

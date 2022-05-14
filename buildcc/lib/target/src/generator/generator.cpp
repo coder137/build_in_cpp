@@ -78,8 +78,8 @@ private:
 
 namespace buildcc {
 
-void Generator::AddInput(const std::string &absolute_input_pattern,
-                         const char *identifier) {
+void FileGenerator::AddInput(const std::string &absolute_input_pattern,
+                             const char *identifier) {
   std::string absolute_input_string = Construct(absolute_input_pattern);
   const auto absolute_input_path =
       internal::Path::CreateNewPath(absolute_input_string);
@@ -90,8 +90,8 @@ void Generator::AddInput(const std::string &absolute_input_pattern,
   }
 }
 
-void Generator::AddOutput(const std::string &absolute_output_pattern,
-                          const char *identifier) {
+void FileGenerator::AddOutput(const std::string &absolute_output_pattern,
+                              const char *identifier) {
   std::string absolute_output_string = Construct(absolute_output_pattern);
   const auto absolute_output_path =
       internal::Path::CreateNewPath(absolute_output_string);
@@ -102,14 +102,14 @@ void Generator::AddOutput(const std::string &absolute_output_pattern,
   }
 }
 
-void Generator::AddCommand(
+void FileGenerator::AddCommand(
     const std::string &command_pattern,
     const std::unordered_map<const char *, std::string> &arguments) {
   std::string constructed_command = Construct(command_pattern, arguments);
   commands_.emplace_back(std::move(constructed_command));
 }
 
-void Generator::Build() {
+void FileGenerator::Build() {
   AddGenInfo(
       "Generate", inputs_, outputs_,
       [&](const CustomGeneratorContext &ctx) -> bool {

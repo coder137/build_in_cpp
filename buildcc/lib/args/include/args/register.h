@@ -138,7 +138,7 @@ private:
 private:
   // BuildTasks
   tf::Task BuildTask(BaseTarget &target);
-  tf::Task BuildTask(BaseGenerator &generator);
+  tf::Task BuildTask(CustomGenerator &generator);
   void BuildStoreTask(const std::string &unique_id, const tf::Task &task);
 
 private:

@@ -8,7 +8,7 @@ tf::Task Reg::Instance::BuildTask(BaseTarget &target) {
   mock().actualCall(fmt::format("BuildTask_{}", target.GetName()).c_str());
   return build_tf_.placeholder().name(target.GetUniqueId());
 }
-tf::Task Reg::Instance::BuildTask(BaseGenerator &generator) {
+tf::Task Reg::Instance::BuildTask(CustomGenerator &generator) {
   mock().actualCall(fmt::format("BuildTask_{}", generator.GetName()).c_str());
   return build_tf_.placeholder().name(generator.GetUniqueId());
 }

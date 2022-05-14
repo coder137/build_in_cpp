@@ -43,12 +43,12 @@ struct UserGeneratorSchema : public internal::GeneratorSchema {
   fs_unordered_set inputs;
 };
 
-class Generator : public CustomGenerator {
+class FileGenerator : public CustomGenerator {
 public:
-  Generator(const std::string &name, const TargetEnv &env)
+  FileGenerator(const std::string &name, const TargetEnv &env)
       : CustomGenerator(name, env) {}
-  virtual ~Generator() = default;
-  Generator(const Generator &) = delete;
+  virtual ~FileGenerator() = default;
+  FileGenerator(const FileGenerator &) = delete;
 
   /**
    * @brief Add absolute input path pattern to generator
@@ -85,7 +85,7 @@ public:
       const std::unordered_map<const char *, std::string> &arguments = {});
 
   /**
-   * @brief Build Generator Tasks
+   * @brief Build FileGenerator Tasks
    *
    * Use `GetTaskflow` for the registered tasks
    */
@@ -103,8 +103,6 @@ private:
   internal::fs_unordered_set outputs_;
   std::vector<std::string> commands_;
 };
-
-typedef Generator BaseGenerator;
 
 } // namespace buildcc
 

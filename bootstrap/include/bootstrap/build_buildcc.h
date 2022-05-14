@@ -28,9 +28,9 @@
 
 namespace buildcc {
 
-void schema_gen_cb(BaseGenerator &generator, const BaseTarget &flatc_exe);
+void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe);
 
-void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
+void buildcc_cb(BaseTarget &target, const FileGenerator &schema_gen,
                 const TargetInfo &flatbuffers_ho, const TargetInfo &fmt_ho,
                 const TargetInfo &spdlog_ho, const TargetInfo &cli11_ho,
                 const TargetInfo &taskflow_ho, const BaseTarget &tpl);
@@ -80,8 +80,8 @@ private:
   ExecutableTarget_generic &GetFlatc() {
     return storage_.Ref<ExecutableTarget_generic>(kFlatcExeName);
   }
-  BaseGenerator &GetSchemaGen() {
-    return storage_.Ref<BaseGenerator>(kSchemaGenName);
+  FileGenerator &GetSchemaGen() {
+    return storage_.Ref<FileGenerator>(kSchemaGenName);
   }
   TargetInfo &GetFlatbuffersHo() {
     return storage_.Ref<TargetInfo>(kFlatbuffersHoName);

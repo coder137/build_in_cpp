@@ -9,10 +9,10 @@ constexpr const char *const EXE = "build";
 // Function Prototypes
 static void clean_cb();
 static void cpp_target_cb(BaseTarget &cpptarget,
-                          const BaseGenerator &cpp_generator);
-static void c_target_cb(BaseTarget &ctarget, const BaseGenerator &c_generator);
-static void cpp_generator_cb(BaseGenerator &generator);
-static void c_generator_cb(BaseGenerator &generator);
+                          const FileGenerator &cpp_generator);
+static void c_target_cb(BaseTarget &ctarget, const FileGenerator &c_generator);
+static void cpp_generator_cb(FileGenerator &generator);
+static void c_generator_cb(FileGenerator &generator);
 
 int main(int argc, char **argv) {
   // Get arguments
@@ -30,8 +30,8 @@ int main(int argc, char **argv) {
   Reg::Call(Args::Clean()).Func(clean_cb);
 
   // Generator
-  BaseGenerator cpp_generator("cpp_generator", "");
-  BaseGenerator c_generator("c_generator", "");
+  FileGenerator cpp_generator("cpp_generator", "");
+  FileGenerator c_generator("c_generator", "");
   Reg::Call()
       .Build(cpp_generator_cb, cpp_generator)
       .Build(c_generator_cb, c_generator);
@@ -82,7 +82,7 @@ static void clean_cb() {
 }
 
 static void cpp_target_cb(BaseTarget &cpptarget,
-                          const BaseGenerator &cpp_generator) {
+                          const FileGenerator &cpp_generator) {
   const fs::path main_cpp =
       fs::path(cpp_generator.GetValueByIdentifier("main_cpp"))
           .lexically_relative(Project::GetRootDir());
@@ -90,21 +90,21 @@ static void cpp_target_cb(BaseTarget &cpptarget,
   cpptarget.Build();
 }
 
-static void c_target_cb(BaseTarget &ctarget, const BaseGenerator &c_generator) {
+static void c_target_cb(BaseTarget &ctarget, const FileGenerator &c_generator) {
   const fs::path main_c = fs::path(c_generator.GetValueByIdentifier("main_c"))
                               .lexically_relative(Project::GetRootDir());
   ctarget.AddSource(main_c);
   ctarget.Build();
 }
 
-static void cpp_generator_cb(BaseGenerator &generator) {
+static void cpp_generator_cb(FileGenerator &generator) {
   generator.AddOutput("{gen_build_dir}/main.cpp", "main_cpp");
   generator.AddCommand("python3 {gen_root_dir}/python/gen.py --source_type cpp "
                        "--destination {main_cpp}");
   generator.Build();
 }
 
-static void c_generator_cb(BaseGenerator &generator) {
+static void c_generator_cb(FileGenerator &generator) {
   generator.AddOutput("{gen_build_dir}/main.c", "main_c");
   generator.AddCommand("python3 {gen_root_dir}/python/gen.py --source_type c "
                        "--destination {main_c}");

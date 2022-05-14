@@ -24,7 +24,7 @@ tf::Task Reg::Instance::BuildTask(BaseTarget &target) {
   return build_tf_.composed_of(target.GetTaskflow()).name(target.GetUniqueId());
 }
 
-tf::Task Reg::Instance::BuildTask(BaseGenerator &generator) {
+tf::Task Reg::Instance::BuildTask(CustomGenerator &generator) {
   return build_tf_.composed_of(generator.GetTaskflow())
       .name(generator.GetUniqueId());
 }
