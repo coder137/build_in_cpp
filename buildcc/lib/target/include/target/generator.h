@@ -99,15 +99,6 @@ private:
   using CustomGenerator::Build;
 
 private:
-  // Recheck states
-  void InputRemoved();
-  void InputAdded();
-  void InputUpdated();
-
-  void OutputChanged();
-  void CommandChanged();
-
-private:
   bool parallel_{false};
 
   //

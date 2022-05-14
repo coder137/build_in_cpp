@@ -6,7 +6,6 @@ add_library(mock_target STATIC
 
     # Generator mocks
     mock/generator/runner.cpp
-    mock/generator/recheck_states.cpp
 
     # Target mocks
     src/target/tasks.cpp
