@@ -1,16 +1,15 @@
 # schema test
 if (${TESTING})
     add_library(mock_schema STATIC
-        src/custom_generator_serialization.cpp
-        src/generator_serialization.cpp
-        src/target_serialization.cpp
-
         include/schema/private/schema_util.h
         include/schema/interface/serialization_interface.h
 
         include/schema/path.h
+
+        src/custom_generator_serialization.cpp
         include/schema/custom_generator_serialization.h
-        include/schema/generator_serialization.h
+
+        src/target_serialization.cpp
         include/schema/target_serialization.h
     )
     target_include_directories(mock_schema PUBLIC 
@@ -43,15 +42,15 @@ if (${TESTING})
 endif()
 
 set(SCHEMA_SRCS
-    src/custom_generator_serialization.cpp
-    src/generator_serialization.cpp
-    src/target_serialization.cpp
-
     include/schema/private/schema_util.h
     include/schema/interface/serialization_interface.h
 
     include/schema/path.h
-    include/schema/generator_serialization.h
+
+    src/custom_generator_serialization.cpp
+    include/schema/custom_generator_serialization.h
+
+    src/target_serialization.cpp
     include/schema/target_serialization.h
 )
 
