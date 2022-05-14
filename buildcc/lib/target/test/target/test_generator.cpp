@@ -2,7 +2,6 @@
 
 #include "expect_command.h"
 #include "expect_custom_generator.h"
-#include "expect_generator.h"
 #include "test_target_util.h"
 
 #include "taskflow/taskflow.hpp"
@@ -43,7 +42,7 @@ TEST(GeneratorTestGroup, Generator_Build) {
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   generator.Build();
-  buildcc::m::GeneratorRunner(generator);
+  buildcc::m::CustomGeneratorRunner(generator);
 
   mock().checkExpectations();
 }
@@ -62,7 +61,7 @@ TEST(GeneratorTestGroup, Generator_Identifier) {
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   generator.Build();
-  buildcc::m::GeneratorRunner(generator);
+  buildcc::m::CustomGeneratorRunner(generator);
 
   mock().checkExpectations();
 }
@@ -81,7 +80,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
   }
 
   {
@@ -95,7 +94,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
                          });
 
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -113,7 +112,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
     CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }
 
@@ -126,7 +125,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
     CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }
 
@@ -140,7 +139,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
   }
 
   buildcc::m::blocking_sleep(1);
@@ -159,7 +158,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -179,7 +178,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
   }
 
   {
@@ -193,7 +192,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
   }
 
   {
@@ -208,7 +207,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -228,7 +227,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
   }
 
   {
@@ -242,7 +241,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
   }
 
   {
@@ -254,7 +253,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -290,7 +289,7 @@ TEST(GeneratorTestGroup, Generator_FailedEnvTaskState) {
                        "{gen_root_dir}/dummy_main.c");
 
   generator.Build();
-  buildcc::m::GeneratorRunner(generator);
+  buildcc::m::CustomGeneratorRunner(generator);
 
   mock().checkExpectations();
 
@@ -311,7 +310,7 @@ TEST(GeneratorTestGroup, Generator_FailedGenerateConvert) {
                        "{gen_root_dir}/dummy_main.c");
 
   generator.Build();
-  buildcc::m::GeneratorRunner(generator);
+  buildcc::m::CustomGeneratorRunner(generator);
 
   CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
 
@@ -335,7 +334,7 @@ TEST(GeneratorTestGroup, Generator_FailedGenerateCommand) {
 
   buildcc::env::m::CommandExpect_Execute(1, false);
   generator.Build();
-  buildcc::m::GeneratorRunner(generator);
+  buildcc::m::CustomGeneratorRunner(generator);
 
   mock().checkExpectations();
 
@@ -360,7 +359,7 @@ TEST(GeneratorTestGroup, Generator_FailedStore) {
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   generator.Build();
-  buildcc::m::GeneratorRunner(generator);
+  buildcc::m::CustomGeneratorRunner(generator);
 
   // CHECK(generator.GetTaskState() == buildcc::env::TaskState::FAILURE);
   CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
@@ -387,7 +386,7 @@ TEST(GeneratorTestGroup, FailedEnvTaskState_Rebuild) {
                          "{gen_root_dir}/dummy_main.c");
 
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
   }
 
   // reset
@@ -408,7 +407,7 @@ TEST(GeneratorTestGroup, FailedEnvTaskState_Rebuild) {
 
     generator.Build();
     buildcc::env::m::CommandExpect_Execute(1, true);
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
   }
 
   mock().checkExpectations();
@@ -431,7 +430,7 @@ TEST(GeneratorTestGroup, FailedGenerateCommand_Rebuild) {
 
     buildcc::env::m::CommandExpect_Execute(1, false);
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
   }
 
   // reset
@@ -453,7 +452,7 @@ TEST(GeneratorTestGroup, FailedGenerateCommand_Rebuild) {
     buildcc::m::CustomGeneratorExpect_IdAdded(1, &generator);
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
-    buildcc::m::GeneratorRunner(generator);
+    buildcc::m::CustomGeneratorRunner(generator);
   }
 
   mock().checkExpectations();
