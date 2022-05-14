@@ -82,24 +82,19 @@ public:
     }
   }
 
-  /**
-   * @brief Reg::Instance for Target to be built
-   */
-  template <typename C, typename... Params>
-  void Build(const C &build_cb, BaseTarget &target, Params &&...params) {
-    build_cb(target, std::forward<Params>(params)...);
-    tf::Task task = BuildTargetTask(target);
-    BuildStoreTask(target.GetUniqueId(), task);
-  }
+  template <typename C, typename T, typename... Params>
+  void Build(const C &build_cb, T &builder, Params &&...params) {
+    if constexpr (std::is_base_of_v<CustomGenerator, T>) {
+      build_cb(builder, std::forward<Params>(params)...);
+      tf::Task task = BuildGeneratorTask(builder);
+      BuildStoreTask(builder.GetUniqueId(), task);
+    }
 
-  /**
-   * @brief Reg::Instance for Generator to be built
-   */
-  template <typename C, typename... Params>
-  void Build(const C &build_cb, BaseGenerator &generator, Params &&...params) {
-    build_cb(generator, std::forward<Params>(params)...);
-    tf::Task task = BuildGeneratorTask(generator);
-    BuildStoreTask(generator.GetUniqueId(), task);
+    if constexpr (std::is_base_of_v<BaseTarget, T>) {
+      build_cb(builder, std::forward<Params>(params)...);
+      tf::Task task = BuildTargetTask(builder);
+      BuildStoreTask(builder.GetUniqueId(), task);
+    }
   }
 
   /**
