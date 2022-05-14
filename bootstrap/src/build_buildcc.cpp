@@ -22,12 +22,10 @@ void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe) {
   generator.AddInput("{gen_root_dir}/path.fbs", "path_fbs");
   generator.AddInput("{gen_root_dir}/custom_generator.fbs",
                      "custom_generator_fbs");
-  generator.AddInput("{gen_root_dir}/generator.fbs", "generator_fbs");
   generator.AddInput("{gen_root_dir}/target.fbs", "target_fbs");
 
   generator.AddOutput("{gen_build_dir}/path_generated.h");
   generator.AddOutput("{gen_build_dir}/custom_generator_generated.h");
-  generator.AddOutput("{gen_build_dir}/generator_generated.h");
   generator.AddOutput("{gen_build_dir}/target_generated.h");
 
   generator.AddDefaultArguments({
@@ -36,7 +34,7 @@ void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe) {
   //   generator.AddCommand("{flatc_compiler} --help");
   generator.AddCommand(
       "{flatc_compiler} -o {gen_build_dir} -I {gen_root_dir} --gen-object-api "
-      "--cpp {path_fbs} {custom_generator_fbs} {generator_fbs} {target_fbs}");
+      "--cpp {path_fbs} {custom_generator_fbs} {target_fbs}");
 
   generator.Build();
 }
