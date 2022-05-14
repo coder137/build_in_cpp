@@ -160,11 +160,10 @@ public:
     return *this;
   }
 
-  template <typename C, typename... Params>
-  CallbackInstance &Build(const C &build_cb, BaseGenerator &generator,
-                          Params &&...params) {
+  template <typename C, typename T, typename... Params>
+  CallbackInstance &Build(const C &build_cb, T &builder, Params &&...params) {
     if (condition_) {
-      Ref().Build(build_cb, generator, std::forward<Params>(params)...);
+      Ref().Build(build_cb, builder, std::forward<Params>(params)...);
     };
     return *this;
   }
@@ -184,16 +183,14 @@ public:
     return *this;
   }
 
-  template <typename C, typename... Params>
-  ToolchainInstance &Build(const C &build_cb, BaseGenerator &generator,
-                           Params &&...params) {
-    return BuildInternal(build_cb, generator, std::forward<Params>(params)...);
+  template <typename C, typename T, typename... Params>
+  ToolchainInstance &Build(const C &build_cb, T &builder, Params &&...params) {
+    if (condition_.build) {
+      Ref().Build(build_cb, builder, std::forward<Params>(params)...);
+    };
+    return *this;
   }
-  template <typename C, typename... Params>
-  ToolchainInstance &Build(const C &build_cb, BaseTarget &target,
-                           Params &&...params) {
-    return BuildInternal(build_cb, target, std::forward<Params>(params)...);
-  }
+  // TODO, Update/Change this
   template <typename P> ToolchainInstance &BuildPackage(P &package) {
     return Func([&]() { package.Setup(condition_); });
   }
@@ -201,16 +198,6 @@ public:
                          const internal::BuilderInterface &dependency);
   ToolchainInstance &Test(const std::string &command, const BaseTarget &target,
                           const TestConfig &config = TestConfig());
-
-private:
-  template <typename C, typename T, typename... Params>
-  ToolchainInstance &BuildInternal(const C &build_cb, T &t,
-                                   Params &&...params) {
-    if (condition_.build) {
-      Ref().Build(build_cb, t, std::forward<Params>(params)...);
-    }
-    return *this;
-  }
 
 private:
   ArgToolchainState condition_;
