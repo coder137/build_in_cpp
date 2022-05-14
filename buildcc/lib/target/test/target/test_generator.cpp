@@ -48,27 +48,6 @@ TEST(GeneratorTestGroup, Generator_Build) {
   mock().checkExpectations();
 }
 
-// TODO, Remove Parallel build
-TEST(GeneratorTestGroup, Generator_BuildParallel) {
-  constexpr const char *const NAME = "BuildParallel";
-  buildcc::Generator generator(NAME, "", true);
-
-  generator.AddDefaultArguments({
-      {"compiler", "gcc"},
-  });
-
-  generator.AddInput("{gen_root_dir}/dummy_main.c");
-  generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-  generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                       "{gen_root_dir}/dummy_main.c");
-
-  buildcc::env::m::CommandExpect_Execute(1, true);
-  generator.Build();
-  buildcc::m::GeneratorRunner(generator);
-
-  mock().checkExpectations();
-}
-
 TEST(GeneratorTestGroup, Generator_Identifier) {
   constexpr const char *const NAME = "Identifier";
   buildcc::Generator generator(NAME, "");
@@ -299,7 +278,7 @@ TEST(GeneratorTestGroup, Generator_FailedEnvTaskState) {
   buildcc::env::set_task_state(buildcc::env::TaskState::FAILURE);
 
   constexpr const char *const NAME = "FailedEnvTaskState";
-  buildcc::Generator generator(NAME, "", true);
+  buildcc::Generator generator(NAME, "");
 
   generator.AddDefaultArguments({
       {"compiler", "gcc"},
@@ -320,7 +299,7 @@ TEST(GeneratorTestGroup, Generator_FailedEnvTaskState) {
 
 TEST(GeneratorTestGroup, Generator_FailedGenerateConvert) {
   constexpr const char *const NAME = "FailedGenerateConvert";
-  buildcc::Generator generator(NAME, "", false);
+  buildcc::Generator generator(NAME, "");
 
   generator.AddDefaultArguments({
       {"compiler", "gcc"},
@@ -343,7 +322,7 @@ TEST(GeneratorTestGroup, Generator_FailedGenerateConvert) {
 
 TEST(GeneratorTestGroup, Generator_FailedGenerateCommand) {
   constexpr const char *const NAME = "FailedGenerateCommand";
-  buildcc::Generator generator(NAME, "", false);
+  buildcc::Generator generator(NAME, "");
 
   generator.AddDefaultArguments({
       {"compiler", "gcc"},
@@ -367,7 +346,7 @@ TEST(GeneratorTestGroup, Generator_FailedStore) {
   constexpr const char *const NAME = "FailedStore";
   const fs::path test_build_dir = buildcc::Project::GetBuildDir() / NAME;
 
-  buildcc::Generator generator(NAME, "", false);
+  buildcc::Generator generator(NAME, "");
   fs::remove_all(test_build_dir);
 
   generator.AddDefaultArguments({
@@ -396,7 +375,7 @@ TEST(GeneratorTestGroup, FailedEnvTaskState_Rebuild) {
 
   constexpr const char *const NAME = "FailedEnvTaskState_Rebuild";
   {
-    buildcc::Generator generator(NAME, "", true);
+    buildcc::Generator generator(NAME, "");
 
     generator.AddDefaultArguments({
         {"compiler", "gcc"},
@@ -416,7 +395,7 @@ TEST(GeneratorTestGroup, FailedEnvTaskState_Rebuild) {
 
   // rebuild
   {
-    buildcc::Generator generator(NAME, "", true);
+    buildcc::Generator generator(NAME, "");
 
     generator.AddDefaultArguments({
         {"compiler", "gcc"},
@@ -439,7 +418,7 @@ TEST(GeneratorTestGroup, FailedGenerateCommand_Rebuild) {
   constexpr const char *const NAME = "FailedGenerateCommand_Rebuild";
 
   {
-    buildcc::Generator generator(NAME, "", false);
+    buildcc::Generator generator(NAME, "");
 
     generator.AddDefaultArguments({
         {"compiler", "gcc"},
@@ -460,7 +439,7 @@ TEST(GeneratorTestGroup, FailedGenerateCommand_Rebuild) {
 
   // rebuild
   {
-    buildcc::Generator generator(NAME, "", false);
+    buildcc::Generator generator(NAME, "");
 
     generator.AddDefaultArguments({
         {"compiler", "gcc"},

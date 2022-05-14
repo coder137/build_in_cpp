@@ -45,9 +45,8 @@ struct UserGeneratorSchema : public internal::GeneratorSchema {
 
 class Generator : public CustomGenerator {
 public:
-  Generator(const std::string &name, const TargetEnv &env,
-            bool parallel = false)
-      : CustomGenerator(name, env), parallel_(parallel) {}
+  Generator(const std::string &name, const TargetEnv &env)
+      : CustomGenerator(name, env) {}
   virtual ~Generator() = default;
   Generator(const Generator &) = delete;
 
@@ -99,8 +98,6 @@ private:
   using CustomGenerator::Build;
 
 private:
-  bool parallel_{false};
-
   //
   internal::fs_unordered_set inputs_;
   internal::fs_unordered_set outputs_;
