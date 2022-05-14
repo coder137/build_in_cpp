@@ -80,15 +80,13 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     )
     target_link_libraries(schema PUBLIC
         env
+        flatbuffers
     )
     target_include_directories(schema PRIVATE
         ${SCHEMA_BUILD_DIR}
     )
     target_compile_options(schema PRIVATE ${BUILD_COMPILE_FLAGS})
     target_link_options(schema PRIVATE ${BUILD_LINK_FLAGS})
-    target_link_libraries(schema PRIVATE
-        flatbuffers
-    )
     add_dependencies(schema fbs_to_header)
 endif()
 
