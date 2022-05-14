@@ -17,31 +17,9 @@
 #ifndef TARGET_GENERATOR_H_
 #define TARGET_GENERATOR_H_
 
-#include <mutex>
-#include <string>
-#include <unordered_map>
-#include <vector>
-
-#include "taskflow/taskflow.hpp"
-
-#include "env/task_state.h"
-
-#include "env/command.h"
-
 #include "target/custom_generator.h"
-#include "target/interface/builder_interface.h"
-
-#include "schema/generator_serialization.h"
-#include "schema/path.h"
-
-#include "target/common/target_env.h"
 
 namespace buildcc {
-
-// TODO, Make this private
-struct UserGeneratorSchema : public internal::GeneratorSchema {
-  fs_unordered_set inputs;
-};
 
 class FileGenerator : public CustomGenerator {
 public:
