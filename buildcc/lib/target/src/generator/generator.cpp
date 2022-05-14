@@ -26,11 +26,11 @@ namespace {
 
 class GeneratorBlobHandler : public buildcc::CustomBlobHandler {
 public:
-  GeneratorBlobHandler(const std::vector<std::string> &commands)
+  explicit GeneratorBlobHandler(const std::vector<std::string> &commands)
       : commands_(commands) {}
 
 private:
-  std::vector<std::string> commands_;
+  const std::vector<std::string> &commands_;
 
   bool Verify(const std::vector<uint8_t> &serialized_data) const override {
     auto flex_ref = flexbuffers::GetRoot(serialized_data);
