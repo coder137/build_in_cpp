@@ -84,17 +84,15 @@ public:
 
   template <typename C, typename T, typename... Params>
   void Build(const C &build_cb, T &builder, Params &&...params) {
-    if constexpr (std::is_base_of_v<CustomGenerator, T>) {
-      build_cb(builder, std::forward<Params>(params)...);
-      tf::Task task = BuildTask(builder);
-      BuildStoreTask(builder.GetUniqueId(), task);
-    }
+    constexpr bool is_supported_base = std::is_base_of_v<CustomGenerator, T> ||
+                                       std::is_base_of_v<BaseTarget, T>;
+    static_assert(
+        is_supported_base,
+        "Build only supports BaseTarget, CustomGenerator and derivatives");
 
-    if constexpr (std::is_base_of_v<BaseTarget, T>) {
-      build_cb(builder, std::forward<Params>(params)...);
-      tf::Task task = BuildTask(builder);
-      BuildStoreTask(builder.GetUniqueId(), task);
-    }
+    build_cb(builder, std::forward<Params>(params)...);
+    tf::Task task = BuildTask(builder);
+    BuildStoreTask(builder.GetUniqueId(), task);
   }
 
   /**
