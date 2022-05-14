@@ -57,6 +57,17 @@ inline void extract_path(
   }
 }
 
+inline void extract(const flatbuffers::Vector<uint8_t> *fbs_data,
+                    std::vector<uint8_t> &out) {
+  if (fbs_data == nullptr) {
+    return;
+  }
+
+  for (auto iter = fbs_data->begin(); iter != fbs_data->end(); iter++) {
+    out.push_back(*iter);
+  }
+}
+
 inline void
 extract(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>
             *fbs_paths,

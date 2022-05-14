@@ -17,51 +17,16 @@
 #ifndef TARGET_GENERATOR_H_
 #define TARGET_GENERATOR_H_
 
-#include <mutex>
-#include <string>
-#include <unordered_map>
-#include <vector>
-
-#include "taskflow/taskflow.hpp"
-
-#include "env/task_state.h"
-
-#include "env/command.h"
-
-#include "target/interface/builder_interface.h"
-
-#include "schema/generator_serialization.h"
-#include "schema/path.h"
-
-#include "target/common/target_env.h"
+#include "target/custom_generator.h"
 
 namespace buildcc {
 
-// TODO, Make this private
-struct UserGeneratorSchema : public internal::GeneratorSchema {
-  fs_unordered_set inputs;
-};
-
-class Generator : public internal::BuilderInterface {
+class FileGenerator : public CustomGenerator {
 public:
-  Generator(const std::string &name, const TargetEnv &env,
-            bool parallel = false)
-      : name_(name), generator_root_dir_(env.GetTargetRootDir()),
-        generator_build_dir_(env.GetTargetBuildDir() / name),
-        serialization_(generator_build_dir_ / fmt::format("{}.bin", name)),
-        parallel_(parallel) {
-    Initialize();
-  }
-  virtual ~Generator() = default;
-  Generator(const Generator &) = delete;
-
-  /**
-   * @brief Add default arguments for input, output and command requirements
-   *
-   * @param arguments Key-Value pair for arguments
-   */
-  void AddDefaultArguments(
-      const std::unordered_map<std::string, std::string> &arguments);
+  FileGenerator(const std::string &name, const TargetEnv &env)
+      : CustomGenerator(name, env) {}
+  virtual ~FileGenerator() = default;
+  FileGenerator(const FileGenerator &) = delete;
 
   /**
    * @brief Add absolute input path pattern to generator
@@ -98,58 +63,24 @@ public:
       const std::unordered_map<const char *, std::string> &arguments = {});
 
   /**
-   * @brief Build Generator Tasks
+   * @brief Build FileGenerator Tasks
    *
    * Use `GetTaskflow` for the registered tasks
    */
   void Build() override;
 
-  // Getter
-  const fs::path &GetBinaryPath() const {
-    return serialization_.GetSerializedFile();
-  }
-  tf::Taskflow &GetTaskflow() { return tf_; }
-
-  const std::string &GetName() const { return name_; }
-  env::TaskState GetTaskState() const { return task_state_; }
-
-  const std::string &
-  GetValueByIdentifier(const std::string &file_identifier) const;
+  // Restrict access to certain custom generator APIs
+private:
+  using CustomGenerator::AddDependencyCb;
+  using CustomGenerator::AddGenInfo;
+  using CustomGenerator::Build;
 
 private:
-  void Initialize();
-
-  void GenerateTask();
-  void Convert();
-  void BuildGenerate();
-
-  // Recheck states
-  void InputRemoved();
-  void InputAdded();
-  void InputUpdated();
-
-  void OutputChanged();
-  void CommandChanged();
-
-private:
-  // Constructor
-  std::string name_;
-  fs::path generator_root_dir_;
-  fs::path generator_build_dir_;
-  internal::GeneratorSerialization serialization_;
-  bool parallel_{false};
-
-  // Serialization
-  UserGeneratorSchema user_;
-
-  // Internal
-  std::mutex task_state_mutex_;
-  env::TaskState task_state_{env::TaskState::SUCCESS};
-  env::Command command_;
-  tf::Taskflow tf_;
+  //
+  internal::fs_unordered_set inputs_;
+  internal::fs_unordered_set outputs_;
+  std::vector<std::string> commands_;
 };
-
-typedef Generator BaseGenerator;
 
 } // namespace buildcc
 

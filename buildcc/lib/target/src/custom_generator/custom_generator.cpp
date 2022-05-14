@@ -27,23 +27,38 @@ constexpr const char *const kGenerateTaskName = "Generate";
 
 namespace buildcc {
 
+void CustomGenerator::AddDefaultArgument(const std::string &identifier,
+                                         const std::string &pattern) {
+  command_.AddDefaultArgument(identifier, command_.Construct(pattern));
+}
+
 void CustomGenerator::AddDefaultArguments(
     const std::unordered_map<std::string, std::string> &arguments) {
   for (const auto &arg_iter : arguments) {
-    command_.AddDefaultArgument(arg_iter.first,
-                                command_.Construct(arg_iter.second));
+    AddDefaultArgument(arg_iter.first, arg_iter.second);
   }
 }
 
-void CustomGenerator::AddGenInfo(const std::string &id,
-                                 const fs_unordered_set &inputs,
-                                 const fs_unordered_set &outputs,
-                                 const GenerateCb &generate_cb) {
-  env::assert_fatal(user_.rels_map.find(id) == user_.rels_map.end(),
+std::string CustomGenerator::Construct(
+    const std::string &pattern,
+    const std::unordered_map<const char *, std::string> &arguments) {
+  return command_.Construct(pattern, arguments);
+}
+
+const std::string &CustomGenerator::GetValueByIdentifier(
+    const std::string &file_identifier) const {
+  return command_.GetDefaultValueByKey(file_identifier);
+}
+
+void CustomGenerator::AddGenInfo(
+    const std::string &id, const fs_unordered_set &inputs,
+    const fs_unordered_set &outputs, const GenerateCb &generate_cb,
+    std::shared_ptr<CustomBlobHandler> blob_handler) {
+  env::assert_fatal(user_.gen_info_map.find(id) == user_.gen_info_map.end(),
                     fmt::format("Duplicate id {} detected", id));
   ASSERT_FATAL(generate_cb, "Invalid callback provided");
 
-  UserRelInputOutputSchema schema;
+  UserGenInfo schema;
   for (const auto &i : inputs) {
     schema.inputs.emplace(command_.Construct(path_as_string(i)));
   }
@@ -51,7 +66,8 @@ void CustomGenerator::AddGenInfo(const std::string &id,
     schema.outputs.emplace(command_.Construct(path_as_string(o)));
   }
   schema.generate_cb = generate_cb;
-  user_.rels_map.emplace(id, std::move(schema));
+  schema.blob_handler = std::move(blob_handler);
+  user_.gen_info_map.emplace(id, std::move(schema));
 }
 
 void CustomGenerator::AddDependencyCb(const DependencyCb &dependency_cb) {
@@ -84,24 +100,25 @@ void CustomGenerator::Initialize() {
 }
 
 void CustomGenerator::BuildGenerate(
-    std::unordered_map<std::string, UserRelInputOutputSchema> &gen_selected_map,
-    std::unordered_map<std::string, UserRelInputOutputSchema>
-        &dummy_gen_selected_map) {
+    std::unordered_map<std::string, UserGenInfo> &gen_selected_map,
+    std::unordered_map<std::string, UserGenInfo> &dummy_gen_selected_map) {
   if (!serialization_.IsLoaded()) {
-    gen_selected_map = user_.rels_map;
+    gen_selected_map = user_.gen_info_map;
     dirty_ = true;
   } else {
-    // DONE, Conditionally select internal_rels depending on what has changed
-    const auto &prev_rels = serialization_.GetLoad().internal_rels_map;
-    const auto &curr_rels = user_.rels_map;
+    // DONE, Conditionally select internal_gen_info_map depending on what has
+    // changed
+    const auto &prev_gen_info_map =
+        serialization_.GetLoad().internal_gen_info_map;
+    const auto &curr_gen_info_map = user_.gen_info_map;
 
-    // DONE, MAP REMOVED condition Check if prev_rels exists in curr_rels
-    // If prev_rels does not exist in curr_rels, has been removed from existing
-    // build
-    // We need this condition to only set the dirty_ flag
-    for (const auto &prev_miter : prev_rels) {
+    // DONE, MAP REMOVED condition Check if prev_gen_info_map exists in
+    // curr_gen_info_map If prev_gen_info_map does not exist in
+    // curr_gen_info_map, has been removed from existing build We need this
+    // condition to only set the dirty_ flag
+    for (const auto &prev_miter : prev_gen_info_map) {
       const auto &id = prev_miter.first;
-      if (curr_rels.find(id) == curr_rels.end()) {
+      if (curr_gen_info_map.find(id) == curr_gen_info_map.end()) {
         // MAP REMOVED condition
         IdRemoved();
         dirty_ = true;
@@ -109,12 +126,12 @@ void CustomGenerator::BuildGenerate(
       }
     }
 
-    // DONE, MAP ADDED condition Check if curr_rels exists in prev_rels
-    // If curr_rels does not exist in prev_rels, has been added to existing
-    // build
-    for (const auto &curr_miter : curr_rels) {
+    // DONE, MAP ADDED condition Check if curr_gen_info_map exists in
+    // prev_gen_info_map If curr_gen_info_map does not exist in
+    // prev_gen_info_map, has been added to existing build
+    for (const auto &curr_miter : curr_gen_info_map) {
       const auto &id = curr_miter.first;
-      if (prev_rels.find(id) == prev_rels.end()) {
+      if (prev_gen_info_map.find(id) == prev_gen_info_map.end()) {
         // MAP ADDED condition
         IdAdded();
         gen_selected_map.emplace(curr_miter.first, curr_miter.second);
@@ -136,16 +153,15 @@ void CustomGenerator::GenerateTask() {
     }
 
     try {
-      std::unordered_map<std::string, UserRelInputOutputSchema>
-          selected_user_schema;
-      std::unordered_map<std::string, UserRelInputOutputSchema>
-          dummy_selected_user_schema;
+      std::unordered_map<std::string, UserGenInfo> selected_user_schema;
+      std::unordered_map<std::string, UserGenInfo> dummy_selected_user_schema;
       BuildGenerate(selected_user_schema, dummy_selected_user_schema);
 
       std::unordered_map<std::string, tf::Task> task_map;
       // Create task for selected schema
       for (const auto &selected_miter : selected_user_schema) {
         const auto &id = selected_miter.first;
+        // const auto &current_info = selected_miter.second;
         tf::Task task = subflow
                             .emplace([&]() {
                               try {
@@ -160,14 +176,10 @@ void CustomGenerator::GenerateTask() {
 
       for (auto &dummy_selected_miter : dummy_selected_user_schema) {
         const auto &id = dummy_selected_miter.first;
-        auto &current_info = dummy_selected_miter.second;
+        // const auto &current_info = dummy_selected_miter.second;
         tf::Task task = subflow
                             .emplace([&]() {
                               try {
-                                user_.rels_map.at(id).internal_inputs =
-                                    internal::path_schema_convert(
-                                        current_info.inputs,
-                                        internal::Path::CreateExistingPath);
                                 TaskRunner<false>(id);
                               } catch (...) {
                                 env::set_task_state(env::TaskState::FAILURE);
@@ -193,8 +205,8 @@ void CustomGenerator::GenerateTask() {
       // Store dummy_selected and successfully run schema
       if (dirty_) {
         UserCustomGeneratorSchema user_final_schema;
-        user_final_schema.rels_map.insert(success_schema_.begin(),
-                                          success_schema_.end());
+        user_final_schema.gen_info_map.insert(success_schema_.begin(),
+                                              success_schema_.end());
 
         user_final_schema.ConvertToInternal();
         serialization_.UpdateStore(user_final_schema);
@@ -211,17 +223,33 @@ void CustomGenerator::GenerateTask() {
 }
 
 template <bool run> void CustomGenerator::TaskRunner(const std::string &id) {
-  const auto &current_info = user_.rels_map.at(id);
+  // Convert
+  {
+    auto &current_gen_info = user_.gen_info_map.at(id);
+    current_gen_info.internal_inputs = internal::path_schema_convert(
+        current_gen_info.inputs, internal::Path::CreateExistingPath);
+    current_gen_info.userblob =
+        current_gen_info.blob_handler != nullptr
+            ? current_gen_info.blob_handler->GetSerializedData()
+            : std::vector<uint8_t>();
+  }
+
+  // Run
+  const auto &current_info = user_.gen_info_map.at(id);
   bool rerun = false;
   if constexpr (run) {
     rerun = true;
   } else {
     const auto &previous_info =
-        serialization_.GetLoad().internal_rels_map.at(id);
+        serialization_.GetLoad().internal_gen_info_map.at(id);
     rerun = internal::CheckPaths(previous_info.internal_inputs,
                                  current_info.internal_inputs) !=
                 internal::PathState::kNoChange ||
             internal::CheckChanged(previous_info.outputs, current_info.outputs);
+    if (!rerun && current_info.blob_handler != nullptr) {
+      rerun = current_info.blob_handler->CheckChanged(previous_info.userblob,
+                                                      current_info.userblob);
+    }
   }
 
   if (rerun) {

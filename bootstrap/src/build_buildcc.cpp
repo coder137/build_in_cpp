@@ -18,16 +18,14 @@
 
 namespace buildcc {
 
-void schema_gen_cb(BaseGenerator &generator, const BaseTarget &flatc_exe) {
+void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe) {
   generator.AddInput("{gen_root_dir}/path.fbs", "path_fbs");
   generator.AddInput("{gen_root_dir}/custom_generator.fbs",
                      "custom_generator_fbs");
-  generator.AddInput("{gen_root_dir}/generator.fbs", "generator_fbs");
   generator.AddInput("{gen_root_dir}/target.fbs", "target_fbs");
 
   generator.AddOutput("{gen_build_dir}/path_generated.h");
   generator.AddOutput("{gen_build_dir}/custom_generator_generated.h");
-  generator.AddOutput("{gen_build_dir}/generator_generated.h");
   generator.AddOutput("{gen_build_dir}/target_generated.h");
 
   generator.AddDefaultArguments({
@@ -36,12 +34,12 @@ void schema_gen_cb(BaseGenerator &generator, const BaseTarget &flatc_exe) {
   //   generator.AddCommand("{flatc_compiler} --help");
   generator.AddCommand(
       "{flatc_compiler} -o {gen_build_dir} -I {gen_root_dir} --gen-object-api "
-      "--cpp {path_fbs} {custom_generator_fbs} {generator_fbs} {target_fbs}");
+      "--cpp {path_fbs} {custom_generator_fbs} {target_fbs}");
 
   generator.Build();
 }
 
-void buildcc_cb(BaseTarget &target, const BaseGenerator &schema_gen,
+void buildcc_cb(BaseTarget &target, const FileGenerator &schema_gen,
                 const TargetInfo &flatbuffers_ho, const TargetInfo &fmt_ho,
                 const TargetInfo &spdlog_ho, const TargetInfo &cli11_ho,
                 const TargetInfo &taskflow_ho, const BaseTarget &tpl) {
@@ -201,7 +199,7 @@ void BuildBuildCC::Initialize() {
                 env_.GetTargetBuildDir()));
 
   // Schema
-  (void)storage_.Add<BaseGenerator>(
+  (void)storage_.Add<FileGenerator>(
       kSchemaGenName, kSchemaGenName,
       TargetEnv(env_.GetTargetRootDir() / "buildcc" / "schema",
                 env_.GetTargetBuildDir() / toolchain_.GetName()));

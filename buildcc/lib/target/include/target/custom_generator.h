@@ -56,19 +56,48 @@ typedef std::function<bool(CustomGeneratorContext &)> GenerateCb;
 typedef std::function<void(std::unordered_map<std::string, tf::Task> &)> DependencyCb;
 // clang-format on
 
-struct UserRelInputOutputSchema : internal::RelInputOutputSchema {
+class CustomBlobHandler {
+public:
+  bool CheckChanged(const std::vector<uint8_t> &previous,
+                    const std::vector<uint8_t> &current) const {
+    env::assert_fatal(
+        Verify(previous),
+        "Stored blob is corrupted or User verification is incorrect");
+    env::assert_fatal(
+        Verify(current),
+        "Current blob is corrupted or User verification is incorrect");
+    return !IsEqual(previous, current);
+  };
+
+  std::vector<uint8_t> GetSerializedData() {
+    auto serialized_data = Serialize();
+    env::assert_fatal(
+        Verify(serialized_data),
+        "Serialized data is corrupted or Serialize function is incorrect");
+    return serialized_data;
+  }
+
+private:
+  virtual bool Verify(const std::vector<uint8_t> &serialized_data) const = 0;
+  virtual bool IsEqual(const std::vector<uint8_t> &previous,
+                       const std::vector<uint8_t> &current) const = 0;
+  virtual std::vector<uint8_t> Serialize() const = 0;
+};
+
+struct UserGenInfo : internal::GenInfo {
   fs_unordered_set inputs;
   GenerateCb generate_cb;
+  std::shared_ptr<CustomBlobHandler> blob_handler{nullptr};
 };
 
 struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
-  std::unordered_map<std::string, UserRelInputOutputSchema> rels_map;
+  std::unordered_map<std::string, UserGenInfo> gen_info_map;
 
   void ConvertToInternal() {
-    for (auto &r_miter : rels_map) {
+    for (auto &r_miter : gen_info_map) {
       r_miter.second.internal_inputs = path_schema_convert(
           r_miter.second.inputs, internal::Path::CreateExistingPath);
-      auto p = internal_rels_map.emplace(r_miter.first, r_miter.second);
+      auto p = internal_gen_info_map.emplace(r_miter.first, r_miter.second);
       env::assert_fatal(p.second,
                         fmt::format("Could not save {}", r_miter.first));
     }
@@ -86,13 +115,17 @@ public:
   virtual ~CustomGenerator() = default;
   CustomGenerator(const CustomGenerator &) = delete;
 
-  /**
-   * @brief Add default arguments for input, output and command requirements
-   *
-   * @param arguments Key-Value pair for arguments
-   */
+  // From env::Command module, forwarding here
+  // TODO, Create a Mixin
+  void AddDefaultArgument(const std::string &identifier,
+                          const std::string &pattern);
   void AddDefaultArguments(
       const std::unordered_map<std::string, std::string> &arguments);
+  std::string Construct(
+      const std::string &pattern,
+      const std::unordered_map<const char *, std::string> &arguments = {});
+  const std::string &
+  GetValueByIdentifier(const std::string &file_identifier) const;
 
   /**
    * @brief Single Generator task for inputs->generate_cb->outputs
@@ -105,7 +138,8 @@ public:
    */
   void AddGenInfo(const std::string &id, const fs_unordered_set &inputs,
                   const fs_unordered_set &outputs,
-                  const GenerateCb &generate_cb);
+                  const GenerateCb &generate_cb,
+                  std::shared_ptr<CustomBlobHandler> blob_handler = nullptr);
 
   // Callbacks
   /**
@@ -127,6 +161,7 @@ public:
   void Build() override;
 
   // Getters
+  const std::string &GetName() const { return name_; }
   const fs::path &GetBinaryPath() const {
     return serialization_.GetSerializedFile();
   }
@@ -140,10 +175,9 @@ private:
   template <bool run> void TaskRunner(const std::string &id);
 
   void GenerateTask();
-  void BuildGenerate(std::unordered_map<std::string, UserRelInputOutputSchema>
-                         &gen_selected_map,
-                     std::unordered_map<std::string, UserRelInputOutputSchema>
-                         &dummy_gen_selected_map);
+  void BuildGenerate(
+      std::unordered_map<std::string, UserGenInfo> &gen_selected_map,
+      std::unordered_map<std::string, UserGenInfo> &dummy_gen_selected_map);
 
   // Recheck states
   void IdRemoved();
@@ -159,7 +193,7 @@ private:
   UserCustomGeneratorSchema user_;
 
   std::mutex success_schema_mutex_;
-  std::unordered_map<std::string, UserRelInputOutputSchema> success_schema_;
+  std::unordered_map<std::string, UserGenInfo> success_schema_;
 
   // Internal
   env::Command command_;

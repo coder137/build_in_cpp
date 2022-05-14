@@ -3,9 +3,6 @@ set(TARGET_SRCS
 
     src/custom_generator/recheck_states.cpp
 
-    src/generator/task.cpp
-    src/generator/recheck_states.cpp
-
     src/target/recheck_states.cpp
     src/target/tasks.cpp
 )

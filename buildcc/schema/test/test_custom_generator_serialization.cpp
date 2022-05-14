@@ -45,8 +45,8 @@ TEST(CustomGeneratorSerializationTestGroup, FormatEmptyCheck) {
   {
     flatbuffers::FlatBufferBuilder builder;
     // RelInputOutput in nullptr
-    auto rel_io = schema::internal::CreateRelInputOutputDirect(builder, "");
-    std::vector v{rel_io};
+    auto gen_info = schema::internal::CreateGenInfoDirect(builder, "");
+    std::vector v{gen_info};
     auto fbs_generator =
         schema::internal::CreateCustomGeneratorDirect(builder, "", &v);
     schema::internal::FinishCustomGeneratorBuffer(builder, fbs_generator);
