@@ -4,14 +4,12 @@
 
 namespace buildcc {
 
-tf::Task Reg::Instance::BuildTargetTask(BaseTarget &target) {
+tf::Task Reg::Instance::BuildTask(BaseTarget &target) {
   mock().actualCall(fmt::format("BuildTask_{}", target.GetName()).c_str());
   return build_tf_.placeholder().name(target.GetUniqueId());
 }
-
-tf::Task Reg::Instance::BuildGeneratorTask(BaseGenerator &generator) {
-  mock().actualCall(
-      fmt::format("BuildGeneratorTask_{}", generator.GetName()).c_str());
+tf::Task Reg::Instance::BuildTask(BaseGenerator &generator) {
+  mock().actualCall(fmt::format("BuildTask_{}", generator.GetName()).c_str());
   return build_tf_.placeholder().name(generator.GetUniqueId());
 }
 

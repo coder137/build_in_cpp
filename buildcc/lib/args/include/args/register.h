@@ -86,13 +86,13 @@ public:
   void Build(const C &build_cb, T &builder, Params &&...params) {
     if constexpr (std::is_base_of_v<CustomGenerator, T>) {
       build_cb(builder, std::forward<Params>(params)...);
-      tf::Task task = BuildGeneratorTask(builder);
+      tf::Task task = BuildTask(builder);
       BuildStoreTask(builder.GetUniqueId(), task);
     }
 
     if constexpr (std::is_base_of_v<BaseTarget, T>) {
       build_cb(builder, std::forward<Params>(params)...);
-      tf::Task task = BuildTargetTask(builder);
+      tf::Task task = BuildTask(builder);
       BuildStoreTask(builder.GetUniqueId(), task);
     }
   }
@@ -139,8 +139,8 @@ public:
 private:
 private:
   // BuildTasks
-  tf::Task BuildTargetTask(BaseTarget &target);
-  tf::Task BuildGeneratorTask(BaseGenerator &generator);
+  tf::Task BuildTask(BaseTarget &target);
+  tf::Task BuildTask(BaseGenerator &generator);
   void BuildStoreTask(const std::string &unique_id, const tf::Task &task);
 
 private:
