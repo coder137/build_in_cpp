@@ -47,8 +47,10 @@ TEST(TemplateGeneratorTestGroup, Basic_InputParse) {
       {"hello", "Hello"},
       {"world", "World"},
   });
-  generator.AddTemplate("template/default_values.txt.in", "default_values.txt");
-  generator.AddTemplate("template/hello_world.txt.in", "hello_world.txt");
+  generator.AddTemplate("{gen_root_dir}/template/default_values.txt.in",
+                        "{gen_build_dir}/default_values.txt");
+  generator.AddTemplate("{gen_root_dir}/template/hello_world.txt.in",
+                        "{gen_build_dir}/hello_world.txt");
   generator.Build();
 
   buildcc::m::CustomGeneratorRunner(generator);

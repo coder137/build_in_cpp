@@ -47,9 +47,11 @@ namespace buildcc {
 void TemplateGenerator::AddTemplate(const fs::path &input_filename,
                                     const fs::path &output_filename) {
   TemplateInfo info;
-  info.input = internal::Path::CreateNewPath(GetRootDir() / input_filename)
+  info.input = internal::Path::CreateNewPath(
+                   command_.Construct(path_as_string(input_filename)))
                    .GetPathname();
-  info.output = internal::Path::CreateNewPath(GetBuildDir() / output_filename)
+  info.output = internal::Path::CreateNewPath(
+                    command_.Construct(path_as_string(output_filename)))
                     .GetPathname();
   template_infos_.emplace_back(std::move(info));
 }
@@ -70,15 +72,6 @@ void TemplateGenerator::Build() {
     AddGenInfo(name, {info.input}, {info.output}, template_generate_cb);
   }
   this->CustomGenerator::Build();
-}
-
-// PRIVATE
-
-void TemplateGenerator::Initialize() {
-  command_.AddDefaultArgument("project_root_dir",
-                              Project::GetRootDir().string());
-  command_.AddDefaultArgument("project_build_dir",
-                              Project::GetBuildDir().string());
 }
 
 } // namespace buildcc

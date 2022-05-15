@@ -24,9 +24,7 @@ namespace buildcc {
 class TemplateGenerator : public CustomGenerator {
 public:
   TemplateGenerator(const std::string &name, const TargetEnv &env)
-      : CustomGenerator(name, env) {
-    Initialize();
-  }
+      : CustomGenerator(name, env) {}
 
   void AddTemplate(const fs::path &input_filename,
                    const fs::path &output_filename);
@@ -44,9 +42,6 @@ private:
   using CustomGenerator::AddDependencyCb;
   using CustomGenerator::AddGenInfo;
   using CustomGenerator::Build;
-
-private:
-  void Initialize();
 
 private:
   struct TemplateInfo {
