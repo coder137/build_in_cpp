@@ -16,17 +16,46 @@
 
 #include "target/template_generator.h"
 
+#include "env/env.h"
+
+namespace {
+
+bool template_generate_cb(const buildcc::CustomGeneratorContext &ctx) {
+  std::string pattern_data;
+  const fs::path &input = *ctx.inputs.begin();
+  const fs::path &output = *ctx.outputs.begin();
+
+  bool success =
+      buildcc::env::load_file(input.string().c_str(), false, &pattern_data);
+  if (success) {
+    std::string parsed_data = ctx.command.Construct(pattern_data);
+    success =
+        buildcc::env::save_file(output.string().c_str(), parsed_data, false);
+  }
+
+  if (!success) {
+    buildcc::env::log_critical(
+        __FUNCTION__, fmt::format("Failed to parse {} -> {}", input, output));
+  }
+  return success;
+}
+
+} // namespace
+
 namespace buildcc {
 
 void TemplateGenerator::AddTemplate(const fs::path &input_filename,
                                     const fs::path &output_filename) {
-  (void)input_filename;
-  (void)output_filename;
+  TemplateInfo info;
+  info.input = internal::Path::CreateNewPath(GetRootDir() / input_filename)
+                   .GetPathname();
+  info.output = internal::Path::CreateNewPath(GetBuildDir() / output_filename)
+                    .GetPathname();
+  template_infos_.emplace_back(std::move(info));
 }
-void TemplateGenerator::AddTemplate(const std::string &pattern,
-                                    fs::path &output_filename) {
-  (void)pattern;
-  (void)output_filename;
+
+std::string TemplateGenerator::Parse(const std::string &pattern) {
+  return command_.Construct(pattern);
 }
 
 /**
@@ -34,6 +63,13 @@ void TemplateGenerator::AddTemplate(const std::string &pattern,
  *
  * Use `GetTaskflow` for the registered tasks
  */
-void TemplateGenerator::Build() {}
+void TemplateGenerator::Build() {
+  for (const auto &info : template_infos_) {
+    std::string name =
+        info.input.lexically_relative(Project::GetRootDir()).string();
+    AddGenInfo(name, {info.input}, {info.output}, template_generate_cb);
+  }
+  this->CustomGenerator::Build();
+}
 
 } // namespace buildcc

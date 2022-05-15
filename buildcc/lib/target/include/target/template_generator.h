@@ -28,7 +28,7 @@ public:
 
   void AddTemplate(const fs::path &input_filename,
                    const fs::path &output_filename);
-  void AddTemplate(const std::string &pattern, fs::path &output_filename);
+  std::string Parse(const std::string &pattern);
 
   /**
    * @brief Build FileGenerator Tasks
@@ -42,6 +42,15 @@ private:
   using CustomGenerator::AddDependencyCb;
   using CustomGenerator::AddGenInfo;
   using CustomGenerator::Build;
+
+private:
+  struct TemplateInfo {
+    fs::path input;
+    fs::path output;
+  };
+
+private:
+  std::vector<TemplateInfo> template_infos_;
 };
 
 } // namespace buildcc
