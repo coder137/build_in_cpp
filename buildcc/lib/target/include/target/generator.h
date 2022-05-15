@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TARGET_GENERATOR_H_
-#define TARGET_GENERATOR_H_
+#ifndef TARGET_FILE_GENERATOR_H_
+#define TARGET_FILE_GENERATOR_H_
 
 #include "target/custom_generator.h"
 

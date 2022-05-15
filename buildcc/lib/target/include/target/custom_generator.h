@@ -115,8 +115,10 @@ public:
   virtual ~CustomGenerator() = default;
   CustomGenerator(const CustomGenerator &) = delete;
 
-  // From env::Command module, forwarding here
+  // TODO, Doc
   void AddPattern(const std::string &identifier, const std::string &pattern);
+
+  // TODO, Doc
   void
   AddPatterns(const std::unordered_map<std::string, std::string> &pattern_map);
 
