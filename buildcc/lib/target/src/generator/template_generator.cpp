@@ -72,4 +72,13 @@ void TemplateGenerator::Build() {
   this->CustomGenerator::Build();
 }
 
+// PRIVATE
+
+void TemplateGenerator::Initialize() {
+  command_.AddDefaultArgument("project_root_dir",
+                              Project::GetRootDir().string());
+  command_.AddDefaultArgument("project_build_dir",
+                              Project::GetBuildDir().string());
+}
+
 } // namespace buildcc
