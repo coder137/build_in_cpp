@@ -23,6 +23,7 @@ enum class TargetType {
   Executable,     ///< Executable Target type
   StaticLibrary,  ///< Static library target type
   DynamicLibrary, ///< Dynamic library target type
+  Undefined,      ///< Undefined target type
 };
 
 }

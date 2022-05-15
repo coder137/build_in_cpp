@@ -28,7 +28,7 @@ namespace buildcc::internal {
 
 struct TargetSchema {
   std::string name;
-  TargetType type;
+  TargetType type{TargetType::Undefined};
 
   path_unordered_set internal_sources;
   path_unordered_set internal_headers;
