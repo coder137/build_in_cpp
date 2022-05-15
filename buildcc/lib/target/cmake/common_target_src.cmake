@@ -36,8 +36,10 @@ set(COMMON_TARGET_SRCS
     # Generator
     src/custom_generator/custom_generator.cpp
     include/target/custom_generator.h
-    src/generator/generator.cpp
-    include/target/generator.h
+    src/generator/file_generator.cpp
+    include/target/file_generator.h
+    src/generator/template_generator.cpp
+    include/target/template_generator.h
 
     # Target Info
     src/target_info/target_info.cpp
