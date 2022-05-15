@@ -54,10 +54,16 @@ void CustomGenerator::AddGenInfo(
 
   UserGenInfo schema;
   for (const auto &i : inputs) {
-    schema.inputs.emplace(command_.Construct(path_as_string(i)));
+    fs::path input =
+        internal::Path::CreateNewPath(command_.Construct(path_as_string(i)))
+            .GetPathname();
+    schema.inputs.emplace(std::move(input));
   }
   for (const auto &o : outputs) {
-    schema.outputs.emplace(command_.Construct(path_as_string(o)));
+    fs::path output =
+        internal::Path::CreateNewPath(command_.Construct(path_as_string(o)))
+            .GetPathname();
+    schema.outputs.emplace(std::move(output));
   }
   schema.generate_cb = generate_cb;
   schema.blob_handler = std::move(blob_handler);
@@ -84,6 +90,8 @@ void CustomGenerator::Initialize() {
   //
   fs::create_directories(env_.GetTargetBuildDir());
   command_.AddDefaultArguments({
+      {"project_root_dir", path_as_string(Project::GetRootDir())},
+      {"project_build_dir", path_as_string(Project::GetBuildDir())},
       {"gen_root_dir", path_as_string(env_.GetTargetRootDir())},
       {"gen_build_dir", path_as_string(env_.GetTargetBuildDir())},
   });
