@@ -58,6 +58,38 @@ TEST(TemplateGeneratorTestGroup, Basic_InputParse) {
   CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
 }
 
+TEST(TemplateGeneratorTestGroup, Basic_SaveFailure) {
+  constexpr const char *const NAME = "basic_save_failure";
+  {
+    buildcc::TemplateGenerator generator(NAME, "");
+
+    fs::create_directories(generator.GetBuildDir() / "default_values.txt");
+
+    generator.AddTemplate("{gen_root_dir}/template/default_values.txt.in",
+                          "{gen_build_dir}/default_values.txt");
+    generator.Build();
+
+    buildcc::m::CustomGeneratorRunner(generator);
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
+  }
+}
+
+TEST(TemplateGeneratorTestGroup, Basic_LoadFailure) {
+  constexpr const char *const NAME = "basic_load_failure";
+  {
+    buildcc::TemplateGenerator generator(NAME, "");
+
+    fs::create_directories(generator.GetBuildDir() / "default_values.txt.in");
+
+    generator.AddTemplate("{gen_build_dir}/default_values.txt.in",
+                          "{gen_build_dir}/default_values.txt");
+    generator.Build();
+
+    buildcc::m::CustomGeneratorRunner(generator);
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
+  }
+}
+
 int main(int ac, char **av) {
   fs::remove_all(BUILD_DIR);
   buildcc::Project::Init(fs::current_path() / "data", BUILD_DIR);
