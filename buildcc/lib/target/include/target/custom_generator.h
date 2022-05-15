@@ -116,11 +116,9 @@ public:
   CustomGenerator(const CustomGenerator &) = delete;
 
   // From env::Command module, forwarding here
-  void AddDefaultArgument(const std::string &identifier,
-                          const std::string &pattern);
-  void AddDefaultArguments(
-      const std::unordered_map<std::string, std::string> &arguments);
-  const std::string &Get(const std::string &file_identifier) const;
+  void AddPattern(const std::string &identifier, const std::string &pattern);
+  void
+  AddPatterns(const std::unordered_map<std::string, std::string> &pattern_map);
 
   /**
    * @brief Single Generator task for inputs->generate_cb->outputs
@@ -163,6 +161,7 @@ public:
   const fs::path &GetRootDir() const { return env_.GetTargetRootDir(); }
   const fs::path &GetBuildDir() const { return env_.GetTargetBuildDir(); }
   tf::Taskflow &GetTaskflow() { return tf_; }
+  const std::string &Get(const std::string &file_identifier) const;
 
 private:
   void Initialize();

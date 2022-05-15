@@ -87,7 +87,7 @@ void FileGenerator::AddInput(const std::string &absolute_input_pattern,
   inputs_.insert(absolute_input_path.GetPathname());
 
   if (identifier != nullptr) {
-    AddDefaultArgument(identifier, absolute_input_path.GetPathAsString());
+    AddPattern(identifier, absolute_input_path.GetPathAsString());
   }
 }
 
@@ -100,7 +100,7 @@ void FileGenerator::AddOutput(const std::string &absolute_output_pattern,
   outputs_.insert(absolute_output_path.GetPathname());
 
   if (identifier != nullptr) {
-    AddDefaultArgument(identifier, absolute_output_path.GetPathAsString());
+    AddPattern(identifier, absolute_output_path.GetPathAsString());
   }
 }
 

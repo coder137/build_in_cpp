@@ -28,7 +28,7 @@ void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe) {
   generator.AddOutput("{gen_build_dir}/custom_generator_generated.h");
   generator.AddOutput("{gen_build_dir}/target_generated.h");
 
-  generator.AddDefaultArguments({
+  generator.AddPatterns({
       {"flatc_compiler", fmt::format("{}", flatc_exe.GetTargetPath())},
   });
   //   generator.AddCommand("{flatc_compiler} --help");

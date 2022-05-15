@@ -27,15 +27,15 @@ constexpr const char *const kGenerateTaskName = "Generate";
 
 namespace buildcc {
 
-void CustomGenerator::AddDefaultArgument(const std::string &identifier,
-                                         const std::string &pattern) {
+void CustomGenerator::AddPattern(const std::string &identifier,
+                                 const std::string &pattern) {
   command_.AddDefaultArgument(identifier, command_.Construct(pattern));
 }
 
-void CustomGenerator::AddDefaultArguments(
-    const std::unordered_map<std::string, std::string> &arguments) {
-  for (const auto &arg_iter : arguments) {
-    AddDefaultArgument(arg_iter.first, arg_iter.second);
+void CustomGenerator::AddPatterns(
+    const std::unordered_map<std::string, std::string> &pattern_map) {
+  for (const auto &arg_iter : pattern_map) {
+    AddPattern(arg_iter.first, arg_iter.second);
   }
 }
 

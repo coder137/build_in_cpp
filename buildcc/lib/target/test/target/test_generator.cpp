@@ -31,7 +31,7 @@ TEST(GeneratorTestGroup, Generator_Build) {
   constexpr const char *const NAME = "Build";
   buildcc::FileGenerator generator(NAME, "");
 
-  generator.AddDefaultArguments({
+  generator.AddPatterns({
       {"compiler", "gcc"},
   });
 
@@ -51,7 +51,7 @@ TEST(GeneratorTestGroup, Generator_Identifier) {
   constexpr const char *const NAME = "Identifier";
   buildcc::FileGenerator generator(NAME, "");
 
-  generator.AddDefaultArguments({
+  generator.AddPatterns({
       {"compiler", "gcc"},
   });
 
@@ -263,7 +263,7 @@ TEST(GeneratorTestGroup, Generator_AddDefaultArguments) {
   constexpr const char *const NAME = "AddDefaultArgument";
   buildcc::FileGenerator generator(NAME, "");
 
-  generator.AddDefaultArguments({
+  generator.AddPatterns({
       {"key", "value"},
   });
   const std::string &value = generator.Get("key");
@@ -279,7 +279,7 @@ TEST(GeneratorTestGroup, Generator_FailedEnvTaskState) {
   constexpr const char *const NAME = "FailedEnvTaskState";
   buildcc::FileGenerator generator(NAME, "");
 
-  generator.AddDefaultArguments({
+  generator.AddPatterns({
       {"compiler", "gcc"},
   });
 
@@ -300,7 +300,7 @@ TEST(GeneratorTestGroup, Generator_FailedGenerateConvert) {
   constexpr const char *const NAME = "FailedGenerateConvert";
   buildcc::FileGenerator generator(NAME, "");
 
-  generator.AddDefaultArguments({
+  generator.AddPatterns({
       {"compiler", "gcc"},
   });
 
@@ -323,7 +323,7 @@ TEST(GeneratorTestGroup, Generator_FailedGenerateCommand) {
   constexpr const char *const NAME = "FailedGenerateCommand";
   buildcc::FileGenerator generator(NAME, "");
 
-  generator.AddDefaultArguments({
+  generator.AddPatterns({
       {"compiler", "gcc"},
   });
 
@@ -348,7 +348,7 @@ TEST(GeneratorTestGroup, Generator_FailedStore) {
   buildcc::FileGenerator generator(NAME, "");
   fs::remove_all(test_build_dir);
 
-  generator.AddDefaultArguments({
+  generator.AddPatterns({
       {"compiler", "gcc"},
   });
 
@@ -376,7 +376,7 @@ TEST(GeneratorTestGroup, FailedEnvTaskState_Rebuild) {
   {
     buildcc::FileGenerator generator(NAME, "");
 
-    generator.AddDefaultArguments({
+    generator.AddPatterns({
         {"compiler", "gcc"},
     });
 
@@ -396,7 +396,7 @@ TEST(GeneratorTestGroup, FailedEnvTaskState_Rebuild) {
   {
     buildcc::FileGenerator generator(NAME, "");
 
-    generator.AddDefaultArguments({
+    generator.AddPatterns({
         {"compiler", "gcc"},
     });
 
@@ -419,7 +419,7 @@ TEST(GeneratorTestGroup, FailedGenerateCommand_Rebuild) {
   {
     buildcc::FileGenerator generator(NAME, "");
 
-    generator.AddDefaultArguments({
+    generator.AddPatterns({
         {"compiler", "gcc"},
     });
 
@@ -440,7 +440,7 @@ TEST(GeneratorTestGroup, FailedGenerateCommand_Rebuild) {
   {
     buildcc::FileGenerator generator(NAME, "");
 
-    generator.AddDefaultArguments({
+    generator.AddPatterns({
         {"compiler", "gcc"},
     });
 
