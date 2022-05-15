@@ -83,15 +83,14 @@ static void clean_cb() {
 
 static void cpp_target_cb(BaseTarget &cpptarget,
                           const FileGenerator &cpp_generator) {
-  const fs::path main_cpp =
-      fs::path(cpp_generator.GetValueByIdentifier("main_cpp"))
-          .lexically_relative(Project::GetRootDir());
+  const fs::path main_cpp = fs::path(cpp_generator.Get("main_cpp"))
+                                .lexically_relative(Project::GetRootDir());
   cpptarget.AddSource(main_cpp);
   cpptarget.Build();
 }
 
 static void c_target_cb(BaseTarget &ctarget, const FileGenerator &c_generator) {
-  const fs::path main_c = fs::path(c_generator.GetValueByIdentifier("main_c"))
+  const fs::path main_c = fs::path(c_generator.Get("main_c"))
                               .lexically_relative(Project::GetRootDir());
   ctarget.AddSource(main_c);
   ctarget.Build();

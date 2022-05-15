@@ -266,7 +266,7 @@ TEST(GeneratorTestGroup, Generator_AddDefaultArguments) {
   generator.AddDefaultArguments({
       {"key", "value"},
   });
-  const std::string &value = generator.GetValueByIdentifier("key");
+  const std::string &value = generator.Get("key");
   STRCMP_EQUAL(value.c_str(), "value");
   STRCMP_EQUAL(generator.GetName().c_str(), "AddDefaultArgument");
 }

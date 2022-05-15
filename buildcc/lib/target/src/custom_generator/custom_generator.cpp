@@ -39,14 +39,8 @@ void CustomGenerator::AddDefaultArguments(
   }
 }
 
-std::string CustomGenerator::Construct(
-    const std::string &pattern,
-    const std::unordered_map<const char *, std::string> &arguments) {
-  return command_.Construct(pattern, arguments);
-}
-
-const std::string &CustomGenerator::GetValueByIdentifier(
-    const std::string &file_identifier) const {
+const std::string &
+CustomGenerator::Get(const std::string &file_identifier) const {
   return command_.GetDefaultValueByKey(file_identifier);
 }
 

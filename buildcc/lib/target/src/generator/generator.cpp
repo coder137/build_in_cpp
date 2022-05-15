@@ -80,7 +80,8 @@ namespace buildcc {
 
 void FileGenerator::AddInput(const std::string &absolute_input_pattern,
                              const char *identifier) {
-  std::string absolute_input_string = Construct(absolute_input_pattern);
+  std::string absolute_input_string =
+      command_.Construct(absolute_input_pattern);
   const auto absolute_input_path =
       internal::Path::CreateNewPath(absolute_input_string);
   inputs_.insert(absolute_input_path.GetPathname());
@@ -92,7 +93,8 @@ void FileGenerator::AddInput(const std::string &absolute_input_pattern,
 
 void FileGenerator::AddOutput(const std::string &absolute_output_pattern,
                               const char *identifier) {
-  std::string absolute_output_string = Construct(absolute_output_pattern);
+  std::string absolute_output_string =
+      command_.Construct(absolute_output_pattern);
   const auto absolute_output_path =
       internal::Path::CreateNewPath(absolute_output_string);
   outputs_.insert(absolute_output_path.GetPathname());
@@ -105,7 +107,8 @@ void FileGenerator::AddOutput(const std::string &absolute_output_pattern,
 void FileGenerator::AddCommand(
     const std::string &command_pattern,
     const std::unordered_map<const char *, std::string> &arguments) {
-  std::string constructed_command = Construct(command_pattern, arguments);
+  std::string constructed_command =
+      command_.Construct(command_pattern, arguments);
   commands_.emplace_back(std::move(constructed_command));
 }
 
