@@ -22,7 +22,8 @@
 
 #include "args.h"
 
-#include "target/generator.h"
+#include "target/custom_generator.h"
+#include "target/file_generator.h"
 #include "target/target.h"
 
 #include "args/register/test_info.h"

@@ -47,15 +47,23 @@ add_executable(test_custom_generator
 )
 target_link_libraries(test_custom_generator PRIVATE target_interface)
 
-add_executable(test_generator
-    test_generator.cpp
+add_executable(test_file_generator
+    test_file_generator.cpp
 )
-target_link_libraries(test_generator PRIVATE target_interface)
+target_link_libraries(test_file_generator PRIVATE target_interface)
+
+add_executable(test_template_generator
+    test_template_generator.cpp
+)
+target_link_libraries(test_template_generator PRIVATE target_interface)
 
 add_test(NAME test_custom_generator COMMAND test_custom_generator
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
-add_test(NAME test_generator COMMAND test_generator
+add_test(NAME test_file_generator COMMAND test_file_generator
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+add_test(NAME test_template_generator COMMAND test_template_generator
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 

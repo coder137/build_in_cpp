@@ -115,17 +115,12 @@ public:
   virtual ~CustomGenerator() = default;
   CustomGenerator(const CustomGenerator &) = delete;
 
-  // From env::Command module, forwarding here
-  // TODO, Create a Mixin
-  void AddDefaultArgument(const std::string &identifier,
-                          const std::string &pattern);
-  void AddDefaultArguments(
-      const std::unordered_map<std::string, std::string> &arguments);
-  std::string Construct(
-      const std::string &pattern,
-      const std::unordered_map<const char *, std::string> &arguments = {});
-  const std::string &
-  GetValueByIdentifier(const std::string &file_identifier) const;
+  // TODO, Doc
+  void AddPattern(const std::string &identifier, const std::string &pattern);
+
+  // TODO, Doc
+  void
+  AddPatterns(const std::unordered_map<std::string, std::string> &pattern_map);
 
   /**
    * @brief Single Generator task for inputs->generate_cb->outputs
@@ -168,6 +163,7 @@ public:
   const fs::path &GetRootDir() const { return env_.GetTargetRootDir(); }
   const fs::path &GetBuildDir() const { return env_.GetTargetBuildDir(); }
   tf::Taskflow &GetTaskflow() { return tf_; }
+  const std::string &Get(const std::string &file_identifier) const;
 
 private:
   void Initialize();
@@ -184,6 +180,9 @@ private:
   void IdAdded();
   void IdUpdated();
 
+protected:
+  env::Command command_;
+
 private:
   std::string name_;
   TargetEnv env_;
@@ -196,7 +195,6 @@ private:
   std::unordered_map<std::string, UserGenInfo> success_schema_;
 
   // Internal
-  env::Command command_;
   tf::Taskflow tf_;
 
   // Callbacks

@@ -27,26 +27,20 @@ constexpr const char *const kGenerateTaskName = "Generate";
 
 namespace buildcc {
 
-void CustomGenerator::AddDefaultArgument(const std::string &identifier,
-                                         const std::string &pattern) {
+void CustomGenerator::AddPattern(const std::string &identifier,
+                                 const std::string &pattern) {
   command_.AddDefaultArgument(identifier, command_.Construct(pattern));
 }
 
-void CustomGenerator::AddDefaultArguments(
-    const std::unordered_map<std::string, std::string> &arguments) {
-  for (const auto &arg_iter : arguments) {
-    AddDefaultArgument(arg_iter.first, arg_iter.second);
+void CustomGenerator::AddPatterns(
+    const std::unordered_map<std::string, std::string> &pattern_map) {
+  for (const auto &arg_iter : pattern_map) {
+    AddPattern(arg_iter.first, arg_iter.second);
   }
 }
 
-std::string CustomGenerator::Construct(
-    const std::string &pattern,
-    const std::unordered_map<const char *, std::string> &arguments) {
-  return command_.Construct(pattern, arguments);
-}
-
-const std::string &CustomGenerator::GetValueByIdentifier(
-    const std::string &file_identifier) const {
+const std::string &
+CustomGenerator::Get(const std::string &file_identifier) const {
   return command_.GetDefaultValueByKey(file_identifier);
 }
 
@@ -60,10 +54,16 @@ void CustomGenerator::AddGenInfo(
 
   UserGenInfo schema;
   for (const auto &i : inputs) {
-    schema.inputs.emplace(command_.Construct(path_as_string(i)));
+    fs::path input =
+        internal::Path::CreateNewPath(command_.Construct(path_as_string(i)))
+            .GetPathname();
+    schema.inputs.emplace(std::move(input));
   }
   for (const auto &o : outputs) {
-    schema.outputs.emplace(command_.Construct(path_as_string(o)));
+    fs::path output =
+        internal::Path::CreateNewPath(command_.Construct(path_as_string(o)))
+            .GetPathname();
+    schema.outputs.emplace(std::move(output));
   }
   schema.generate_cb = generate_cb;
   schema.blob_handler = std::move(blob_handler);
@@ -90,6 +90,8 @@ void CustomGenerator::Initialize() {
   //
   fs::create_directories(env_.GetTargetBuildDir());
   command_.AddDefaultArguments({
+      {"project_root_dir", path_as_string(Project::GetRootDir())},
+      {"project_build_dir", path_as_string(Project::GetBuildDir())},
       {"gen_root_dir", path_as_string(env_.GetTargetRootDir())},
       {"gen_build_dir", path_as_string(env_.GetTargetBuildDir())},
   });

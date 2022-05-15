@@ -28,7 +28,7 @@ void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe) {
   generator.AddOutput("{gen_build_dir}/custom_generator_generated.h");
   generator.AddOutput("{gen_build_dir}/target_generated.h");
 
-  generator.AddDefaultArguments({
+  generator.AddPatterns({
       {"flatc_compiler", fmt::format("{}", flatc_exe.GetTargetPath())},
   });
   //   generator.AddCommand("{flatc_compiler} --help");
@@ -45,8 +45,7 @@ void buildcc_cb(BaseTarget &target, const FileGenerator &schema_gen,
                 const TargetInfo &taskflow_ho, const BaseTarget &tpl) {
   // NOTE, Build as single lib
   target.AddIncludeDir("", true);
-  const std::string &schema_build_dir =
-      schema_gen.GetValueByIdentifier("gen_build_dir");
+  const std::string &schema_build_dir = schema_gen.Get("gen_build_dir");
   target.AddIncludeDirAbsolute(schema_build_dir, true);
 
   // ENV

@@ -87,7 +87,7 @@ TEST(CustomGeneratorTestGroup, Basic_Failure) {
 
 TEST(CustomGeneratorTestGroup, DefaultArgumentUsage) {
   buildcc::CustomGenerator cgen("default_argument_usage", "");
-  cgen.AddDefaultArguments({
+  cgen.AddPatterns({
       {"dummy_main_c", "{gen_root_dir}/dummy_main.c"},
       {"dummy_main_o", "{gen_build_dir}/dummy_main.o"},
       {"dummy_main_cpp", "{gen_root_dir}/dummy_main.cpp"},

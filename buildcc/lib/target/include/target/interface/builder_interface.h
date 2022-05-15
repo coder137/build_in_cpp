@@ -27,7 +27,7 @@
 
 namespace buildcc::internal {
 
-enum PathState {
+enum class PathState {
   kNoChange,
   kRemoved,
   kAdded,
@@ -69,14 +69,14 @@ inline PathState CheckPaths(const internal::path_unordered_set &previous_path,
                         const bool added_cond = (find == previous_path.end());
                         if (added_cond) {
                           dirty = true;
-                          state = kAdded;
+                          state = PathState::kAdded;
                         } else {
                           const bool updated_cond =
                               (p.GetLastWriteTimestamp() >
                                find->GetLastWriteTimestamp());
                           if (updated_cond) {
                             dirty = true;
-                            state = kUpdated;
+                            state = PathState::kUpdated;
                           } else {
                             dirty = false;
                           }
@@ -110,7 +110,7 @@ protected:
       return;
     }
 
-    if (previous != current) {
+    if (CheckChanged(previous, current)) {
       callback();
       dirty_ = true;
     }
@@ -130,39 +130,25 @@ protected:
       return;
     }
 
-    // * Old path is removed
-    const bool removed =
-        std::any_of(previous_path.begin(), previous_path.end(),
-                    [&](const internal::Path &p) {
-                      return current_path.find(p) == current_path.end();
-                    });
-    if (removed) {
+    auto path_state = CheckPaths(previous_path, current_path);
+    switch (path_state) {
+    case PathState::kRemoved:
       path_removed_cb();
       dirty_ = true;
-      return;
+      break;
+    case PathState::kAdded:
+      path_added_cb();
+      dirty_ = true;
+      break;
+    case PathState::kUpdated:
+      path_updated_cb();
+      dirty_ = true;
+      break;
+    case PathState::kNoChange:
+    default:
+      dirty_ = false;
+      break;
     }
-
-    dirty_ = std::any_of(
-        current_path.cbegin(), current_path.cend(),
-        [&](const internal::Path &p) -> bool {
-          bool dirty = false;
-          const auto find = previous_path.find(p);
-          const bool added_cond = (find == previous_path.end());
-          if (added_cond) {
-            path_added_cb();
-            dirty = true;
-          } else {
-            const bool updated_cond =
-                (p.GetLastWriteTimestamp() > find->GetLastWriteTimestamp());
-            if (updated_cond) {
-              path_updated_cb();
-              dirty = true;
-            } else {
-              dirty = false;
-            }
-          }
-          return dirty;
-        });
   }
 
 protected:
