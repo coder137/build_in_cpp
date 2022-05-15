@@ -16,7 +16,7 @@
 #include "CppUTestExt/MockSupport.h"
 
 // clang-format off
-TEST_GROUP(GeneratorTestGroup)
+TEST_GROUP(FileGeneratorTestGroup)
 {
     void teardown() {
       buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
@@ -25,9 +25,9 @@ TEST_GROUP(GeneratorTestGroup)
 };
 // clang-format on
 
-fs::path BUILD_DIR = fs::current_path() / "intermediate" / "generator";
+fs::path BUILD_DIR = fs::current_path() / "intermediate" / "file_generator";
 
-TEST(GeneratorTestGroup, Generator_Build) {
+TEST(FileGeneratorTestGroup, Generator_Build) {
   constexpr const char *const NAME = "Build";
   buildcc::FileGenerator generator(NAME, "");
 
@@ -47,7 +47,7 @@ TEST(GeneratorTestGroup, Generator_Build) {
   mock().checkExpectations();
 }
 
-TEST(GeneratorTestGroup, Generator_Identifier) {
+TEST(FileGeneratorTestGroup, Generator_Identifier) {
   constexpr const char *const NAME = "Identifier";
   buildcc::FileGenerator generator(NAME, "");
 
@@ -66,7 +66,7 @@ TEST(GeneratorTestGroup, Generator_Identifier) {
   mock().checkExpectations();
 }
 
-TEST(GeneratorTestGroup, Generator_Rebuild) {
+TEST(FileGeneratorTestGroup, Generator_Rebuild) {
   constexpr const char *const NAME = "Rebuild";
   {
     buildcc::FileGenerator generator(NAME, "");
@@ -100,7 +100,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild) {
   mock().checkExpectations();
 }
 
-TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
+TEST(FileGeneratorTestGroup, Generator_Rebuild_Inputs) {
   constexpr const char *const NAME = "Rebuild_Inputs";
 
   {
@@ -164,7 +164,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Inputs) {
   mock().checkExpectations();
 }
 
-TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
+TEST(FileGeneratorTestGroup, Generator_Rebuild_Outputs) {
   constexpr const char *const NAME = "Rebuild_Outputs";
   {
     buildcc::FileGenerator generator(NAME, "");
@@ -213,7 +213,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Outputs) {
   mock().checkExpectations();
 }
 
-TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
+TEST(FileGeneratorTestGroup, Generator_Rebuild_Commands) {
   constexpr const char *const NAME = "Rebuild_Commands";
   {
     buildcc::FileGenerator generator(NAME, "");
@@ -259,7 +259,7 @@ TEST(GeneratorTestGroup, Generator_Rebuild_Commands) {
   mock().checkExpectations();
 }
 
-TEST(GeneratorTestGroup, Generator_AddDefaultArguments) {
+TEST(FileGeneratorTestGroup, Generator_AddDefaultArguments) {
   constexpr const char *const NAME = "AddDefaultArgument";
   buildcc::FileGenerator generator(NAME, "");
 
@@ -273,7 +273,7 @@ TEST(GeneratorTestGroup, Generator_AddDefaultArguments) {
 
 // FAILURE STATES
 
-TEST(GeneratorTestGroup, Generator_FailedEnvTaskState) {
+TEST(FileGeneratorTestGroup, Generator_FailedEnvTaskState) {
   buildcc::env::set_task_state(buildcc::env::TaskState::FAILURE);
 
   constexpr const char *const NAME = "FailedEnvTaskState";
@@ -296,7 +296,7 @@ TEST(GeneratorTestGroup, Generator_FailedEnvTaskState) {
   buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
 }
 
-TEST(GeneratorTestGroup, Generator_FailedGenerateConvert) {
+TEST(FileGeneratorTestGroup, Generator_FailedGenerateConvert) {
   constexpr const char *const NAME = "FailedGenerateConvert";
   buildcc::FileGenerator generator(NAME, "");
 
@@ -319,7 +319,7 @@ TEST(GeneratorTestGroup, Generator_FailedGenerateConvert) {
   buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
 }
 
-TEST(GeneratorTestGroup, Generator_FailedGenerateCommand) {
+TEST(FileGeneratorTestGroup, Generator_FailedGenerateCommand) {
   constexpr const char *const NAME = "FailedGenerateCommand";
   buildcc::FileGenerator generator(NAME, "");
 
@@ -341,7 +341,7 @@ TEST(GeneratorTestGroup, Generator_FailedGenerateCommand) {
   buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
 }
 
-TEST(GeneratorTestGroup, Generator_FailedStore) {
+TEST(FileGeneratorTestGroup, Generator_FailedStore) {
   constexpr const char *const NAME = "FailedStore";
   const fs::path test_build_dir = buildcc::Project::GetBuildDir() / NAME;
 
@@ -369,7 +369,7 @@ TEST(GeneratorTestGroup, Generator_FailedStore) {
   buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
 }
 
-TEST(GeneratorTestGroup, FailedEnvTaskState_Rebuild) {
+TEST(FileGeneratorTestGroup, FailedEnvTaskState_Rebuild) {
   buildcc::env::set_task_state(buildcc::env::TaskState::FAILURE);
 
   constexpr const char *const NAME = "FailedEnvTaskState_Rebuild";
@@ -413,7 +413,7 @@ TEST(GeneratorTestGroup, FailedEnvTaskState_Rebuild) {
   mock().checkExpectations();
 }
 
-TEST(GeneratorTestGroup, FailedGenerateCommand_Rebuild) {
+TEST(FileGeneratorTestGroup, FailedGenerateCommand_Rebuild) {
   constexpr const char *const NAME = "FailedGenerateCommand_Rebuild";
 
   {
