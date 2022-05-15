@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "target/generator.h"
+#include "target/file_generator.h"
 
 #include <algorithm>
 

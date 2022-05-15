@@ -1,4 +1,4 @@
-#include "target/generator.h"
+#include "target/file_generator.h"
 
 #include "expect_command.h"
 #include "expect_custom_generator.h"
