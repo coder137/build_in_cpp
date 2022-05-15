@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
   ExecutableTarget_generic buildcc_hybrid_simple_example(
       "buildcc_hybrid_simple_example", toolchain, "example/hybrid/simple");
   Reg::Toolchain(custom_toolchain_arg.state)
-      //   .Func([&]() { toolchain.Verify(); })
+      .Func([&]() { toolchain.Verify(); })
       .BuildPackage(buildcc)
       .Build(hybrid_simple_example_cb, buildcc_hybrid_simple_example,
              buildcc_lib)
