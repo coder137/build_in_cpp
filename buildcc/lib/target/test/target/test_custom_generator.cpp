@@ -183,7 +183,7 @@ static bool Dep2Cb(const buildcc::CustomGeneratorContext &ctx) {
   return buildcc::env::Command::Execute("");
 }
 
-static void DependencyCb(std::unordered_map<std::string, tf::Task> &task_map) {
+static void DependencyCb(std::unordered_map<std::string, tf::Task> &&task_map) {
   task_map.at("id1").precede(task_map.at("id2"));
 }
 
@@ -417,8 +417,10 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Basic) {
 
     mock().expectOneCall("RealGenerateCb");
     buildcc::env::m::CommandExpect_Execute(1, false);
-    mock().expectOneCall("RealGenerateCb");
-    buildcc::env::m::CommandExpect_Execute(1, true);
+
+    // Since there is an error above, second command does not execute (note,
+    // this is the behaviour in a single thread that is why we can
+    // check sequentially)
     buildcc::m::CustomGeneratorRunner(cgen);
 
     CHECK_TRUE(buildcc::env::get_task_state() ==
@@ -427,7 +429,7 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Basic) {
     buildcc::internal::CustomGeneratorSerialization serialization(
         cgen.GetBinaryPath());
     CHECK_TRUE(serialization.LoadFromFile());
-    CHECK_EQUAL(serialization.GetLoad().internal_gen_info_map.size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().internal_gen_info_map.size(), 0);
 
     fs::remove_all(cgen.GetBinaryPath());
   }
