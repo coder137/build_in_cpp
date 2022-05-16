@@ -85,6 +85,97 @@ TEST(CustomGeneratorTestGroup, Basic_Failure) {
   CHECK_EQUAL(internal_map.size(), 1);
 }
 
+TEST(CustomGeneratorTestGroup, Basic_Group) {
+  buildcc::CustomGenerator cgen("basic_group", "");
+  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
+                  {"{gen_build_dir}/dummy_main.o"}, BasicGenerateCb);
+  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+                  BasicGenerateCb);
+  cgen.AddGroup("grouped_id1_and_id2", {"id1", "id2"});
+  cgen.Build();
+
+  mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+  mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+  buildcc::m::CustomGeneratorRunner(cgen);
+
+  // Serialization check
+  {
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+
+    const auto &internal_map = serialization.GetLoad().internal_gen_info_map;
+    CHECK_EQUAL(internal_map.size(), 2);
+    const auto &id1_info = internal_map.at("id1");
+    CHECK_EQUAL(id1_info.internal_inputs.size(), 1);
+    CHECK_EQUAL(id1_info.outputs.size(), 1);
+
+    const auto &id2_info = internal_map.at("id2");
+    CHECK_EQUAL(id2_info.internal_inputs.size(), 1);
+    CHECK_EQUAL(id2_info.outputs.size(), 0);
+  }
+}
+
+TEST(CustomGeneratorTestGroup, Basic_Group_Dependency) {
+  buildcc::CustomGenerator cgen("basic_group_dependency", "");
+  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
+                  {"{gen_build_dir}/dummy_main.o"}, BasicGenerateCb);
+  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+                  BasicGenerateCb);
+  cgen.AddGroup("grouped_id1_and_id2", {"id1", "id2"}, [](auto &&task_map) {
+    task_map.at("id1").precede(task_map.at("id2"));
+  });
+  cgen.Build();
+
+  mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+  mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+  buildcc::m::CustomGeneratorRunner(cgen);
+
+  // Serialization check
+  {
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+
+    const auto &internal_map = serialization.GetLoad().internal_gen_info_map;
+    CHECK_EQUAL(internal_map.size(), 2);
+    const auto &id1_info = internal_map.at("id1");
+    CHECK_EQUAL(id1_info.internal_inputs.size(), 1);
+    CHECK_EQUAL(id1_info.outputs.size(), 1);
+
+    const auto &id2_info = internal_map.at("id2");
+    CHECK_EQUAL(id2_info.internal_inputs.size(), 1);
+    CHECK_EQUAL(id2_info.outputs.size(), 0);
+  }
+}
+
+TEST(CustomGeneratorTestGroup, Basic_Group_DependencyFailure) {
+  buildcc::CustomGenerator cgen("basic_group_dependency_failure", "");
+  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
+                  {"{gen_build_dir}/dummy_main.o"}, BasicGenerateCb);
+  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+                  BasicGenerateCb);
+  cgen.AddGroup("grouped_id1_and_id2", {"id1", "id2"}, [](auto &&task_map) {
+    task_map.at("id1").precede(task_map.at("id2"));
+    buildcc::env::assert_fatal<false>("Failure");
+  });
+  cgen.Build();
+
+  buildcc::m::CustomGeneratorRunner(cgen);
+
+  // Serialization check
+  {
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+
+    const auto &internal_map = serialization.GetLoad().internal_gen_info_map;
+    CHECK_EQUAL(internal_map.size(), 0);
+  }
+
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
+}
+
 TEST(CustomGeneratorTestGroup, DefaultArgumentUsage) {
   buildcc::CustomGenerator cgen("default_argument_usage", "");
   cgen.AddPatterns({
