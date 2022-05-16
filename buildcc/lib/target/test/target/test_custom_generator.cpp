@@ -176,6 +176,88 @@ TEST(CustomGeneratorTestGroup, Basic_Group_DependencyFailure) {
   CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
 }
 
+// Behaviour
+// Initial: A | B -> Passes
+// Changes: (GID:NEW)[A -> B] -> No rebuild triggered
+
+// Behaviour
+// Initial: A | B -> Fails
+// Changes: (GID:NEW)[A -> B] -> rebuild triggered due to previous failure
+
+// DONE, Make B fail because it properly depends on A
+static bool rebuild_value{false};
+static bool ProperDependency1(const buildcc::CustomGeneratorContext &ctx) {
+  (void)ctx;
+  mock().actualCall("ProperDependency1");
+  rebuild_value = true;
+  return true;
+}
+
+static bool ProperDependency2(const buildcc::CustomGeneratorContext &ctx) {
+  (void)ctx;
+  mock().actualCall("ProperDependency2");
+  return rebuild_value;
+}
+
+// ProperDependency2 depends on ProperDependency1 completion
+TEST(CustomGeneratorTestGroup, Basic_ProperDependency_GoodCase) {
+  rebuild_value = false;
+
+  buildcc::CustomGenerator cgen("basic_proper_dependency_good_case", "");
+  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
+                  {"{gen_build_dir}/dummy_main.o"}, ProperDependency1);
+  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+                  ProperDependency2);
+  cgen.AddDependencyCb(
+      [](auto &&task_map) { task_map.at("id1").precede(task_map.at("id2")); });
+  cgen.Build();
+
+  mock().expectOneCall("ProperDependency1");
+  mock().expectOneCall("ProperDependency2");
+  buildcc::m::CustomGeneratorRunner(cgen);
+
+  // Serialization check
+  {
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+
+    const auto &internal_map = serialization.GetLoad().internal_gen_info_map;
+    CHECK_EQUAL(internal_map.size(), 2);
+  }
+
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
+}
+
+// ProperDependency2 depends on ProperDependency1 completion
+TEST(CustomGeneratorTestGroup, Basic_ProperDependency_BadCase) {
+  rebuild_value = false;
+
+  buildcc::CustomGenerator cgen("basic_proper_dependency_bad_case", "");
+  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
+                  {"{gen_build_dir}/dummy_main.o"}, ProperDependency1);
+  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+                  ProperDependency2);
+  cgen.AddDependencyCb(
+      [](auto &&task_map) { task_map.at("id2").precede(task_map.at("id1")); });
+  cgen.Build();
+
+  mock().expectOneCall("ProperDependency2");
+  buildcc::m::CustomGeneratorRunner(cgen);
+
+  // Serialization check
+  {
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+
+    const auto &internal_map = serialization.GetLoad().internal_gen_info_map;
+    CHECK_EQUAL(internal_map.size(), 0);
+  }
+
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
+}
+
 TEST(CustomGeneratorTestGroup, DefaultArgumentUsage) {
   buildcc::CustomGenerator cgen("default_argument_usage", "");
   cgen.AddPatterns({
