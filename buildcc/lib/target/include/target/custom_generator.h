@@ -53,7 +53,7 @@ public:
 // clang-format off
 typedef std::function<bool(CustomGeneratorContext &)> GenerateCb;
 
-typedef std::function<void(std::unordered_map<std::string, tf::Task> &)> DependencyCb;
+typedef std::function<void(std::unordered_map<std::string, tf::Task> &&)> DependencyCb;
 // clang-format on
 
 class CustomBlobHandler {
@@ -136,6 +136,10 @@ public:
                   const GenerateCb &generate_cb,
                   std::shared_ptr<CustomBlobHandler> blob_handler = nullptr);
 
+  void AddGroup(const std::string &group_id,
+                std::initializer_list<std::string> ids,
+                const DependencyCb &dependency_cb = DependencyCb());
+
   // Callbacks
   /**
    * @brief Setup dependencies between Tasks using their `id`
@@ -168,12 +172,13 @@ public:
 private:
   void Initialize();
 
-  template <bool run> void TaskRunner(const std::string &id);
+  void TaskRunner(bool run, const std::string &id);
+  tf::Task CreateTaskRunner(tf::Subflow &subflow, bool build,
+                            const std::string &id);
 
   void GenerateTask();
-  void BuildGenerate(
-      std::unordered_map<std::string, UserGenInfo> &gen_selected_map,
-      std::unordered_map<std::string, UserGenInfo> &dummy_gen_selected_map);
+  void BuildGenerate(std::unordered_set<std::string> &gen_selected_ids,
+                     std::unordered_set<std::string> &dummy_gen_selected_ids);
 
   // Recheck states
   void IdRemoved();
@@ -184,12 +189,20 @@ protected:
   env::Command command_;
 
 private:
+  struct GroupMetadata {
+    std::vector<std::string> ids;
+    DependencyCb dependency_cb;
+  };
+
+private:
   std::string name_;
   TargetEnv env_;
   internal::CustomGeneratorSerialization serialization_;
 
   // Serialization
   UserCustomGeneratorSchema user_;
+  std::unordered_map<std::string, GroupMetadata> grouped_ids_;
+  std::unordered_set<std::string> ungrouped_ids_;
 
   std::mutex success_schema_mutex_;
   std::unordered_map<std::string, UserGenInfo> success_schema_;
