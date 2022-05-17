@@ -301,7 +301,8 @@ void CustomGenerator::TaskRunner(bool run, const std::string &id) {
   if (rerun) {
     dirty_ = true;
     buildcc::CustomGeneratorContext ctx(command_, current_info.inputs,
-                                        current_info.outputs);
+                                        current_info.outputs,
+                                        current_info.userblob);
     bool success = current_info.generate_cb(ctx);
     env::assert_fatal(success, fmt::format("Generate Cb failed for id {}", id));
   }
