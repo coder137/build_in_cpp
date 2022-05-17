@@ -73,6 +73,7 @@ public:
 private:
   using CustomGenerator::AddDependencyCb;
   using CustomGenerator::AddGenInfo;
+  using CustomGenerator::AddGroup;
   using CustomGenerator::Build;
 
 private:
