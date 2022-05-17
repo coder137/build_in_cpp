@@ -176,6 +176,43 @@ TEST(CustomGeneratorTestGroup, Basic_Group_DependencyFailure) {
   CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
 }
 
+bool FailureCb(const buildcc::CustomGeneratorContext &ctx) {
+  (void)ctx;
+  return false;
+}
+bool SuccessCb(const buildcc::CustomGeneratorContext &ctx) {
+  (void)ctx;
+  return true;
+}
+
+// An ungrouped task a dependency on a grouped task and fail the
+// ungrouped task
+TEST(CustomGeneratorTestGroup, Basic_Group_DependencyFailure2) {
+  buildcc::CustomGenerator cgen("basic_group_dependency_failure2", "");
+  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
+                  {"{gen_build_dir}/dummy_main.o"}, FailureCb);
+  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {}, SuccessCb);
+  cgen.AddGroup("grouped_id2", {"id2"});
+  cgen.AddDependencyCb([&](auto &&task_map) {
+    task_map.at("id1").precede(task_map.at("grouped_id2"));
+  });
+  cgen.Build();
+
+  buildcc::m::CustomGeneratorRunner(cgen);
+
+  // Serialization check
+  {
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+
+    const auto &internal_map = serialization.GetLoad().internal_gen_info_map;
+    CHECK_EQUAL(internal_map.size(), 0);
+  }
+
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
+}
+
 // Behaviour
 // Initial: A | B -> Passes
 // Changes: (GID:NEW)[A -> B] -> No rebuild triggered
@@ -183,6 +220,25 @@ TEST(CustomGeneratorTestGroup, Basic_Group_DependencyFailure) {
 // Behaviour
 // Initial: A | B -> Fails
 // Changes: (GID:NEW)[A -> B] -> rebuild triggered due to previous failure
+
+// ! IMPORTANT
+// * NOTE, It is users responsibility to make sure that when A -> B, A's data
+// change should automatically trigger B
+
+// For example: Say A -> B i.e B depends on A
+// In a typical scenario, B would depend on A's output
+// To make sure B is triggered when A changes. Make sure you use A's output in
+// B's userblob.
+// In this way whenever A changes, B's userblob automatically becomes "newer"
+// and triggers a rebuild as well
+
+// Say, A gives out "rebuild = true/false" as its output
+// We can use this "rebuild" variable in B's userblob
+// When A runs and "rebuild" changes from false to true, During the `TaskRunner`
+// we check B's userblob and automatically invoke the `CheckChanged` virtual
+// call
+// TODO, Create a testcase for the above scenario (Advanced_DependencyRebuild
+// scenario)
 
 // DONE, Make B fail because it properly depends on A
 static bool rebuild_value{false};
