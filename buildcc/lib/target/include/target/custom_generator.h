@@ -99,8 +99,8 @@ struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
     for (auto &[id, gen_info] : gen_info_map) {
       gen_info.internal_inputs = path_schema_convert(
           gen_info.inputs, internal::Path::CreateExistingPath);
-      auto p = internal_gen_info_map.emplace(id, gen_info);
-      env::assert_fatal(p.second, fmt::format("Could not save {}", id));
+      auto [_, success] = internal_gen_info_map.try_emplace(id, gen_info);
+      env::assert_fatal(success, fmt::format("Could not save {}", id));
     }
   }
 };
