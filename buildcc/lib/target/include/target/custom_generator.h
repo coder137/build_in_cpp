@@ -192,7 +192,8 @@ private:
   void IdUpdated();
 
 protected:
-  env::Command command_;
+  const env::Command &ConstCommand() const { return command_; }
+  env::Command &RefCommand() { return command_; }
 
 private:
   struct GroupMetadata {
@@ -231,6 +232,7 @@ private:
   std::unordered_map<std::string, UserGenInfo> success_schema_;
 
   // Internal
+  env::Command command_;
   tf::Taskflow tf_;
 
   // Callbacks
