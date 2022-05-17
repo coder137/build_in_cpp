@@ -23,8 +23,9 @@ namespace buildcc {
 
 class TemplateGenerator : public CustomGenerator {
 public:
-  TemplateGenerator(const std::string &name, const TargetEnv &env)
-      : CustomGenerator(name, env) {}
+  using CustomGenerator::CustomGenerator;
+  ~TemplateGenerator() override = default;
+  TemplateGenerator(const TemplateGenerator &) = delete;
 
   void AddTemplate(const fs::path &input_filename,
                    const fs::path &output_filename);
