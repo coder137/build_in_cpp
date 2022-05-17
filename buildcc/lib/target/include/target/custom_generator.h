@@ -181,6 +181,9 @@ private:
   void BuildGenerate(std::unordered_set<std::string> &gen_selected_ids,
                      std::unordered_set<std::string> &dummy_gen_selected_ids);
 
+  void InvokeDependencyCb(std::unordered_map<std::string, tf::Task>
+                              &&registered_tasks) const noexcept;
+
   // Recheck states
   void IdRemoved();
   void IdAdded();

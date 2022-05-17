@@ -218,14 +218,7 @@ void CustomGenerator::GenerateTask() {
       }
 
       // Dependencies between tasks
-      if (dependency_cb_) {
-        try {
-          dependency_cb_(std::move(registered_tasks));
-        } catch (...) {
-          env::log_critical(__FUNCTION__, "Dependency callback failed");
-          env::set_task_state(env::TaskState::FAILURE);
-        }
-      }
+      InvokeDependencyCb(std::move(registered_tasks));
 
       // NOTE, Do not call detach otherwise this will fail
       subflow.join();
@@ -250,6 +243,19 @@ void CustomGenerator::GenerateTask() {
   generate_task.name(kGenerateTaskName);
 }
 
+void CustomGenerator::InvokeDependencyCb(
+    std::unordered_map<std::string, tf::Task> &&registered_tasks)
+    const noexcept {
+  if (dependency_cb_) {
+    try {
+      dependency_cb_(std::move(registered_tasks));
+    } catch (...) {
+      env::log_critical(__FUNCTION__, "Dependency callback failed");
+      env::set_task_state(env::TaskState::FAILURE);
+    }
+  }
+}
+
 tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow, bool build,
                                            const std::string &id) {
   return subflow.emplace([&, build, id]() {
@@ -265,8 +271,6 @@ tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow, bool build,
 }
 
 void CustomGenerator::TaskRunner(bool run, const std::string &id) {
-  env::log_critical(__FUNCTION__, id);
-
   // Convert
   auto &current_gen_info = user_.gen_info_map.at(id);
   current_gen_info.internal_inputs = internal::path_schema_convert(
