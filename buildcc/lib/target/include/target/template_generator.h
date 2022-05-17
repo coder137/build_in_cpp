@@ -28,7 +28,7 @@ public:
 
   void AddTemplate(const fs::path &input_filename,
                    const fs::path &output_filename);
-  std::string Parse(const std::string &pattern);
+  std::string Parse(const std::string &pattern) const;
 
   /**
    * @brief Build FileGenerator Tasks

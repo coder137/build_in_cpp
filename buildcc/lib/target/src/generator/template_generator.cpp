@@ -56,7 +56,7 @@ void TemplateGenerator::AddTemplate(const fs::path &input_filename,
   template_infos_.emplace_back(std::move(info));
 }
 
-std::string TemplateGenerator::Parse(const std::string &pattern) {
+std::string TemplateGenerator::Parse(const std::string &pattern) const {
   return command_.Construct(pattern);
 }
 
