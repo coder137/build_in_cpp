@@ -200,17 +200,7 @@ void CustomGenerator::GenerateTask() {
           }
 
           // Dependency callback
-          if (group_metadata.dependency_cb) {
-            try {
-              group_metadata.dependency_cb(std::move(reg_tasks));
-            } catch (...) {
-              env::log_critical(
-                  __FUNCTION__,
-                  fmt::format("Dependency callback failed for group id {}",
-                              group_id));
-              env::set_task_state(env::TaskState::FAILURE);
-            }
-          }
+          group_metadata.InvokeDependencyCb(group_id, std::move(reg_tasks));
 
           // NOTE, Do not call detach otherwise this will fail
           s.join();

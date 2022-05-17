@@ -193,6 +193,23 @@ private:
   struct GroupMetadata {
     std::vector<std::string> ids;
     DependencyCb dependency_cb;
+
+    void InvokeDependencyCb(const std::string &group_id,
+                            std::unordered_map<std::string, tf::Task>
+                                &&registered_tasks) const noexcept {
+      if (!dependency_cb) {
+        return;
+      }
+      try {
+        dependency_cb(std::move(registered_tasks));
+      } catch (...) {
+        env::log_critical(
+            __FUNCTION__,
+            fmt::format("Dependency callback failed for group id {}",
+                        group_id));
+        env::set_task_state(env::TaskState::FAILURE);
+      }
+    }
   };
 
 private:
