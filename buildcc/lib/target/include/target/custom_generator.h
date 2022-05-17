@@ -44,20 +44,22 @@ public:
                          const fs_unordered_set &o)
       : command(c), inputs(i), outputs(o) {}
 
-public:
   const env::Command &command;
   const fs_unordered_set &inputs;
   const fs_unordered_set &outputs;
 };
 
 // clang-format off
-typedef std::function<bool(CustomGeneratorContext &)> GenerateCb;
+using GenerateCb = std::function<bool (CustomGeneratorContext &)>;
 
-typedef std::function<void(std::unordered_map<std::string, tf::Task> &&)> DependencyCb;
+using DependencyCb = std::function<void (std::unordered_map<std::string, tf::Task> &&)>;
 // clang-format on
 
 class CustomBlobHandler {
 public:
+  CustomBlobHandler() = default;
+  virtual ~CustomBlobHandler() = default;
+
   bool CheckChanged(const std::vector<uint8_t> &previous,
                     const std::vector<uint8_t> &current) const {
     env::assert_fatal(
@@ -69,7 +71,7 @@ public:
     return !IsEqual(previous, current);
   };
 
-  std::vector<uint8_t> GetSerializedData() {
+  std::vector<uint8_t> GetSerializedData() const {
     auto serialized_data = Serialize();
     env::assert_fatal(
         Verify(serialized_data),
@@ -94,12 +96,11 @@ struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
   std::unordered_map<std::string, UserGenInfo> gen_info_map;
 
   void ConvertToInternal() {
-    for (auto &r_miter : gen_info_map) {
-      r_miter.second.internal_inputs = path_schema_convert(
-          r_miter.second.inputs, internal::Path::CreateExistingPath);
-      auto p = internal_gen_info_map.emplace(r_miter.first, r_miter.second);
-      env::assert_fatal(p.second,
-                        fmt::format("Could not save {}", r_miter.first));
+    for (auto &[id, gen_info] : gen_info_map) {
+      gen_info.internal_inputs = path_schema_convert(
+          gen_info.inputs, internal::Path::CreateExistingPath);
+      auto p = internal_gen_info_map.emplace(id, gen_info);
+      env::assert_fatal(p.second, fmt::format("Could not save {}", id));
     }
   }
 };
