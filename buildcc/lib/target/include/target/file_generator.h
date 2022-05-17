@@ -23,9 +23,8 @@ namespace buildcc {
 
 class FileGenerator : public CustomGenerator {
 public:
-  FileGenerator(const std::string &name, const TargetEnv &env)
-      : CustomGenerator(name, env) {}
-  virtual ~FileGenerator() = default;
+  using CustomGenerator::CustomGenerator;
+  ~FileGenerator() override = default;
   FileGenerator(const FileGenerator &) = delete;
 
   /**
