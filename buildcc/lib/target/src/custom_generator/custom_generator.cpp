@@ -17,10 +17,7 @@
 #include "target/custom_generator.h"
 
 namespace {
-constexpr const char *const kStartGeneratorTaskName = "Start Generator";
-constexpr const char *const kEndGeneratorTaskName = "End Generator";
 
-constexpr const char *const kCommandTaskName = "Command";
 constexpr const char *const kGenerateTaskName = "Generate";
 
 } // namespace
@@ -34,8 +31,8 @@ void CustomGenerator::AddPattern(const std::string &identifier,
 
 void CustomGenerator::AddPatterns(
     const std::unordered_map<std::string, std::string> &pattern_map) {
-  for (const auto &arg_iter : pattern_map) {
-    AddPattern(arg_iter.first, arg_iter.second);
+  for (const auto &[identifier, pattern] : pattern_map) {
+    AddPattern(identifier, pattern);
   }
 }
 
@@ -67,7 +64,7 @@ void CustomGenerator::AddGenInfo(
   }
   schema.generate_cb = generate_cb;
   schema.blob_handler = std::move(blob_handler);
-  user_.gen_info_map.emplace(id, std::move(schema));
+  user_.gen_info_map.try_emplace(id, std::move(schema));
   ungrouped_ids_.emplace(id);
 }
 
@@ -89,7 +86,7 @@ void CustomGenerator::AddGroup(const std::string &group_id,
   GroupMetadata group_metadata;
   group_metadata.ids = ids;
   group_metadata.dependency_cb = dependency_cb;
-  grouped_ids_.emplace(group_id, std::move(group_metadata));
+  grouped_ids_.try_emplace(group_id, std::move(group_metadata));
 }
 
 void CustomGenerator::AddDependencyCb(const DependencyCb &dependency_cb) {
@@ -142,8 +139,7 @@ void CustomGenerator::BuildGenerate(
     // curr_gen_info_map If prev_gen_info_map does not exist in
     // curr_gen_info_map, has been removed from existing build We need this
     // condition to only set the dirty_ flag
-    for (const auto &prev_miter : prev_gen_info_map) {
-      const auto &id = prev_miter.first;
+    for (const auto &[id, _] : prev_gen_info_map) {
       if (curr_gen_info_map.find(id) == curr_gen_info_map.end()) {
         // MAP REMOVED condition
         IdRemoved();
@@ -155,18 +151,17 @@ void CustomGenerator::BuildGenerate(
     // DONE, MAP ADDED condition Check if curr_gen_info_map exists in
     // prev_gen_info_map If curr_gen_info_map does not exist in
     // prev_gen_info_map, has been added to existing build
-    for (const auto &curr_miter : curr_gen_info_map) {
-      const auto &id = curr_miter.first;
+    for (const auto &[id, _] : curr_gen_info_map) {
       if (prev_gen_info_map.find(id) == prev_gen_info_map.end()) {
         // MAP ADDED condition
         IdAdded();
-        gen_selected_ids.insert(curr_miter.first);
+        gen_selected_ids.insert(id);
         dirty_ = true;
       } else {
         // MAP UPDATED condition (*checked later)
         // This is because tasks can have dependencies amongst each other we can
         // compute task level rebuilds later
-        dummy_gen_selected_ids.insert(curr_miter.first);
+        dummy_gen_selected_ids.insert(id);
       }
     }
   }
@@ -187,9 +182,9 @@ void CustomGenerator::GenerateTask() {
       BuildGenerate(selected_ids, dummy_selected_ids);
 
       // Grouped tasks
-      for (const auto &group_iter : grouped_ids_) {
-        const auto &group_id = group_iter.first;
-        const auto &group_metadata = group_iter.second;
+      for (const auto &[first, second] : grouped_ids_) {
+        const auto &group_id = first;
+        const auto &group_metadata = second;
         auto group_task = subflow.emplace([&](tf::Subflow &s) {
           std::unordered_map<std::string, tf::Task> reg_tasks;
 
@@ -201,7 +196,7 @@ void CustomGenerator::GenerateTask() {
             bool build = selected_ids.count(id) == 1;
             auto task = CreateTaskRunner(s, build, id);
             task.name(id);
-            reg_tasks.emplace(id, task);
+            reg_tasks.try_emplace(id, task);
           }
 
           // Dependency callback
@@ -221,7 +216,7 @@ void CustomGenerator::GenerateTask() {
           s.join();
         });
         group_task.name(group_id);
-        registered_tasks.emplace(group_id, group_task);
+        registered_tasks.try_emplace(group_id, group_task);
       }
 
       // Ungrouped tasks
@@ -229,7 +224,7 @@ void CustomGenerator::GenerateTask() {
         bool build = selected_ids.count(id) == 1;
         auto task = CreateTaskRunner(subflow, build, id);
         task.name(id);
-        registered_tasks.emplace(id, task);
+        registered_tasks.try_emplace(id, task);
       }
 
       // Dependencies between tasks
@@ -283,15 +278,13 @@ void CustomGenerator::TaskRunner(bool run, const std::string &id) {
   env::log_critical(__FUNCTION__, id);
 
   // Convert
-  {
-    auto &current_gen_info = user_.gen_info_map.at(id);
-    current_gen_info.internal_inputs = internal::path_schema_convert(
-        current_gen_info.inputs, internal::Path::CreateExistingPath);
-    current_gen_info.userblob =
-        current_gen_info.blob_handler != nullptr
-            ? current_gen_info.blob_handler->GetSerializedData()
-            : std::vector<uint8_t>();
-  }
+  auto &current_gen_info = user_.gen_info_map.at(id);
+  current_gen_info.internal_inputs = internal::path_schema_convert(
+      current_gen_info.inputs, internal::Path::CreateExistingPath);
+  current_gen_info.userblob =
+      current_gen_info.blob_handler != nullptr
+          ? current_gen_info.blob_handler->GetSerializedData()
+          : std::vector<uint8_t>();
 
   // Run
   const auto &current_info = user_.gen_info_map.at(id);
@@ -319,8 +312,8 @@ void CustomGenerator::TaskRunner(bool run, const std::string &id) {
     env::assert_fatal(success, fmt::format("Generate Cb failed for id {}", id));
   }
 
-  std::lock_guard<std::mutex> guard(success_schema_mutex_);
-  success_schema_.emplace(id, current_info);
+  std::scoped_lock<std::mutex> guard(success_schema_mutex_);
+  success_schema_.try_emplace(id, current_info);
 }
 
 } // namespace buildcc
