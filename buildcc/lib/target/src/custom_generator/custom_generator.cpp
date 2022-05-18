@@ -17,10 +17,7 @@
 #include "target/custom_generator.h"
 
 namespace {
-constexpr const char *const kStartGeneratorTaskName = "Start Generator";
-constexpr const char *const kEndGeneratorTaskName = "End Generator";
 
-constexpr const char *const kCommandTaskName = "Command";
 constexpr const char *const kGenerateTaskName = "Generate";
 
 } // namespace
@@ -34,8 +31,8 @@ void CustomGenerator::AddPattern(const std::string &identifier,
 
 void CustomGenerator::AddPatterns(
     const std::unordered_map<std::string, std::string> &pattern_map) {
-  for (const auto &arg_iter : pattern_map) {
-    AddPattern(arg_iter.first, arg_iter.second);
+  for (const auto &[identifier, pattern] : pattern_map) {
+    AddPattern(identifier, pattern);
   }
 }
 
@@ -67,7 +64,29 @@ void CustomGenerator::AddGenInfo(
   }
   schema.generate_cb = generate_cb;
   schema.blob_handler = std::move(blob_handler);
-  user_.gen_info_map.emplace(id, std::move(schema));
+  user_.gen_info_map.try_emplace(id, std::move(schema));
+  ungrouped_ids_.emplace(id);
+}
+
+void CustomGenerator::AddGroup(const std::string &group_id,
+                               std::initializer_list<std::string> ids,
+                               const DependencyCb &dependency_cb) {
+  // Verify that the ids exist
+  // Remove those ids from ungrouped_ids
+  for (const auto &id : ids) {
+    env::assert_fatal(user_.gen_info_map.find(id) != user_.gen_info_map.end(),
+                      fmt::format("Id '{}' is not found", id));
+    ungrouped_ids_.erase(id);
+  }
+
+  env::assert_fatal(grouped_ids_.find(group_id) == grouped_ids_.end(),
+                    fmt::format("Group Id '{}' duplicate found", group_id));
+
+  // Group map is used to group similar ids in a single subflow
+  GroupMetadata group_metadata;
+  group_metadata.ids = ids;
+  group_metadata.dependency_cb = dependency_cb;
+  grouped_ids_.try_emplace(group_id, std::move(group_metadata));
 }
 
 void CustomGenerator::AddDependencyCb(const DependencyCb &dependency_cb) {
@@ -102,10 +121,12 @@ void CustomGenerator::Initialize() {
 }
 
 void CustomGenerator::BuildGenerate(
-    std::unordered_map<std::string, UserGenInfo> &gen_selected_map,
-    std::unordered_map<std::string, UserGenInfo> &dummy_gen_selected_map) {
+    std::unordered_set<std::string> &gen_selected_ids,
+    std::unordered_set<std::string> &dummy_gen_selected_ids) {
   if (!serialization_.IsLoaded()) {
-    gen_selected_map = user_.gen_info_map;
+    std::for_each(
+        user_.gen_info_map.begin(), user_.gen_info_map.end(),
+        [&](const auto &iter) { gen_selected_ids.insert(iter.first); });
     dirty_ = true;
   } else {
     // DONE, Conditionally select internal_gen_info_map depending on what has
@@ -118,8 +139,7 @@ void CustomGenerator::BuildGenerate(
     // curr_gen_info_map If prev_gen_info_map does not exist in
     // curr_gen_info_map, has been removed from existing build We need this
     // condition to only set the dirty_ flag
-    for (const auto &prev_miter : prev_gen_info_map) {
-      const auto &id = prev_miter.first;
+    for (const auto &[id, _] : prev_gen_info_map) {
       if (curr_gen_info_map.find(id) == curr_gen_info_map.end()) {
         // MAP REMOVED condition
         IdRemoved();
@@ -131,18 +151,17 @@ void CustomGenerator::BuildGenerate(
     // DONE, MAP ADDED condition Check if curr_gen_info_map exists in
     // prev_gen_info_map If curr_gen_info_map does not exist in
     // prev_gen_info_map, has been added to existing build
-    for (const auto &curr_miter : curr_gen_info_map) {
-      const auto &id = curr_miter.first;
+    for (const auto &[id, _] : curr_gen_info_map) {
       if (prev_gen_info_map.find(id) == prev_gen_info_map.end()) {
         // MAP ADDED condition
         IdAdded();
-        gen_selected_map.emplace(curr_miter.first, curr_miter.second);
+        gen_selected_ids.insert(id);
         dirty_ = true;
       } else {
         // MAP UPDATED condition (*checked later)
         // This is because tasks can have dependencies amongst each other we can
         // compute task level rebuilds later
-        dummy_gen_selected_map.emplace(curr_miter.first, curr_miter.second);
+        dummy_gen_selected_ids.insert(id);
       }
     }
   }
@@ -155,51 +174,51 @@ void CustomGenerator::GenerateTask() {
     }
 
     try {
-      std::unordered_map<std::string, UserGenInfo> selected_user_schema;
-      std::unordered_map<std::string, UserGenInfo> dummy_selected_user_schema;
-      BuildGenerate(selected_user_schema, dummy_selected_user_schema);
+      std::unordered_map<std::string, tf::Task> registered_tasks;
 
-      std::unordered_map<std::string, tf::Task> task_map;
-      // Create task for selected schema
-      for (const auto &selected_miter : selected_user_schema) {
-        const auto &id = selected_miter.first;
-        // const auto &current_info = selected_miter.second;
-        tf::Task task = subflow
-                            .emplace([&]() {
-                              try {
-                                TaskRunner<true>(id);
-                              } catch (...) {
-                                env::set_task_state(env::TaskState::FAILURE);
-                              }
-                            })
-                            .name(id);
-        task_map.emplace(id, task);
+      // Selected ids for build
+      std::unordered_set<std::string> selected_ids;
+      std::unordered_set<std::string> dummy_selected_ids;
+      BuildGenerate(selected_ids, dummy_selected_ids);
+
+      // Grouped tasks
+      for (const auto &[first, second] : grouped_ids_) {
+        const auto &group_id = first;
+        const auto &group_metadata = second;
+        auto group_task = subflow.emplace([&](tf::Subflow &s) {
+          std::unordered_map<std::string, tf::Task> reg_tasks;
+
+          if (env::get_task_state() != env::TaskState::SUCCESS) {
+            return;
+          }
+
+          for (const auto &id : group_metadata.ids) {
+            bool build = selected_ids.count(id) == 1;
+            auto task = CreateTaskRunner(s, build, id);
+            task.name(id);
+            reg_tasks.try_emplace(id, task);
+          }
+
+          // Dependency callback
+          group_metadata.InvokeDependencyCb(group_id, std::move(reg_tasks));
+
+          // NOTE, Do not call detach otherwise this will fail
+          s.join();
+        });
+        group_task.name(group_id);
+        registered_tasks.try_emplace(group_id, group_task);
       }
 
-      for (auto &dummy_selected_miter : dummy_selected_user_schema) {
-        const auto &id = dummy_selected_miter.first;
-        // const auto &current_info = dummy_selected_miter.second;
-        tf::Task task = subflow
-                            .emplace([&]() {
-                              try {
-                                TaskRunner<false>(id);
-                              } catch (...) {
-                                env::set_task_state(env::TaskState::FAILURE);
-                              }
-                            })
-                            .name(id);
-        task_map.emplace(id, task);
+      // Ungrouped tasks
+      for (const auto &id : ungrouped_ids_) {
+        bool build = selected_ids.count(id) == 1;
+        auto task = CreateTaskRunner(subflow, build, id);
+        task.name(id);
+        registered_tasks.try_emplace(id, task);
       }
 
-      // Dependencies between ids
-      if (dependency_cb_) {
-        try {
-          dependency_cb_(task_map);
-        } catch (...) {
-          env::log_critical(__FUNCTION__, "Dependency callback failed");
-          env::set_task_state(env::TaskState::FAILURE);
-        }
-      }
+      // Dependencies between tasks
+      InvokeDependencyCb(std::move(registered_tasks));
 
       // NOTE, Do not call detach otherwise this will fail
       subflow.join();
@@ -224,22 +243,47 @@ void CustomGenerator::GenerateTask() {
   generate_task.name(kGenerateTaskName);
 }
 
-template <bool run> void CustomGenerator::TaskRunner(const std::string &id) {
-  // Convert
-  {
-    auto &current_gen_info = user_.gen_info_map.at(id);
-    current_gen_info.internal_inputs = internal::path_schema_convert(
-        current_gen_info.inputs, internal::Path::CreateExistingPath);
-    current_gen_info.userblob =
-        current_gen_info.blob_handler != nullptr
-            ? current_gen_info.blob_handler->GetSerializedData()
-            : std::vector<uint8_t>();
+void CustomGenerator::InvokeDependencyCb(
+    std::unordered_map<std::string, tf::Task> &&registered_tasks)
+    const noexcept {
+  if (dependency_cb_) {
+    try {
+      dependency_cb_(std::move(registered_tasks));
+    } catch (...) {
+      env::log_critical(__FUNCTION__, "Dependency callback failed");
+      env::set_task_state(env::TaskState::FAILURE);
+    }
   }
+}
+
+tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow, bool build,
+                                           const std::string &id) {
+  return subflow.emplace([&, build, id]() {
+    if (env::get_task_state() != env::TaskState::SUCCESS) {
+      return;
+    }
+    try {
+      TaskRunner(build, id);
+    } catch (...) {
+      env::set_task_state(env::TaskState::FAILURE);
+    }
+  });
+}
+
+void CustomGenerator::TaskRunner(bool run, const std::string &id) {
+  // Convert
+  auto &current_gen_info = user_.gen_info_map.at(id);
+  current_gen_info.internal_inputs = internal::path_schema_convert(
+      current_gen_info.inputs, internal::Path::CreateExistingPath);
+  current_gen_info.userblob =
+      current_gen_info.blob_handler != nullptr
+          ? current_gen_info.blob_handler->GetSerializedData()
+          : std::vector<uint8_t>();
 
   // Run
   const auto &current_info = user_.gen_info_map.at(id);
   bool rerun = false;
-  if constexpr (run) {
+  if (run) {
     rerun = true;
   } else {
     const auto &previous_info =
@@ -257,13 +301,14 @@ template <bool run> void CustomGenerator::TaskRunner(const std::string &id) {
   if (rerun) {
     dirty_ = true;
     buildcc::CustomGeneratorContext ctx(command_, current_info.inputs,
-                                        current_info.outputs);
+                                        current_info.outputs,
+                                        current_info.userblob);
     bool success = current_info.generate_cb(ctx);
     env::assert_fatal(success, fmt::format("Generate Cb failed for id {}", id));
   }
 
-  std::lock_guard<std::mutex> guard(success_schema_mutex_);
-  success_schema_.emplace(id, current_info);
+  std::scoped_lock<std::mutex> guard(success_schema_mutex_);
+  success_schema_.try_emplace(id, current_info);
 }
 
 } // namespace buildcc

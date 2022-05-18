@@ -48,16 +48,16 @@ void TemplateGenerator::AddTemplate(const fs::path &input_filename,
                                     const fs::path &output_filename) {
   TemplateInfo info;
   info.input = internal::Path::CreateNewPath(
-                   command_.Construct(path_as_string(input_filename)))
+                   RefCommand().Construct(path_as_string(input_filename)))
                    .GetPathname();
   info.output = internal::Path::CreateNewPath(
-                    command_.Construct(path_as_string(output_filename)))
+                    RefCommand().Construct(path_as_string(output_filename)))
                     .GetPathname();
   template_infos_.emplace_back(std::move(info));
 }
 
-std::string TemplateGenerator::Parse(const std::string &pattern) {
-  return command_.Construct(pattern);
+std::string TemplateGenerator::Parse(const std::string &pattern) const {
+  return ConstCommand().Construct(pattern);
 }
 
 /**

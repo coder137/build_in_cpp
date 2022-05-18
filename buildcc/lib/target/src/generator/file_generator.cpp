@@ -24,10 +24,21 @@
 
 namespace {
 
-class GeneratorBlobHandler : public buildcc::CustomBlobHandler {
+class FileGeneratorBlobHandler : public buildcc::CustomBlobHandler {
 public:
-  explicit GeneratorBlobHandler(const std::vector<std::string> &commands)
+  explicit FileGeneratorBlobHandler(const std::vector<std::string> &commands)
       : commands_(commands) {}
+
+  // serialized_data has already been verified
+  static std::vector<std::string>
+  Deserialize(const std::vector<uint8_t> &serialized_data) {
+    std::vector<std::string> deserialized;
+    auto flex_vect = flexbuffers::GetRoot(serialized_data).AsVector();
+    for (size_t i = 0; i < flex_vect.size(); i++) {
+      deserialized.emplace_back(flex_vect[i].AsString().str());
+    }
+    return deserialized;
+  }
 
 private:
   const std::vector<std::string> &commands_;
@@ -61,18 +72,24 @@ private:
     builder.Finish();
     return builder.GetBuffer();
   }
-
-  // serialized_data has already been verified
-  static std::vector<std::string>
-  Deserialize(const std::vector<uint8_t> &serialized_data) {
-    std::vector<std::string> deserialized;
-    auto flex_vect = flexbuffers::GetRoot(serialized_data).AsVector();
-    for (size_t i = 0; i < flex_vect.size(); i++) {
-      deserialized.emplace_back(flex_vect[i].AsString().str());
-    }
-    return deserialized;
-  }
 };
+
+bool FileGeneratorGenerateCb(const buildcc::CustomGeneratorContext &ctx) {
+  (void)ctx;
+  bool success = true;
+  std::vector<std::string> commands =
+      FileGeneratorBlobHandler::Deserialize(ctx.userblob);
+  for (const auto &c : commands) {
+    bool executed = buildcc::env::Command::Execute(c);
+    if (!executed) {
+      success = false;
+      buildcc::env::log_critical(__FUNCTION__,
+                                 fmt::format("Failed to run command {}", c));
+      break;
+    }
+  }
+  return success;
+}
 
 } // namespace
 
@@ -81,7 +98,7 @@ namespace buildcc {
 void FileGenerator::AddInput(const std::string &absolute_input_pattern,
                              const char *identifier) {
   std::string absolute_input_string =
-      command_.Construct(absolute_input_pattern);
+      RefCommand().Construct(absolute_input_pattern);
   const auto absolute_input_path =
       internal::Path::CreateNewPath(absolute_input_string);
   inputs_.insert(absolute_input_path.GetPathname());
@@ -94,7 +111,7 @@ void FileGenerator::AddInput(const std::string &absolute_input_pattern,
 void FileGenerator::AddOutput(const std::string &absolute_output_pattern,
                               const char *identifier) {
   std::string absolute_output_string =
-      command_.Construct(absolute_output_pattern);
+      RefCommand().Construct(absolute_output_pattern);
   const auto absolute_output_path =
       internal::Path::CreateNewPath(absolute_output_string);
   outputs_.insert(absolute_output_path.GetPathname());
@@ -108,28 +125,13 @@ void FileGenerator::AddCommand(
     const std::string &command_pattern,
     const std::unordered_map<const char *, std::string> &arguments) {
   std::string constructed_command =
-      command_.Construct(command_pattern, arguments);
+      RefCommand().Construct(command_pattern, arguments);
   commands_.emplace_back(std::move(constructed_command));
 }
 
 void FileGenerator::Build() {
-  AddGenInfo(
-      "Generate", inputs_, outputs_,
-      [&](const CustomGeneratorContext &ctx) -> bool {
-        (void)ctx;
-        bool success = true;
-        for (const auto &c : commands_) {
-          bool executed = env::Command::Execute(c);
-          if (!executed) {
-            success = false;
-            env::log_critical(__FUNCTION__,
-                              fmt::format("Failed to run command {}", c));
-            break;
-          }
-        }
-        return success;
-      },
-      std::make_shared<GeneratorBlobHandler>(commands_));
+  AddGenInfo("Generate", inputs_, outputs_, FileGeneratorGenerateCb,
+             std::make_shared<FileGeneratorBlobHandler>(commands_));
   this->CustomGenerator::Build();
 }
 

@@ -85,6 +85,235 @@ TEST(CustomGeneratorTestGroup, Basic_Failure) {
   CHECK_EQUAL(internal_map.size(), 1);
 }
 
+TEST(CustomGeneratorTestGroup, Basic_Group) {
+  buildcc::CustomGenerator cgen("basic_group", "");
+  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
+                  {"{gen_build_dir}/dummy_main.o"}, BasicGenerateCb);
+  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+                  BasicGenerateCb);
+  cgen.AddGroup("grouped_id1_and_id2", {"id1", "id2"});
+  cgen.Build();
+
+  mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+  mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+  buildcc::m::CustomGeneratorRunner(cgen);
+
+  // Serialization check
+  {
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+
+    const auto &internal_map = serialization.GetLoad().internal_gen_info_map;
+    CHECK_EQUAL(internal_map.size(), 2);
+    const auto &id1_info = internal_map.at("id1");
+    CHECK_EQUAL(id1_info.internal_inputs.size(), 1);
+    CHECK_EQUAL(id1_info.outputs.size(), 1);
+
+    const auto &id2_info = internal_map.at("id2");
+    CHECK_EQUAL(id2_info.internal_inputs.size(), 1);
+    CHECK_EQUAL(id2_info.outputs.size(), 0);
+  }
+}
+
+TEST(CustomGeneratorTestGroup, Basic_Group_Dependency) {
+  buildcc::CustomGenerator cgen("basic_group_dependency", "");
+  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
+                  {"{gen_build_dir}/dummy_main.o"}, BasicGenerateCb);
+  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+                  BasicGenerateCb);
+  cgen.AddGroup("grouped_id1_and_id2", {"id1", "id2"}, [](auto &&task_map) {
+    task_map.at("id1").precede(task_map.at("id2"));
+  });
+  cgen.Build();
+
+  mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+  mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+  buildcc::m::CustomGeneratorRunner(cgen);
+
+  // Serialization check
+  {
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+
+    const auto &internal_map = serialization.GetLoad().internal_gen_info_map;
+    CHECK_EQUAL(internal_map.size(), 2);
+    const auto &id1_info = internal_map.at("id1");
+    CHECK_EQUAL(id1_info.internal_inputs.size(), 1);
+    CHECK_EQUAL(id1_info.outputs.size(), 1);
+
+    const auto &id2_info = internal_map.at("id2");
+    CHECK_EQUAL(id2_info.internal_inputs.size(), 1);
+    CHECK_EQUAL(id2_info.outputs.size(), 0);
+  }
+}
+
+TEST(CustomGeneratorTestGroup, Basic_Group_DependencyFailure) {
+  buildcc::CustomGenerator cgen("basic_group_dependency_failure", "");
+  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
+                  {"{gen_build_dir}/dummy_main.o"}, BasicGenerateCb);
+  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+                  BasicGenerateCb);
+  cgen.AddGroup("grouped_id1_and_id2", {"id1", "id2"}, [](auto &&task_map) {
+    task_map.at("id1").precede(task_map.at("id2"));
+    buildcc::env::assert_fatal<false>("Failure");
+  });
+  cgen.Build();
+
+  buildcc::m::CustomGeneratorRunner(cgen);
+
+  // Serialization check
+  {
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+
+    const auto &internal_map = serialization.GetLoad().internal_gen_info_map;
+    CHECK_EQUAL(internal_map.size(), 0);
+  }
+
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
+}
+
+bool FailureCb(const buildcc::CustomGeneratorContext &ctx) {
+  (void)ctx;
+  return false;
+}
+bool SuccessCb(const buildcc::CustomGeneratorContext &ctx) {
+  (void)ctx;
+  return true;
+}
+
+// An ungrouped task a dependency on a grouped task and fail the
+// ungrouped task
+TEST(CustomGeneratorTestGroup, Basic_Group_DependencyFailure2) {
+  buildcc::CustomGenerator cgen("basic_group_dependency_failure2", "");
+  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
+                  {"{gen_build_dir}/dummy_main.o"}, FailureCb);
+  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {}, SuccessCb);
+  cgen.AddGroup("grouped_id2", {"id2"});
+  cgen.AddDependencyCb([&](auto &&task_map) {
+    task_map.at("id1").precede(task_map.at("grouped_id2"));
+  });
+  cgen.Build();
+
+  buildcc::m::CustomGeneratorRunner(cgen);
+
+  // Serialization check
+  {
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+
+    const auto &internal_map = serialization.GetLoad().internal_gen_info_map;
+    CHECK_EQUAL(internal_map.size(), 0);
+  }
+
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
+}
+
+// Behaviour
+// Initial: A | B -> Passes
+// Changes: (GID:NEW)[A -> B] -> No rebuild triggered
+
+// Behaviour
+// Initial: A | B -> Fails
+// Changes: (GID:NEW)[A -> B] -> rebuild triggered due to previous failure
+
+// ! IMPORTANT
+// * NOTE, It is users responsibility to make sure that when A -> B, A's data
+// change should automatically trigger B
+
+// For example: Say A -> B i.e B depends on A
+// In a typical scenario, B would depend on A's output
+// To make sure B is triggered when A changes. Make sure you use A's output in
+// B's userblob.
+// In this way whenever A changes, B's userblob automatically becomes "newer"
+// and triggers a rebuild as well
+
+// Say, A gives out "rebuild = true/false" as its output
+// We can use this "rebuild" variable in B's userblob
+// When A runs and "rebuild" changes from false to true, During the `TaskRunner`
+// we check B's userblob and automatically invoke the `CheckChanged` virtual
+// call
+// TODO, Create a testcase for the above scenario (Advanced_DependencyRebuild
+// scenario)
+
+// DONE, Make B fail because it properly depends on A
+static bool rebuild_value{false};
+static bool ProperDependency1(const buildcc::CustomGeneratorContext &ctx) {
+  (void)ctx;
+  mock().actualCall("ProperDependency1");
+  rebuild_value = true;
+  return true;
+}
+
+static bool ProperDependency2(const buildcc::CustomGeneratorContext &ctx) {
+  (void)ctx;
+  mock().actualCall("ProperDependency2");
+  return rebuild_value;
+}
+
+// ProperDependency2 depends on ProperDependency1 completion
+TEST(CustomGeneratorTestGroup, Basic_ProperDependency_GoodCase) {
+  rebuild_value = false;
+
+  buildcc::CustomGenerator cgen("basic_proper_dependency_good_case", "");
+  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
+                  {"{gen_build_dir}/dummy_main.o"}, ProperDependency1);
+  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+                  ProperDependency2);
+  cgen.AddDependencyCb(
+      [](auto &&task_map) { task_map.at("id1").precede(task_map.at("id2")); });
+  cgen.Build();
+
+  mock().expectOneCall("ProperDependency1");
+  mock().expectOneCall("ProperDependency2");
+  buildcc::m::CustomGeneratorRunner(cgen);
+
+  // Serialization check
+  {
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+
+    const auto &internal_map = serialization.GetLoad().internal_gen_info_map;
+    CHECK_EQUAL(internal_map.size(), 2);
+  }
+
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
+}
+
+// ProperDependency2 depends on ProperDependency1 completion
+TEST(CustomGeneratorTestGroup, Basic_ProperDependency_BadCase) {
+  rebuild_value = false;
+
+  buildcc::CustomGenerator cgen("basic_proper_dependency_bad_case", "");
+  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
+                  {"{gen_build_dir}/dummy_main.o"}, ProperDependency1);
+  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+                  ProperDependency2);
+  cgen.AddDependencyCb(
+      [](auto &&task_map) { task_map.at("id2").precede(task_map.at("id1")); });
+  cgen.Build();
+
+  mock().expectOneCall("ProperDependency2");
+  buildcc::m::CustomGeneratorRunner(cgen);
+
+  // Serialization check
+  {
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        cgen.GetBinaryPath());
+    CHECK_TRUE(serialization.LoadFromFile());
+
+    const auto &internal_map = serialization.GetLoad().internal_gen_info_map;
+    CHECK_EQUAL(internal_map.size(), 0);
+  }
+
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
+}
+
 TEST(CustomGeneratorTestGroup, DefaultArgumentUsage) {
   buildcc::CustomGenerator cgen("default_argument_usage", "");
   cgen.AddPatterns({
@@ -183,7 +412,7 @@ static bool Dep2Cb(const buildcc::CustomGeneratorContext &ctx) {
   return buildcc::env::Command::Execute("");
 }
 
-static void DependencyCb(std::unordered_map<std::string, tf::Task> &task_map) {
+static void DependencyCb(std::unordered_map<std::string, tf::Task> &&task_map) {
   task_map.at("id1").precede(task_map.at("id2"));
 }
 
@@ -417,8 +646,10 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Basic) {
 
     mock().expectOneCall("RealGenerateCb");
     buildcc::env::m::CommandExpect_Execute(1, false);
-    mock().expectOneCall("RealGenerateCb");
-    buildcc::env::m::CommandExpect_Execute(1, true);
+
+    // Since there is an error above, second command does not execute (note,
+    // this is the behaviour in a single thread that is why we can
+    // check sequentially)
     buildcc::m::CustomGeneratorRunner(cgen);
 
     CHECK_TRUE(buildcc::env::get_task_state() ==
@@ -427,7 +658,7 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Basic) {
     buildcc::internal::CustomGeneratorSerialization serialization(
         cgen.GetBinaryPath());
     CHECK_TRUE(serialization.LoadFromFile());
-    CHECK_EQUAL(serialization.GetLoad().internal_gen_info_map.size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().internal_gen_info_map.size(), 0);
 
     fs::remove_all(cgen.GetBinaryPath());
   }
@@ -515,6 +746,9 @@ TEST(CustomGeneratorTestGroup, RealGenerate_RemoveAndAdd) {
                     {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
     cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
                     {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddDependencyCb([](auto &&task_map) {
+      task_map.at("id1").precede(task_map.at("id2"));
+    });
     cgen.Build();
 
     buildcc::m::CustomGeneratorExpect_IdAdded(1, &cgen);
@@ -576,6 +810,9 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Failure) {
                     {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
     cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.cpp"},
                     {"{gen_build_dir}/other_dummy_main.o"}, RealGenerateCb);
+    cgen.AddDependencyCb([](auto &&task_map) {
+      task_map.at("id1").precede(task_map.at("id2"));
+    });
     cgen.Build();
 
     mock().expectOneCall("RealGenerateCb");
@@ -609,6 +846,9 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Failure) {
                     {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
     cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.cpp"},
                     {"{gen_build_dir}/other_dummy_main.o"}, RealGenerateCb);
+    cgen.AddDependencyCb([](auto &&task_map) {
+      task_map.at("id1").precede(task_map.at("id2"));
+    });
     cgen.Build();
 
     mock().expectOneCall("RealGenerateCb");

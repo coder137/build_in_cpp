@@ -23,12 +23,13 @@ namespace buildcc {
 
 class TemplateGenerator : public CustomGenerator {
 public:
-  TemplateGenerator(const std::string &name, const TargetEnv &env)
-      : CustomGenerator(name, env) {}
+  using CustomGenerator::CustomGenerator;
+  ~TemplateGenerator() override = default;
+  TemplateGenerator(const TemplateGenerator &) = delete;
 
   void AddTemplate(const fs::path &input_filename,
                    const fs::path &output_filename);
-  std::string Parse(const std::string &pattern);
+  std::string Parse(const std::string &pattern) const;
 
   /**
    * @brief Build FileGenerator Tasks
@@ -41,6 +42,7 @@ public:
 private:
   using CustomGenerator::AddDependencyCb;
   using CustomGenerator::AddGenInfo;
+  using CustomGenerator::AddGroup;
   using CustomGenerator::Build;
 
 private:

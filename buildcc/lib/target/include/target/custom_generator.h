@@ -41,23 +41,27 @@ namespace buildcc {
 class CustomGeneratorContext {
 public:
   CustomGeneratorContext(const env::Command &c, const fs_unordered_set &i,
-                         const fs_unordered_set &o)
-      : command(c), inputs(i), outputs(o) {}
+                         const fs_unordered_set &o,
+                         const std::vector<uint8_t> &ub)
+      : command(c), inputs(i), outputs(o), userblob(ub) {}
 
-public:
   const env::Command &command;
   const fs_unordered_set &inputs;
   const fs_unordered_set &outputs;
+  const std::vector<uint8_t> &userblob;
 };
 
 // clang-format off
-typedef std::function<bool(CustomGeneratorContext &)> GenerateCb;
+using GenerateCb = std::function<bool (CustomGeneratorContext &)>;
 
-typedef std::function<void(std::unordered_map<std::string, tf::Task> &)> DependencyCb;
+using DependencyCb = std::function<void (std::unordered_map<std::string, tf::Task> &&)>;
 // clang-format on
 
 class CustomBlobHandler {
 public:
+  CustomBlobHandler() = default;
+  virtual ~CustomBlobHandler() = default;
+
   bool CheckChanged(const std::vector<uint8_t> &previous,
                     const std::vector<uint8_t> &current) const {
     env::assert_fatal(
@@ -69,7 +73,7 @@ public:
     return !IsEqual(previous, current);
   };
 
-  std::vector<uint8_t> GetSerializedData() {
+  std::vector<uint8_t> GetSerializedData() const {
     auto serialized_data = Serialize();
     env::assert_fatal(
         Verify(serialized_data),
@@ -94,12 +98,11 @@ struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
   std::unordered_map<std::string, UserGenInfo> gen_info_map;
 
   void ConvertToInternal() {
-    for (auto &r_miter : gen_info_map) {
-      r_miter.second.internal_inputs = path_schema_convert(
-          r_miter.second.inputs, internal::Path::CreateExistingPath);
-      auto p = internal_gen_info_map.emplace(r_miter.first, r_miter.second);
-      env::assert_fatal(p.second,
-                        fmt::format("Could not save {}", r_miter.first));
+    for (auto &[id, gen_info] : gen_info_map) {
+      gen_info.internal_inputs = path_schema_convert(
+          gen_info.inputs, internal::Path::CreateExistingPath);
+      auto [_, success] = internal_gen_info_map.try_emplace(id, gen_info);
+      env::assert_fatal(success, fmt::format("Could not save {}", id));
     }
   }
 };
@@ -136,6 +139,10 @@ public:
                   const GenerateCb &generate_cb,
                   std::shared_ptr<CustomBlobHandler> blob_handler = nullptr);
 
+  void AddGroup(const std::string &group_id,
+                std::initializer_list<std::string> ids,
+                const DependencyCb &dependency_cb = DependencyCb());
+
   // Callbacks
   /**
    * @brief Setup dependencies between Tasks using their `id`
@@ -168,12 +175,16 @@ public:
 private:
   void Initialize();
 
-  template <bool run> void TaskRunner(const std::string &id);
+  void TaskRunner(bool run, const std::string &id);
+  tf::Task CreateTaskRunner(tf::Subflow &subflow, bool build,
+                            const std::string &id);
 
   void GenerateTask();
-  void BuildGenerate(
-      std::unordered_map<std::string, UserGenInfo> &gen_selected_map,
-      std::unordered_map<std::string, UserGenInfo> &dummy_gen_selected_map);
+  void BuildGenerate(std::unordered_set<std::string> &gen_selected_ids,
+                     std::unordered_set<std::string> &dummy_gen_selected_ids);
+
+  void InvokeDependencyCb(std::unordered_map<std::string, tf::Task>
+                              &&registered_tasks) const noexcept;
 
   // Recheck states
   void IdRemoved();
@@ -181,7 +192,31 @@ private:
   void IdUpdated();
 
 protected:
-  env::Command command_;
+  const env::Command &ConstCommand() const { return command_; }
+  env::Command &RefCommand() { return command_; }
+
+private:
+  struct GroupMetadata {
+    std::vector<std::string> ids;
+    DependencyCb dependency_cb;
+
+    void InvokeDependencyCb(const std::string &group_id,
+                            std::unordered_map<std::string, tf::Task>
+                                &&registered_tasks) const noexcept {
+      if (!dependency_cb) {
+        return;
+      }
+      try {
+        dependency_cb(std::move(registered_tasks));
+      } catch (...) {
+        env::log_critical(
+            __FUNCTION__,
+            fmt::format("Dependency callback failed for group id {}",
+                        group_id));
+        env::set_task_state(env::TaskState::FAILURE);
+      }
+    }
+  };
 
 private:
   std::string name_;
@@ -190,11 +225,14 @@ private:
 
   // Serialization
   UserCustomGeneratorSchema user_;
+  std::unordered_map<std::string, GroupMetadata> grouped_ids_;
+  std::unordered_set<std::string> ungrouped_ids_;
 
   std::mutex success_schema_mutex_;
   std::unordered_map<std::string, UserGenInfo> success_schema_;
 
   // Internal
+  env::Command command_;
   tf::Taskflow tf_;
 
   // Callbacks
