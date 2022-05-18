@@ -746,6 +746,9 @@ TEST(CustomGeneratorTestGroup, RealGenerate_RemoveAndAdd) {
                     {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
     cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
                     {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddDependencyCb([](auto &&task_map) {
+      task_map.at("id1").precede(task_map.at("id2"));
+    });
     cgen.Build();
 
     buildcc::m::CustomGeneratorExpect_IdAdded(1, &cgen);
@@ -807,6 +810,9 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Failure) {
                     {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
     cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.cpp"},
                     {"{gen_build_dir}/other_dummy_main.o"}, RealGenerateCb);
+    cgen.AddDependencyCb([](auto &&task_map) {
+      task_map.at("id1").precede(task_map.at("id2"));
+    });
     cgen.Build();
 
     mock().expectOneCall("RealGenerateCb");
@@ -840,6 +846,9 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Failure) {
                     {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
     cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.cpp"},
                     {"{gen_build_dir}/other_dummy_main.o"}, RealGenerateCb);
+    cgen.AddDependencyCb([](auto &&task_map) {
+      task_map.at("id1").precede(task_map.at("id2"));
+    });
     cgen.Build();
 
     mock().expectOneCall("RealGenerateCb");
