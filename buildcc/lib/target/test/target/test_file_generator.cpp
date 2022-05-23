@@ -54,9 +54,11 @@ TEST(FileGeneratorTestGroup, Generator_Identifier) {
   generator.AddPatterns({
       {"compiler", "gcc"},
   });
+  generator.AddPattern("dummy_main_c", "{gen_root_dir}/dummy_main.c");
+  generator.AddPattern("dummy_main_exe", "{gen_build_dir}/dummy_main.exe");
 
-  generator.AddInput("{gen_root_dir}/dummy_main.c", "dummy_main_c");
-  generator.AddOutput("{gen_build_dir}/dummy_main.exe", "dummy_main_exe");
+  generator.AddInput("{dummy_main_c}");
+  generator.AddOutput("{dummy_main_exe}");
   generator.AddCommand("{compiler} -o {dummy_main_exe} {dummy_main_c}");
 
   buildcc::env::m::CommandExpect_Execute(1, true);
