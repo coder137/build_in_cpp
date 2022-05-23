@@ -19,10 +19,14 @@
 namespace buildcc {
 
 void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe) {
-  generator.AddInput("{gen_root_dir}/path.fbs", "path_fbs");
-  generator.AddInput("{gen_root_dir}/custom_generator.fbs",
-                     "custom_generator_fbs");
-  generator.AddInput("{gen_root_dir}/target.fbs", "target_fbs");
+  generator.AddPattern("path_fbs", "{gen_root_dir}/path.fbs");
+  generator.AddPattern("custom_generator_fbs",
+                       "{gen_root_dir}/custom_generator.fbs");
+  generator.AddPattern("target_fbs", "{gen_root_dir}/target.fbs");
+
+  generator.AddInput("{path_fbs}");
+  generator.AddInput("{custom_generator_fbs}");
+  generator.AddInput("{target_fbs}");
 
   generator.AddOutput("{gen_build_dir}/path_generated.h");
   generator.AddOutput("{gen_build_dir}/custom_generator_generated.h");
