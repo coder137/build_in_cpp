@@ -134,8 +134,9 @@ public:
    * @param generate_cb User-defined generate callback to build outputs from the
    * provided inputs
    */
-  void AddGenInfo(const std::string &id, const fs_unordered_set &inputs,
-                  const fs_unordered_set &outputs,
+  void AddGenInfo(const std::string &id,
+                  const std::unordered_set<std::string> &inputs,
+                  const std::unordered_set<std::string> &outputs,
                   const GenerateCb &generate_cb,
                   std::shared_ptr<CustomBlobHandler> blob_handler = nullptr);
 
@@ -192,6 +193,11 @@ private:
   void IdUpdated();
 
 protected:
+  std::string ParsePattern(const std::string &pattern,
+                           const std::unordered_map<const char *, std::string>
+                               &arguments = {}) const {
+    return command_.Construct(pattern, arguments);
+  }
   const env::Command &ConstCommand() const { return command_; }
   env::Command &RefCommand() { return command_; }
 
