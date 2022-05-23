@@ -97,14 +97,16 @@ static void c_target_cb(BaseTarget &ctarget, const FileGenerator &c_generator) {
 }
 
 static void cpp_generator_cb(FileGenerator &generator) {
-  generator.AddOutput("{gen_build_dir}/main.cpp", "main_cpp");
+  generator.AddPattern("main_cpp", "{gen_build_dir}/main.cpp");
+  generator.AddOutput("{main_cpp}");
   generator.AddCommand("python3 {gen_root_dir}/python/gen.py --source_type cpp "
                        "--destination {main_cpp}");
   generator.Build();
 }
 
 static void c_generator_cb(FileGenerator &generator) {
-  generator.AddOutput("{gen_build_dir}/main.c", "main_c");
+  generator.AddPattern("main_c", "{gen_build_dir}/main.c");
+  generator.AddOutput("{main_c}");
   generator.AddCommand("python3 {gen_root_dir}/python/gen.py --source_type c "
                        "--destination {main_c}");
   generator.Build();
