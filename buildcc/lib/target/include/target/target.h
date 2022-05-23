@@ -83,9 +83,6 @@ public:
   // Builders
   void Build() override;
 
-  // Getters
-  env::TaskState GetTaskState() const noexcept { return task_state_; }
-
 private:
   friend class internal::CompilePch;
   friend class internal::CompileObject;
@@ -112,14 +109,7 @@ private:
                      const std::vector<std::string> &current_external_libs);
 
   // Tasks
-  void SetTaskStateFailure();
-  int GetTaskStateAsInt() const noexcept {
-    return static_cast<int>(task_state_);
-  }
-
-  void StartTask();
   void EndTask();
-  tf::Task CheckStateTask();
   void TaskDeps();
 
   // Callbacks for unit tests
@@ -151,8 +141,6 @@ private:
   // Task states
   tf::Task target_start_task_;
   tf::Task target_end_task_;
-  std::mutex task_state_mutex_;
-  env::TaskState task_state_{env::TaskState::SUCCESS};
 };
 
 typedef Target BaseTarget;

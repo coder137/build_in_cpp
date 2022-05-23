@@ -97,10 +97,6 @@ void Target::Build() {
   // Load the serialized file
   (void)serialization_.LoadFromFile();
 
-  // Target State Tasks
-  StartTask();
-  EndTask();
-
   // PCH Compile
   if (state_.ContainsPch()) {
     command_.AddDefaultArguments({
@@ -118,6 +114,9 @@ void Target::Build() {
         {kPchObjectOutput, ""},
     });
   }
+
+  // Target State Tasks
+  EndTask();
 
   // Compile Command
   compile_object_.CacheCompileCommands();

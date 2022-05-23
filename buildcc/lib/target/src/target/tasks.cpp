@@ -36,39 +36,7 @@ constexpr const char *const kLinkTaskName = "Target";
 
 } // namespace
 
-namespace buildcc {
-
-void Target::SetTaskStateFailure() {
-  std::lock_guard<std::mutex> guard(task_state_mutex_);
-  task_state_ = env::TaskState::FAILURE;
-}
-
-tf::Task Target::CheckStateTask() {
-  // NOTE, For now we only have 2 states
-  // 0 -> SUCCESS
-  // 1 -> FAILURE
-  // * When more states are added make sure to handle them explicitly
-  return tf_.emplace([&]() { return GetTaskStateAsInt(); })
-      .name(kCheckTaskName);
-}
-
-void Target::StartTask() {
-  // Return 0 for success
-  // Return 1 for failure
-  target_start_task_ = tf_.emplace([&]() {
-    switch (env::get_task_state()) {
-    case env::TaskState::SUCCESS:
-      break;
-    default:
-      SetTaskStateFailure();
-      break;
-    };
-    return GetTaskStateAsInt();
-  });
-  target_start_task_.name(kStartTaskName);
-}
-
-} // namespace buildcc
+namespace buildcc {} // namespace buildcc
 
 namespace buildcc::internal {
 
@@ -78,11 +46,15 @@ namespace buildcc::internal {
 // 3. Successfully compiled sources are added to `compiled_pch_files_`
 void CompilePch::Task() {
   task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
+    if (env::get_task_state() != env::TaskState::SUCCESS) {
+      return;
+    }
+
     try {
       BuildCompile();
       target_.serialization_.UpdatePchCompiled(target_.user_);
     } catch (...) {
-      target_.SetTaskStateFailure();
+      env::set_task_state(env::TaskState::FAILURE);
     }
 
     // For Graph generation
@@ -107,6 +79,10 @@ void CompilePch::Task() {
 // serialization schema
 void CompileObject::Task() {
   compile_task_ = target_.tf_.emplace([&](tf::Subflow &subflow) {
+    if (env::get_task_state() != env::TaskState::SUCCESS) {
+      return;
+    }
+
     std::vector<internal::Path> selected_source_files;
     std::vector<internal::Path> selected_dummy_source_files;
 
@@ -127,7 +103,7 @@ void CompileObject::Task() {
                 env::assert_fatal(success, "Could not compile source");
                 target_.serialization_.AddSource(s);
               } catch (...) {
-                target_.SetTaskStateFailure();
+                env::set_task_state(env::TaskState::FAILURE);
               }
             })
             .name(name);
@@ -140,7 +116,7 @@ void CompileObject::Task() {
         (void)subflow.placeholder().name(name);
       }
     } catch (...) {
-      target_.SetTaskStateFailure();
+      env::set_task_state(env::TaskState::FAILURE);
     }
   });
   compile_task_.name(kCompileTaskName);
@@ -152,10 +128,13 @@ void CompileObject::Task() {
 // 3. Successfully linking the target sets link state
 void LinkTarget::Task() {
   task_ = target_.tf_.emplace([&]() {
+    if (env::get_task_state() != env::TaskState::SUCCESS) {
+      return;
+    }
     try {
       BuildLink();
     } catch (...) {
-      target_.SetTaskStateFailure();
+      env::set_task_state(env::TaskState::FAILURE);
     }
   });
   task_.name(kLinkTaskName);
@@ -174,13 +153,8 @@ void Target::EndTask() {
                           fmt::format("Store failed for {}", GetName()));
         state_.BuildCompleted();
       } catch (...) {
-        SetTaskStateFailure();
+        env::set_task_state(env::TaskState::FAILURE);
       }
-    }
-
-    // Update env task state
-    if (task_state_ != env::TaskState::SUCCESS) {
-      env::set_task_state(GetTaskState());
     }
   });
   target_end_task_.name(kEndTaskName);
@@ -188,17 +162,9 @@ void Target::EndTask() {
 
 void Target::TaskDeps() {
   if (state_.ContainsPch()) {
-    target_start_task_.precede(compile_pch_.GetTask(), target_end_task_);
-    tf::Task pch_check_state_task = CheckStateTask();
-    compile_pch_.GetTask().precede(pch_check_state_task);
-    pch_check_state_task.precede(compile_object_.GetTask(), target_end_task_);
-  } else {
-    target_start_task_.precede(compile_object_.GetTask(), target_end_task_);
+    compile_pch_.GetTask().precede(compile_object_.GetTask());
   }
-
-  tf::Task object_check_state_task = CheckStateTask();
-  compile_object_.GetTask().precede(object_check_state_task);
-  object_check_state_task.precede(link_target_.GetTask(), target_end_task_);
+  compile_object_.GetTask().precede(link_target_.GetTask());
   link_target_.GetTask().precede(target_end_task_);
 }
 
