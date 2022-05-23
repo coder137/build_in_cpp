@@ -44,15 +44,11 @@ bool template_generate_cb(const buildcc::CustomGeneratorContext &ctx) {
 
 namespace buildcc {
 
-void TemplateGenerator::AddTemplate(const fs::path &input_filename,
-                                    const fs::path &output_filename) {
+void TemplateGenerator::AddTemplate(std::string_view absolute_input_pattern,
+                                    std::string_view absolute_output_pattern) {
   TemplateInfo info;
-  info.input = internal::Path::CreateNewPath(
-                   RefCommand().Construct(path_as_string(input_filename)))
-                   .GetPathname();
-  info.output = internal::Path::CreateNewPath(
-                    RefCommand().Construct(path_as_string(output_filename)))
-                    .GetPathname();
+  info.input_pattern = absolute_input_pattern;
+  info.output_pattern = absolute_output_pattern;
   template_infos_.emplace_back(std::move(info));
 }
 
@@ -67,9 +63,11 @@ std::string TemplateGenerator::Parse(const std::string &pattern) const {
  */
 void TemplateGenerator::Build() {
   for (const auto &info : template_infos_) {
-    std::string name =
-        info.input.lexically_relative(Project::GetRootDir()).string();
-    AddGenInfo(name, {info.input}, {info.output}, template_generate_cb);
+    std::string name = string_as_path(ParsePattern(info.input_pattern))
+                           .lexically_relative(Project::GetRootDir())
+                           .string();
+    AddGenInfo(name, {info.input_pattern}, {info.output_pattern},
+               template_generate_cb);
   }
   this->CustomGenerator::Build();
 }
