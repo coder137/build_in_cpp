@@ -77,7 +77,7 @@ public:
         compile_pch_(*this), compile_object_(*this), link_target_(*this) {
     Initialize();
   }
-  virtual ~Target() {}
+  virtual ~Target() = default;
   Target(const Target &target) = delete;
 
   // Builders
