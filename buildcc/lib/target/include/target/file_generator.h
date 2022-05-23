@@ -35,8 +35,7 @@ public:
    * If `identifier` is supplied it is added to default arguments as a key
    * Example: fmt::format("{identifier}") -> "absolute_input_pattern"
    */
-  void AddInput(const std::string &absolute_input_pattern,
-                const char *identifier = nullptr);
+  void AddInput(const std::string &absolute_input_pattern);
 
   /**
    * @brief Add absolute output path pattern to generator
@@ -46,8 +45,7 @@ public:
    * If `identifier` is supplied it is added to default arguments as a key
    * Example: fmt::format("{identifier}") -> "absolute_output_pattern"
    */
-  void AddOutput(const std::string &absolute_output_pattern,
-                 const char *identifier = nullptr);
+  void AddOutput(const std::string &absolute_output_pattern);
 
   /**
    * @brief Add a command_pattern that is fed to `Command::Execute` internally
@@ -77,8 +75,8 @@ private:
 
 private:
   //
-  internal::fs_unordered_set inputs_;
-  internal::fs_unordered_set outputs_;
+  std::unordered_set<std::string> inputs_;
+  std::unordered_set<std::string> outputs_;
   std::vector<std::string> commands_;
 };
 
