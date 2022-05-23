@@ -20,8 +20,6 @@
 #include <filesystem>
 #include <functional>
 #include <string>
-
-// The Path class defined below is meant to be used with Sets
 #include <unordered_set>
 
 // Env
@@ -44,7 +42,6 @@ public:
    * @param pathname
    * @return Path
    */
-  // TODO, Discuss if we should return `std::optional` instead of asserting
   static Path CreateExistingPath(const fs::path &pathname) {
     std::error_code errcode;
     uint64_t last_write_timestamp =
@@ -109,7 +106,7 @@ public:
 private:
   explicit Path(const fs::path &pathname, std::uint64_t last_write_timestamp)
       : pathname_(pathname), last_write_timestamp_(last_write_timestamp) {
-    pathname_.make_preferred();
+    pathname_.lexically_normal().make_preferred();
   }
 
   std::string Quote(const std::string &str) const {
@@ -140,8 +137,8 @@ public:
   size_t operator()(const fs::path &p) const { return fs::hash_value(p); }
 };
 
-typedef std::unordered_set<Path, PathHash> path_unordered_set;
-typedef std::unordered_set<fs::path, PathHash> fs_unordered_set;
+using path_unordered_set = std::unordered_set<Path, PathHash>;
+using fs_unordered_set = std::unordered_set<fs::path, PathHash>;
 
 inline std::vector<Path>
 path_schema_convert(const std::vector<fs::path> &path_list,
@@ -182,7 +179,15 @@ inline std::string path_as_string(const fs::path &p) {
   return internal::Path::CreateNewPath(p).GetPathAsString();
 }
 
-typedef internal::fs_unordered_set fs_unordered_set;
+inline std::string path_as_display_string(const fs::path &p) {
+  return internal::Path::CreateNewPath(p).GetPathAsStringForDisplay();
+}
+
+inline fs::path string_as_path(const std::string &str) {
+  return internal::Path::CreateNewPath(str).GetPathname();
+}
+
+using fs_unordered_set = internal::fs_unordered_set;
 
 } // namespace buildcc
 
@@ -191,9 +196,8 @@ typedef internal::fs_unordered_set fs_unordered_set;
 template <> struct fmt::formatter<fs::path> : formatter<std::string> {
   template <typename FormatContext>
   auto format(const fs::path &p, FormatContext &ctx) {
-    return formatter<std::string>::format(
-        buildcc::internal::Path::CreateNewPath(p).GetPathAsStringForDisplay(),
-        ctx);
+    return formatter<std::string>::format(buildcc::path_as_display_string(p),
+                                          ctx);
   }
 };
 
