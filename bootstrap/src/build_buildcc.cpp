@@ -19,26 +19,26 @@
 namespace buildcc {
 
 void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe) {
-  generator.AddPattern("path_fbs", "{gen_root_dir}/path.fbs");
+  generator.AddPattern("path_fbs", "{current_root_dir}/path.fbs");
   generator.AddPattern("custom_generator_fbs",
-                       "{gen_root_dir}/custom_generator.fbs");
-  generator.AddPattern("target_fbs", "{gen_root_dir}/target.fbs");
+                       "{current_root_dir}/custom_generator.fbs");
+  generator.AddPattern("target_fbs", "{current_root_dir}/target.fbs");
 
   generator.AddInput("{path_fbs}");
   generator.AddInput("{custom_generator_fbs}");
   generator.AddInput("{target_fbs}");
 
-  generator.AddOutput("{gen_build_dir}/path_generated.h");
-  generator.AddOutput("{gen_build_dir}/custom_generator_generated.h");
-  generator.AddOutput("{gen_build_dir}/target_generated.h");
+  generator.AddOutput("{current_build_dir}/path_generated.h");
+  generator.AddOutput("{current_build_dir}/custom_generator_generated.h");
+  generator.AddOutput("{current_build_dir}/target_generated.h");
 
   generator.AddPatterns({
       {"flatc_compiler", fmt::format("{}", flatc_exe.GetTargetPath())},
   });
   //   generator.AddCommand("{flatc_compiler} --help");
-  generator.AddCommand(
-      "{flatc_compiler} -o {gen_build_dir} -I {gen_root_dir} --gen-object-api "
-      "--cpp {path_fbs} {custom_generator_fbs} {target_fbs}");
+  generator.AddCommand("{flatc_compiler} -o {current_build_dir} -I "
+                       "{current_root_dir} --gen-object-api "
+                       "--cpp {path_fbs} {custom_generator_fbs} {target_fbs}");
 
   generator.Build();
 }
@@ -49,7 +49,7 @@ void buildcc_cb(BaseTarget &target, const FileGenerator &schema_gen,
                 const TargetInfo &taskflow_ho, const BaseTarget &tpl) {
   // NOTE, Build as single lib
   target.AddIncludeDir("", true);
-  const std::string &schema_build_dir = schema_gen.Get("gen_build_dir");
+  const std::string &schema_build_dir = schema_gen.Get("current_build_dir");
   target.AddIncludeDirAbsolute(schema_build_dir, true);
 
   // ENV
