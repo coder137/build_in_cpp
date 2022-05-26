@@ -47,10 +47,10 @@ TEST(TemplateGeneratorTestGroup, Basic_InputParse) {
       {"hello", "Hello"},
       {"world", "World"},
   });
-  generator.AddTemplate("{gen_root_dir}/template/default_values.txt.in",
-                        "{gen_build_dir}/default_values.txt");
-  generator.AddTemplate("{gen_root_dir}/template/hello_world.txt.in",
-                        "{gen_build_dir}/hello_world.txt");
+  generator.AddTemplate("{current_root_dir}/template/default_values.txt.in",
+                        "{current_build_dir}/default_values.txt");
+  generator.AddTemplate("{current_root_dir}/template/hello_world.txt.in",
+                        "{current_build_dir}/hello_world.txt");
   generator.Build();
 
   buildcc::m::CustomGeneratorRunner(generator);
@@ -65,8 +65,8 @@ TEST(TemplateGeneratorTestGroup, Basic_SaveFailure) {
 
     fs::create_directories(generator.GetBuildDir() / "default_values.txt");
 
-    generator.AddTemplate("{gen_root_dir}/template/default_values.txt.in",
-                          "{gen_build_dir}/default_values.txt");
+    generator.AddTemplate("{current_root_dir}/template/default_values.txt.in",
+                          "{current_build_dir}/default_values.txt");
     generator.Build();
 
     buildcc::m::CustomGeneratorRunner(generator);
@@ -81,8 +81,8 @@ TEST(TemplateGeneratorTestGroup, Basic_LoadFailure) {
 
     fs::create_directories(generator.GetBuildDir() / "default_values.txt.in");
 
-    generator.AddTemplate("{gen_build_dir}/default_values.txt.in",
-                          "{gen_build_dir}/default_values.txt");
+    generator.AddTemplate("{current_build_dir}/default_values.txt.in",
+                          "{current_build_dir}/default_values.txt");
     generator.Build();
 
     buildcc::m::CustomGeneratorRunner(generator);

@@ -35,10 +35,10 @@ TEST(FileGeneratorTestGroup, Generator_Build) {
       {"compiler", "gcc"},
   });
 
-  generator.AddInput("{gen_root_dir}/dummy_main.c");
-  generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-  generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                       "{gen_root_dir}/dummy_main.c");
+  generator.AddInput("{current_root_dir}/dummy_main.c");
+  generator.AddOutput("{current_build_dir}/dummy_main.exe");
+  generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                       "{current_root_dir}/dummy_main.c");
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   generator.Build();
@@ -54,8 +54,8 @@ TEST(FileGeneratorTestGroup, Generator_Identifier) {
   generator.AddPatterns({
       {"compiler", "gcc"},
   });
-  generator.AddPattern("dummy_main_c", "{gen_root_dir}/dummy_main.c");
-  generator.AddPattern("dummy_main_exe", "{gen_build_dir}/dummy_main.exe");
+  generator.AddPattern("dummy_main_c", "{current_root_dir}/dummy_main.c");
+  generator.AddPattern("dummy_main_exe", "{current_build_dir}/dummy_main.exe");
 
   generator.AddInput("{dummy_main_c}");
   generator.AddOutput("{dummy_main_exe}");
@@ -72,10 +72,10 @@ TEST(FileGeneratorTestGroup, Generator_Rebuild) {
   constexpr const char *const NAME = "Rebuild";
   {
     buildcc::FileGenerator generator(NAME, "");
-    generator.AddInput("{gen_root_dir}/dummy_main.c");
-    generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-    generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                         "{gen_root_dir}/dummy_main.c",
+    generator.AddInput("{current_root_dir}/dummy_main.c");
+    generator.AddOutput("{current_build_dir}/dummy_main.exe");
+    generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                         "{current_root_dir}/dummy_main.c",
                          {
                              {"compiler", "gcc"},
                          });
@@ -87,10 +87,10 @@ TEST(FileGeneratorTestGroup, Generator_Rebuild) {
 
   {
     buildcc::FileGenerator generator(NAME, "");
-    generator.AddInput("{gen_root_dir}/dummy_main.c");
-    generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-    generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                         "{gen_root_dir}/dummy_main.c",
+    generator.AddInput("{current_root_dir}/dummy_main.c");
+    generator.AddOutput("{current_build_dir}/dummy_main.exe");
+    generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                         "{current_root_dir}/dummy_main.c",
                          {
                              {"compiler", "gcc"},
                          });
@@ -107,10 +107,10 @@ TEST(FileGeneratorTestGroup, Generator_Rebuild_Inputs) {
 
   {
     buildcc::FileGenerator generator(NAME, "");
-    generator.AddInput("{gen_root_dir}/new_source.cpp");
-    generator.AddOutput("{gen_build_dir}/new_source.exe");
-    generator.AddCommand("gcc -o {gen_build_dir}/new_source.exe "
-                         "{gen_root_dir}/new_source.cpp");
+    generator.AddInput("{current_root_dir}/new_source.cpp");
+    generator.AddOutput("{current_build_dir}/new_source.exe");
+    generator.AddCommand("gcc -o {current_build_dir}/new_source.exe "
+                         "{current_root_dir}/new_source.cpp");
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
@@ -121,9 +121,9 @@ TEST(FileGeneratorTestGroup, Generator_Rebuild_Inputs) {
   // Removed
   {
     buildcc::FileGenerator generator(NAME, "");
-    generator.AddOutput("{gen_build_dir}/new_source.exe");
-    generator.AddCommand("gcc -o {gen_build_dir}/new_source.exe "
-                         "{gen_root_dir}/new_source.cpp");
+    generator.AddOutput("{current_build_dir}/new_source.exe");
+    generator.AddCommand("gcc -o {current_build_dir}/new_source.exe "
+                         "{current_root_dir}/new_source.cpp");
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
@@ -134,10 +134,10 @@ TEST(FileGeneratorTestGroup, Generator_Rebuild_Inputs) {
   // Added
   {
     buildcc::FileGenerator generator(NAME, "");
-    generator.AddInput("{gen_root_dir}/new_source.cpp");
-    generator.AddOutput("{gen_build_dir}/new_source.cpp.exe");
-    generator.AddCommand("gcc -o {gen_build_dir}/new_source.cpp.exe "
-                         "{gen_root_dir}/new_source.cpp");
+    generator.AddInput("{current_root_dir}/new_source.cpp");
+    generator.AddOutput("{current_build_dir}/new_source.cpp.exe");
+    generator.AddCommand("gcc -o {current_build_dir}/new_source.cpp.exe "
+                         "{current_root_dir}/new_source.cpp");
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
@@ -153,10 +153,10 @@ TEST(FileGeneratorTestGroup, Generator_Rebuild_Inputs) {
   // Updated
   {
     buildcc::FileGenerator generator(NAME, "");
-    generator.AddInput("{gen_root_dir}/new_source.cpp");
-    generator.AddOutput("{gen_build_dir}/new_source.cpp.exe");
-    generator.AddCommand("gcc -o {gen_build_dir}/new_source.cpp.exe "
-                         "{gen_root_dir}/new_source.cpp");
+    generator.AddInput("{current_root_dir}/new_source.cpp");
+    generator.AddOutput("{current_build_dir}/new_source.cpp.exe");
+    generator.AddCommand("gcc -o {current_build_dir}/new_source.cpp.exe "
+                         "{current_root_dir}/new_source.cpp");
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
@@ -170,10 +170,10 @@ TEST(FileGeneratorTestGroup, Generator_Rebuild_Outputs) {
   constexpr const char *const NAME = "Rebuild_Outputs";
   {
     buildcc::FileGenerator generator(NAME, "");
-    generator.AddInput("{gen_root_dir}/dummy_main.c");
-    generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-    generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                         "{gen_root_dir}/dummy_main.c",
+    generator.AddInput("{current_root_dir}/dummy_main.c");
+    generator.AddOutput("{current_build_dir}/dummy_main.exe");
+    generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                         "{current_root_dir}/dummy_main.c",
                          {
                              {"compiler", "gcc"},
                          });
@@ -185,9 +185,9 @@ TEST(FileGeneratorTestGroup, Generator_Rebuild_Outputs) {
 
   {
     buildcc::FileGenerator generator(NAME, "");
-    generator.AddInput("{gen_root_dir}/dummy_main.c");
-    generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                         "{gen_root_dir}/dummy_main.c",
+    generator.AddInput("{current_root_dir}/dummy_main.c");
+    generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                         "{current_root_dir}/dummy_main.c",
                          {
                              {"compiler", "gcc"},
                          });
@@ -199,10 +199,10 @@ TEST(FileGeneratorTestGroup, Generator_Rebuild_Outputs) {
 
   {
     buildcc::FileGenerator generator(NAME, "");
-    generator.AddInput("{gen_root_dir}/dummy_main.c");
-    generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-    generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                         "{gen_root_dir}/dummy_main.c",
+    generator.AddInput("{current_root_dir}/dummy_main.c");
+    generator.AddOutput("{current_build_dir}/dummy_main.exe");
+    generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                         "{current_root_dir}/dummy_main.c",
                          {
                              {"compiler", "gcc"},
                          });
@@ -219,10 +219,10 @@ TEST(FileGeneratorTestGroup, Generator_Rebuild_Commands) {
   constexpr const char *const NAME = "Rebuild_Commands";
   {
     buildcc::FileGenerator generator(NAME, "");
-    generator.AddInput("{gen_root_dir}/dummy_main.c");
-    generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-    generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                         "{gen_root_dir}/dummy_main.c",
+    generator.AddInput("{current_root_dir}/dummy_main.c");
+    generator.AddOutput("{current_build_dir}/dummy_main.exe");
+    generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                         "{current_root_dir}/dummy_main.c",
                          {
                              {"compiler", "gcc"},
                          });
@@ -234,9 +234,9 @@ TEST(FileGeneratorTestGroup, Generator_Rebuild_Commands) {
 
   {
     buildcc::FileGenerator generator(NAME, "");
-    generator.AddInput("{gen_root_dir}/dummy_main.c");
-    generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-    generator.AddCommand("{compiler} {gen_root_dir}/dummy_main.c",
+    generator.AddInput("{current_root_dir}/dummy_main.c");
+    generator.AddOutput("{current_build_dir}/dummy_main.exe");
+    generator.AddCommand("{compiler} {current_root_dir}/dummy_main.c",
                          {
                              {"compiler", "gcc"},
                          });
@@ -248,10 +248,10 @@ TEST(FileGeneratorTestGroup, Generator_Rebuild_Commands) {
 
   {
     buildcc::FileGenerator generator(NAME, "");
-    generator.AddInput("{gen_root_dir}/dummy_main.c");
-    generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-    generator.AddCommand("gcc -o {gen_build_dir}/dummy_main.exe "
-                         "{gen_root_dir}/dummy_main.c");
+    generator.AddInput("{current_root_dir}/dummy_main.c");
+    generator.AddOutput("{current_build_dir}/dummy_main.exe");
+    generator.AddCommand("gcc -o {current_build_dir}/dummy_main.exe "
+                         "{current_root_dir}/dummy_main.c");
 
     buildcc::env::m::CommandExpect_Execute(1, true);
     generator.Build();
@@ -285,10 +285,10 @@ TEST(FileGeneratorTestGroup, Generator_FailedEnvTaskState) {
       {"compiler", "gcc"},
   });
 
-  generator.AddInput("{gen_root_dir}/dummy_main.c");
-  generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-  generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                       "{gen_root_dir}/dummy_main.c");
+  generator.AddInput("{current_root_dir}/dummy_main.c");
+  generator.AddOutput("{current_build_dir}/dummy_main.exe");
+  generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                       "{current_root_dir}/dummy_main.c");
 
   generator.Build();
   buildcc::m::CustomGeneratorRunner(generator);
@@ -306,10 +306,10 @@ TEST(FileGeneratorTestGroup, Generator_FailedGenerateConvert) {
       {"compiler", "gcc"},
   });
 
-  generator.AddInput("{gen_root_dir}/this_file_does_not_exist.c");
-  generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-  generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                       "{gen_root_dir}/dummy_main.c");
+  generator.AddInput("{current_root_dir}/this_file_does_not_exist.c");
+  generator.AddOutput("{current_build_dir}/dummy_main.exe");
+  generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                       "{current_root_dir}/dummy_main.c");
 
   generator.Build();
   buildcc::m::CustomGeneratorRunner(generator);
@@ -329,10 +329,10 @@ TEST(FileGeneratorTestGroup, Generator_FailedGenerateCommand) {
       {"compiler", "gcc"},
   });
 
-  generator.AddInput("{gen_root_dir}/dummy_main.c");
-  generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-  generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                       "{gen_root_dir}/dummy_main.c");
+  generator.AddInput("{current_root_dir}/dummy_main.c");
+  generator.AddOutput("{current_build_dir}/dummy_main.exe");
+  generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                       "{current_root_dir}/dummy_main.c");
 
   buildcc::env::m::CommandExpect_Execute(1, false);
   generator.Build();
@@ -354,10 +354,10 @@ TEST(FileGeneratorTestGroup, Generator_FailedStore) {
       {"compiler", "gcc"},
   });
 
-  generator.AddInput("{gen_root_dir}/dummy_main.c");
-  generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-  generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                       "{gen_root_dir}/dummy_main.c");
+  generator.AddInput("{current_root_dir}/dummy_main.c");
+  generator.AddOutput("{current_build_dir}/dummy_main.exe");
+  generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                       "{current_root_dir}/dummy_main.c");
 
   buildcc::env::m::CommandExpect_Execute(1, true);
   generator.Build();
@@ -382,10 +382,10 @@ TEST(FileGeneratorTestGroup, FailedEnvTaskState_Rebuild) {
         {"compiler", "gcc"},
     });
 
-    generator.AddInput("{gen_root_dir}/dummy_main.c");
-    generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-    generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                         "{gen_root_dir}/dummy_main.c");
+    generator.AddInput("{current_root_dir}/dummy_main.c");
+    generator.AddOutput("{current_build_dir}/dummy_main.exe");
+    generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                         "{current_root_dir}/dummy_main.c");
 
     generator.Build();
     buildcc::m::CustomGeneratorRunner(generator);
@@ -402,10 +402,10 @@ TEST(FileGeneratorTestGroup, FailedEnvTaskState_Rebuild) {
         {"compiler", "gcc"},
     });
 
-    generator.AddInput("{gen_root_dir}/dummy_main.c");
-    generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-    generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                         "{gen_root_dir}/dummy_main.c");
+    generator.AddInput("{current_root_dir}/dummy_main.c");
+    generator.AddOutput("{current_build_dir}/dummy_main.exe");
+    generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                         "{current_root_dir}/dummy_main.c");
 
     generator.Build();
     buildcc::env::m::CommandExpect_Execute(1, true);
@@ -425,10 +425,10 @@ TEST(FileGeneratorTestGroup, FailedGenerateCommand_Rebuild) {
         {"compiler", "gcc"},
     });
 
-    generator.AddInput("{gen_root_dir}/dummy_main.c");
-    generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-    generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                         "{gen_root_dir}/dummy_main.c");
+    generator.AddInput("{current_root_dir}/dummy_main.c");
+    generator.AddOutput("{current_build_dir}/dummy_main.exe");
+    generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                         "{current_root_dir}/dummy_main.c");
 
     buildcc::env::m::CommandExpect_Execute(1, false);
     generator.Build();
@@ -446,10 +446,10 @@ TEST(FileGeneratorTestGroup, FailedGenerateCommand_Rebuild) {
         {"compiler", "gcc"},
     });
 
-    generator.AddInput("{gen_root_dir}/dummy_main.c");
-    generator.AddOutput("{gen_build_dir}/dummy_main.exe");
-    generator.AddCommand("{compiler} -o {gen_build_dir}/dummy_main.exe "
-                         "{gen_root_dir}/dummy_main.c");
+    generator.AddInput("{current_root_dir}/dummy_main.c");
+    generator.AddOutput("{current_build_dir}/dummy_main.exe");
+    generator.AddCommand("{compiler} -o {current_build_dir}/dummy_main.exe "
+                         "{current_root_dir}/dummy_main.c");
 
     buildcc::m::CustomGeneratorExpect_IdAdded(1, &generator);
     buildcc::env::m::CommandExpect_Execute(1, true);

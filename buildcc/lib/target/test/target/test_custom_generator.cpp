@@ -35,9 +35,9 @@ static bool BasicGenerateCb(const buildcc::CustomGeneratorContext &ctx) {
 
 TEST(CustomGeneratorTestGroup, Basic) {
   buildcc::CustomGenerator cgen("basic", "");
-  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
-                  {"{gen_build_dir}/dummy_main.o"}, BasicGenerateCb);
-  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+  cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.c"},
+                  {"{current_build_dir}/dummy_main.o"}, BasicGenerateCb);
+  cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
                   BasicGenerateCb);
   cgen.Build();
 
@@ -65,8 +65,9 @@ TEST(CustomGeneratorTestGroup, Basic) {
 
 TEST(CustomGeneratorTestGroup, Basic_Failure) {
   buildcc::CustomGenerator cgen("basic_failure", "");
-  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"}, {}, BasicGenerateCb);
-  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+  cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.c"}, {},
+                  BasicGenerateCb);
+  cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
                   BasicGenerateCb);
   cgen.Build();
 
@@ -87,9 +88,9 @@ TEST(CustomGeneratorTestGroup, Basic_Failure) {
 
 TEST(CustomGeneratorTestGroup, Basic_Group) {
   buildcc::CustomGenerator cgen("basic_group", "");
-  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
-                  {"{gen_build_dir}/dummy_main.o"}, BasicGenerateCb);
-  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+  cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.c"},
+                  {"{current_build_dir}/dummy_main.o"}, BasicGenerateCb);
+  cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
                   BasicGenerateCb);
   cgen.AddGroup("grouped_id1_and_id2", {"id1", "id2"});
   cgen.Build();
@@ -118,9 +119,9 @@ TEST(CustomGeneratorTestGroup, Basic_Group) {
 
 TEST(CustomGeneratorTestGroup, Basic_Group_Dependency) {
   buildcc::CustomGenerator cgen("basic_group_dependency", "");
-  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
-                  {"{gen_build_dir}/dummy_main.o"}, BasicGenerateCb);
-  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+  cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.c"},
+                  {"{current_build_dir}/dummy_main.o"}, BasicGenerateCb);
+  cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
                   BasicGenerateCb);
   cgen.AddGroup("grouped_id1_and_id2", {"id1", "id2"}, [](auto &&task_map) {
     task_map.at("id1").precede(task_map.at("id2"));
@@ -151,9 +152,9 @@ TEST(CustomGeneratorTestGroup, Basic_Group_Dependency) {
 
 TEST(CustomGeneratorTestGroup, Basic_Group_DependencyFailure) {
   buildcc::CustomGenerator cgen("basic_group_dependency_failure", "");
-  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
-                  {"{gen_build_dir}/dummy_main.o"}, BasicGenerateCb);
-  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+  cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.c"},
+                  {"{current_build_dir}/dummy_main.o"}, BasicGenerateCb);
+  cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
                   BasicGenerateCb);
   cgen.AddGroup("grouped_id1_and_id2", {"id1", "id2"}, [](auto &&task_map) {
     task_map.at("id1").precede(task_map.at("id2"));
@@ -189,9 +190,9 @@ bool SuccessCb(const buildcc::CustomGeneratorContext &ctx) {
 // ungrouped task
 TEST(CustomGeneratorTestGroup, Basic_Group_DependencyFailure2) {
   buildcc::CustomGenerator cgen("basic_group_dependency_failure2", "");
-  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
-                  {"{gen_build_dir}/dummy_main.o"}, FailureCb);
-  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {}, SuccessCb);
+  cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.c"},
+                  {"{current_build_dir}/dummy_main.o"}, FailureCb);
+  cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {}, SuccessCb);
   cgen.AddGroup("grouped_id2", {"id2"});
   cgen.AddDependencyCb([&](auto &&task_map) {
     task_map.at("id1").precede(task_map.at("grouped_id2"));
@@ -260,9 +261,9 @@ TEST(CustomGeneratorTestGroup, Basic_ProperDependency_GoodCase) {
   rebuild_value = false;
 
   buildcc::CustomGenerator cgen("basic_proper_dependency_good_case", "");
-  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
-                  {"{gen_build_dir}/dummy_main.o"}, ProperDependency1);
-  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+  cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.c"},
+                  {"{current_build_dir}/dummy_main.o"}, ProperDependency1);
+  cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
                   ProperDependency2);
   cgen.AddDependencyCb(
       [](auto &&task_map) { task_map.at("id1").precede(task_map.at("id2")); });
@@ -290,9 +291,9 @@ TEST(CustomGeneratorTestGroup, Basic_ProperDependency_BadCase) {
   rebuild_value = false;
 
   buildcc::CustomGenerator cgen("basic_proper_dependency_bad_case", "");
-  cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
-                  {"{gen_build_dir}/dummy_main.o"}, ProperDependency1);
-  cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.cpp"}, {},
+  cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.c"},
+                  {"{current_build_dir}/dummy_main.o"}, ProperDependency1);
+  cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
                   ProperDependency2);
   cgen.AddDependencyCb(
       [](auto &&task_map) { task_map.at("id2").precede(task_map.at("id1")); });
@@ -317,9 +318,9 @@ TEST(CustomGeneratorTestGroup, Basic_ProperDependency_BadCase) {
 TEST(CustomGeneratorTestGroup, DefaultArgumentUsage) {
   buildcc::CustomGenerator cgen("default_argument_usage", "");
   cgen.AddPatterns({
-      {"dummy_main_c", "{gen_root_dir}/dummy_main.c"},
-      {"dummy_main_o", "{gen_build_dir}/dummy_main.o"},
-      {"dummy_main_cpp", "{gen_root_dir}/dummy_main.cpp"},
+      {"dummy_main_c", "{current_root_dir}/dummy_main.c"},
+      {"dummy_main_o", "{current_build_dir}/dummy_main.o"},
+      {"dummy_main_cpp", "{current_root_dir}/dummy_main.cpp"},
   });
   cgen.AddGenInfo("id1", {"{dummy_main_c}"}, {"{dummy_main_o}"},
                   BasicGenerateCb);
@@ -420,10 +421,10 @@ TEST(CustomGeneratorTestGroup, AddDependency_BasicCheck) {
   constexpr const char *const kGenName = "add_dependency_basic_check";
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, Dep2Cb);
-    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
-                    {"{gen_build_dir}/dummy_main.o"}, Dep1Cb);
+    cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, Dep2Cb);
+    cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.cpp"},
+                    {"{current_build_dir}/dummy_main.o"}, Dep1Cb);
     cgen.AddDependencyCb(DependencyCb);
     cgen.Build();
 
@@ -460,9 +461,10 @@ TEST(CustomGeneratorTestGroup, AddDependency_FileDep) {
   constexpr const char *const kGenName = "add_dependency_file_dep";
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, FileDep1Cb);
-    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.o"}, {}, FileDep2Cb);
+    cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, FileDep1Cb);
+    cgen.AddGenInfo("id2", {"{current_build_dir}/dummy_main.o"}, {},
+                    FileDep2Cb);
     cgen.AddDependencyCb(DependencyCb);
     cgen.Build();
 
@@ -488,9 +490,10 @@ TEST(CustomGeneratorTestGroup, AddDependency_FileDep_WithRebuild) {
 
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, FileDep1Cb);
-    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.o"}, {}, FileDep2Cb);
+    cgen.AddGenInfo("id1", {"{current_build_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, FileDep1Cb);
+    cgen.AddGenInfo("id2", {"{current_build_dir}/dummy_main.o"}, {},
+                    FileDep2Cb);
     cgen.AddDependencyCb(DependencyCb);
     cgen.Build();
 
@@ -509,9 +512,10 @@ TEST(CustomGeneratorTestGroup, AddDependency_FileDep_WithRebuild) {
   // Same, no change
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, FileDep1Cb);
-    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.o"}, {}, FileDep2Cb);
+    cgen.AddGenInfo("id1", {"{current_build_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, FileDep1Cb);
+    cgen.AddGenInfo("id2", {"{current_build_dir}/dummy_main.o"}, {},
+                    FileDep2Cb);
     cgen.AddDependencyCb(DependencyCb);
     cgen.Build();
 
@@ -533,7 +537,8 @@ TEST(CustomGeneratorTestGroup, AddDependency_FileDep_WithRebuild) {
   // sets dirty_ == true
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.o"}, {}, FileDep2Cb);
+    cgen.AddGenInfo("id2", {"{current_build_dir}/dummy_main.o"}, {},
+                    FileDep2Cb);
     cgen.AddDependencyCb(DependencyCb);
     cgen.Build();
 
@@ -555,9 +560,10 @@ TEST(CustomGeneratorTestGroup, AddDependency_FileDep_WithRebuild) {
   // Added
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, FileDep1Cb);
-    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.o"}, {}, FileDep2Cb);
+    cgen.AddGenInfo("id1", {"{current_build_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, FileDep1Cb);
+    cgen.AddGenInfo("id2", {"{current_build_dir}/dummy_main.o"}, {},
+                    FileDep2Cb);
     cgen.AddDependencyCb(DependencyCb);
     cgen.Build();
 
@@ -586,9 +592,10 @@ TEST(CustomGeneratorTestGroup, AddDependency_FileDep_WithRebuild) {
   {
     buildcc::CustomGenerator cgen(kGenName, "");
 
-    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, FileDep1Cb);
-    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.o"}, {}, FileDep2Cb);
+    cgen.AddGenInfo("id1", {"{current_build_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, FileDep1Cb);
+    cgen.AddGenInfo("id2", {"{current_build_dir}/dummy_main.o"}, {},
+                    FileDep2Cb);
     cgen.AddDependencyCb(DependencyCb);
     cgen.Build();
 
@@ -617,10 +624,10 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Basic) {
   constexpr const char *const kGenName = "real_generator_basic";
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
-    cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.cpp"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
     cgen.Build();
 
     mock().expectOneCall("RealGenerateCb");
@@ -639,9 +646,10 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Basic) {
 
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"}, {},
+    cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.cpp"}, {},
                     RealGenerateCb);
-    cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"}, {}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.c"}, {},
+                    RealGenerateCb);
     cgen.Build();
 
     mock().expectOneCall("RealGenerateCb");
@@ -670,10 +678,10 @@ TEST(CustomGeneratorTestGroup, RealGenerate_RemoveAndAdd) {
   constexpr const char *const kGenName = "real_generator_remove_and_add";
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
-    cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.cpp"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
     cgen.Build();
 
     mock().expectOneCall("RealGenerateCb");
@@ -697,10 +705,10 @@ TEST(CustomGeneratorTestGroup, RealGenerate_RemoveAndAdd) {
   // Same, no change
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
-    cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.cpp"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
     cgen.Build();
 
     buildcc::m::CustomGeneratorRunner(cgen);
@@ -720,8 +728,8 @@ TEST(CustomGeneratorTestGroup, RealGenerate_RemoveAndAdd) {
   // Map Removed
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.cpp"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
 
     cgen.Build();
 
@@ -742,10 +750,10 @@ TEST(CustomGeneratorTestGroup, RealGenerate_RemoveAndAdd) {
   // Map Added Failure
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
-    cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.cpp"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
     cgen.AddDependencyCb([](auto &&task_map) {
       task_map.at("id1").precede(task_map.at("id2"));
     });
@@ -772,10 +780,10 @@ TEST(CustomGeneratorTestGroup, RealGenerate_RemoveAndAdd) {
   // Map Added Success
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
-    cgen.AddGenInfo("id2", {"{gen_root_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.cpp"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{current_root_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
     cgen.Build();
 
     buildcc::m::CustomGeneratorExpect_IdAdded(1, &cgen);
@@ -806,10 +814,10 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Failure) {
     buildcc::env::save_file(
         (cgen.GetBuildDir() / "dummy_main.cpp").string().c_str(), "", false);
 
-    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
-    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.cpp"},
-                    {"{gen_build_dir}/other_dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id1", {"{current_build_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{current_build_dir}/dummy_main.cpp"},
+                    {"{current_build_dir}/other_dummy_main.o"}, RealGenerateCb);
     cgen.AddDependencyCb([](auto &&task_map) {
       task_map.at("id1").precede(task_map.at("id2"));
     });
@@ -842,10 +850,10 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Failure) {
     buildcc::env::save_file(
         (cgen.GetBuildDir() / "dummy_main.cpp").string().c_str(), "", false);
 
-    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
-    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.cpp"},
-                    {"{gen_build_dir}/other_dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id1", {"{current_build_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{current_build_dir}/dummy_main.cpp"},
+                    {"{current_build_dir}/other_dummy_main.o"}, RealGenerateCb);
     cgen.AddDependencyCb([](auto &&task_map) {
       task_map.at("id1").precede(task_map.at("id2"));
     });
@@ -879,10 +887,10 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
     buildcc::env::save_file(
         (cgen.GetBuildDir() / "dummy_main.cpp").string().c_str(), "", false);
 
-    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
-    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.cpp"},
-                    {"{gen_build_dir}/other_dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id1", {"{current_build_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{current_build_dir}/dummy_main.cpp"},
+                    {"{current_build_dir}/other_dummy_main.o"}, RealGenerateCb);
     cgen.Build();
 
     mock().expectOneCall("RealGenerateCb");
@@ -917,10 +925,10 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
             .time_since_epoch()
             .count());
 
-    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
-    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.cpp"},
-                    {"{gen_build_dir}/other_dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id1", {"{current_build_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{current_build_dir}/dummy_main.cpp"},
+                    {"{current_build_dir}/other_dummy_main.o"}, RealGenerateCb);
     cgen.Build();
 
     mock().expectOneCall("RealGenerateCb");
@@ -950,10 +958,11 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
   {
     buildcc::CustomGenerator cgen(kGenName, "");
 
-    cgen.AddGenInfo("id1", {"{gen_build_dir}/dummy_main.c"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb);
-    cgen.AddGenInfo("id2", {"{gen_build_dir}/dummy_main.cpp"},
-                    {"{gen_build_dir}/rename_dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id1", {"{current_build_dir}/dummy_main.c"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb);
+    cgen.AddGenInfo("id2", {"{current_build_dir}/dummy_main.cpp"},
+                    {"{current_build_dir}/rename_dummy_main.o"},
+                    RealGenerateCb);
     cgen.Build();
 
     mock().expectOneCall("RealGenerateCb");
@@ -1010,8 +1019,8 @@ TEST(CustomGeneratorTestGroup, RealGenerate_BasicBlobRecheck) {
   constexpr const char *const kGenName = "real_generator_basic_blob_recheck";
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb,
+    cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.cpp"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb,
                     std::make_shared<MyCustomBlobHandler>(12));
     cgen.Build();
 
@@ -1028,8 +1037,8 @@ TEST(CustomGeneratorTestGroup, RealGenerate_BasicBlobRecheck) {
   // Rebuild
   {
     buildcc::CustomGenerator cgen(kGenName, "");
-    cgen.AddGenInfo("id1", {"{gen_root_dir}/dummy_main.cpp"},
-                    {"{gen_build_dir}/dummy_main.o"}, RealGenerateCb,
+    cgen.AddGenInfo("id1", {"{current_root_dir}/dummy_main.cpp"},
+                    {"{current_build_dir}/dummy_main.o"}, RealGenerateCb,
                     std::make_shared<MyCustomBlobHandler>(200));
     cgen.Build();
 
