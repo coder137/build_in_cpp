@@ -19,6 +19,10 @@
 namespace {
 
 constexpr const char *const kGenerateTaskName = "Generate";
+constexpr const char *const kProjectRootDirName = "project_root_dir";
+constexpr const char *const kProjectBuildDirName = "project_build_dir";
+constexpr const char *const kCurrentRootDirName = "current_root_dir";
+constexpr const char *const kCurrentBuildDirName = "current_build_dir";
 
 } // namespace
 
@@ -106,10 +110,10 @@ void CustomGenerator::Initialize() {
   //
   fs::create_directories(env_.GetTargetBuildDir());
   command_.AddDefaultArguments({
-      {"project_root_dir", path_as_string(Project::GetRootDir())},
-      {"project_build_dir", path_as_string(Project::GetBuildDir())},
-      {"current_root_dir", path_as_string(env_.GetTargetRootDir())},
-      {"current_build_dir", path_as_string(env_.GetTargetBuildDir())},
+      {kProjectRootDirName, path_as_string(Project::GetRootDir())},
+      {kProjectBuildDirName, path_as_string(Project::GetBuildDir())},
+      {kCurrentRootDirName, path_as_string(env_.GetTargetRootDir())},
+      {kCurrentBuildDirName, path_as_string(env_.GetTargetBuildDir())},
   });
 
   //
