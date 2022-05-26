@@ -96,13 +96,11 @@ bool FileGeneratorGenerateCb(const buildcc::CustomGeneratorContext &ctx) {
 namespace buildcc {
 
 void FileGenerator::AddInput(const std::string &absolute_input_pattern) {
-  std::string absolute_input_string = ParsePattern(absolute_input_pattern);
-  inputs_.emplace(std::move(absolute_input_string));
+  inputs_.emplace(absolute_input_pattern);
 }
 
 void FileGenerator::AddOutput(const std::string &absolute_output_pattern) {
-  std::string absolute_output_string = ParsePattern(absolute_output_pattern);
-  outputs_.emplace(std::move(absolute_output_string));
+  outputs_.emplace(absolute_output_pattern);
 }
 
 void FileGenerator::AddCommand(
