@@ -29,7 +29,7 @@ public:
 
   /**
    * @brief Add absolute input path pattern to generator
-   * NOTE: We can use {gen_root_dir} and {gen_build_dir} in the
+   * NOTE: We can use {current_root_dir} and {current_build_dir} in the
    * absolute_input_pattern
    *
    * If `identifier` is supplied it is added to default arguments as a key
@@ -39,7 +39,7 @@ public:
 
   /**
    * @brief Add absolute output path pattern to generator
-   * NOTE: We can use {gen_root_dir} and {gen_build_dir} in the
+   * NOTE: We can use {current_root_dir} and {current_build_dir} in the
    * absolute_output_pattern
    *
    * If `identifier` is supplied it is added to default arguments as a key
