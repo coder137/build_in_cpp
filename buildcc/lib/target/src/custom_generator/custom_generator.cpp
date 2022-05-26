@@ -108,8 +108,8 @@ void CustomGenerator::Initialize() {
   command_.AddDefaultArguments({
       {"project_root_dir", path_as_string(Project::GetRootDir())},
       {"project_build_dir", path_as_string(Project::GetBuildDir())},
-      {"gen_root_dir", path_as_string(env_.GetTargetRootDir())},
-      {"gen_build_dir", path_as_string(env_.GetTargetBuildDir())},
+      {"current_root_dir", path_as_string(env_.GetTargetRootDir())},
+      {"current_build_dir", path_as_string(env_.GetTargetBuildDir())},
   });
 
   //
