@@ -53,7 +53,7 @@ void TemplateGenerator::AddTemplate(std::string_view absolute_input_pattern,
 }
 
 std::string TemplateGenerator::Parse(const std::string &pattern) const {
-  return ConstCommand().Construct(pattern);
+  return ParsePattern(pattern);
 }
 
 /**
