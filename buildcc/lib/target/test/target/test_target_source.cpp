@@ -103,7 +103,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
   buildcc::env::m::CommandExpect_Execute(1, true); // link
   buildcc::m::TargetRunner(simple);
 
-  CHECK(simple.GetTaskState() == buildcc::env::TaskState::SUCCESS);
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
 
   mock().checkExpectations();
 

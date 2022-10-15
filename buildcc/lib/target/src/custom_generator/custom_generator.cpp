@@ -19,6 +19,10 @@
 namespace {
 
 constexpr const char *const kGenerateTaskName = "Generate";
+constexpr const char *const kProjectRootDirName = "project_root_dir";
+constexpr const char *const kProjectBuildDirName = "project_build_dir";
+constexpr const char *const kCurrentRootDirName = "current_root_dir";
+constexpr const char *const kCurrentBuildDirName = "current_build_dir";
 
 } // namespace
 
@@ -42,8 +46,9 @@ CustomGenerator::Get(const std::string &file_identifier) const {
 }
 
 void CustomGenerator::AddGenInfo(
-    const std::string &id, const fs_unordered_set &inputs,
-    const fs_unordered_set &outputs, const GenerateCb &generate_cb,
+    const std::string &id, const std::unordered_set<std::string> &inputs,
+    const std::unordered_set<std::string> &outputs,
+    const GenerateCb &generate_cb,
     std::shared_ptr<CustomBlobHandler> blob_handler) {
   env::assert_fatal(user_.gen_info_map.find(id) == user_.gen_info_map.end(),
                     fmt::format("Duplicate id {} detected", id));
@@ -51,15 +56,11 @@ void CustomGenerator::AddGenInfo(
 
   UserGenInfo schema;
   for (const auto &i : inputs) {
-    fs::path input =
-        internal::Path::CreateNewPath(command_.Construct(path_as_string(i)))
-            .GetPathname();
+    fs::path input = string_as_path(command_.Construct(i));
     schema.inputs.emplace(std::move(input));
   }
   for (const auto &o : outputs) {
-    fs::path output =
-        internal::Path::CreateNewPath(command_.Construct(path_as_string(o)))
-            .GetPathname();
+    fs::path output = string_as_path(command_.Construct(o));
     schema.outputs.emplace(std::move(output));
   }
   schema.generate_cb = generate_cb;
@@ -109,10 +110,10 @@ void CustomGenerator::Initialize() {
   //
   fs::create_directories(env_.GetTargetBuildDir());
   command_.AddDefaultArguments({
-      {"project_root_dir", path_as_string(Project::GetRootDir())},
-      {"project_build_dir", path_as_string(Project::GetBuildDir())},
-      {"gen_root_dir", path_as_string(env_.GetTargetRootDir())},
-      {"gen_build_dir", path_as_string(env_.GetTargetBuildDir())},
+      {kProjectRootDirName, path_as_string(Project::GetRootDir())},
+      {kProjectBuildDirName, path_as_string(Project::GetBuildDir())},
+      {kCurrentRootDirName, path_as_string(env_.GetTargetRootDir())},
+      {kCurrentBuildDirName, path_as_string(env_.GetTargetBuildDir())},
   });
 
   //

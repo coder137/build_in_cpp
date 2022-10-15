@@ -1,4 +1,4 @@
-{gen_root_dir}
-{gen_build_dir}
+{current_root_dir}
+{current_build_dir}
 {project_root_dir}
 {project_build_dir}

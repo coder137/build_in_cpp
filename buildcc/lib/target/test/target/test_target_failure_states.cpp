@@ -40,7 +40,7 @@ TEST(TargetTestFailureStates, StartTaskEnvFailure) {
   target.Build();
   buildcc::m::TargetRunner(target);
 
-  CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
 }
 
 TEST(TargetTestFailureStates, CompilePchFailure) {
@@ -55,7 +55,7 @@ TEST(TargetTestFailureStates, CompilePchFailure) {
   buildcc::env::m::CommandExpect_Execute(1, false); // PCH compile
   buildcc::m::TargetRunner(target);
 
-  CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
 }
 
 TEST(TargetTestFailureStates, CompileObjectFailure) {
@@ -72,7 +72,7 @@ TEST(TargetTestFailureStates, CompileObjectFailure) {
   buildcc::env::m::CommandExpect_Execute(1, true);  // compile
   buildcc::m::TargetRunner(target);
 
-  CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
 }
 
 TEST(TargetTestFailureStates, CompileObject_FileNotFoundFailure) {
@@ -85,7 +85,7 @@ TEST(TargetTestFailureStates, CompileObject_FileNotFoundFailure) {
   target.Build();
   buildcc::m::TargetRunner(target);
 
-  CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
 }
 
 TEST(TargetTestFailureStates, LinkTargetFailure) {
@@ -101,7 +101,7 @@ TEST(TargetTestFailureStates, LinkTargetFailure) {
   buildcc::env::m::CommandExpect_Execute(1, false); // link
   buildcc::m::TargetRunner(target);
 
-  CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
 }
 
 TEST(TargetTestFailureStates, EndTaskStoreFailure) {
@@ -119,7 +119,7 @@ TEST(TargetTestFailureStates, EndTaskStoreFailure) {
   buildcc::env::m::CommandExpect_Execute(1, true); // link
   buildcc::m::TargetRunner(target);
 
-  CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
+  CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
 }
 
 // TODO, Test failure rebuilds!
@@ -138,7 +138,7 @@ TEST(TargetTestFailureStates, StartTaskEnvFailure_Rebuild) {
     target.Build();
     buildcc::m::TargetRunner(target);
 
-    CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
     CHECK_FALSE(target.IsBuilt());
   }
 
@@ -157,7 +157,7 @@ TEST(TargetTestFailureStates, StartTaskEnvFailure_Rebuild) {
     buildcc::env::m::CommandExpect_Execute(1, true); // link
     buildcc::m::TargetRunner(target);
 
-    CHECK(target.GetTaskState() == buildcc::env::TaskState::SUCCESS);
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
     CHECK_TRUE(target.IsBuilt());
   }
 }
@@ -177,7 +177,7 @@ TEST(TargetTestFailureStates, CompilePchFailure_Rebuild) {
     buildcc::env::m::CommandExpect_Execute(1, false); // PCH compile
     buildcc::m::TargetRunner(target);
 
-    CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
   }
 
   // Reset
@@ -201,7 +201,7 @@ TEST(TargetTestFailureStates, CompilePchFailure_Rebuild) {
 
     buildcc::m::TargetRunner(target);
 
-    CHECK(target.GetTaskState() == buildcc::env::TaskState::SUCCESS);
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }
 }
 
@@ -222,7 +222,7 @@ TEST(TargetTestFailureStates, CompileObjectFailure_Rebuild) {
     buildcc::env::m::CommandExpect_Execute(1, true);  // compile
     buildcc::m::TargetRunner(target);
 
-    CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
   }
 
   // Reset
@@ -253,7 +253,7 @@ TEST(TargetTestFailureStates, CompileObjectFailure_Rebuild) {
     buildcc::env::m::CommandExpect_Execute(1, true); // link
     buildcc::m::TargetRunner(target);
 
-    CHECK(target.GetTaskState() == buildcc::env::TaskState::SUCCESS);
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }
 }
 
@@ -272,7 +272,7 @@ TEST(TargetTestFailureStates, LinkTargetFailure_Rebuild) {
     buildcc::env::m::CommandExpect_Execute(1, false); // link
     buildcc::m::TargetRunner(target);
 
-    CHECK(target.GetTaskState() == buildcc::env::TaskState::FAILURE);
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::FAILURE);
   }
 
   // Reset
@@ -290,7 +290,7 @@ TEST(TargetTestFailureStates, LinkTargetFailure_Rebuild) {
     buildcc::env::m::CommandExpect_Execute(1, true); // link
     buildcc::m::TargetRunner(target);
 
-    CHECK(target.GetTaskState() == buildcc::env::TaskState::SUCCESS);
+    CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }
 }
 

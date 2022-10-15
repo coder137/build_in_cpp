@@ -17,6 +17,8 @@
 #ifndef TARGET_TEMPLATE_GENERATOR_H_
 #define TARGET_TEMPLATE_GENERATOR_H_
 
+#include <string_view>
+
 #include "target/custom_generator.h"
 
 namespace buildcc {
@@ -27,8 +29,8 @@ public:
   ~TemplateGenerator() override = default;
   TemplateGenerator(const TemplateGenerator &) = delete;
 
-  void AddTemplate(const fs::path &input_filename,
-                   const fs::path &output_filename);
+  void AddTemplate(std::string_view absolute_input_pattern,
+                   std::string_view absolute_output_pattern);
   std::string Parse(const std::string &pattern) const;
 
   /**
@@ -47,8 +49,8 @@ private:
 
 private:
   struct TemplateInfo {
-    fs::path input;
-    fs::path output;
+    std::string input_pattern;
+    std::string output_pattern;
   };
 
 private:

@@ -4,7 +4,6 @@ set(TARGET_SRCS
     src/custom_generator/recheck_states.cpp
 
     src/target/recheck_states.cpp
-    src/target/tasks.cpp
 )
 
 if(${BUILDCC_BUILD_AS_SINGLE_LIB})
