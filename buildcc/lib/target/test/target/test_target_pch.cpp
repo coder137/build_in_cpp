@@ -286,6 +286,29 @@ TEST(TargetPchTestGroup, Target_AddPchObjectFlag_Build) {
   mock().checkExpectations();
 }
 
+TEST(TargetPchTestGroup, Target_BadPch) {
+  constexpr const char *const NAME = "Target_BadPch.exe";
+  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                             "data");
+  target.AddPch("pch/pch_header_1.h");
+  target.AddPch("pch/pch_header_2.h");
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::FAILURE);
+
+  target.Build();
+  buildcc::m::TargetRunner(target);
+  bool exists = fs::exists(target.GetPchHeaderPath());
+  CHECK_FALSE(exists);
+
+  buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
+
+  // Save file
+  exists = fs::exists(target.GetPchHeaderPath());
+  CHECK_FALSE(exists);
+
+  mock().checkExpectations();
+}
+
 int main(int ac, char **av) {
   const fs::path target_source_intermediate_path =
       fs::path(BUILD_TARGET_PCH_INTERMEDIATE_DIR) / gcc.GetName();
