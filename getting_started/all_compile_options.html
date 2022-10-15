@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Build Options for “scripts”" href="all_default_build_options.html" /><link rel="prev" title="Walkthrough Examples" href="walkthroughs.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>Compile Options for BuildExe - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -221,7 +221,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,10 +238,10 @@
         </div>
         <article role="main">
           <div class="section" id="compile-options-for-buildexe">
-<h1>Compile Options for BuildExe<a class="headerlink" href="#compile-options-for-buildexe" title="Permalink to this headline">#</a></h1>
+<h1>Compile Options for BuildExe<a class="headerlink" href="#compile-options-for-buildexe" title="Permalink to this heading">#</a></h1>
 <p>We can pass in configuration parameters through the Command Line but writing them inside a <code class="docutils literal notranslate"><span class="pre">.toml</span></code> file and passing it through the <code class="docutils literal notranslate"><span class="pre">--config</span></code> flag is much easier.</p>
 <div class="section" id="command-line-options">
-<h2>Command Line options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">#</a></h2>
+<h2>Command Line options<a class="headerlink" href="#command-line-options" title="Permalink to this heading">#</a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Options:
 -h,--help                   Print this <span class="nb">help</span> message and <span class="nb">exit</span>
 --help-all                  Expand individual options.
@@ -293,34 +295,34 @@ Options:
 </div>
 </div>
 <div class="section" id="toml-file-options">
-<h2>TOML file options<a class="headerlink" href="#toml-file-options" title="Permalink to this headline">#</a></h2>
+<h2>TOML file options<a class="headerlink" href="#toml-file-options" title="Permalink to this heading">#</a></h2>
 <p>Relate the options below with the <strong>Command Line options</strong> above.</p>
 <p>You can also read the <a class="reference external" href="https://github.com/CLIUtils/CLI11">CLI11 README</a></p>
 <div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Default (ungrouped) Options</span><span class="w"></span>
-<span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"script"</span><span class="w"> </span><span class="c1"># REQUIRED script, immediate</span><span class="w"></span>
+<span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;script&quot;</span><span class="w"> </span><span class="c1"># REQUIRED script, immediate</span><span class="w"></span>
 
 <span class="c1"># Root Options</span><span class="w"></span>
 <span class="n">clean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="w"> </span><span class="c1"># true, false</span><span class="w"></span>
-<span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"trace"</span><span class="w"> </span><span class="c1"># "trace", "debug", "info", "warning", "critical"</span><span class="w"></span>
-<span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
-<span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
+<span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;trace&quot;</span><span class="w"> </span><span class="c1"># &quot;trace&quot;, &quot;debug&quot;, &quot;info&quot;, &quot;warning&quot;, &quot;critical&quot;</span><span class="w"></span>
+<span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
+<span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
 
 <span class="c1"># Target Info Options</span><span class="w"></span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
-<span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"executable"</span><span class="w"> </span><span class="c1"># REQUIRED, executable, staticLibrary, dynamicLibrary</span><span class="w"></span>
-<span class="n">relative_to_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
+<span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;executable&quot;</span><span class="w"> </span><span class="c1"># REQUIRED, executable, staticLibrary, dynamicLibrary</span><span class="w"></span>
+<span class="n">relative_to_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
 
 <span class="c1"># Target Inputs Options</span><span class="w"></span>
-<span class="n">srcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">""</span><span class="p">]</span><span class="w"></span>
-<span class="n">includes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">""</span><span class="p">]</span><span class="w"></span>
-<span class="n">lib_dirs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">""</span><span class="p">]</span><span class="w"></span>
-<span class="n">external_libs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">""</span><span class="p">]</span><span class="w"></span>
-<span class="n">preprocessor_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">""</span><span class="p">]</span><span class="w"></span>
-<span class="n">common_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">""</span><span class="p">]</span><span class="w"></span>
-<span class="n">asm_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">""</span><span class="p">]</span><span class="w"></span>
-<span class="n">c_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">""</span><span class="p">]</span><span class="w"></span>
-<span class="n">cpp_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">""</span><span class="p">]</span><span class="w"></span>
-<span class="n">link_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">""</span><span class="p">]</span><span class="w"></span>
+<span class="n">srcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="n">includes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="n">lib_dirs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="n">external_libs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="n">preprocessor_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="n">common_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="n">asm_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="n">c_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="n">cpp_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="n">link_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
 
 <span class="c1"># Subcommand</span><span class="w"></span>
 
@@ -329,19 +331,19 @@ Options:
 <span class="n">build</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="w"> </span><span class="c1"># ALWAYS</span><span class="w"></span>
 <span class="n">test</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">false</span><span class="w"> </span><span class="c1"># ALWAYS</span><span class="w"></span>
 
-<span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"gcc"</span><span class="w"></span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"x86_64-linux-gnu"</span><span class="w"></span>
-<span class="n">asm_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"as"</span><span class="w"></span>
-<span class="n">c_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"gcc"</span><span class="w"></span>
-<span class="n">cpp_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"g++"</span><span class="w"></span>
-<span class="n">archiver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"ar"</span><span class="w"></span>
-<span class="n">linker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"ld"</span><span class="w"></span>
+<span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;gcc&quot;</span><span class="w"></span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;x86_64-linux-gnu&quot;</span><span class="w"></span>
+<span class="n">asm_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;as&quot;</span><span class="w"></span>
+<span class="n">c_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;gcc&quot;</span><span class="w"></span>
+<span class="n">cpp_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;g++&quot;</span><span class="w"></span>
+<span class="n">archiver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ar&quot;</span><span class="w"></span>
+<span class="n">linker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ld&quot;</span><span class="w"></span>
 
 <span class="c1"># TODO, Add more options to narrow down search when multiple toolchains are installed</span><span class="w"></span>
 
 <span class="c1"># Script Options</span><span class="w"></span>
 <span class="k">[script]</span><span class="w"></span>
-<span class="n">configs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">"build.toml"</span><span class="p">,</span><span class="w"> </span><span class="s">"custom_toolchain.toml"</span><span class="p">]</span><span class="w"> </span><span class="c1"># Converted to --config build.toml --config custom_toolchain.toml</span><span class="w"></span>
+<span class="n">configs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;build.toml&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;custom_toolchain.toml&quot;</span><span class="p">]</span><span class="w"> </span><span class="c1"># Converted to --config build.toml --config custom_toolchain.toml</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -359,10 +361,10 @@ Options:
                 </div>
                 <div class="title">Build Options for “scripts”</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="walkthroughs.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -398,7 +400,7 @@ Options:
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -421,7 +423,9 @@ Options:
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

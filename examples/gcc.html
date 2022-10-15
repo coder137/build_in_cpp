@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="MSVC" href="msvc.html" /><link rel="prev" title="Hybrid" href="hybrid.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>GCC - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -221,7 +221,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,19 +238,19 @@
         </div>
         <article role="main">
           <div class="section" id="gcc">
-<h1>GCC<a class="headerlink" href="#gcc" title="Permalink to this headline">#</a></h1>
+<h1>GCC<a class="headerlink" href="#gcc" title="Permalink to this heading">#</a></h1>
 <p>Lowlevel GCC Tests</p>
 <div class="section" id="simple">
-<h2>Simple<a class="headerlink" href="#simple" title="Permalink to this headline">#</a></h2>
+<h2>Simple<a class="headerlink" href="#simple" title="Permalink to this heading">#</a></h2>
 <p>Compile a single source</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// GCC specialized toolchain</span>
 <span class="linenos"> 2</span><span class="n">Toolchain_gcc</span><span class="w"> </span><span class="n">toolchain</span><span class="p">;</span><span class="w"></span>
 <span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="c1">// GCC specialized targets</span>
-<span class="linenos"> 5</span><span class="c1">// Create "Simple" target (meant to use the GCC compiler)</span>
+<span class="linenos"> 5</span><span class="c1">// Create &quot;Simple&quot; target (meant to use the GCC compiler)</span>
 <span class="linenos"> 6</span><span class="c1">// On Windows the equivalent is the MinGW compiler</span>
-<span class="linenos"> 7</span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="nf">target</span><span class="p">(</span><span class="s">"Simple"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
-<span class="hll"><span class="linenos"> 8</span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"main.cpp"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">target</span><span class="p">(</span><span class="s">&quot;Simple&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="hll"><span class="linenos"> 8</span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;main.cpp&quot;</span><span class="p">);</span><span class="w"></span>
 </span><span class="linenos"> 9</span><span class="n">target</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
 <span class="linenos">10</span>
 <span class="linenos">11</span><span class="c1">// Build</span>
@@ -259,23 +261,23 @@
 </div>
 </div>
 <div class="section" id="includedir">
-<h2>IncludeDir<a class="headerlink" href="#includedir" title="Permalink to this headline">#</a></h2>
+<h2>IncludeDir<a class="headerlink" href="#includedir" title="Permalink to this heading">#</a></h2>
 <p>Compile multiple sources with header files</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// GCC specialized toolchain</span>
 <span class="linenos"> 2</span><span class="n">Toolchain_gcc</span><span class="w"> </span><span class="n">toolchain</span><span class="p">;</span><span class="w"></span>
 <span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="c1">// GCC specialized targets</span>
-<span class="linenos"> 5</span><span class="c1">// Create "IncludeDir" target (meant to use the GCC compiler)</span>
+<span class="linenos"> 5</span><span class="c1">// Create &quot;IncludeDir&quot; target (meant to use the GCC compiler)</span>
 <span class="linenos"> 6</span><span class="c1">// On Windows the equivalent is the MinGW compiler</span>
-<span class="linenos"> 7</span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="nf">target</span><span class="p">(</span><span class="s">"IncludeDir"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">"files"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos"> 8</span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"main.cpp"</span><span class="p">,</span><span class="w"> </span><span class="s">"src"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos"> 9</span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/random.cpp"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">target</span><span class="p">(</span><span class="s">&quot;IncludeDir&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;files&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;main.cpp&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;src&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;src/random.cpp&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">10</span>
 <span class="linenos">11</span><span class="c1">// Track header for rebuilds</span>
-<span class="hll"><span class="linenos">12</span><span class="n">target</span><span class="p">.</span><span class="n">AddHeader</span><span class="p">(</span><span class="s">"include/random.h"</span><span class="p">);</span><span class="w"></span>
+<span class="hll"><span class="linenos">12</span><span class="n">target</span><span class="p">.</span><span class="n">AddHeader</span><span class="p">(</span><span class="s">&quot;include/random.h&quot;</span><span class="p">);</span><span class="w"></span>
 </span><span class="linenos">13</span>
 <span class="linenos">14</span><span class="c1">// Add include dir to search paths</span>
-<span class="hll"><span class="linenos">15</span><span class="n">target</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">);</span><span class="w"></span>
+<span class="hll"><span class="linenos">15</span><span class="n">target</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">&quot;include&quot;</span><span class="p">);</span><span class="w"></span>
 </span><span class="linenos">16</span><span class="n">target</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
 <span class="linenos">17</span>
 <span class="linenos">18</span><span class="c1">// Build</span>
@@ -286,26 +288,26 @@
 </div>
 </div>
 <div class="section" id="staticlib">
-<h2>StaticLib<a class="headerlink" href="#staticlib" title="Permalink to this headline">#</a></h2>
+<h2>StaticLib<a class="headerlink" href="#staticlib" title="Permalink to this heading">#</a></h2>
 <p>Compile a static library which is used by an executable</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// GCC specialized toolchain</span>
 <span class="linenos"> 2</span><span class="n">Toolchain_gcc</span><span class="w"> </span><span class="n">toolchain</span><span class="p">;</span><span class="w"></span>
 <span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="c1">// GCC specialized targets</span>
-<span class="linenos"> 5</span><span class="c1">// Create "librandom.a" target (meant to use the GCC compiler)</span>
+<span class="linenos"> 5</span><span class="c1">// Create &quot;librandom.a&quot; target (meant to use the GCC compiler)</span>
 <span class="linenos"> 6</span><span class="c1">// On Windows the equivalent is the MinGW compiler</span>
-<span class="hll"><span class="linenos"> 7</span><span class="n">StaticTarget_gcc</span><span class="w"> </span><span class="nf">statictarget</span><span class="p">(</span><span class="s">"librandom"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">"files"</span><span class="p">);</span><span class="w"></span>
-</span><span class="linenos"> 8</span><span class="n">statictarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/random.cpp"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos"> 9</span><span class="n">statictarget</span><span class="p">.</span><span class="n">AddHeader</span><span class="p">(</span><span class="s">"include/random.h"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">10</span><span class="n">statictarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">);</span><span class="w"></span>
+<span class="hll"><span class="linenos"> 7</span><span class="n">StaticTarget_gcc</span><span class="w"> </span><span class="n">statictarget</span><span class="p">(</span><span class="s">&quot;librandom&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;files&quot;</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos"> 8</span><span class="n">statictarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;src/random.cpp&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="n">statictarget</span><span class="p">.</span><span class="n">AddHeader</span><span class="p">(</span><span class="s">&quot;include/random.h&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">10</span><span class="n">statictarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">&quot;include&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">11</span><span class="n">statictarget</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
 <span class="linenos">12</span>
 <span class="linenos">13</span><span class="c1">// GCC specialized targets</span>
-<span class="linenos">14</span><span class="c1">// Create "statictest" target (meant to use the GCC compiler)</span>
+<span class="linenos">14</span><span class="c1">// Create &quot;statictest&quot; target (meant to use the GCC compiler)</span>
 <span class="linenos">15</span><span class="c1">// On Windows the equivalent is the MinGW compiler</span>
-<span class="linenos">16</span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="nf">exetarget</span><span class="p">(</span><span class="s">"statictest"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">"files"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">17</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"main.cpp"</span><span class="p">,</span><span class="w"> </span><span class="s">"src"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">18</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">16</span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">exetarget</span><span class="p">(</span><span class="s">&quot;statictest&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;files&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">17</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;main.cpp&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;src&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">18</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">&quot;include&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">19</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddLibDep</span><span class="p">(</span><span class="n">statictarget</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">20</span><span class="n">exetarget</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
 <span class="linenos">21</span>
@@ -325,26 +327,26 @@
 </div>
 </div>
 <div class="section" id="dynamiclib">
-<h2>DynamicLib<a class="headerlink" href="#dynamiclib" title="Permalink to this headline">#</a></h2>
+<h2>DynamicLib<a class="headerlink" href="#dynamiclib" title="Permalink to this heading">#</a></h2>
 <p>Compile a dynamic library which is used by an executable</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// GCC specialized toolchain</span>
 <span class="linenos"> 2</span><span class="n">Toolchain_gcc</span><span class="w"> </span><span class="n">toolchain</span><span class="p">;</span><span class="w"></span>
 <span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="c1">// GCC specialized targets</span>
-<span class="linenos"> 5</span><span class="c1">// Create "librandom.so" target (meant to use the GCC compiler)</span>
+<span class="linenos"> 5</span><span class="c1">// Create &quot;librandom.so&quot; target (meant to use the GCC compiler)</span>
 <span class="linenos"> 6</span><span class="c1">// On Windows the equivalent is the MinGW compiler</span>
-<span class="hll"><span class="linenos"> 7</span><span class="n">DynamicTarget_gcc</span><span class="w"> </span><span class="nf">dynamictarget</span><span class="p">(</span><span class="s">"librandom"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">"files"</span><span class="p">);</span><span class="w"></span>
-</span><span class="linenos"> 8</span><span class="n">dynamictarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/random.cpp"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos"> 9</span><span class="n">dynamictarget</span><span class="p">.</span><span class="n">AddHeader</span><span class="p">(</span><span class="s">"include/random.h"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">10</span><span class="n">dynamictarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">);</span><span class="w"></span>
+<span class="hll"><span class="linenos"> 7</span><span class="n">DynamicTarget_gcc</span><span class="w"> </span><span class="n">dynamictarget</span><span class="p">(</span><span class="s">&quot;librandom&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;files&quot;</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos"> 8</span><span class="n">dynamictarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;src/random.cpp&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="n">dynamictarget</span><span class="p">.</span><span class="n">AddHeader</span><span class="p">(</span><span class="s">&quot;include/random.h&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">10</span><span class="n">dynamictarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">&quot;include&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">11</span><span class="n">dynamictarget</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
 <span class="linenos">12</span>
 <span class="linenos">13</span><span class="c1">// GCC specialized targets</span>
-<span class="linenos">14</span><span class="c1">// Create "dynamictest" target (meant to use the GCC compiler)</span>
+<span class="linenos">14</span><span class="c1">// Create &quot;dynamictest&quot; target (meant to use the GCC compiler)</span>
 <span class="linenos">15</span><span class="c1">// On Windows the equivalent is the MinGW compiler</span>
-<span class="linenos">16</span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="nf">target</span><span class="p">(</span><span class="s">"dynamictest"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">"files"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">17</span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"main.cpp"</span><span class="p">,</span><span class="w"> </span><span class="s">"src"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">18</span><span class="n">target</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">16</span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">target</span><span class="p">(</span><span class="s">&quot;dynamictest&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;files&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">17</span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;main.cpp&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;src&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">18</span><span class="n">target</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">&quot;include&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">19</span><span class="n">target</span><span class="p">.</span><span class="n">AddLibDep</span><span class="p">(</span><span class="n">dynamictarget</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">20</span><span class="n">target</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
 <span class="linenos">21</span>
@@ -374,41 +376,41 @@
 </div>
 </div>
 <div class="section" id="flags">
-<h2>Flags<a class="headerlink" href="#flags" title="Permalink to this headline">#</a></h2>
+<h2>Flags<a class="headerlink" href="#flags" title="Permalink to this heading">#</a></h2>
 <p>Using <strong>PreprocessorFlags</strong>, <strong>C Compile flags</strong>, <strong>Cpp Compile flags</strong> and <strong>Link flags</strong></p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// GCC specialized toolchain</span>
 <span class="linenos"> 2</span><span class="n">Toolchain_gcc</span><span class="w"> </span><span class="n">toolchain</span><span class="p">;</span><span class="w"></span>
 <span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="c1">// GCC specialized targets</span>
-<span class="linenos"> 5</span><span class="c1">// Create "CppFlags" target (meant to use the GCC compiler)</span>
+<span class="linenos"> 5</span><span class="c1">// Create &quot;CppFlags&quot; target (meant to use the GCC compiler)</span>
 <span class="linenos"> 6</span><span class="c1">// On Windows the equivalent is the MinGW compiler</span>
-<span class="linenos"> 7</span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="nf">cpptarget</span><span class="p">(</span><span class="s">"CppFlags"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">"files"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos"> 8</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"main.cpp"</span><span class="p">,</span><span class="w"> </span><span class="s">"src"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos"> 9</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/random.cpp"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">10</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddHeader</span><span class="p">(</span><span class="s">"include/random.h"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">11</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">);</span><span class="w"></span>
-<span class="hll"><span class="linenos">12</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"-DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
-</span><span class="hll"><span class="linenos">13</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"-Wall"</span><span class="p">);</span><span class="w"></span>
-</span><span class="hll"><span class="linenos">14</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"-Werror"</span><span class="p">);</span><span class="w"></span>
-</span><span class="hll"><span class="linenos">15</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddLinkFlag</span><span class="p">(</span><span class="s">"-lm"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">cpptarget</span><span class="p">(</span><span class="s">&quot;CppFlags&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;files&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;main.cpp&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;src&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;src/random.cpp&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">10</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddHeader</span><span class="p">(</span><span class="s">&quot;include/random.h&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">11</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">&quot;include&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="hll"><span class="linenos">12</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">&quot;-DRANDOM=1&quot;</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">13</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">&quot;-Wall&quot;</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">14</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">&quot;-Werror&quot;</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">15</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">AddLinkFlag</span><span class="p">(</span><span class="s">&quot;-lm&quot;</span><span class="p">);</span><span class="w"></span>
 </span><span class="linenos">16</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
 <span class="linenos">17</span>
 <span class="linenos">18</span><span class="c1">// Gcc specialized targets</span>
-<span class="linenos">19</span><span class="c1">// Create "CFlags" target (meant to use the GCC compiler)</span>
+<span class="linenos">19</span><span class="c1">// Create &quot;CFlags&quot; target (meant to use the GCC compiler)</span>
 <span class="linenos">20</span><span class="c1">// On Windows the equivalent is the MinGW compiler</span>
-<span class="linenos">21</span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="nf">ctarget</span><span class="p">(</span><span class="s">"CFlags"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">"files"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">22</span><span class="n">ctarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"main.c"</span><span class="p">,</span><span class="w"> </span><span class="s">"src"</span><span class="p">);</span><span class="w"></span>
-<span class="hll"><span class="linenos">23</span><span class="n">ctarget</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"-DRANDOM=1"</span><span class="p">);</span><span class="w"></span>
-</span><span class="hll"><span class="linenos">24</span><span class="n">ctarget</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">"-Wall"</span><span class="p">);</span><span class="w"></span>
-</span><span class="hll"><span class="linenos">25</span><span class="n">ctarget</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">"-Werror"</span><span class="p">);</span><span class="w"></span>
-</span><span class="hll"><span class="linenos">26</span><span class="n">ctarget</span><span class="p">.</span><span class="n">AddLinkFlag</span><span class="p">(</span><span class="s">"-lm"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">21</span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">ctarget</span><span class="p">(</span><span class="s">&quot;CFlags&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;files&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">22</span><span class="n">ctarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;main.c&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;src&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="hll"><span class="linenos">23</span><span class="n">ctarget</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">&quot;-DRANDOM=1&quot;</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">24</span><span class="n">ctarget</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">&quot;-Wall&quot;</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">25</span><span class="n">ctarget</span><span class="p">.</span><span class="n">AddCCompileFlag</span><span class="p">(</span><span class="s">&quot;-Werror&quot;</span><span class="p">);</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">26</span><span class="n">ctarget</span><span class="p">.</span><span class="n">AddLinkFlag</span><span class="p">(</span><span class="s">&quot;-lm&quot;</span><span class="p">);</span><span class="w"></span>
 </span><span class="linenos">27</span><span class="n">ctarget</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
 <span class="linenos">28</span>
 <span class="linenos">29</span><span class="c1">// Build</span>
 <span class="linenos">30</span><span class="n">tf</span><span class="o">::</span><span class="n">Executor</span><span class="w"> </span><span class="n">executor</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">31</span><span class="n">tf</span><span class="o">::</span><span class="n">Taskflow</span><span class="w"> </span><span class="n">taskflow</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">32</span>
-<span class="linenos">33</span><span class="c1">// There isn't any dependency between the 2 targets</span>
+<span class="linenos">33</span><span class="c1">// There isn&#39;t any dependency between the 2 targets</span>
 <span class="linenos">34</span><span class="n">taskflow</span><span class="p">.</span><span class="n">composed_of</span><span class="p">(</span><span class="n">cpptarget</span><span class="p">.</span><span class="n">GetTaskflow</span><span class="p">());</span><span class="w"></span>
 <span class="linenos">35</span><span class="n">taskflow</span><span class="p">.</span><span class="n">composed_of</span><span class="p">(</span><span class="n">ctarget</span><span class="p">.</span><span class="n">GetTaskflow</span><span class="p">());</span><span class="w"></span>
 <span class="linenos">36</span>
@@ -418,7 +420,7 @@
 </div>
 </div>
 <div class="section" id="afterinstall">
-<h2>AfterInstall<a class="headerlink" href="#afterinstall" title="Permalink to this headline">#</a></h2>
+<h2>AfterInstall<a class="headerlink" href="#afterinstall" title="Permalink to this heading">#</a></h2>
 <p>Use BuildCC with CMake</p>
 <ul class="simple">
 <li><p>Install <code class="docutils literal notranslate"><span class="pre">BuildCC</span></code> via CMake to your system and add it to <strong>PATH</strong></p></li>
@@ -428,23 +430,23 @@
 </ul>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Package dependencies</span>
 <span class="c"># fmt is imported by spdlog by default</span>
-<span class="nb">find_package</span><span class="p">(</span><span class="s">fmt_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">"fmt"</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
-<span class="nb">find_package</span><span class="p">(</span><span class="s">spdlog_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">"spdlog"</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
-<span class="nb">find_package</span><span class="p">(</span><span class="s">flatbuffers_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">"flatbuffers"</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
-<span class="nb">find_package</span><span class="p">(</span><span class="s">taskflow_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">"Taskflow"</span><span class="w"> </span><span class="s2">"taskflow"</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
-<span class="nb">find_package</span><span class="p">(</span><span class="s">CLI11_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">"CLI11"</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
-<span class="nb">find_package</span><span class="p">(</span><span class="s">tiny_process_library_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">"tiny-process-library"</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">fmt_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">&quot;fmt&quot;</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">spdlog_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">&quot;spdlog&quot;</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">flatbuffers_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">&quot;flatbuffers&quot;</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">taskflow_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">&quot;Taskflow&quot;</span><span class="w"> </span><span class="s2">&quot;taskflow&quot;</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">CLI11_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">&quot;CLI11&quot;</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">tiny_process_library_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">&quot;tiny-process-library&quot;</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
 
-<span class="nb">find_package</span><span class="p">(</span><span class="s">buildcc_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">"buildcc"</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">buildcc_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">&quot;buildcc&quot;</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
 
-<span class="nb">message</span><span class="p">(</span><span class="s2">"Find package: ${fmt_package_DIR}"</span><span class="p">)</span>
-<span class="nb">message</span><span class="p">(</span><span class="s2">"Find package: ${spdlog_package_DIR}"</span><span class="p">)</span>
-<span class="nb">message</span><span class="p">(</span><span class="s2">"Find package: ${flatbuffers_package_DIR}"</span><span class="p">)</span>
-<span class="nb">message</span><span class="p">(</span><span class="s2">"Find package: ${taskflow_package_DIR}"</span><span class="p">)</span>
-<span class="nb">message</span><span class="p">(</span><span class="s2">"Find package: ${CLI11_package_DIR}"</span><span class="p">)</span>
-<span class="nb">message</span><span class="p">(</span><span class="s2">"Find package: ${tiny_process_library_package_DIR}"</span><span class="p">)</span><span class="w"> </span><span class="c">#</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Find package: ${fmt_package_DIR}&quot;</span><span class="p">)</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Find package: ${spdlog_package_DIR}&quot;</span><span class="p">)</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Find package: ${flatbuffers_package_DIR}&quot;</span><span class="p">)</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Find package: ${taskflow_package_DIR}&quot;</span><span class="p">)</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Find package: ${CLI11_package_DIR}&quot;</span><span class="p">)</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Find package: ${tiny_process_library_package_DIR}&quot;</span><span class="p">)</span><span class="w"> </span><span class="c">#</span>
 
-<span class="nb">message</span><span class="p">(</span><span class="s2">"Find package: ${buildcc_package_DIR}"</span><span class="p">)</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Find package: ${buildcc_package_DIR}&quot;</span><span class="p">)</span>
 
 <span class="c"># build executable</span>
 <span class="nb">add_executable</span><span class="p">(</span><span class="s">build</span><span class="w"> </span><span class="s">build.cpp</span><span class="p">)</span>
@@ -453,7 +455,7 @@
 <span class="w">    </span><span class="s">buildcc</span>
 <span class="p">)</span>
 <span class="nb">if</span> <span class="p">(</span><span class="o">${</span><span class="nv">MINGW</span><span class="o">}</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">message</span><span class="p">(</span><span class="s">WARNING</span><span class="w"> </span><span class="s2">"-Wl,--allow-multiple-definition for MINGW"</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">message</span><span class="p">(</span><span class="s">WARNING</span><span class="w"> </span><span class="s2">&quot;-Wl,--allow-multiple-definition for MINGW&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">target_link_options</span><span class="p">(</span><span class="s">build</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">-Wl,--allow-multiple-definition</span><span class="p">)</span>
 <span class="nb">endif</span><span class="p">()</span>
 
@@ -463,7 +465,7 @@
 </div>
 </div>
 <div class="section" id="plugins">
-<h2>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">#</a></h2>
+<h2>Plugins<a class="headerlink" href="#plugins" title="Permalink to this heading">#</a></h2>
 <p>Demonstrating BuildCC supported plugin usage</p>
 <ul class="simple">
 <li><p>From the <strong>Flags</strong> example above</p></li>
@@ -474,7 +476,7 @@
 </div>
 </div>
 <div class="section" id="precompileheader">
-<h2>PrecompileHeader<a class="headerlink" href="#precompileheader" title="Permalink to this headline">#</a></h2>
+<h2>PrecompileHeader<a class="headerlink" href="#precompileheader" title="Permalink to this heading">#</a></h2>
 <p>TODO</p>
 </div>
 </div>
@@ -491,10 +493,10 @@
                 </div>
                 <div class="title">MSVC</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="hybrid.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -530,7 +532,7 @@
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -559,7 +561,9 @@
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

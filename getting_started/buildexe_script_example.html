@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="BuildExe “Immediate” example" href="buildexe_immediate_example.html" /><link rel="prev" title="BuildExe Setup" href="buildexe_setup.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>BuildExe “Script” example - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -221,7 +221,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,26 +238,26 @@
         </div>
         <article role="main">
           <div class="section" id="buildexe-script-example">
-<h1>BuildExe “Script” example<a class="headerlink" href="#buildexe-script-example" title="Permalink to this headline">#</a></h1>
+<h1>BuildExe “Script” example<a class="headerlink" href="#buildexe-script-example" title="Permalink to this heading">#</a></h1>
 <div class="section" id="basic-procedure">
-<h2>Basic Procedure<a class="headerlink" href="#basic-procedure" title="Permalink to this headline">#</a></h2>
+<h2>Basic Procedure<a class="headerlink" href="#basic-procedure" title="Permalink to this heading">#</a></h2>
 <p>Since we are writing our scripts in C++ we first need to <strong>compile</strong> our “script” to an executable, and then <strong>execute</strong> it to build targets.</p>
 <p class="plantuml">
-<img alt='usecase "build.helloworld.cpp" as build_cpp
-usecase "compile.toml" as compile_toml
-usecase "host_toolchain.toml" as host_toolchain_toml
-usecase "./build.helloworld" as build_project_exe
-usecase "build.toml" as build_toml
+<img src="../_images/plantuml-a1e5d847249641c4133a5a1f48974c3d0a2657af.png" alt="usecase &quot;build.helloworld.cpp&quot; as build_cpp
+usecase &quot;compile.toml&quot; as compile_toml
+usecase &quot;host_toolchain.toml&quot; as host_toolchain_toml
+usecase &quot;./build.helloworld&quot; as build_project_exe
+usecase &quot;build.toml&quot; as build_toml
 
-rectangle "./buildexe" as buildexe_exe
-artifact "./hello_world" as hello_world_exe
+rectangle &quot;./buildexe&quot; as buildexe_exe
+artifact &quot;./hello_world&quot; as hello_world_exe
 
 build_cpp -right-&gt; buildexe_exe
 compile_toml -up-&gt; buildexe_exe
 host_toolchain_toml -up-&gt; buildexe_exe
 buildexe_exe -right-&gt; build_project_exe
 build_toml -up-&gt; build_project_exe
-build_project_exe -right-&gt; hello_world_exe' src="../_images/plantuml-a1e5d847249641c4133a5a1f48974c3d0a2657af.png"/>
+build_project_exe -right-&gt; hello_world_exe"/>
 </p>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
@@ -265,7 +267,7 @@ We cannot use a cross compiler here.</p>
 </div>
 </div>
 <div class="section" id="helloworld-script-example">
-<h2>Helloworld “script” example<a class="headerlink" href="#helloworld-script-example" title="Permalink to this headline">#</a></h2>
+<h2>Helloworld “script” example<a class="headerlink" href="#helloworld-script-example" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Write your C++ “script”</p></li>
 <li><p>Write your <code class="docutils literal notranslate"><span class="pre">compile.toml</span></code> file</p></li>
@@ -286,20 +288,20 @@ We cannot use a cross compiler here.</p>
 <li><p>Your target will now be present in <code class="docutils literal notranslate"><span class="pre">[build_dir]/[toolchain_name]/[target_name]</span></code> (taken from <code class="docutils literal notranslate"><span class="pre">build.toml</span></code> and <code class="docutils literal notranslate"><span class="pre">build.helloworld.cpp</span></code>)</p></li>
 </ul>
 <div class="section" id="directory-structure">
-<h3>Directory structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">#</a></h3>
+<h3>Directory structure<a class="headerlink" href="#directory-structure" title="Permalink to this heading">#</a></h3>
 <p class="plantuml">
-<img alt="@startmindmap
+<img src="../_images/plantuml-b40964fcd5a61e8b3f5c822c4bd4d59ada9a1f33.png" alt="&#64;startmindmap
 * [workspace]
 ** [src]
 *** main.cpp
 ** build.helloworld.cpp
 ** compile.toml
 ** build.toml
-@endmindmap" src="../_images/plantuml-b40964fcd5a61e8b3f5c822c4bd4d59ada9a1f33.png"/>
+&#64;endmindmap"/>
 </p>
 </div>
 <div class="section" id="write-your-c-script">
-<h3>Write your C++ “script”<a class="headerlink" href="#write-your-c-script" title="Permalink to this headline">#</a></h3>
+<h3>Write your C++ “script”<a class="headerlink" href="#write-your-c-script" title="Permalink to this heading">#</a></h3>
 <p>From the “script” below we can see that we have a few lines of <strong>boilerplate</strong></p>
 <ul class="simple">
 <li><p>Setup args</p></li>
@@ -336,7 +338,7 @@ We cannot use a cross compiler here.</p>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">build.helloworld.cpp</span><a class="headerlink" href="#id1" title="Permalink to this code">#</a></div>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"buildcc.h"</span><span class="cp"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;buildcc.h&quot;</span><span class="cp"></span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">buildcc</span><span class="p">;</span><span class="w"></span>
 <span class="linenos"> 4</span>
@@ -349,7 +351,7 @@ We cannot use a cross compiler here.</p>
 <span class="linenos">11</span><span class="w">    </span><span class="n">ArgToolchain</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">12</span>
 <span class="linenos">13</span><span class="w">    </span><span class="n">Args</span><span class="o">::</span><span class="n">Init</span><span class="p">()</span><span class="w"></span>
-<span class="linenos">14</span><span class="w">        </span><span class="p">.</span><span class="n">AddToolchain</span><span class="p">(</span><span class="s">"gcc"</span><span class="p">,</span><span class="w"> </span><span class="s">"GCC toolchain"</span><span class="p">,</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">14</span><span class="w">        </span><span class="p">.</span><span class="n">AddToolchain</span><span class="p">(</span><span class="s">&quot;gcc&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GCC toolchain&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">)</span><span class="w"></span>
 <span class="linenos">15</span><span class="w">        </span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">16</span>
 <span class="linenos">17</span><span class="w">    </span><span class="c1">// Register</span>
@@ -362,7 +364,7 @@ We cannot use a cross compiler here.</p>
 <span class="linenos">24</span><span class="w">    </span><span class="c1">// Build steps</span>
 <span class="linenos">25</span><span class="w">    </span><span class="c1">// Main setup</span>
 <span class="linenos">26</span><span class="w">    </span><span class="n">Toolchain_gcc</span><span class="w"> </span><span class="n">gcc</span><span class="p">;</span><span class="w"></span>
-<span class="linenos">27</span><span class="w">    </span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">hello_world</span><span class="p">(</span><span class="s">"hello_world"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">27</span><span class="w">    </span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">hello_world</span><span class="p">(</span><span class="s">&quot;hello_world&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">28</span>
 <span class="linenos">29</span><span class="w">    </span><span class="n">Reg</span><span class="o">::</span><span class="n">Toolchain</span><span class="p">(</span><span class="n">arg_gcc</span><span class="p">.</span><span class="n">state</span><span class="p">)</span><span class="w"></span>
 <span class="linenos">30</span><span class="w">        </span><span class="p">.</span><span class="n">Func</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](){</span><span class="w"> </span><span class="n">gcc</span><span class="p">.</span><span class="n">Verify</span><span class="p">()</span><span class="w"> </span><span class="p">})</span><span class="w"></span>
@@ -384,7 +386,7 @@ We cannot use a cross compiler here.</p>
 <span class="linenos">46</span>
 <span class="linenos">47</span><span class="kt">void</span><span class="w"> </span><span class="nf">hello_world_build_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">target</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="linenos">48</span><span class="w">    </span><span class="c1">// Add your source</span>
-<span class="linenos">49</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/main.cpp"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">49</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;src/main.cpp&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">50</span>
 <span class="linenos">51</span><span class="w">    </span><span class="c1">// Initializes the target build tasks</span>
 <span class="linenos">52</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
@@ -394,26 +396,26 @@ We cannot use a cross compiler here.</p>
 </div>
 </div>
 <div class="section" id="write-your-compile-toml-file">
-<h3>Write your <code class="docutils literal notranslate"><span class="pre">compile.toml</span></code> file<a class="headerlink" href="#write-your-compile-toml-file" title="Permalink to this headline">#</a></h3>
+<h3>Write your <code class="docutils literal notranslate"><span class="pre">compile.toml</span></code> file<a class="headerlink" href="#write-your-compile-toml-file" title="Permalink to this heading">#</a></h3>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">compile.toml</span><a class="headerlink" href="#id2" title="Permalink to this code">#</a></div>
 <div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># Settings</span><span class="w"></span>
-<span class="linenos"> 2</span><span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"></span>
-<span class="linenos"> 3</span><span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"_build_internal"</span><span class="w"></span>
-<span class="linenos"> 4</span><span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"info"</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;_build_internal&quot;</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;info&quot;</span><span class="w"></span>
 <span class="linenos"> 5</span><span class="n">clean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
 <span class="linenos"> 6</span>
 <span class="linenos"> 7</span><span class="c1"># BuildExe run mode</span><span class="w"></span>
-<span class="linenos"> 8</span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"script"</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;script&quot;</span><span class="w"></span>
 <span class="linenos"> 9</span>
 <span class="linenos">10</span><span class="c1"># Target information</span><span class="w"></span>
-<span class="linenos">11</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"build.helloworld"</span><span class="w"></span>
-<span class="linenos">12</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"executable"</span><span class="w"></span>
-<span class="linenos">13</span><span class="n">relative_to_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"></span>
-<span class="linenos">14</span><span class="n">srcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">"build.helloworld.cpp"</span><span class="p">]</span><span class="w"></span>
+<span class="linenos">11</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;build.helloworld&quot;</span><span class="w"></span>
+<span class="linenos">12</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;executable&quot;</span><span class="w"></span>
+<span class="linenos">13</span><span class="n">relative_to_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="linenos">14</span><span class="n">srcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;build.helloworld.cpp&quot;</span><span class="p">]</span><span class="w"></span>
 <span class="linenos">15</span>
 <span class="linenos">16</span><span class="k">[script]</span><span class="w"></span>
-<span class="linenos">17</span><span class="n">configs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">"build.toml"</span><span class="p">]</span><span class="w"></span>
+<span class="linenos">17</span><span class="n">configs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;build.toml&quot;</span><span class="p">]</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -450,13 +452,13 @@ We cannot use a cross compiler here.</p>
 </ul>
 </div>
 <div class="section" id="write-your-build-toml-file">
-<h3>Write your <code class="docutils literal notranslate"><span class="pre">build.toml</span></code> file<a class="headerlink" href="#write-your-build-toml-file" title="Permalink to this headline">#</a></h3>
+<h3>Write your <code class="docutils literal notranslate"><span class="pre">build.toml</span></code> file<a class="headerlink" href="#write-your-build-toml-file" title="Permalink to this heading">#</a></h3>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">build.toml</span><a class="headerlink" href="#id3" title="Permalink to this code">#</a></div>
 <div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># Root</span><span class="w"></span>
-<span class="linenos"> 2</span><span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"></span>
-<span class="linenos"> 3</span><span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"_build"</span><span class="w"></span>
-<span class="linenos"> 4</span><span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"debug"</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;_build&quot;</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;debug&quot;</span><span class="w"></span>
 <span class="linenos"> 5</span>
 <span class="linenos"> 6</span><span class="c1"># Project</span><span class="w"></span>
 <span class="linenos"> 7</span><span class="n">clean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
@@ -476,7 +478,7 @@ We cannot use a cross compiler here.</p>
 <dt>[toolchain.gcc] submodule</dt><dd><ul>
 <li><p>This is a nested submodule of <code class="docutils literal notranslate"><span class="pre">toolchain</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">gcc</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">--build</span></code>, <code class="docutils literal notranslate"><span class="pre">--test</span></code> options and so on.</p></li>
 <li><p>The naming convention follows <code class="docutils literal notranslate"><span class="pre">toolchain.[name]</span></code> provided when using the <code class="docutils literal notranslate"><span class="pre">.AddToolchain</span></code> API.</p></li>
-<li><p>In our example: <code class="docutils literal notranslate"><span class="pre">args.AddToolchain("gcc",</span> <span class="pre">"GCC</span> <span class="pre">toolchain",</span> <span class="pre">arg_gcc);</span></code></p></li>
+<li><p>In our example: <code class="docutils literal notranslate"><span class="pre">args.AddToolchain(&quot;gcc&quot;,</span> <span class="pre">&quot;GCC</span> <span class="pre">toolchain&quot;,</span> <span class="pre">arg_gcc);</span></code></p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">build</span></code> and <code class="docutils literal notranslate"><span class="pre">test</span></code> values are used by the <code class="docutils literal notranslate"><span class="pre">Register</span></code> module.</p></li>
 <li><p>In our example <code class="docutils literal notranslate"><span class="pre">arg_gcc.state.build</span></code> and <code class="docutils literal notranslate"><span class="pre">arg_gcc.state.test</span></code></p></li>
 <li><p><strong>REASONING</strong> The reason why this has been done is because Buildcc allows your to mix multiple toolchains in a single script. We can now conditionally (at run time) choose the toolchains with which we would want to compile our targets.</p></li>
@@ -501,10 +503,10 @@ We cannot use a cross compiler here.</p>
                 </div>
                 <div class="title">BuildExe “Immediate” example</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="buildexe_setup.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -540,7 +542,7 @@ We cannot use a cross compiler here.</p>
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -569,7 +571,9 @@ We cannot use a cross compiler here.</p>
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

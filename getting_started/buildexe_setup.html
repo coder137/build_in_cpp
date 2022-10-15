@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="BuildExe “Script” example" href="buildexe_script_example.html" /><link rel="prev" title="Getting Started" href="toc.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>BuildExe Setup - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -221,7 +221,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,9 +238,9 @@
         </div>
         <article role="main">
           <div class="section" id="buildexe-setup">
-<h1>BuildExe Setup<a class="headerlink" href="#buildexe-setup" title="Permalink to this headline">#</a></h1>
+<h1>BuildExe Setup<a class="headerlink" href="#buildexe-setup" title="Permalink to this heading">#</a></h1>
 <div class="section" id="env-buildcc-home">
-<h2>ENV[BUILDCC_HOME]<a class="headerlink" href="#env-buildcc-home" title="Permalink to this headline">#</a></h2>
+<h2>ENV[BUILDCC_HOME]<a class="headerlink" href="#env-buildcc-home" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Add the environment variable <code class="docutils literal notranslate"><span class="pre">BUILDCC_HOME</span></code> with the absolute path on the operating system. For example: <code class="docutils literal notranslate"><span class="pre">BUILDCC_HOME=C:\buildcc</span></code> or <code class="docutils literal notranslate"><span class="pre">BUILDCC_HOME=/local/mnt/buildcc</span></code></p></li>
 <li><dl class="simple">
@@ -252,7 +254,7 @@
 <li><dl class="simple">
 <dt>Update your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> variable with the <strong>bin</strong> folder.</dt><dd><ul>
 <li><p>For example: <code class="docutils literal notranslate"><span class="pre">PATH</span> <span class="pre">+=</span> <span class="pre">ENV[BUILDCC_HOME]/bin;ENV[PATH]</span></code></p></li>
-<li><p>Linux : <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">PATH="$BUILDCC_HOME/bin:$PATH"</span></code></p></li>
+<li><p>Linux : <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">PATH=&quot;$BUILDCC_HOME/bin:$PATH&quot;</span></code></p></li>
 <li><p>Windows : My Computer -&gt; Properties -&gt; Advanced System Settings -&gt; Environment Variables -&gt; [Update your system variables]</p></li>
 </ul>
 </dd>
@@ -277,7 +279,7 @@ git submodule update
 <li><p>Your ENV[BUILDCC_HOME] directory should look like the following</p></li>
 </ul>
 <p class="plantuml">
-<img alt="@startmindmap
+<img src="../_images/plantuml-a44a18216eecf3208e0d901f9a57e84751a9010b.png" alt="&#64;startmindmap
 * ENV[BUILDCC_HOME]
 ** bin
 *** flatc
@@ -290,37 +292,37 @@ git submodule update
 *** [empty]
 ** host
 *** [empty]
-@endmindmap" src="../_images/plantuml-a44a18216eecf3208e0d901f9a57e84751a9010b.png"/>
+&#64;endmindmap"/>
 </p>
 </div>
 <div class="section" id="host-toolchains">
-<h2>Host Toolchains<a class="headerlink" href="#host-toolchains" title="Permalink to this headline">#</a></h2>
+<h2>Host Toolchains<a class="headerlink" href="#host-toolchains" title="Permalink to this heading">#</a></h2>
 <p>From the above map we can see that the <strong>host</strong> folder is empty</p>
 <p>This folder will contain the .toml files of all the HOST toolchains present on your system.</p>
 <div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">[toolchain.host]</span><span class="w"></span>
 <span class="linenos"> 2</span><span class="c1"># Toolchain family id</span><span class="w"></span>
 <span class="linenos"> 3</span><span class="c1"># valid options are: gcc, msvc, mingw</span><span class="w"></span>
 <span class="linenos"> 4</span><span class="c1"># clang is not yet supported</span><span class="w"></span>
-<span class="linenos"> 5</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"gcc"</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;gcc&quot;</span><span class="w"></span>
 <span class="linenos"> 6</span>
 <span class="linenos"> 7</span><span class="c1"># NOTE: Each name MUST be unique</span><span class="w"></span>
 <span class="linenos"> 8</span><span class="c1"># Preferrably use the [id]_[target_arch]_[compiler_version] for uniqueness,</span><span class="w"></span>
 <span class="linenos"> 9</span><span class="c1"># but make sure the name is unique if you have multiple similar host toolchains installed on your system</span><span class="w"></span>
-<span class="linenos">10</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"gcc_x86_64-linux-gnu_9.3.0"</span><span class="w"></span>
+<span class="linenos">10</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;gcc_x86_64-linux-gnu_9.3.0&quot;</span><span class="w"></span>
 <span class="linenos">11</span>
 <span class="linenos">12</span><span class="c1"># Make sure all of these executables are present when you install your toolchain</span><span class="w"></span>
-<span class="linenos">13</span><span class="n">asm_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"as"</span><span class="w"></span>
-<span class="linenos">14</span><span class="n">c_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"gcc"</span><span class="w"></span>
-<span class="linenos">15</span><span class="n">cpp_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"g++"</span><span class="w"></span>
-<span class="linenos">16</span><span class="n">archiver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"ar"</span><span class="w"></span>
-<span class="linenos">17</span><span class="n">linker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"ld"</span><span class="w"></span>
+<span class="linenos">13</span><span class="n">asm_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;as&quot;</span><span class="w"></span>
+<span class="linenos">14</span><span class="n">c_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;gcc&quot;</span><span class="w"></span>
+<span class="linenos">15</span><span class="n">cpp_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;g++&quot;</span><span class="w"></span>
+<span class="linenos">16</span><span class="n">archiver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ar&quot;</span><span class="w"></span>
+<span class="linenos">17</span><span class="n">linker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ld&quot;</span><span class="w"></span>
 <span class="linenos">18</span>
 <span class="linenos">19</span><span class="c1"># Additional information</span><span class="w"></span>
 <span class="linenos">20</span><span class="c1"># Necessary if multiple similar toolchains are installed</span><span class="w"></span>
 <span class="linenos">21</span><span class="c1"># For example. Installed gcc version 9.3.0 and 10.2.0</span><span class="w"></span>
-<span class="linenos">22</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"/usr/bin"</span><span class="w"></span>
-<span class="linenos">23</span><span class="n">compiler_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"9.3.0"</span><span class="w"></span>
-<span class="linenos">24</span><span class="n">target_arch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"x86_64-linux-gnu"</span><span class="w"></span>
+<span class="linenos">22</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/usr/bin&quot;</span><span class="w"></span>
+<span class="linenos">23</span><span class="n">compiler_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;9.3.0&quot;</span><span class="w"></span>
+<span class="linenos">24</span><span class="n">target_arch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;x86_64-linux-gnu&quot;</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="admonition important">
@@ -331,7 +333,7 @@ git submodule update
 <li><p>Your ENV[BUILDCC_HOME] directory should look like the following</p></li>
 </ul>
 <p class="plantuml">
-<img alt="@startmindmap
+<img src="../_images/plantuml-968d5bbd1332b743a7b17b0e4274266a2acaaaae.png" alt="&#64;startmindmap
 * ENV[BUILDCC_HOME]
 ** bin
 *** flatc
@@ -346,11 +348,11 @@ git submodule update
 *** gcc_x86_64-linux-gnu_9.3.0.toml
 *** mingw_x86_64-w64-mingw32_10.2.0.toml
 *** msvc_am64_19.29.30137.toml
-@endmindmap" src="../_images/plantuml-968d5bbd1332b743a7b17b0e4274266a2acaaaae.png"/>
+&#64;endmindmap"/>
 </p>
 </div>
 <div class="section" id="libs">
-<h2>Libs<a class="headerlink" href="#libs" title="Permalink to this headline">#</a></h2>
+<h2>Libs<a class="headerlink" href="#libs" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Any library that the user needs to use in their projects can be <strong>git cloned</strong> into the libs folder.</p></li>
 <li><p>BuildExe can then be used to compile the library build files along with the “script”.</p></li>
@@ -372,7 +374,7 @@ git clone https://github.com/fmtlib/fmt.git
 <li><p>Please see the <a class="reference internal" href="buildexe_package_manager.html"><span class="doc">BuildExe as a Package Manager</span></a> document for a simple example.</p></li>
 </ul>
 <p class="plantuml">
-<img alt="@startmindmap
+<img src="../_images/plantuml-87d3b26be8cc5bb34385575617f41f55382be5a4.png" alt="&#64;startmindmap
 * ENV[BUILDCC_HOME]
 ** bin
 *** flatc
@@ -392,11 +394,11 @@ git clone https://github.com/fmtlib/fmt.git
 *** gcc_x86_64-linux-gnu_9.3.0.toml
 *** mingw_x86_64-w64-mingw32_10.2.0.toml
 *** msvc_am64_19.29.30137.toml
-@endmindmap" src="../_images/plantuml-87d3b26be8cc5bb34385575617f41f55382be5a4.png"/>
+&#64;endmindmap"/>
 </p>
 </div>
 <div class="section" id="extensions">
-<h2>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">#</a></h2>
+<h2>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">#</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Extensions support in BuildExe is incomplete and there currently aren’t any third party extensions for BuildCC.</p>
@@ -416,10 +418,10 @@ git clone https://github.com/fmtlib/fmt.git
                 </div>
                 <div class="title">BuildExe “Script” example</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="toc.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -455,7 +457,7 @@ git clone https://github.com/fmtlib/fmt.git
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -480,7 +482,9 @@ git clone https://github.com/fmtlib/fmt.git
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

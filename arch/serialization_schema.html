@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="CMake Boilerplate" href="cmake_boilerplate.html" /><link rel="prev" title="Software Heirarchy" href="software_heirarchy.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>Serialization Schema - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -221,7 +221,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,9 +238,9 @@
         </div>
         <article role="main">
           <div class="section" id="serialization-schema">
-<h1>Serialization Schema<a class="headerlink" href="#serialization-schema" title="Permalink to this headline">#</a></h1>
+<h1>Serialization Schema<a class="headerlink" href="#serialization-schema" title="Permalink to this heading">#</a></h1>
 <div class="section" id="path">
-<h2>Path<a class="headerlink" href="#path" title="Permalink to this headline">#</a></h2>
+<h2>Path<a class="headerlink" href="#path" title="Permalink to this heading">#</a></h2>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>namespace schema.internal;
 
 table Path {
@@ -254,7 +256,7 @@ table Path {
 </ul>
 </div>
 <div class="section" id="generator">
-<h2>Generator<a class="headerlink" href="#generator" title="Permalink to this headline">#</a></h2>
+<h2>Generator<a class="headerlink" href="#generator" title="Permalink to this heading">#</a></h2>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>namespace schema.internal;
 
 // Each generator consists of many relational files of [input] - [output] - [commands]
@@ -268,15 +270,15 @@ root_type Generator;
 </pre></div>
 </div>
 <p class="plantuml">
-<img alt="start
+<img src="../_images/plantuml-d8f9ceaa35fb19ba9a4f6ee187ac3f3b4739883f.png" alt="start
 :Inputs;
 :Commands;
 :Outputs;
-stop" src="../_images/plantuml-d8f9ceaa35fb19ba9a4f6ee187ac3f3b4739883f.png"/>
+stop"/>
 </p>
 </div>
 <div class="section" id="target">
-<h2>Target<a class="headerlink" href="#target" title="Permalink to this headline">#</a></h2>
+<h2>Target<a class="headerlink" href="#target" title="Permalink to this heading">#</a></h2>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>namespace schema.internal;
 
 enum TargetType : byte {
@@ -330,7 +332,7 @@ root_type Target;
 </pre></div>
 </div>
 <p class="plantuml">
-<img alt="start
+<img src="../_images/plantuml-b6a52ee0cced6967c6a4ad74b7016af535492d65.png" alt="start
 
 split
 :SourceFiles;
@@ -378,7 +380,7 @@ end split
 :Link;
 
 :Target;
-stop" src="../_images/plantuml-b6a52ee0cced6967c6a4ad74b7016af535492d65.png"/>
+stop"/>
 </p>
 </div>
 </div>
@@ -395,10 +397,10 @@ stop" src="../_images/plantuml-b6a52ee0cced6967c6a4ad74b7016af535492d65.png"/>
                 </div>
                 <div class="title">CMake Boilerplate</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="software_heirarchy.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -434,7 +436,7 @@ stop" src="../_images/plantuml-b6a52ee0cced6967c6a4ad74b7016af535492d65.png"/>
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -458,7 +460,9 @@ stop" src="../_images/plantuml-b6a52ee0cced6967c6a4ad74b7016af535492d65.png"/>
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

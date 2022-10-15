@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Serialization Schema" href="serialization_schema.html" /><link rel="prev" title="Project Layout" href="project_layout.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>Software Heirarchy - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -221,7 +221,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,21 +238,21 @@
         </div>
         <article role="main">
           <div class="section" id="software-heirarchy">
-<h1>Software Heirarchy<a class="headerlink" href="#software-heirarchy" title="Permalink to this headline">#</a></h1>
+<h1>Software Heirarchy<a class="headerlink" href="#software-heirarchy" title="Permalink to this heading">#</a></h1>
 <div class="section" id="buildcc-single-lib">
-<h2>BuildCC single lib<a class="headerlink" href="#buildcc-single-lib" title="Permalink to this headline">#</a></h2>
+<h2>BuildCC single lib<a class="headerlink" href="#buildcc-single-lib" title="Permalink to this heading">#</a></h2>
 <p><strong>BuildCC</strong> sources are compiled into a single library</p>
 <ul class="simple">
 <li><p>The easiest way to use <code class="docutils literal notranslate"><span class="pre">BuildCC</span></code></p></li>
 <li><p>After building the project all we need to do is <code class="docutils literal notranslate"><span class="pre">-lbuildcc</span> <span class="pre">-ltiny-process-library</span></code> or equivalent</p></li>
 </ul>
 <p class="plantuml">
-<img alt='rectangle Flatbuffers as flatbuffers
+<img src="../_images/plantuml-0217fffc78ce874c8847e87d1a5f460f94194815.png" alt="rectangle Flatbuffers as flatbuffers
 rectangle fmt as fmt
 rectangle spdlog as spdlog
 rectangle Taskflow as taskflow
 rectangle CLI11 as cli11
-rectangle "tiny-process-library" as tpl
+rectangle &quot;tiny-process-library&quot; as tpl
 
 rectangle BuildCC as buildcc
 
@@ -259,11 +261,11 @@ fmt -up-&gt; buildcc
 spdlog -up-&gt; buildcc
 taskflow -up-&gt; buildcc
 cli11 -up-&gt; buildcc
-tpl -up-&gt; buildcc' src="../_images/plantuml-0217fffc78ce874c8847e87d1a5f460f94194815.png"/>
+tpl -up-&gt; buildcc"/>
 </p>
 </div>
 <div class="section" id="buildcc-interface-lib">
-<h2>BuildCC interface lib<a class="headerlink" href="#buildcc-interface-lib" title="Permalink to this headline">#</a></h2>
+<h2>BuildCC interface lib<a class="headerlink" href="#buildcc-interface-lib" title="Permalink to this heading">#</a></h2>
 <p><strong>BuildCC</strong> is broken up into multiple smaller libraries</p>
 <ul class="simple">
 <li><p>This has been done mainly for unit-testing and mocking segregation</p></li>
@@ -271,22 +273,22 @@ tpl -up-&gt; buildcc' src="../_images/plantuml-0217fffc78ce874c8847e87d1a5f460f9
 <li><p>Please see <a class="reference internal" href="testing.html"><span class="doc">Testing</span></a> for more information of how the <code class="docutils literal notranslate"><span class="pre">mock_*</span></code> equivalent of these libraries are used</p></li>
 </ul>
 <p class="plantuml">
-<img alt='rectangle Flatbuffers as flatbuffers #palegreen
+<img src="../_images/plantuml-ec70faad6a43503cdb6747457536977d7eca7583.png" alt="rectangle Flatbuffers as flatbuffers #palegreen
 rectangle fmt as fmt #palegreen
 rectangle spdlog as spdlog #palegreen
 rectangle Taskflow as taskflow #palegreen
 rectangle CLI11 as cli11 #palegreen
-rectangle "tiny-process-library" as tpl #palegreen
+rectangle &quot;tiny-process-library&quot; as tpl #palegreen
 
 rectangle Environment as env #aliceblue
 rectangle Schema as schema #aliceblue
 rectangle Toolchain as toolchain #aliceblue
 rectangle Target as target #aliceblue
-rectangle "Toolchain specialized" as toolchain_specialized #aliceblue
-rectangle "Target specialized" as target_specialized #aliceblue
+rectangle &quot;Toolchain specialized&quot; as toolchain_specialized #aliceblue
+rectangle &quot;Target specialized&quot; as target_specialized #aliceblue
 rectangle Args as args #aliceblue
 rectangle Register as register #aliceblue
-rectangle "Supported Plugins" as plugins #aliceblue
+rectangle &quot;Supported Plugins&quot; as plugins #aliceblue
 rectangle BuildCC as buildcc
 
 
@@ -316,7 +318,7 @@ toolchain_specialized -up-&gt; buildcc
 target_specialized -up-&gt; buildcc
 args -up-&gt; buildcc
 register -up-&gt; buildcc
-plugins -up-&gt; buildcc' src="../_images/plantuml-ec70faad6a43503cdb6747457536977d7eca7583.png"/>
+plugins -up-&gt; buildcc"/>
 </p>
 </div>
 </div>
@@ -333,10 +335,10 @@ plugins -up-&gt; buildcc' src="../_images/plantuml-ec70faad6a43503cdb67474575369
                 </div>
                 <div class="title">Serialization Schema</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="project_layout.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -372,7 +374,7 @@ plugins -up-&gt; buildcc' src="../_images/plantuml-ec70faad6a43503cdb67474575369
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -395,7 +397,9 @@ plugins -up-&gt; buildcc' src="../_images/plantuml-ec70faad6a43503cdb67474575369
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

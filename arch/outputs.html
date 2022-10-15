@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Style Guide" href="style_guide.html" /><link rel="prev" title="Testing" href="testing.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>Outputs - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -221,7 +221,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,15 +238,15 @@
         </div>
         <article role="main">
           <div class="section" id="outputs">
-<h1>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">#</a></h1>
+<h1>Outputs<a class="headerlink" href="#outputs" title="Permalink to this heading">#</a></h1>
 <div class="section" id="buildcc-library">
-<h2>BuildCC Library<a class="headerlink" href="#buildcc-library" title="Permalink to this headline">#</a></h2>
+<h2>BuildCC Library<a class="headerlink" href="#buildcc-library" title="Permalink to this heading">#</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">build_in_cpp</span></code> project aims to remove DSLs by writing build files in C++.</p>
 <p>However our C++ “script” first needs to be <strong>built (compiled and linked)</strong> then <strong>executed (build targets)</strong>.</p>
 <p>When building (compiling and linking) our C++ “script” we need to link the <code class="docutils literal notranslate"><span class="pre">buildcc</span></code> library as well to provide the “script” with <code class="docutils literal notranslate"><span class="pre">buildcc</span></code> APIs.</p>
 </div>
 <div class="section" id="buildexe-executable">
-<h2>BuildExe Executable<a class="headerlink" href="#buildexe-executable" title="Permalink to this headline">#</a></h2>
+<h2>BuildExe Executable<a class="headerlink" href="#buildexe-executable" title="Permalink to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">BuildExe</span></code> is a standalone executable similar to <code class="docutils literal notranslate"><span class="pre">make.exe</span></code>.</p>
 <p>As part of the current release <code class="docutils literal notranslate"><span class="pre">BuildExe</span></code> requires the following folder structure.</p>
 <div class="admonition note">
@@ -252,24 +254,24 @@
 <p>Proper details of <code class="docutils literal notranslate"><span class="pre">BuildExe</span></code> usage to be added. For now this is in its experimental stage with only support for GCC, MinGW and MSVC compilers.</p>
 </div>
 <p class="plantuml">
-<img alt="@startmindmap
+<img src="../_images/plantuml-c585d7bd336d497ba3d390dbf1921d7b65892f1e.png" alt="&#64;startmindmap
 * ENV[BUILDCC_HOME]
 ** buildcc
 ** extensions
 ** libs
 ** host
-@endmindmap" src="../_images/plantuml-c585d7bd336d497ba3d390dbf1921d7b65892f1e.png"/>
+&#64;endmindmap"/>
 </p>
 <div class="section" id="env-buildcc-home">
-<h3>ENV[BUILDCC_HOME]<a class="headerlink" href="#env-buildcc-home" title="Permalink to this headline">#</a></h3>
+<h3>ENV[BUILDCC_HOME]<a class="headerlink" href="#env-buildcc-home" title="Permalink to this heading">#</a></h3>
 <p>Create your BUILDCC_HOME directory. For example: <code class="docutils literal notranslate"><span class="pre">C:/BUILDCCHOME</span></code> or <code class="docutils literal notranslate"><span class="pre">local/mnt/BUILDCCHOME</span></code> and add this path to the <strong>environment variable BUILDCC_HOME</strong>.</p>
 </div>
 <div class="section" id="buildcc">
-<h3>buildcc<a class="headerlink" href="#buildcc" title="Permalink to this headline">#</a></h3>
+<h3>buildcc<a class="headerlink" href="#buildcc" title="Permalink to this heading">#</a></h3>
 <p>This directory contains the git cloned <code class="docutils literal notranslate"><span class="pre">build_in_cpp</span></code> repository</p>
 </div>
 <div class="section" id="extensions">
-<h3>extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">#</a></h3>
+<h3>extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">#</a></h3>
 <p>This directory contains several git cloned second and third party plugins and extensions</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -277,12 +279,12 @@
 </div>
 </div>
 <div class="section" id="libs">
-<h3>libs<a class="headerlink" href="#libs" title="Permalink to this headline">#</a></h3>
+<h3>libs<a class="headerlink" href="#libs" title="Permalink to this heading">#</a></h3>
 <p>This directory contains several git cloned libraries that need to be used in your projects or code base once they are specified in your .toml file.</p>
 <p>In this way, the <code class="docutils literal notranslate"><span class="pre">build_in_cpp</span></code> project automatically behaves like a package manager.</p>
 </div>
 <div class="section" id="host">
-<h3>host<a class="headerlink" href="#host" title="Permalink to this headline">#</a></h3>
+<h3>host<a class="headerlink" href="#host" title="Permalink to this heading">#</a></h3>
 <p>Host toolchain toml files that contain information pertaining to the various host toolchains installed on your operating system.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -308,10 +310,10 @@
                 </div>
                 <div class="title">Style Guide</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="testing.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -347,7 +349,7 @@
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -377,7 +379,9 @@
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

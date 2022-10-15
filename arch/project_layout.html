@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Software Heirarchy" href="software_heirarchy.html" /><link rel="prev" title="Architecture" href="toc.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>Project Layout - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -221,7 +221,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,9 +238,9 @@
         </div>
         <article role="main">
           <div class="section" id="project-layout">
-<h1>Project Layout<a class="headerlink" href="#project-layout" title="Permalink to this headline">#</a></h1>
+<h1>Project Layout<a class="headerlink" href="#project-layout" title="Permalink to this heading">#</a></h1>
 <p class="plantuml">
-<img alt="@startmindmap
+<img src="../_images/plantuml-10e47c02afa512122c5fa782e6bf3ae6cc48f28d.png" alt="&#64;startmindmap
 * [root]
 ** .clang-format
 ** .gitmodules
@@ -278,10 +280,10 @@
 ** spdlog
 ** taskflow
 ** tiny-process-library
-@endmindmap" src="../_images/plantuml-10e47c02afa512122c5fa782e6bf3ae6cc48f28d.png"/>
+&#64;endmindmap"/>
 </p>
 <div class="section" id="workspace-root">
-<h2>[workspace root]<a class="headerlink" href="#workspace-root" title="Permalink to this headline">#</a></h2>
+<h2>[workspace root]<a class="headerlink" href="#workspace-root" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>.clang-format</dt><dd><ul>
@@ -343,7 +345,7 @@
 </ul>
 </div>
 <div class="section" id="bootstrap">
-<h2>bootstrap<a class="headerlink" href="#bootstrap" title="Permalink to this headline">#</a></h2>
+<h2>bootstrap<a class="headerlink" href="#bootstrap" title="Permalink to this heading">#</a></h2>
 <p>Bootstrap build files to compile the <code class="docutils literal notranslate"><span class="pre">build_in_cpp</span></code> project</p>
 <ul class="simple">
 <li><dl class="simple">
@@ -358,7 +360,7 @@
 </ul>
 </div>
 <div class="section" id="buildcc">
-<h2>buildcc<a class="headerlink" href="#buildcc" title="Permalink to this headline">#</a></h2>
+<h2>buildcc<a class="headerlink" href="#buildcc" title="Permalink to this heading">#</a></h2>
 <p>Contains the core <code class="docutils literal notranslate"><span class="pre">buildcc</span></code> library</p>
 <ul class="simple">
 <li><p>schema</p></li>
@@ -378,11 +380,11 @@
 </ul>
 </div>
 <div class="section" id="buildexe">
-<h2>buildexe<a class="headerlink" href="#buildexe" title="Permalink to this headline">#</a></h2>
+<h2>buildexe<a class="headerlink" href="#buildexe" title="Permalink to this heading">#</a></h2>
 <p>Standalone <code class="docutils literal notranslate"><span class="pre">buildcc</span></code> executable for compiling projects in immediate mode or script mode</p>
 </div>
 <div class="section" id="cmake">
-<h2>cmake<a class="headerlink" href="#cmake" title="Permalink to this headline">#</a></h2>
+<h2>cmake<a class="headerlink" href="#cmake" title="Permalink to this heading">#</a></h2>
 <p>Global cmake variables and custom_targets</p>
 <ul class="simple">
 <li><dl class="simple">
@@ -426,7 +428,7 @@
 </ul>
 </div>
 <div class="section" id="docs">
-<h2>docs<a class="headerlink" href="#docs" title="Permalink to this headline">#</a></h2>
+<h2>docs<a class="headerlink" href="#docs" title="Permalink to this heading">#</a></h2>
 <p>Project documentation</p>
 <ul class="simple">
 <li><dl class="simple">
@@ -446,7 +448,7 @@
 </ul>
 </div>
 <div class="section" id="example">
-<h2>example<a class="headerlink" href="#example" title="Permalink to this headline">#</a></h2>
+<h2>example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>gcc</dt><dd><ul>
@@ -472,7 +474,7 @@
 </ul>
 </div>
 <div class="section" id="third-party">
-<h2>third_party<a class="headerlink" href="#third-party" title="Permalink to this headline">#</a></h2>
+<h2>third_party<a class="headerlink" href="#third-party" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Flatbuffers</p></li>
 <li><p>Fmtlib</p></li>
@@ -497,10 +499,10 @@
                 </div>
                 <div class="title">Software Heirarchy</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="toc.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -536,7 +538,7 @@
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -565,7 +567,9 @@
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Target Info APIs" href="target.html" /><link rel="prev" title="Target Utils" href="target_utils.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>Generator - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -221,7 +221,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,9 +238,9 @@
         </div>
         <article role="main">
           <div class="section" id="generator">
-<h1>Generator<a class="headerlink" href="#generator" title="Permalink to this headline">#</a></h1>
+<h1>Generator<a class="headerlink" href="#generator" title="Permalink to this heading">#</a></h1>
 <div class="section" id="generator-h">
-<h2>generator.h<a class="headerlink" href="#generator-h" title="Permalink to this headline">#</a></h2>
+<h2>generator.h<a class="headerlink" href="#generator-h" title="Permalink to this heading">#</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>doxygenclass: Cannot find class “buildcc::Generator” in doxygen xml output for project “buildcc_documentation” from directory: /home/runner/work/build_in_cpp/build_in_cpp/build/xml</p>
@@ -249,27 +251,27 @@
 </div>
 </div>
 <div class="section" id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">#</a></h2>
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h2>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// Example Setup</span>
-<span class="linenos"> 2</span><span class="n">TargetEnv</span><span class="w"> </span><span class="nf">gen_env</span><span class="p">(</span><span class="s">"gen_root"</span><span class="p">,</span><span class="w"> </span><span class="s">"gen_build"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="n">TargetEnv</span><span class="w"> </span><span class="n">gen_env</span><span class="p">(</span><span class="s">&quot;gen_root&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;gen_build&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos"> 3</span><span class="kt">bool</span><span class="w"> </span><span class="n">parallel</span><span class="p">{</span><span class="nb">true</span><span class="p">};</span><span class="w"></span>
-<span class="linenos"> 4</span><span class="n">BaseGenerator</span><span class="w"> </span><span class="nf">generator</span><span class="p">(</span><span class="s">"unique_name"</span><span class="p">,</span><span class="w"> </span><span class="n">gen_env</span><span class="p">,</span><span class="w"> </span><span class="n">parallel</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="n">BaseGenerator</span><span class="w"> </span><span class="n">generator</span><span class="p">(</span><span class="s">&quot;unique_name&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gen_env</span><span class="p">,</span><span class="w"> </span><span class="n">parallel</span><span class="p">);</span><span class="w"></span>
 <span class="linenos"> 5</span><span class="c1">// Adds absolute {gen_root_dir} and {gen_build_dir} paths to internal fmt::format</span>
 <span class="linenos"> 6</span>
 <span class="linenos"> 7</span><span class="c1">// We can now do this</span>
 <span class="linenos"> 8</span><span class="c1">// {gen_root_dir}/my_generator.py -&gt; {my_generator}</span>
-<span class="linenos"> 9</span><span class="n">generator</span><span class="p">.</span><span class="n">AddInput</span><span class="p">(</span><span class="s">"{gen_root_dir}/my_generator.py"</span><span class="p">,</span><span class="w"> </span><span class="s">"my_generator"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="n">generator</span><span class="p">.</span><span class="n">AddInput</span><span class="p">(</span><span class="s">&quot;{gen_root_dir}/my_generator.py&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my_generator&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">10</span>
 <span class="linenos">11</span><span class="c1">// {gen_build_dir}/my_generator.h -&gt; {generated_header}</span>
 <span class="linenos">12</span><span class="c1">// {gen_build_dir}/my_generator.cpp -&gt; {generated_source}</span>
-<span class="linenos">13</span><span class="n">generator</span><span class="p">.</span><span class="n">AddOutput</span><span class="p">(</span><span class="s">"{gen_build_dir}/generated.h"</span><span class="p">,</span><span class="w"> </span><span class="s">"generated_header"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">14</span><span class="n">generator</span><span class="p">.</span><span class="n">AddOutput</span><span class="p">(</span><span class="s">"{gen_build_dir}/generated.cpp"</span><span class="p">,</span><span class="w"> </span><span class="s">"generated_source"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">13</span><span class="n">generator</span><span class="p">.</span><span class="n">AddOutput</span><span class="p">(</span><span class="s">&quot;{gen_build_dir}/generated.h&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;generated_header&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">14</span><span class="n">generator</span><span class="p">.</span><span class="n">AddOutput</span><span class="p">(</span><span class="s">&quot;{gen_build_dir}/generated.cpp&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;generated_source&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">15</span>
 <span class="linenos">16</span><span class="c1">// Example Commands</span>
 <span class="linenos">17</span><span class="c1">// NOTE: If `parallel==true`, both of these commands runs in parallel</span>
 <span class="linenos">18</span><span class="c1">// NOTE: If `parallel==false`, commands will run in the order that they are added.</span>
-<span class="linenos">19</span><span class="n">generator</span><span class="p">.</span><span class="n">AddCommand</span><span class="p">(</span><span class="s">"{my_generator} --generate header {generated_header}"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">20</span><span class="n">generator</span><span class="p">.</span><span class="n">AddCommand</span><span class="p">(</span><span class="s">"{my_generator} --generate source {generated_source}"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">19</span><span class="n">generator</span><span class="p">.</span><span class="n">AddCommand</span><span class="p">(</span><span class="s">&quot;{my_generator} --generate header {generated_header}&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">20</span><span class="n">generator</span><span class="p">.</span><span class="n">AddCommand</span><span class="p">(</span><span class="s">&quot;{my_generator} --generate source {generated_source}&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">21</span>
 <span class="linenos">22</span><span class="c1">// Setup the tasks</span>
 <span class="linenos">23</span><span class="n">generator</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
@@ -295,10 +297,10 @@
                 </div>
                 <div class="title">Target Info APIs</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="target_utils.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -334,7 +336,7 @@
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -357,7 +359,9 @@
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

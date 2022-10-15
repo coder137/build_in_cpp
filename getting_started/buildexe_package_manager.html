@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Walkthrough Examples" href="walkthroughs.html" /><link rel="prev" title="BuildExe “Immediate” example" href="buildexe_immediate_example.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>BuildExe as a Package Manager - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -221,7 +221,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,26 +238,26 @@
         </div>
         <article role="main">
           <div class="section" id="buildexe-as-a-package-manager">
-<h1>BuildExe as a Package Manager<a class="headerlink" href="#buildexe-as-a-package-manager" title="Permalink to this headline">#</a></h1>
+<h1>BuildExe as a Package Manager<a class="headerlink" href="#buildexe-as-a-package-manager" title="Permalink to this heading">#</a></h1>
 <p>When we are <strong>compiling</strong> our “script” to an executable we can also add additional library build files which define how the library is built.</p>
 <p>The procedure is similar to git cloning the library to the <strong>ENV{BUILDCC_HOME}/libs</strong> folder using the <code class="docutils literal notranslate"><span class="pre">libs</span></code> options in buildexe.</p>
 <p>Please see <a class="reference internal" href="buildexe_setup.html"><span class="doc">BuildExe Setup</span></a> to setup your libs folder appropriately.</p>
 <div class="section" id="basic-procedure">
-<h2>Basic Procedure<a class="headerlink" href="#basic-procedure" title="Permalink to this headline">#</a></h2>
+<h2>Basic Procedure<a class="headerlink" href="#basic-procedure" title="Permalink to this heading">#</a></h2>
 <p class="plantuml">
-<img alt='usecase "build.user_project.cpp" as build_cpp
-usecase "libs/library/build.library.h" as build_lib_header
-usecase "libs/library/build.library.cpp" as build_lib_source
+<img src="../_images/plantuml-5669be3cde8ac843833b78be715a0ce02d47688d.png" alt="usecase &quot;build.user_project.cpp&quot; as build_cpp
+usecase &quot;libs/library/build.library.h&quot; as build_lib_header
+usecase &quot;libs/library/build.library.cpp&quot; as build_lib_source
 
-usecase "compile.toml" as compile_toml
-usecase "host_toolchain.toml" as host_toolchain_toml
-rectangle "./build.user_project" as build_project_exe
-usecase "build.toml" as build_toml
+usecase &quot;compile.toml&quot; as compile_toml
+usecase &quot;host_toolchain.toml&quot; as host_toolchain_toml
+rectangle &quot;./build.user_project&quot; as build_project_exe
+usecase &quot;build.toml&quot; as build_toml
 
-rectangle "./buildexe" as buildexe_exe
+rectangle &quot;./buildexe&quot; as buildexe_exe
 
-artifact "library" as library
-artifact "./hello_world" as hello_world_exe
+artifact &quot;library&quot; as library
+artifact &quot;./hello_world&quot; as hello_world_exe
 
 build_cpp -right-&gt; buildexe_exe
 build_lib_header -right-&gt; buildexe_exe
@@ -269,11 +271,11 @@ buildexe_exe -right-&gt; build_project_exe
 build_toml -up-&gt; build_project_exe
 build_project_exe -right-&gt; hello_world_exe
 
-library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b78be715a0ce02d47688d.png"/>
+library -up-&gt; hello_world_exe"/>
 </p>
 </div>
 <div class="section" id="helloworld-fmtlib-example">
-<h2>Helloworld “fmtlib” example<a class="headerlink" href="#helloworld-fmtlib-example" title="Permalink to this headline">#</a></h2>
+<h2>Helloworld “fmtlib” example<a class="headerlink" href="#helloworld-fmtlib-example" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Git clone the <code class="docutils literal notranslate"><span class="pre">fmt</span></code> library into your <code class="docutils literal notranslate"><span class="pre">ENV{BUILDCC_HOME}/libs</span></code> folder</p></li>
 <li><dl class="simple">
@@ -304,20 +306,20 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </pre></div>
 </div>
 <div class="section" id="directory-structure">
-<h3>Directory structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">#</a></h3>
+<h3>Directory structure<a class="headerlink" href="#directory-structure" title="Permalink to this heading">#</a></h3>
 <p class="plantuml">
-<img alt="@startmindmap
+<img src="../_images/plantuml-b40964fcd5a61e8b3f5c822c4bd4d59ada9a1f33.png" alt="&#64;startmindmap
 * [workspace]
 ** [src]
 *** main.cpp
 ** build.helloworld.cpp
 ** compile.toml
 ** build.toml
-@endmindmap" src="../_images/plantuml-b40964fcd5a61e8b3f5c822c4bd4d59ada9a1f33.png"/>
+&#64;endmindmap"/>
 </p>
 </div>
 <div class="section" id="write-your-fmtlib-build-files">
-<h3>Write your fmtlib build files<a class="headerlink" href="#write-your-fmtlib-build-files" title="Permalink to this headline">#</a></h3>
+<h3>Write your fmtlib build files<a class="headerlink" href="#write-your-fmtlib-build-files" title="Permalink to this heading">#</a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This process might seem like a hassle. But please note that fmtlib does not currently have support for BuildCC like build files and it must be provided by the user.</p>
@@ -326,7 +328,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 <div class="code-block-caption"><span class="caption-text">build.fmt.h</span><a class="headerlink" href="#id1" title="Permalink to this code">#</a></div>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#pragma once</span>
 <span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"buildcc.h"</span><span class="cp"></span>
+<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;buildcc.h&quot;</span><span class="cp"></span>
 <span class="linenos"> 4</span>
 <span class="linenos"> 5</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">buildcc</span><span class="p">;</span><span class="w"></span>
 <span class="linenos"> 6</span>
@@ -360,26 +362,26 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </div>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">build.fmt.cpp</span><a class="headerlink" href="#id2" title="Permalink to this code">#</a></div>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"build.fmt.h"</span><span class="cp"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;build.fmt.h&quot;</span><span class="cp"></span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="kt">void</span><span class="w"> </span><span class="nf">build_fmt_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="o">&amp;</span><span class="w"> </span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">FmtConfig</span><span class="o">&amp;</span><span class="w"> </span><span class="n">config</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos"> 4</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/os.cc"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos"> 5</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/format.cc"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos"> 6</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span><span class="w"></span>
-<span class="linenos"> 7</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">GlobHeaders</span><span class="p">(</span><span class="s">"include/fmt"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;src/os.cc&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;src/format.cc&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">&quot;include&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">GlobHeaders</span><span class="p">(</span><span class="s">&quot;include/fmt&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos"> 8</span>
 <span class="linenos"> 9</span><span class="w">    </span><span class="c1">// Toolchain specific flags added</span>
 <span class="linenos">10</span><span class="w">    </span><span class="c1">// if default_flags == true</span>
 <span class="linenos">11</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">default_flags</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="linenos">12</span><span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="n">GetToolchain</span><span class="p">().</span><span class="n">GetId</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="linenos">13</span><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">ToolchainId</span><span class="o">::</span><span class="no">Gcc</span><span class="p">:</span><span class="w"></span>
-<span class="linenos">14</span><span class="w">            </span><span class="n">target</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"-std=c++11"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">14</span><span class="w">            </span><span class="n">target</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">&quot;-std=c++11&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">15</span><span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">16</span><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">ToolchainId</span><span class="o">::</span><span class="no">MinGW</span><span class="p">:</span><span class="w"></span>
-<span class="linenos">17</span><span class="w">            </span><span class="n">target</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"-std=c++11"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">17</span><span class="w">            </span><span class="n">target</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">&quot;-std=c++11&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">18</span><span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">19</span><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">ToolchainId</span><span class="o">::</span><span class="no">Msvc</span><span class="p">:</span><span class="w"></span>
-<span class="linenos">20</span><span class="w">            </span><span class="n">target</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">"/std:c++11"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">20</span><span class="w">            </span><span class="n">target</span><span class="p">.</span><span class="n">AddCppCompileFlag</span><span class="p">(</span><span class="s">&quot;/std:c++11&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">21</span><span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">22</span><span class="w">        </span><span class="k">default</span><span class="o">:</span><span class="w"></span>
 <span class="linenos">23</span><span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
@@ -391,16 +393,16 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 <span class="linenos">29</span><span class="p">}</span><span class="w"></span>
 <span class="linenos">30</span>
 <span class="linenos">31</span><span class="kt">void</span><span class="w"> </span><span class="nf">build_fmt_ho_cb</span><span class="p">(</span><span class="n">TargetInfo</span><span class="o">&amp;</span><span class="w"> </span><span class="n">target_info</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">32</span><span class="w">    </span><span class="n">target_info</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">33</span><span class="w">    </span><span class="n">target_info</span><span class="p">.</span><span class="n">GlobHeaders</span><span class="p">(</span><span class="s">"include/fmt"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">34</span><span class="w">    </span><span class="n">target_info</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">"-DFMT_HEADER_ONLY=1"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">32</span><span class="w">    </span><span class="n">target_info</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">&quot;include&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">33</span><span class="w">    </span><span class="n">target_info</span><span class="p">.</span><span class="n">GlobHeaders</span><span class="p">(</span><span class="s">&quot;include/fmt&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">34</span><span class="w">    </span><span class="n">target_info</span><span class="p">.</span><span class="n">AddPreprocessorFlag</span><span class="p">(</span><span class="s">&quot;-DFMT_HEADER_ONLY=1&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">35</span><span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="write-your-c-script">
-<h3>Write your C++ “script”<a class="headerlink" href="#write-your-c-script" title="Permalink to this headline">#</a></h3>
+<h3>Write your C++ “script”<a class="headerlink" href="#write-your-c-script" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Boilerplate is similar to the BuildExe helloworld “script” example in <a class="reference internal" href="buildexe_script_example.html"><span class="doc">BuildExe “Script” example</span></a></p></li>
 </ul>
@@ -416,7 +418,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </dl>
 </li>
 <li><dl class="simple">
-<dt>On line 40 we point to the absolute <code class="docutils literal notranslate"><span class="pre">fmt</span></code> libs folder path for the sources and <strong>redirect</strong> the output to our <code class="docutils literal notranslate"><span class="pre">env::get_project_build_dir()</span> <span class="pre">/</span> <span class="pre">"fmt"</span></code> folder.</dt><dd><ul>
+<dt>On line 40 we point to the absolute <code class="docutils literal notranslate"><span class="pre">fmt</span></code> libs folder path for the sources and <strong>redirect</strong> the output to our <code class="docutils literal notranslate"><span class="pre">env::get_project_build_dir()</span> <span class="pre">/</span> <span class="pre">&quot;fmt&quot;</span></code> folder.</dt><dd><ul>
 <li><p>In this way we can safely use out of root projects and redirect the output files to our build location</p></li>
 <li><p>There are other input source -&gt; output object redirect options through additional APIs.</p></li>
 </ul>
@@ -435,7 +437,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 <li><dl class="simple">
 <dt>On line 79 <code class="docutils literal notranslate"><span class="pre">hello_world_build_cb</span></code> in additional to compiling our <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> file</dt><dd><ul>
 <li><p>We need to link our compiled <code class="docutils literal notranslate"><span class="pre">fmt_lib</span></code> using the <code class="docutils literal notranslate"><span class="pre">AddLibDep</span></code> API</p></li>
-<li><p>We also insert the <code class="docutils literal notranslate"><span class="pre">fmt_lib</span></code> include dirs to the hello world target since we need to <code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">"fmt/format.h"</span></code> in <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code></p></li>
+<li><p>We also insert the <code class="docutils literal notranslate"><span class="pre">fmt_lib</span></code> include dirs to the hello world target since we need to <code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">&quot;fmt/format.h&quot;</span></code> in <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -449,14 +451,14 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </dl>
 </li>
 </ul>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"buildcc.h"</span><span class="cp"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;buildcc.h&quot;</span><span class="cp"></span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="c1">// Included through libs</span>
-<span class="linenos"> 4</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"build.fmt.h"</span><span class="cp"></span>
+<span class="linenos"> 4</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;build.fmt.h&quot;</span><span class="cp"></span>
 <span class="linenos"> 5</span>
 <span class="linenos"> 6</span><span class="c1">// Generated by BuildCC</span>
 <span class="linenos"> 7</span><span class="c1">// See the `_build_internal` directory</span>
-<span class="linenos"> 8</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"buildexe_lib_dirs.h"</span><span class="cp"></span>
+<span class="linenos"> 8</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;buildexe_lib_dirs.h&quot;</span><span class="cp"></span>
 <span class="linenos"> 9</span>
 <span class="linenos">10</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">buildcc</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">11</span>
@@ -469,7 +471,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 <span class="linenos">18</span><span class="w">    </span><span class="n">ArgToolchain</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">19</span>
 <span class="linenos">20</span><span class="w">    </span><span class="n">Args</span><span class="o">::</span><span class="n">Init</span><span class="p">()</span><span class="w"></span>
-<span class="linenos">21</span><span class="w">        </span><span class="p">.</span><span class="n">AddToolchain</span><span class="p">(</span><span class="s">"gcc"</span><span class="p">,</span><span class="w"> </span><span class="s">"Generic gcc toolchain"</span><span class="p">,</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">21</span><span class="w">        </span><span class="p">.</span><span class="n">AddToolchain</span><span class="p">(</span><span class="s">&quot;gcc&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Generic gcc toolchain&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">arg_gcc</span><span class="p">)</span><span class="w"></span>
 <span class="linenos">22</span><span class="w">        </span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">23</span>
 <span class="linenos">24</span><span class="w">    </span><span class="c1">// Initialize your environment</span>
@@ -486,14 +488,14 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 <span class="linenos">35</span><span class="w">    </span><span class="c1">// Update your TargetEnv to point to `BuildExeLibDir::fmt` folder</span>
 <span class="linenos">36</span><span class="w">    </span><span class="c1">// The generated build files will go into your current `project_build_dir / fmt` folder</span>
 <span class="linenos">37</span><span class="w">    </span><span class="n">StaticTarget_gcc</span><span class="w"> </span><span class="n">fmt_lib</span><span class="p">(</span><span class="w"></span>
-<span class="linenos">38</span><span class="w">        </span><span class="s">"libfmt"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"></span>
-<span class="linenos">39</span><span class="w">        </span><span class="n">TargetEnv</span><span class="p">(</span><span class="n">BuildExeLibDir</span><span class="o">::</span><span class="n">fmt</span><span class="p">,</span><span class="w"> </span><span class="n">env</span><span class="o">::</span><span class="n">get_project_build_dir</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s">"fmt"</span><span class="p">));</span><span class="w"></span>
+<span class="linenos">38</span><span class="w">        </span><span class="s">&quot;libfmt&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">39</span><span class="w">        </span><span class="n">TargetEnv</span><span class="p">(</span><span class="n">BuildExeLibDir</span><span class="o">::</span><span class="n">fmt</span><span class="p">,</span><span class="w"> </span><span class="n">env</span><span class="o">::</span><span class="n">get_project_build_dir</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s">&quot;fmt&quot;</span><span class="p">));</span><span class="w"></span>
 <span class="linenos">40</span>
 <span class="linenos">41</span><span class="w">    </span><span class="c1">// We use the build.fmt.h and build.fmt.cpp APIs to define how we build our fmtlib</span>
 <span class="linenos">42</span><span class="w">    </span><span class="n">FmtConfig</span><span class="w"> </span><span class="n">fmt_config</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">43</span>
 <span class="linenos">44</span><span class="w">    </span><span class="c1">// Define our hello world executable</span>
-<span class="linenos">45</span><span class="w">    </span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">hello_world</span><span class="p">(</span><span class="s">"hello_world"</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">45</span><span class="w">    </span><span class="n">ExecutableTarget_gcc</span><span class="w"> </span><span class="n">hello_world</span><span class="p">(</span><span class="s">&quot;hello_world&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gcc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">46</span>
 <span class="linenos">47</span><span class="w">    </span><span class="c1">// Fmt lib is a dependency to the Hello world executable</span>
 <span class="linenos">48</span><span class="w">    </span><span class="c1">// This means that fmt lib is guaranteed to be built before the hello world executable</span>
@@ -501,7 +503,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 <span class="linenos">50</span><span class="w">        </span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">arg_gcc</span><span class="p">.</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">build_fmt_cb</span><span class="p">,</span><span class="w"> </span><span class="n">fmt_lib</span><span class="p">,</span><span class="w"> </span><span class="n">fmt_config</span><span class="p">)</span><span class="w"></span>
 <span class="linenos">51</span><span class="w">        </span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="n">hello_world_build_cb</span><span class="p">,</span><span class="w"> </span><span class="n">hello_world</span><span class="p">,</span><span class="w"> </span><span class="n">fmt_lib</span><span class="p">)</span><span class="w"></span>
 <span class="linenos">52</span><span class="w">        </span><span class="p">.</span><span class="n">Dep</span><span class="p">(</span><span class="n">hello_world</span><span class="p">,</span><span class="w"> </span><span class="n">fmt_lib</span><span class="p">)</span><span class="w"></span>
-<span class="linenos">53</span><span class="w">        </span><span class="p">.</span><span class="n">Test</span><span class="p">(</span><span class="s">"{executable}"</span><span class="p">,</span><span class="w"> </span><span class="n">hello_world</span><span class="p">);;</span><span class="w"></span>
+<span class="linenos">53</span><span class="w">        </span><span class="p">.</span><span class="n">Test</span><span class="p">(</span><span class="s">&quot;{executable}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">hello_world</span><span class="p">);;</span><span class="w"></span>
 <span class="linenos">54</span>
 <span class="linenos">55</span>
 <span class="linenos">56</span><span class="w">    </span><span class="c1">// Build and Test Target</span>
@@ -522,7 +524,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 <span class="linenos">71</span><span class="p">}</span><span class="w"></span>
 <span class="linenos">72</span>
 <span class="linenos">73</span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">hello_world_build_cb</span><span class="p">(</span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="n">BaseTarget</span><span class="w"> </span><span class="o">&amp;</span><span class="n">fmt_lib</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">74</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"main.cpp"</span><span class="p">,</span><span class="w"> </span><span class="s">"src"</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">74</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;main.cpp&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;src&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">75</span>
 <span class="linenos">76</span><span class="w">    </span><span class="c1">// Add fmt_lib as a library dependency</span>
 <span class="linenos">77</span><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">AddLibDep</span><span class="p">(</span><span class="n">fmt_lib</span><span class="p">);</span><span class="w"></span>
@@ -539,7 +541,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </div>
 </div>
 <div class="section" id="write-your-compile-toml-file">
-<h3>Write your <code class="docutils literal notranslate"><span class="pre">compile.toml</span></code> file<a class="headerlink" href="#write-your-compile-toml-file" title="Permalink to this headline">#</a></h3>
+<h3>Write your <code class="docutils literal notranslate"><span class="pre">compile.toml</span></code> file<a class="headerlink" href="#write-your-compile-toml-file" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The only difference from the <code class="docutils literal notranslate"><span class="pre">compile.toml</span></code> in <a class="reference internal" href="buildexe_script_example.html"><span class="doc">BuildExe “Script” example</span></a> is the additional of the <code class="docutils literal notranslate"><span class="pre">libs</span></code> submodule</p></li>
 <li><p>We use the <code class="docutils literal notranslate"><span class="pre">fmt</span></code> option since we git cloned the library into the libs folder</p></li>
@@ -547,37 +549,37 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 <li><p>See highlighed lines 19 and 20</p></li>
 </ul>
 <div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># Settings</span><span class="w"></span>
-<span class="linenos"> 2</span><span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"></span>
-<span class="linenos"> 3</span><span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"_build_internal"</span><span class="w"></span>
-<span class="linenos"> 4</span><span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"debug"</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;_build_internal&quot;</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;debug&quot;</span><span class="w"></span>
 <span class="linenos"> 5</span><span class="n">clean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
 <span class="linenos"> 6</span>
 <span class="linenos"> 7</span><span class="c1"># BuildExe run mode</span><span class="w"></span>
-<span class="linenos"> 8</span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"script"</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;script&quot;</span><span class="w"></span>
 <span class="linenos"> 9</span>
 <span class="linenos">10</span><span class="c1"># Target information</span><span class="w"></span>
-<span class="linenos">11</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"single"</span><span class="w"></span>
-<span class="linenos">12</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"executable"</span><span class="w"></span>
-<span class="linenos">13</span><span class="n">relative_to_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"></span>
-<span class="linenos">14</span><span class="n">srcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">"build.main.cpp"</span><span class="p">]</span><span class="w"></span>
+<span class="linenos">11</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;single&quot;</span><span class="w"></span>
+<span class="linenos">12</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;executable&quot;</span><span class="w"></span>
+<span class="linenos">13</span><span class="n">relative_to_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="linenos">14</span><span class="n">srcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;build.main.cpp&quot;</span><span class="p">]</span><span class="w"></span>
 <span class="linenos">15</span>
 <span class="linenos">16</span><span class="k">[script]</span><span class="w"></span>
-<span class="linenos">17</span><span class="n">configs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">"build.toml"</span><span class="p">]</span><span class="w"></span>
+<span class="linenos">17</span><span class="n">configs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;build.toml&quot;</span><span class="p">]</span><span class="w"></span>
 <span class="linenos">18</span>
 <span class="hll"><span class="linenos">19</span><span class="k">[libs]</span><span class="w"></span>
-</span><span class="hll"><span class="linenos">20</span><span class="n">fmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">"build.fmt.cpp"</span><span class="p">,</span><span class="w"> </span><span class="s">"build.fmt.h"</span><span class="p">]</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">20</span><span class="n">fmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;build.fmt.cpp&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;build.fmt.h&quot;</span><span class="p">]</span><span class="w"></span>
 </span></pre></div>
 </div>
 </div>
 <div class="section" id="write-your-build-toml-file">
-<h3>Write your <code class="docutils literal notranslate"><span class="pre">build.toml</span></code> file<a class="headerlink" href="#write-your-build-toml-file" title="Permalink to this headline">#</a></h3>
+<h3>Write your <code class="docutils literal notranslate"><span class="pre">build.toml</span></code> file<a class="headerlink" href="#write-your-build-toml-file" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Exact same <code class="docutils literal notranslate"><span class="pre">build.toml</span></code> as seen in the document <a class="reference internal" href="buildexe_script_example.html"><span class="doc">BuildExe “Script” example</span></a></p></li>
 </ul>
 <div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># Root</span><span class="w"></span>
-<span class="linenos"> 2</span><span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"></span>
-<span class="linenos"> 3</span><span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"_build"</span><span class="w"></span>
-<span class="linenos"> 4</span><span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"debug"</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;_build&quot;</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;debug&quot;</span><span class="w"></span>
 <span class="linenos"> 5</span><span class="n">clean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
 <span class="linenos"> 6</span>
 <span class="linenos"> 7</span><span class="c1"># Toolchain</span><span class="w"></span>
@@ -588,10 +590,10 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </div>
 </div>
 <div class="section" id="write-your-main-cpp-helloworld-example-in-fmtlib">
-<h3>Write your <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> helloworld example in fmtlib<a class="headerlink" href="#write-your-main-cpp-helloworld-example-in-fmtlib" title="Permalink to this headline">#</a></h3>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"fmt/format.h"</span><span class="cp"></span>
+<h3>Write your <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> helloworld example in fmtlib<a class="headerlink" href="#write-your-main-cpp-helloworld-example-in-fmtlib" title="Permalink to this heading">#</a></h3>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;fmt/format.h&quot;</span><span class="cp"></span>
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">fmt</span><span class="o">::</span><span class="n">print</span><span class="p">(</span><span class="s">"{} {}"</span><span class="p">,</span><span class="w"> </span><span class="s">"Hello"</span><span class="p">,</span><span class="w"> </span><span class="s">"World"</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">fmt</span><span class="o">::</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;{} {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;World&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </pre></div>
@@ -612,10 +614,10 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
                 </div>
                 <div class="title">Walkthrough Examples</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="buildexe_immediate_example.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -651,7 +653,7 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -682,7 +684,9 @@ library -up-&gt; hello_world_exe' src="../_images/plantuml-5669be3cde8ac843833b7
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

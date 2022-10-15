@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="User API" href="../user_api/toc.html" /><link rel="prev" title="Compile Options for BuildExe" href="all_compile_options.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>Build Options for “scripts” - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -221,7 +221,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,10 +238,10 @@
         </div>
         <article role="main">
           <div class="section" id="build-options-for-scripts">
-<h1>Build Options for “scripts”<a class="headerlink" href="#build-options-for-scripts" title="Permalink to this headline">#</a></h1>
+<h1>Build Options for “scripts”<a class="headerlink" href="#build-options-for-scripts" title="Permalink to this heading">#</a></h1>
 <p>We can pass in configuration parameters through the Command Line but writing them inside a <code class="docutils literal notranslate"><span class="pre">.toml</span></code> file and passing it through the <code class="docutils literal notranslate"><span class="pre">--config</span></code> flag is much easier.</p>
 <div class="section" id="command-line-options">
-<h2>Command Line options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">#</a></h2>
+<h2>Command Line options<a class="headerlink" href="#command-line-options" title="Permalink to this heading">#</a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Options:
 -h,--help                   Print this <span class="nb">help</span> message and <span class="nb">exit</span>
 --help-all                  Expand individual options.
@@ -264,14 +266,14 @@ Select Target
 </div>
 </div>
 <div class="section" id="toml-file-options">
-<h2>TOML file options<a class="headerlink" href="#toml-file-options" title="Permalink to this headline">#</a></h2>
+<h2>TOML file options<a class="headerlink" href="#toml-file-options" title="Permalink to this heading">#</a></h2>
 <p>Relate the options below with the <strong>Command Line options</strong> above.</p>
 <p>You can also read the <a class="reference external" href="https://github.com/CLIUtils/CLI11">CLI11 README</a></p>
 <div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Root Options</span><span class="w"></span>
 <span class="n">clean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="w"> </span><span class="c1"># true, false</span><span class="w"></span>
-<span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"trace"</span><span class="w"> </span><span class="c1"># "trace", "debug", "info", "warning", "critical"</span><span class="w"></span>
-<span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
-<span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
+<span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;trace&quot;</span><span class="w"> </span><span class="c1"># &quot;trace&quot;, &quot;debug&quot;, &quot;info&quot;, &quot;warning&quot;, &quot;critical&quot;</span><span class="w"></span>
+<span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
+<span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
 
 <span class="c1"># Subcommand</span><span class="w"></span>
 
@@ -289,13 +291,13 @@ Select Target
 <span class="c1"># Run time way to change the compiler on the fly</span><span class="w"></span>
 <span class="c1"># Not recommended</span><span class="w"></span>
 <span class="c1"># Prefer to use the specialized Toolchains during Compile time (See build.cpp in examples)</span><span class="w"></span>
-<span class="c1"># id = "gcc"</span><span class="w"></span>
-<span class="c1"># name = "x86_64-linux-gnu"</span><span class="w"></span>
-<span class="c1"># asm_compiler = "as"</span><span class="w"></span>
-<span class="c1"># c_compiler = "gcc"</span><span class="w"></span>
-<span class="c1"># cpp_compiler = "g++"</span><span class="w"></span>
-<span class="c1"># archiver = "ar"</span><span class="w"></span>
-<span class="c1"># linker = "ld"</span><span class="w"></span>
+<span class="c1"># id = &quot;gcc&quot;</span><span class="w"></span>
+<span class="c1"># name = &quot;x86_64-linux-gnu&quot;</span><span class="w"></span>
+<span class="c1"># asm_compiler = &quot;as&quot;</span><span class="w"></span>
+<span class="c1"># c_compiler = &quot;gcc&quot;</span><span class="w"></span>
+<span class="c1"># cpp_compiler = &quot;g++&quot;</span><span class="w"></span>
+<span class="c1"># archiver = &quot;ar&quot;</span><span class="w"></span>
+<span class="c1"># linker = &quot;ld&quot;</span><span class="w"></span>
 
 <span class="c1"># TODO, Add more options to narrow down search when multiple toolchains are installed</span><span class="w"></span>
 </pre></div>
@@ -321,10 +323,10 @@ Select Target
                 </div>
                 <div class="title">User API</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="all_compile_options.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -360,7 +362,7 @@ Select Target
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -383,7 +385,9 @@ Select Target
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

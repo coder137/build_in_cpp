@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Namespaces" href="namespaces.html" /><link rel="prev" title="Serialization Schema" href="serialization_schema.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>CMake Boilerplate - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -221,7 +221,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,7 +238,7 @@
         </div>
         <article role="main">
           <div class="section" id="cmake-boilerplate">
-<h1>CMake Boilerplate<a class="headerlink" href="#cmake-boilerplate" title="Permalink to this headline">#</a></h1>
+<h1>CMake Boilerplate<a class="headerlink" href="#cmake-boilerplate" title="Permalink to this heading">#</a></h1>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">if</span> <span class="p">(</span><span class="o">${</span><span class="nv">TESTING</span><span class="o">}</span><span class="p">)</span>
 <span class="c"># setup mocking</span>
 <span class="c"># setup testing executables</span>
@@ -343,7 +345,7 @@ We can then <code class="docutils literal notranslate"><span class="pre">add_sub
 <span class="nb">endif</span><span class="p">()</span>
 
 <span class="nb">if</span><span class="p">(</span><span class="o">${</span><span class="nv">BUILDCC_BUILD_AS_INTERFACE</span><span class="o">}</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">m_clangtidy</span><span class="p">(</span><span class="s2">"env"</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">m_clangtidy</span><span class="p">(</span><span class="s2">&quot;env&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">add_library</span><span class="p">(</span><span class="s">env</span>
 <span class="w">        </span><span class="o">${</span><span class="nv">ENV_SRCS</span><span class="o">}</span>
 <span class="w">    </span><span class="p">)</span>
@@ -363,9 +365,9 @@ We can then <code class="docutils literal notranslate"><span class="pre">add_sub
 <span class="nb">if</span> <span class="p">(</span><span class="o">${</span><span class="nv">BUILDCC_INSTALL</span><span class="o">}</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">if</span> <span class="p">(</span><span class="o">${</span><span class="nv">BUILDCC_BUILD_AS_INTERFACE</span><span class="o">}</span><span class="p">)</span>
 <span class="w">        </span><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span><span class="w"> </span><span class="s">env</span><span class="w"> </span><span class="s">DESTINATION</span><span class="w"> </span><span class="s">lib</span><span class="w"> </span><span class="s">EXPORT</span><span class="w"> </span><span class="s">envConfig</span><span class="p">)</span>
-<span class="w">        </span><span class="nb">install</span><span class="p">(</span><span class="s">EXPORT</span><span class="w"> </span><span class="s">envConfig</span><span class="w"> </span><span class="s">DESTINATION</span><span class="w"> </span><span class="s2">"${BUILDCC_INSTALL_LIB_PREFIX}/env"</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">install</span><span class="p">(</span><span class="s">EXPORT</span><span class="w"> </span><span class="s">envConfig</span><span class="w"> </span><span class="s">DESTINATION</span><span class="w"> </span><span class="s2">&quot;${BUILDCC_INSTALL_LIB_PREFIX}/env&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
-<span class="w">    </span><span class="nb">install</span><span class="p">(</span><span class="s">DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/include/</span><span class="w"> </span><span class="s">DESTINATION</span><span class="w"> </span><span class="s2">"${BUILDCC_INSTALL_HEADER_PREFIX}"</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">install</span><span class="p">(</span><span class="s">DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/include/</span><span class="w"> </span><span class="s">DESTINATION</span><span class="w"> </span><span class="s2">&quot;${BUILDCC_INSTALL_HEADER_PREFIX}&quot;</span><span class="p">)</span>
 <span class="nb">endif</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -383,10 +385,10 @@ We can then <code class="docutils literal notranslate"><span class="pre">add_sub
                 </div>
                 <div class="title">Namespaces</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="serialization_schema.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -425,7 +427,9 @@ We can then <code class="docutils literal notranslate"><span class="pre">add_sub
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

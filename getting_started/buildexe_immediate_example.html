@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="BuildExe as a Package Manager" href="buildexe_package_manager.html" /><link rel="prev" title="BuildExe “Script” example" href="buildexe_script_example.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>BuildExe “Immediate” example - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -221,7 +221,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,25 +238,25 @@
         </div>
         <article role="main">
           <div class="section" id="buildexe-immediate-example">
-<h1>BuildExe “Immediate” example<a class="headerlink" href="#buildexe-immediate-example" title="Permalink to this headline">#</a></h1>
+<h1>BuildExe “Immediate” example<a class="headerlink" href="#buildexe-immediate-example" title="Permalink to this heading">#</a></h1>
 <div class="section" id="basic-procedure">
-<h2>Basic Procedure<a class="headerlink" href="#basic-procedure" title="Permalink to this headline">#</a></h2>
+<h2>Basic Procedure<a class="headerlink" href="#basic-procedure" title="Permalink to this heading">#</a></h2>
 <p>BuildExe has an “immediate” mode where it can directly provide us the Target (singular) without going through the intermediate steps that we followed in the “script” mode.</p>
 <p class="plantuml">
-<img alt='usecase "main.cpp" as main_cpp
-usecase "compile.toml" as compile_toml
-usecase "host_or_cross_toolchain.toml" as host_or_cross_toolchain
+<img src="../_images/plantuml-2747063a6a93a8770f0100d64a922e27761385f3.png" alt="usecase &quot;main.cpp&quot; as main_cpp
+usecase &quot;compile.toml&quot; as compile_toml
+usecase &quot;host_or_cross_toolchain.toml&quot; as host_or_cross_toolchain
 
-rectangle "./buildexe" as buildexe_exe
-artifact "./hello_world" as hello_world_exe
+rectangle &quot;./buildexe&quot; as buildexe_exe
+artifact &quot;./hello_world&quot; as hello_world_exe
 
 main_cpp -right-&gt; buildexe_exe
 compile_toml -up-&gt; buildexe_exe
 host_or_cross_toolchain -up-&gt; buildexe_exe
-buildexe_exe -right-&gt; hello_world_exe' src="../_images/plantuml-2747063a6a93a8770f0100d64a922e27761385f3.png"/>
+buildexe_exe -right-&gt; hello_world_exe"/>
 </p>
 <div class="section" id="what-is-the-point-of-the-script-mode-then">
-<h3>What is the point of the “script” mode then?<a class="headerlink" href="#what-is-the-point-of-the-script-mode-then" title="Permalink to this headline">#</a></h3>
+<h3>What is the point of the “script” mode then?<a class="headerlink" href="#what-is-the-point-of-the-script-mode-then" title="Permalink to this heading">#</a></h3>
 <p>The “immediate” mode has a lot of limitations but it is also useful in certain scenarios</p>
 <p><strong>Limitations</strong></p>
 <ul class="simple">
@@ -294,7 +296,7 @@ buildexe_exe -right-&gt; hello_world_exe' src="../_images/plantuml-2747063a6a93a
 </div>
 </div>
 <div class="section" id="helloworld-immediate-example">
-<h2>Helloworld “immediate” example<a class="headerlink" href="#helloworld-immediate-example" title="Permalink to this headline">#</a></h2>
+<h2>Helloworld “immediate” example<a class="headerlink" href="#helloworld-immediate-example" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Write your <code class="docutils literal notranslate"><span class="pre">build.toml</span></code> file</p></li>
 <li><dl class="simple">
@@ -313,32 +315,32 @@ buildexe_exe -right-&gt; hello_world_exe' src="../_images/plantuml-2747063a6a93a
 <li><p>Your target will now be present in <code class="docutils literal notranslate"><span class="pre">[build_dir]/[toolchain_name]/[target_name]</span></code> (taken from <code class="docutils literal notranslate"><span class="pre">build.toml</span></code>)</p></li>
 </ul>
 <div class="section" id="directory-structure">
-<h3>Directory structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">#</a></h3>
+<h3>Directory structure<a class="headerlink" href="#directory-structure" title="Permalink to this heading">#</a></h3>
 <p class="plantuml">
-<img alt="@startmindmap
+<img src="../_images/plantuml-5ce711ae5febce0ae03fd7ff0c9cd102d17254f2.png" alt="&#64;startmindmap
 * [workspace]
 ** [src]
 *** main.cpp
 ** build.toml
-@endmindmap" src="../_images/plantuml-5ce711ae5febce0ae03fd7ff0c9cd102d17254f2.png"/>
+&#64;endmindmap"/>
 </p>
 </div>
 <div class="section" id="write-your-build-toml-file">
-<h3>Write your <code class="docutils literal notranslate"><span class="pre">build.toml</span></code> file<a class="headerlink" href="#write-your-build-toml-file" title="Permalink to this headline">#</a></h3>
+<h3>Write your <code class="docutils literal notranslate"><span class="pre">build.toml</span></code> file<a class="headerlink" href="#write-your-build-toml-file" title="Permalink to this heading">#</a></h3>
 <div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Settings</span><span class="w"></span>
-<span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="w"></span>
-<span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"_build"</span><span class="w"></span>
-<span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"info"</span><span class="w"></span>
+<span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;_build&quot;</span><span class="w"></span>
+<span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;info&quot;</span><span class="w"></span>
 <span class="n">clean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
 
 <span class="c1"># BuildExe run mode</span><span class="w"></span>
-<span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"immediate"</span><span class="w"></span>
+<span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;immediate&quot;</span><span class="w"></span>
 
 <span class="c1"># Target information</span><span class="w"></span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"hello_world"</span><span class="w"></span>
-<span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"executable"</span><span class="w"></span>
-<span class="n">relative_to_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"src"</span><span class="w"></span>
-<span class="n">srcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">"main.cpp"</span><span class="p">]</span><span class="w"></span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;hello_world&quot;</span><span class="w"></span>
+<span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;executable&quot;</span><span class="w"></span>
+<span class="n">relative_to_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;src&quot;</span><span class="w"></span>
+<span class="n">srcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;main.cpp&quot;</span><span class="p">]</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -357,10 +359,10 @@ buildexe_exe -right-&gt; hello_world_exe' src="../_images/plantuml-2747063a6a93a
                 </div>
                 <div class="title">BuildExe as a Package Manager</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="buildexe_script_example.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -396,7 +398,7 @@ buildexe_exe -right-&gt; hello_world_exe' src="../_images/plantuml-2747063a6a93a
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -426,7 +428,9 @@ buildexe_exe -right-&gt; hello_world_exe' src="../_images/plantuml-2747063a6a93a
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>

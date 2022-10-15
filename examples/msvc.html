@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Clang" href="clang.html" /><link rel="prev" title="GCC" href="gcc.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>MSVC - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -221,7 +221,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,18 +238,18 @@
         </div>
         <article role="main">
           <div class="section" id="msvc">
-<h1>MSVC<a class="headerlink" href="#msvc" title="Permalink to this headline">#</a></h1>
+<h1>MSVC<a class="headerlink" href="#msvc" title="Permalink to this heading">#</a></h1>
 <p>Lowlevel MSVC Tests</p>
 <div class="section" id="executable">
-<h2>Executable<a class="headerlink" href="#executable" title="Permalink to this headline">#</a></h2>
+<h2>Executable<a class="headerlink" href="#executable" title="Permalink to this heading">#</a></h2>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// MSVC specialized Toolchain</span>
 <span class="hll"><span class="linenos"> 2</span><span class="n">Toolchain_msvc</span><span class="w"> </span><span class="n">msvc</span><span class="p">;</span><span class="w"></span>
 </span><span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="c1">// MSVC specialized targets</span>
 <span class="linenos"> 5</span><span class="c1">// Creates `Simple.exe`</span>
-<span class="hll"><span class="linenos"> 6</span><span class="n">ExecutableTarget_msvc</span><span class="w"> </span><span class="nf">exetarget</span><span class="p">(</span><span class="s">"Simple"</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
-</span><span class="linenos"> 7</span><span class="n">exetarget</span><span class="p">.</span><span class="n">GlobSources</span><span class="p">(</span><span class="s">"src"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos"> 8</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+<span class="hll"><span class="linenos"> 6</span><span class="n">ExecutableTarget_msvc</span><span class="w"> </span><span class="n">exetarget</span><span class="p">(</span><span class="s">&quot;Simple&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos"> 7</span><span class="n">exetarget</span><span class="p">.</span><span class="n">GlobSources</span><span class="p">(</span><span class="s">&quot;src&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">&quot;include&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
 <span class="linenos"> 9</span><span class="n">exetarget</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
 <span class="linenos">10</span>
 <span class="linenos">11</span><span class="c1">// Build</span>
@@ -258,22 +260,22 @@
 </div>
 </div>
 <div class="section" id="staticlib">
-<h2>StaticLib<a class="headerlink" href="#staticlib" title="Permalink to this headline">#</a></h2>
+<h2>StaticLib<a class="headerlink" href="#staticlib" title="Permalink to this heading">#</a></h2>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// MSVC specialized Toolchain</span>
 <span class="hll"><span class="linenos"> 2</span><span class="n">Toolchain_msvc</span><span class="w"> </span><span class="n">msvc</span><span class="p">;</span><span class="w"></span>
 </span><span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="c1">// MSVC specialized targets</span>
 <span class="linenos"> 5</span><span class="c1">// Creates `librandom.lib`</span>
-<span class="hll"><span class="linenos"> 6</span><span class="n">StaticTarget_msvc</span><span class="w"> </span><span class="nf">statictarget</span><span class="p">(</span><span class="s">"librandom"</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
-</span><span class="linenos"> 7</span><span class="n">statictarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/random.cpp"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos"> 8</span><span class="n">statictarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+<span class="hll"><span class="linenos"> 6</span><span class="n">StaticTarget_msvc</span><span class="w"> </span><span class="n">statictarget</span><span class="p">(</span><span class="s">&quot;librandom&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos"> 7</span><span class="n">statictarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;src/random.cpp&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="n">statictarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">&quot;include&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
 <span class="linenos"> 9</span><span class="n">statictarget</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
 <span class="linenos">10</span>
 <span class="linenos">11</span><span class="c1">// MSVC specialized targets</span>
 <span class="linenos">12</span><span class="c1">// Creates `Simple.exe`</span>
-<span class="hll"><span class="linenos">13</span><span class="n">ExecutableTarget_msvc</span><span class="w"> </span><span class="nf">exetarget</span><span class="p">(</span><span class="s">"Simple"</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
-</span><span class="linenos">14</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/main.cpp"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">15</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+<span class="hll"><span class="linenos">13</span><span class="n">ExecutableTarget_msvc</span><span class="w"> </span><span class="n">exetarget</span><span class="p">(</span><span class="s">&quot;Simple&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos">14</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;src/main.cpp&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">15</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">&quot;include&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">16</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddLibDep</span><span class="p">(</span><span class="n">statictarget</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">17</span><span class="n">exetarget</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
 <span class="linenos">18</span>
@@ -293,22 +295,22 @@
 </div>
 </div>
 <div class="section" id="dynamiclib">
-<h2>DynamicLib<a class="headerlink" href="#dynamiclib" title="Permalink to this headline">#</a></h2>
+<h2>DynamicLib<a class="headerlink" href="#dynamiclib" title="Permalink to this heading">#</a></h2>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// MSVC specialized Toolchain</span>
 <span class="hll"><span class="linenos"> 2</span><span class="n">Toolchain_msvc</span><span class="w"> </span><span class="n">msvc</span><span class="p">;</span><span class="w"></span>
 </span><span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="c1">// MSVC specialized targets</span>
 <span class="linenos"> 5</span><span class="c1">// Creates `librandom.lib` and `librandom.lib.dll`</span>
-<span class="hll"><span class="linenos"> 6</span><span class="n">DynamicTarget_msvc</span><span class="w"> </span><span class="nf">dynamictarget</span><span class="p">(</span><span class="s">"librandom"</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
-</span><span class="linenos"> 7</span><span class="n">dynamictarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/random.cpp"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos"> 8</span><span class="n">dynamictarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+<span class="hll"><span class="linenos"> 6</span><span class="n">DynamicTarget_msvc</span><span class="w"> </span><span class="n">dynamictarget</span><span class="p">(</span><span class="s">&quot;librandom&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos"> 7</span><span class="n">dynamictarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;src/random.cpp&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="n">dynamictarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">&quot;include&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
 <span class="linenos"> 9</span><span class="n">dynamictarget</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
 <span class="linenos">10</span>
 <span class="linenos">11</span><span class="c1">// MSVC specialized target</span>
 <span class="linenos">12</span><span class="c1">// Creates `Simple.exe` which uses the above dynamic library</span>
-<span class="hll"><span class="linenos">13</span><span class="n">ExecutableTarget_msvc</span><span class="w"> </span><span class="nf">exetarget</span><span class="p">(</span><span class="s">"Simple"</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span><span class="w"></span>
-</span><span class="linenos">14</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"src/main.cpp"</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">15</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">"include"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+<span class="hll"><span class="linenos">13</span><span class="n">ExecutableTarget_msvc</span><span class="w"> </span><span class="n">exetarget</span><span class="p">(</span><span class="s">&quot;Simple&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msvc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos">14</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">&quot;src/main.cpp&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">15</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddIncludeDir</span><span class="p">(</span><span class="s">&quot;include&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">16</span><span class="n">exetarget</span><span class="p">.</span><span class="n">AddLibDep</span><span class="p">(</span><span class="n">dynamictarget</span><span class="p">);</span><span class="w"></span>
 <span class="linenos">17</span><span class="n">exetarget</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span><span class="w"></span>
 <span class="linenos">18</span>
@@ -340,7 +342,7 @@
 </div>
 </div>
 <div class="section" id="precompileheader">
-<h2>PrecompileHeader<a class="headerlink" href="#precompileheader" title="Permalink to this headline">#</a></h2>
+<h2>PrecompileHeader<a class="headerlink" href="#precompileheader" title="Permalink to this heading">#</a></h2>
 <p>TODO</p>
 </div>
 </div>
@@ -357,10 +359,10 @@
                 </div>
                 <div class="title">Clang</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="gcc.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -396,7 +398,7 @@
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -421,7 +423,9 @@
 </div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     </body>
 </html>
