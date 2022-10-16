@@ -123,6 +123,11 @@ public:
   void
   AddPatterns(const std::unordered_map<std::string, std::string> &pattern_map);
 
+  // TODO, Doc
+  std::string ParsePattern(const std::string &pattern,
+                           const std::unordered_map<const char *, std::string>
+                               &arguments = {}) const;
+
   /**
    * @brief Single Generator task for inputs->generate_cb->outputs
    *
@@ -138,6 +143,7 @@ public:
                   const GenerateCb &generate_cb,
                   std::shared_ptr<CustomBlobHandler> blob_handler = nullptr);
 
+  // TODO, Doc
   void AddGroup(const std::string &group_id,
                 std::initializer_list<std::string> ids,
                 const DependencyCb &dependency_cb = DependencyCb());
@@ -190,11 +196,6 @@ private:
   void IdUpdated();
 
 protected:
-  std::string ParsePattern(const std::string &pattern,
-                           const std::unordered_map<const char *, std::string>
-                               &arguments = {}) const {
-    return command_.Construct(pattern, arguments);
-  }
   const env::Command &ConstCommand() const { return command_; }
   env::Command &RefCommand() { return command_; }
 
