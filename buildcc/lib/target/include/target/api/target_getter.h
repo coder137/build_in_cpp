@@ -38,7 +38,6 @@ public:
   // Target State
   const TargetState &GetState() const;
   bool IsBuilt() const;
-  bool IsLocked() const;
 
   // Target Config
   const TargetConfig &GetConfig() const;

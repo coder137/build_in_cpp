@@ -243,6 +243,8 @@ TEST(TargetTestSourceGroup, Target_CompileCommand_Throws) {
 
     // Throws when you call CompileCommand before Build
     CHECK_THROWS(std::exception, simple.GetCompileCommand(p));
+    // Link Command will be empty before Build
+    STRCMP_EQUAL(simple.GetLinkCommand().c_str(), "");
   }
 }
 

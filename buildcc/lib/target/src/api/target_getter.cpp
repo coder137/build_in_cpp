@@ -40,12 +40,6 @@ template <typename T> const TargetConfig &TargetGetter<T>::GetConfig() const {
   return t.config_;
 }
 
-template <typename T> bool TargetGetter<T>::IsLocked() const {
-  const T &t = static_cast<const T &>(*this);
-
-  return t.lock_.IsLocked();
-}
-
 template <typename T> const fs::path &TargetGetter<T>::GetBinaryPath() const {
   const T &t = static_cast<const T &>(*this);
 
@@ -95,7 +89,6 @@ const std::string &
 TargetGetter<T>::GetCompileCommand(const fs::path &source) const {
   const T &t = static_cast<const T &>(*this);
 
-  t.lock_.ExpectsLock(__FUNCTION__);
   return t.compile_object_.GetObjectData(source).command;
 }
 
@@ -103,14 +96,12 @@ template <typename T>
 const std::string &TargetGetter<T>::GetLinkCommand() const {
   const T &t = static_cast<const T &>(*this);
 
-  t.lock_.ExpectsLock(__FUNCTION__);
   return t.link_target_.GetCommand();
 }
 
 template <typename T> tf::Taskflow &TargetGetter<T>::GetTaskflow() {
   T &t = static_cast<T &>(*this);
 
-  t.lock_.ExpectsLock(__FUNCTION__);
   return t.tf_;
 }
 

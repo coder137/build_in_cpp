@@ -54,9 +54,6 @@ namespace buildcc {
 void Target::Build() {
   env::log_trace(name_, __FUNCTION__);
 
-  lock_.ExpectsUnlock("Target::Build");
-  lock_.Lock();
-
   // PCH state
   if (!user_.pchs.empty()) {
     state_.PchDetected();

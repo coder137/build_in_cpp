@@ -24,7 +24,6 @@ template <typename T>
 void IncludeApi<T>::AddHeaderAbsolute(const fs::path &absolute_filepath) {
   T &t = static_cast<T &>(*this);
 
-  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.toolchain_.GetConfig().ExpectsValidHeader(absolute_filepath);
   t.user_.headers.insert(absolute_filepath);
 }
@@ -74,7 +73,6 @@ void IncludeApi<T>::AddIncludeDirAbsolute(const fs::path &absolute_include_dir,
                                           bool glob_headers) {
   T &t = static_cast<T &>(*this);
 
-  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.user_.include_dirs.insert(absolute_include_dir);
 
   if (glob_headers) {
