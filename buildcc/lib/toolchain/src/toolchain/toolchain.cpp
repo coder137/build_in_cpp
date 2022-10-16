@@ -18,8 +18,4 @@
 
 #include <iostream>
 
-namespace buildcc {
-
-void Toolchain::Lock() { lock_.Lock(); }
-
-} // namespace buildcc
+namespace buildcc {} // namespace buildcc

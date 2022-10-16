@@ -24,7 +24,6 @@ namespace buildcc::internal {
 
 // Requires
 // TargetSchema
-// FunctionLock
 template <typename T> class FlagApi {
 public:
   void AddPreprocessorFlag(const std::string &flag);

@@ -3,7 +3,6 @@ set(TOOLCHAIN_SRCS
     src/common/toolchain_config.cpp
     include/toolchain/common/toolchain_config.h
     include/toolchain/common/file_ext.h
-    include/toolchain/common/function_lock.h
 
     # API
     src/api/toolchain_find.cpp

@@ -22,7 +22,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include "toolchain/common/function_lock.h"
 #include "toolchain/common/toolchain_config.h"
 #include "toolchain/common/toolchain_executables.h"
 #include "toolchain/common/toolchain_id.h"
@@ -42,16 +41,13 @@ public:
   Toolchain(ToolchainId id, std::string_view name,
             const ToolchainExecutables &executables,
             const ToolchainConfig &config = ToolchainConfig())
-      : id_(id), name_(name), executables_(executables), config_(config),
-        lock_(false) {}
+      : id_(id), name_(name), executables_(executables), config_(config) {}
 
   virtual ~Toolchain() = default;
   Toolchain(Toolchain &&) = default;
   Toolchain &operator=(Toolchain &&) = default;
   Toolchain(const Toolchain &) = delete;
   Toolchain &operator=(const Toolchain &) = delete;
-
-  void Lock();
 
   // Getters
   ToolchainId GetId() const { return id_; }
@@ -67,7 +63,6 @@ public:
     return executables_;
   }
 
-  const FunctionLock &GetLockInfo() const { return lock_; }
   const ToolchainConfig &GetConfig() const { return config_; }
 
 protected:
@@ -97,7 +92,6 @@ private:
   std::string name_;
   ToolchainExecutables executables_;
   ToolchainConfig config_;
-  FunctionLock lock_;
 
   //
   UserSchema user_;
