@@ -22,8 +22,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include "taskflow/taskflow.hpp"
-
 #include "env/command.h"
 #include "env/task_state.h"
 
@@ -170,7 +168,6 @@ public:
   }
   const fs::path &GetRootDir() const { return env_.GetTargetRootDir(); }
   const fs::path &GetBuildDir() const { return env_.GetTargetBuildDir(); }
-  tf::Taskflow &GetTaskflow() { return tf_; }
   const std::string &Get(const std::string &file_identifier) const;
 
 private:
@@ -239,7 +236,6 @@ private:
 
   // Internal
   env::Command command_;
-  tf::Taskflow tf_;
 
   // Callbacks
   DependencyCb dependency_cb_;

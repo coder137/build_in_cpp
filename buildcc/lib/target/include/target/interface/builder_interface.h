@@ -21,6 +21,8 @@
 #include <functional>
 #include <unordered_set>
 
+#include "taskflow/taskflow.hpp"
+
 #include "env/assert_fatal.h"
 
 #include "target/common/util.h"
@@ -98,6 +100,7 @@ public:
   virtual void Build() = 0;
 
   const std::string &GetUniqueId() const { return unique_id_; }
+  tf::Taskflow &GetTaskflow() { return tf_; }
 
 protected:
   template <typename T>
@@ -154,6 +157,7 @@ protected:
 protected:
   bool dirty_{false};
   std::string unique_id_;
+  tf::Taskflow tf_;
 };
 
 } // namespace buildcc::internal

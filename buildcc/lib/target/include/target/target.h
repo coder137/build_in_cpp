@@ -136,7 +136,6 @@ private:
   //
   TargetState state_;
   env::Command command_;
-  tf::Taskflow tf_;
 
   // Task states
   tf::Task target_start_task_;

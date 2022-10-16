@@ -99,12 +99,6 @@ const std::string &TargetGetter<T>::GetLinkCommand() const {
   return t.link_target_.GetCommand();
 }
 
-template <typename T> tf::Taskflow &TargetGetter<T>::GetTaskflow() {
-  T &t = static_cast<T &>(*this);
-
-  return t.tf_;
-}
-
 template class TargetGetter<BaseTarget>;
 
 } // namespace buildcc::internal
