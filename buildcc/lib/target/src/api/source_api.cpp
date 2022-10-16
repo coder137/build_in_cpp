@@ -24,7 +24,6 @@ template <typename T>
 void SourceApi<T>::AddSourceAbsolute(const fs::path &absolute_source) {
   T &t = static_cast<T &>(*this);
 
-  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.toolchain_.GetConfig().ExpectsValidSource(absolute_source);
   t.user_.sources.emplace(fs::path(absolute_source).make_preferred());
 }

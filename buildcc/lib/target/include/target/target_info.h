@@ -86,7 +86,6 @@ protected:
   TargetEnv env_;
 
   //
-  FunctionLock lock_;
   UserTargetSchema user_;
 
 private:

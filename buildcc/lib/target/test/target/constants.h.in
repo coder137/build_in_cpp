@@ -17,8 +17,6 @@ inline constexpr char const * BUILD_TARGET_FLAG_INTERMEDIATE_DIR = "@CMAKE_CURRE
 
 inline constexpr char const * BUILD_TARGET_USER_DEPS_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_user_deps";
 
-inline constexpr char const * BUILD_TARGET_LOCK_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_lock";
-
 inline constexpr char const * BUILD_TARGET_SYNC_INTERMEDIATE_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_sync";
 
 inline constexpr char const * BUILD_TARGET_FAILURE_STATES_BUILD_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/intermediate/target_failure_states";

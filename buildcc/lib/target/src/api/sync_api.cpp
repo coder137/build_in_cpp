@@ -41,7 +41,6 @@ template <typename TargetType>
 void SyncApi<T>::SpecializedCopy(TargetType target,
                                  std::initializer_list<SyncOption> options) {
   T &t = static_cast<T &>(*this);
-  t.lock_.ExpectsUnlock(__FUNCTION__);
   for (const SyncOption o : options) {
     switch (o) {
     case SyncOption::PreprocessorFlags:
@@ -122,7 +121,6 @@ template <typename TargetType>
 void SyncApi<T>::SpecializedInsert(TargetType target,
                                    std::initializer_list<SyncOption> options) {
   T &t = static_cast<T &>(*this);
-  t.lock_.ExpectsUnlock(__FUNCTION__);
   for (const SyncOption o : options) {
     switch (o) {
     case SyncOption::PreprocessorFlags:

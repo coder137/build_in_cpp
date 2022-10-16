@@ -24,55 +24,47 @@ template <typename T>
 void FlagApi<T>::AddPreprocessorFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
-  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.user_.preprocessor_flags.insert(flag);
 }
 template <typename T>
 void FlagApi<T>::AddCommonCompileFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
-  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.user_.common_compile_flags.insert(flag);
 }
 template <typename T>
 void FlagApi<T>::AddPchCompileFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
-  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.user_.pch_compile_flags.insert(flag);
 }
 template <typename T>
 void FlagApi<T>::AddPchObjectFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
-  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.user_.pch_object_flags.insert(flag);
 }
 template <typename T>
 void FlagApi<T>::AddAsmCompileFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
-  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.user_.asm_compile_flags.insert(flag);
 }
 template <typename T>
 void FlagApi<T>::AddCCompileFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
-  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.user_.c_compile_flags.insert(flag);
 }
 template <typename T>
 void FlagApi<T>::AddCppCompileFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
-  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.user_.cpp_compile_flags.insert(flag);
 }
 template <typename T> void FlagApi<T>::AddLinkFlag(const std::string &flag) {
   T &t = static_cast<T &>(*this);
 
-  t.lock_.ExpectsUnlock(__FUNCTION__);
   t.user_.link_flags.insert(flag);
 }
 
