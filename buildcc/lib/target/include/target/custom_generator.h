@@ -22,8 +22,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include "taskflow/taskflow.hpp"
-
 #include "env/command.h"
 #include "env/task_state.h"
 
@@ -125,6 +123,11 @@ public:
   void
   AddPatterns(const std::unordered_map<std::string, std::string> &pattern_map);
 
+  // TODO, Doc
+  std::string ParsePattern(const std::string &pattern,
+                           const std::unordered_map<const char *, std::string>
+                               &arguments = {}) const;
+
   /**
    * @brief Single Generator task for inputs->generate_cb->outputs
    *
@@ -140,6 +143,7 @@ public:
                   const GenerateCb &generate_cb,
                   std::shared_ptr<CustomBlobHandler> blob_handler = nullptr);
 
+  // TODO, Doc
   void AddGroup(const std::string &group_id,
                 std::initializer_list<std::string> ids,
                 const DependencyCb &dependency_cb = DependencyCb());
@@ -170,7 +174,6 @@ public:
   }
   const fs::path &GetRootDir() const { return env_.GetTargetRootDir(); }
   const fs::path &GetBuildDir() const { return env_.GetTargetBuildDir(); }
-  tf::Taskflow &GetTaskflow() { return tf_; }
   const std::string &Get(const std::string &file_identifier) const;
 
 private:
@@ -193,11 +196,6 @@ private:
   void IdUpdated();
 
 protected:
-  std::string ParsePattern(const std::string &pattern,
-                           const std::unordered_map<const char *, std::string>
-                               &arguments = {}) const {
-    return command_.Construct(pattern, arguments);
-  }
   const env::Command &ConstCommand() const { return command_; }
   env::Command &RefCommand() { return command_; }
 
@@ -239,7 +237,6 @@ private:
 
   // Internal
   env::Command command_;
-  tf::Taskflow tf_;
 
   // Callbacks
   DependencyCb dependency_cb_;

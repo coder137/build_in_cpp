@@ -74,8 +74,6 @@ public:
   // TODO, Add GetPchCommand if required
   const std::string &GetCompileCommand(const fs::path &source) const;
   const std::string &GetLinkCommand() const;
-
-  tf::Taskflow &GetTaskflow();
 };
 
 }; // namespace buildcc::internal

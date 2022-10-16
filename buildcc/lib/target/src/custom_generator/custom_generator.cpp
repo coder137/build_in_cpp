@@ -40,6 +40,12 @@ void CustomGenerator::AddPatterns(
   }
 }
 
+std::string CustomGenerator::ParsePattern(
+    const std::string &pattern,
+    const std::unordered_map<const char *, std::string> &arguments) const {
+  return command_.Construct(pattern, arguments);
+}
+
 const std::string &
 CustomGenerator::Get(const std::string &file_identifier) const {
   return command_.GetDefaultValueByKey(file_identifier);
