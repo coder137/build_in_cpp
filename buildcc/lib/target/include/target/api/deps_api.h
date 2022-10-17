@@ -36,25 +36,43 @@ public:
    * @brief Recompile sources to object if compile dependency is removed, added
    * or newer from the previous build
    */
-  void AddCompileDependency(const fs::path &relative_path);
+  void AddCompileDependencyAbsolute(const fs::path &absolute_path) {
+    auto &t = static_cast<T &>(*this);
+
+    t.user_.compile_dependencies.insert(absolute_path);
+  }
 
   /**
    * @brief Recompile sources to object if compile dependency is removed, added
    * or newer from the previous build
    */
-  void AddCompileDependencyAbsolute(const fs::path &absolute_path);
+  void AddCompileDependency(const fs::path &relative_path) {
+    auto &t = static_cast<T &>(*this);
+
+    fs::path absolute_path = t.env_.GetTargetRootDir() / relative_path;
+    AddCompileDependencyAbsolute(absolute_path);
+  }
 
   /**
    * @brief Relink target if link dependency is removed, added or newer from
    * previous build
    */
-  void AddLinkDependency(const fs::path &relative_path);
+  void AddLinkDependencyAbsolute(const fs::path &absolute_path) {
+    auto &t = static_cast<T &>(*this);
+
+    t.user_.link_dependencies.insert(absolute_path);
+  }
 
   /**
    * @brief Relink target if link dependency is removed, added or newer from
    * previous build
    */
-  void AddLinkDependencyAbsolute(const fs::path &absolute_path);
+  void AddLinkDependency(const fs::path &relative_path) {
+    auto &t = static_cast<T &>(*this);
+
+    fs::path absolute_path = t.env_.GetTargetRootDir() / relative_path;
+    AddLinkDependencyAbsolute(absolute_path);
+  }
 };
 
 } // namespace buildcc::internal

@@ -17,7 +17,6 @@ set(COMMON_TARGET_SRCS
     src/api/lib_api.cpp
     src/api/pch_api.cpp
     src/api/flag_api.cpp
-    src/api/deps_api.cpp
     include/target/api/source_api.h
     include/target/api/include_api.h
     include/target/api/lib_api.h
