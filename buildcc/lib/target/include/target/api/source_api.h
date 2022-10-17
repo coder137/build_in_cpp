@@ -24,17 +24,49 @@ namespace fs = std::filesystem;
 namespace buildcc::internal {
 
 // Requires
-// - TargetStorer
-// - TargetConfig
-// - TargetEnv
+// Toolchain
+// User::Sources
+// TargetEnv
 template <typename T> class SourceApi {
 public:
-  void AddSourceAbsolute(const fs::path &absolute_source);
-  void GlobSourcesAbsolute(const fs::path &absolute_source_dir);
+  void AddSourceAbsolute(const fs::path &absolute_source) {
+    auto &t = static_cast<T &>(*this);
+
+    t.toolchain_.GetConfig().ExpectsValidSource(absolute_source);
+    t.user_.sources.emplace(fs::path(absolute_source).make_preferred());
+  }
+
+  void GlobSourcesAbsolute(const fs::path &absolute_source_dir) {
+    auto &t = static_cast<T &>(*this);
+
+    for (const auto &p : fs::directory_iterator(absolute_source_dir)) {
+      if (t.toolchain_.GetConfig().IsValidSource(p.path())) {
+        AddSourceAbsolute(p.path());
+      }
+    }
+  }
 
   void AddSource(const fs::path &relative_source,
-                 const fs::path &relative_to_target_path = "");
-  void GlobSources(const fs::path &relative_to_target_path = "");
+                 const fs::path &relative_to_target_path = "") {
+    auto &t = static_cast<T &>(*this);
+
+    // Compute the absolute source path
+    fs::path absolute_source =
+        t.env_.GetTargetRootDir() / relative_to_target_path / relative_source;
+    AddSourceAbsolute(absolute_source);
+  }
+
+  void GlobSources(const fs::path &relative_to_target_path = "") {
+    auto &t = static_cast<T &>(*this);
+
+    fs::path absolute_input_path =
+        t.env_.GetTargetRootDir() / relative_to_target_path;
+    for (const auto &p : fs::directory_iterator(absolute_input_path)) {
+      if (t.toolchain_.GetConfig().IsValidSource(p.path())) {
+        AddSourceAbsolute(p.path());
+      }
+    }
+  }
 };
 
 } // namespace buildcc::internal

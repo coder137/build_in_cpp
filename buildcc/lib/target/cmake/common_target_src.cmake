@@ -13,7 +13,6 @@ set(COMMON_TARGET_SRCS
     include/target/common/util.h
 
     # API
-    src/api/source_api.cpp
     src/api/include_api.cpp
     src/api/lib_api.cpp
     src/api/pch_api.cpp
