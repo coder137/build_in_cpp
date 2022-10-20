@@ -32,18 +32,6 @@ public:
   // Target Env
   const fs::path &GetTargetRootDir() const;
   const fs::path &GetTargetBuildDir() const;
-
-  // Target Storer
-  const fs_unordered_set &GetSourceFiles() const;
-  const fs_unordered_set &GetHeaderFiles() const;
-  const fs_unordered_set &GetPchFiles() const;
-  const std::vector<fs::path> &GetLibDeps() const;
-  const std::vector<std::string> &GetExternalLibDeps() const;
-  const fs_unordered_set &GetIncludeDirs() const;
-  const fs_unordered_set &GetLibDirs() const;
-
-  const fs_unordered_set &GetCompileDependencies() const;
-  const fs_unordered_set &GetLinkDependencies() const;
 };
 
 } // namespace buildcc::internal

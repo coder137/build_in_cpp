@@ -19,16 +19,29 @@
 
 #include <filesystem>
 
+#include "schema/path.h"
+
 namespace fs = std::filesystem;
 
 namespace buildcc::internal {
 
 // Requires
-// - TargetStorer
-// - TargetConfig
-// - TargetEnv
+// Toolchain
+// User::Headers
+// User::IncludeDirs
+// TargetEnv
 template <typename T> class IncludeApi {
 public:
+  const fs_unordered_set &GetHeaderFiles() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.headers;
+  }
+
+  const fs_unordered_set &GetIncludeDirs() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.include_dirs;
+  }
+
   void AddHeaderAbsolute(const fs::path &absolute_filepath) {
     auto &t = static_cast<T &>(*this);
 

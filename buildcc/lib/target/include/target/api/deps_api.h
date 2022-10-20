@@ -19,18 +19,31 @@
 
 #include <filesystem>
 
+#include "schema/path.h"
+
 namespace fs = std::filesystem;
 
 namespace buildcc::internal {
 
 // Requires
-// - TargetStorer
-// - TargetEnv
+// User::CompileDependencies
+// User::LinkDependencies
+// TargetEnv
 template <typename T> class DepsApi {
 public:
   // TODO, AddPchDependency
   // TODO, Rename AddObjectDependency
   // TODO, Rename AddTargetDependency
+
+  const fs_unordered_set &GetCompileDependencies() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.compile_dependencies;
+  }
+
+  const fs_unordered_set &GetLinkDependencies() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.link_dependencies;
+  }
 
   /**
    * @brief Recompile sources to object if compile dependency is removed, added

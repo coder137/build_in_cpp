@@ -19,6 +19,9 @@
 
 #include <filesystem>
 #include <string>
+#include <vector>
+
+#include "schema/path.h"
 
 namespace fs = std::filesystem;
 
@@ -31,16 +34,47 @@ class Target;
 namespace buildcc::internal {
 
 // Requires
-// - TargetStorer
-// - TargetEnv
-// T::GetTargetPath
+// User::LibDirs
+// User::Libs
+// User::ExternalLibs
+// TargetEnv
+// Target::GetTargetPath
 template <typename T> class LibApi {
 public:
-  void AddLibDep(const Target &lib_dep);
-  void AddLibDep(const std::string &lib_dep);
+  const std::vector<fs::path> &GetLibDeps() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.libs;
+  }
 
-  void AddLibDir(const fs::path &relative_lib_dir);
-  void AddLibDirAbsolute(const fs::path &absolute_lib_dir);
+  const std::vector<std::string> &GetExternalLibDeps() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.external_libs;
+  }
+
+  const fs_unordered_set &GetLibDirs() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.lib_dirs;
+  }
+
+  void AddLibDirAbsolute(const fs::path &absolute_lib_dir) {
+    auto &t = static_cast<T &>(*this);
+    t.user_.lib_dirs.insert(absolute_lib_dir);
+  }
+
+  void AddLibDir(const fs::path &relative_lib_dir) {
+    auto &t = static_cast<T &>(*this);
+    fs::path final_lib_dir = t.env_.GetTargetRootDir() / relative_lib_dir;
+    AddLibDirAbsolute(final_lib_dir);
+  }
+
+  void AddLibDep(const std::string &lib_dep) {
+    auto &t = static_cast<T &>(*this);
+    t.user_.external_libs.push_back(lib_dep);
+  }
+
+  // Target class has been forward declared
+  // This is because this file is meant to be used by `TargetInfo` and `Target`
+  void AddLibDep(const Target &lib_dep);
 };
 
 } // namespace buildcc::internal

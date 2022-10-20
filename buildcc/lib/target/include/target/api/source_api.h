@@ -19,6 +19,8 @@
 
 #include <filesystem>
 
+#include "schema/path.h"
+
 namespace fs = std::filesystem;
 
 namespace buildcc::internal {
@@ -29,6 +31,11 @@ namespace buildcc::internal {
 // TargetEnv
 template <typename T> class SourceApi {
 public:
+  const fs_unordered_set &GetSourceFiles() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.sources;
+  }
+
   void AddSourceAbsolute(const fs::path &absolute_source) {
     auto &t = static_cast<T &>(*this);
 

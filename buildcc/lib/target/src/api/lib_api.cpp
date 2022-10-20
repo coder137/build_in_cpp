@@ -21,31 +21,10 @@
 
 namespace buildcc::internal {
 
-template <typename T>
-void LibApi<T>::AddLibDirAbsolute(const fs::path &absolute_lib_dir) {
-  T &t = static_cast<T &>(*this);
-
-  t.user_.lib_dirs.insert(absolute_lib_dir);
-}
-
-template <typename T>
-void LibApi<T>::AddLibDir(const fs::path &relative_lib_dir) {
-  T &t = static_cast<T &>(*this);
-
-  fs::path final_lib_dir = t.env_.GetTargetRootDir() / relative_lib_dir;
-  AddLibDirAbsolute(final_lib_dir);
-}
-
 template <typename T> void LibApi<T>::AddLibDep(const BaseTarget &lib_dep) {
   T &t = static_cast<T &>(*this);
 
   t.user_.libs.push_back(lib_dep.GetTargetPath());
-}
-
-template <typename T> void LibApi<T>::AddLibDep(const std::string &lib_dep) {
-  T &t = static_cast<T &>(*this);
-
-  t.user_.external_libs.push_back(lib_dep);
 }
 
 template class LibApi<TargetInfo>;
