@@ -26,24 +26,86 @@ namespace buildcc::internal {
 // TargetSchema
 template <typename T> class FlagApi {
 public:
-  void AddPreprocessorFlag(const std::string &flag);
-  void AddCommonCompileFlag(const std::string &flag);
-  void AddPchCompileFlag(const std::string &flag);
-  void AddPchObjectFlag(const std::string &flag);
-  void AddAsmCompileFlag(const std::string &flag);
-  void AddCCompileFlag(const std::string &flag);
-  void AddCppCompileFlag(const std::string &flag);
-  void AddLinkFlag(const std::string &flag);
+  void AddPreprocessorFlag(const std::string &flag) {
+    auto &t = static_cast<T &>(*this);
+    t.user_.preprocessor_flags.insert(flag);
+  }
+
+  void AddCommonCompileFlag(const std::string &flag) {
+    auto &t = static_cast<T &>(*this);
+    t.user_.common_compile_flags.insert(flag);
+  }
+
+  void AddPchCompileFlag(const std::string &flag) {
+    auto &t = static_cast<T &>(*this);
+    t.user_.pch_compile_flags.insert(flag);
+  }
+
+  void AddPchObjectFlag(const std::string &flag) {
+    auto &t = static_cast<T &>(*this);
+    t.user_.pch_object_flags.insert(flag);
+  }
+
+  void AddAsmCompileFlag(const std::string &flag) {
+    auto &t = static_cast<T &>(*this);
+    t.user_.asm_compile_flags.insert(flag);
+  }
+
+  void AddCCompileFlag(const std::string &flag) {
+    auto &t = static_cast<T &>(*this);
+    t.user_.c_compile_flags.insert(flag);
+  }
+
+  void AddCppCompileFlag(const std::string &flag) {
+    auto &t = static_cast<T &>(*this);
+    t.user_.cpp_compile_flags.insert(flag);
+  }
+
+  void AddLinkFlag(const std::string &flag) {
+    auto &t = static_cast<T &>(*this);
+    t.user_.link_flags.insert(flag);
+  }
 
   // Getters
-  const std::unordered_set<std::string> &GetPreprocessorFlags() const;
-  const std::unordered_set<std::string> &GetCommonCompileFlags() const;
-  const std::unordered_set<std::string> &GetPchCompileFlags() const;
-  const std::unordered_set<std::string> &GetPchObjectFlags() const;
-  const std::unordered_set<std::string> &GetAsmCompileFlags() const;
-  const std::unordered_set<std::string> &GetCCompileFlags() const;
-  const std::unordered_set<std::string> &GetCppCompileFlags() const;
-  const std::unordered_set<std::string> &GetLinkFlags() const;
+  const std::unordered_set<std::string> &GetPreprocessorFlags() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.preprocessor_flags;
+  }
+
+  const std::unordered_set<std::string> &GetCommonCompileFlags() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.common_compile_flags;
+  }
+
+  const std::unordered_set<std::string> &GetPchCompileFlags() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.pch_compile_flags;
+  }
+
+  const std::unordered_set<std::string> &GetPchObjectFlags() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.pch_object_flags;
+  }
+
+  const std::unordered_set<std::string> &GetAsmCompileFlags() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.asm_compile_flags;
+  }
+
+  const std::unordered_set<std::string> &GetCCompileFlags() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.c_compile_flags;
+  }
+
+  const std::unordered_set<std::string> &GetCppCompileFlags() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.cpp_compile_flags;
+  }
+
+  const std::unordered_set<std::string> &GetLinkFlags() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.link_flags;
+  }
 };
 
 } // namespace buildcc::internal

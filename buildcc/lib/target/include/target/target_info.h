@@ -21,7 +21,6 @@
 
 #include "toolchain/toolchain.h"
 
-#include "target/common/target_config.h"
 #include "target/common/target_env.h"
 
 #include "target/api/deps_api.h"
@@ -30,7 +29,6 @@
 #include "target/api/pch_api.h"
 #include "target/api/source_api.h"
 #include "target/api/sync_api.h"
-#include "target/api/target_info_getter.h"
 
 #include "schema/target_serialization.h"
 
@@ -59,7 +57,7 @@ class TargetInfo : public internal::SourceApi<TargetInfo>,
                    public internal::FlagApi<TargetInfo>,
                    public internal::DepsApi<TargetInfo>,
                    public internal::SyncApi<TargetInfo>,
-                   public internal::TargetInfoGetter<TargetInfo> {
+                   public internal::TargetEnvApi<TargetInfo> {
 public:
   TargetInfo(const BaseToolchain &toolchain, const TargetEnv &env)
       : toolchain_(toolchain), env_(env) {
@@ -67,25 +65,19 @@ public:
   }
 
 private:
-  // Inputs
   friend class internal::SourceApi<TargetInfo>;
   friend class internal::IncludeApi<TargetInfo>;
   friend class internal::LibApi<TargetInfo>;
   friend class internal::PchApi<TargetInfo>;
   friend class internal::FlagApi<TargetInfo>;
   friend class internal::DepsApi<TargetInfo>;
-
-  // Feature
   friend class internal::SyncApi<TargetInfo>;
-
-  // Getters
-  friend class internal::TargetInfoGetter<TargetInfo>;
+  friend class internal::TargetEnvApi<TargetInfo>;
 
 protected:
   const BaseToolchain &toolchain_;
   TargetEnv env_;
 
-  //
   UserTargetSchema user_;
 
 private:

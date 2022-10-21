@@ -82,6 +82,25 @@ private:
   bool relative_{false};
 };
 
+namespace internal {
+
+// Requires
+// TargetEnv
+template <typename T> class TargetEnvApi {
+public:
+  const fs::path &GetTargetRootDir() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.env_.GetTargetRootDir();
+  }
+
+  const fs::path &GetTargetBuildDir() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.env_.GetTargetBuildDir();
+  }
+};
+
+} // namespace internal
+
 } // namespace buildcc
 
 #endif

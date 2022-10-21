@@ -19,27 +19,83 @@
 
 #include <filesystem>
 
+#include "schema/path.h"
+
 namespace fs = std::filesystem;
 
 namespace buildcc::internal {
 
 // Requires
-// - TargetStorer
-// - TargetConfig
-// - TargetEnv
+// Toolchain
+// User::Headers
+// User::IncludeDirs
+// TargetEnv
 template <typename T> class IncludeApi {
 public:
-  void AddHeader(const fs::path &relative_filename,
-                 const fs::path &relative_to_target_path = "");
-  void AddHeaderAbsolute(const fs::path &absolute_filepath);
+  const fs_unordered_set &GetHeaderFiles() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.headers;
+  }
 
-  void GlobHeaders(const fs::path &relative_to_target_path = "");
-  void GlobHeadersAbsolute(const fs::path &absolute_path);
+  const fs_unordered_set &GetIncludeDirs() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.include_dirs;
+  }
+
+  void AddHeaderAbsolute(const fs::path &absolute_filepath) {
+    auto &t = static_cast<T &>(*this);
+
+    t.toolchain_.GetConfig().ExpectsValidHeader(absolute_filepath);
+    t.user_.headers.insert(absolute_filepath);
+  }
+
+  void GlobHeadersAbsolute(const fs::path &absolute_path) {
+    auto &t = static_cast<T &>(*this);
+
+    for (const auto &p : fs::directory_iterator(absolute_path)) {
+      if (t.toolchain_.GetConfig().IsValidHeader(p.path())) {
+        AddHeaderAbsolute(p.path());
+      }
+    }
+  }
+
+  void AddIncludeDirAbsolute(const fs::path &absolute_include_dir,
+                             bool glob_headers = false) {
+    auto &t = static_cast<T &>(*this);
+
+    t.user_.include_dirs.insert(absolute_include_dir);
+
+    if (glob_headers) {
+      GlobHeadersAbsolute(absolute_include_dir);
+    }
+  }
+
+  void AddHeader(const fs::path &relative_filename,
+                 const fs::path &relative_to_target_path = "") {
+    auto &t = static_cast<T &>(*this);
+
+    // Check Source
+    fs::path absolute_filepath =
+        t.env_.GetTargetRootDir() / relative_to_target_path / relative_filename;
+    AddHeaderAbsolute(absolute_filepath);
+  }
+
+  void GlobHeaders(const fs::path &relative_to_target_path = "") {
+    auto &t = static_cast<T &>(*this);
+
+    fs::path absolute_path =
+        t.env_.GetTargetRootDir() / relative_to_target_path;
+    GlobHeadersAbsolute(absolute_path);
+  }
 
   void AddIncludeDir(const fs::path &relative_include_dir,
-                     bool glob_headers = false);
-  void AddIncludeDirAbsolute(const fs::path &absolute_include_dir,
-                             bool glob_headers = false);
+                     bool glob_headers = false) {
+    auto &t = static_cast<T &>(*this);
+
+    const fs::path absolute_include_dir =
+        t.env_.GetTargetRootDir() / relative_include_dir;
+    AddIncludeDirAbsolute(absolute_include_dir, glob_headers);
+  }
 };
 
 } // namespace buildcc::internal

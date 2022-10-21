@@ -13,12 +13,7 @@ set(COMMON_TARGET_SRCS
     include/target/common/util.h
 
     # API
-    src/api/source_api.cpp
-    src/api/include_api.cpp
     src/api/lib_api.cpp
-    src/api/pch_api.cpp
-    src/api/flag_api.cpp
-    src/api/deps_api.cpp
     include/target/api/source_api.h
     include/target/api/include_api.h
     include/target/api/lib_api.h
@@ -28,9 +23,7 @@ set(COMMON_TARGET_SRCS
     src/api/sync_api.cpp
     include/target/api/sync_api.h
     
-    src/api/target_info_getter.cpp
     src/api/target_getter.cpp
-    include/target/api/target_info_getter.h
     include/target/api/target_getter.h
 
     # Generator

@@ -19,19 +19,42 @@
 
 #include <filesystem>
 
+#include "schema/path.h"
+
 namespace fs = std::filesystem;
 
 namespace buildcc::internal {
 
 // Requires
-// - TargetStorer
-// - TargetConfig
-// - TargetEnv
+// Toolchain
+// User::Pchs
+// TargetEnv
 template <typename T> class PchApi {
 public:
+  const fs_unordered_set &GetPchFiles() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.pchs;
+  }
+
+  void AddPchAbsolute(const fs::path &absolute_filepath) {
+    auto &t = static_cast<T &>(*this);
+
+    t.toolchain_.GetConfig().ExpectsValidHeader(absolute_filepath);
+
+    const fs::path absolute_pch = fs::path(absolute_filepath).make_preferred();
+    t.user_.pchs.insert(absolute_pch);
+  }
+
   void AddPch(const fs::path &relative_filename,
-              const fs::path &relative_to_target_path = "");
-  void AddPchAbsolute(const fs::path &absolute_filepath);
+              const fs::path &relative_to_target_path = "") {
+    auto &t = static_cast<T &>(*this);
+
+    // Compute the absolute source path
+    fs::path absolute_pch =
+        t.env_.GetTargetRootDir() / relative_to_target_path / relative_filename;
+
+    AddPchAbsolute(absolute_pch);
+  }
 };
 
 } // namespace buildcc::internal

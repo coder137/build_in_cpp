@@ -19,42 +19,73 @@
 
 #include <filesystem>
 
+#include "schema/path.h"
+
 namespace fs = std::filesystem;
 
 namespace buildcc::internal {
 
 // Requires
-// - TargetStorer
-// - TargetEnv
+// User::CompileDependencies
+// User::LinkDependencies
+// TargetEnv
 template <typename T> class DepsApi {
 public:
   // TODO, AddPchDependency
   // TODO, Rename AddObjectDependency
   // TODO, Rename AddTargetDependency
 
-  /**
-   * @brief Recompile sources to object if compile dependency is removed, added
-   * or newer from the previous build
-   */
-  void AddCompileDependency(const fs::path &relative_path);
+  const fs_unordered_set &GetCompileDependencies() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.compile_dependencies;
+  }
+
+  const fs_unordered_set &GetLinkDependencies() const {
+    const auto &t = static_cast<const T &>(*this);
+    return t.user_.link_dependencies;
+  }
 
   /**
    * @brief Recompile sources to object if compile dependency is removed, added
    * or newer from the previous build
    */
-  void AddCompileDependencyAbsolute(const fs::path &absolute_path);
+  void AddCompileDependencyAbsolute(const fs::path &absolute_path) {
+    auto &t = static_cast<T &>(*this);
+
+    t.user_.compile_dependencies.insert(absolute_path);
+  }
+
+  /**
+   * @brief Recompile sources to object if compile dependency is removed, added
+   * or newer from the previous build
+   */
+  void AddCompileDependency(const fs::path &relative_path) {
+    auto &t = static_cast<T &>(*this);
+
+    fs::path absolute_path = t.env_.GetTargetRootDir() / relative_path;
+    AddCompileDependencyAbsolute(absolute_path);
+  }
 
   /**
    * @brief Relink target if link dependency is removed, added or newer from
    * previous build
    */
-  void AddLinkDependency(const fs::path &relative_path);
+  void AddLinkDependencyAbsolute(const fs::path &absolute_path) {
+    auto &t = static_cast<T &>(*this);
+
+    t.user_.link_dependencies.insert(absolute_path);
+  }
 
   /**
    * @brief Relink target if link dependency is removed, added or newer from
    * previous build
    */
-  void AddLinkDependencyAbsolute(const fs::path &absolute_path);
+  void AddLinkDependency(const fs::path &relative_path) {
+    auto &t = static_cast<T &>(*this);
+
+    fs::path absolute_path = t.env_.GetTargetRootDir() / relative_path;
+    AddLinkDependencyAbsolute(absolute_path);
+  }
 };
 
 } // namespace buildcc::internal
