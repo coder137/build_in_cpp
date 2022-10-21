@@ -22,80 +22,68 @@ namespace buildcc::internal {
 
 // Target State
 template <typename T> const TargetState &TargetGetter<T>::GetState() const {
-  const T &t = static_cast<const T &>(*this);
-
+  const auto &t = static_cast<const T &>(*this);
   return t.state_;
 }
 
 template <typename T> bool TargetGetter<T>::IsBuilt() const {
-  const T &t = static_cast<const T &>(*this);
-
+  const auto &t = static_cast<const T &>(*this);
   return t.state_.IsBuilt();
 }
 
 // Target Config
 template <typename T> const TargetConfig &TargetGetter<T>::GetConfig() const {
-  const T &t = static_cast<const T &>(*this);
-
+  const auto &t = static_cast<const T &>(*this);
   return t.config_;
 }
 
 template <typename T> const fs::path &TargetGetter<T>::GetBinaryPath() const {
-  const T &t = static_cast<const T &>(*this);
-
+  const auto &t = static_cast<const T &>(*this);
   return t.serialization_.GetSerializedFile();
 }
 
 template <typename T> const fs::path &TargetGetter<T>::GetTargetPath() const {
-  const T &t = static_cast<const T &>(*this);
-
+  const auto &t = static_cast<const T &>(*this);
   return t.link_target_.GetOutput();
 }
 
 template <typename T>
 const fs::path &TargetGetter<T>::GetPchHeaderPath() const {
-  const T &t = static_cast<const T &>(*this);
-
+  const auto &t = static_cast<const T &>(*this);
   return t.compile_pch_.GetHeaderPath();
 }
 
 template <typename T>
 const fs::path &TargetGetter<T>::GetPchCompilePath() const {
-  const T &t = static_cast<const T &>(*this);
-
+  const auto &t = static_cast<const T &>(*this);
   return t.compile_pch_.GetCompilePath();
 }
 
 template <typename T> const std::string &TargetGetter<T>::GetName() const {
-  const T &t = static_cast<const T &>(*this);
-
+  const auto &t = static_cast<const T &>(*this);
   return t.name_;
 }
 
 template <typename T> const Toolchain &TargetGetter<T>::GetToolchain() const {
-  const T &t = static_cast<const T &>(*this);
-
+  const auto &t = static_cast<const T &>(*this);
   return t.toolchain_;
 }
 
 template <typename T> TargetType TargetGetter<T>::GetType() const {
-  const T &t = static_cast<const T &>(*this);
-
+  const auto &t = static_cast<const T &>(*this);
   return t.type_;
 }
 
 template <typename T>
 const std::string &
 TargetGetter<T>::GetCompileCommand(const fs::path &source) const {
-  const T &t = static_cast<const T &>(*this);
-
+  const auto &t = static_cast<const T &>(*this);
   return t.compile_object_.GetObjectData(source).command;
 }
 
 template <typename T>
 const std::string &TargetGetter<T>::GetLinkCommand() const {
-  const T &t = static_cast<const T &>(*this);
-
+  const auto &t = static_cast<const T &>(*this);
   return t.link_target_.GetCommand();
 }
 
