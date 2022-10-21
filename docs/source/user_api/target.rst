@@ -56,10 +56,10 @@ Target APIs
 
 .. important:: Target APIs can also use TargetInfo APIs
 
-target_info_getter.h
+target_env.h
 ---------------------
 
-.. doxygenclass:: buildcc::internal::TargetGetter
+.. doxygenclass:: buildcc::internal::TargetEnvApi
 
 Target
 =======

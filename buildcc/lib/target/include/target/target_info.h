@@ -21,7 +21,6 @@
 
 #include "toolchain/toolchain.h"
 
-#include "target/common/target_config.h"
 #include "target/common/target_env.h"
 
 #include "target/api/deps_api.h"
@@ -30,7 +29,6 @@
 #include "target/api/pch_api.h"
 #include "target/api/source_api.h"
 #include "target/api/sync_api.h"
-#include "target/api/target_info_getter.h"
 
 #include "schema/target_serialization.h"
 
@@ -67,7 +65,6 @@ public:
   }
 
 private:
-  // Inputs
   friend class internal::SourceApi<TargetInfo>;
   friend class internal::IncludeApi<TargetInfo>;
   friend class internal::LibApi<TargetInfo>;

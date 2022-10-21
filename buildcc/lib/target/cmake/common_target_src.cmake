@@ -23,9 +23,7 @@ set(COMMON_TARGET_SRCS
     src/api/sync_api.cpp
     include/target/api/sync_api.h
     
-    src/api/target_info_getter.cpp
     src/api/target_getter.cpp
-    include/target/api/target_info_getter.h
     include/target/api/target_getter.h
 
     # Generator
