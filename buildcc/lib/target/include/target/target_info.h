@@ -59,7 +59,7 @@ class TargetInfo : public internal::SourceApi<TargetInfo>,
                    public internal::FlagApi<TargetInfo>,
                    public internal::DepsApi<TargetInfo>,
                    public internal::SyncApi<TargetInfo>,
-                   public internal::TargetInfoGetter<TargetInfo> {
+                   public internal::TargetEnvApi<TargetInfo> {
 public:
   TargetInfo(const BaseToolchain &toolchain, const TargetEnv &env)
       : toolchain_(toolchain), env_(env) {
@@ -74,18 +74,13 @@ private:
   friend class internal::PchApi<TargetInfo>;
   friend class internal::FlagApi<TargetInfo>;
   friend class internal::DepsApi<TargetInfo>;
-
-  // Feature
   friend class internal::SyncApi<TargetInfo>;
-
-  // Getters
-  friend class internal::TargetInfoGetter<TargetInfo>;
+  friend class internal::TargetEnvApi<TargetInfo>;
 
 protected:
   const BaseToolchain &toolchain_;
   TargetEnv env_;
 
-  //
   UserTargetSchema user_;
 
 private:
