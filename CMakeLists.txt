@@ -78,6 +78,7 @@ include(cmake/target/spdlog.cmake)
 include(cmake/target/cli11.cmake)
 include(cmake/target/taskflow.cmake)
 include(cmake/target/tpl.cmake)
+include(cmake/target/tl_optional.cmake)
 
 if (${TESTING})
     include(cmake/target/cpputest.cmake)
