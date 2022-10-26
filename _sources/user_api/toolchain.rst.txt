@@ -64,7 +64,7 @@ Example for Custom Toolchain
     // Selects the first found toolchain
     // Runs a verification function on the selected toolchain depending on the `ToolchainId`
     Toolchain::AddVerificationFunc(ToolchainId::Custom,
-    [](const ToolchainExecutables & executables) -> std::optional<ToolchainCompilerInfo> {
+    [](const ToolchainExecutables & executables) -> buildcc::env::optional<ToolchainCompilerInfo> {
         // Use executables to get compiler_version and target_arch
         if (success) {
             ToolchainCompilerInfo info;
