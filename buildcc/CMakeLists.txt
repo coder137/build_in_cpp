@@ -12,6 +12,7 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
     )
     target_link_libraries(buildcc PUBLIC
         fmt::fmt
+        optional
         flatbuffers
         Taskflow
         CLI11::CLI11

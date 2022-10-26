@@ -17,6 +17,7 @@ if (${TESTING})
     )
     target_link_libraries(mock_env PUBLIC
         fmt::fmt
+        optional
         Taskflow
 
         CppUTest
@@ -54,6 +55,8 @@ if (${TESTING})
 endif()
 
 set(ENV_SRCS
+    include/env/optional.h
+
     src/env.cpp
     src/assert_fatal.cpp
     src/logging.cpp
@@ -96,7 +99,10 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:${BUILDCC_INSTALL_HEADER_PREFIX}>
     )
-    target_link_libraries(env PUBLIC fmt::fmt)
+    target_link_libraries(env PUBLIC 
+        fmt::fmt 
+        optional
+    )
     target_compile_options(env PRIVATE ${BUILD_COMPILE_FLAGS})
     target_link_options(env PRIVATE ${BUILD_LINK_FLAGS})
     target_link_libraries(env PRIVATE

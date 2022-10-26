@@ -14,28 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef TOOLCHAINS_TOOLCHAIN_GENERIC_H_
-#define TOOLCHAINS_TOOLCHAIN_GENERIC_H_
+#ifndef ENV_OPTIONAL_H_
+#define ENV_OPTIONAL_H_
 
-#include "toolchain/toolchain.h"
+#include "tl/optional.hpp"
 
-namespace buildcc {
+namespace buildcc::env {
 
-class Toolchain_generic {
-public:
-  /**
-   * @brief Create a generic toolchain instance
-   *
-   * @return Toolchain& Returns the BaseToolchain with necessary virtual
-   * function overrides
-   * Asserts fatal if ToolchainId is not supported
-   */
-  static Toolchain &
-  New(ToolchainId id, const std::string &identifier,
-      const env::optional<ToolchainExecutables> &op_executables = {},
-      const env::optional<ToolchainConfig> &op_config = {});
-};
+template <typename T> using optional = tl::optional<T>;
 
-} // namespace buildcc
+} // namespace buildcc::env
 
 #endif

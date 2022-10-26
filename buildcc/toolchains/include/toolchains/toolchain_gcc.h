@@ -35,8 +35,8 @@ class Toolchain_gcc : public Toolchain {
 public:
   // Run time basic constructor
   Toolchain_gcc(const std::string &name = "gcc",
-                std::optional<ToolchainExecutables> op_executables = {},
-                std::optional<ToolchainConfig> op_config = {})
+                const env::optional<ToolchainExecutables> &op_executables = {},
+                const env::optional<ToolchainConfig> &op_config = {})
       : Toolchain(ToolchainId::Gcc, name,
                   op_executables.value_or(
                       ToolchainExecutables("as", "gcc", "g++", "ar", "ld")),

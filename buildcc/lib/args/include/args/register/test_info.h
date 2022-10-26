@@ -17,10 +17,14 @@
 #ifndef ARGS_REGISTER_TEST_INFO_H_
 #define ARGS_REGISTER_TEST_INFO_H_
 
+#include <filesystem>
+#include <unordered_map>
+
+#include "env/optional.h"
+
 #include "target/target.h"
 
-#include <optional>
-#include <unordered_map>
+namespace fs = std::filesystem;
 
 namespace buildcc {
 
@@ -70,9 +74,12 @@ public:
    * @param working_directory Working directory from which the test runs
    * @param output Output from tests
    */
+  // ! FIXME, warning: base class ‘struct
+  // tl::detail::optional_operations_base<std::filesystem::__cxx11::path>’
+  // should be explicitly initialized in the copy constructor
   TestConfig(
       const std::unordered_map<const char *, std::string> &arguments = {},
-      const std::optional<fs::path> &working_directory = {},
+      const env::optional<fs::path> &working_directory = {},
       const TestOutput &output = TestOutput())
       : arguments_(arguments), working_directory_(working_directory),
         output_(output) {}
@@ -80,14 +87,14 @@ public:
   const std::unordered_map<const char *, std::string> &GetArguments() const {
     return arguments_;
   }
-  const std::optional<fs::path> &GetWorkingDirectory() const {
+  const env::optional<fs::path> &GetWorkingDirectory() const {
     return working_directory_;
   }
   const TestOutput &GetTestOutput() const { return output_; }
 
 private:
   std::unordered_map<const char *, std::string> arguments_;
-  std::optional<fs::path> working_directory_{};
+  env::optional<fs::path> working_directory_;
   TestOutput output_;
 };
 

@@ -35,8 +35,8 @@ class Toolchain_msvc : public Toolchain {
 public:
   // Run time basic constructor
   Toolchain_msvc(const std::string &name = "msvc",
-                 std::optional<ToolchainExecutables> op_executables = {},
-                 std::optional<ToolchainConfig> op_config = {})
+                 const env::optional<ToolchainExecutables> &op_executables = {},
+                 const env::optional<ToolchainConfig> &op_config = {})
       : Toolchain(ToolchainId::Msvc, name,
                   op_executables.value_or(
                       ToolchainExecutables("cl", "cl", "cl", "lib", "link")),

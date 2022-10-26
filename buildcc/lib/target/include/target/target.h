@@ -21,7 +21,6 @@
 #include <functional>
 #include <initializer_list>
 #include <mutex>
-#include <optional>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -94,8 +93,8 @@ private:
   void Initialize();
 
   //
-  std::optional<std::string> SelectCompileFlags(FileExt ext) const;
-  std::optional<std::string> SelectCompiler(FileExt ext) const;
+  env::optional<std::string> SelectCompileFlags(FileExt ext) const;
+  env::optional<std::string> SelectCompiler(FileExt ext) const;
 
   // Recompilation checks
   void RecheckPaths(const internal::path_unordered_set &previous_path,

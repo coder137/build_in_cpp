@@ -12,7 +12,7 @@ static constexpr const char *const STDERR_DATA_STRING = "stderr_data";
 
 // command
 bool Command::Execute(const std::string &command,
-                      const std::optional<fs::path> &working_directory,
+                      const optional<fs::path> &working_directory,
                       std::vector<std::string> *stdout_data,
                       std::vector<std::string> *stderr_data) {
   (void)command;

@@ -110,7 +110,7 @@ TEST(ToolchainVerifyTestGroup, CustomToolchainInfo) {
       buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
   toolchain.SetToolchainInfoCb(
       [](const buildcc::ToolchainExecutables &executables)
-          -> std::optional<buildcc::ToolchainCompilerInfo> {
+          -> buildcc::env::optional<buildcc::ToolchainCompilerInfo> {
         (void)executables;
         mock().actualCall("SetToolchainInfoCb");
         buildcc::ToolchainCompilerInfo info;

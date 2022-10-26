@@ -38,7 +38,7 @@ buildcc::ToolchainConfig GetGccToolchainConfig() {
   return config;
 }
 
-std::optional<std::string>
+buildcc::env::optional<std::string>
 GetGccCompilerVersion(const buildcc::env::Command &command) {
   std::vector<std::string> stdout_data;
   bool executed = buildcc::env::Command::Execute(
@@ -49,7 +49,7 @@ GetGccCompilerVersion(const buildcc::env::Command &command) {
   return stdout_data[0];
 }
 
-std::optional<std::string>
+buildcc::env::optional<std::string>
 GetGccTargetArchitecture(const buildcc::env::Command &command) {
   std::vector<std::string> stdout_data;
   bool executed = buildcc::env::Command::Execute(
@@ -60,7 +60,7 @@ GetGccTargetArchitecture(const buildcc::env::Command &command) {
   return stdout_data[0];
 }
 
-std::optional<buildcc::ToolchainCompilerInfo>
+buildcc::env::optional<buildcc::ToolchainCompilerInfo>
 GetGccToolchainInfo(const buildcc::ToolchainExecutables &executables) {
   buildcc::env::Command command;
   command.AddDefaultArgument("compiler", executables.cpp_compiler);
@@ -94,7 +94,7 @@ buildcc::ToolchainConfig GetMsvcToolchainConfig() {
   return config;
 }
 
-std::optional<std::string> GetMsvcCompilerVersion() {
+buildcc::env::optional<std::string> GetMsvcCompilerVersion() {
   const char *vscmd_version = getenv("VSCMD_VER");
   if (vscmd_version == nullptr) {
     return {};
@@ -102,7 +102,7 @@ std::optional<std::string> GetMsvcCompilerVersion() {
   return vscmd_version;
 }
 
-std::optional<std::string> GetMsvcTargetArchitecture() {
+buildcc::env::optional<std::string> GetMsvcTargetArchitecture() {
   // DONE, Read `VSCMD_ARG_HOST_ARCH` from env path
   // DONE, Read `VSCMD_ARG_TGT_ARCH` from env path
   const char *vs_host_arch = getenv("VSCMD_ARG_HOST_ARCH");
@@ -115,7 +115,7 @@ std::optional<std::string> GetMsvcTargetArchitecture() {
   return fmt::format("{}_{}", vs_host_arch, vs_target_arch);
 }
 
-std::optional<buildcc::ToolchainCompilerInfo>
+buildcc::env::optional<buildcc::ToolchainCompilerInfo>
 GetMsvcToolchainInfo(const buildcc::ToolchainExecutables &executables) {
   (void)executables;
   auto op_compiler_version = GetMsvcCompilerVersion();
@@ -132,7 +132,7 @@ GetMsvcToolchainInfo(const buildcc::ToolchainExecutables &executables) {
 
 //
 
-std::optional<buildcc::ToolchainCompilerInfo>
+buildcc::env::optional<buildcc::ToolchainCompilerInfo>
 GetErrorToolchainInfo(const buildcc::ToolchainExecutables &executables) {
   (void)executables;
   buildcc::env::log_critical(__FUNCTION__,

@@ -26,7 +26,7 @@ public:
   // Run time basic constructor
   Toolchain_custom(ToolchainId id, const std::string &name,
                    const ToolchainExecutables &executables,
-                   std::optional<ToolchainConfig> op_config = {})
+                   const env::optional<ToolchainConfig> &op_config = {})
       : Toolchain(id, name, executables,
                   op_config.value_or(ToolchainConfig())) {
     Initialize();

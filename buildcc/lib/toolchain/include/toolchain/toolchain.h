@@ -17,7 +17,6 @@
 #ifndef TOOLCHAIN_TOOLCHAIN_H_
 #define TOOLCHAIN_TOOLCHAIN_H_
 
-#include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>

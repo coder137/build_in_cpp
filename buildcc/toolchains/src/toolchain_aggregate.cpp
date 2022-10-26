@@ -29,8 +29,7 @@
 namespace {
 
 template <typename Type, typename... Params>
-static buildcc::Toolchain *AddIf(const std::string &identifier,
-                                 Params &&...params) {
+buildcc::Toolchain *AddIf(const std::string &identifier, Params &&...params) {
   buildcc::Toolchain *toolchain{nullptr};
   if (!buildcc::Storage::Contains(identifier)) {
     toolchain = &buildcc::Storage::Add<Type>(identifier,
@@ -51,8 +50,8 @@ void Toolchain_custom::Initialize() {
 
 Toolchain &Toolchain_generic::New(
     ToolchainId id, const std::string &identifier,
-    const std::optional<ToolchainExecutables> &op_executables,
-    const std::optional<ToolchainConfig> &op_config) {
+    const env::optional<ToolchainExecutables> &op_executables,
+    const env::optional<ToolchainConfig> &op_config) {
   Toolchain *toolchain{nullptr};
   switch (id) {
   case ToolchainId::Gcc:
@@ -73,8 +72,7 @@ Toolchain &Toolchain_generic::New(
                       "ToolchainId::Custom and ToolchainId::Clang require "
                       "executables to be provided");
     toolchain = AddIf<Toolchain_custom>(identifier, id, identifier,
-                                        op_executables.value(),
-                                        op_config.value_or(ToolchainConfig()));
+                                        op_executables.value(), op_config);
     break;
   default:
     break;

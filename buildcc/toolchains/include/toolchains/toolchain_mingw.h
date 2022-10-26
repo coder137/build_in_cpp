@@ -36,9 +36,10 @@ namespace buildcc {
 class Toolchain_mingw : public Toolchain {
 public:
   // Run time basic constructor
-  Toolchain_mingw(const std::string &name = "gcc",
-                  std::optional<ToolchainExecutables> op_executables = {},
-                  std::optional<ToolchainConfig> op_config = {})
+  Toolchain_mingw(
+      const std::string &name = "gcc",
+      const env::optional<ToolchainExecutables> &op_executables = {},
+      const env::optional<ToolchainConfig> &op_config = {})
       : Toolchain(ToolchainId::MinGW, name,
                   op_executables.value_or(
                       ToolchainExecutables("as", "gcc", "g++", "ar", "ld")),
