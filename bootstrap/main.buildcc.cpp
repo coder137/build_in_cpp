@@ -21,6 +21,7 @@
 #include "bootstrap/build_fmtlib.h"
 #include "bootstrap/build_spdlog.h"
 #include "bootstrap/build_taskflow.h"
+#include "bootstrap/build_tl_optional.h"
 #include "bootstrap/build_tpl.h"
 
 #include "bootstrap/build_buildcc.h"
