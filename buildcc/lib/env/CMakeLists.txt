@@ -17,7 +17,7 @@ if (${TESTING})
     )
     target_link_libraries(mock_env PUBLIC
         fmt::fmt
-        optional
+        tl::optional
         Taskflow
 
         CppUTest
@@ -101,7 +101,7 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     )
     target_link_libraries(env PUBLIC 
         fmt::fmt 
-        optional
+        tl::optional
     )
     target_compile_options(env PRIVATE ${BUILD_COMPILE_FLAGS})
     target_link_options(env PRIVATE ${BUILD_LINK_FLAGS})
