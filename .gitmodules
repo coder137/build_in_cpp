@@ -19,6 +19,6 @@
 [submodule "tiny-process-library"]
 	path = third_party/tiny-process-library
 	url = https://gitlab.com/eidheim/tiny-process-library.git
-[submodule "third_party/tl_optional"]
+[submodule "optional"]
 	path = third_party/tl_optional
 	url = https://github.com/TartanLlama/optional.git
