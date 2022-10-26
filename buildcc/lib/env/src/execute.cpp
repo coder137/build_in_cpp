@@ -28,8 +28,8 @@ namespace tpl = TinyProcessLib;
 
 namespace {
 
-tpl::Process::string_type
-get_working_directory(const std::optional<fs::path> &working_directory) {
+tpl::Process::string_type get_working_directory(
+    const buildcc::env::optional<fs::path> &working_directory) {
 #ifdef UNICODE
   return working_directory.value_or(tpl::Process::string_type()).wstring();
 #else
@@ -42,7 +42,7 @@ get_working_directory(const std::optional<fs::path> &working_directory) {
 namespace buildcc::env {
 
 bool Command::Execute(const std::string &command,
-                      const std::optional<fs::path> &working_directory,
+                      const optional<fs::path> &working_directory,
                       std::vector<std::string> *stdout_data,
                       std::vector<std::string> *stderr_data) {
   env::assert_fatal(!command.empty(), "Empty command");

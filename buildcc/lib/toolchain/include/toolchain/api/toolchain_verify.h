@@ -18,12 +18,12 @@
 #define TOOLCHAIN_TOOLCHAIN_VERIFY_H_
 
 #include <filesystem>
-#include <optional>
 #include <vector>
 
 #include "fmt/format.h"
 
 #include "env/logging.h"
+#include "env/optional.h"
 
 #include "toolchain/common/toolchain_executables.h"
 #include "toolchain/common/toolchain_id.h"
@@ -51,7 +51,7 @@ struct ToolchainCompilerInfo {
 };
 
 // clang-format off
-typedef std::function<std::optional<ToolchainCompilerInfo>(const ToolchainExecutables &)> ToolchainInfoCb;
+using ToolchainInfoCb = std::function<env::optional<ToolchainCompilerInfo>(const ToolchainExecutables &)>;
 // clang-format on
 
 template <typename T> class ToolchainVerify {
@@ -74,8 +74,8 @@ public:
   /**
    * @brief Set ToolchainInfo callback for run time objects
    */
-  void SetToolchainInfoCb(const ToolchainInfoCb &cb) { info_cb_ = cb; }
-  const ToolchainInfoCb &GetToolchainInfoCb() const { return info_cb_; }
+  void SetToolchainInfoCb(const ToolchainInfoCb &cb);
+  const ToolchainInfoCb &GetToolchainInfoCb() const;
 
 private:
   ToolchainInfoCb info_cb_;

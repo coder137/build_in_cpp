@@ -2,10 +2,10 @@
 #include "env/storage.h"
 #include "env/util.h"
 
+#include "toolchains/toolchain_specialized.h"
+
 #include "expect_command.h"
 #include "mock_command_copier.h"
-
-#include "toolchains/toolchain_specialized.h"
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"

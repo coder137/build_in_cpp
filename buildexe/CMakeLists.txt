@@ -21,6 +21,7 @@ target_sources(buildexe PRIVATE
     ../bootstrap/src/build_spdlog.cpp
     ../bootstrap/src/build_taskflow.cpp
     ../bootstrap/src/build_tpl.cpp
+    ../bootstrap/src/build_tl_optional.cpp
 )
 target_include_directories(buildexe PRIVATE 
     include

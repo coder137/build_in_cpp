@@ -46,7 +46,8 @@ void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe) {
 void buildcc_cb(BaseTarget &target, const FileGenerator &schema_gen,
                 const TargetInfo &flatbuffers_ho, const TargetInfo &fmt_ho,
                 const TargetInfo &spdlog_ho, const TargetInfo &cli11_ho,
-                const TargetInfo &taskflow_ho, const BaseTarget &tpl) {
+                const TargetInfo &taskflow_ho, const TargetInfo &tl_optional_ho,
+                const BaseTarget &tpl) {
   // NOTE, Build as single lib
   target.AddIncludeDir("", true);
   const std::string &schema_build_dir = schema_gen.Get("current_build_dir");
@@ -129,6 +130,9 @@ void buildcc_cb(BaseTarget &target, const FileGenerator &schema_gen,
 
   // TASKFLOW HO
   target.Insert(taskflow_ho, kInsertOptions);
+
+  // TL OPTIONAL HO
+  target.Insert(tl_optional_ho, kInsertOptions);
 
   // TPL LIB
   target.AddLibDep(tpl);
@@ -237,6 +241,12 @@ void BuildBuildCC::Initialize() {
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "taskflow",
                 env_.GetTargetBuildDir()));
 
+  // tl optional HO lib
+  (void)storage_.Add<TargetInfo>(
+      kTlOptionalHoName, toolchain_,
+      TargetEnv(env_.GetTargetRootDir() / "third_party" / "tl_optional",
+                env_.GetTargetBuildDir()));
+
   // Tiny-process-library lib
   // TODO, Make this a generic selection between StaticTarget and
   // DynamicTarget
@@ -262,6 +272,7 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
   auto &fmt_ho_lib = GetFmtHo();
   auto &spdlog_ho_lib = GetSpdlogHo();
   auto &taskflow_ho_lib = GetTaskflowHo();
+  auto &tl_optional_ho_lib = GetTlOptionalHo();
   auto &tpl_lib = GetTpl();
   auto &buildcc_lib = GetBuildcc();
   Reg::Toolchain(state)
@@ -274,11 +285,13 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
       .Func(fmt_ho_cb, fmt_ho_lib)
       .Func(spdlog_ho_cb, spdlog_ho_lib)
       .Func(taskflow_ho_cb, taskflow_ho_lib)
+      .Func(tl_optional_ho_cb, tl_optional_ho_lib)
       .Func(global_flags_cb, tpl_lib, toolchain_)
       .Build(tpl_cb, tpl_lib)
       .Func(global_flags_cb, buildcc_lib, toolchain_)
       .Build(buildcc_cb, buildcc_lib, schema_gen, flatbuffers_ho_lib,
-             fmt_ho_lib, spdlog_ho_lib, cli11_ho_lib, taskflow_ho_lib, tpl_lib)
+             fmt_ho_lib, spdlog_ho_lib, cli11_ho_lib, taskflow_ho_lib,
+             tl_optional_ho_lib, tpl_lib)
       .Dep(buildcc_lib, schema_gen)
       .Dep(buildcc_lib, tpl_lib);
 }

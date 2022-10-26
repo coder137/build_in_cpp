@@ -21,12 +21,11 @@
 #include <unordered_map>
 
 #include "args.h"
+#include "args/register/test_info.h"
 
 #include "target/custom_generator.h"
 #include "target/file_generator.h"
 #include "target/target.h"
-
-#include "args/register/test_info.h"
 
 #include "taskflow/taskflow.hpp"
 
@@ -134,7 +133,6 @@ public:
   // Getters
   const tf::Taskflow &GetTaskflow() const { return build_tf_; }
 
-private:
 private:
   // BuildTasks
   tf::Task BuildTask(BaseTarget &target);

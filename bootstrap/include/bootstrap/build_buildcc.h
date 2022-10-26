@@ -24,6 +24,7 @@
 #include "build_fmtlib.h"
 #include "build_spdlog.h"
 #include "build_taskflow.h"
+#include "build_tl_optional.h"
 #include "build_tpl.h"
 
 namespace buildcc {
@@ -33,7 +34,8 @@ void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe);
 void buildcc_cb(BaseTarget &target, const FileGenerator &schema_gen,
                 const TargetInfo &flatbuffers_ho, const TargetInfo &fmt_ho,
                 const TargetInfo &spdlog_ho, const TargetInfo &cli11_ho,
-                const TargetInfo &taskflow_ho, const BaseTarget &tpl);
+                const TargetInfo &taskflow_ho, const TargetInfo &tl_optional_ho,
+                const BaseTarget &tpl);
 
 /**
  * @brief
@@ -47,6 +49,7 @@ public:
   static constexpr const char *const kFmtHoName = "fmtlib_ho";
   static constexpr const char *const kSpdlogHoName = "spdlog_ho";
   static constexpr const char *const kTaskflowHoName = "taskflow_ho";
+  static constexpr const char *const kTlOptionalHoName = "tl_optional_ho";
 
   // Executable
   static constexpr const char *const kFlatcExeName = "flatc";
@@ -91,6 +94,9 @@ private:
   TargetInfo &GetSpdlogHo() { return storage_.Ref<TargetInfo>(kSpdlogHoName); }
   TargetInfo &GetTaskflowHo() {
     return storage_.Ref<TargetInfo>(kTaskflowHoName);
+  }
+  TargetInfo &GetTlOptionalHo() {
+    return storage_.Ref<TargetInfo>(kTlOptionalHoName);
   }
 
 private:

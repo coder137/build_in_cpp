@@ -8,6 +8,7 @@ target_sources(buildcc_lib_bootstrap PRIVATE
     src/build_spdlog.cpp
     src/build_taskflow.cpp
     src/build_tpl.cpp
+    src/build_tl_optional.cpp
 
     src/build_buildcc.cpp
 )

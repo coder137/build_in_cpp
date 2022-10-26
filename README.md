@@ -34,6 +34,7 @@ Build C, C++ and ASM files in C++
   - fmt v8.0.1
   - spdlog v1.9.2
   - CppUTest v4.0
+  - Tl::Optional (master)
 
 # General Information
 
@@ -178,3 +179,4 @@ _BuildCC_ is licensed under the Apache License, Version 2.0. See [LICENSE](LICEN
 - [Flatbuffers](https://github.com/google/flatbuffers) (Serialization) [Apache-2.0 License]
 - [CLI11](https://github.com/CLIUtils/CLI11) (Argument Parsing) [BSD-3-Clause License] [Header Only]
 - [CppUTest](https://github.com/cpputest/cpputest) (Unit Testing/Mocking) [BSD-3-Clause License]
+- [Tl::Optional](https://github.com/TartanLlama/optional) (Optional support) [CC0-1.0 License]

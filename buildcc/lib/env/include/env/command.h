@@ -18,10 +18,11 @@
 #define ENV_COMMAND_H_
 
 #include <filesystem>
-#include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>
+
+#include "env/optional.h"
 
 namespace fs = std::filesystem;
 
@@ -74,7 +75,7 @@ public:
   // TODO, Update this to get an integer exit code number instead of boolean
   // value
   static bool Execute(const std::string &command,
-                      const std::optional<fs::path> &working_directory = {},
+                      const optional<fs::path> &working_directory = {},
                       std::vector<std::string> *stdout_data = nullptr,
                       std::vector<std::string> *stderr_data = nullptr);
 

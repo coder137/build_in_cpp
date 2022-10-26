@@ -16,7 +16,6 @@
 
 #include "toolchain/api/toolchain_verify.h"
 
-#include <optional>
 #include <unordered_set>
 #include <vector>
 
@@ -82,7 +81,7 @@ ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
 
   ToolchainExecutables exes =
       CreateToolchainExecutables(toolchain_paths[0], t.executables_);
-  std::optional<ToolchainCompilerInfo> op_toolchain_compiler_info{};
+  env::optional<ToolchainCompilerInfo> op_toolchain_compiler_info{};
   if (GetToolchainInfoCb()) {
     op_toolchain_compiler_info = GetToolchainInfoCb()(exes);
   }
@@ -96,6 +95,16 @@ ToolchainVerify<T>::Verify(const ToolchainFindConfig &config) {
   // Update the compilers
   t.executables_ = exes;
   return toolchain_compiler_info;
+}
+
+template <typename T>
+void ToolchainVerify<T>::SetToolchainInfoCb(const ToolchainInfoCb &cb) {
+  info_cb_ = cb;
+}
+
+template <typename T>
+const ToolchainInfoCb &ToolchainVerify<T>::GetToolchainInfoCb() const {
+  return info_cb_;
 }
 
 template class ToolchainVerify<Toolchain>;
