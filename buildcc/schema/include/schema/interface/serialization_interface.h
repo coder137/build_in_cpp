@@ -30,9 +30,9 @@ namespace buildcc::internal {
 
 class SerializationInterface {
 public:
-  SerializationInterface(const fs::path &serialized_file)
+  explicit SerializationInterface(const fs::path &serialized_file)
       : serialized_file_(serialized_file) {}
-  virtual ~SerializationInterface() {}
+  virtual ~SerializationInterface() = default;
 
   bool LoadFromFile() {
     std::string buffer;

@@ -86,7 +86,7 @@ private:
   virtual std::vector<uint8_t> Serialize() const = 0;
 };
 
-struct UserGenInfo : internal::GenInfo {
+struct UserGenInfo : internal::CustomGeneratorSchema::IdInfo {
   fs_unordered_set inputs;
   GenerateCb generate_cb;
   std::shared_ptr<CustomBlobHandler> blob_handler{nullptr};
@@ -99,7 +99,7 @@ struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
     for (auto &[id, gen_info] : gen_info_map) {
       gen_info.internal_inputs = path_schema_convert(
           gen_info.inputs, internal::Path::CreateExistingPath);
-      auto [_, success] = internal_gen_info_map.try_emplace(id, gen_info);
+      auto [_, success] = internal_ids.try_emplace(id, gen_info);
       env::assert_fatal(success, fmt::format("Could not save {}", id));
     }
   }

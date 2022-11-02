@@ -17,71 +17,35 @@
 #include "schema/custom_generator_serialization.h"
 
 // Third party
-#include "flatbuffers/flatbuffers.h"
-
-// Private
-#include "schema/private/schema_util.h"
-
-// Schema generated
-#include "custom_generator_generated.h"
+#include "nlohmann/json.hpp"
 
 namespace buildcc::internal {
 
 // PRIVATE
 
 bool CustomGeneratorSerialization::Verify(const std::string &serialized_data) {
-  flatbuffers::Verifier verifier((const uint8_t *)serialized_data.c_str(),
-                                 serialized_data.length());
-  return fbs::VerifyCustomGeneratorBuffer(verifier);
+  (void)serialized_data;
+  return true;
 }
 
 bool CustomGeneratorSerialization::Load(const std::string &serialized_data) {
-  const auto *custom_generator =
-      fbs::GetCustomGenerator((const void *)serialized_data.c_str());
-  // Verified, does not need a nullptr check
-
-  const auto *fbs_gen_info = custom_generator->info();
-  if (fbs_gen_info == nullptr) {
-    return false;
+  bool is_loaded = true;
+  try {
+    json j = json::parse(serialized_data, nullptr, true, true);
+    load_ = j.get<CustomGeneratorSchema>();
+  } catch (const std::exception &e) {
+    env::log_critical(__FUNCTION__, e.what());
+    is_loaded = false;
   }
-
-  // gen_info->id is a required parameter, hence gen_info cannot be nullptr
-  for (const auto *gen_info : *fbs_gen_info) {
-    GenInfo current_info;
-    extract_path(gen_info->inputs(), current_info.internal_inputs);
-    extract(gen_info->outputs(), current_info.outputs);
-    extract(gen_info->userblob(), current_info.userblob);
-    load_.internal_gen_info_map.emplace(gen_info->id()->c_str(),
-                                        std::move(current_info));
-  }
-  return true;
+  return is_loaded;
 }
 
 bool CustomGeneratorSerialization::Store(
     const fs::path &absolute_serialized_file) {
-  flatbuffers::FlatBufferBuilder builder;
-
-  std::vector<flatbuffers::Offset<fbs::GenInfo>> fbs_gen_info;
-  for (const auto &gen_info_iter : store_.internal_gen_info_map) {
-    const auto &id = gen_info_iter.first;
-    const auto &gen_info = gen_info_iter.second;
-    auto fbs_internal_inputs =
-        internal::create_fbs_vector_path(builder, gen_info.internal_inputs);
-    auto fbs_outputs =
-        internal::create_fbs_vector_string(builder, gen_info.outputs);
-    auto fbs_current_info =
-        fbs::CreateGenInfoDirect(builder, id.c_str(), &fbs_internal_inputs,
-                                 &fbs_outputs, &gen_info.userblob);
-    fbs_gen_info.push_back(fbs_current_info);
-  }
-
-  auto fbs_generator = fbs::CreateCustomGeneratorDirect(
-      builder, store_.name.c_str(), &fbs_gen_info);
-  fbs::FinishCustomGeneratorBuffer(builder, fbs_generator);
-
-  return env::save_file(path_as_string(absolute_serialized_file).c_str(),
-                        (const char *)builder.GetBufferPointer(),
-                        builder.GetSize(), true);
+  json j = store_;
+  auto data = j.dump(4);
+  return env::save_file(path_as_string(absolute_serialized_file).c_str(), data,
+                        false);
 }
 
 } // namespace buildcc::internal

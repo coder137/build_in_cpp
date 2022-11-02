@@ -27,13 +27,25 @@
 
 // Third party
 #include "fmt/format.h"
+#include "nlohmann/json.hpp"
 
 namespace fs = std::filesystem;
+using json = nlohmann::ordered_json;
 
 namespace buildcc::internal {
 
 class Path {
+private:
+  static constexpr const char *const kPathName = "path";
+  static constexpr const char *const kHashName = "hash";
+
 public:
+  Path() = default;
+  explicit Path(const fs::path &pathname, std::uint64_t last_write_timestamp)
+      : pathname_(pathname), last_write_timestamp_(last_write_timestamp) {
+    pathname_.lexically_normal().make_preferred();
+  }
+
   /**
    * @brief Create a Existing Path object and sets last_write_timstamp to file
    * timestamp
@@ -103,12 +115,21 @@ public:
     return GetPathname() == pathname;
   }
 
-private:
-  explicit Path(const fs::path &pathname, std::uint64_t last_write_timestamp)
-      : pathname_(pathname), last_write_timestamp_(last_write_timestamp) {
-    pathname_.lexically_normal().make_preferred();
+  // JSON specialization
+
+  friend void to_json(json &j, const Path &p) {
+    j = json{
+        {kPathName, p.pathname_},
+        {kHashName, p.last_write_timestamp_},
+    };
   }
 
+  friend void from_json(const json &j, Path &p) {
+    j.at(kPathName).get_to(p.pathname_);
+    j.at(kHashName).get_to(p.last_write_timestamp_);
+  }
+
+private:
   std::string Quote(const std::string &str) const {
     if (str.find(" ") == std::string::npos) {
       return str;

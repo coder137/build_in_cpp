@@ -136,10 +136,9 @@ void CustomGenerator::BuildGenerate(
         [&](const auto &iter) { gen_selected_ids.insert(iter.first); });
     dirty_ = true;
   } else {
-    // DONE, Conditionally select internal_gen_info_map depending on what has
+    // DONE, Conditionally select internal_ids depending on what has
     // changed
-    const auto &prev_gen_info_map =
-        serialization_.GetLoad().internal_gen_info_map;
+    const auto &prev_gen_info_map = serialization_.GetLoad().internal_ids;
     const auto &curr_gen_info_map = user_.gen_info_map;
 
     // DONE, MAP REMOVED condition Check if prev_gen_info_map exists in
@@ -293,8 +292,7 @@ void CustomGenerator::TaskRunner(bool run, const std::string &id) {
   if (run) {
     rerun = true;
   } else {
-    const auto &previous_info =
-        serialization_.GetLoad().internal_gen_info_map.at(id);
+    const auto &previous_info = serialization_.GetLoad().internal_ids.at(id);
     rerun = internal::CheckPaths(previous_info.internal_inputs,
                                  current_info.internal_inputs) !=
                 internal::PathState::kNoChange ||

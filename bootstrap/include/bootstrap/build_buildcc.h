@@ -22,6 +22,7 @@
 #include "build_cli11.h"
 #include "build_flatbuffers.h"
 #include "build_fmtlib.h"
+#include "build_nlohmann_json.h"
 #include "build_spdlog.h"
 #include "build_taskflow.h"
 #include "build_tl_optional.h"
@@ -32,7 +33,8 @@ namespace buildcc {
 void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe);
 
 void buildcc_cb(BaseTarget &target, const FileGenerator &schema_gen,
-                const TargetInfo &flatbuffers_ho, const TargetInfo &fmt_ho,
+                const TargetInfo &flatbuffers_ho,
+                const TargetInfo &nlohmann_json_ho, const TargetInfo &fmt_ho,
                 const TargetInfo &spdlog_ho, const TargetInfo &cli11_ho,
                 const TargetInfo &taskflow_ho, const TargetInfo &tl_optional_ho,
                 const BaseTarget &tpl);
@@ -45,6 +47,7 @@ class BuildBuildCC {
 public:
   // TargetInfo / Header Only
   static constexpr const char *const kFlatbuffersHoName = "flatbuffers_ho";
+  static constexpr const char *const kNlohmannJsonHoName = "nlohmann_json_ho";
   static constexpr const char *const kCli11HoName = "cli11_ho";
   static constexpr const char *const kFmtHoName = "fmtlib_ho";
   static constexpr const char *const kSpdlogHoName = "spdlog_ho";
@@ -88,6 +91,9 @@ private:
   }
   TargetInfo &GetFlatbuffersHo() {
     return storage_.Ref<TargetInfo>(kFlatbuffersHoName);
+  }
+  TargetInfo &GetNlohmannJsonHo() {
+    return storage_.Ref<TargetInfo>(kNlohmannJsonHoName);
   }
   TargetInfo &GetCli11Ho() { return storage_.Ref<TargetInfo>(kCli11HoName); }
   TargetInfo &GetFmtHo() { return storage_.Ref<TargetInfo>(kFmtHoName); }
