@@ -3,6 +3,7 @@ add_executable(buildcc_lib_bootstrap
 )
 target_sources(buildcc_lib_bootstrap PRIVATE
     src/build_flatbuffers.cpp
+    src/build_nlohmann_json.cpp
     src/build_cli11.cpp
     src/build_fmtlib.cpp
     src/build_spdlog.cpp

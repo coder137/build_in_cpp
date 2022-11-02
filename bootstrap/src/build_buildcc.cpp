@@ -20,16 +20,12 @@ namespace buildcc {
 
 void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe) {
   generator.AddPattern("path_fbs", "{current_root_dir}/path.fbs");
-  generator.AddPattern("custom_generator_fbs",
-                       "{current_root_dir}/custom_generator.fbs");
   generator.AddPattern("target_fbs", "{current_root_dir}/target.fbs");
 
   generator.AddInput("{path_fbs}");
-  generator.AddInput("{custom_generator_fbs}");
   generator.AddInput("{target_fbs}");
 
   generator.AddOutput("{current_build_dir}/path_generated.h");
-  generator.AddOutput("{current_build_dir}/custom_generator_generated.h");
   generator.AddOutput("{current_build_dir}/target_generated.h");
 
   generator.AddPatterns({
@@ -38,13 +34,14 @@ void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe) {
   //   generator.AddCommand("{flatc_compiler} --help");
   generator.AddCommand("{flatc_compiler} -o {current_build_dir} -I "
                        "{current_root_dir} --gen-object-api "
-                       "--cpp {path_fbs} {custom_generator_fbs} {target_fbs}");
+                       "--cpp {path_fbs} {target_fbs}");
 
   generator.Build();
 }
 
 void buildcc_cb(BaseTarget &target, const FileGenerator &schema_gen,
-                const TargetInfo &flatbuffers_ho, const TargetInfo &fmt_ho,
+                const TargetInfo &flatbuffers_ho,
+                const TargetInfo &nlohmann_json_ho, const TargetInfo &fmt_ho,
                 const TargetInfo &spdlog_ho, const TargetInfo &cli11_ho,
                 const TargetInfo &taskflow_ho, const TargetInfo &tl_optional_ho,
                 const BaseTarget &tpl) {
@@ -118,6 +115,9 @@ void buildcc_cb(BaseTarget &target, const FileGenerator &schema_gen,
 
   // FLATBUFFERS HO
   target.Insert(flatbuffers_ho, kInsertOptions);
+
+  // NLOHMANN JSON HO
+  target.Insert(nlohmann_json_ho, kInsertOptions);
 
   // FMT HO
   target.Insert(fmt_ho, kInsertOptions);
@@ -217,6 +217,12 @@ void BuildBuildCC::Initialize() {
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "flatbuffers",
                 env_.GetTargetBuildDir()));
 
+  // Nlohmann json HO lib
+  (void)storage_.Add<TargetInfo>(
+      kNlohmannJsonHoName, toolchain_,
+      TargetEnv(env_.GetTargetRootDir() / "third_party" / "json",
+                env_.GetTargetBuildDir()));
+
   // CLI11 HO lib
   (void)storage_.Add<TargetInfo>(
       kCli11HoName, toolchain_,
@@ -268,6 +274,7 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
   auto &flatc_exe = GetFlatc();
   auto &schema_gen = GetSchemaGen();
   auto &flatbuffers_ho_lib = GetFlatbuffersHo();
+  auto &nlohmann_json_ho_lib = GetNlohmannJsonHo();
   auto &cli11_ho_lib = GetCli11Ho();
   auto &fmt_ho_lib = GetFmtHo();
   auto &spdlog_ho_lib = GetSpdlogHo();
@@ -281,6 +288,7 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
       .Build(schema_gen_cb, schema_gen, flatc_exe)
       .Dep(schema_gen, flatc_exe)
       .Func(flatbuffers_ho_cb, flatbuffers_ho_lib)
+      .Func(nlohmann_json_ho_cb, nlohmann_json_ho_lib)
       .Func(cli11_ho_cb, cli11_ho_lib)
       .Func(fmt_ho_cb, fmt_ho_lib)
       .Func(spdlog_ho_cb, spdlog_ho_lib)
@@ -290,8 +298,8 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
       .Build(tpl_cb, tpl_lib)
       .Func(global_flags_cb, buildcc_lib, toolchain_)
       .Build(buildcc_cb, buildcc_lib, schema_gen, flatbuffers_ho_lib,
-             fmt_ho_lib, spdlog_ho_lib, cli11_ho_lib, taskflow_ho_lib,
-             tl_optional_ho_lib, tpl_lib)
+             nlohmann_json_ho_lib, fmt_ho_lib, spdlog_ho_lib, cli11_ho_lib,
+             taskflow_ho_lib, tl_optional_ho_lib, tpl_lib)
       .Dep(buildcc_lib, schema_gen)
       .Dep(buildcc_lib, tpl_lib);
 }

@@ -17,6 +17,7 @@ target_sources(buildexe PRIVATE
     ../bootstrap/src/build_buildcc.cpp
     ../bootstrap/src/build_cli11.cpp
     ../bootstrap/src/build_flatbuffers.cpp
+    ../bootstrap/src/build_nlohmann_json.cpp
     ../bootstrap/src/build_fmtlib.cpp
     ../bootstrap/src/build_spdlog.cpp
     ../bootstrap/src/build_taskflow.cpp
