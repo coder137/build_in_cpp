@@ -4,8 +4,6 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-#include "custom_generator_generated.h"
-
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
