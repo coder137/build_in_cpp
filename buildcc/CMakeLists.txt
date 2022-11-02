@@ -14,6 +14,7 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
         fmt::fmt
         tl::optional
         flatbuffers
+        nlohmann_json::nlohmann_json
         Taskflow
         CLI11::CLI11
     )

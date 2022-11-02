@@ -20,6 +20,7 @@ if (${TESTING})
     target_link_libraries(mock_schema PUBLIC
         mock_env
         flatbuffers
+        nlohmann_json::nlohmann_json
     
         CppUTest
         CppUTestExt
@@ -80,6 +81,7 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     target_link_libraries(schema PUBLIC
         env
         flatbuffers
+        nlohmann_json::nlohmann_json
     )
     target_include_directories(schema PRIVATE
         ${SCHEMA_BUILD_DIR}
