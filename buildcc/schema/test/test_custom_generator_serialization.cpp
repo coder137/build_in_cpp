@@ -24,56 +24,24 @@ TEST_GROUP(CustomGeneratorSerializationTestGroup)
 
 TEST(CustomGeneratorSerializationTestGroup, FormatEmptyCheck) {
   buildcc::internal::CustomGeneratorSerialization serialization(
-      "dump/FormatEmptyCheck.bin");
+      "dump/FormatEmptyCheck.json");
 
-  {
-    flatbuffers::FlatBufferBuilder builder;
-    // Entire std::vector<RelInputOutput> is nullptr
-    auto fbs_generator =
-        schema::internal::CreateCustomGeneratorDirect(builder, "", nullptr);
-    schema::internal::FinishCustomGeneratorBuffer(builder, fbs_generator);
-
-    CHECK_TRUE(buildcc::env::save_file(
-        serialization.GetSerializedFile().string().c_str(),
-        (const char *)builder.GetBufferPointer(), builder.GetSize(), true));
-
-    CHECK_FALSE(serialization.LoadFromFile());
-
-    fs::remove_all(serialization.GetSerializedFile());
-  }
-
-  {
-    flatbuffers::FlatBufferBuilder builder;
-    // RelInputOutput in nullptr
-    auto gen_info = schema::internal::CreateGenInfoDirect(builder, "");
-    std::vector v{gen_info};
-    auto fbs_generator =
-        schema::internal::CreateCustomGeneratorDirect(builder, "", &v);
-    schema::internal::FinishCustomGeneratorBuffer(builder, fbs_generator);
-
-    CHECK_TRUE(buildcc::env::save_file(
-        serialization.GetSerializedFile().string().c_str(),
-        (const char *)builder.GetBufferPointer(), builder.GetSize(), true));
-
-    CHECK_TRUE(serialization.LoadFromFile());
-
-    fs::remove_all(serialization.GetSerializedFile());
-  }
+  bool stored = serialization.StoreToFile();
+  CHECK_TRUE(stored);
 }
 
 TEST(CustomGeneratorSerializationTestGroup, EmptyFile_Failure) {
   {
     buildcc::internal::CustomGeneratorSerialization serialization(
-        "dump/empty_file.bin");
+        "dump/EmptyFile.json");
     CHECK_FALSE(serialization.LoadFromFile());
   }
 
   {
     buildcc::internal::CustomGeneratorSerialization serialization(
-        "dump/empty_file.bin");
-    char data[] = {0};
+        "dump/EmptyFile.json");
     buildcc::env::save_file(serialization.GetSerializedFile().string().c_str(),
-                            (const char *)data, 1, true);
+                            "", false);
     CHECK_FALSE(serialization.LoadFromFile());
   }
 }
