@@ -65,11 +65,9 @@ public:
   std::unordered_map<GroupKey, GroupInfo> internal_groups;
 
   friend void to_json(json &j, const CustomGeneratorSchema &schema) {
-    j = {
-        {kSchemaName, schema.name},
-        {kIdsName, schema.internal_ids},
-        {kGroupsName, schema.internal_groups},
-    };
+    j[kSchemaName] = schema.name;
+    j[kIdsName] = schema.internal_ids;
+    j[kGroupsName] = schema.internal_groups;
   }
 
   friend void from_json(const json &j, CustomGeneratorSchema &schema) {
