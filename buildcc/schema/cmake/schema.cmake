@@ -7,6 +7,7 @@ if (${TESTING})
         include/schema/path.h
 
         src/custom_generator_serialization.cpp
+        include/schema/custom_generator_schema.h
         include/schema/custom_generator_serialization.h
 
         src/target_serialization.cpp
