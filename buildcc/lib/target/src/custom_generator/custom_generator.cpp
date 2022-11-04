@@ -56,11 +56,11 @@ void CustomGenerator::AddGenInfo(
     const std::unordered_set<std::string> &outputs,
     const GenerateCb &generate_cb,
     std::shared_ptr<CustomBlobHandler> blob_handler) {
-  env::assert_fatal(user_.gen_info_map.find(id) == user_.gen_info_map.end(),
+  env::assert_fatal(user_.ids.find(id) == user_.ids.end(),
                     fmt::format("Duplicate id {} detected", id));
   ASSERT_FATAL(generate_cb, "Invalid callback provided");
 
-  UserGenInfo schema;
+  UserIdInfo schema;
   for (const auto &i : inputs) {
     fs::path input = string_as_path(command_.Construct(i));
     schema.inputs.emplace(std::move(input));
@@ -71,7 +71,7 @@ void CustomGenerator::AddGenInfo(
   }
   schema.generate_cb = generate_cb;
   schema.blob_handler = std::move(blob_handler);
-  user_.gen_info_map.try_emplace(id, std::move(schema));
+  user_.ids.try_emplace(id, std::move(schema));
   ungrouped_ids_.emplace(id);
 }
 
@@ -81,7 +81,7 @@ void CustomGenerator::AddGroup(const std::string &group_id,
   // Verify that the ids exist
   // Remove those ids from ungrouped_ids
   for (const auto &id : ids) {
-    env::assert_fatal(user_.gen_info_map.find(id) != user_.gen_info_map.end(),
+    env::assert_fatal(user_.ids.find(id) != user_.ids.end(),
                       fmt::format("Id '{}' is not found", id));
     ungrouped_ids_.erase(id);
   }
@@ -131,15 +131,15 @@ void CustomGenerator::BuildGenerate(
     std::unordered_set<std::string> &gen_selected_ids,
     std::unordered_set<std::string> &dummy_gen_selected_ids) {
   if (!serialization_.IsLoaded()) {
-    std::for_each(
-        user_.gen_info_map.begin(), user_.gen_info_map.end(),
-        [&](const auto &iter) { gen_selected_ids.insert(iter.first); });
+    std::for_each(user_.ids.begin(), user_.ids.end(), [&](const auto &iter) {
+      gen_selected_ids.insert(iter.first);
+    });
     dirty_ = true;
   } else {
     // DONE, Conditionally select internal_ids depending on what has
     // changed
     const auto &prev_gen_info_map = serialization_.GetLoad().internal_ids;
-    const auto &curr_gen_info_map = user_.gen_info_map;
+    const auto &curr_gen_info_map = user_.ids;
 
     // DONE, MAP REMOVED condition Check if prev_gen_info_map exists in
     // curr_gen_info_map If prev_gen_info_map does not exist in
@@ -232,8 +232,8 @@ void CustomGenerator::GenerateTask() {
       // Store dummy_selected and successfully run schema
       if (dirty_) {
         UserCustomGeneratorSchema user_final_schema;
-        user_final_schema.gen_info_map.insert(success_schema_.begin(),
-                                              success_schema_.end());
+        user_final_schema.ids.insert(success_schema_.begin(),
+                                     success_schema_.end());
 
         user_final_schema.ConvertToInternal();
         serialization_.UpdateStore(user_final_schema);
@@ -278,7 +278,7 @@ tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow, bool build,
 
 void CustomGenerator::TaskRunner(bool run, const std::string &id) {
   // Convert
-  auto &current_gen_info = user_.gen_info_map.at(id);
+  auto &current_gen_info = user_.ids.at(id);
   current_gen_info.internal_inputs = internal::path_schema_convert(
       current_gen_info.inputs, internal::Path::CreateExistingPath);
   current_gen_info.userblob =
@@ -287,7 +287,7 @@ void CustomGenerator::TaskRunner(bool run, const std::string &id) {
           : std::vector<uint8_t>();
 
   // Run
-  const auto &current_info = user_.gen_info_map.at(id);
+  const auto &current_info = user_.ids.at(id);
   bool rerun = false;
   if (run) {
     rerun = true;
