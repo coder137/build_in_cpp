@@ -41,7 +41,7 @@ TEST(PathTestGroup, Path_ExistingPathStaticConstructor_ThrowFileException) {
 
 TEST(PathTestGroup, PathConstructor_NewPathStaticConstructor) {
   buildcc::internal::Path p =
-      buildcc::internal::Path::CreateNewPath("random_path_main.cpp", 12345ULL);
+      buildcc::internal::Path("random_path_main.cpp", 12345ULL);
   STRCMP_EQUAL(p.pathname.string().c_str(), "random_path_main.cpp");
   UNSIGNED_LONGLONGS_EQUAL(p.last_write_timestamp, 12345ULL);
 }
@@ -52,7 +52,7 @@ TEST(PathTestGroup, Path_EqualityOperator) {
   STRCMP_EQUAL(p.pathname.string().c_str(), current_file_path.string().c_str());
 
   buildcc::internal::Path newp =
-      buildcc::internal::Path::CreateNewPath(current_file_path, 12345ULL);
+      buildcc::internal::Path(current_file_path, 12345ULL);
 
   // NOTE, Equality does not match the last_write_timestamp
   // ONLY matches the string
@@ -70,25 +70,24 @@ TEST(PathTestGroup, Path_UnorderedSet) {
                  .insert(buildcc::internal::Path::CreateExistingPath(
                      current_file_path))
                  .second);
-  CHECK_FALSE(unique_paths
-                  .insert(buildcc::internal::Path::CreateNewPath(
-                      current_file_path, 12345ULL))
-                  .second);
-  CHECK_TRUE(unique_paths
-                 .insert(buildcc::internal::Path::CreateNewPath(
-                     "random_path_main.cpp", 98765ULL))
-                 .second);
+  CHECK_FALSE(
+      unique_paths.insert(buildcc::internal::Path(current_file_path, 12345ULL))
+          .second);
+  CHECK_TRUE(
+      unique_paths
+          .insert(buildcc::internal::Path("random_path_main.cpp", 98765ULL))
+          .second);
 
   // Check finds
   // * NOTE, Only matches pathname
   CHECK_FALSE(unique_paths.find(buildcc::internal::Path::CreateExistingPath(
                   current_file_path)) == unique_paths.end());
 
-  CHECK_FALSE(unique_paths.find(buildcc::internal::Path::CreateNewPath(
+  CHECK_FALSE(unique_paths.find(buildcc::internal::Path(
                   current_file_path, 1111ULL)) == unique_paths.end());
-  CHECK_FALSE(unique_paths.find(buildcc::internal::Path::CreateNewPath(
+  CHECK_FALSE(unique_paths.find(buildcc::internal::Path(
                   "random_path_main.cpp", 12345ULL)) == unique_paths.end());
-  CHECK_TRUE(unique_paths.find(buildcc::internal::Path::CreateNewPath(
+  CHECK_TRUE(unique_paths.find(buildcc::internal::Path(
                  "incorrect_path_main.cpp", 0000ULL)) == unique_paths.end());
 }
 

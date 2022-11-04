@@ -76,12 +76,12 @@ TEST(TestBuilderInterfaceGroup, CheckPaths) {
   {
     auto pathstate = buildcc::internal::CheckPaths(
         {
-            buildcc::internal::Path::CreateNewPath("", 0x1234),
-            buildcc::internal::Path::CreateNewPath("v1", 0x2345),
+            buildcc::internal::Path("", 0x1234),
+            buildcc::internal::Path("v1", 0x2345),
         },
         {
-            buildcc::internal::Path::CreateNewPath("", 0x1234),
-            buildcc::internal::Path::CreateNewPath("v1", 0x2345),
+            buildcc::internal::Path("", 0x1234),
+            buildcc::internal::Path("v1", 0x2345),
         });
     CHECK_TRUE(pathstate == buildcc::internal::PathState::kNoChange);
   }
@@ -89,11 +89,11 @@ TEST(TestBuilderInterfaceGroup, CheckPaths) {
   {
     auto pathstate = buildcc::internal::CheckPaths(
         {
-            buildcc::internal::Path::CreateNewPath("", 0x1234),
-            buildcc::internal::Path::CreateNewPath("v1", 0x2345),
+            buildcc::internal::Path("", 0x1234),
+            buildcc::internal::Path("v1", 0x2345),
         },
         {
-            buildcc::internal::Path::CreateNewPath("", 0x1234),
+            buildcc::internal::Path("", 0x1234),
         });
     CHECK_TRUE(pathstate == buildcc::internal::PathState::kRemoved);
   }
@@ -101,13 +101,13 @@ TEST(TestBuilderInterfaceGroup, CheckPaths) {
   {
     auto pathstate = buildcc::internal::CheckPaths(
         {
-            buildcc::internal::Path::CreateNewPath("", 0x1234),
-            buildcc::internal::Path::CreateNewPath("v1", 0x2345),
+            buildcc::internal::Path("", 0x1234),
+            buildcc::internal::Path("v1", 0x2345),
         },
         {
-            buildcc::internal::Path::CreateNewPath("", 0x1234),
-            buildcc::internal::Path::CreateNewPath("v1", 0x2345),
-            buildcc::internal::Path::CreateNewPath("v2", 0x3456),
+            buildcc::internal::Path("", 0x1234),
+            buildcc::internal::Path("v1", 0x2345),
+            buildcc::internal::Path("v2", 0x3456),
         });
     CHECK_TRUE(pathstate == buildcc::internal::PathState::kAdded);
   }
@@ -115,12 +115,12 @@ TEST(TestBuilderInterfaceGroup, CheckPaths) {
   {
     auto pathstate = buildcc::internal::CheckPaths(
         {
-            buildcc::internal::Path::CreateNewPath("", 0x1234),
-            buildcc::internal::Path::CreateNewPath("v1", 0x2345),
+            buildcc::internal::Path("", 0x1234),
+            buildcc::internal::Path("v1", 0x2345),
         },
         {
-            buildcc::internal::Path::CreateNewPath("", 0x1234),
-            buildcc::internal::Path::CreateNewPath("v1", 0x3456),
+            buildcc::internal::Path("", 0x1234),
+            buildcc::internal::Path("v1", 0x3456),
         });
     CHECK_TRUE(pathstate == buildcc::internal::PathState::kUpdated);
   }

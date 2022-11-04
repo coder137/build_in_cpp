@@ -41,7 +41,7 @@ private:
 
 public:
   Path() = default;
-  explicit Path(const fs::path &path, std::uint64_t timestamp)
+  Path(const fs::path &path, std::uint64_t timestamp = 0)
       : pathname(path), last_write_timestamp(timestamp) {
     pathname.lexically_normal().make_preferred();
   }
@@ -64,21 +64,6 @@ public:
                       fmt::format("{} not found", pathname));
 
     return Path(pathname, last_write_timestamp);
-  }
-
-  static Path CreateNewPath(const fs::path &pathname,
-                            uint64_t last_write_timestamp) noexcept {
-    return Path(pathname, last_write_timestamp);
-  }
-
-  /**
-   * @brief Create a New Path object and sets last_write_timestamp to 0
-   *
-   * @param pathname
-   * @return Path
-   */
-  static Path CreateNewPath(const fs::path &pathname) {
-    return Path(pathname, 0);
   }
 
   /**
@@ -186,15 +171,15 @@ path_schema_convert(const path_unordered_set &internal_path_set) {
 namespace buildcc {
 
 inline std::string path_as_string(const fs::path &p) {
-  return internal::Path::CreateNewPath(p).GetPathAsString();
+  return internal::Path(p).GetPathAsString();
 }
 
 inline std::string path_as_display_string(const fs::path &p) {
-  return internal::Path::CreateNewPath(p).GetPathAsStringForDisplay();
+  return internal::Path(p).GetPathAsStringForDisplay();
 }
 
 inline fs::path string_as_path(const std::string &str) {
-  return internal::Path::CreateNewPath(str).pathname;
+  return internal::Path(str).pathname;
 }
 
 using fs_unordered_set = internal::fs_unordered_set;

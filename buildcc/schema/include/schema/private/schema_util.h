@@ -38,8 +38,7 @@ inline void extract_path(
   }
 
   for (auto iter = fbs_paths->begin(); iter != fbs_paths->end(); iter++) {
-    out.insert(Path::CreateNewPath(iter->pathname()->c_str(),
-                                   iter->last_write_timestamp()));
+    out.insert(Path(iter->pathname()->c_str(), iter->last_write_timestamp()));
   }
 }
 
@@ -52,8 +51,8 @@ inline void extract_path(
   }
 
   for (auto iter = fbs_paths->begin(); iter != fbs_paths->end(); iter++) {
-    out.push_back(Path::CreateNewPath(iter->pathname()->c_str(),
-                                      iter->last_write_timestamp()));
+    out.push_back(
+        Path(iter->pathname()->c_str(), iter->last_write_timestamp()));
   }
 }
 
