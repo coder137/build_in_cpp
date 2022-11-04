@@ -138,15 +138,15 @@ void CustomGenerator::BuildGenerate(
   } else {
     // DONE, Conditionally select internal_ids depending on what has
     // changed
-    const auto &prev_gen_info_map = serialization_.GetLoad().internal_ids;
-    const auto &curr_gen_info_map = user_.ids;
+    const auto &prev_ids = serialization_.GetLoad().internal_ids;
+    const auto &curr_ids = user_.ids;
 
-    // DONE, MAP REMOVED condition Check if prev_gen_info_map exists in
-    // curr_gen_info_map If prev_gen_info_map does not exist in
-    // curr_gen_info_map, has been removed from existing build We need this
+    // DONE, MAP REMOVED condition Check if prev_ids exists in
+    // curr_ids If prev_ids does not exist in
+    // curr_ids, has been removed from existing build We need this
     // condition to only set the dirty_ flag
-    for (const auto &[id, _] : prev_gen_info_map) {
-      if (curr_gen_info_map.find(id) == curr_gen_info_map.end()) {
+    for (const auto &[id, _] : prev_ids) {
+      if (curr_ids.find(id) == curr_ids.end()) {
         // MAP REMOVED condition
         IdRemoved();
         dirty_ = true;
@@ -154,11 +154,11 @@ void CustomGenerator::BuildGenerate(
       }
     }
 
-    // DONE, MAP ADDED condition Check if curr_gen_info_map exists in
-    // prev_gen_info_map If curr_gen_info_map does not exist in
-    // prev_gen_info_map, has been added to existing build
-    for (const auto &[id, _] : curr_gen_info_map) {
-      if (prev_gen_info_map.find(id) == prev_gen_info_map.end()) {
+    // DONE, MAP ADDED condition Check if curr_ids exists in
+    // prev_ids If curr_ids does not exist in
+    // prev_ids, has been added to existing build
+    for (const auto &[id, _] : curr_ids) {
+      if (prev_ids.find(id) == prev_ids.end()) {
         // MAP ADDED condition
         IdAdded();
         gen_selected_ids.insert(id);
