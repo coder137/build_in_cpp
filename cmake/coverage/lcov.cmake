@@ -16,6 +16,7 @@ else()
     )
     set(LCOV_REMOVE_OPTIONS 
         "/usr*"
+        "*third_party*"
         "*/CppUTestExt*"
         "*/CppUTest*"
         "*/fmt*"

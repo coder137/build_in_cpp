@@ -51,16 +51,16 @@ CustomGenerator::Get(const std::string &file_identifier) const {
   return command_.GetDefaultValueByKey(file_identifier);
 }
 
-void CustomGenerator::AddGenInfo(
+void CustomGenerator::AddIdInfo(
     const std::string &id, const std::unordered_set<std::string> &inputs,
     const std::unordered_set<std::string> &outputs,
     const GenerateCb &generate_cb,
     std::shared_ptr<CustomBlobHandler> blob_handler) {
-  env::assert_fatal(user_.gen_info_map.find(id) == user_.gen_info_map.end(),
+  env::assert_fatal(user_.ids.find(id) == user_.ids.end(),
                     fmt::format("Duplicate id {} detected", id));
   ASSERT_FATAL(generate_cb, "Invalid callback provided");
 
-  UserGenInfo schema;
+  UserIdInfo schema;
   for (const auto &i : inputs) {
     fs::path input = string_as_path(command_.Construct(i));
     schema.inputs.emplace(std::move(input));
@@ -71,17 +71,17 @@ void CustomGenerator::AddGenInfo(
   }
   schema.generate_cb = generate_cb;
   schema.blob_handler = std::move(blob_handler);
-  user_.gen_info_map.try_emplace(id, std::move(schema));
+  user_.ids.try_emplace(id, std::move(schema));
   ungrouped_ids_.emplace(id);
 }
 
-void CustomGenerator::AddGroup(const std::string &group_id,
-                               std::initializer_list<std::string> ids,
-                               const DependencyCb &dependency_cb) {
+void CustomGenerator::AddGroupInfo(const std::string &group_id,
+                                   std::initializer_list<std::string> ids,
+                                   const DependencyCb &dependency_cb) {
   // Verify that the ids exist
   // Remove those ids from ungrouped_ids
   for (const auto &id : ids) {
-    env::assert_fatal(user_.gen_info_map.find(id) != user_.gen_info_map.end(),
+    env::assert_fatal(user_.ids.find(id) != user_.ids.end(),
                       fmt::format("Id '{}' is not found", id));
     ungrouped_ids_.erase(id);
   }
@@ -131,22 +131,22 @@ void CustomGenerator::BuildGenerate(
     std::unordered_set<std::string> &gen_selected_ids,
     std::unordered_set<std::string> &dummy_gen_selected_ids) {
   if (!serialization_.IsLoaded()) {
-    std::for_each(
-        user_.gen_info_map.begin(), user_.gen_info_map.end(),
-        [&](const auto &iter) { gen_selected_ids.insert(iter.first); });
+    std::for_each(user_.ids.begin(), user_.ids.end(), [&](const auto &iter) {
+      gen_selected_ids.insert(iter.first);
+    });
     dirty_ = true;
   } else {
     // DONE, Conditionally select internal_ids depending on what has
     // changed
-    const auto &prev_gen_info_map = serialization_.GetLoad().internal_ids;
-    const auto &curr_gen_info_map = user_.gen_info_map;
+    const auto &prev_ids = serialization_.GetLoad().internal_ids;
+    const auto &curr_ids = user_.ids;
 
-    // DONE, MAP REMOVED condition Check if prev_gen_info_map exists in
-    // curr_gen_info_map If prev_gen_info_map does not exist in
-    // curr_gen_info_map, has been removed from existing build We need this
+    // DONE, MAP REMOVED condition Check if prev_ids exists in
+    // curr_ids If prev_ids does not exist in
+    // curr_ids, has been removed from existing build We need this
     // condition to only set the dirty_ flag
-    for (const auto &[id, _] : prev_gen_info_map) {
-      if (curr_gen_info_map.find(id) == curr_gen_info_map.end()) {
+    for (const auto &[id, _] : prev_ids) {
+      if (curr_ids.find(id) == curr_ids.end()) {
         // MAP REMOVED condition
         IdRemoved();
         dirty_ = true;
@@ -154,11 +154,11 @@ void CustomGenerator::BuildGenerate(
       }
     }
 
-    // DONE, MAP ADDED condition Check if curr_gen_info_map exists in
-    // prev_gen_info_map If curr_gen_info_map does not exist in
-    // prev_gen_info_map, has been added to existing build
-    for (const auto &[id, _] : curr_gen_info_map) {
-      if (prev_gen_info_map.find(id) == prev_gen_info_map.end()) {
+    // DONE, MAP ADDED condition Check if curr_ids exists in
+    // prev_ids If curr_ids does not exist in
+    // prev_ids, has been added to existing build
+    for (const auto &[id, _] : curr_ids) {
+      if (prev_ids.find(id) == prev_ids.end()) {
         // MAP ADDED condition
         IdAdded();
         gen_selected_ids.insert(id);
@@ -232,8 +232,8 @@ void CustomGenerator::GenerateTask() {
       // Store dummy_selected and successfully run schema
       if (dirty_) {
         UserCustomGeneratorSchema user_final_schema;
-        user_final_schema.gen_info_map.insert(success_schema_.begin(),
-                                              success_schema_.end());
+        user_final_schema.ids.insert(success_schema_.begin(),
+                                     success_schema_.end());
 
         user_final_schema.ConvertToInternal();
         serialization_.UpdateStore(user_final_schema);
@@ -278,42 +278,44 @@ tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow, bool build,
 
 void CustomGenerator::TaskRunner(bool run, const std::string &id) {
   // Convert
-  auto &current_gen_info = user_.gen_info_map.at(id);
-  current_gen_info.internal_inputs = internal::path_schema_convert(
-      current_gen_info.inputs, internal::Path::CreateExistingPath);
-  current_gen_info.userblob =
-      current_gen_info.blob_handler != nullptr
-          ? current_gen_info.blob_handler->GetSerializedData()
-          : std::vector<uint8_t>();
+  {
+    auto &curr_id_info = user_.ids.at(id);
+    curr_id_info.internal_inputs = internal::path_schema_convert(
+        curr_id_info.inputs, internal::Path::CreateExistingPath);
+    curr_id_info.userblob = curr_id_info.blob_handler != nullptr
+                                ? curr_id_info.blob_handler->GetSerializedData()
+                                : std::vector<uint8_t>();
+  }
 
   // Run
-  const auto &current_info = user_.gen_info_map.at(id);
+  const auto &current_id_info = user_.ids.at(id);
   bool rerun = false;
   if (run) {
     rerun = true;
   } else {
     const auto &previous_info = serialization_.GetLoad().internal_ids.at(id);
-    rerun = internal::CheckPaths(previous_info.internal_inputs,
-                                 current_info.internal_inputs) !=
-                internal::PathState::kNoChange ||
-            internal::CheckChanged(previous_info.outputs, current_info.outputs);
-    if (!rerun && current_info.blob_handler != nullptr) {
-      rerun = current_info.blob_handler->CheckChanged(previous_info.userblob,
-                                                      current_info.userblob);
+    rerun =
+        internal::CheckPaths(previous_info.internal_inputs,
+                             current_id_info.internal_inputs) !=
+            internal::PathState::kNoChange ||
+        internal::CheckChanged(previous_info.outputs, current_id_info.outputs);
+    if (!rerun && current_id_info.blob_handler != nullptr) {
+      rerun = current_id_info.blob_handler->CheckChanged(
+          previous_info.userblob, current_id_info.userblob);
     }
   }
 
   if (rerun) {
     dirty_ = true;
-    buildcc::CustomGeneratorContext ctx(command_, current_info.inputs,
-                                        current_info.outputs,
-                                        current_info.userblob);
-    bool success = current_info.generate_cb(ctx);
+    buildcc::CustomGeneratorContext ctx(command_, current_id_info.inputs,
+                                        current_id_info.outputs,
+                                        current_id_info.userblob);
+    bool success = current_id_info.generate_cb(ctx);
     env::assert_fatal(success, fmt::format("Generate Cb failed for id {}", id));
   }
 
   std::scoped_lock<std::mutex> guard(success_schema_mutex_);
-  success_schema_.try_emplace(id, current_info);
+  success_schema_.try_emplace(id, current_id_info);
 }
 
 } // namespace buildcc

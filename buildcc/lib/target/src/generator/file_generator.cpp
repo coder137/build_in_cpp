@@ -111,8 +111,8 @@ void FileGenerator::AddCommand(
 }
 
 void FileGenerator::Build() {
-  AddGenInfo("Generate", inputs_, outputs_, FileGeneratorGenerateCb,
-             std::make_shared<FileGeneratorBlobHandler>(commands_));
+  AddIdInfo("Generate", inputs_, outputs_, FileGeneratorGenerateCb,
+            std::make_shared<FileGeneratorBlobHandler>(commands_));
   this->CustomGenerator::Build();
 }
 

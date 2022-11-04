@@ -94,12 +94,12 @@ void CompileObject::Task() {
 
       for (const auto &s : selected_source_files) {
         std::string name = fmt::format(
-            "{}", s.GetPathname().lexically_relative(Project::GetRootDir()));
+            "{}", s.pathname.lexically_relative(Project::GetRootDir()));
         (void)subflow
             .emplace([this, s]() {
               try {
-                bool success = env::Command::Execute(
-                    GetObjectData(s.GetPathname()).command);
+                bool success =
+                    env::Command::Execute(GetObjectData(s.pathname).command);
                 env::assert_fatal(success, "Could not compile source");
                 target_.serialization_.AddSource(s);
               } catch (...) {
@@ -112,7 +112,7 @@ void CompileObject::Task() {
       // For graph generation
       for (const auto &ds : selected_dummy_source_files) {
         std::string name = fmt::format(
-            "{}", ds.GetPathname().lexically_relative(Project::GetRootDir()));
+            "{}", ds.pathname.lexically_relative(Project::GetRootDir()));
         (void)subflow.placeholder().name(name);
       }
     } catch (...) {

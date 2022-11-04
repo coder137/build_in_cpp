@@ -254,8 +254,7 @@ void CompileObject::RecompileSources(
       target_.SourceAdded();
     } else {
       // *2 Current file is updated
-      if (current_file.GetLastWriteTimestamp() >
-          iter->GetLastWriteTimestamp()) {
+      if (current_file.last_write_timestamp > iter->last_write_timestamp) {
         source_files.push_back(current_file);
         target_.dirty_ = true;
         target_.SourceUpdated();

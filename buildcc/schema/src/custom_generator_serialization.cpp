@@ -29,15 +29,18 @@ bool CustomGeneratorSerialization::Verify(const std::string &serialized_data) {
 }
 
 bool CustomGeneratorSerialization::Load(const std::string &serialized_data) {
-  bool is_loaded = true;
-  try {
-    json j = json::parse(serialized_data, nullptr, true, true);
-    load_ = j.get<CustomGeneratorSchema>();
-  } catch (const std::exception &e) {
-    env::log_critical(__FUNCTION__, e.what());
-    is_loaded = false;
+  json j = json::parse(serialized_data, nullptr, false);
+  bool loaded = !j.is_discarded();
+
+  if (loaded) {
+    try {
+      load_ = j.get<CustomGeneratorSchema>();
+    } catch (const std::exception &e) {
+      env::log_critical(__FUNCTION__, e.what());
+      loaded = false;
+    }
   }
-  return is_loaded;
+  return loaded;
 }
 
 bool CustomGeneratorSerialization::Store(
