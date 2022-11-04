@@ -74,8 +74,8 @@ inline PathState CheckPaths(const internal::path_unordered_set &previous_path,
                           state = PathState::kAdded;
                         } else {
                           const bool updated_cond =
-                              (p.GetLastWriteTimestamp() >
-                               find->GetLastWriteTimestamp());
+                              (p.last_write_timestamp >
+                               find->last_write_timestamp);
                           if (updated_cond) {
                             dirty = true;
                             state = PathState::kUpdated;

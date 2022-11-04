@@ -26,11 +26,11 @@ static const auto current_file_path =
 TEST(PathTestGroup, Path_ExistingPathStaticConstructor) {
   auto existing_path =
       buildcc::internal::Path::CreateExistingPath(current_file_path);
-  STRCMP_EQUAL(existing_path.GetPathname().string().c_str(),
+  STRCMP_EQUAL(existing_path.pathname.string().c_str(),
                current_file_path.string().c_str());
   // * NOTE, Last write timestamp changes whenever we resave or re-download
   // This would not work well with Git
-  //   UNSIGNED_LONGLONGS_EQUAL(existing_path.GetLastWriteTimestamp(),
+  //   UNSIGNED_LONGLONGS_EQUAL(existing_path.last_write_timestamp,
   //                            13623997187709551616ULL);
 }
 
@@ -42,15 +42,14 @@ TEST(PathTestGroup, Path_ExistingPathStaticConstructor_ThrowFileException) {
 TEST(PathTestGroup, PathConstructor_NewPathStaticConstructor) {
   buildcc::internal::Path p =
       buildcc::internal::Path::CreateNewPath("random_path_main.cpp", 12345ULL);
-  STRCMP_EQUAL(p.GetPathname().string().c_str(), "random_path_main.cpp");
-  UNSIGNED_LONGLONGS_EQUAL(p.GetLastWriteTimestamp(), 12345ULL);
+  STRCMP_EQUAL(p.pathname.string().c_str(), "random_path_main.cpp");
+  UNSIGNED_LONGLONGS_EQUAL(p.last_write_timestamp, 12345ULL);
 }
 
 TEST(PathTestGroup, Path_EqualityOperator) {
   buildcc::internal::Path p =
       buildcc::internal::Path::CreateExistingPath(current_file_path);
-  STRCMP_EQUAL(p.GetPathname().string().c_str(),
-               current_file_path.string().c_str());
+  STRCMP_EQUAL(p.pathname.string().c_str(), current_file_path.string().c_str());
 
   buildcc::internal::Path newp =
       buildcc::internal::Path::CreateNewPath(current_file_path, 12345ULL);

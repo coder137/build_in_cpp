@@ -118,7 +118,7 @@ create_fbs_vector_path(flatbuffers::FlatBufferBuilder &builder,
   std::vector<flatbuffers::Offset<fbs::Path>> paths;
   for (const auto &p : pathlist) {
     auto fbs_file = fbs::CreatePathDirect(builder, p.GetPathAsString().c_str(),
-                                          p.GetLastWriteTimestamp());
+                                          p.last_write_timestamp);
     paths.push_back(fbs_file);
   }
   return paths;

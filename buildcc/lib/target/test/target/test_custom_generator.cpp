@@ -946,9 +946,8 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
     CHECK_EQUAL(imap.at("id2").internal_inputs.size(), 1);
     CHECK_EQUAL(imap.at("id2").outputs.size(), 1);
 
-    CHECK_EQUAL(
-        last_write_timestamp,
-        imap.at("id2").internal_inputs.begin()->GetLastWriteTimestamp());
+    CHECK_EQUAL(last_write_timestamp,
+                imap.at("id2").internal_inputs.begin()->last_write_timestamp);
 
     CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }
