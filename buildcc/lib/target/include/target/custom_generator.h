@@ -137,11 +137,11 @@ public:
    * @param generate_cb User-defined generate callback to build outputs from the
    * provided inputs
    */
-  void AddGenInfo(const std::string &id,
-                  const std::unordered_set<std::string> &inputs,
-                  const std::unordered_set<std::string> &outputs,
-                  const GenerateCb &generate_cb,
-                  std::shared_ptr<CustomBlobHandler> blob_handler = nullptr);
+  void AddIdInfo(const std::string &id,
+                 const std::unordered_set<std::string> &inputs,
+                 const std::unordered_set<std::string> &outputs,
+                 const GenerateCb &generate_cb,
+                 std::shared_ptr<CustomBlobHandler> blob_handler = nullptr);
 
   // TODO, Doc
   void AddGroup(const std::string &group_id,

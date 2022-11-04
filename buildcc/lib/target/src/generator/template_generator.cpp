@@ -66,8 +66,8 @@ void TemplateGenerator::Build() {
     std::string name = string_as_path(ParsePattern(info.input_pattern))
                            .lexically_relative(Project::GetRootDir())
                            .string();
-    AddGenInfo(name, {info.input_pattern}, {info.output_pattern},
-               template_generate_cb);
+    AddIdInfo(name, {info.input_pattern}, {info.output_pattern},
+              template_generate_cb);
   }
   this->CustomGenerator::Build();
 }

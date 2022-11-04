@@ -51,7 +51,7 @@ CustomGenerator::Get(const std::string &file_identifier) const {
   return command_.GetDefaultValueByKey(file_identifier);
 }
 
-void CustomGenerator::AddGenInfo(
+void CustomGenerator::AddIdInfo(
     const std::string &id, const std::unordered_set<std::string> &inputs,
     const std::unordered_set<std::string> &outputs,
     const GenerateCb &generate_cb,
