@@ -75,9 +75,9 @@ void CustomGenerator::AddIdInfo(
   ungrouped_ids_.emplace(id);
 }
 
-void CustomGenerator::AddGroup(const std::string &group_id,
-                               std::initializer_list<std::string> ids,
-                               const DependencyCb &dependency_cb) {
+void CustomGenerator::AddGroupInfo(const std::string &group_id,
+                                   std::initializer_list<std::string> ids,
+                                   const DependencyCb &dependency_cb) {
   // Verify that the ids exist
   // Remove those ids from ungrouped_ids
   for (const auto &id : ids) {

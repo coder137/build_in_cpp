@@ -92,7 +92,7 @@ TEST(CustomGeneratorTestGroup, Basic_Group) {
                  {"{current_build_dir}/dummy_main.o"}, BasicGenerateCb);
   cgen.AddIdInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
                  BasicGenerateCb);
-  cgen.AddGroup("grouped_id1_and_id2", {"id1", "id2"});
+  cgen.AddGroupInfo("grouped_id1_and_id2", {"id1", "id2"});
   cgen.Build();
 
   mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
@@ -123,7 +123,7 @@ TEST(CustomGeneratorTestGroup, Basic_Group_Dependency) {
                  {"{current_build_dir}/dummy_main.o"}, BasicGenerateCb);
   cgen.AddIdInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
                  BasicGenerateCb);
-  cgen.AddGroup("grouped_id1_and_id2", {"id1", "id2"}, [](auto &&task_map) {
+  cgen.AddGroupInfo("grouped_id1_and_id2", {"id1", "id2"}, [](auto &&task_map) {
     task_map.at("id1").precede(task_map.at("id2"));
   });
   cgen.Build();
@@ -156,7 +156,7 @@ TEST(CustomGeneratorTestGroup, Basic_Group_DependencyFailure) {
                  {"{current_build_dir}/dummy_main.o"}, BasicGenerateCb);
   cgen.AddIdInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
                  BasicGenerateCb);
-  cgen.AddGroup("grouped_id1_and_id2", {"id1", "id2"}, [](auto &&task_map) {
+  cgen.AddGroupInfo("grouped_id1_and_id2", {"id1", "id2"}, [](auto &&task_map) {
     task_map.at("id1").precede(task_map.at("id2"));
     buildcc::env::assert_fatal<false>("Failure");
   });
@@ -193,7 +193,7 @@ TEST(CustomGeneratorTestGroup, Basic_Group_DependencyFailure2) {
   cgen.AddIdInfo("id1", {"{current_root_dir}/dummy_main.c"},
                  {"{current_build_dir}/dummy_main.o"}, FailureCb);
   cgen.AddIdInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {}, SuccessCb);
-  cgen.AddGroup("grouped_id2", {"id2"});
+  cgen.AddGroupInfo("grouped_id2", {"id2"});
   cgen.AddDependencyCb([&](auto &&task_map) {
     task_map.at("id1").precede(task_map.at("grouped_id2"));
   });

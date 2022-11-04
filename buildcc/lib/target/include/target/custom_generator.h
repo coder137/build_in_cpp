@@ -144,9 +144,9 @@ public:
                  std::shared_ptr<CustomBlobHandler> blob_handler = nullptr);
 
   // TODO, Doc
-  void AddGroup(const std::string &group_id,
-                std::initializer_list<std::string> ids,
-                const DependencyCb &dependency_cb = DependencyCb());
+  void AddGroupInfo(const std::string &group_id,
+                    std::initializer_list<std::string> ids,
+                    const DependencyCb &dependency_cb = DependencyCb());
 
   // Callbacks
   /**
