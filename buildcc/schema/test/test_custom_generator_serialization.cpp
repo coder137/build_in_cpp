@@ -20,6 +20,31 @@ TEST_GROUP(CustomGeneratorSerializationTestGroup)
 };
 // clang-format on
 
+TEST(CustomGeneratorSerializationTestGroup, JsonParse_Failure) {
+  {
+    // JSON Parse fails
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        "dump/JsonParseFailure.json");
+
+    buildcc::env::save_file(serialization.GetSerializedFile().string().c_str(),
+                            std::string(""), false);
+    bool loaded = serialization.LoadFromFile();
+    CHECK_FALSE(loaded);
+  }
+
+  {
+    // Custom Generator Schema conversion fails
+    buildcc::internal::CustomGeneratorSerialization serialization(
+        "dump/JsonParseFailure.json");
+
+    auto data = R"({"name": ""})";
+    buildcc::env::save_file(serialization.GetSerializedFile().string().c_str(),
+                            data, false);
+    bool loaded = serialization.LoadFromFile();
+    CHECK_FALSE(loaded);
+  }
+}
+
 TEST(CustomGeneratorSerializationTestGroup, FormatEmptyCheck) {
   buildcc::internal::CustomGeneratorSerialization serialization(
       "dump/FormatEmptyCheck.json");
