@@ -118,10 +118,8 @@ public:
   // JSON specialization
 
   friend void to_json(json &j, const Path &p) {
-    j = json{
-        {kPathName, p.pathname_},
-        {kHashName, p.last_write_timestamp_},
-    };
+    j[kPathName] = p.pathname_;
+    j[kHashName] = p.last_write_timestamp_;
   }
 
   friend void from_json(const json &j, Path &p) {
@@ -145,7 +143,7 @@ private:
 
 private:
   fs::path pathname_;
-  std::uint64_t last_write_timestamp_;
+  std::uint64_t last_write_timestamp_{0};
 };
 
 // Used by Path
