@@ -278,42 +278,44 @@ tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow, bool build,
 
 void CustomGenerator::TaskRunner(bool run, const std::string &id) {
   // Convert
-  auto &current_gen_info = user_.ids.at(id);
-  current_gen_info.internal_inputs = internal::path_schema_convert(
-      current_gen_info.inputs, internal::Path::CreateExistingPath);
-  current_gen_info.userblob =
-      current_gen_info.blob_handler != nullptr
-          ? current_gen_info.blob_handler->GetSerializedData()
-          : std::vector<uint8_t>();
+  {
+    auto &curr_id_info = user_.ids.at(id);
+    curr_id_info.internal_inputs = internal::path_schema_convert(
+        curr_id_info.inputs, internal::Path::CreateExistingPath);
+    curr_id_info.userblob = curr_id_info.blob_handler != nullptr
+                                ? curr_id_info.blob_handler->GetSerializedData()
+                                : std::vector<uint8_t>();
+  }
 
   // Run
-  const auto &current_info = user_.ids.at(id);
+  const auto &current_id_info = user_.ids.at(id);
   bool rerun = false;
   if (run) {
     rerun = true;
   } else {
     const auto &previous_info = serialization_.GetLoad().internal_ids.at(id);
-    rerun = internal::CheckPaths(previous_info.internal_inputs,
-                                 current_info.internal_inputs) !=
-                internal::PathState::kNoChange ||
-            internal::CheckChanged(previous_info.outputs, current_info.outputs);
-    if (!rerun && current_info.blob_handler != nullptr) {
-      rerun = current_info.blob_handler->CheckChanged(previous_info.userblob,
-                                                      current_info.userblob);
+    rerun =
+        internal::CheckPaths(previous_info.internal_inputs,
+                             current_id_info.internal_inputs) !=
+            internal::PathState::kNoChange ||
+        internal::CheckChanged(previous_info.outputs, current_id_info.outputs);
+    if (!rerun && current_id_info.blob_handler != nullptr) {
+      rerun = current_id_info.blob_handler->CheckChanged(
+          previous_info.userblob, current_id_info.userblob);
     }
   }
 
   if (rerun) {
     dirty_ = true;
-    buildcc::CustomGeneratorContext ctx(command_, current_info.inputs,
-                                        current_info.outputs,
-                                        current_info.userblob);
-    bool success = current_info.generate_cb(ctx);
+    buildcc::CustomGeneratorContext ctx(command_, current_id_info.inputs,
+                                        current_id_info.outputs,
+                                        current_id_info.userblob);
+    bool success = current_id_info.generate_cb(ctx);
     env::assert_fatal(success, fmt::format("Generate Cb failed for id {}", id));
   }
 
   std::scoped_lock<std::mutex> guard(success_schema_mutex_);
-  success_schema_.try_emplace(id, current_info);
+  success_schema_.try_emplace(id, current_id_info);
 }
 
 } // namespace buildcc
