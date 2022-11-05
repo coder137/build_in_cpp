@@ -28,7 +28,6 @@ if (${TESTING})
         CppUTestExt
         ${TEST_LINK_LIBS}
     )
-    add_dependencies(mock_schema fbs_to_header)
 
     target_compile_options(mock_schema PUBLIC ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_FLAGS})
     target_link_options(mock_schema PUBLIC ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS})
@@ -78,7 +77,6 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
     target_include_directories(buildcc PRIVATE
         ${SCHEMA_BUILD_DIR}
     )
-    add_dependencies(buildcc fbs_to_header)
 endif()
 
 if(${BUILDCC_BUILD_AS_INTERFACE})
@@ -100,7 +98,6 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     )
     target_compile_options(schema PRIVATE ${BUILD_COMPILE_FLAGS})
     target_link_options(schema PRIVATE ${BUILD_LINK_FLAGS})
-    add_dependencies(schema fbs_to_header)
 endif()
 
 if (${BUILDCC_INSTALL})
