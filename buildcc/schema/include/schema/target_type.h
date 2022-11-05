@@ -30,7 +30,7 @@ enum class TargetType {
   Undefined,      ///< Undefined target type
 };
 
-constexpr std::array<std::pair<std::string_view, TargetType>, 4>
+constexpr std::array<std::pair<std::string_view, TargetType>, 3>
     kTargetTypePair{
         std::make_pair("executable", TargetType::Executable),
         std::make_pair("static_library", TargetType::StaticLibrary),

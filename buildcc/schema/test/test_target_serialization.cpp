@@ -1,5 +1,9 @@
 #include "schema/target_serialization.h"
 
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::ordered_json;
+
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
@@ -16,7 +20,42 @@ TEST_GROUP(TargetSerializationTestGroup)
 };
 // clang-format on
 
-TEST(TargetSerializationTestGroup, TargetTypeTest) {
+TEST(TargetSerializationTestGroup, TargetType) {
+  buildcc::TargetType type;
+  json j;
+
+  {
+    j = buildcc::kTargetTypePair[0].first;
+    from_json(j, type);
+    CHECK_TRUE(type == buildcc::kTargetTypePair[0].second);
+  }
+
+  {
+    j = buildcc::kTargetTypePair[1].first;
+    from_json(j, type);
+    CHECK_TRUE(type == buildcc::kTargetTypePair[1].second);
+  }
+
+  {
+    j = buildcc::kTargetTypePair[2].first;
+    from_json(j, type);
+    CHECK_TRUE(type == buildcc::kTargetTypePair[2].second);
+  }
+
+  {
+    j = "should_not_exist";
+    from_json(j, type);
+    CHECK_TRUE(type == buildcc::TargetType::Undefined);
+  }
+
+  {
+    j = nullptr;
+    from_json(j, type);
+    CHECK_TRUE(type == buildcc::TargetType::Undefined);
+  }
+}
+
+TEST(TargetSerializationTestGroup, TargetSerialization_TargetType) {
   {
     // Target Type executable
     buildcc::internal::TargetSerialization serialization(
