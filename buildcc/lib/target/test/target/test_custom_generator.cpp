@@ -4,8 +4,6 @@
 #include "expect_custom_generator.h"
 #include "test_target_util.h"
 
-#include "flatbuffers/flexbuffers.h"
-
 #include <memory>
 
 // NOTE, Make sure all these includes are AFTER the system and header includes
@@ -986,7 +984,8 @@ private:
 
 private:
   bool Verify(const std::vector<uint8_t> &serialized_data) const override {
-    return flexbuffers::GetRoot(serialized_data).IsInt();
+    json j = json::from_msgpack(serialized_data);
+    return !j.is_discarded();
   }
 
   bool IsEqual(const std::vector<uint8_t> &previous,
@@ -995,15 +994,16 @@ private:
   }
 
   std::vector<uint8_t> Serialize() const override {
-    flexbuffers::Builder builder;
-    builder.Add(recheck_value);
-    builder.Finish();
-    return builder.GetBuffer();
+    json j = recheck_value;
+    return json::to_msgpack(j);
   }
 
   // serialized_data has already been verified
   int32_t Deserialize(const std::vector<uint8_t> &serialized_data) const {
-    return flexbuffers::GetRoot(serialized_data).AsInt32();
+    json j = json::from_msgpack(serialized_data);
+    int32_t deserialized;
+    j.get_to(deserialized);
+    return deserialized;
   }
 };
 
