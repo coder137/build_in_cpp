@@ -18,37 +18,13 @@
 
 namespace buildcc {
 
-void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe) {
-  generator.AddPattern("path_fbs", "{current_root_dir}/path.fbs");
-  generator.AddPattern("target_fbs", "{current_root_dir}/target.fbs");
-
-  generator.AddInput("{path_fbs}");
-  generator.AddInput("{target_fbs}");
-
-  generator.AddOutput("{current_build_dir}/path_generated.h");
-  generator.AddOutput("{current_build_dir}/target_generated.h");
-
-  generator.AddPatterns({
-      {"flatc_compiler", fmt::format("{}", flatc_exe.GetTargetPath())},
-  });
-  //   generator.AddCommand("{flatc_compiler} --help");
-  generator.AddCommand("{flatc_compiler} -o {current_build_dir} -I "
-                       "{current_root_dir} --gen-object-api "
-                       "--cpp {path_fbs} {target_fbs}");
-
-  generator.Build();
-}
-
-void buildcc_cb(BaseTarget &target, const FileGenerator &schema_gen,
-                const TargetInfo &flatbuffers_ho,
+void buildcc_cb(BaseTarget &target, const TargetInfo &flatbuffers_ho,
                 const TargetInfo &nlohmann_json_ho, const TargetInfo &fmt_ho,
                 const TargetInfo &spdlog_ho, const TargetInfo &cli11_ho,
                 const TargetInfo &taskflow_ho, const TargetInfo &tl_optional_ho,
                 const BaseTarget &tpl) {
   // NOTE, Build as single lib
   target.AddIncludeDir("", true);
-  const std::string &schema_build_dir = schema_gen.Get("current_build_dir");
-  target.AddIncludeDirAbsolute(schema_build_dir, true);
 
   // ENV
   target.GlobSources("lib/env/src");
@@ -60,7 +36,6 @@ void buildcc_cb(BaseTarget &target, const FileGenerator &schema_gen,
   target.AddIncludeDir("schema/include");
   target.GlobHeaders("schema/include/schema");
   target.GlobHeaders("schema/include/schema/interface");
-  target.GlobHeaders("schema/include/schema/private");
 
   // TOOLCHAIN
   target.GlobSources("lib/toolchain/src/api");
@@ -205,12 +180,6 @@ void BuildBuildCC::Initialize() {
       TargetEnv(env_.GetTargetRootDir() / "third_party" / "flatbuffers",
                 env_.GetTargetBuildDir()));
 
-  // Schema
-  (void)storage_.Add<FileGenerator>(
-      kSchemaGenName, kSchemaGenName,
-      TargetEnv(env_.GetTargetRootDir() / "buildcc" / "schema",
-                env_.GetTargetBuildDir() / toolchain_.GetName()));
-
   // Flatbuffers HO lib
   (void)storage_.Add<TargetInfo>(
       kFlatbuffersHoName, toolchain_,
@@ -271,8 +240,6 @@ void BuildBuildCC::Initialize() {
 }
 
 void BuildBuildCC::Setup(const ArgToolchainState &state) {
-  auto &flatc_exe = GetFlatc();
-  auto &schema_gen = GetSchemaGen();
   auto &flatbuffers_ho_lib = GetFlatbuffersHo();
   auto &nlohmann_json_ho_lib = GetNlohmannJsonHo();
   auto &cli11_ho_lib = GetCli11Ho();
@@ -283,10 +250,6 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
   auto &tpl_lib = GetTpl();
   auto &buildcc_lib = GetBuildcc();
   Reg::Toolchain(state)
-      .Func(global_flags_cb, flatc_exe, toolchain_)
-      .Build(build_flatc_exe_cb, flatc_exe)
-      .Build(schema_gen_cb, schema_gen, flatc_exe)
-      .Dep(schema_gen, flatc_exe)
       .Func(flatbuffers_ho_cb, flatbuffers_ho_lib)
       .Func(nlohmann_json_ho_cb, nlohmann_json_ho_lib)
       .Func(cli11_ho_cb, cli11_ho_lib)
@@ -297,10 +260,9 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
       .Func(global_flags_cb, tpl_lib, toolchain_)
       .Build(tpl_cb, tpl_lib)
       .Func(global_flags_cb, buildcc_lib, toolchain_)
-      .Build(buildcc_cb, buildcc_lib, schema_gen, flatbuffers_ho_lib,
-             nlohmann_json_ho_lib, fmt_ho_lib, spdlog_ho_lib, cli11_ho_lib,
-             taskflow_ho_lib, tl_optional_ho_lib, tpl_lib)
-      .Dep(buildcc_lib, schema_gen)
+      .Build(buildcc_cb, buildcc_lib, flatbuffers_ho_lib, nlohmann_json_ho_lib,
+             fmt_ho_lib, spdlog_ho_lib, cli11_ho_lib, taskflow_ho_lib,
+             tl_optional_ho_lib, tpl_lib)
       .Dep(buildcc_lib, tpl_lib);
 }
 

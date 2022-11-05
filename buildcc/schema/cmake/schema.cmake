@@ -1,7 +1,6 @@
 # schema test
 if (${TESTING})
     add_library(mock_schema STATIC
-        include/schema/private/schema_util.h
         include/schema/interface/serialization_interface.h
 
         include/schema/path.h
@@ -11,6 +10,7 @@ if (${TESTING})
         include/schema/custom_generator_serialization.h
 
         src/target_serialization.cpp
+        include/schema/target_schema.h
         include/schema/target_serialization.h
     )
     target_include_directories(mock_schema PUBLIC 
@@ -27,7 +27,6 @@ if (${TESTING})
         CppUTestExt
         ${TEST_LINK_LIBS}
     )
-    add_dependencies(mock_schema fbs_to_header)
 
     target_compile_options(mock_schema PUBLIC ${TEST_COMPILE_FLAGS} ${BUILD_COMPILE_FLAGS})
     target_link_options(mock_schema PUBLIC ${TEST_LINK_FLAGS} ${BUILD_LINK_FLAGS})
@@ -38,21 +37,30 @@ if (${TESTING})
     )
     target_link_libraries(test_custom_generator_serialization PRIVATE mock_schema)
 
+    add_executable(test_target_serialization
+        test/test_target_serialization.cpp
+    )
+    target_link_libraries(test_target_serialization PRIVATE mock_schema)
+
     add_test(NAME test_custom_generator_serialization COMMAND test_custom_generator_serialization
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
+    )
+    add_test(NAME test_target_serialization COMMAND test_target_serialization
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
     )
 endif()
 
 set(SCHEMA_SRCS
-    include/schema/private/schema_util.h
     include/schema/interface/serialization_interface.h
 
     include/schema/path.h
 
     src/custom_generator_serialization.cpp
+    include/schema/custom_generator_schema.h
     include/schema/custom_generator_serialization.h
 
     src/target_serialization.cpp
+    include/schema/target_schema.h
     include/schema/target_serialization.h
 )
 
@@ -67,7 +75,6 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
     target_include_directories(buildcc PRIVATE
         ${SCHEMA_BUILD_DIR}
     )
-    add_dependencies(buildcc fbs_to_header)
 endif()
 
 if(${BUILDCC_BUILD_AS_INTERFACE})
@@ -89,7 +96,6 @@ if(${BUILDCC_BUILD_AS_INTERFACE})
     )
     target_compile_options(schema PRIVATE ${BUILD_COMPILE_FLAGS})
     target_link_options(schema PRIVATE ${BUILD_LINK_FLAGS})
-    add_dependencies(schema fbs_to_header)
 endif()
 
 if (${BUILDCC_INSTALL})

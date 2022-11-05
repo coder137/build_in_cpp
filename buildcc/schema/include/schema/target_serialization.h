@@ -20,40 +20,11 @@
 #include <mutex>
 
 #include "schema/path.h"
-#include "schema/target_type.h"
+#include "schema/target_schema.h"
 
 #include "schema/interface/serialization_interface.h"
 
 namespace buildcc::internal {
-
-struct TargetSchema {
-  std::string name;
-  TargetType type{TargetType::Undefined};
-
-  path_unordered_set internal_sources;
-  path_unordered_set internal_headers;
-  path_unordered_set internal_pchs;
-  std::vector<Path> internal_libs;
-  std::vector<std::string> external_libs;
-
-  fs_unordered_set include_dirs;
-  fs_unordered_set lib_dirs;
-
-  std::unordered_set<std::string> preprocessor_flags;
-  std::unordered_set<std::string> common_compile_flags;
-  std::unordered_set<std::string> pch_compile_flags;
-  std::unordered_set<std::string> pch_object_flags;
-  std::unordered_set<std::string> asm_compile_flags;
-  std::unordered_set<std::string> c_compile_flags;
-  std::unordered_set<std::string> cpp_compile_flags;
-  std::unordered_set<std::string> link_flags;
-
-  path_unordered_set internal_compile_dependencies;
-  path_unordered_set internal_link_dependencies;
-
-  bool pch_compiled{false};
-  bool target_linked{false};
-};
 
 class TargetSerialization : public SerializationInterface {
 public:

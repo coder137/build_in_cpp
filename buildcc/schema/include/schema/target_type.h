@@ -17,6 +17,10 @@
 #ifndef SCHEMA_TARGET_TYPE_H_
 #define SCHEMA_TARGET_TYPE_H_
 
+#include <algorithm>
+#include <array>
+#include <string_view>
+
 namespace buildcc {
 
 enum class TargetType {
@@ -26,6 +30,37 @@ enum class TargetType {
   Undefined,      ///< Undefined target type
 };
 
+constexpr std::array<std::pair<std::string_view, TargetType>, 3>
+    kTargetTypeInfo{
+        std::make_pair("executable", TargetType::Executable),
+        std::make_pair("static_library", TargetType::StaticLibrary),
+        std::make_pair("dynamic_library", TargetType::DynamicLibrary),
+    };
+
+template <typename JsonType> void to_json(JsonType &j, TargetType type) {
+  j = nullptr;
+  auto iter = std::find_if(kTargetTypeInfo.cbegin(), kTargetTypeInfo.cend(),
+                           [type](const auto &p) { return p.second == type; });
+  if (iter != kTargetTypeInfo.cend()) {
+    j = iter->first;
+  }
 }
+
+template <typename JsonType>
+void from_json(const JsonType &j, TargetType &type) {
+  type = TargetType::Undefined;
+  if (j.is_string()) {
+    std::string name;
+    j.get_to(name);
+    auto iter =
+        std::find_if(kTargetTypeInfo.cbegin(), kTargetTypeInfo.cend(),
+                     [&name](const auto &p) { return p.first == name; });
+    if (iter != kTargetTypeInfo.cend()) {
+      type = iter->second;
+    }
+  }
+}
+
+} // namespace buildcc
 
 #endif
