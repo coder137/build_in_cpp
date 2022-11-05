@@ -25,18 +25,18 @@ namespace buildcc::internal {
 
 struct CustomGeneratorSchema {
 private:
-  static constexpr const char *const kSchemaName = "name";
-  static constexpr const char *const kIdsName = "ids";
-  static constexpr const char *const kGroupsName = "groups";
+  static constexpr const char *const kName = "name";
+  static constexpr const char *const kIds = "ids";
+  static constexpr const char *const kGroups = "groups";
 
 public:
   using IdKey = std::string;
   using GroupKey = std::string;
   struct IdInfo {
   private:
-    static constexpr const char *const kInputsName = "inputs";
-    static constexpr const char *const kOutputsName = "outputs";
-    static constexpr const char *const kUserblobName = "userblob";
+    static constexpr const char *const kInputs = "inputs";
+    static constexpr const char *const kOutputs = "outputs";
+    static constexpr const char *const kUserblob = "userblob";
 
   public:
     path_unordered_set internal_inputs;
@@ -44,15 +44,15 @@ public:
     std::vector<uint8_t> userblob;
 
     friend void to_json(json &j, const IdInfo &info) {
-      j[kInputsName] = info.internal_inputs;
-      j[kOutputsName] = info.outputs;
-      j[kUserblobName] = info.userblob;
+      j[kInputs] = info.internal_inputs;
+      j[kOutputs] = info.outputs;
+      j[kUserblob] = info.userblob;
     }
 
     friend void from_json(const json &j, IdInfo &info) {
-      j.at(kInputsName).get_to(info.internal_inputs);
-      j.at(kOutputsName).get_to(info.outputs);
-      j.at(kUserblobName).get_to(info.userblob);
+      j.at(kInputs).get_to(info.internal_inputs);
+      j.at(kOutputs).get_to(info.outputs);
+      j.at(kUserblob).get_to(info.userblob);
     }
   };
 
@@ -65,15 +65,15 @@ public:
   std::unordered_map<GroupKey, GroupInfo> internal_groups;
 
   friend void to_json(json &j, const CustomGeneratorSchema &schema) {
-    j[kSchemaName] = schema.name;
-    j[kIdsName] = schema.internal_ids;
-    j[kGroupsName] = schema.internal_groups;
+    j[kName] = schema.name;
+    j[kIds] = schema.internal_ids;
+    j[kGroups] = schema.internal_groups;
   }
 
   friend void from_json(const json &j, CustomGeneratorSchema &schema) {
-    j.at(kSchemaName).get_to(schema.name);
-    j.at(kIdsName).get_to(schema.internal_ids);
-    j.at(kGroupsName).get_to(schema.internal_groups);
+    j.at(kName).get_to(schema.name);
+    j.at(kIds).get_to(schema.internal_ids);
+    j.at(kGroups).get_to(schema.internal_groups);
   }
 };
 

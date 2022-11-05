@@ -1,9 +1,5 @@
 #include "schema/custom_generator_serialization.h"
 
-#include "schema/private/schema_util.h"
-
-#include "flatbuffers/flatbuffers.h"
-
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
@@ -24,7 +20,7 @@ TEST(CustomGeneratorSerializationTestGroup, JsonParse_Failure) {
   {
     // JSON Parse fails
     buildcc::internal::CustomGeneratorSerialization serialization(
-        "dump/JsonParseFailure.json");
+        "dump/CustomGeneratorJsonParseFailure.json");
 
     buildcc::env::save_file(serialization.GetSerializedFile().string().c_str(),
                             std::string(""), false);
@@ -35,7 +31,7 @@ TEST(CustomGeneratorSerializationTestGroup, JsonParse_Failure) {
   {
     // Custom Generator Schema conversion fails
     buildcc::internal::CustomGeneratorSerialization serialization(
-        "dump/JsonParseFailure.json");
+        "dump/CustomGeneratorJsonParseFailure.json");
 
     auto data = R"({"name": ""})";
     buildcc::env::save_file(serialization.GetSerializedFile().string().c_str(),
@@ -47,7 +43,7 @@ TEST(CustomGeneratorSerializationTestGroup, JsonParse_Failure) {
 
 TEST(CustomGeneratorSerializationTestGroup, FormatEmptyCheck) {
   buildcc::internal::CustomGeneratorSerialization serialization(
-      "dump/FormatEmptyCheck.json");
+      "dump/CustomGeneratorFormatEmptyCheck.json");
 
   bool stored = serialization.StoreToFile();
   CHECK_TRUE(stored);
@@ -56,13 +52,13 @@ TEST(CustomGeneratorSerializationTestGroup, FormatEmptyCheck) {
 TEST(CustomGeneratorSerializationTestGroup, EmptyFile_Failure) {
   {
     buildcc::internal::CustomGeneratorSerialization serialization(
-        "dump/EmptyFile.json");
+        "dump/CustomGeneratorEmptyFile.json");
     CHECK_FALSE(serialization.LoadFromFile());
   }
 
   {
     buildcc::internal::CustomGeneratorSerialization serialization(
-        "dump/EmptyFile.json");
+        "dump/CustomGeneratorEmptyFile.json");
     buildcc::env::save_file(serialization.GetSerializedFile().string().c_str(),
                             "", false);
     CHECK_FALSE(serialization.LoadFromFile());
