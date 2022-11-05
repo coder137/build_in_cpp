@@ -1,7 +1,6 @@
 # schema test
 if (${TESTING})
     add_library(mock_schema STATIC
-        include/schema/private/schema_util.h
         include/schema/interface/serialization_interface.h
 
         include/schema/path.h
@@ -52,7 +51,6 @@ if (${TESTING})
 endif()
 
 set(SCHEMA_SRCS
-    include/schema/private/schema_util.h
     include/schema/interface/serialization_interface.h
 
     include/schema/path.h

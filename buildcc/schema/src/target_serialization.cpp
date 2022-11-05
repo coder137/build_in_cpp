@@ -16,9 +16,6 @@
 
 #include "schema/target_serialization.h"
 
-// Private
-#include "schema/private/schema_util.h"
-
 namespace buildcc::internal {
 
 // PUBLIC
