@@ -30,10 +30,7 @@
 
 namespace buildcc {
 
-void schema_gen_cb(FileGenerator &generator, const BaseTarget &flatc_exe);
-
-void buildcc_cb(BaseTarget &target, const FileGenerator &schema_gen,
-                const TargetInfo &flatbuffers_ho,
+void buildcc_cb(BaseTarget &target, const TargetInfo &flatbuffers_ho,
                 const TargetInfo &nlohmann_json_ho, const TargetInfo &fmt_ho,
                 const TargetInfo &spdlog_ho, const TargetInfo &cli11_ho,
                 const TargetInfo &taskflow_ho, const TargetInfo &tl_optional_ho,
@@ -56,9 +53,6 @@ public:
 
   // Executable
   static constexpr const char *const kFlatcExeName = "flatc";
-
-  // Generator
-  static constexpr const char *const kSchemaGenName = "schema_gen";
 
   // Libraries
   static constexpr const char *const kTplLibName = "libtpl";
@@ -85,9 +79,6 @@ private:
   void Initialize();
   ExecutableTarget_generic &GetFlatc() {
     return storage_.Ref<ExecutableTarget_generic>(kFlatcExeName);
-  }
-  FileGenerator &GetSchemaGen() {
-    return storage_.Ref<FileGenerator>(kSchemaGenName);
   }
   TargetInfo &GetFlatbuffersHo() {
     return storage_.Ref<TargetInfo>(kFlatbuffersHoName);
