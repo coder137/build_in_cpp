@@ -26,6 +26,32 @@ enum class TargetType {
   Undefined,      ///< Undefined target type
 };
 
+template <typename JsonType> void to_json(JsonType &j, TargetType type) {
+  switch (type) {
+  case TargetType::Executable:
+    j = "executable";
+    break;
+  case TargetType::StaticLibrary:
+    j = "static_library";
+    break;
+  case TargetType::DynamicLibrary:
+    j = "dynamic_library";
+    break;
+  default:
+    j = nullptr;
+    break;
+  }
 }
+
+template <typename JsonType>
+void from_json(const JsonType &j, TargetType &type) {
+  if (j.is_null()) {
+    type = TargetType::Undefined;
+  } else {
+    j.get_to(type);
+  }
+}
+
+} // namespace buildcc
 
 #endif

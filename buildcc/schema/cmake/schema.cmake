@@ -11,6 +11,7 @@ if (${TESTING})
         include/schema/custom_generator_serialization.h
 
         src/target_serialization.cpp
+        include/schema/target_schema.h
         include/schema/target_serialization.h
     )
     target_include_directories(mock_schema PUBLIC 
@@ -38,8 +39,16 @@ if (${TESTING})
     )
     target_link_libraries(test_custom_generator_serialization PRIVATE mock_schema)
 
+    add_executable(test_target_serialization
+        test/test_target_serialization.cpp
+    )
+    target_link_libraries(test_target_serialization PRIVATE mock_schema)
+
     add_test(NAME test_custom_generator_serialization COMMAND test_custom_generator_serialization
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
+    )
+    add_test(NAME test_target_serialization COMMAND test_target_serialization
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test
     )
 endif()
 
@@ -50,9 +59,11 @@ set(SCHEMA_SRCS
     include/schema/path.h
 
     src/custom_generator_serialization.cpp
+    include/schema/custom_generator_schema.h
     include/schema/custom_generator_serialization.h
 
     src/target_serialization.cpp
+    include/schema/target_schema.h
     include/schema/target_serialization.h
 )
 
