@@ -17,8 +17,8 @@
 #ifndef SCHEMA_TARGET_TYPE_H_
 #define SCHEMA_TARGET_TYPE_H_
 
+#include <algorithm>
 #include <array>
-#include <optional>
 #include <string_view>
 
 namespace buildcc {
@@ -31,26 +31,18 @@ enum class TargetType {
 };
 
 constexpr std::array<std::pair<std::string_view, TargetType>, 3>
-    kTargetTypePair{
+    kTargetTypeInfo{
         std::make_pair("executable", TargetType::Executable),
         std::make_pair("static_library", TargetType::StaticLibrary),
         std::make_pair("dynamic_library", TargetType::DynamicLibrary),
     };
 
 template <typename JsonType> void to_json(JsonType &j, TargetType type) {
-  std::optional<std::string> name;
-  for (const auto &[p_name, p_type] : kTargetTypePair) {
-    // type provided should match the constexpr present pair_type
-    if (type == p_type) {
-      name = p_name;
-      break;
-    }
-  }
-
-  if (name.has_value()) {
-    j = name.value();
-  } else {
-    j = nullptr;
+  j = nullptr;
+  auto iter = std::find_if(kTargetTypeInfo.cbegin(), kTargetTypeInfo.cend(),
+                           [type](const auto &p) { return p.second == type; });
+  if (iter != kTargetTypeInfo.cend()) {
+    j = iter->first;
   }
 }
 
@@ -60,14 +52,11 @@ void from_json(const JsonType &j, TargetType &type) {
   if (j.is_string()) {
     std::string name;
     j.get_to(name);
-
-    for (const auto &[p_name, p_type] : kTargetTypePair) {
-      // name provided in json schema should matched the constexpr present
-      // pair_name
-      if (name == p_name) {
-        type = p_type;
-        break;
-      }
+    auto iter =
+        std::find_if(kTargetTypeInfo.cbegin(), kTargetTypeInfo.cend(),
+                     [&name](const auto &p) { return p.first == name; });
+    if (iter != kTargetTypeInfo.cend()) {
+      type = iter->second;
     }
   }
 }

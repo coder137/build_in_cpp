@@ -25,21 +25,21 @@ TEST(TargetSerializationTestGroup, TargetType) {
   json j;
 
   {
-    j = buildcc::kTargetTypePair[0].first;
+    j = buildcc::kTargetTypeInfo[0].first;
     from_json(j, type);
-    CHECK_TRUE(type == buildcc::kTargetTypePair[0].second);
+    CHECK_TRUE(type == buildcc::kTargetTypeInfo[0].second);
   }
 
   {
-    j = buildcc::kTargetTypePair[1].first;
+    j = buildcc::kTargetTypeInfo[1].first;
     from_json(j, type);
-    CHECK_TRUE(type == buildcc::kTargetTypePair[1].second);
+    CHECK_TRUE(type == buildcc::kTargetTypeInfo[1].second);
   }
 
   {
-    j = buildcc::kTargetTypePair[2].first;
+    j = buildcc::kTargetTypeInfo[2].first;
     from_json(j, type);
-    CHECK_TRUE(type == buildcc::kTargetTypePair[2].second);
+    CHECK_TRUE(type == buildcc::kTargetTypeInfo[2].second);
   }
 
   {
