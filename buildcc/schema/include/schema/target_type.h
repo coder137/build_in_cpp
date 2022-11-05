@@ -17,6 +17,10 @@
 #ifndef SCHEMA_TARGET_TYPE_H_
 #define SCHEMA_TARGET_TYPE_H_
 
+#include <array>
+#include <optional>
+#include <string_view>
+
 namespace buildcc {
 
 enum class TargetType {
@@ -26,29 +30,45 @@ enum class TargetType {
   Undefined,      ///< Undefined target type
 };
 
+constexpr std::array<std::pair<std::string_view, TargetType>, 4>
+    kTargetTypePair{
+        std::make_pair("executable", TargetType::Executable),
+        std::make_pair("static_library", TargetType::StaticLibrary),
+        std::make_pair("dynamic_library", TargetType::DynamicLibrary),
+    };
+
 template <typename JsonType> void to_json(JsonType &j, TargetType type) {
-  switch (type) {
-  case TargetType::Executable:
-    j = "executable";
-    break;
-  case TargetType::StaticLibrary:
-    j = "static_library";
-    break;
-  case TargetType::DynamicLibrary:
-    j = "dynamic_library";
-    break;
-  default:
+  std::optional<std::string> name;
+  for (const auto &[p_name, p_type] : kTargetTypePair) {
+    // type provided should match the constexpr present pair_type
+    if (type == p_type) {
+      name = p_name;
+      break;
+    }
+  }
+
+  if (name.has_value()) {
+    j = name.value();
+  } else {
     j = nullptr;
-    break;
   }
 }
 
 template <typename JsonType>
 void from_json(const JsonType &j, TargetType &type) {
-  if (j.is_null()) {
-    type = TargetType::Undefined;
-  } else {
-    j.get_to(type);
+  type = TargetType::Undefined;
+  if (j.is_string()) {
+    std::string name;
+    j.get_to(name);
+
+    for (const auto &[p_name, p_type] : kTargetTypePair) {
+      // name provided in json schema should matched the constexpr present
+      // pair_name
+      if (name == p_name) {
+        type = p_type;
+        break;
+      }
+    }
   }
 }
 

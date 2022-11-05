@@ -16,9 +16,9 @@ TEST_GROUP(TargetSerializationTestGroup)
 };
 // clang-format on
 
-IGNORE_TEST(TargetSerializationTestGroup, TargetTypeTest) {
+TEST(TargetSerializationTestGroup, TargetTypeTest) {
   {
-    // JSON Parse fails
+    // Target Type executable
     buildcc::internal::TargetSerialization serialization(
         "dump/TargetTypeTest.json");
 
@@ -27,10 +27,80 @@ IGNORE_TEST(TargetSerializationTestGroup, TargetTypeTest) {
     serialization.UpdateStore(schema);
     bool store = serialization.StoreToFile();
     CHECK_TRUE(store);
+
+    bool load = serialization.LoadFromFile();
+    CHECK_TRUE(load);
+    CHECK_TRUE(serialization.GetLoad().type == buildcc::TargetType::Executable);
+  }
+
+  {
+    // Target Type static library
+    buildcc::internal::TargetSerialization serialization(
+        "dump/TargetTypeTest.json");
+
+    buildcc::internal::TargetSchema schema;
+    schema.type = buildcc::TargetType::StaticLibrary;
+    serialization.UpdateStore(schema);
+    bool store = serialization.StoreToFile();
+    CHECK_TRUE(store);
+
+    bool load = serialization.LoadFromFile();
+    CHECK_TRUE(load);
+    CHECK_TRUE(serialization.GetLoad().type ==
+               buildcc::TargetType::StaticLibrary);
+  }
+
+  {
+    // Target Type dynamic library
+    buildcc::internal::TargetSerialization serialization(
+        "dump/TargetTypeTest.json");
+
+    buildcc::internal::TargetSchema schema;
+    schema.type = buildcc::TargetType::DynamicLibrary;
+    serialization.UpdateStore(schema);
+    bool store = serialization.StoreToFile();
+    CHECK_TRUE(store);
+
+    bool load = serialization.LoadFromFile();
+    CHECK_TRUE(load);
+    CHECK_TRUE(serialization.GetLoad().type ==
+               buildcc::TargetType::DynamicLibrary);
+  }
+
+  {
+    // Target Type undefined
+    buildcc::internal::TargetSerialization serialization(
+        "dump/TargetTypeTest.json");
+
+    buildcc::internal::TargetSchema schema;
+    schema.type = buildcc::TargetType::Undefined;
+    serialization.UpdateStore(schema);
+    bool store = serialization.StoreToFile();
+    CHECK_TRUE(store);
+
+    bool load = serialization.LoadFromFile();
+    CHECK_TRUE(load);
+    CHECK_TRUE(serialization.GetLoad().type == buildcc::TargetType::Undefined);
+  }
+
+  {
+    // Target Type random value
+    buildcc::internal::TargetSerialization serialization(
+        "dump/TargetTypeTest.json");
+
+    buildcc::internal::TargetSchema schema;
+    schema.type = (buildcc::TargetType)65535;
+    serialization.UpdateStore(schema);
+    bool store = serialization.StoreToFile();
+    CHECK_TRUE(store);
+
+    bool load = serialization.LoadFromFile();
+    CHECK_TRUE(load);
+    CHECK_TRUE(serialization.GetLoad().type == buildcc::TargetType::Undefined);
   }
 }
 
-IGNORE_TEST(TargetSerializationTestGroup, JsonParse_Failure) {
+TEST(TargetSerializationTestGroup, JsonParse_Failure) {
   {
     // JSON Parse fails
     buildcc::internal::TargetSerialization serialization(
@@ -66,7 +136,7 @@ TEST(TargetSerializationTestGroup, FormatEmptyCheck) {
   CHECK_TRUE(loaded);
 }
 
-IGNORE_TEST(TargetSerializationTestGroup, EmptyFile_Failure) {
+TEST(TargetSerializationTestGroup, EmptyFile_Failure) {
   {
     buildcc::internal::TargetSerialization serialization(
         "dump/TargetEmptyFile.json");
