@@ -21,7 +21,6 @@ else()
         "*/CppUTest*"
         "*/fmt*"
         "*/spdlog*"
-        "*/flatbuffers*"
         "*/taskflow*"
         "*/CLI11*"
         "*/generated*"

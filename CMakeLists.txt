@@ -12,8 +12,6 @@ project(BuildCC
 
 # User options
 option(BUILDCC_INSTALL "Enable BuildCC Installation" ON)
-option(BUILDCC_FLATBUFFERS_FLATC "Build Flatbuffer::Flatc Compiler" ON)
-
 option(BUILDCC_BUILD_AS_SINGLE_LIB "Build all internal libs and modules as part of the buildcc library" ON)
 option(BUILDCC_BUILD_AS_INTERFACE "Build all internal libs and modules seperately and link" OFF)
 
@@ -34,7 +32,6 @@ option(BUILDCC_DOCUMENTATION "Enable Documentation" OFF)
 
 # Compiler options
 # NOTE, This option is required for clang compilers, architecture x86_64-pc-windows-msvc
-# Flatbuffers library uses `std::system` internally which causes a deprecated error
 option(BUILDCC_NO_DEPRECATED "Disable Deprecated" OFF)
 if (${BUILDCC_NO_DEPRECATED})
     add_compile_options("-Wno-deprecated")
@@ -72,9 +69,7 @@ include(cmake/tool/cppcheck.cmake)
 include(cmake/tool/doxygen.cmake)
 
 # Libraries
-include(cmake/target/flatbuffers.cmake)
 include(cmake/target/json.cmake)
-
 include(cmake/target/fmt.cmake)
 include(cmake/target/spdlog.cmake)
 include(cmake/target/cli11.cmake)

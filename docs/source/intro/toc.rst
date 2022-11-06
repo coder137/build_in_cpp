@@ -25,7 +25,7 @@ Pre-requisites
    * C++17 filesystem library support
    * C++11 thread library support
 * Third Party Libraries (See License below)
-   * Flatbuffers v2.0.0
+   * JSON v3.11.2
    * Taskflow v3.1.0
    * CLI11 v2.1.0
    * Tiny Process Library v2.0.4
@@ -68,6 +68,6 @@ Licenses
 * `Tiny Process Library <https://gitlab.com/eidheim/tiny-process-library>`_ (Process handling) [MIT License]
 * `Taskflow <https://github.com/taskflow/taskflow>`_ (Parallel Programming) [MIT License] [Header Only]
    * See also `3rd-Party <https://github.com/taskflow/taskflow/tree/master/3rd-party>`_ used by Taskflow
-* `Flatbuffers <https://github.com/google/flatbuffers>`_ (Serialization) [Apache-2.0 License] [Header Only]
+* `Nlohmann::Json <https://github.com/nlohmann/json>`_ (Serialization) [MIT License] [Header Only]
 * `CLI11 <https://github.com/CLIUtils/CLI11>`_ (Argument Parsing) [BSD-3-Clause License] [Header Only]
 * `CppUTest <https://github.com/cpputest/cpputest>`_ (Unit Testing/Mocking) [BSD-3-Clause License]

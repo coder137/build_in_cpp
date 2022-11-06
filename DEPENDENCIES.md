@@ -2,13 +2,21 @@
 
 These third party libraries are added as submodules since they aren't meant to be modified by this project.
 
+### Adding a submodule
+
 `git submodule add [git_url] third_party/[foldername]`
+
+### Removing a submodule
+
+- `git rm --cached path_to_submodule` (no trailing slash)
+- Delete relevant line from `.gitmodules` file
+- Delete relevant section from `.git/config` file
 
 ## Main
 
 - fmt (Formatting)
 - spdlog (Logging)
-- flatbuffers (Serialization)
+- json (Serialization)
 - CLI11 (Argument Parsing)
 - Taskflow (Parallel Programming)
 

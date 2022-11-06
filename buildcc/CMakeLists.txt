@@ -13,7 +13,6 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
     target_link_libraries(buildcc PUBLIC
         fmt::fmt
         tl::optional
-        flatbuffers
         nlohmann_json::nlohmann_json
         Taskflow
         CLI11::CLI11
@@ -29,7 +28,7 @@ if(${BUILDCC_BUILD_AS_SINGLE_LIB})
     endif()
 endif()
 
-# Flatbuffers schema
+# Schema
 add_subdirectory(schema)
 
 # Environment

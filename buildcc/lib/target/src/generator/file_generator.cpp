@@ -18,8 +18,6 @@
 
 #include <algorithm>
 
-#include "flatbuffers/flexbuffers.h"
-
 #include "env/assert_fatal.h"
 
 namespace {
@@ -32,11 +30,9 @@ public:
   // serialized_data has already been verified
   static std::vector<std::string>
   Deserialize(const std::vector<uint8_t> &serialized_data) {
+    json j = json::from_msgpack(serialized_data, true, false);
     std::vector<std::string> deserialized;
-    auto flex_vect = flexbuffers::GetRoot(serialized_data).AsVector();
-    for (size_t i = 0; i < flex_vect.size(); i++) {
-      deserialized.emplace_back(flex_vect[i].AsString().str());
-    }
+    j.get_to(deserialized);
     return deserialized;
   }
 
@@ -44,17 +40,8 @@ private:
   const std::vector<std::string> &commands_;
 
   bool Verify(const std::vector<uint8_t> &serialized_data) const override {
-    auto flex_ref = flexbuffers::GetRoot(serialized_data);
-    if (!flex_ref.IsVector()) {
-      return false;
-    }
-    auto flex_vect = flex_ref.AsVector();
-    for (size_t i = 0; i < flex_vect.size(); i++) {
-      if (!flex_vect[i].IsString()) {
-        return false;
-      }
-    }
-    return true;
+    json j = json::from_msgpack(serialized_data, true, false);
+    return !j.is_discarded();
   }
 
   bool IsEqual(const std::vector<uint8_t> &previous,
@@ -63,14 +50,8 @@ private:
   }
 
   std::vector<uint8_t> Serialize() const override {
-    flexbuffers::Builder builder;
-    builder.Vector([&]() {
-      for (const auto &c : commands_) {
-        builder.Add(c);
-      }
-    });
-    builder.Finish();
-    return builder.GetBuffer();
+    json j = commands_;
+    return json::to_msgpack(j);
   }
 };
 

@@ -1,15 +1,25 @@
-Generator
-=========
+Template Generator
+===================
 
-generator.h
------------
+> TODO,
 
-.. doxygenclass:: buildcc::Generator
+File Generator
+===============
 
-.. doxygentypedef:: BaseGenerator
+> TODO
+
+Custom Generator
+================
+
+custom_generator.h
+-------------------
+
+.. doxygenclass:: buildcc::CustomGenerator
 
 Example
 --------
+
+> TODO, Update example
 
 .. code-block:: cpp
     :linenos:
