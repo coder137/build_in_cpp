@@ -36,11 +36,6 @@ sync_api.h
 
 .. doxygenclass:: buildcc::internal::SyncApi
 
-target_getter.h
------------------
-
-.. doxygenclass:: buildcc::internal::TargetInfoGetter
-
 TargetInfo
 ===========
 

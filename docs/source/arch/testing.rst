@@ -37,17 +37,13 @@ mock_toolchain
 mock_target
 ^^^^^^^^^^^^
 
-.. doxygenfunction:: GeneratorRunner
+.. doxygenfunction:: CustomGeneratorRunner
 
-.. doxygenfunction:: GeneratorExpect_InputRemoved
+.. doxygenfunction:: CustomGeneratorExpect_IdRemoved
 
-.. doxygenfunction:: GeneratorExpect_InputAdded
+.. doxygenfunction:: CustomGeneratorExpect_IdAdded
 
-.. doxygenfunction:: GeneratorExpect_InputUpdated
-
-.. doxygenfunction:: GeneratorExpect_OutputChanged
-
-.. doxygenfunction:: GeneratorExpect_CommandChanged
+.. doxygenfunction:: CustomGeneratorExpect_IdUpdated
 
 From the :doc:`serialization_schema` **generator** we can see that our generator has 3 rebuild conditions
 
