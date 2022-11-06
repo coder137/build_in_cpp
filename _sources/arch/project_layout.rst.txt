@@ -38,7 +38,7 @@ Project Layout
    * third_party
    ** CLI11
    ** cpputest
-   ** flatbuffers
+   ** json
    ** fmt
    ** spdlog
    ** taskflow
@@ -109,7 +109,7 @@ Global cmake variables and custom_targets
    * build_flags.cmake
    * test_flags.cmake
 * target
-   * flatbuffers.cmake
+   * json.cmake
    * fmt.cmake
    * spdlog.cmake
    * tpl.cmake
@@ -144,7 +144,7 @@ example
 third_party
 -----------
 
-* Flatbuffers
+* JSON
 * Fmtlib
 * Spdlog
 * CLI11

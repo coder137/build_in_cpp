@@ -11,7 +11,7 @@ BuildCC single lib
 
 .. uml::
    
-   rectangle Flatbuffers as flatbuffers
+   rectangle JSON as json
    rectangle fmt as fmt
    rectangle spdlog as spdlog
    rectangle Taskflow as taskflow
@@ -20,7 +20,7 @@ BuildCC single lib
 
    rectangle BuildCC as buildcc
 
-   flatbuffers -up-> buildcc
+   json -up-> buildcc
    fmt -up-> buildcc
    spdlog -up-> buildcc
    taskflow -up-> buildcc
@@ -39,7 +39,7 @@ BuildCC interface lib
 
 .. uml::
 
-   rectangle Flatbuffers as flatbuffers #palegreen
+   rectangle JSON as json #palegreen
    rectangle fmt as fmt #palegreen
    rectangle spdlog as spdlog #palegreen
    rectangle Taskflow as taskflow #palegreen
@@ -65,7 +65,7 @@ BuildCC interface lib
    cli11 -up-> args
    taskflow -up-> register
 
-   flatbuffers .up.> schema
+   json .up.> schema
    env -up-> schema
 
    schema -up-> toolchain

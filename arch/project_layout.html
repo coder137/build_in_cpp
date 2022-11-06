@@ -185,7 +185,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target_utils.html">Target Utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html">Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html">Template Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html#file-generator">File Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html#custom-generator">Custom Generator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target.html">Target Info APIs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#targetinfo">TargetInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#target-apis">Target APIs</a></li>
@@ -240,7 +242,7 @@
           <div class="section" id="project-layout">
 <h1>Project Layout<a class="headerlink" href="#project-layout" title="Permalink to this heading">#</a></h1>
 <p class="plantuml">
-<img src="../_images/plantuml-10e47c02afa512122c5fa782e6bf3ae6cc48f28d.png" alt="&#64;startmindmap
+<img src="../_images/plantuml-0301541550d46899ce00e184d59022fbf66c0426.png" alt="&#64;startmindmap
 * [root]
 ** .clang-format
 ** .gitmodules
@@ -275,7 +277,7 @@
 * third_party
 ** CLI11
 ** cpputest
-** flatbuffers
+** json
 ** fmt
 ** spdlog
 ** taskflow
@@ -405,7 +407,7 @@
 </li>
 <li><dl class="simple">
 <dt>target</dt><dd><ul>
-<li><p>flatbuffers.cmake</p></li>
+<li><p>json.cmake</p></li>
 <li><p>fmt.cmake</p></li>
 <li><p>spdlog.cmake</p></li>
 <li><p>tpl.cmake</p></li>
@@ -476,7 +478,7 @@
 <div class="section" id="third-party">
 <h2>third_party<a class="headerlink" href="#third-party" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p>Flatbuffers</p></li>
+<li><p>JSON</p></li>
 <li><p>Fmtlib</p></li>
 <li><p>Spdlog</p></li>
 <li><p>CLI11</p></li>

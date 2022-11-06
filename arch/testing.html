@@ -185,7 +185,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target_utils.html">Target Utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html">Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html">Template Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html#file-generator">File Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html#custom-generator">Custom Generator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target.html">Target Info APIs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#targetinfo">TargetInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#target-apis">Target APIs</a></li>
@@ -306,30 +308,27 @@
 </div>
 <div class="section" id="mock-target">
 <h3>mock_target<a class="headerlink" href="#mock-target" title="Permalink to this heading">#</a></h3>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Cannot find function “GeneratorRunner” in doxygen xml output for project “buildcc_documentation” from directory: /home/runner/work/build_in_cpp/build_in_cpp/build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Cannot find function “GeneratorExpect_InputRemoved” in doxygen xml output for project “buildcc_documentation” from directory: /home/runner/work/build_in_cpp/build_in_cpp/build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Cannot find function “GeneratorExpect_InputAdded” in doxygen xml output for project “buildcc_documentation” from directory: /home/runner/work/build_in_cpp/build_in_cpp/build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Cannot find function “GeneratorExpect_InputUpdated” in doxygen xml output for project “buildcc_documentation” from directory: /home/runner/work/build_in_cpp/build_in_cpp/build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Cannot find function “GeneratorExpect_OutputChanged” in doxygen xml output for project “buildcc_documentation” from directory: /home/runner/work/build_in_cpp/build_in_cpp/build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Cannot find function “GeneratorExpect_CommandChanged” in doxygen xml output for project “buildcc_documentation” from directory: /home/runner/work/build_in_cpp/build_in_cpp/build/xml</p>
-</div>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc1m21CustomGeneratorRunnerER15CustomGenerator">
+<span id="_CPPv3N7buildcc1m21CustomGeneratorRunnerER15CustomGenerator"></span><span id="_CPPv2N7buildcc1m21CustomGeneratorRunnerER15CustomGenerator"></span><span id="buildcc::m::CustomGeneratorRunner__CustomGeneratorR"></span><span class="target" id="namespacebuildcc_1_1m_1ab75e8598dfaa84a3e9162c59e257a6dc"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">CustomGeneratorRunner</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../user_api/generator.html#_CPPv4N7buildcc15CustomGeneratorE" title="buildcc::CustomGenerator"><span class="n"><span class="pre">CustomGenerator</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">custom_generator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc1m21CustomGeneratorRunnerER15CustomGenerator" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>Runs the generator using Taskflow with 1 thread CppUTest cannot mock with multiple threads. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc1m31CustomGeneratorExpect_IdRemovedEjP15CustomGenerator">
+<span id="_CPPv3N7buildcc1m31CustomGeneratorExpect_IdRemovedEjP15CustomGenerator"></span><span id="_CPPv2N7buildcc1m31CustomGeneratorExpect_IdRemovedEjP15CustomGenerator"></span><span id="buildcc::m::CustomGeneratorExpect_IdRemoved__unsigned-i.CustomGeneratorP"></span><span class="target" id="namespacebuildcc_1_1m_1a23ce2671e13430c53896af7a44aade3f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">CustomGeneratorExpect_IdRemoved</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <a class="reference internal" href="../user_api/generator.html#_CPPv4N7buildcc15CustomGeneratorE" title="buildcc::CustomGenerator"><span class="n"><span class="pre">CustomGenerator</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">generator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc1m31CustomGeneratorExpect_IdRemovedEjP15CustomGenerator" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc1m29CustomGeneratorExpect_IdAddedEjP15CustomGenerator">
+<span id="_CPPv3N7buildcc1m29CustomGeneratorExpect_IdAddedEjP15CustomGenerator"></span><span id="_CPPv2N7buildcc1m29CustomGeneratorExpect_IdAddedEjP15CustomGenerator"></span><span id="buildcc::m::CustomGeneratorExpect_IdAdded__unsigned-i.CustomGeneratorP"></span><span class="target" id="namespacebuildcc_1_1m_1aa757469db950cc87d28b397ee6543537"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">CustomGeneratorExpect_IdAdded</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <a class="reference internal" href="../user_api/generator.html#_CPPv4N7buildcc15CustomGeneratorE" title="buildcc::CustomGenerator"><span class="n"><span class="pre">CustomGenerator</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">generator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc1m29CustomGeneratorExpect_IdAddedEjP15CustomGenerator" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc1m31CustomGeneratorExpect_IdUpdatedEjP15CustomGenerator">
+<span id="_CPPv3N7buildcc1m31CustomGeneratorExpect_IdUpdatedEjP15CustomGenerator"></span><span id="_CPPv2N7buildcc1m31CustomGeneratorExpect_IdUpdatedEjP15CustomGenerator"></span><span id="buildcc::m::CustomGeneratorExpect_IdUpdated__unsigned-i.CustomGeneratorP"></span><span class="target" id="namespacebuildcc_1_1m_1a5bde29c3f2b2488dd7849e16d2fc8543"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">CustomGeneratorExpect_IdUpdated</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">calls</span></span>, <a class="reference internal" href="../user_api/generator.html#_CPPv4N7buildcc15CustomGeneratorE" title="buildcc::CustomGenerator"><span class="n"><span class="pre">CustomGenerator</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">generator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc1m31CustomGeneratorExpect_IdUpdatedEjP15CustomGenerator" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
 <p>From the <a class="reference internal" href="serialization_schema.html"><span class="doc">Serialization Schema</span></a> <strong>generator</strong> we can see that our generator has 3 rebuild conditions</p>
 <ul class="simple">
 <li><dl class="simple">

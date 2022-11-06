@@ -185,7 +185,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target_utils.html">Target Utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html">Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html">Template Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html#file-generator">File Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html#custom-generator">Custom Generator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target.html">Target Info APIs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#targetinfo">TargetInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#target-apis">Target APIs</a></li>
@@ -247,7 +249,7 @@
 <li><p>After building the project all we need to do is <code class="docutils literal notranslate"><span class="pre">-lbuildcc</span> <span class="pre">-ltiny-process-library</span></code> or equivalent</p></li>
 </ul>
 <p class="plantuml">
-<img src="../_images/plantuml-0217fffc78ce874c8847e87d1a5f460f94194815.png" alt="rectangle Flatbuffers as flatbuffers
+<img src="../_images/plantuml-062ce616cfc91480b82e6700bd3638d725e92552.png" alt="rectangle JSON as json
 rectangle fmt as fmt
 rectangle spdlog as spdlog
 rectangle Taskflow as taskflow
@@ -256,7 +258,7 @@ rectangle &quot;tiny-process-library&quot; as tpl
 
 rectangle BuildCC as buildcc
 
-flatbuffers -up-&gt; buildcc
+json -up-&gt; buildcc
 fmt -up-&gt; buildcc
 spdlog -up-&gt; buildcc
 taskflow -up-&gt; buildcc
@@ -273,7 +275,7 @@ tpl -up-&gt; buildcc"/>
 <li><p>Please see <a class="reference internal" href="testing.html"><span class="doc">Testing</span></a> for more information of how the <code class="docutils literal notranslate"><span class="pre">mock_*</span></code> equivalent of these libraries are used</p></li>
 </ul>
 <p class="plantuml">
-<img src="../_images/plantuml-ec70faad6a43503cdb6747457536977d7eca7583.png" alt="rectangle Flatbuffers as flatbuffers #palegreen
+<img src="../_images/plantuml-ae3f7ebf4d173c6318e66ad7923fce75225f7336.png" alt="rectangle JSON as json #palegreen
 rectangle fmt as fmt #palegreen
 rectangle spdlog as spdlog #palegreen
 rectangle Taskflow as taskflow #palegreen
@@ -299,7 +301,7 @@ tpl .up.&gt; env
 cli11 -up-&gt; args
 taskflow -up-&gt; register
 
-flatbuffers .up.&gt; schema
+json .up.&gt; schema
 env -up-&gt; schema
 
 schema -up-&gt; toolchain

@@ -185,7 +185,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target_utils.html">Target Utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html">Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html">Template Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html#file-generator">File Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_api/generator.html#custom-generator">Custom Generator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target.html">Target Info APIs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#targetinfo">TargetInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/target.html#target-apis">Target APIs</a></li>
@@ -432,7 +434,7 @@
 <span class="c"># fmt is imported by spdlog by default</span>
 <span class="nb">find_package</span><span class="p">(</span><span class="s">fmt_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">&quot;fmt&quot;</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
 <span class="nb">find_package</span><span class="p">(</span><span class="s">spdlog_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">&quot;spdlog&quot;</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
-<span class="nb">find_package</span><span class="p">(</span><span class="s">flatbuffers_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">&quot;flatbuffers&quot;</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">nlohmann_json_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">&quot;nlohmann_json&quot;</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
 <span class="nb">find_package</span><span class="p">(</span><span class="s">taskflow_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">&quot;Taskflow&quot;</span><span class="w"> </span><span class="s2">&quot;taskflow&quot;</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
 <span class="nb">find_package</span><span class="p">(</span><span class="s">CLI11_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">&quot;CLI11&quot;</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
 <span class="nb">find_package</span><span class="p">(</span><span class="s">tiny_process_library_package</span><span class="w"> </span><span class="s">NAMES</span><span class="w"> </span><span class="s2">&quot;tiny-process-library&quot;</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
@@ -441,7 +443,7 @@
 
 <span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Find package: ${fmt_package_DIR}&quot;</span><span class="p">)</span>
 <span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Find package: ${spdlog_package_DIR}&quot;</span><span class="p">)</span>
-<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Find package: ${flatbuffers_package_DIR}&quot;</span><span class="p">)</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Find package: ${nlohmann_json_package_DIR}&quot;</span><span class="p">)</span>
 <span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Find package: ${taskflow_package_DIR}&quot;</span><span class="p">)</span>
 <span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Find package: ${CLI11_package_DIR}&quot;</span><span class="p">)</span>
 <span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Find package: ${tiny_process_library_package_DIR}&quot;</span><span class="p">)</span><span class="w"> </span><span class="c">#</span>

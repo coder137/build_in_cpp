@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Target Info APIs" href="target.html" /><link rel="prev" title="Target Utils" href="target_utils.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>Generator - BuildCC 0.1.1 documentation</title>
+        <title>Template Generator - BuildCC 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -133,7 +133,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -185,7 +185,9 @@
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target_utils.html">Target Utils</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Generator</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Template Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#file-generator">File Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-generator">Custom Generator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target.html">Target Info APIs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target.html#targetinfo">TargetInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="target.html#target-apis">Target APIs</a></li>
@@ -231,27 +233,130 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <div class="section" id="generator">
-<h1>Generator<a class="headerlink" href="#generator" title="Permalink to this heading">#</a></h1>
-<div class="section" id="generator-h">
-<h2>generator.h<a class="headerlink" href="#generator-h" title="Permalink to this heading">#</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenclass: Cannot find class “buildcc::Generator” in doxygen xml output for project “buildcc_documentation” from directory: /home/runner/work/build_in_cpp/build_in_cpp/build/xml</p>
+          <div class="section" id="template-generator">
+<h1>Template Generator<a class="headerlink" href="#template-generator" title="Permalink to this heading">#</a></h1>
+<p>&gt; TODO,</p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygentypedef: Cannot find typedef “BaseGenerator” in doxygen xml output for project “buildcc_documentation” from directory: /home/runner/work/build_in_cpp/build_in_cpp/build/xml</p>
+<div class="section" id="file-generator">
+<h1>File Generator<a class="headerlink" href="#file-generator" title="Permalink to this heading">#</a></h1>
+<p>&gt; TODO</p>
 </div>
+<div class="section" id="custom-generator">
+<h1>Custom Generator<a class="headerlink" href="#custom-generator" title="Permalink to this heading">#</a></h1>
+<div class="section" id="custom-generator-h">
+<h2>custom_generator.h<a class="headerlink" href="#custom-generator-h" title="Permalink to this heading">#</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15CustomGeneratorE">
+<span id="_CPPv3N7buildcc15CustomGeneratorE"></span><span id="_CPPv2N7buildcc15CustomGeneratorE"></span><span id="buildcc::CustomGenerator"></span><span class="target" id="classbuildcc_1_1CustomGenerator"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CustomGenerator</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">internal</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">BuilderInterface</span></span><a class="headerlink" href="#_CPPv4N7buildcc15CustomGeneratorE" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>Subclassed by buildcc::FileGenerator, buildcc::TemplateGenerator</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15CustomGenerator15CustomGeneratorERKNSt6stringERK9TargetEnv">
+<span id="_CPPv3N7buildcc15CustomGenerator15CustomGeneratorERKNSt6stringERK9TargetEnv"></span><span id="_CPPv2N7buildcc15CustomGenerator15CustomGeneratorERKNSt6stringERK9TargetEnv"></span><span id="buildcc::CustomGenerator::CustomGenerator__ssCR.TargetEnvCR"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1acec70032620b89f0f62e6b73c1fc462f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CustomGenerator</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc9TargetEnvE" title="buildcc::TargetEnv"><span class="n"><span class="pre">TargetEnv</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">env</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc15CustomGenerator15CustomGeneratorERKNSt6stringERK9TargetEnv" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15CustomGeneratorD0Ev">
+<span id="_CPPv3N7buildcc15CustomGeneratorD0Ev"></span><span id="_CPPv2N7buildcc15CustomGeneratorD0Ev"></span><span id="buildcc::CustomGenerator::~CustomGenerator"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1a5b022e0b188ce694593b1849cd6346cb"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~CustomGenerator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N7buildcc15CustomGeneratorD0Ev" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15CustomGenerator15CustomGeneratorERK15CustomGenerator">
+<span id="_CPPv3N7buildcc15CustomGenerator15CustomGeneratorERK15CustomGenerator"></span><span id="_CPPv2N7buildcc15CustomGenerator15CustomGeneratorERK15CustomGenerator"></span><span id="buildcc::CustomGenerator::CustomGenerator__CustomGeneratorCR"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1a8263a472a75aa7de134711d04fcca3cd"></span><span class="sig-name descname"><span class="n"><span class="pre">CustomGenerator</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7buildcc15CustomGenerator15CustomGeneratorERK15CustomGenerator" title="buildcc::CustomGenerator::CustomGenerator"><span class="n"><span class="pre">CustomGenerator</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N7buildcc15CustomGenerator15CustomGeneratorERK15CustomGenerator" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15CustomGenerator10AddPatternERKNSt6stringERKNSt6stringE">
+<span id="_CPPv3N7buildcc15CustomGenerator10AddPatternERKNSt6stringERKNSt6stringE"></span><span id="_CPPv2N7buildcc15CustomGenerator10AddPatternERKNSt6stringERKNSt6stringE"></span><span id="buildcc::CustomGenerator::AddPattern__ssCR.ssCR"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1ad7d70dd8fefb23e4b9359d8f8583a184"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddPattern</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">identifier</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pattern</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc15CustomGenerator10AddPatternERKNSt6stringERKNSt6stringE" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15CustomGenerator11AddPatternsERKNSt13unordered_mapINSt6stringENSt6stringEEE">
+<span id="_CPPv3N7buildcc15CustomGenerator11AddPatternsERKNSt13unordered_mapINSt6stringENSt6stringEEE"></span><span id="_CPPv2N7buildcc15CustomGenerator11AddPatternsERKNSt13unordered_mapINSt6stringENSt6stringEEE"></span><span id="buildcc::CustomGenerator::AddPatterns__std::unordered_map:ss.ss:CR"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1a589ced133a01f28af4ed8b15ba5ea3a7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddPatterns</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pattern_map</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc15CustomGenerator11AddPatternsERKNSt13unordered_mapINSt6stringENSt6stringEEE" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc15CustomGenerator12ParsePatternERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE">
+<span id="_CPPv3NK7buildcc15CustomGenerator12ParsePatternERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE"></span><span id="_CPPv2NK7buildcc15CustomGenerator12ParsePatternERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE"></span><span id="buildcc::CustomGenerator::ParsePattern__ssCR.std::unordered_map:cCP.ss:CRC"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1a0c95f6860b17538752e4e95e147c7026"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ParsePattern</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pattern</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">arguments</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc15CustomGenerator12ParsePatternERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15CustomGenerator9AddIdInfoERKNSt6stringERKNSt13unordered_setINSt6stringEEERKNSt13unordered_setINSt6stringEEERK10GenerateCbNSt10shared_ptrI17CustomBlobHandlerEE">
+<span id="_CPPv3N7buildcc15CustomGenerator9AddIdInfoERKNSt6stringERKNSt13unordered_setINSt6stringEEERKNSt13unordered_setINSt6stringEEERK10GenerateCbNSt10shared_ptrI17CustomBlobHandlerEE"></span><span id="_CPPv2N7buildcc15CustomGenerator9AddIdInfoERKNSt6stringERKNSt13unordered_setINSt6stringEEERKNSt13unordered_setINSt6stringEEERK10GenerateCbNSt10shared_ptrI17CustomBlobHandlerEE"></span><span id="buildcc::CustomGenerator::AddIdInfo__ssCR.std::unordered_set:ss:CR.std::unordered_set:ss:CR.GenerateCbCR.std::shared_ptr:CustomBlobHandler:"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1aa7cb37c0fe713b132c93ab6861640d32"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddIdInfo</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_set</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">inputs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_set</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">outputs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">GenerateCb</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">generate_cb</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">CustomBlobHandler</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">blob_handler</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc15CustomGenerator9AddIdInfoERKNSt6stringERKNSt13unordered_setINSt6stringEEERKNSt13unordered_setINSt6stringEEERK10GenerateCbNSt10shared_ptrI17CustomBlobHandlerEE" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>Single Generator task for inputs-&gt;generate_cb-&gt;outputs. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – Unique id associated with Generator task </p></li>
+<li><p><strong>inputs</strong> – File inputs </p></li>
+<li><p><strong>outputs</strong> – File outputs </p></li>
+<li><p><strong>generate_cb</strong> – User-defined generate callback to build outputs from the provided inputs </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15CustomGenerator12AddGroupInfoERKNSt6stringENSt16initializer_listINSt6stringEEERK12DependencyCb">
+<span id="_CPPv3N7buildcc15CustomGenerator12AddGroupInfoERKNSt6stringENSt16initializer_listINSt6stringEEERK12DependencyCb"></span><span id="_CPPv2N7buildcc15CustomGenerator12AddGroupInfoERKNSt6stringENSt16initializer_listINSt6stringEEERK12DependencyCb"></span><span id="buildcc::CustomGenerator::AddGroupInfo__ssCR.std::initializer_list:ss:.DependencyCbCR"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1a3b62cce778b10ea9897beeeee07fc817"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddGroupInfo</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">group_id</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">initializer_list</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ids</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DependencyCb</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dependency_cb</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">DependencyCb</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc15CustomGenerator12AddGroupInfoERKNSt6stringENSt16initializer_listINSt6stringEEERK12DependencyCb" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15CustomGenerator15AddDependencyCbERK12DependencyCb">
+<span id="_CPPv3N7buildcc15CustomGenerator15AddDependencyCbERK12DependencyCb"></span><span id="_CPPv2N7buildcc15CustomGenerator15AddDependencyCbERK12DependencyCb"></span><span id="buildcc::CustomGenerator::AddDependencyCb__DependencyCbCR"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1ad301140ff30b0210384b0e0bcafce489"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddDependencyCb</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DependencyCb</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dependency_cb</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc15CustomGenerator15AddDependencyCbERK12DependencyCb" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>Setup dependencies between Tasks using their <code class="docutils literal notranslate"><span class="pre">id</span></code> For example: <code class="docutils literal notranslate"><span class="pre">task_map[&quot;id1&quot;].precede(task_map[&quot;id2&quot;])</span></code> </p>
+<p>IMPORTANT: Successor tasks will not automatically run if dependent task is run. The Dependency callback only sets precedence (order in which your tasks should run) Default behaviour when dependency callback is not supplied: All task <code class="docutils literal notranslate"><span class="pre">id</span></code>s run in parallel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dependency_cb</strong> – Unordered map of <code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">task</span></code> The map can be safely mutated. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7buildcc15CustomGenerator5BuildEv">
+<span id="_CPPv3N7buildcc15CustomGenerator5BuildEv"></span><span id="_CPPv2N7buildcc15CustomGenerator5BuildEv"></span><span id="buildcc::CustomGenerator::Build"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1af4c53a382d69b9e63d931f1fa09f4bc0"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Build</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N7buildcc15CustomGenerator5BuildEv" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc15CustomGenerator7GetNameEv">
+<span id="_CPPv3NK7buildcc15CustomGenerator7GetNameEv"></span><span id="_CPPv2NK7buildcc15CustomGenerator7GetNameEv"></span><span id="buildcc::CustomGenerator::GetNameC"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1a9c0cad2a99b4ed7d19aa1a42e11cea1f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetName</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc15CustomGenerator7GetNameEv" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc15CustomGenerator13GetBinaryPathEv">
+<span id="_CPPv3NK7buildcc15CustomGenerator13GetBinaryPathEv"></span><span id="_CPPv2NK7buildcc15CustomGenerator13GetBinaryPathEv"></span><span id="buildcc::CustomGenerator::GetBinaryPathC"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1a0cda6bec3e7cdb6e2b764876f9e14e14"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetBinaryPath</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc15CustomGenerator13GetBinaryPathEv" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc15CustomGenerator10GetRootDirEv">
+<span id="_CPPv3NK7buildcc15CustomGenerator10GetRootDirEv"></span><span id="_CPPv2NK7buildcc15CustomGenerator10GetRootDirEv"></span><span id="buildcc::CustomGenerator::GetRootDirC"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1a7485cfc704c17038995f8270e59ec3a4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetRootDir</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc15CustomGenerator10GetRootDirEv" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc15CustomGenerator11GetBuildDirEv">
+<span id="_CPPv3NK7buildcc15CustomGenerator11GetBuildDirEv"></span><span id="_CPPv2NK7buildcc15CustomGenerator11GetBuildDirEv"></span><span id="buildcc::CustomGenerator::GetBuildDirC"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1a4d76a11b6c6ee4523b93958c0875a173"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetBuildDir</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc15CustomGenerator11GetBuildDirEv" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7buildcc15CustomGenerator3GetERKNSt6stringE">
+<span id="_CPPv3NK7buildcc15CustomGenerator3GetERKNSt6stringE"></span><span id="_CPPv2NK7buildcc15CustomGenerator3GetERKNSt6stringE"></span><span id="buildcc::CustomGenerator::Get__ssCRC"></span><span class="target" id="classbuildcc_1_1CustomGenerator_1ac4a6a608d6e45a35a8056158bd651dff"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Get</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">file_identifier</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc15CustomGenerator3GetERKNSt6stringE" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
 </div>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h2>
+<p>&gt; TODO, Update example</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// Example Setup</span>
 <span class="linenos"> 2</span><span class="n">TargetEnv</span><span class="w"> </span><span class="n">gen_env</span><span class="p">(</span><span class="s">&quot;gen_root&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;gen_build&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="linenos"> 3</span><span class="kt">bool</span><span class="w"> </span><span class="n">parallel</span><span class="p">{</span><span class="nb">true</span><span class="p">};</span><span class="w"></span>
@@ -330,28 +435,8 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Generator</a><ul>
-<li><a class="reference internal" href="#generator-h">generator.h</a></li>
-<li><a class="reference internal" href="#example">Example</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

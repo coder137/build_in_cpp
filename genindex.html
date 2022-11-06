@@ -184,7 +184,9 @@
 <li class="toctree-l2"><a class="reference internal" href="user_api/toolchain.html">Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_api/toolchain.html#specialized-toolchain">Specialized Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_api/target_utils.html">Target Utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_api/generator.html">Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_api/generator.html">Template Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_api/generator.html#file-generator">File Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_api/generator.html#custom-generator">Custom Generator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_api/target.html">Target Info APIs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_api/target.html#targetinfo">TargetInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_api/target.html#target-apis">Target APIs</a></li>
@@ -339,6 +341,36 @@
         <li><a href="user_api/target.html#_CPPv4N7buildcc14BaseTargetInfoE">buildcc::BaseTargetInfo (C++ type)</a>
 </li>
         <li><a href="user_api/toolchain.html#_CPPv4N7buildcc13BaseToolchainE">buildcc::BaseToolchain (C++ type)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc15CustomGeneratorE">buildcc::CustomGenerator (C++ class)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc15CustomGenerator15AddDependencyCbERK12DependencyCb">buildcc::CustomGenerator::AddDependencyCb (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc15CustomGenerator12AddGroupInfoERKNSt6stringENSt16initializer_listINSt6stringEEERK12DependencyCb">buildcc::CustomGenerator::AddGroupInfo (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc15CustomGenerator9AddIdInfoERKNSt6stringERKNSt13unordered_setINSt6stringEEERKNSt13unordered_setINSt6stringEEERK10GenerateCbNSt10shared_ptrI17CustomBlobHandlerEE">buildcc::CustomGenerator::AddIdInfo (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc15CustomGenerator10AddPatternERKNSt6stringERKNSt6stringE">buildcc::CustomGenerator::AddPattern (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc15CustomGenerator11AddPatternsERKNSt13unordered_mapINSt6stringENSt6stringEEE">buildcc::CustomGenerator::AddPatterns (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc15CustomGenerator5BuildEv">buildcc::CustomGenerator::Build (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc15CustomGenerator15CustomGeneratorERK15CustomGenerator">buildcc::CustomGenerator::CustomGenerator (C++ function)</a>, <a href="user_api/generator.html#_CPPv4N7buildcc15CustomGenerator15CustomGeneratorERKNSt6stringERK9TargetEnv">[1]</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4NK7buildcc15CustomGenerator3GetERKNSt6stringE">buildcc::CustomGenerator::Get (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4NK7buildcc15CustomGenerator13GetBinaryPathEv">buildcc::CustomGenerator::GetBinaryPath (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4NK7buildcc15CustomGenerator11GetBuildDirEv">buildcc::CustomGenerator::GetBuildDir (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4NK7buildcc15CustomGenerator7GetNameEv">buildcc::CustomGenerator::GetName (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4NK7buildcc15CustomGenerator10GetRootDirEv">buildcc::CustomGenerator::GetRootDir (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4NK7buildcc15CustomGenerator12ParsePatternERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE">buildcc::CustomGenerator::ParsePattern (C++ function)</a>
+</li>
+        <li><a href="user_api/generator.html#_CPPv4N7buildcc15CustomGeneratorD0Ev">buildcc::CustomGenerator::~CustomGenerator (C++ function)</a>
 </li>
         <li><a href="user_api/target.html#_CPPv4N7buildcc17DynamicTarget_gccE">buildcc::DynamicTarget_gcc (C++ class)</a>
 </li>
@@ -560,12 +592,22 @@
 </li>
         <li><a href="user_api/target.html#_CPPv4NK7buildcc8internal12TargetEnvApi16GetTargetRootDirEv">buildcc::internal::TargetEnvApi::GetTargetRootDir (C++ function)</a>
 </li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m29CustomGeneratorExpect_IdAddedEjP15CustomGenerator">buildcc::m::CustomGeneratorExpect_IdAdded (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m31CustomGeneratorExpect_IdRemovedEjP15CustomGenerator">buildcc::m::CustomGeneratorExpect_IdRemoved (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m31CustomGeneratorExpect_IdUpdatedEjP15CustomGenerator">buildcc::m::CustomGeneratorExpect_IdUpdated (C++ function)</a>
+</li>
+        <li><a href="arch/testing.html#_CPPv4N7buildcc1m21CustomGeneratorRunnerER15CustomGenerator">buildcc::m::CustomGeneratorRunner (C++ function)</a>
+</li>
         <li><a href="arch/testing.html#_CPPv4N7buildcc1m23TargetExpect_DirChangedEjP6Target">buildcc::m::TargetExpect_DirChanged (C++ function)</a>
 </li>
         <li><a href="arch/testing.html#_CPPv4N7buildcc1m31TargetExpect_ExternalLibChangedEjP6Target">buildcc::m::TargetExpect_ExternalLibChanged (C++ function)</a>
 </li>
         <li><a href="arch/testing.html#_CPPv4N7buildcc1m24TargetExpect_FlagChangedEjP6Target">buildcc::m::TargetExpect_FlagChanged (C++ function)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="arch/testing.html#_CPPv4N7buildcc1m22TargetExpect_PathAddedEjP6Target">buildcc::m::TargetExpect_PathAdded (C++ function)</a>
 </li>
         <li><a href="arch/testing.html#_CPPv4N7buildcc1m24TargetExpect_PathRemovedEjP6Target">buildcc::m::TargetExpect_PathRemoved (C++ function)</a>
@@ -584,8 +626,6 @@
 </li>
         <li><a href="user_api/environment.html#_CPPv4N7buildcc4OsId5LinuxE">buildcc::OsId::Linux (C++ enumerator)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="user_api/environment.html#_CPPv4N7buildcc4OsId3MacE">buildcc::OsId::Mac (C++ enumerator)</a>
 </li>
         <li><a href="user_api/environment.html#_CPPv4N7buildcc4OsId9UndefinedE">buildcc::OsId::Undefined (C++ enumerator)</a>
