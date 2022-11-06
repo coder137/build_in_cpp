@@ -8,7 +8,7 @@ These third party libraries are added as submodules since they aren't meant to b
 
 - fmt (Formatting)
 - spdlog (Logging)
-- flatbuffers (Serialization)
+- json (Serialization)
 - CLI11 (Argument Parsing)
 - Taskflow (Parallel Programming)
 

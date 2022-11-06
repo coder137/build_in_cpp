@@ -31,6 +31,10 @@ Also see [Target::BuildRecompile() in build.cpp](../../buildcc/lib/target/src/ta
   - For example: an array cannot be a root when writing your schema.
 - `flexbuffer` can be used to generate flexibile + efficient JSON.
 
+# JSON
+
+- See https://github.com/coder137/build_in_cpp/issues/222
+
 # Fmtlib and Spdlog
 
 - Fmtlib and Spdlog are extremely popular libraries for formatting and logging.
