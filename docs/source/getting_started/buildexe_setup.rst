@@ -144,7 +144,7 @@ For example we download the **fmt library** to our libs folder
     **** [git cloned]
     *** spdlog
     **** [git cloned]
-    *** flatbuffers
+    *** json
     **** [git cloned]
     ** host
     *** gcc_x86_64-linux-gnu_9.3.0.toml
