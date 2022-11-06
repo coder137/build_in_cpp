@@ -18,11 +18,10 @@
 
 namespace buildcc {
 
-void buildcc_cb(BaseTarget &target, const TargetInfo &flatbuffers_ho,
-                const TargetInfo &nlohmann_json_ho, const TargetInfo &fmt_ho,
-                const TargetInfo &spdlog_ho, const TargetInfo &cli11_ho,
-                const TargetInfo &taskflow_ho, const TargetInfo &tl_optional_ho,
-                const BaseTarget &tpl) {
+void buildcc_cb(BaseTarget &target, const TargetInfo &nlohmann_json_ho,
+                const TargetInfo &fmt_ho, const TargetInfo &spdlog_ho,
+                const TargetInfo &cli11_ho, const TargetInfo &taskflow_ho,
+                const TargetInfo &tl_optional_ho, const BaseTarget &tpl) {
   // NOTE, Build as single lib
   target.AddIncludeDir("", true);
 
@@ -87,9 +86,6 @@ void buildcc_cb(BaseTarget &target, const TargetInfo &flatbuffers_ho,
       SyncOption::IncludeDirs,
       SyncOption::HeaderFiles,
   };
-
-  // FLATBUFFERS HO
-  target.Insert(flatbuffers_ho, kInsertOptions);
 
   // NLOHMANN JSON HO
   target.Insert(nlohmann_json_ho, kInsertOptions);
@@ -175,17 +171,6 @@ static void global_flags_cb(TargetInfo &global_info,
 }
 
 void BuildBuildCC::Initialize() {
-  (void)storage_.Add<ExecutableTarget_generic>(
-      kFlatcExeName, kFlatcExeName, toolchain_,
-      TargetEnv(env_.GetTargetRootDir() / "third_party" / "flatbuffers",
-                env_.GetTargetBuildDir()));
-
-  // Flatbuffers HO lib
-  (void)storage_.Add<TargetInfo>(
-      kFlatbuffersHoName, toolchain_,
-      TargetEnv(env_.GetTargetRootDir() / "third_party" / "flatbuffers",
-                env_.GetTargetBuildDir()));
-
   // Nlohmann json HO lib
   (void)storage_.Add<TargetInfo>(
       kNlohmannJsonHoName, toolchain_,
@@ -240,7 +225,6 @@ void BuildBuildCC::Initialize() {
 }
 
 void BuildBuildCC::Setup(const ArgToolchainState &state) {
-  auto &flatbuffers_ho_lib = GetFlatbuffersHo();
   auto &nlohmann_json_ho_lib = GetNlohmannJsonHo();
   auto &cli11_ho_lib = GetCli11Ho();
   auto &fmt_ho_lib = GetFmtHo();
@@ -250,7 +234,6 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
   auto &tpl_lib = GetTpl();
   auto &buildcc_lib = GetBuildcc();
   Reg::Toolchain(state)
-      .Func(flatbuffers_ho_cb, flatbuffers_ho_lib)
       .Func(nlohmann_json_ho_cb, nlohmann_json_ho_lib)
       .Func(cli11_ho_cb, cli11_ho_lib)
       .Func(fmt_ho_cb, fmt_ho_lib)
@@ -260,9 +243,9 @@ void BuildBuildCC::Setup(const ArgToolchainState &state) {
       .Func(global_flags_cb, tpl_lib, toolchain_)
       .Build(tpl_cb, tpl_lib)
       .Func(global_flags_cb, buildcc_lib, toolchain_)
-      .Build(buildcc_cb, buildcc_lib, flatbuffers_ho_lib, nlohmann_json_ho_lib,
-             fmt_ho_lib, spdlog_ho_lib, cli11_ho_lib, taskflow_ho_lib,
-             tl_optional_ho_lib, tpl_lib)
+      .Build(buildcc_cb, buildcc_lib, nlohmann_json_ho_lib, fmt_ho_lib,
+             spdlog_ho_lib, cli11_ho_lib, taskflow_ho_lib, tl_optional_ho_lib,
+             tpl_lib)
       .Dep(buildcc_lib, tpl_lib);
 }
 

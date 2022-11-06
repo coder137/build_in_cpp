@@ -17,7 +17,6 @@
 #include "buildcc.h"
 
 #include "bootstrap/build_cli11.h"
-#include "bootstrap/build_flatbuffers.h"
 #include "bootstrap/build_fmtlib.h"
 #include "bootstrap/build_spdlog.h"
 #include "bootstrap/build_taskflow.h"
