@@ -181,9 +181,8 @@ public:
 private:
   void Initialize();
 
-  void TaskRunner(bool run, const std::string &id);
-  tf::Task CreateTaskRunner(tf::Subflow &subflow, bool build,
-                            const std::string &id);
+  tf::Task CreateTaskRunner(tf::Subflow &subflow, const std::string &id);
+  void TaskRunner(const std::string &id);
 
   void GenerateTask();
   void BuildGenerate();

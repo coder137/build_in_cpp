@@ -180,8 +180,7 @@ void CustomGenerator::GenerateTask() {
           }
 
           for (const auto &id : group_metadata.ids) {
-            bool build = comparator_.AddedId(id);
-            auto task = CreateTaskRunner(s, build, id);
+            auto task = CreateTaskRunner(s, id);
             task.name(id);
             reg_tasks.try_emplace(id, task);
           }
@@ -198,8 +197,7 @@ void CustomGenerator::GenerateTask() {
 
       // Ungrouped tasks
       for (const auto &id : ungrouped_ids_) {
-        bool build = comparator_.AddedId(id);
-        auto task = CreateTaskRunner(subflow, build, id);
+        auto task = CreateTaskRunner(subflow, id);
         task.name(id);
         registered_tasks.try_emplace(id, task);
       }
@@ -243,21 +241,21 @@ void CustomGenerator::InvokeDependencyCb(
   }
 }
 
-tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow, bool build,
+tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow,
                                            const std::string &id) {
-  return subflow.emplace([&, build, id]() {
+  return subflow.emplace([&, id]() {
     if (env::get_task_state() != env::TaskState::SUCCESS) {
       return;
     }
     try {
-      TaskRunner(build, id);
+      TaskRunner(id);
     } catch (...) {
       env::set_task_state(env::TaskState::FAILURE);
     }
   });
 }
 
-void CustomGenerator::TaskRunner(bool run, const std::string &id) {
+void CustomGenerator::TaskRunner(const std::string &id) {
   // Convert
   {
     auto &curr_id_info = user_.ids.at(id);
@@ -270,23 +268,21 @@ void CustomGenerator::TaskRunner(bool run, const std::string &id) {
 
   // Run
   const auto &current_id_info = user_.ids.at(id);
-  bool rerun = false;
-  if (run) {
-    rerun = true;
-  } else {
+  bool run = comparator_.AddedId(id);
+  if (!run) {
     const auto &previous_info = serialization_.GetLoad().internal_ids.at(id);
-    rerun =
+    run =
         internal::CheckPaths(previous_info.internal_inputs,
                              current_id_info.internal_inputs) !=
             internal::PathState::kNoChange ||
         internal::CheckChanged(previous_info.outputs, current_id_info.outputs);
-    if (!rerun && current_id_info.blob_handler != nullptr) {
-      rerun = current_id_info.blob_handler->CheckChanged(
+    if (!run && current_id_info.blob_handler != nullptr) {
+      run = current_id_info.blob_handler->CheckChanged(
           previous_info.userblob, current_id_info.userblob);
     }
   }
 
-  if (rerun) {
+  if (run) {
     dirty_ = true;
     buildcc::CustomGeneratorContext ctx(command_, current_id_info.inputs,
                                         current_id_info.outputs,
