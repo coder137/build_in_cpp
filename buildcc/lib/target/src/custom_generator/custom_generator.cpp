@@ -60,7 +60,7 @@ void CustomGenerator::AddIdInfo(
                     fmt::format("Duplicate id {} detected", id));
   ASSERT_FATAL(generate_cb, "Invalid callback provided");
 
-  UserIdInfo schema;
+  UserCustomGeneratorSchema::UserIdInfo schema;
   for (const auto &i : inputs) {
     fs::path input = string_as_path(command_.Construct(i));
     schema.inputs.emplace(std::move(input));
@@ -71,6 +71,7 @@ void CustomGenerator::AddIdInfo(
   }
   schema.generate_cb = generate_cb;
   schema.blob_handler = std::move(blob_handler);
+
   user_.ids.try_emplace(id, std::move(schema));
   ungrouped_ids_.emplace(id);
 }
@@ -127,48 +128,30 @@ void CustomGenerator::Initialize() {
   tf_.name(name_);
 }
 
-void CustomGenerator::BuildGenerate(
-    std::unordered_set<std::string> &gen_selected_ids,
-    std::unordered_set<std::string> &dummy_gen_selected_ids) {
+/**
+ * @brief Check which ids need to be rebuilt
+ *
+ * @param gen_selected_ids
+ * @param dummy_gen_selected_ids
+ */
+void CustomGenerator::BuildGenerate() {
   if (!serialization_.IsLoaded()) {
-    std::for_each(user_.ids.begin(), user_.ids.end(), [&](const auto &iter) {
-      gen_selected_ids.insert(iter.first);
-    });
+    comparator_.AddAllIds();
     dirty_ = true;
   } else {
-    // DONE, Conditionally select internal_ids depending on what has
-    // changed
-    const auto &prev_ids = serialization_.GetLoad().internal_ids;
-    const auto &curr_ids = user_.ids;
+    comparator_.CompareIds();
 
-    // DONE, MAP REMOVED condition Check if prev_ids exists in
-    // curr_ids If prev_ids does not exist in
-    // curr_ids, has been removed from existing build We need this
-    // condition to only set the dirty_ flag
-    for (const auto &[id, _] : prev_ids) {
-      if (curr_ids.find(id) == curr_ids.end()) {
-        // MAP REMOVED condition
-        IdRemoved();
-        dirty_ = true;
-        break;
-      }
+    const bool is_removed = !comparator_.RemovedIds().empty();
+    const bool is_added = !comparator_.AddedIds().empty();
+    dirty_ = is_removed || is_added;
+
+    if (is_removed) {
+      IdRemoved();
     }
 
-    // DONE, MAP ADDED condition Check if curr_ids exists in
-    // prev_ids If curr_ids does not exist in
-    // prev_ids, has been added to existing build
-    for (const auto &[id, _] : curr_ids) {
-      if (prev_ids.find(id) == prev_ids.end()) {
-        // MAP ADDED condition
-        IdAdded();
-        gen_selected_ids.insert(id);
-        dirty_ = true;
-      } else {
-        // MAP UPDATED condition (*checked later)
-        // This is because tasks can have dependencies amongst each other we can
-        // compute task level rebuilds later
-        dummy_gen_selected_ids.insert(id);
-      }
+    for (const auto &id : comparator_.AddedIds()) {
+      (void)id;
+      IdAdded();
     }
   }
 }
@@ -183,9 +166,7 @@ void CustomGenerator::GenerateTask() {
       std::unordered_map<std::string, tf::Task> registered_tasks;
 
       // Selected ids for build
-      std::unordered_set<std::string> selected_ids;
-      std::unordered_set<std::string> dummy_selected_ids;
-      BuildGenerate(selected_ids, dummy_selected_ids);
+      BuildGenerate();
 
       // Grouped tasks
       for (const auto &[first, second] : grouped_ids_) {
@@ -199,7 +180,7 @@ void CustomGenerator::GenerateTask() {
           }
 
           for (const auto &id : group_metadata.ids) {
-            bool build = selected_ids.count(id) == 1;
+            bool build = comparator_.AddedId(id);
             auto task = CreateTaskRunner(s, build, id);
             task.name(id);
             reg_tasks.try_emplace(id, task);
@@ -217,7 +198,7 @@ void CustomGenerator::GenerateTask() {
 
       // Ungrouped tasks
       for (const auto &id : ungrouped_ids_) {
-        bool build = selected_ids.count(id) == 1;
+        bool build = comparator_.AddedId(id);
         auto task = CreateTaskRunner(subflow, build, id);
         task.name(id);
         registered_tasks.try_emplace(id, task);

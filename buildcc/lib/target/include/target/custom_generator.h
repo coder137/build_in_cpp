@@ -86,13 +86,14 @@ private:
   virtual std::vector<uint8_t> Serialize() const = 0;
 };
 
-struct UserIdInfo : internal::CustomGeneratorSchema::IdInfo {
-  fs_unordered_set inputs;
-  GenerateCb generate_cb;
-  std::shared_ptr<CustomBlobHandler> blob_handler{nullptr};
-};
-
 struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
+  struct UserIdInfo : internal::CustomGeneratorSchema::IdInfo {
+    fs_unordered_set inputs; // TODO, Remove
+    GenerateCb generate_cb;
+    std::shared_ptr<CustomBlobHandler> blob_handler{nullptr};
+  };
+
+  using UserIdPair = std::pair<const IdKey, UserIdInfo>;
   std::unordered_map<IdKey, UserIdInfo> ids;
 
   void ConvertToInternal() {
@@ -110,7 +111,8 @@ public:
   CustomGenerator(const std::string &name, const TargetEnv &env)
       : name_(name),
         env_(env.GetTargetRootDir(), env.GetTargetBuildDir() / name),
-        serialization_(env_.GetTargetBuildDir() / fmt::format("{}.bin", name)) {
+        serialization_(env_.GetTargetBuildDir() / fmt::format("{}.json", name)),
+        comparator_(serialization_.GetLoad(), user_) {
     Initialize();
   }
   virtual ~CustomGenerator() = default;
@@ -184,8 +186,7 @@ private:
                             const std::string &id);
 
   void GenerateTask();
-  void BuildGenerate(std::unordered_set<std::string> &gen_selected_ids,
-                     std::unordered_set<std::string> &dummy_gen_selected_ids);
+  void BuildGenerate();
 
   void InvokeDependencyCb(std::unordered_map<std::string, tf::Task>
                               &&registered_tasks) const noexcept;
@@ -207,19 +208,114 @@ private:
     void InvokeDependencyCb(const std::string &group_id,
                             std::unordered_map<std::string, tf::Task>
                                 &&registered_tasks) const noexcept {
-      if (!dependency_cb) {
-        return;
-      }
-      try {
-        dependency_cb(std::move(registered_tasks));
-      } catch (...) {
-        env::log_critical(
-            __FUNCTION__,
-            fmt::format("Dependency callback failed for group id {}",
-                        group_id));
-        env::set_task_state(env::TaskState::FAILURE);
+      if (dependency_cb) {
+        try {
+          dependency_cb(std::move(registered_tasks));
+        } catch (...) {
+          env::log_critical(
+              __FUNCTION__,
+              fmt::format("Dependency callback failed for group id {}",
+                          group_id));
+          env::set_task_state(env::TaskState::FAILURE);
+        }
       }
     }
+  };
+
+  struct Comparator {
+    Comparator(const internal::CustomGeneratorSchema &s,
+               const UserCustomGeneratorSchema &us)
+        : schema(s), user_schema(us) {}
+
+    enum class State {
+      kRemoved,
+      kAdded,
+      kCheckLater,
+    };
+
+    void AddAllIds() {
+      const auto &curr_ids = user_schema.ids;
+      for (const auto &[id, _] : curr_ids) {
+        id_state_info.at(State::kAdded).insert(id);
+      }
+    }
+
+    void CompareIds() {
+      const auto &prev_ids = schema.internal_ids;
+      const auto &curr_ids = user_schema.ids;
+
+      for (const auto &[prev_id, _] : prev_ids) {
+        if (curr_ids.find(prev_id) == curr_ids.end()) {
+          // Id Removed condition, previous id is not present in the current run
+          id_state_info.at(State::kRemoved).insert(prev_id);
+        }
+      }
+
+      for (const auto &[curr_id, _] : curr_ids) {
+        if (prev_ids.find(curr_id) == prev_ids.end()) {
+          // Id Added condition
+          id_state_info.at(State::kAdded).insert(curr_id);
+        } else {
+          // Id Check Later condition
+          id_state_info.at(State::kCheckLater).insert(curr_id);
+        }
+      }
+    }
+
+    void CompareGroups() {
+      const auto &prev_groups = schema.internal_groups;
+      const auto &curr_groups = user_schema.internal_groups;
+
+      for (const auto &[prev_group_id, _] : prev_groups) {
+        if (curr_groups.find(prev_group_id) == curr_groups.end()) {
+          // Group Removed condition
+          group_state_info.at(State::kRemoved).insert(prev_group_id);
+        }
+      }
+
+      for (const auto &[curr_group_id, curr_group_info] : curr_groups) {
+        if (prev_groups.find(curr_group_id) == prev_groups.end()) {
+          // Group Added condition
+          group_state_info.at(State::kAdded).insert(curr_group_id);
+        } else {
+          // Group Check Later condition
+          // NOTE, We cannot perform the check now since the input/metadata
+          // might be added during runtime (when task executes)
+          group_state_info.at(State::kCheckLater).insert(curr_group_id);
+        }
+      }
+    }
+
+    const std::unordered_set<std::string> &RemovedIds() const {
+      return id_state_info.at(State::kRemoved);
+    }
+
+    const std::unordered_set<std::string> &AddedIds() const {
+      return id_state_info.at(State::kAdded);
+    }
+
+    bool AddedId(const std::string &id) const {
+      return id_state_info.at(State::kAdded).count(id) == 1;
+    }
+
+    bool AddedGroupId(const std::string &group_id) const {
+      return group_state_info.at(State::kAdded).count(group_id) == 1;
+    }
+
+  private:
+    const internal::CustomGeneratorSchema &schema;
+    const UserCustomGeneratorSchema &user_schema;
+    std::unordered_map<State, std::unordered_set<std::string>> id_state_info{
+        {State::kRemoved, std::unordered_set<std::string>()},
+        {State::kAdded, std::unordered_set<std::string>()},
+        {State::kCheckLater, std::unordered_set<std::string>()},
+    };
+
+    std::unordered_map<State, std::unordered_set<std::string>> group_state_info{
+        {State::kRemoved, std::unordered_set<std::string>()},
+        {State::kAdded, std::unordered_set<std::string>()},
+        {State::kCheckLater, std::unordered_set<std::string>()},
+    };
   };
 
 private:
@@ -232,8 +328,12 @@ private:
   std::unordered_map<std::string, GroupMetadata> grouped_ids_;
   std::unordered_set<std::string> ungrouped_ids_;
 
+  // Comparator
+  Comparator comparator_;
+
   std::mutex success_schema_mutex_;
-  std::unordered_map<std::string, UserIdInfo> success_schema_;
+  std::unordered_map<std::string, UserCustomGeneratorSchema::UserIdInfo>
+      success_schema_;
 
   // Internal
   env::Command command_;
