@@ -139,6 +139,7 @@ void CustomGenerator::BuildGenerate() {
     comparator_.AddAllIds();
     dirty_ = true;
   } else {
+    // For IDS
     comparator_.CompareIds();
 
     const bool is_removed = !comparator_.RemovedIds().empty();
@@ -153,6 +154,11 @@ void CustomGenerator::BuildGenerate() {
       (void)id;
       IdAdded();
     }
+
+    // For GROUPS
+    // Group Removed
+    // Group Added
+    // Group Updated
   }
 }
 
@@ -163,34 +169,14 @@ void CustomGenerator::GenerateTask() {
     }
 
     try {
-      std::unordered_map<std::string, tf::Task> registered_tasks;
-
       // Selected ids for build
       BuildGenerate();
 
+      std::unordered_map<std::string, tf::Task> registered_tasks;
+
       // Grouped tasks
-      for (const auto &[first, second] : grouped_ids_) {
-        const auto &group_id = first;
-        const auto &group_metadata = second;
-        auto group_task = subflow.emplace([&](tf::Subflow &s) {
-          std::unordered_map<std::string, tf::Task> reg_tasks;
-
-          if (env::get_task_state() != env::TaskState::SUCCESS) {
-            return;
-          }
-
-          for (const auto &id : group_metadata.ids) {
-            auto task = CreateTaskRunner(s, id);
-            task.name(id);
-            reg_tasks.try_emplace(id, task);
-          }
-
-          // Dependency callback
-          group_metadata.InvokeDependencyCb(group_id, std::move(reg_tasks));
-
-          // NOTE, Do not call detach otherwise this will fail
-          s.join();
-        });
+      for (const auto &[group_id, group_metadata] : grouped_ids_) {
+        auto group_task = CreateGroupTask(subflow, group_metadata);
         group_task.name(group_id);
         registered_tasks.try_emplace(group_id, group_task);
       }
@@ -208,7 +194,7 @@ void CustomGenerator::GenerateTask() {
       // NOTE, Do not call detach otherwise this will fail
       subflow.join();
 
-      // Store dummy_selected and successfully run schema
+      // Store
       if (dirty_) {
         UserCustomGeneratorSchema user_final_schema;
         user_final_schema.ids.insert(success_schema_.begin(),
@@ -241,6 +227,28 @@ void CustomGenerator::InvokeDependencyCb(
   }
 }
 
+tf::Task CustomGenerator::CreateGroupTask(tf::FlowBuilder &builder,
+                                          const GroupMetadata &group_metadata) {
+  return builder.emplace([&](tf::Subflow &s) {
+    if (env::get_task_state() != env::TaskState::SUCCESS) {
+      return;
+    }
+
+    std::unordered_map<std::string, tf::Task> registered_tasks;
+    for (const auto &id : group_metadata.ids) {
+      auto task = CreateTaskRunner(s, id);
+      task.name(id);
+      registered_tasks.try_emplace(id, task);
+    }
+
+    // Dependency callback
+    group_metadata.InvokeDependencyCb(std::move(registered_tasks));
+
+    // NOTE, Do not call detach otherwise this will fail
+    s.join();
+  });
+}
+
 tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow,
                                            const std::string &id) {
   return subflow.emplace([&, id]() {
@@ -258,12 +266,13 @@ tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow,
 void CustomGenerator::TaskRunner(const std::string &id) {
   // Convert
   {
-    auto &curr_id_info = user_.ids.at(id);
-    curr_id_info.internal_inputs = internal::path_schema_convert(
-        curr_id_info.inputs, internal::Path::CreateExistingPath);
-    curr_id_info.userblob = curr_id_info.blob_handler != nullptr
-                                ? curr_id_info.blob_handler->GetSerializedData()
-                                : std::vector<uint8_t>();
+    auto &current_id_info = user_.ids.at(id);
+    current_id_info.internal_inputs = internal::path_schema_convert(
+        current_id_info.inputs, internal::Path::CreateExistingPath);
+    current_id_info.userblob =
+        current_id_info.blob_handler != nullptr
+            ? current_id_info.blob_handler->GetSerializedData()
+            : std::vector<uint8_t>();
   }
 
   // Run

@@ -179,42 +179,17 @@ public:
   const std::string &Get(const std::string &file_identifier) const;
 
 private:
-  void Initialize();
-
-  tf::Task CreateTaskRunner(tf::Subflow &subflow, const std::string &id);
-  void TaskRunner(const std::string &id);
-
-  void GenerateTask();
-  void BuildGenerate();
-
-  void InvokeDependencyCb(std::unordered_map<std::string, tf::Task>
-                              &&registered_tasks) const noexcept;
-
-  // Recheck states
-  void IdRemoved();
-  void IdAdded();
-  void IdUpdated();
-
-protected:
-  const env::Command &ConstCommand() const { return command_; }
-  env::Command &RefCommand() { return command_; }
-
-private:
   struct GroupMetadata {
     std::vector<std::string> ids;
     DependencyCb dependency_cb;
 
-    void InvokeDependencyCb(const std::string &group_id,
-                            std::unordered_map<std::string, tf::Task>
+    void InvokeDependencyCb(std::unordered_map<std::string, tf::Task>
                                 &&registered_tasks) const noexcept {
       if (dependency_cb) {
         try {
           dependency_cb(std::move(registered_tasks));
         } catch (...) {
-          env::log_critical(
-              __FUNCTION__,
-              fmt::format("Dependency callback failed for group id {}",
-                          group_id));
+          // TODO, Put a logging message here
           env::set_task_state(env::TaskState::FAILURE);
         }
       }
@@ -316,6 +291,30 @@ private:
         {State::kCheckLater, std::unordered_set<std::string>()},
     };
   };
+
+private:
+  void Initialize();
+
+  tf::Task CreateGroupTask(tf::FlowBuilder &builder,
+                           const GroupMetadata &group_metadata);
+
+  tf::Task CreateTaskRunner(tf::Subflow &subflow, const std::string &id);
+  void TaskRunner(const std::string &id);
+
+  void GenerateTask();
+  void BuildGenerate();
+
+  void InvokeDependencyCb(std::unordered_map<std::string, tf::Task>
+                              &&registered_tasks) const noexcept;
+
+  // Recheck states
+  void IdRemoved();
+  void IdAdded();
+  void IdUpdated();
+
+protected:
+  const env::Command &ConstCommand() const { return command_; }
+  env::Command &RefCommand() { return command_; }
 
 private:
   std::string name_;
