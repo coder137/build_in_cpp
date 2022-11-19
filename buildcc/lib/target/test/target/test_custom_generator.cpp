@@ -124,48 +124,6 @@ bool SuccessCb(const buildcc::CustomGeneratorContext &ctx) {
   return true;
 }
 
-// Behaviour
-// Initial: A | B -> Passes
-// Changes: (GID:NEW)[A -> B] -> No rebuild triggered
-
-// Behaviour
-// Initial: A | B -> Fails
-// Changes: (GID:NEW)[A -> B] -> rebuild triggered due to previous failure
-
-// ! IMPORTANT
-// * NOTE, It is users responsibility to make sure that when A -> B, A's data
-// change should automatically trigger B
-
-// For example: Say A -> B i.e B depends on A
-// In a typical scenario, B would depend on A's output
-// To make sure B is triggered when A changes. Make sure you use A's output in
-// B's userblob.
-// In this way whenever A changes, B's userblob automatically becomes "newer"
-// and triggers a rebuild as well
-
-// Say, A gives out "rebuild = true/false" as its output
-// We can use this "rebuild" variable in B's userblob
-// When A runs and "rebuild" changes from false to true, During the `TaskRunner`
-// we check B's userblob and automatically invoke the `CheckChanged` virtual
-// call
-// TODO, Create a testcase for the above scenario (Advanced_DependencyRebuild
-// scenario)
-
-// DONE, Make B fail because it properly depends on A
-static bool rebuild_value{false};
-static bool ProperDependency1(const buildcc::CustomGeneratorContext &ctx) {
-  (void)ctx;
-  mock().actualCall("ProperDependency1");
-  rebuild_value = true;
-  return true;
-}
-
-static bool ProperDependency2(const buildcc::CustomGeneratorContext &ctx) {
-  (void)ctx;
-  mock().actualCall("ProperDependency2");
-  return rebuild_value;
-}
-
 TEST(CustomGeneratorTestGroup, DefaultArgumentUsage) {
   buildcc::CustomGenerator cgen("default_argument_usage", "");
   cgen.AddPatterns({
@@ -250,38 +208,6 @@ TEST(CustomGeneratorTestGroup, FailureCases) {
   }
 
   buildcc::env::set_task_state(buildcc::env::TaskState::SUCCESS);
-}
-
-static bool Dep1Cb(const buildcc::CustomGeneratorContext &ctx) {
-  (void)ctx;
-  mock().actualCall("Dep1Cb");
-  return buildcc::env::Command::Execute("");
-}
-
-static bool Dep2Cb(const buildcc::CustomGeneratorContext &ctx) {
-  (void)ctx;
-  mock().actualCall("Dep2Cb");
-  return buildcc::env::Command::Execute("");
-}
-
-static void DependencyCb(std::unordered_map<std::string, tf::Task> &&task_map) {
-  task_map.at("id1").precede(task_map.at("id2"));
-}
-
-static bool FileDep1Cb(const buildcc::CustomGeneratorContext &ctx) {
-  mock().actualCall("FileDep1Cb");
-  for (const auto &o : ctx.outputs) {
-    CHECK_TRUE(buildcc::env::save_file(o.string().c_str(), "", false));
-  }
-  return true;
-}
-
-static bool FileDep2Cb(const buildcc::CustomGeneratorContext &ctx) {
-  mock().actualCall("FileDep2Cb");
-  for (const auto &i : ctx.inputs) {
-    CHECK_TRUE(fs::exists(i));
-  }
-  return true;
 }
 
 static bool RealGenerateCb(const buildcc::CustomGeneratorContext &ctx) {
