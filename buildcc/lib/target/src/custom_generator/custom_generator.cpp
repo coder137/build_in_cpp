@@ -77,8 +77,7 @@ void CustomGenerator::AddIdInfo(
 }
 
 void CustomGenerator::AddGroupInfo(const std::string &group_id,
-                                   std::initializer_list<std::string> ids,
-                                   const DependencyCb &dependency_cb) {
+                                   std::initializer_list<std::string> ids) {
   // Verify that the ids exist
   // Remove those ids from ungrouped_ids
   for (const auto &id : ids) {
@@ -93,12 +92,7 @@ void CustomGenerator::AddGroupInfo(const std::string &group_id,
   // Group map is used to group similar ids in a single subflow
   GroupMetadata group_metadata;
   group_metadata.ids = ids;
-  group_metadata.dependency_cb = dependency_cb;
   grouped_ids_.try_emplace(group_id, std::move(group_metadata));
-}
-
-void CustomGenerator::AddDependencyCb(const DependencyCb &dependency_cb) {
-  dependency_cb_ = dependency_cb;
 }
 
 void CustomGenerator::Build() {
@@ -188,9 +182,6 @@ void CustomGenerator::GenerateTask() {
         registered_tasks.try_emplace(id, task);
       }
 
-      // Dependencies between tasks
-      InvokeDependencyCb(std::move(registered_tasks));
-
       // NOTE, Do not call detach otherwise this will fail
       subflow.join();
 
@@ -214,19 +205,6 @@ void CustomGenerator::GenerateTask() {
   generate_task.name(kGenerateTaskName);
 }
 
-void CustomGenerator::InvokeDependencyCb(
-    std::unordered_map<std::string, tf::Task> &&registered_tasks)
-    const noexcept {
-  if (dependency_cb_) {
-    try {
-      dependency_cb_(std::move(registered_tasks));
-    } catch (...) {
-      env::log_critical(__FUNCTION__, "Dependency callback failed");
-      env::set_task_state(env::TaskState::FAILURE);
-    }
-  }
-}
-
 tf::Task CustomGenerator::CreateGroupTask(tf::FlowBuilder &builder,
                                           const GroupMetadata &group_metadata) {
   return builder.emplace([&](tf::Subflow &s) {
@@ -240,9 +218,6 @@ tf::Task CustomGenerator::CreateGroupTask(tf::FlowBuilder &builder,
       task.name(id);
       registered_tasks.try_emplace(id, task);
     }
-
-    // Dependency callback
-    group_metadata.InvokeDependencyCb(std::move(registered_tasks));
 
     // NOTE, Do not call detach otherwise this will fail
     s.join();

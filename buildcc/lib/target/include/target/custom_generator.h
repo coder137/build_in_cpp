@@ -147,8 +147,7 @@ public:
 
   // TODO, Doc
   void AddGroupInfo(const std::string &group_id,
-                    std::initializer_list<std::string> ids,
-                    const DependencyCb &dependency_cb = DependencyCb());
+                    std::initializer_list<std::string> ids);
 
   // Callbacks
   /**
@@ -165,7 +164,7 @@ public:
    * @param dependency_cb Unordered map of `id` and `task`
    * The map can be safely mutated.
    */
-  void AddDependencyCb(const DependencyCb &dependency_cb);
+  // void AddDependencyCb(const DependencyCb &dependency_cb);
 
   void Build() override;
 
@@ -181,19 +180,18 @@ public:
 private:
   struct GroupMetadata {
     std::vector<std::string> ids;
-    DependencyCb dependency_cb;
-
-    void InvokeDependencyCb(std::unordered_map<std::string, tf::Task>
-                                &&registered_tasks) const noexcept {
-      if (dependency_cb) {
-        try {
-          dependency_cb(std::move(registered_tasks));
-        } catch (...) {
-          // TODO, Put a logging message here
-          env::set_task_state(env::TaskState::FAILURE);
-        }
-      }
-    }
+    // DependencyCb dependency_cb;
+    // void InvokeDependencyCb(std::unordered_map<std::string, tf::Task>
+    //                             &&registered_tasks) const noexcept {
+    //   if (dependency_cb) {
+    //     try {
+    //       dependency_cb(std::move(registered_tasks));
+    //     } catch (...) {
+    //       // TODO, Put a logging message here
+    //       env::set_task_state(env::TaskState::FAILURE);
+    //     }
+    //   }
+    // }
   };
 
   struct Comparator {
@@ -304,8 +302,8 @@ private:
   void GenerateTask();
   void BuildGenerate();
 
-  void InvokeDependencyCb(std::unordered_map<std::string, tf::Task>
-                              &&registered_tasks) const noexcept;
+  // void InvokeDependencyCb(std::unordered_map<std::string, tf::Task>
+  //                             &&registered_tasks) const noexcept;
 
   // Recheck states
   void IdRemoved();
@@ -336,8 +334,8 @@ private:
   // Internal
   env::Command command_;
 
-  // Callbacks
-  DependencyCb dependency_cb_;
+  // // Callbacks
+  // DependencyCb dependency_cb_;
 };
 
 } // namespace buildcc
