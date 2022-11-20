@@ -76,25 +76,6 @@ void CustomGenerator::AddIdInfo(
   ungrouped_ids_.emplace(id);
 }
 
-void CustomGenerator::AddGroupInfo(const std::string &group_id,
-                                   std::initializer_list<std::string> ids) {
-  // Verify that the ids exist
-  // Remove those ids from ungrouped_ids
-  for (const auto &id : ids) {
-    env::assert_fatal(user_.ids.find(id) != user_.ids.end(),
-                      fmt::format("Id '{}' is not found", id));
-    ungrouped_ids_.erase(id);
-  }
-
-  env::assert_fatal(grouped_ids_.find(group_id) == grouped_ids_.end(),
-                    fmt::format("Group Id '{}' duplicate found", group_id));
-
-  // Group map is used to group similar ids in a single subflow
-  GroupMetadata group_metadata;
-  group_metadata.ids = ids;
-  grouped_ids_.try_emplace(group_id, std::move(group_metadata));
-}
-
 void CustomGenerator::Build() {
   (void)serialization_.LoadFromFile();
 
@@ -148,11 +129,6 @@ void CustomGenerator::BuildGenerate() {
       (void)id;
       IdAdded();
     }
-
-    // For GROUPS
-    // Group Removed
-    // Group Added
-    // Group Updated
   }
 }
 
@@ -167,13 +143,6 @@ void CustomGenerator::GenerateTask() {
       BuildGenerate();
 
       std::unordered_map<std::string, tf::Task> registered_tasks;
-
-      // Grouped tasks
-      for (const auto &[group_id, group_metadata] : grouped_ids_) {
-        auto group_task = CreateGroupTask(subflow, group_metadata);
-        group_task.name(group_id);
-        registered_tasks.try_emplace(group_id, group_task);
-      }
 
       // Ungrouped tasks
       for (const auto &id : ungrouped_ids_) {
@@ -203,25 +172,6 @@ void CustomGenerator::GenerateTask() {
   });
   // TODO, Instead of "Generate" name the task of user's choice
   generate_task.name(kGenerateTaskName);
-}
-
-tf::Task CustomGenerator::CreateGroupTask(tf::FlowBuilder &builder,
-                                          const GroupMetadata &group_metadata) {
-  return builder.emplace([&](tf::Subflow &s) {
-    if (env::get_task_state() != env::TaskState::SUCCESS) {
-      return;
-    }
-
-    std::unordered_map<std::string, tf::Task> registered_tasks;
-    for (const auto &id : group_metadata.ids) {
-      auto task = CreateTaskRunner(s, id);
-      task.name(id);
-      registered_tasks.try_emplace(id, task);
-    }
-
-    // NOTE, Do not call detach otherwise this will fail
-    s.join();
-  });
 }
 
 tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow,

@@ -145,10 +145,6 @@ public:
                  const GenerateCb &generate_cb,
                  std::shared_ptr<CustomBlobHandler> blob_handler = nullptr);
 
-  // TODO, Doc
-  void AddGroupInfo(const std::string &group_id,
-                    std::initializer_list<std::string> ids);
-
   // Callbacks
   /**
    * @brief Setup dependencies between Tasks using their `id`
@@ -178,22 +174,6 @@ public:
   const std::string &Get(const std::string &file_identifier) const;
 
 private:
-  struct GroupMetadata {
-    std::vector<std::string> ids;
-    // DependencyCb dependency_cb;
-    // void InvokeDependencyCb(std::unordered_map<std::string, tf::Task>
-    //                             &&registered_tasks) const noexcept {
-    //   if (dependency_cb) {
-    //     try {
-    //       dependency_cb(std::move(registered_tasks));
-    //     } catch (...) {
-    //       // TODO, Put a logging message here
-    //       env::set_task_state(env::TaskState::FAILURE);
-    //     }
-    //   }
-    // }
-  };
-
   struct Comparator {
     Comparator(const internal::CustomGeneratorSchema &s,
                const UserCustomGeneratorSchema &us)
@@ -293,17 +273,11 @@ private:
 private:
   void Initialize();
 
-  tf::Task CreateGroupTask(tf::FlowBuilder &builder,
-                           const GroupMetadata &group_metadata);
-
   tf::Task CreateTaskRunner(tf::Subflow &subflow, const std::string &id);
   void TaskRunner(const std::string &id);
 
   void GenerateTask();
   void BuildGenerate();
-
-  // void InvokeDependencyCb(std::unordered_map<std::string, tf::Task>
-  //                             &&registered_tasks) const noexcept;
 
   // Recheck states
   void IdRemoved();
@@ -321,7 +295,7 @@ private:
 
   // Serialization
   UserCustomGeneratorSchema user_;
-  std::unordered_map<std::string, GroupMetadata> grouped_ids_;
+  // TODO, Remove this as well
   std::unordered_set<std::string> ungrouped_ids_;
 
   // Comparator
@@ -333,9 +307,6 @@ private:
 
   // Internal
   env::Command command_;
-
-  // // Callbacks
-  // DependencyCb dependency_cb_;
 };
 
 } // namespace buildcc

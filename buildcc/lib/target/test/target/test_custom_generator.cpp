@@ -84,37 +84,6 @@ TEST(CustomGeneratorTestGroup, Basic_Failure) {
   CHECK_EQUAL(internal_map.size(), 1);
 }
 
-TEST(CustomGeneratorTestGroup, Basic_Group) {
-  buildcc::CustomGenerator cgen("basic_group", "");
-  cgen.AddIdInfo("id1", {"{current_root_dir}/dummy_main.c"},
-                 {"{current_build_dir}/dummy_main.o"}, BasicGenerateCb);
-  cgen.AddIdInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
-                 BasicGenerateCb);
-  cgen.AddGroupInfo("grouped_id1_and_id2", {"id1", "id2"});
-  cgen.Build();
-
-  mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
-  mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
-  buildcc::m::CustomGeneratorRunner(cgen);
-
-  // Serialization check
-  {
-    buildcc::internal::CustomGeneratorSerialization serialization(
-        cgen.GetBinaryPath());
-    CHECK_TRUE(serialization.LoadFromFile());
-
-    const auto &internal_map = serialization.GetLoad().internal_ids;
-    CHECK_EQUAL(internal_map.size(), 2);
-    const auto &id1_info = internal_map.at("id1");
-    CHECK_EQUAL(id1_info.internal_inputs.size(), 1);
-    CHECK_EQUAL(id1_info.outputs.size(), 1);
-
-    const auto &id2_info = internal_map.at("id2");
-    CHECK_EQUAL(id2_info.internal_inputs.size(), 1);
-    CHECK_EQUAL(id2_info.outputs.size(), 0);
-  }
-}
-
 bool FailureCb(const buildcc::CustomGeneratorContext &ctx) {
   (void)ctx;
   return false;
