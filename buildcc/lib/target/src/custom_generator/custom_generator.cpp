@@ -200,27 +200,15 @@ void CustomGenerator::TaskRunner(const std::string &id) {
             : std::vector<uint8_t>();
   }
 
-  // Run
-  const auto &current_id_info = user_.ids.at(id);
-  bool run = comparator_.IsIdAdded(id);
-  if (!run) {
-    const auto &previous_info = serialization_.GetLoad().internal_ids.at(id);
-    run =
-        internal::CheckPaths(previous_info.internal_inputs,
-                             current_id_info.internal_inputs) !=
-            internal::PathState::kNoChange ||
-        internal::CheckChanged(previous_info.outputs, current_id_info.outputs);
-    if (!run && current_id_info.blob_handler != nullptr) {
-      run = current_id_info.blob_handler->CheckChanged(
-          previous_info.userblob, current_id_info.userblob);
-    }
-  }
+  // Compute runnable
+  bool run = comparator_.IsIdAdded(id) ? true : comparator_.IsChanged(id);
 
+  const auto &current_id_info = user_.ids.at(id);
   if (run) {
     dirty_ = true;
-    buildcc::CustomGeneratorContext ctx(command_, current_id_info.inputs,
-                                        current_id_info.outputs,
-                                        current_id_info.userblob);
+    CustomGeneratorContext ctx(command_, current_id_info.inputs,
+                               current_id_info.outputs,
+                               current_id_info.userblob);
     bool success = current_id_info.generate_cb(ctx);
     env::assert_fatal(success, fmt::format("Generate Cb failed for id {}", id));
   }

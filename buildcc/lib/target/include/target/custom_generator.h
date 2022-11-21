@@ -214,6 +214,23 @@ private:
       }
     }
 
+    bool IsChanged(const std::string &id) const {
+      const auto &previous_id_info = loaded_schema_.internal_ids.at(id);
+      const auto &current_id_info = current_schema_.ids.at(id);
+
+      bool changed = internal::CheckPaths(previous_id_info.internal_inputs,
+                                          current_id_info.internal_inputs) !=
+                     internal::PathState::kNoChange;
+      changed = changed || internal::CheckChanged(previous_id_info.outputs,
+                                                  current_id_info.outputs);
+      if (!changed && current_id_info.blob_handler != nullptr) {
+        changed =
+            changed || current_id_info.blob_handler->CheckChanged(
+                           previous_id_info.userblob, current_id_info.userblob);
+      }
+      return changed;
+    }
+
     const std::unordered_set<std::string> &GetRemovedIds() const {
       return id_state_info_.at(State::kRemoved);
     }
