@@ -73,7 +73,6 @@ void CustomGenerator::AddIdInfo(
   schema.blob_handler = std::move(blob_handler);
 
   user_.ids.try_emplace(id, std::move(schema));
-  ungrouped_ids_.emplace(id);
 }
 
 void CustomGenerator::Build() {
@@ -117,15 +116,15 @@ void CustomGenerator::BuildGenerate() {
     // For IDS
     comparator_.CompareIds();
 
-    const bool is_removed = !comparator_.RemovedIds().empty();
-    const bool is_added = !comparator_.AddedIds().empty();
+    const bool is_removed = !comparator_.GetRemovedIds().empty();
+    const bool is_added = !comparator_.GetAddedIds().empty();
     dirty_ = is_removed || is_added;
 
     if (is_removed) {
       IdRemoved();
     }
 
-    for (const auto &id : comparator_.AddedIds()) {
+    for (const auto &id : comparator_.GetAddedIds()) {
       (void)id;
       IdAdded();
     }
@@ -142,13 +141,15 @@ void CustomGenerator::GenerateTask() {
       // Selected ids for build
       BuildGenerate();
 
-      std::unordered_map<std::string, tf::Task> registered_tasks;
-
-      // Ungrouped tasks
-      for (const auto &id : ungrouped_ids_) {
+      // Create runner for each added/updated id
+      for (const auto &id : comparator_.GetAddedIds()) {
         auto task = CreateTaskRunner(subflow, id);
         task.name(id);
-        registered_tasks.try_emplace(id, task);
+      }
+
+      for (const auto &id : comparator_.GetCheckLaterIds()) {
+        auto task = CreateTaskRunner(subflow, id);
+        task.name(id);
       }
 
       // NOTE, Do not call detach otherwise this will fail
@@ -165,7 +166,6 @@ void CustomGenerator::GenerateTask() {
         env::assert_fatal(serialization_.StoreToFile(),
                           fmt::format("Store failed for {}", name_));
       }
-
     } catch (...) {
       env::set_task_state(env::TaskState::FAILURE);
     }
@@ -202,7 +202,7 @@ void CustomGenerator::TaskRunner(const std::string &id) {
 
   // Run
   const auto &current_id_info = user_.ids.at(id);
-  bool run = comparator_.AddedId(id);
+  bool run = comparator_.IsIdAdded(id);
   if (!run) {
     const auto &previous_info = serialization_.GetLoad().internal_ids.at(id);
     run =

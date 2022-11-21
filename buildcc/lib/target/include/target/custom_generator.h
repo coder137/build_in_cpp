@@ -214,56 +214,26 @@ private:
       }
     }
 
-    void CompareGroups() {
-      const auto &prev_groups = schema.internal_groups;
-      const auto &curr_groups = user_schema.internal_groups;
-
-      for (const auto &[prev_group_id, _] : prev_groups) {
-        if (curr_groups.find(prev_group_id) == curr_groups.end()) {
-          // Group Removed condition
-          group_state_info.at(State::kRemoved).insert(prev_group_id);
-        }
-      }
-
-      for (const auto &[curr_group_id, curr_group_info] : curr_groups) {
-        if (prev_groups.find(curr_group_id) == prev_groups.end()) {
-          // Group Added condition
-          group_state_info.at(State::kAdded).insert(curr_group_id);
-        } else {
-          // Group Check Later condition
-          // NOTE, We cannot perform the check now since the input/metadata
-          // might be added during runtime (when task executes)
-          group_state_info.at(State::kCheckLater).insert(curr_group_id);
-        }
-      }
-    }
-
-    const std::unordered_set<std::string> &RemovedIds() const {
+    const std::unordered_set<std::string> &GetRemovedIds() const {
       return id_state_info.at(State::kRemoved);
     }
 
-    const std::unordered_set<std::string> &AddedIds() const {
+    const std::unordered_set<std::string> &GetAddedIds() const {
       return id_state_info.at(State::kAdded);
     }
 
-    bool AddedId(const std::string &id) const {
-      return id_state_info.at(State::kAdded).count(id) == 1;
+    const std::unordered_set<std::string> &GetCheckLaterIds() const {
+      return id_state_info.at(State::kCheckLater);
     }
 
-    bool AddedGroupId(const std::string &group_id) const {
-      return group_state_info.at(State::kAdded).count(group_id) == 1;
+    bool IsIdAdded(const std::string &id) const {
+      return id_state_info.at(State::kAdded).count(id) == 1;
     }
 
   private:
     const internal::CustomGeneratorSchema &schema;
     const UserCustomGeneratorSchema &user_schema;
     std::unordered_map<State, std::unordered_set<std::string>> id_state_info{
-        {State::kRemoved, std::unordered_set<std::string>()},
-        {State::kAdded, std::unordered_set<std::string>()},
-        {State::kCheckLater, std::unordered_set<std::string>()},
-    };
-
-    std::unordered_map<State, std::unordered_set<std::string>> group_state_info{
         {State::kRemoved, std::unordered_set<std::string>()},
         {State::kAdded, std::unordered_set<std::string>()},
         {State::kCheckLater, std::unordered_set<std::string>()},
@@ -295,8 +265,6 @@ private:
 
   // Serialization
   UserCustomGeneratorSchema user_;
-  // TODO, Remove this as well
-  std::unordered_set<std::string> ungrouped_ids_;
 
   // Comparator
   Comparator comparator_;
