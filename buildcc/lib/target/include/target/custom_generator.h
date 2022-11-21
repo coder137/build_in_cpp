@@ -51,8 +51,6 @@ public:
 
 // clang-format off
 using GenerateCb = std::function<bool (CustomGeneratorContext &)>;
-
-using DependencyCb = std::function<void (std::unordered_map<std::string, tf::Task> &&)>;
 // clang-format on
 
 class CustomBlobHandler {
@@ -91,6 +89,13 @@ struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
     fs_unordered_set inputs; // TODO, Remove
     GenerateCb generate_cb;
     std::shared_ptr<CustomBlobHandler> blob_handler{nullptr};
+
+    void ConvertToInternal() {
+      internal_inputs = internal::path_schema_convert(
+          inputs, internal::Path::CreateExistingPath);
+      userblob = blob_handler != nullptr ? blob_handler->GetSerializedData()
+                                         : std::vector<uint8_t>();
+    }
   };
 
   using UserIdPair = std::pair<const IdKey, UserIdInfo>;

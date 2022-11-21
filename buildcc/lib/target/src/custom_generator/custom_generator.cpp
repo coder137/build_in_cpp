@@ -189,20 +189,13 @@ tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow,
 }
 
 void CustomGenerator::TaskRunner(const std::string &id) {
-  // Convert
-  {
-    auto &current_id_info = user_.ids.at(id);
-    current_id_info.internal_inputs = internal::path_schema_convert(
-        current_id_info.inputs, internal::Path::CreateExistingPath);
-    current_id_info.userblob =
-        current_id_info.blob_handler != nullptr
-            ? current_id_info.blob_handler->GetSerializedData()
-            : std::vector<uint8_t>();
-  }
+  // Convert to internal
+  user_.ids.at(id).ConvertToInternal();
 
   // Compute runnable
   bool run = comparator_.IsIdAdded(id) ? true : comparator_.IsChanged(id);
 
+  // Invoke generator callback
   const auto &current_id_info = user_.ids.at(id);
   if (run) {
     dirty_ = true;
