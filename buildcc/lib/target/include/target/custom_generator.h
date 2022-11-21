@@ -175,9 +175,9 @@ public:
 
 private:
   struct Comparator {
-    Comparator(const internal::CustomGeneratorSchema &s,
+    Comparator(const internal::CustomGeneratorSchema &loaded,
                const UserCustomGeneratorSchema &us)
-        : schema(s), user_schema(us) {}
+        : loaded_schema_(loaded), current_schema_(us) {}
 
     enum class State {
       kRemoved,
@@ -186,54 +186,54 @@ private:
     };
 
     void AddAllIds() {
-      const auto &curr_ids = user_schema.ids;
+      const auto &curr_ids = current_schema_.ids;
       for (const auto &[id, _] : curr_ids) {
-        id_state_info.at(State::kAdded).insert(id);
+        id_state_info_.at(State::kAdded).insert(id);
       }
     }
 
     void CompareIds() {
-      const auto &prev_ids = schema.internal_ids;
-      const auto &curr_ids = user_schema.ids;
+      const auto &prev_ids = loaded_schema_.internal_ids;
+      const auto &curr_ids = current_schema_.ids;
 
       for (const auto &[prev_id, _] : prev_ids) {
         if (curr_ids.find(prev_id) == curr_ids.end()) {
           // Id Removed condition, previous id is not present in the current run
-          id_state_info.at(State::kRemoved).insert(prev_id);
+          id_state_info_.at(State::kRemoved).insert(prev_id);
         }
       }
 
       for (const auto &[curr_id, _] : curr_ids) {
         if (prev_ids.find(curr_id) == prev_ids.end()) {
           // Id Added condition
-          id_state_info.at(State::kAdded).insert(curr_id);
+          id_state_info_.at(State::kAdded).insert(curr_id);
         } else {
           // Id Check Later condition
-          id_state_info.at(State::kCheckLater).insert(curr_id);
+          id_state_info_.at(State::kCheckLater).insert(curr_id);
         }
       }
     }
 
     const std::unordered_set<std::string> &GetRemovedIds() const {
-      return id_state_info.at(State::kRemoved);
+      return id_state_info_.at(State::kRemoved);
     }
 
     const std::unordered_set<std::string> &GetAddedIds() const {
-      return id_state_info.at(State::kAdded);
+      return id_state_info_.at(State::kAdded);
     }
 
     const std::unordered_set<std::string> &GetCheckLaterIds() const {
-      return id_state_info.at(State::kCheckLater);
+      return id_state_info_.at(State::kCheckLater);
     }
 
     bool IsIdAdded(const std::string &id) const {
-      return id_state_info.at(State::kAdded).count(id) == 1;
+      return id_state_info_.at(State::kAdded).count(id) == 1;
     }
 
   private:
-    const internal::CustomGeneratorSchema &schema;
-    const UserCustomGeneratorSchema &user_schema;
-    std::unordered_map<State, std::unordered_set<std::string>> id_state_info{
+    const internal::CustomGeneratorSchema &loaded_schema_;
+    const UserCustomGeneratorSchema &current_schema_;
+    std::unordered_map<State, std::unordered_set<std::string>> id_state_info_{
         {State::kRemoved, std::unordered_set<std::string>()},
         {State::kAdded, std::unordered_set<std::string>()},
         {State::kCheckLater, std::unordered_set<std::string>()},
