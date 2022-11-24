@@ -104,23 +104,6 @@ public:
             const GenerateCb &generate_cb,
             const std::shared_ptr<CustomBlobHandler> &blob_handler = nullptr);
 
-  // Callbacks
-  /**
-   * @brief Setup dependencies between Tasks using their `id`
-   * For example: `task_map["id1"].precede(task_map["id2"])`
-   *
-   * IMPORTANT: Successor tasks will not automatically run if dependent task is
-   * run.
-   * The Dependency callback only sets precedence (order in which your tasks
-   * should run)
-   * Default behaviour when dependency callback is not supplied: All task `id`s
-   * run in parallel.
-   *
-   * @param dependency_cb Unordered map of `id` and `task`
-   * The map can be safely mutated.
-   */
-  // void AddDependencyCb(const DependencyCb &dependency_cb);
-
   void Build() override;
 
   // Getters
