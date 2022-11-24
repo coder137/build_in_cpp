@@ -34,6 +34,7 @@ static bool BasicGenerateCb(const buildcc::CustomGeneratorContext &ctx) {
 
 TEST(CustomGeneratorTestGroup, Basic) {
   buildcc::CustomGenerator cgen("basic", "");
+  STRCMP_EQUAL(cgen.GetName().c_str(), "basic");
   cgen.AddIdInfo("id1", {"{current_root_dir}/dummy_main.c"},
                  {"{current_build_dir}/dummy_main.o"}, BasicGenerateCb);
   cgen.AddIdInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},

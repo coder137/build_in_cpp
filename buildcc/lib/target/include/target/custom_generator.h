@@ -166,9 +166,11 @@ private:
       changed = changed || internal::CheckChanged(previous_id_info.outputs,
                                                   current_id_info.outputs);
       if (!changed && current_id_info.blob_handler != nullptr) {
-        changed =
-            changed || current_id_info.blob_handler->CheckChanged(
-                           previous_id_info.userblob, current_id_info.userblob);
+        // We only check blob handler if not changed by inputs/outputs
+        // Checking blob_handler could be expensive so this optimization is made
+        // to run only when changed == false
+        changed = current_id_info.blob_handler->CheckChanged(
+            previous_id_info.userblob, current_id_info.userblob);
       }
       return changed;
     }
