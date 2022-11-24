@@ -30,59 +30,12 @@
 #include "schema/custom_generator_serialization.h"
 #include "schema/path.h"
 
+#include "custom_generator/custom_blob_handler.h"
+#include "custom_generator/custom_generator_context.h"
+
 #include "target/common/target_env.h"
 
 namespace buildcc {
-
-// TODO, Shift to a different file
-// TODO, Check if we need the "id" here as well
-class CustomGeneratorContext {
-public:
-  CustomGeneratorContext(const env::Command &c, const fs_unordered_set &i,
-                         const fs_unordered_set &o,
-                         const std::vector<uint8_t> &ub)
-      : command(c), inputs(i), outputs(o), userblob(ub) {}
-
-  const env::Command &command;
-  const fs_unordered_set &inputs;
-  const fs_unordered_set &outputs;
-  const std::vector<uint8_t> &userblob;
-};
-
-// clang-format off
-using GenerateCb = std::function<bool (CustomGeneratorContext &)>;
-// clang-format on
-
-class CustomBlobHandler {
-public:
-  CustomBlobHandler() = default;
-  virtual ~CustomBlobHandler() = default;
-
-  bool CheckChanged(const std::vector<uint8_t> &previous,
-                    const std::vector<uint8_t> &current) const {
-    env::assert_fatal(
-        Verify(previous),
-        "Stored blob is corrupted or User verification is incorrect");
-    env::assert_fatal(
-        Verify(current),
-        "Current blob is corrupted or User verification is incorrect");
-    return !IsEqual(previous, current);
-  };
-
-  std::vector<uint8_t> GetSerializedData() const {
-    auto serialized_data = Serialize();
-    env::assert_fatal(
-        Verify(serialized_data),
-        "Serialized data is corrupted or Serialize function is incorrect");
-    return serialized_data;
-  }
-
-private:
-  virtual bool Verify(const std::vector<uint8_t> &serialized_data) const = 0;
-  virtual bool IsEqual(const std::vector<uint8_t> &previous,
-                       const std::vector<uint8_t> &current) const = 0;
-  virtual std::vector<uint8_t> Serialize() const = 0;
-};
 
 struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
   struct UserIdInfo : internal::CustomGeneratorSchema::IdInfo {

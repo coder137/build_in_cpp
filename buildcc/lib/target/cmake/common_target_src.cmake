@@ -27,6 +27,9 @@ set(COMMON_TARGET_SRCS
     include/target/api/target_getter.h
 
     # Generator
+    include/target/custom_generator/custom_generator_context.h
+    include/target/custom_generator/custom_blob_handler.h
+
     src/custom_generator/custom_generator.cpp
     include/target/custom_generator.h
     src/generator/file_generator.cpp
