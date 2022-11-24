@@ -13,7 +13,7 @@ if(${BUILDCC_CPPCHECK})
     set(CPPCHECK_ADDITIONAL_OPTIONS 
         --std=c++17
         -q 
-        --error-exitcode=1
+        # --error-exitcode=1
         --cppcheck-build-dir=${CMAKE_CURRENT_BINARY_DIR}/cppcheck_output
     )
     set(CPPCHECK_CHECK_DIR 
