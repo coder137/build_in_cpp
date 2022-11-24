@@ -55,7 +55,7 @@ void CustomGenerator::AddIdInfo(
     const std::string &id, const std::unordered_set<std::string> &inputs,
     const std::unordered_set<std::string> &outputs,
     const GenerateCb &generate_cb,
-    std::shared_ptr<CustomBlobHandler> blob_handler) {
+    const std::shared_ptr<CustomBlobHandler> &blob_handler) {
   env::assert_fatal(user_.ids.find(id) == user_.ids.end(),
                     fmt::format("Duplicate id {} detected", id));
   ASSERT_FATAL(generate_cb, "Invalid callback provided");
@@ -70,8 +70,7 @@ void CustomGenerator::AddIdInfo(
     schema.outputs.emplace(std::move(output));
   }
   schema.generate_cb = generate_cb;
-  schema.blob_handler = std::move(blob_handler);
-
+  schema.blob_handler = blob_handler;
   user_.ids.try_emplace(id, std::move(schema));
 }
 
