@@ -102,12 +102,6 @@ void CustomGenerator::Initialize() {
   tf_.name(name_);
 }
 
-/**
- * @brief Check which ids need to be rebuilt
- *
- * @param gen_selected_ids
- * @param dummy_gen_selected_ids
- */
 void CustomGenerator::BuildGenerate() {
   if (!serialization_.IsLoaded()) {
     comparator_.AddAllIds();
