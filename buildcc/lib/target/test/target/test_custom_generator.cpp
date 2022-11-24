@@ -24,7 +24,8 @@ TEST_GROUP(CustomGeneratorTestGroup)
 };
 // clang-format on
 
-fs::path BUILD_DIR = fs::current_path() / "intermediate" / "custom_generator";
+const fs::path BUILD_DIR =
+    fs::current_path() / "intermediate" / "custom_generator";
 
 static bool BasicGenerateCb(const buildcc::CustomGeneratorContext &ctx) {
   (void)ctx;
@@ -61,6 +62,77 @@ TEST(CustomGeneratorTestGroup, Basic) {
   }
 }
 
+TEST(CustomGeneratorTestGroup, BasicRebuild) {
+  constexpr const char *const kName = "basic_rebuild";
+
+  {
+    buildcc::CustomGenerator cgen(kName, "");
+    cgen.AddIdInfo("id1", {"{current_root_dir}/dummy_main.c"},
+                   {"{current_build_dir}/dummy_main.o"}, BasicGenerateCb);
+    cgen.AddIdInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
+                   BasicGenerateCb);
+    cgen.Build();
+
+    mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+    mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+    buildcc::m::CustomGeneratorRunner(cgen);
+  }
+
+  {
+    buildcc::CustomGenerator cgen(kName, "");
+    cgen.AddIdInfo("id1", {"{current_root_dir}/dummy_main.c"},
+                   {"{current_build_dir}/dummy_main.o"}, BasicGenerateCb);
+    cgen.AddIdInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
+                   BasicGenerateCb);
+    cgen.Build();
+
+    buildcc::m::CustomGeneratorRunner(cgen);
+  }
+}
+
+TEST(CustomGeneratorTestGroup, BasicRebuild_Add_Remove) {
+  constexpr const char *const kName = "basic_rebuild_add_remove";
+
+  {
+    buildcc::CustomGenerator cgen(kName, "");
+    cgen.AddIdInfo("id1", {"{current_root_dir}/dummy_main.c"},
+                   {"{current_build_dir}/dummy_main.o"}, BasicGenerateCb);
+    cgen.AddIdInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
+                   BasicGenerateCb);
+    cgen.Build();
+
+    mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+    mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+    buildcc::m::CustomGeneratorRunner(cgen);
+  }
+
+  // Remove
+  {
+    buildcc::CustomGenerator cgen(kName, "");
+    cgen.AddIdInfo("id1", {"{current_root_dir}/dummy_main.c"},
+                   {"{current_build_dir}/dummy_main.o"}, BasicGenerateCb);
+    // ID2 Removed
+    cgen.Build();
+
+    buildcc::m::CustomGeneratorExpect_IdRemoved(1, &cgen);
+    buildcc::m::CustomGeneratorRunner(cgen);
+  }
+
+  // Add
+  {
+    buildcc::CustomGenerator cgen(kName, "");
+    cgen.AddIdInfo("id1", {"{current_root_dir}/dummy_main.c"},
+                   {"{current_build_dir}/dummy_main.o"}, BasicGenerateCb);
+    cgen.AddIdInfo("id2", {"{current_root_dir}/dummy_main.cpp"}, {},
+                   BasicGenerateCb);
+    cgen.Build();
+
+    buildcc::m::CustomGeneratorExpect_IdAdded(1, &cgen);
+    mock().expectOneCall("BasicGenerateCb").andReturnValue(true);
+    buildcc::m::CustomGeneratorRunner(cgen);
+  }
+}
+
 TEST(CustomGeneratorTestGroup, Basic_Failure) {
   buildcc::CustomGenerator cgen("basic_failure", "");
   cgen.AddIdInfo("id1", {"{current_root_dir}/dummy_main.c"}, {},
@@ -84,22 +156,15 @@ TEST(CustomGeneratorTestGroup, Basic_Failure) {
   CHECK_EQUAL(internal_map.size(), 1);
 }
 
-bool FailureCb(const buildcc::CustomGeneratorContext &ctx) {
-  (void)ctx;
-  return false;
-}
-bool SuccessCb(const buildcc::CustomGeneratorContext &ctx) {
-  (void)ctx;
-  return true;
-}
-
 TEST(CustomGeneratorTestGroup, DefaultArgumentUsage) {
   buildcc::CustomGenerator cgen("default_argument_usage", "");
-  cgen.AddPatterns({
-      {"dummy_main_c", "{current_root_dir}/dummy_main.c"},
-      {"dummy_main_o", "{current_build_dir}/dummy_main.o"},
-      {"dummy_main_cpp", "{current_root_dir}/dummy_main.cpp"},
-  });
+  cgen.AddPatterns({{"dummy_main_c", "{current_root_dir}/dummy_main.c"},
+                    {"dummy_main_o", "{current_build_dir}/dummy_main.o"},
+                    {"dummy_main_cpp", "{current_root_dir}/dummy_main.cpp"},
+                    {"hello", "world"}});
+  STRCMP_EQUAL(cgen.ParsePattern("{hello}").c_str(), "world");
+  STRCMP_EQUAL(cgen.Get("hello").c_str(), "world");
+
   cgen.AddIdInfo("id1", {"{dummy_main_c}"}, {"{dummy_main_o}"},
                  BasicGenerateCb);
   cgen.AddIdInfo("id2", {"{dummy_main_cpp}"}, {}, BasicGenerateCb);
