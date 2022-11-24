@@ -9,6 +9,7 @@ else()
 message("GCOVR at ${gcovr_program}")
 
 set(GCOVR_REMOVE_OPTIONS 
+    --exclude "(.+/)?third_party(.+/)?"
     --exclude "(.+/)?spdlog(.+/)?"
     --exclude "(.+/)?fmt(.+/)?"
     --exclude "(.+/)?taskflow(.+/)?"

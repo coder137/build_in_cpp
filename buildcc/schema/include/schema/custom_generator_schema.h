@@ -27,11 +27,9 @@ struct CustomGeneratorSchema {
 private:
   static constexpr const char *const kName = "name";
   static constexpr const char *const kIds = "ids";
-  static constexpr const char *const kGroups = "groups";
 
 public:
   using IdKey = std::string;
-  using GroupKey = std::string;
   struct IdInfo {
   private:
     static constexpr const char *const kInputs = "inputs";
@@ -57,23 +55,18 @@ public:
   };
 
   using IdPair = std::pair<const IdKey, IdInfo>;
-  using GroupInfo = std::unordered_set<std::string>;
-  using GroupPair = std::pair<const GroupKey, GroupInfo>;
 
   std::string name;
   std::unordered_map<IdKey, IdInfo> internal_ids;
-  std::unordered_map<GroupKey, GroupInfo> internal_groups;
 
   friend void to_json(json &j, const CustomGeneratorSchema &schema) {
     j[kName] = schema.name;
     j[kIds] = schema.internal_ids;
-    j[kGroups] = schema.internal_groups;
   }
 
   friend void from_json(const json &j, CustomGeneratorSchema &schema) {
     j.at(kName).get_to(schema.name);
     j.at(kIds).get_to(schema.internal_ids);
-    j.at(kGroups).get_to(schema.internal_groups);
   }
 };
 

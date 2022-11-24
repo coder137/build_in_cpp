@@ -42,8 +42,6 @@ public:
 
   // Restrict access to certain custom generator APIs
 private:
-  using CustomGenerator::AddDependencyCb;
-  using CustomGenerator::AddGroupInfo;
   using CustomGenerator::AddIdInfo;
   using CustomGenerator::Build;
 

@@ -30,69 +30,28 @@
 #include "schema/custom_generator_serialization.h"
 #include "schema/path.h"
 
+#include "custom_generator/custom_blob_handler.h"
+#include "custom_generator/custom_generator_context.h"
+
 #include "target/common/target_env.h"
 
 namespace buildcc {
 
-// TODO, Shift to a different file
-// TODO, Check if we need the "id" here as well
-class CustomGeneratorContext {
-public:
-  CustomGeneratorContext(const env::Command &c, const fs_unordered_set &i,
-                         const fs_unordered_set &o,
-                         const std::vector<uint8_t> &ub)
-      : command(c), inputs(i), outputs(o), userblob(ub) {}
+struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
+  struct UserIdInfo : internal::CustomGeneratorSchema::IdInfo {
+    fs_unordered_set inputs; // TODO, Remove
+    GenerateCb generate_cb;
+    std::shared_ptr<CustomBlobHandler> blob_handler{nullptr};
 
-  const env::Command &command;
-  const fs_unordered_set &inputs;
-  const fs_unordered_set &outputs;
-  const std::vector<uint8_t> &userblob;
-};
-
-// clang-format off
-using GenerateCb = std::function<bool (CustomGeneratorContext &)>;
-
-using DependencyCb = std::function<void (std::unordered_map<std::string, tf::Task> &&)>;
-// clang-format on
-
-class CustomBlobHandler {
-public:
-  CustomBlobHandler() = default;
-  virtual ~CustomBlobHandler() = default;
-
-  bool CheckChanged(const std::vector<uint8_t> &previous,
-                    const std::vector<uint8_t> &current) const {
-    env::assert_fatal(
-        Verify(previous),
-        "Stored blob is corrupted or User verification is incorrect");
-    env::assert_fatal(
-        Verify(current),
-        "Current blob is corrupted or User verification is incorrect");
-    return !IsEqual(previous, current);
+    void ConvertToInternal() {
+      internal_inputs = internal::path_schema_convert(
+          inputs, internal::Path::CreateExistingPath);
+      userblob = blob_handler != nullptr ? blob_handler->GetSerializedData()
+                                         : std::vector<uint8_t>();
+    }
   };
 
-  std::vector<uint8_t> GetSerializedData() const {
-    auto serialized_data = Serialize();
-    env::assert_fatal(
-        Verify(serialized_data),
-        "Serialized data is corrupted or Serialize function is incorrect");
-    return serialized_data;
-  }
-
-private:
-  virtual bool Verify(const std::vector<uint8_t> &serialized_data) const = 0;
-  virtual bool IsEqual(const std::vector<uint8_t> &previous,
-                       const std::vector<uint8_t> &current) const = 0;
-  virtual std::vector<uint8_t> Serialize() const = 0;
-};
-
-struct UserIdInfo : internal::CustomGeneratorSchema::IdInfo {
-  fs_unordered_set inputs;
-  GenerateCb generate_cb;
-  std::shared_ptr<CustomBlobHandler> blob_handler{nullptr};
-};
-
-struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
+  using UserIdPair = std::pair<const IdKey, UserIdInfo>;
   std::unordered_map<IdKey, UserIdInfo> ids;
 
   void ConvertToInternal() {
@@ -110,7 +69,8 @@ public:
   CustomGenerator(const std::string &name, const TargetEnv &env)
       : name_(name),
         env_(env.GetTargetRootDir(), env.GetTargetBuildDir() / name),
-        serialization_(env_.GetTargetBuildDir() / fmt::format("{}.bin", name)) {
+        serialization_(env_.GetTargetBuildDir() / fmt::format("{}.json", name)),
+        comparator_(serialization_.GetLoad(), user_) {
     Initialize();
   }
   virtual ~CustomGenerator() = default;
@@ -137,33 +97,12 @@ public:
    * @param generate_cb User-defined generate callback to build outputs from the
    * provided inputs
    */
-  void AddIdInfo(const std::string &id,
-                 const std::unordered_set<std::string> &inputs,
-                 const std::unordered_set<std::string> &outputs,
-                 const GenerateCb &generate_cb,
-                 std::shared_ptr<CustomBlobHandler> blob_handler = nullptr);
-
-  // TODO, Doc
-  void AddGroupInfo(const std::string &group_id,
-                    std::initializer_list<std::string> ids,
-                    const DependencyCb &dependency_cb = DependencyCb());
-
-  // Callbacks
-  /**
-   * @brief Setup dependencies between Tasks using their `id`
-   * For example: `task_map["id1"].precede(task_map["id2"])`
-   *
-   * IMPORTANT: Successor tasks will not automatically run if dependent task is
-   * run.
-   * The Dependency callback only sets precedence (order in which your tasks
-   * should run)
-   * Default behaviour when dependency callback is not supplied: All task `id`s
-   * run in parallel.
-   *
-   * @param dependency_cb Unordered map of `id` and `task`
-   * The map can be safely mutated.
-   */
-  void AddDependencyCb(const DependencyCb &dependency_cb);
+  void
+  AddIdInfo(const std::string &id,
+            const std::unordered_set<std::string> &inputs,
+            const std::unordered_set<std::string> &outputs,
+            const GenerateCb &generate_cb,
+            const std::shared_ptr<CustomBlobHandler> &blob_handler = nullptr);
 
   void Build() override;
 
@@ -177,18 +116,99 @@ public:
   const std::string &Get(const std::string &file_identifier) const;
 
 private:
+  struct Comparator {
+    Comparator(const internal::CustomGeneratorSchema &loaded,
+               const UserCustomGeneratorSchema &us)
+        : loaded_schema_(loaded), current_schema_(us) {}
+
+    enum class State {
+      kRemoved,
+      kAdded,
+      kCheckLater,
+    };
+
+    void AddAllIds() {
+      const auto &curr_ids = current_schema_.ids;
+      for (const auto &[id, _] : curr_ids) {
+        id_state_info_.at(State::kAdded).insert(id);
+      }
+    }
+
+    void CompareIds() {
+      const auto &prev_ids = loaded_schema_.internal_ids;
+      const auto &curr_ids = current_schema_.ids;
+
+      for (const auto &[prev_id, _] : prev_ids) {
+        if (curr_ids.find(prev_id) == curr_ids.end()) {
+          // Id Removed condition, previous id is not present in the current run
+          id_state_info_.at(State::kRemoved).insert(prev_id);
+        }
+      }
+
+      for (const auto &[curr_id, _] : curr_ids) {
+        if (prev_ids.find(curr_id) == prev_ids.end()) {
+          // Id Added condition
+          id_state_info_.at(State::kAdded).insert(curr_id);
+        } else {
+          // Id Check Later condition
+          id_state_info_.at(State::kCheckLater).insert(curr_id);
+        }
+      }
+    }
+
+    bool IsChanged(const std::string &id) const {
+      const auto &previous_id_info = loaded_schema_.internal_ids.at(id);
+      const auto &current_id_info = current_schema_.ids.at(id);
+
+      bool changed = internal::CheckPaths(previous_id_info.internal_inputs,
+                                          current_id_info.internal_inputs) !=
+                     internal::PathState::kNoChange;
+      changed = changed || internal::CheckChanged(previous_id_info.outputs,
+                                                  current_id_info.outputs);
+      if (!changed && current_id_info.blob_handler != nullptr) {
+        // We only check blob handler if not changed by inputs/outputs
+        // Checking blob_handler could be expensive so this optimization is made
+        // to run only when changed == false
+        changed = current_id_info.blob_handler->CheckChanged(
+            previous_id_info.userblob, current_id_info.userblob);
+      }
+      return changed;
+    }
+
+    const std::unordered_set<std::string> &GetRemovedIds() const {
+      return id_state_info_.at(State::kRemoved);
+    }
+
+    const std::unordered_set<std::string> &GetAddedIds() const {
+      return id_state_info_.at(State::kAdded);
+    }
+
+    const std::unordered_set<std::string> &GetCheckLaterIds() const {
+      return id_state_info_.at(State::kCheckLater);
+    }
+
+    bool IsIdAdded(const std::string &id) const {
+      return id_state_info_.at(State::kAdded).count(id) == 1;
+    }
+
+  private:
+    const internal::CustomGeneratorSchema &loaded_schema_;
+    const UserCustomGeneratorSchema &current_schema_;
+    std::unordered_map<State, std::unordered_set<std::string>> id_state_info_{
+        {State::kRemoved, std::unordered_set<std::string>()},
+        {State::kAdded, std::unordered_set<std::string>()},
+        {State::kCheckLater, std::unordered_set<std::string>()},
+    };
+  };
+
+private:
   void Initialize();
 
-  void TaskRunner(bool run, const std::string &id);
-  tf::Task CreateTaskRunner(tf::Subflow &subflow, bool build,
-                            const std::string &id);
+  tf::Task CreateTaskRunner(tf::Subflow &subflow, const std::string &id);
+  void TaskRunner(const std::string &id);
 
   void GenerateTask();
-  void BuildGenerate(std::unordered_set<std::string> &gen_selected_ids,
-                     std::unordered_set<std::string> &dummy_gen_selected_ids);
-
-  void InvokeDependencyCb(std::unordered_map<std::string, tf::Task>
-                              &&registered_tasks) const noexcept;
+  void BuildGenerate();
 
   // Recheck states
   void IdRemoved();
@@ -200,46 +220,22 @@ protected:
   env::Command &RefCommand() { return command_; }
 
 private:
-  struct GroupMetadata {
-    std::vector<std::string> ids;
-    DependencyCb dependency_cb;
-
-    void InvokeDependencyCb(const std::string &group_id,
-                            std::unordered_map<std::string, tf::Task>
-                                &&registered_tasks) const noexcept {
-      if (!dependency_cb) {
-        return;
-      }
-      try {
-        dependency_cb(std::move(registered_tasks));
-      } catch (...) {
-        env::log_critical(
-            __FUNCTION__,
-            fmt::format("Dependency callback failed for group id {}",
-                        group_id));
-        env::set_task_state(env::TaskState::FAILURE);
-      }
-    }
-  };
-
-private:
   std::string name_;
   TargetEnv env_;
   internal::CustomGeneratorSerialization serialization_;
 
   // Serialization
   UserCustomGeneratorSchema user_;
-  std::unordered_map<std::string, GroupMetadata> grouped_ids_;
-  std::unordered_set<std::string> ungrouped_ids_;
+
+  // Comparator
+  Comparator comparator_;
 
   std::mutex success_schema_mutex_;
-  std::unordered_map<std::string, UserIdInfo> success_schema_;
+  std::unordered_map<std::string, UserCustomGeneratorSchema::UserIdInfo>
+      success_schema_;
 
   // Internal
   env::Command command_;
-
-  // Callbacks
-  DependencyCb dependency_cb_;
 };
 
 } // namespace buildcc
