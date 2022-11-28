@@ -76,7 +76,6 @@ void CustomGenerator::AddIdInfo(
 
 void CustomGenerator::Build() {
   (void)serialization_.LoadFromFile();
-
   GenerateTask();
 }
 
@@ -99,29 +98,6 @@ void CustomGenerator::Initialize() {
   //
   unique_id_ = name_;
   tf_.name(name_);
-}
-
-void CustomGenerator::BuildGenerate() {
-  if (!serialization_.IsLoaded()) {
-    comparator_.AddAllIds();
-    dirty_ = true;
-  } else {
-    // For IDS
-    comparator_.CompareIds();
-
-    const bool is_removed = !comparator_.GetRemovedIds().empty();
-    const bool is_added = !comparator_.GetAddedIds().empty();
-    dirty_ = is_removed || is_added;
-
-    if (is_removed) {
-      IdRemoved();
-    }
-
-    for (const auto &id : comparator_.GetAddedIds()) {
-      (void)id;
-      IdAdded();
-    }
-  }
 }
 
 void CustomGenerator::GenerateTask() {
@@ -165,6 +141,29 @@ void CustomGenerator::GenerateTask() {
   });
   // TODO, Instead of "Generate" name the task of user's choice
   generate_task.name(kGenerateTaskName);
+}
+
+void CustomGenerator::BuildGenerate() {
+  if (!serialization_.IsLoaded()) {
+    comparator_.AddAllIds();
+    dirty_ = true;
+  } else {
+    // For IDS
+    comparator_.CompareIds();
+
+    const bool is_removed = !comparator_.GetRemovedIds().empty();
+    const bool is_added = !comparator_.GetAddedIds().empty();
+    dirty_ = is_removed || is_added;
+
+    if (is_removed) {
+      IdRemoved();
+    }
+
+    for (const auto &id : comparator_.GetAddedIds()) {
+      (void)id;
+      IdAdded();
+    }
+  }
 }
 
 tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow,

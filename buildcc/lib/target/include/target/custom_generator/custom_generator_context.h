@@ -37,7 +37,7 @@ public:
 };
 
 // clang-format off
-using GenerateCb = std::function<bool (CustomGeneratorContext &)>;
+using GenerateCb = std::function<bool (const CustomGeneratorContext &)>;
 // clang-format on
 
 } // namespace buildcc
