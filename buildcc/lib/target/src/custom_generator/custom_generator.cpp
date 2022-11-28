@@ -62,12 +62,12 @@ void CustomGenerator::AddIdInfo(
 
   UserCustomGeneratorSchema::UserIdInfo schema;
   for (const auto &i : inputs) {
-    fs::path input = string_as_path(command_.Construct(i));
-    schema.inputs.emplace(std::move(input));
+    auto input = command_.Construct(i);
+    schema.inputs.Emplace(input, 0);
   }
   for (const auto &o : outputs) {
-    fs::path output = string_as_path(command_.Construct(o));
-    schema.outputs.emplace(std::move(output));
+    auto output = command_.Construct(o);
+    schema.outputs.Emplace(output);
   }
   schema.generate_cb = generate_cb;
   schema.blob_handler = blob_handler;
@@ -191,8 +191,9 @@ void CustomGenerator::TaskRunner(const std::string &id) {
   const auto &current_id_info = user_.ids.at(id);
   if (run) {
     dirty_ = true;
-    CustomGeneratorContext ctx(command_, current_id_info.inputs,
-                               current_id_info.outputs,
+    const auto input_paths = current_id_info.inputs.GetPaths();
+    const auto &output_paths = current_id_info.outputs.GetPaths();
+    CustomGeneratorContext ctx(command_, input_paths, output_paths,
                                current_id_info.userblob);
     bool success = current_id_info.generate_cb(ctx);
     env::assert_fatal(success, fmt::format("Generate Cb failed for id {}", id));

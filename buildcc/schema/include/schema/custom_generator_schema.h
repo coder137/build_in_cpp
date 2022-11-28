@@ -37,18 +37,18 @@ public:
     static constexpr const char *const kUserblob = "userblob";
 
   public:
-    path_unordered_set internal_inputs;
-    fs_unordered_set outputs;
+    PathInfoList inputs;
+    PathList outputs;
     std::vector<uint8_t> userblob;
 
     friend void to_json(json &j, const IdInfo &info) {
-      j[kInputs] = info.internal_inputs;
+      j[kInputs] = info.inputs;
       j[kOutputs] = info.outputs;
       j[kUserblob] = info.userblob;
     }
 
     friend void from_json(const json &j, IdInfo &info) {
-      j.at(kInputs).get_to(info.internal_inputs);
+      j.at(kInputs).get_to(info.inputs);
       j.at(kOutputs).get_to(info.outputs);
       j.at(kUserblob).get_to(info.userblob);
     }

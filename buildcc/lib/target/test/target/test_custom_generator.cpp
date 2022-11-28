@@ -54,12 +54,12 @@ TEST(CustomGeneratorTestGroup, Basic) {
     const auto &internal_map = serialization.GetLoad().internal_ids;
     CHECK_EQUAL(internal_map.size(), 2);
     const auto &id1_info = internal_map.at("id1");
-    CHECK_EQUAL(id1_info.internal_inputs.size(), 1);
-    CHECK_EQUAL(id1_info.outputs.size(), 1);
+    CHECK_EQUAL(id1_info.inputs.GetPathInfos().size(), 1);
+    CHECK_EQUAL(id1_info.outputs.GetPaths().size(), 1);
 
     const auto &id2_info = internal_map.at("id2");
-    CHECK_EQUAL(id2_info.internal_inputs.size(), 1);
-    CHECK_EQUAL(id2_info.outputs.size(), 0);
+    CHECK_EQUAL(id2_info.inputs.GetPathInfos().size(), 1);
+    CHECK_EQUAL(id2_info.outputs.GetPaths().size(), 0);
   }
 }
 
@@ -184,12 +184,12 @@ TEST(CustomGeneratorTestGroup, DefaultArgumentUsage) {
     const auto &internal_map = serialization.GetLoad().internal_ids;
     CHECK_EQUAL(internal_map.size(), 2);
     const auto &id1_info = internal_map.at("id1");
-    CHECK_EQUAL(id1_info.internal_inputs.size(), 1);
-    CHECK_EQUAL(id1_info.outputs.size(), 1);
+    CHECK_EQUAL(id1_info.inputs.GetPathInfos().size(), 1);
+    CHECK_EQUAL(id1_info.outputs.GetPaths().size(), 1);
 
     const auto &id2_info = internal_map.at("id2");
-    CHECK_EQUAL(id2_info.internal_inputs.size(), 1);
-    CHECK_EQUAL(id2_info.outputs.size(), 0);
+    CHECK_EQUAL(id2_info.inputs.GetPathInfos().size(), 1);
+    CHECK_EQUAL(id2_info.outputs.GetPaths().size(), 0);
   }
 }
 
@@ -332,11 +332,11 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
     CHECK_TRUE(serialization.LoadFromFile());
     CHECK_EQUAL(serialization.GetLoad().internal_ids.size(), 2);
     auto imap = serialization.GetLoad().internal_ids;
-    CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
-    CHECK_EQUAL(imap.at("id2").internal_inputs.size(), 1);
+    CHECK_EQUAL(imap.at("id1").inputs.GetPathInfos().size(), 1);
+    CHECK_EQUAL(imap.at("id2").inputs.GetPathInfos().size(), 1);
 
-    CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
-    CHECK_EQUAL(imap.at("id2").outputs.size(), 1);
+    CHECK_EQUAL(imap.at("id1").outputs.GetPaths().size(), 1);
+    CHECK_EQUAL(imap.at("id2").outputs.GetPaths().size(), 1);
   }
 
   buildcc::m::blocking_sleep(1);
@@ -368,14 +368,14 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
     CHECK_TRUE(serialization.LoadFromFile());
     CHECK_EQUAL(serialization.GetLoad().internal_ids.size(), 2);
     auto imap = serialization.GetLoad().internal_ids;
-    CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
-    CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+    CHECK_EQUAL(imap.at("id1").inputs.GetPathInfos().size(), 1);
+    CHECK_EQUAL(imap.at("id1").outputs.GetPaths().size(), 1);
 
-    CHECK_EQUAL(imap.at("id2").internal_inputs.size(), 1);
-    CHECK_EQUAL(imap.at("id2").outputs.size(), 1);
+    CHECK_EQUAL(imap.at("id2").inputs.GetPathInfos().size(), 1);
+    CHECK_EQUAL(imap.at("id2").outputs.GetPaths().size(), 1);
 
     CHECK_EQUAL(last_write_timestamp,
-                imap.at("id2").internal_inputs.begin()->last_write_timestamp);
+                imap.at("id2").inputs.GetPathInfos().begin()->second);
 
     CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }
@@ -400,11 +400,11 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
     CHECK_TRUE(serialization.LoadFromFile());
     CHECK_EQUAL(serialization.GetLoad().internal_ids.size(), 2);
     auto imap = serialization.GetLoad().internal_ids;
-    CHECK_EQUAL(imap.at("id1").internal_inputs.size(), 1);
-    CHECK_EQUAL(imap.at("id1").outputs.size(), 1);
+    CHECK_EQUAL(imap.at("id1").inputs.GetPathInfos().size(), 1);
+    CHECK_EQUAL(imap.at("id1").outputs.GetPaths().size(), 1);
 
-    CHECK_EQUAL(imap.at("id2").internal_inputs.size(), 1);
-    CHECK_EQUAL(imap.at("id2").outputs.size(), 1);
+    CHECK_EQUAL(imap.at("id2").inputs.GetPathInfos().size(), 1);
+    CHECK_EQUAL(imap.at("id2").outputs.GetPaths().size(), 1);
 
     CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }

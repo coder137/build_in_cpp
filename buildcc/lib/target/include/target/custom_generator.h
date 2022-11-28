@@ -39,13 +39,13 @@ namespace buildcc {
 
 struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
   struct UserIdInfo : internal::CustomGeneratorSchema::IdInfo {
-    fs_unordered_set inputs; // TODO, Remove
     GenerateCb generate_cb;
     std::shared_ptr<CustomBlobHandler> blob_handler{nullptr};
 
     void ConvertToInternal() {
-      internal_inputs = internal::path_schema_convert(
-          inputs, internal::Path::CreateExistingPath);
+      for (const auto &[path_str, _] : inputs.GetPathInfos()) {
+        inputs.ComputeHash(path_str);
+      }
       userblob = blob_handler != nullptr ? blob_handler->GetSerializedData()
                                          : std::vector<uint8_t>();
     }
@@ -55,8 +55,7 @@ struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
 
   void ConvertToInternal() {
     for (auto &[id_key, id_info] : ids) {
-      id_info.internal_inputs = path_schema_convert(
-          id_info.inputs, internal::Path::CreateExistingPath);
+      id_info.ConvertToInternal();
       auto [_, success] = internal_ids.try_emplace(id_key, id_info);
       env::assert_fatal(success, fmt::format("Could not save {}", id_key));
     }
@@ -107,12 +106,8 @@ struct Comparator {
     const auto &previous_id_info = loaded_schema_.internal_ids.at(id);
     const auto &current_id_info = current_schema_.ids.at(id);
 
-    bool changed =
-        buildcc::internal::CheckPaths(previous_id_info.internal_inputs,
-                                      current_id_info.internal_inputs) !=
-        buildcc::internal::PathState::kNoChange;
-    changed = changed || buildcc::internal::CheckChanged(
-                             previous_id_info.outputs, current_id_info.outputs);
+    bool changed = !previous_id_info.inputs.IsEqual(current_id_info.inputs) ||
+                   !previous_id_info.outputs.IsEqual(current_id_info.outputs);
     if (!changed && current_id_info.blob_handler != nullptr) {
       // We only check blob handler if not changed by inputs/outputs
       // Checking blob_handler could be expensive so this optimization is made
