@@ -63,7 +63,7 @@ void CustomGenerator::AddIdInfo(
   UserCustomGeneratorSchema::UserIdInfo schema;
   for (const auto &i : inputs) {
     auto input = command_.Construct(i);
-    schema.inputs.Emplace(input, 0);
+    schema.inputs.Emplace(input, "");
   }
   for (const auto &o : outputs) {
     auto output = command_.Construct(o);

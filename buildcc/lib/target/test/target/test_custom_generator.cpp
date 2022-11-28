@@ -348,7 +348,7 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
     buildcc::env::save_file(
         (cgen.GetBuildDir() / "dummy_main.cpp").string().c_str(), "", false);
 
-    std::uint64_t last_write_timestamp = static_cast<uint64_t>(
+    auto last_write_timestamp = static_cast<uint64_t>(
         fs::last_write_time(cgen.GetBuildDir() / "dummy_main.cpp")
             .time_since_epoch()
             .count());
@@ -374,8 +374,8 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
     CHECK_EQUAL(imap.at("id2").inputs.GetPathInfos().size(), 1);
     CHECK_EQUAL(imap.at("id2").outputs.GetPaths().size(), 1);
 
-    CHECK_EQUAL(last_write_timestamp,
-                imap.at("id2").inputs.GetPathInfos().begin()->second);
+    STRCMP_EQUAL(std::to_string(last_write_timestamp).c_str(),
+                 imap.at("id2").inputs.GetPathInfos().begin()->second.c_str());
 
     CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }

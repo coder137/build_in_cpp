@@ -34,6 +34,7 @@ using json = nlohmann::ordered_json;
 
 namespace buildcc::internal {
 
+// TODO, Update this
 struct Path {
 private:
   static constexpr const char *const kPathName = "path";
@@ -161,6 +162,7 @@ public:
   std::uint64_t last_write_timestamp{0};
 };
 
+// TODO, Remove this
 // Used by Path
 class PathHash {
 public:
@@ -169,88 +171,9 @@ public:
   size_t operator()(const fs::path &p) const { return fs::hash_value(p); }
 };
 
+// TODO, Remove this
 using path_unordered_set = std::unordered_set<Path, PathHash>;
 using fs_unordered_set = std::unordered_set<fs::path, PathHash>;
-
-/**
- * @brief Stores path + path hash in a hashmap
- *
- */
-class PathInfoList {
-private:
-  static constexpr const char *const kPath = "path";
-  static constexpr const char *const kHash = "hash";
-
-public:
-  PathInfoList() = default;
-  explicit PathInfoList(
-      std::initializer_list<std::pair<const std::string, std::uint64_t>>
-          path_infos) {
-    for (const auto &pinfo : path_infos) {
-      Emplace(pinfo.first, pinfo.second);
-    }
-  }
-
-  void Emplace(const std::string &pstr, std::uint64_t hash) {
-    auto path_str = Path::ToPathString(pstr);
-    path_infos_.emplace(std::move(path_str), std::move(hash));
-  }
-
-  // TODO, Add Compute Strategy here
-  void ComputeHash(const std::string &pstr) {
-    auto path_str = Path::ToPathString(pstr);
-    const bool found = path_infos_.find(path_str) != path_infos_.end();
-    // TODO, Verbose error message
-    env::assert_fatal(found, "");
-
-    std::error_code errcode;
-    const std::uint64_t last_write_timestamp =
-        std::filesystem::last_write_time(path_str, errcode)
-            .time_since_epoch()
-            .count();
-    env::assert_fatal(errcode.value() == 0,
-                      fmt::format("{} not found", path_str));
-    path_infos_.at(path_str) = last_write_timestamp;
-  }
-
-  // TODO, Use this later
-  void ComputeHashForAll() {}
-
-  // TODO, Change return value here to std::string
-  std::uint64_t GetHash(const std::string &str) const {
-    auto path_str = Path::ToPathString(str);
-    const bool found = path_infos_.find(path_str) != path_infos_.end();
-    env::assert_fatal(found, "");
-    return path_infos_.at(path_str);
-  }
-
-  bool IsEqual(const PathInfoList &other) const {
-    return path_infos_ == other.path_infos_;
-  }
-
-  const std::unordered_map<std::string, std::uint64_t> &GetPathInfos() const {
-    return path_infos_;
-  }
-
-  std::unordered_set<std::string> GetPaths() const {
-    std::unordered_set<std::string> paths;
-    for (const auto &[path_str, hash] : path_infos_) {
-      paths.emplace(path_str);
-    }
-    return paths;
-  }
-
-  friend void to_json(json &j, const PathInfoList &plist) {
-    j = plist.path_infos_;
-  }
-
-  friend void from_json(const json &j, PathInfoList &plist) {
-    j.get_to(plist.path_infos_);
-  }
-
-private:
-  std::unordered_map<std::string, std::uint64_t> path_infos_;
-};
 
 /**
  * @brief Stores path
@@ -272,8 +195,6 @@ public:
   bool IsEqual(const PathList &other) const { return paths_ == other.paths_; }
   const std::unordered_set<std::string> &GetPaths() const { return paths_; }
 
-  // TODO, Add a Contains API
-
   friend void to_json(json &j, const PathList &plist) { j = plist.paths_; }
 
   friend void from_json(const json &j, PathList &plist) {
@@ -284,6 +205,88 @@ private:
   std::unordered_set<std::string> paths_;
 };
 
+/**
+ * @brief Stores path + path hash in a hashmap
+ *
+ */
+class PathInfoList {
+private:
+  static constexpr const char *const kPath = "path";
+  static constexpr const char *const kHash = "hash";
+
+public:
+  PathInfoList() = default;
+  explicit PathInfoList(
+      std::initializer_list<std::pair<const std::string, std::string>>
+          path_infos) {
+    for (const auto &pinfo : path_infos) {
+      Emplace(pinfo.first, pinfo.second);
+    }
+  }
+
+  void Emplace(const std::string &pstr, const std::string &hash) {
+    auto path_str = Path::ToPathString(pstr);
+    path_infos_.emplace(std::move(path_str), hash);
+  }
+
+  void ComputeHashForAll() {
+    for (auto &[path_str, hash] : path_infos_) {
+      hash = ComputeHash(path_str);
+    }
+  }
+
+  const std::string &GetHash(const std::string &str) const {
+    auto path_str = Path::ToPathString(str);
+    const bool found = path_infos_.find(path_str) != path_infos_.end();
+    env::assert_fatal(found, "");
+    return path_infos_.at(path_str);
+  }
+
+  bool IsEqual(const PathInfoList &other) const {
+    return path_infos_ == other.path_infos_;
+  }
+
+  const std::unordered_map<std::string, std::string> &GetPathInfos() const {
+    return path_infos_;
+  }
+
+  std::unordered_set<std::string> GetPaths() const {
+    std::unordered_set<std::string> paths;
+    for (const auto &[path_str, hash] : path_infos_) {
+      paths.emplace(path_str);
+    }
+    return paths;
+  }
+
+  // TODO, Add Compute Strategy enum
+  static std::string ComputeHash(const std::string &pstr) {
+    auto path_str = Path::ToPathString(pstr);
+
+    // TODO, There might be a file checksum hash compute strategy
+    // This is the timestamp hash compute strategy
+    std::error_code errcode;
+    const std::uint64_t last_write_timestamp =
+        std::filesystem::last_write_time(path_str, errcode)
+            .time_since_epoch()
+            .count();
+    env::assert_fatal(errcode.value() == 0,
+                      fmt::format("{} not found", path_str));
+    return std::to_string(last_write_timestamp);
+  }
+
+  friend void to_json(json &j, const PathInfoList &plist) {
+    j = plist.path_infos_;
+  }
+
+  friend void from_json(const json &j, PathInfoList &plist) {
+    j.get_to(plist.path_infos_);
+  }
+
+private:
+  std::unordered_map<std::string, std::string> path_infos_;
+};
+
+// TODO, Remove this
 inline std::vector<Path>
 path_schema_convert(const std::vector<fs::path> &path_list,
                     const std::function<Path(const fs::path &)> &cb =
@@ -295,6 +298,7 @@ path_schema_convert(const std::vector<fs::path> &path_list,
   return internal_path_list;
 }
 
+// TODO, Remove this
 inline path_unordered_set
 path_schema_convert(const fs_unordered_set &path_set,
                     const std::function<Path(const fs::path &)> &cb =
@@ -306,6 +310,7 @@ path_schema_convert(const fs_unordered_set &path_set,
   return internal_path_set;
 }
 
+// TODO, Remove this
 inline fs_unordered_set
 path_schema_convert(const path_unordered_set &internal_path_set) {
   fs_unordered_set path_set;
@@ -318,11 +323,6 @@ path_schema_convert(const path_unordered_set &internal_path_set) {
 } // namespace buildcc::internal
 
 namespace buildcc {
-
-inline std::string sanitize_path_string(const fs::path &p) {
-  auto path_str = p.lexically_normal().string();
-  return path_str;
-}
 
 inline std::string path_as_string(const fs::path &p) {
   return internal::Path(p).GetPathAsString();

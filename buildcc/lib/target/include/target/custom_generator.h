@@ -43,9 +43,7 @@ struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
     std::shared_ptr<CustomBlobHandler> blob_handler{nullptr};
 
     void ConvertToInternal() {
-      for (const auto &[path_str, _] : inputs.GetPathInfos()) {
-        inputs.ComputeHash(path_str);
-      }
+      inputs.ComputeHashForAll();
       userblob = blob_handler != nullptr ? blob_handler->GetSerializedData()
                                          : std::vector<uint8_t>();
     }
