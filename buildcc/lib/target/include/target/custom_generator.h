@@ -39,17 +39,15 @@ namespace buildcc {
 
 struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
   struct UserIdInfo : internal::CustomGeneratorSchema::IdInfo {
-    GenerateCb generate_cb;
-    std::shared_ptr<CustomBlobHandler> blob_handler{nullptr};
-
     void ConvertToInternal() {
       inputs.ComputeHashForAll();
       userblob = blob_handler != nullptr ? blob_handler->GetSerializedData()
                                          : std::vector<uint8_t>();
     }
-  };
 
-  std::unordered_map<IdKey, UserIdInfo> ids;
+    GenerateCb generate_cb;
+    std::shared_ptr<CustomBlobHandler> blob_handler{nullptr};
+  };
 
   void ConvertToInternal() {
     for (auto &[id_key, id_info] : ids) {
@@ -58,6 +56,8 @@ struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
       env::assert_fatal(success, fmt::format("Could not save {}", id_key));
     }
   }
+
+  std::unordered_map<IdKey, UserIdInfo> ids;
 };
 
 struct Comparator {

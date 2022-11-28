@@ -129,8 +129,8 @@ void CustomGenerator::GenerateTask() {
         UserCustomGeneratorSchema user_final_schema;
         user_final_schema.ids.insert(success_schema_.begin(),
                                      success_schema_.end());
-
         user_final_schema.ConvertToInternal();
+
         serialization_.UpdateStore(user_final_schema);
         env::assert_fatal(serialization_.StoreToFile(),
                           fmt::format("Store failed for {}", name_));
@@ -139,7 +139,6 @@ void CustomGenerator::GenerateTask() {
       env::set_task_state(env::TaskState::FAILURE);
     }
   });
-  // TODO, Instead of "Generate" name the task of user's choice
   generate_task.name(kGenerateTaskName);
 }
 
