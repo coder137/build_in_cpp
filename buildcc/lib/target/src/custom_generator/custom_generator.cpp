@@ -112,13 +112,13 @@ void CustomGenerator::GenerateTask() {
 
       // Create runner for each added/updated id
       for (const auto &id : comparator_.GetAddedIds()) {
-        auto task = CreateTaskRunner(subflow, id);
-        task.name(id);
+        auto &id_info = user_.ids.at(id);
+        CreateTaskRunner(subflow, id, id_info);
       }
 
       for (const auto &id : comparator_.GetCheckLaterIds()) {
-        auto task = CreateTaskRunner(subflow, id);
-        task.name(id);
+        auto &id_info = user_.ids.at(id);
+        CreateTaskRunner(subflow, id, id_info);
       }
 
       // NOTE, Do not call detach otherwise this will fail
@@ -165,41 +165,45 @@ void CustomGenerator::BuildGenerate() {
   }
 }
 
-tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow,
-                                           const std::string &id) {
-  return subflow.emplace([&, id]() {
+tf::Task CustomGenerator::CreateTaskRunner(
+    tf::Subflow &subflow, const std::string &id,
+    UserCustomGeneratorSchema::UserIdInfo &id_info) {
+  auto task = subflow.emplace([&, id]() {
     if (env::get_task_state() != env::TaskState::SUCCESS) {
       return;
     }
     try {
-      TaskRunner(id);
+      id_info.ConvertToInternal();
+      TaskRunner(id, id_info);
     } catch (...) {
       env::set_task_state(env::TaskState::FAILURE);
     }
   });
+  task.name(id);
+  return task;
 }
 
-void CustomGenerator::TaskRunner(const std::string &id) {
-  // Convert to internal
-  user_.ids.at(id).ConvertToInternal();
-
+// TODO, 2 problems with this
+// Find a way for TaskRunner (subflow to send data back to taskflow)
+void CustomGenerator::TaskRunner(
+    const std::string &id,
+    const UserCustomGeneratorSchema::UserIdInfo &id_info) {
   // Compute runnable
   bool run = comparator_.IsIdAdded(id) ? true : comparator_.IsChanged(id);
 
   // Invoke generator callback
-  const auto &current_id_info = user_.ids.at(id);
   if (run) {
     dirty_ = true;
-    const auto input_paths = current_id_info.inputs.GetPaths();
-    const auto &output_paths = current_id_info.outputs.GetPaths();
-    CustomGeneratorContext ctx(command_, input_paths, output_paths,
-                               current_id_info.userblob);
-    bool success = current_id_info.generate_cb(ctx);
+    const auto input_paths = id_info.inputs.GetPaths();
+    CustomGeneratorContext ctx(command_, input_paths,
+                               id_info.outputs.GetPaths(), id_info.userblob);
+
+    bool success = id_info.generate_cb(ctx);
     env::assert_fatal(success, fmt::format("Generate Cb failed for id {}", id));
   }
 
   std::scoped_lock<std::mutex> guard(success_schema_mutex_);
-  success_schema_.try_emplace(id, current_id_info);
+  success_schema_.try_emplace(id, id_info);
 }
 
 } // namespace buildcc
