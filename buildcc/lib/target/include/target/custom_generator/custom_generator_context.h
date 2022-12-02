@@ -25,19 +25,20 @@ namespace buildcc {
 
 class CustomGeneratorContext {
 public:
-  CustomGeneratorContext(const env::Command &c, const fs_unordered_set &i,
-                         const fs_unordered_set &o,
+  CustomGeneratorContext(const env::Command &c,
+                         const std::unordered_set<std::string> &i,
+                         const std::unordered_set<std::string> &o,
                          const std::vector<uint8_t> &ub)
       : command(c), inputs(i), outputs(o), userblob(ub) {}
 
   const env::Command &command;
-  const fs_unordered_set &inputs;
-  const fs_unordered_set &outputs;
+  const std::unordered_set<std::string> &inputs;
+  const std::unordered_set<std::string> &outputs;
   const std::vector<uint8_t> &userblob;
 };
 
 // clang-format off
-using GenerateCb = std::function<bool (CustomGeneratorContext &)>;
+using GenerateCb = std::function<bool (const CustomGeneratorContext &)>;
 // clang-format on
 
 } // namespace buildcc

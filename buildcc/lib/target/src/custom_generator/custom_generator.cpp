@@ -28,6 +28,164 @@ constexpr const char *const kCurrentBuildDirName = "current_build_dir";
 
 namespace buildcc {
 
+struct Comparator {
+  Comparator(const internal::CustomGeneratorSchema &loaded,
+             const UserCustomGeneratorSchema &current)
+      : loaded_(loaded), current_(current) {}
+
+  enum class State {
+    kRemoved,
+    kAdded,
+    kCheckLater,
+  };
+
+  void AddAllIds() {
+    const auto &curr_ids = current_.ids;
+    for (const auto &[id, _] : curr_ids) {
+      id_state_info_.at(State::kAdded).insert(id);
+    }
+  }
+
+  void CompareAndAddIds() {
+    const auto &prev_ids = loaded_.internal_ids;
+    const auto &curr_ids = current_.ids;
+
+    for (const auto &[prev_id, _] : prev_ids) {
+      if (curr_ids.find(prev_id) == curr_ids.end()) {
+        // Id Removed condition, previous id is not present in the current run
+        id_state_info_.at(State::kRemoved).insert(prev_id);
+      }
+    }
+
+    for (const auto &[curr_id, _] : curr_ids) {
+      if (prev_ids.find(curr_id) == prev_ids.end()) {
+        // Id Added condition
+        id_state_info_.at(State::kAdded).insert(curr_id);
+      } else {
+        // Id Check Later condition
+        id_state_info_.at(State::kCheckLater).insert(curr_id);
+      }
+    }
+  }
+
+  bool IsChanged(const std::string &id) const {
+    const auto &previous_id_info = loaded_.internal_ids.at(id);
+    const auto &current_id_info = current_.ids.at(id);
+
+    bool changed = !previous_id_info.inputs.IsEqual(current_id_info.inputs) ||
+                   !previous_id_info.outputs.IsEqual(current_id_info.outputs);
+    if (!changed && current_id_info.blob_handler != nullptr) {
+      // We only check blob handler if not changed by inputs/outputs
+      // Checking blob_handler could be expensive so this optimization is made
+      // to run only when changed == false
+      changed = current_id_info.blob_handler->CheckChanged(
+          previous_id_info.userblob, current_id_info.userblob);
+    }
+    return changed;
+  }
+
+  const std::unordered_set<std::string> &GetRemovedIds() const {
+    return id_state_info_.at(State::kRemoved);
+  }
+
+  const std::unordered_set<std::string> &GetAddedIds() const {
+    return id_state_info_.at(State::kAdded);
+  }
+
+  const std::unordered_set<std::string> &GetCheckLaterIds() const {
+    return id_state_info_.at(State::kCheckLater);
+  }
+
+  bool IsIdAdded(const std::string &id) const {
+    return id_state_info_.at(State::kAdded).count(id) == 1;
+  }
+
+private:
+  const buildcc::internal::CustomGeneratorSchema &loaded_;
+  const buildcc::UserCustomGeneratorSchema &current_;
+  std::unordered_map<State, std::unordered_set<std::string>> id_state_info_{
+      {State::kRemoved, std::unordered_set<std::string>()},
+      {State::kAdded, std::unordered_set<std::string>()},
+      {State::kCheckLater, std::unordered_set<std::string>()},
+  };
+};
+
+struct TaskState {
+  bool should_run{false};
+  bool run_success{false};
+};
+
+struct TaskFunctor {
+  TaskFunctor(const std::string &id,
+              UserCustomGeneratorSchema::UserIdInfo &id_info,
+              const Comparator &comparator, const env::Command &command,
+              TaskState &state)
+      : id_(id), id_info_(id_info), comparator(comparator), command_(command),
+        state_(state) {}
+
+  void operator()() {
+    if (env::get_task_state() != env::TaskState::SUCCESS) {
+      return;
+    }
+    try {
+      id_info_.ConvertToInternal();
+      // Compute runnable
+      state_.should_run =
+          comparator.IsIdAdded(id_) ? true : comparator.IsChanged(id_);
+
+      // Invoke generator callback
+      if (state_.should_run) {
+        const auto input_paths = id_info_.inputs.GetPaths();
+        CustomGeneratorContext ctx(command_, input_paths,
+                                   id_info_.outputs.GetPaths(),
+                                   id_info_.userblob);
+
+        bool success = id_info_.generate_cb(ctx);
+        env::assert_fatal(success,
+                          fmt::format("Generate Cb failed for id {}", id_));
+      }
+      state_.run_success = true;
+    } catch (...) {
+      env::set_task_state(env::TaskState::FAILURE);
+    }
+  }
+
+private:
+  const std::string &id_;
+  UserCustomGeneratorSchema::UserIdInfo &id_info_;
+
+  const Comparator &comparator;
+  const env::Command &command_;
+
+  TaskState &state_;
+};
+
+bool ComputeBuild(const internal::CustomGeneratorSerialization &serialization,
+                  Comparator &comparator,
+                  std::function<void(void)> &&id_removed_cb,
+                  std::function<void(void)> &&id_added_cb) {
+  bool build = false;
+  if (!serialization.IsLoaded()) {
+    comparator.AddAllIds();
+    build = true;
+  } else {
+    comparator.CompareAndAddIds();
+    const bool is_removed = !comparator.GetRemovedIds().empty();
+    const bool is_added = !comparator.GetAddedIds().empty();
+    build = is_removed || is_added;
+
+    if (is_removed) {
+      id_removed_cb();
+    }
+
+    for (const auto &id : comparator.GetAddedIds()) {
+      (void)id;
+      id_added_cb();
+    }
+  }
+  return build;
+}
+
 void CustomGenerator::AddPattern(const std::string &identifier,
                                  const std::string &pattern) {
   command_.AddDefaultArgument(identifier, command_.Construct(pattern));
@@ -62,12 +220,12 @@ void CustomGenerator::AddIdInfo(
 
   UserCustomGeneratorSchema::UserIdInfo schema;
   for (const auto &i : inputs) {
-    fs::path input = string_as_path(command_.Construct(i));
-    schema.inputs.emplace(std::move(input));
+    auto input = command_.Construct(i);
+    schema.inputs.Emplace(input, "");
   }
   for (const auto &o : outputs) {
-    fs::path output = string_as_path(command_.Construct(o));
-    schema.outputs.emplace(std::move(output));
+    auto output = command_.Construct(o);
+    schema.outputs.Emplace(output);
   }
   schema.generate_cb = generate_cb;
   schema.blob_handler = blob_handler;
@@ -76,7 +234,6 @@ void CustomGenerator::AddIdInfo(
 
 void CustomGenerator::Build() {
   (void)serialization_.LoadFromFile();
-
   GenerateTask();
 }
 
@@ -101,29 +258,6 @@ void CustomGenerator::Initialize() {
   tf_.name(name_);
 }
 
-void CustomGenerator::BuildGenerate() {
-  if (!serialization_.IsLoaded()) {
-    comparator_.AddAllIds();
-    dirty_ = true;
-  } else {
-    // For IDS
-    comparator_.CompareIds();
-
-    const bool is_removed = !comparator_.GetRemovedIds().empty();
-    const bool is_added = !comparator_.GetAddedIds().empty();
-    dirty_ = is_removed || is_added;
-
-    if (is_removed) {
-      IdRemoved();
-    }
-
-    for (const auto &id : comparator_.GetAddedIds()) {
-      (void)id;
-      IdAdded();
-    }
-  }
-}
-
 void CustomGenerator::GenerateTask() {
   tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
     if (env::get_task_state() != env::TaskState::SUCCESS) {
@@ -132,29 +266,43 @@ void CustomGenerator::GenerateTask() {
 
     try {
       // Selected ids for build
-      BuildGenerate();
+      Comparator comparator(serialization_.GetLoad(), user_);
+      dirty_ = ComputeBuild(
+          serialization_, comparator, [this]() { IdRemoved(); },
+          [this]() { IdAdded(); });
+
+      std::unordered_map<std::string, TaskState> states;
 
       // Create runner for each added/updated id
-      for (const auto &id : comparator_.GetAddedIds()) {
-        auto task = CreateTaskRunner(subflow, id);
-        task.name(id);
+      for (const auto &id : comparator.GetAddedIds()) {
+        states.try_emplace(id, TaskState());
+        auto &id_info = user_.ids.at(id);
+        TaskFunctor functor(id, id_info, comparator, command_, states.at(id));
+        subflow.emplace(functor).name(id);
       }
 
-      for (const auto &id : comparator_.GetCheckLaterIds()) {
-        auto task = CreateTaskRunner(subflow, id);
-        task.name(id);
+      for (const auto &id : comparator.GetCheckLaterIds()) {
+        states.try_emplace(id, TaskState());
+        auto &id_info = user_.ids.at(id);
+        TaskFunctor functor(id, id_info, comparator, command_, states.at(id));
+        subflow.emplace(functor).name(id);
       }
 
       // NOTE, Do not call detach otherwise this will fail
       subflow.join();
 
+      UserCustomGeneratorSchema user_final_schema;
+      for (const auto &[id, state] : states) {
+        dirty_ = dirty_ || state.should_run;
+        if (state.run_success) {
+          user_final_schema.ids.try_emplace(id, user_.ids.at(id));
+        }
+      }
+
       // Store
       if (dirty_) {
-        UserCustomGeneratorSchema user_final_schema;
-        user_final_schema.ids.insert(success_schema_.begin(),
-                                     success_schema_.end());
-
         user_final_schema.ConvertToInternal();
+
         serialization_.UpdateStore(user_final_schema);
         env::assert_fatal(serialization_.StoreToFile(),
                           fmt::format("Store failed for {}", name_));
@@ -163,44 +311,7 @@ void CustomGenerator::GenerateTask() {
       env::set_task_state(env::TaskState::FAILURE);
     }
   });
-  // TODO, Instead of "Generate" name the task of user's choice
   generate_task.name(kGenerateTaskName);
-}
-
-tf::Task CustomGenerator::CreateTaskRunner(tf::Subflow &subflow,
-                                           const std::string &id) {
-  return subflow.emplace([&, id]() {
-    if (env::get_task_state() != env::TaskState::SUCCESS) {
-      return;
-    }
-    try {
-      TaskRunner(id);
-    } catch (...) {
-      env::set_task_state(env::TaskState::FAILURE);
-    }
-  });
-}
-
-void CustomGenerator::TaskRunner(const std::string &id) {
-  // Convert to internal
-  user_.ids.at(id).ConvertToInternal();
-
-  // Compute runnable
-  bool run = comparator_.IsIdAdded(id) ? true : comparator_.IsChanged(id);
-
-  // Invoke generator callback
-  const auto &current_id_info = user_.ids.at(id);
-  if (run) {
-    dirty_ = true;
-    CustomGeneratorContext ctx(command_, current_id_info.inputs,
-                               current_id_info.outputs,
-                               current_id_info.userblob);
-    bool success = current_id_info.generate_cb(ctx);
-    env::assert_fatal(success, fmt::format("Generate Cb failed for id {}", id));
-  }
-
-  std::scoped_lock<std::mutex> guard(success_schema_mutex_);
-  success_schema_.try_emplace(id, current_id_info);
 }
 
 } // namespace buildcc

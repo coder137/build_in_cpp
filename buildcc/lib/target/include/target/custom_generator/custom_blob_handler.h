@@ -23,6 +23,12 @@
 
 namespace buildcc {
 
+/**
+ * @brief Abstract class for serializing additional data for which rebuilds
+ * might be triggered i.e data that is not input/output files
+ * TODO, Add examples here
+ *
+ */
 class CustomBlobHandler {
 public:
   CustomBlobHandler() = default;
@@ -52,6 +58,48 @@ private:
   virtual bool IsEqual(const std::vector<uint8_t> &previous,
                        const std::vector<uint8_t> &current) const = 0;
   virtual std::vector<uint8_t> Serialize() const = 0;
+};
+
+/**
+ * @brief Typed Custom Blob handler which automatically performs Serialization
+ * and Deserialization as long as it is JSON serializable
+ *
+ * NOTE: Type data is stored as a reference (to avoid copying large amount of
+ * data) when constructing TypedCustomBlobHandler
+ *
+ * @tparam Type should be JSON serializable (see nlohmann::json compatible
+ * objects)
+ */
+template <typename Type>
+class TypedCustomBlobHandler : public CustomBlobHandler {
+public:
+  explicit TypedCustomBlobHandler(const Type &data) : data_(data) {}
+
+  // serialized_data has already been verified
+  static Type Deserialize(const std::vector<uint8_t> &serialized_data) {
+    json j = json::from_msgpack(serialized_data, true, false);
+    Type deserialized;
+    j.get_to(deserialized);
+    return deserialized;
+  }
+
+private:
+  const Type &data_;
+
+  bool Verify(const std::vector<uint8_t> &serialized_data) const override {
+    json j = json::from_msgpack(serialized_data, true, false);
+    return !j.is_discarded();
+  }
+
+  bool IsEqual(const std::vector<uint8_t> &previous,
+               const std::vector<uint8_t> &current) const override {
+    return Deserialize(previous) == Deserialize(current);
+  }
+
+  std::vector<uint8_t> Serialize() const override {
+    json j = data_;
+    return json::to_msgpack(j);
+  }
 };
 
 } // namespace buildcc

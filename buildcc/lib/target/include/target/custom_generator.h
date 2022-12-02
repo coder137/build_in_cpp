@@ -39,29 +39,25 @@ namespace buildcc {
 
 struct UserCustomGeneratorSchema : public internal::CustomGeneratorSchema {
   struct UserIdInfo : internal::CustomGeneratorSchema::IdInfo {
-    fs_unordered_set inputs; // TODO, Remove
-    GenerateCb generate_cb;
-    std::shared_ptr<CustomBlobHandler> blob_handler{nullptr};
-
     void ConvertToInternal() {
-      internal_inputs = internal::path_schema_convert(
-          inputs, internal::Path::CreateExistingPath);
+      inputs.ComputeHashForAll();
       userblob = blob_handler != nullptr ? blob_handler->GetSerializedData()
                                          : std::vector<uint8_t>();
     }
-  };
 
-  using UserIdPair = std::pair<const IdKey, UserIdInfo>;
-  std::unordered_map<IdKey, UserIdInfo> ids;
+    GenerateCb generate_cb;
+    std::shared_ptr<CustomBlobHandler> blob_handler{nullptr};
+  };
 
   void ConvertToInternal() {
     for (auto &[id_key, id_info] : ids) {
-      id_info.internal_inputs = path_schema_convert(
-          id_info.inputs, internal::Path::CreateExistingPath);
+      id_info.ConvertToInternal();
       auto [_, success] = internal_ids.try_emplace(id_key, id_info);
       env::assert_fatal(success, fmt::format("Could not save {}", id_key));
     }
   }
+
+  std::unordered_map<IdKey, UserIdInfo> ids;
 };
 
 class CustomGenerator : public internal::BuilderInterface {
@@ -69,8 +65,8 @@ public:
   CustomGenerator(const std::string &name, const TargetEnv &env)
       : name_(name),
         env_(env.GetTargetRootDir(), env.GetTargetBuildDir() / name),
-        serialization_(env_.GetTargetBuildDir() / fmt::format("{}.json", name)),
-        comparator_(serialization_.GetLoad(), user_) {
+        serialization_(env_.GetTargetBuildDir() /
+                       fmt::format("{}.json", name)) {
     Initialize();
   }
   virtual ~CustomGenerator() = default;
@@ -116,99 +112,8 @@ public:
   const std::string &Get(const std::string &file_identifier) const;
 
 private:
-  struct Comparator {
-    Comparator(const internal::CustomGeneratorSchema &loaded,
-               const UserCustomGeneratorSchema &us)
-        : loaded_schema_(loaded), current_schema_(us) {}
-
-    enum class State {
-      kRemoved,
-      kAdded,
-      kCheckLater,
-    };
-
-    void AddAllIds() {
-      const auto &curr_ids = current_schema_.ids;
-      for (const auto &[id, _] : curr_ids) {
-        id_state_info_.at(State::kAdded).insert(id);
-      }
-    }
-
-    void CompareIds() {
-      const auto &prev_ids = loaded_schema_.internal_ids;
-      const auto &curr_ids = current_schema_.ids;
-
-      for (const auto &[prev_id, _] : prev_ids) {
-        if (curr_ids.find(prev_id) == curr_ids.end()) {
-          // Id Removed condition, previous id is not present in the current run
-          id_state_info_.at(State::kRemoved).insert(prev_id);
-        }
-      }
-
-      for (const auto &[curr_id, _] : curr_ids) {
-        if (prev_ids.find(curr_id) == prev_ids.end()) {
-          // Id Added condition
-          id_state_info_.at(State::kAdded).insert(curr_id);
-        } else {
-          // Id Check Later condition
-          id_state_info_.at(State::kCheckLater).insert(curr_id);
-        }
-      }
-    }
-
-    bool IsChanged(const std::string &id) const {
-      const auto &previous_id_info = loaded_schema_.internal_ids.at(id);
-      const auto &current_id_info = current_schema_.ids.at(id);
-
-      bool changed = internal::CheckPaths(previous_id_info.internal_inputs,
-                                          current_id_info.internal_inputs) !=
-                     internal::PathState::kNoChange;
-      changed = changed || internal::CheckChanged(previous_id_info.outputs,
-                                                  current_id_info.outputs);
-      if (!changed && current_id_info.blob_handler != nullptr) {
-        // We only check blob handler if not changed by inputs/outputs
-        // Checking blob_handler could be expensive so this optimization is made
-        // to run only when changed == false
-        changed = current_id_info.blob_handler->CheckChanged(
-            previous_id_info.userblob, current_id_info.userblob);
-      }
-      return changed;
-    }
-
-    const std::unordered_set<std::string> &GetRemovedIds() const {
-      return id_state_info_.at(State::kRemoved);
-    }
-
-    const std::unordered_set<std::string> &GetAddedIds() const {
-      return id_state_info_.at(State::kAdded);
-    }
-
-    const std::unordered_set<std::string> &GetCheckLaterIds() const {
-      return id_state_info_.at(State::kCheckLater);
-    }
-
-    bool IsIdAdded(const std::string &id) const {
-      return id_state_info_.at(State::kAdded).count(id) == 1;
-    }
-
-  private:
-    const internal::CustomGeneratorSchema &loaded_schema_;
-    const UserCustomGeneratorSchema &current_schema_;
-    std::unordered_map<State, std::unordered_set<std::string>> id_state_info_{
-        {State::kRemoved, std::unordered_set<std::string>()},
-        {State::kAdded, std::unordered_set<std::string>()},
-        {State::kCheckLater, std::unordered_set<std::string>()},
-    };
-  };
-
-private:
   void Initialize();
-
-  tf::Task CreateTaskRunner(tf::Subflow &subflow, const std::string &id);
-  void TaskRunner(const std::string &id);
-
   void GenerateTask();
-  void BuildGenerate();
 
   // Recheck states
   void IdRemoved();
@@ -226,13 +131,6 @@ private:
 
   // Serialization
   UserCustomGeneratorSchema user_;
-
-  // Comparator
-  Comparator comparator_;
-
-  std::mutex success_schema_mutex_;
-  std::unordered_map<std::string, UserCustomGeneratorSchema::UserIdInfo>
-      success_schema_;
 
   // Internal
   env::Command command_;
