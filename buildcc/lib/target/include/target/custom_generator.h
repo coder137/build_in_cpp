@@ -78,7 +78,7 @@ struct Comparator {
     }
   }
 
-  void CompareIds() {
+  void CompareAndAddIds() {
     const auto &prev_ids = loaded_schema_.internal_ids;
     const auto &curr_ids = current_schema_.ids;
 
@@ -147,8 +147,8 @@ public:
   CustomGenerator(const std::string &name, const TargetEnv &env)
       : name_(name),
         env_(env.GetTargetRootDir(), env.GetTargetBuildDir() / name),
-        serialization_(env_.GetTargetBuildDir() / fmt::format("{}.json", name)),
-        comparator_(serialization_.GetLoad(), user_) {
+        serialization_(env_.GetTargetBuildDir() /
+                       fmt::format("{}.json", name)) {
     Initialize();
   }
   virtual ~CustomGenerator() = default;
@@ -195,9 +195,7 @@ public:
 
 private:
   void Initialize();
-
   void GenerateTask();
-  void BuildGenerate();
 
   // Recheck states
   void IdRemoved();
@@ -218,15 +216,6 @@ private:
 
   // Internal
   env::Command command_;
-
-  // Comparator
-  // TODO, Shift internally
-  Comparator comparator_;
-
-  // TODO, Shift internally
-  std::mutex success_schema_mutex_;
-  std::unordered_map<std::string, UserCustomGeneratorSchema::UserIdInfo>
-      success_schema_;
 };
 
 } // namespace buildcc

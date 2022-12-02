@@ -38,7 +38,7 @@ struct TaskFunctor {
               UserCustomGeneratorSchema::UserIdInfo &id_info,
               const Comparator &comparator, const env::Command &command,
               TaskState &state)
-      : id_(id), id_info_(id_info), comparator_(comparator), command_(command),
+      : id_(id), id_info_(id_info), comparator(comparator), command_(command),
         state_(state) {}
 
   void operator()() {
@@ -49,7 +49,7 @@ struct TaskFunctor {
       id_info_.ConvertToInternal();
       // Compute runnable
       state_.should_run =
-          comparator_.IsIdAdded(id_) ? true : comparator_.IsChanged(id_);
+          comparator.IsIdAdded(id_) ? true : comparator.IsChanged(id_);
 
       // Invoke generator callback
       if (state_.should_run) {
@@ -72,11 +72,37 @@ private:
   const std::string &id_;
   UserCustomGeneratorSchema::UserIdInfo &id_info_;
 
-  const Comparator &comparator_;
+  const Comparator &comparator;
   const env::Command &command_;
 
   TaskState &state_;
 };
+
+bool ComputeBuild(const internal::CustomGeneratorSerialization &serialization,
+                  Comparator &comparator,
+                  std::function<void(void)> &&id_removed_cb,
+                  std::function<void(void)> &&id_added_cb) {
+  bool build = false;
+  if (!serialization.IsLoaded()) {
+    comparator.AddAllIds();
+    build = true;
+  } else {
+    comparator.CompareAndAddIds();
+    const bool is_removed = !comparator.GetRemovedIds().empty();
+    const bool is_added = !comparator.GetAddedIds().empty();
+    build = is_removed || is_added;
+
+    if (is_removed) {
+      id_removed_cb();
+    }
+
+    for (const auto &id : comparator.GetAddedIds()) {
+      (void)id;
+      id_added_cb();
+    }
+  }
+  return build;
+}
 
 void CustomGenerator::AddPattern(const std::string &identifier,
                                  const std::string &pattern) {
@@ -158,22 +184,25 @@ void CustomGenerator::GenerateTask() {
 
     try {
       // Selected ids for build
-      BuildGenerate();
+      Comparator comparator(serialization_.GetLoad(), user_);
+      dirty_ = ComputeBuild(
+          serialization_, comparator, [this]() { IdRemoved(); },
+          [this]() { IdAdded(); });
 
       std::unordered_map<std::string, TaskState> states;
 
       // Create runner for each added/updated id
-      for (const auto &id : comparator_.GetAddedIds()) {
+      for (const auto &id : comparator.GetAddedIds()) {
         states.try_emplace(id, TaskState());
         auto &id_info = user_.ids.at(id);
-        TaskFunctor functor(id, id_info, comparator_, command_, states.at(id));
+        TaskFunctor functor(id, id_info, comparator, command_, states.at(id));
         subflow.emplace(functor).name(id);
       }
 
-      for (const auto &id : comparator_.GetCheckLaterIds()) {
+      for (const auto &id : comparator.GetCheckLaterIds()) {
         states.try_emplace(id, TaskState());
         auto &id_info = user_.ids.at(id);
-        TaskFunctor functor(id, id_info, comparator_, command_, states.at(id));
+        TaskFunctor functor(id, id_info, comparator, command_, states.at(id));
         subflow.emplace(functor).name(id);
       }
 
@@ -201,29 +230,6 @@ void CustomGenerator::GenerateTask() {
     }
   });
   generate_task.name(kGenerateTaskName);
-}
-
-void CustomGenerator::BuildGenerate() {
-  if (!serialization_.IsLoaded()) {
-    comparator_.AddAllIds();
-    dirty_ = true;
-  } else {
-    // For IDS
-    comparator_.CompareIds();
-
-    const bool is_removed = !comparator_.GetRemovedIds().empty();
-    const bool is_added = !comparator_.GetAddedIds().empty();
-    dirty_ = is_removed || is_added;
-
-    if (is_removed) {
-      IdRemoved();
-    }
-
-    for (const auto &id : comparator_.GetAddedIds()) {
-      (void)id;
-      IdAdded();
-    }
-  }
 }
 
 } // namespace buildcc
