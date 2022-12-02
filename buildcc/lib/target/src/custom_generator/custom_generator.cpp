@@ -29,9 +29,9 @@ constexpr const char *const kCurrentBuildDirName = "current_build_dir";
 namespace buildcc {
 
 struct Comparator {
-  Comparator(const buildcc::internal::CustomGeneratorSchema &loaded,
-             const buildcc::UserCustomGeneratorSchema &current)
-      : loaded_schema_(loaded), current_schema_(current) {}
+  Comparator(const internal::CustomGeneratorSchema &loaded,
+             const UserCustomGeneratorSchema &current)
+      : loaded_(loaded), current_(current) {}
 
   enum class State {
     kRemoved,
@@ -40,15 +40,15 @@ struct Comparator {
   };
 
   void AddAllIds() {
-    const auto &curr_ids = current_schema_.ids;
+    const auto &curr_ids = current_.ids;
     for (const auto &[id, _] : curr_ids) {
       id_state_info_.at(State::kAdded).insert(id);
     }
   }
 
   void CompareAndAddIds() {
-    const auto &prev_ids = loaded_schema_.internal_ids;
-    const auto &curr_ids = current_schema_.ids;
+    const auto &prev_ids = loaded_.internal_ids;
+    const auto &curr_ids = current_.ids;
 
     for (const auto &[prev_id, _] : prev_ids) {
       if (curr_ids.find(prev_id) == curr_ids.end()) {
@@ -69,8 +69,8 @@ struct Comparator {
   }
 
   bool IsChanged(const std::string &id) const {
-    const auto &previous_id_info = loaded_schema_.internal_ids.at(id);
-    const auto &current_id_info = current_schema_.ids.at(id);
+    const auto &previous_id_info = loaded_.internal_ids.at(id);
+    const auto &current_id_info = current_.ids.at(id);
 
     bool changed = !previous_id_info.inputs.IsEqual(current_id_info.inputs) ||
                    !previous_id_info.outputs.IsEqual(current_id_info.outputs);
@@ -101,8 +101,8 @@ struct Comparator {
   }
 
 private:
-  const buildcc::internal::CustomGeneratorSchema &loaded_schema_;
-  const buildcc::UserCustomGeneratorSchema &current_schema_;
+  const buildcc::internal::CustomGeneratorSchema &loaded_;
+  const buildcc::UserCustomGeneratorSchema &current_;
   std::unordered_map<State, std::unordered_set<std::string>> id_state_info_{
       {State::kRemoved, std::unordered_set<std::string>()},
       {State::kAdded, std::unordered_set<std::string>()},
