@@ -100,6 +100,56 @@ void CustomGenerator::Initialize() {
   tf_.name(name_);
 }
 
+struct TaskState {
+  bool should_run{false};
+  bool run_success{false};
+};
+
+struct CustomGeneratorFunctor {
+  CustomGeneratorFunctor(const std::string &id,
+                         UserCustomGeneratorSchema::UserIdInfo &id_info,
+                         const Comparator &comparator,
+                         const env::Command &command, TaskState &state)
+      : id_(id), id_info_(id_info), comparator_(comparator), command_(command),
+        state_(state) {}
+
+  void operator()() {
+    if (env::get_task_state() != env::TaskState::SUCCESS) {
+      return;
+    }
+    try {
+      id_info_.ConvertToInternal();
+      // Compute runnable
+      state_.should_run =
+          comparator_.IsIdAdded(id_) ? true : comparator_.IsChanged(id_);
+
+      // Invoke generator callback
+      if (state_.should_run) {
+        const auto input_paths = id_info_.inputs.GetPaths();
+        CustomGeneratorContext ctx(command_, input_paths,
+                                   id_info_.outputs.GetPaths(),
+                                   id_info_.userblob);
+
+        bool success = id_info_.generate_cb(ctx);
+        env::assert_fatal(success,
+                          fmt::format("Generate Cb failed for id {}", id_));
+      }
+      state_.run_success = true;
+    } catch (...) {
+      env::set_task_state(env::TaskState::FAILURE);
+    }
+  }
+
+private:
+  const std::string &id_;
+  UserCustomGeneratorSchema::UserIdInfo &id_info_;
+
+  const Comparator &comparator_;
+  const env::Command &command_;
+
+  TaskState &state_;
+};
+
 void CustomGenerator::GenerateTask() {
   tf::Task generate_task = tf_.emplace([&](tf::Subflow &subflow) {
     if (env::get_task_state() != env::TaskState::SUCCESS) {
@@ -110,25 +160,38 @@ void CustomGenerator::GenerateTask() {
       // Selected ids for build
       BuildGenerate();
 
+      std::unordered_map<std::string, TaskState> states;
+
       // Create runner for each added/updated id
       for (const auto &id : comparator_.GetAddedIds()) {
+        states.try_emplace(id, TaskState());
         auto &id_info = user_.ids.at(id);
-        CreateTaskRunner(subflow, id, id_info);
+        CustomGeneratorFunctor functor(id, id_info, comparator_, command_,
+                                       states.at(id));
+        subflow.emplace(functor).name(id);
       }
 
       for (const auto &id : comparator_.GetCheckLaterIds()) {
+        states.try_emplace(id, TaskState());
         auto &id_info = user_.ids.at(id);
-        CreateTaskRunner(subflow, id, id_info);
+        CustomGeneratorFunctor functor(id, id_info, comparator_, command_,
+                                       states.at(id));
+        subflow.emplace(functor).name(id);
       }
 
       // NOTE, Do not call detach otherwise this will fail
       subflow.join();
 
+      UserCustomGeneratorSchema user_final_schema;
+      for (const auto &[id, state] : states) {
+        dirty_ = dirty_ || state.should_run;
+        if (state.run_success) {
+          user_final_schema.ids.try_emplace(id, user_.ids.at(id));
+        }
+      }
+
       // Store
       if (dirty_) {
-        UserCustomGeneratorSchema user_final_schema;
-        user_final_schema.ids.insert(success_schema_.begin(),
-                                     success_schema_.end());
         user_final_schema.ConvertToInternal();
 
         serialization_.UpdateStore(user_final_schema);
@@ -163,24 +226,6 @@ void CustomGenerator::BuildGenerate() {
       IdAdded();
     }
   }
-}
-
-tf::Task CustomGenerator::CreateTaskRunner(
-    tf::Subflow &subflow, const std::string &id,
-    UserCustomGeneratorSchema::UserIdInfo &id_info) {
-  auto task = subflow.emplace([&, id]() {
-    if (env::get_task_state() != env::TaskState::SUCCESS) {
-      return;
-    }
-    try {
-      id_info.ConvertToInternal();
-      TaskRunner(id, id_info);
-    } catch (...) {
-      env::set_task_state(env::TaskState::FAILURE);
-    }
-  });
-  task.name(id);
-  return task;
 }
 
 // TODO, 2 problems with this
