@@ -226,27 +226,4 @@ void CustomGenerator::BuildGenerate() {
   }
 }
 
-// TODO, 2 problems with this
-// Find a way for TaskRunner (subflow to send data back to taskflow)
-void CustomGenerator::TaskRunner(
-    const std::string &id,
-    const UserCustomGeneratorSchema::UserIdInfo &id_info) {
-  // Compute runnable
-  bool run = comparator_.IsIdAdded(id) ? true : comparator_.IsChanged(id);
-
-  // Invoke generator callback
-  if (run) {
-    dirty_ = true;
-    const auto input_paths = id_info.inputs.GetPaths();
-    CustomGeneratorContext ctx(command_, input_paths,
-                               id_info.outputs.GetPaths(), id_info.userblob);
-
-    bool success = id_info.generate_cb(ctx);
-    env::assert_fatal(success, fmt::format("Generate Cb failed for id {}", id));
-  }
-
-  std::scoped_lock<std::mutex> guard(success_schema_mutex_);
-  success_schema_.try_emplace(id, id_info);
-}
-
 } // namespace buildcc

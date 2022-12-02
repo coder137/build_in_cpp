@@ -196,11 +196,6 @@ public:
 private:
   void Initialize();
 
-  tf::Task CreateTaskRunner(tf::Subflow &subflow, const std::string &id,
-                            UserCustomGeneratorSchema::UserIdInfo &id_info);
-  void TaskRunner(const std::string &id,
-                  const UserCustomGeneratorSchema::UserIdInfo &id_info);
-
   void GenerateTask();
   void BuildGenerate();
 
