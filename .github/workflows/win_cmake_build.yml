@@ -24,7 +24,7 @@ jobs:
     runs-on: windows-2019
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
@@ -88,7 +88,7 @@ jobs:
           cpack -C Release -G ZIP
 
       - name: Upload CPack
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: "BuildExe_Win"
           path: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}/BuildCC-0.1.1-win64.zip
@@ -162,7 +162,7 @@ jobs:
     runs-on: windows-2019
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
