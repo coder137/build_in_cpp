@@ -103,8 +103,8 @@ public:
    */
   static std::string ToPathString(const std::string &str) {
     auto path_str = str;
-    std::replace(path_str.begin(), path_str.end(), '\\', '/');
     path_str = fs::path(path_str).lexically_normal().string();
+    std::replace(path_str.begin(), path_str.end(), '\\', '/');
     return path_str;
   }
 
