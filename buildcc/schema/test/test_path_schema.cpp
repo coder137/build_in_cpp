@@ -21,7 +21,7 @@ TEST(PathSchemaTestGroup, Path_ToPathString) {
   auto path_str = buildcc::internal::Path::ToPathString("hello/\\first.txt");
 
   if constexpr (buildcc::env::is_win()) {
-    STRCMP_EQUAL("hello/first.txt", path_str.c_str());
+    STRCMP_EQUAL("hello\\first.txt", path_str.c_str());
   } else if constexpr (buildcc::env::is_linux() || buildcc::env::is_mac() ||
                        buildcc::env::is_unix()) {
     STRCMP_EQUAL("hello/\\first.txt", path_str.c_str());
