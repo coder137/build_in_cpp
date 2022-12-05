@@ -189,11 +189,11 @@ public:
 
   void Emplace(const std::string &pstr) {
     auto path_str = Path::ToPathString(pstr);
-    paths_.emplace(std::move(path_str));
+    paths_.emplace_back(std::move(path_str));
   }
 
   bool IsEqual(const PathList &other) const { return paths_ == other.paths_; }
-  const std::unordered_set<std::string> &GetPaths() const { return paths_; }
+  const std::vector<std::string> &GetPaths() const { return paths_; }
 
   friend void to_json(json &j, const PathList &plist) { j = plist.paths_; }
 
@@ -202,7 +202,7 @@ public:
   }
 
 private:
-  std::unordered_set<std::string> paths_;
+  std::vector<std::string> paths_;
 };
 
 /**
@@ -211,10 +211,34 @@ private:
  */
 class PathInfoList {
 private:
-  static constexpr const char *const kPath = "path";
-  static constexpr const char *const kHash = "hash";
-
 public:
+  struct PathInfo {
+  private:
+    static constexpr const char *const kPath = "path";
+    static constexpr const char *const kHash = "hash";
+
+  public:
+    PathInfo() = default;
+    PathInfo(const std::string &p, const std::string &h) : path(p), hash(h) {}
+
+    bool operator==(const PathInfo &other) const {
+      return ((path == other.path) && (hash == other.hash));
+    }
+
+    friend void to_json(json &j, const PathInfo &info) {
+      j[kPath] = info.path;
+      j[kHash] = info.hash;
+    }
+
+    friend void from_json(const json &j, PathInfo &info) {
+      j.at(kPath).get_to(info.path);
+      j.at(kHash).get_to(info.hash);
+    }
+
+    std::string path;
+    std::string hash;
+  };
+
   PathInfoList() = default;
   explicit PathInfoList(
       std::initializer_list<std::pair<const std::string, std::string>>
@@ -226,34 +250,31 @@ public:
 
   void Emplace(const std::string &pstr, const std::string &hash) {
     auto path_str = Path::ToPathString(pstr);
-    path_infos_.emplace(std::move(path_str), hash);
+    infos_.emplace_back(PathInfo(path_str, hash));
   }
 
-  void ComputeHashForAll() {
-    for (auto &[path_str, hash] : path_infos_) {
-      hash = ComputeHash(path_str);
+  void Insert(const PathInfoList &other) {
+    for (const auto &info : other.infos_) {
+      Emplace(info.path, info.hash);
     }
   }
 
-  const std::string &GetHash(const std::string &str) const {
-    auto path_str = Path::ToPathString(str);
-    const bool found = path_infos_.find(path_str) != path_infos_.end();
-    env::assert_fatal(found, "");
-    return path_infos_.at(path_str);
+  void ComputeHashForAll() {
+    for (auto &info : infos_) {
+      info.hash = ComputeHash(info.path);
+    }
   }
 
   bool IsEqual(const PathInfoList &other) const {
-    return path_infos_ == other.path_infos_;
+    return infos_ == other.infos_;
   }
 
-  const std::unordered_map<std::string, std::string> &GetPathInfos() const {
-    return path_infos_;
-  }
+  const std::vector<PathInfo> &GetPathInfos() const { return infos_; }
 
-  std::unordered_set<std::string> GetPaths() const {
-    std::unordered_set<std::string> paths;
-    for (const auto &[path_str, hash] : path_infos_) {
-      paths.emplace(path_str);
+  std::vector<std::string> GetPaths() const {
+    std::vector<std::string> paths;
+    for (const auto &info : infos_) {
+      paths.emplace_back(info.path);
     }
     return paths;
   }
@@ -274,16 +295,14 @@ public:
     return std::to_string(last_write_timestamp);
   }
 
-  friend void to_json(json &j, const PathInfoList &plist) {
-    j = plist.path_infos_;
-  }
+  friend void to_json(json &j, const PathInfoList &plist) { j = plist.infos_; }
 
   friend void from_json(const json &j, PathInfoList &plist) {
-    j.get_to(plist.path_infos_);
+    j.get_to(plist.infos_);
   }
 
 private:
-  std::unordered_map<std::string, std::string> path_infos_;
+  std::vector<PathInfo> infos_;
 };
 
 // TODO, Remove this
