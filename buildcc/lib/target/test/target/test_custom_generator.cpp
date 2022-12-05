@@ -375,7 +375,7 @@ TEST(CustomGeneratorTestGroup, RealGenerate_Update_Success) {
     CHECK_EQUAL(imap.at("id2").outputs.GetPaths().size(), 1);
 
     STRCMP_EQUAL(std::to_string(last_write_timestamp).c_str(),
-                 imap.at("id2").inputs.GetPathInfos().begin()->second.c_str());
+                 imap.at("id2").inputs.GetPathInfos()[0].hash.c_str());
 
     CHECK(buildcc::env::get_task_state() == buildcc::env::TaskState::SUCCESS);
   }
