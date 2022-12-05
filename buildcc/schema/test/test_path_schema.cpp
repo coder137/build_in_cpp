@@ -1,6 +1,8 @@
 // Internal
 #include "schema/path.h"
 
+#include "env/host_os.h"
+
 // NOTE, Make sure all these includes are AFTER the system and header includes
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
@@ -17,7 +19,15 @@ TEST(PathSchemaTestGroup, PathList) { buildcc::internal::PathList paths; }
 
 TEST(PathSchemaTestGroup, Path_ToPathString) {
   auto path_str = buildcc::internal::Path::ToPathString("hello/\\first.txt");
-  STRCMP_EQUAL("hello/first.txt", path_str.c_str());
+
+  if constexpr (buildcc::env::is_win()) {
+    STRCMP_EQUAL("hello/first.txt", path_str.c_str());
+  } else if constexpr (buildcc::env::is_linux() || buildcc::env::is_mac() ||
+                       buildcc::env::is_unix()) {
+    STRCMP_EQUAL("hello/\\first.txt", path_str.c_str());
+  } else {
+    FAIL("Operating system not supported");
+  }
 }
 
 TEST(PathSchemaTestGroup, PathInfoList_OrderedEmplace) {
@@ -28,12 +38,25 @@ TEST(PathSchemaTestGroup, PathInfoList_OrderedEmplace) {
   path_infos.Emplace("hello/world/third_file.txt", "");
   path_infos.Emplace("hello/world/fourth_file.txt", "");
 
-  std::vector<std::string> paths = {
-      "hello/world/first_file.txt",
-      "hello/world/second_file.txt",
-      "hello/world/third_file.txt",
-      "hello/world/fourth_file.txt",
-  };
+  std::vector<std::string> paths;
+  if constexpr (buildcc::env::is_win()) {
+    paths = {
+        "hello\\world\\first_file.txt",
+        "hello\\world\\second_file.txt",
+        "hello\\world\\third_file.txt",
+        "hello\\world\\fourth_file.txt",
+    };
+  } else if constexpr (buildcc::env::is_linux() || buildcc::env::is_unix() ||
+                       buildcc::env::is_mac()) {
+    paths = {
+        "hello/world/first_file.txt",
+        "hello/world/second_file.txt",
+        "hello/world/third_file.txt",
+        "hello/world/fourth_file.txt",
+    };
+  } else {
+    FAIL("Operating system not supported");
+  }
 
   auto inserted_paths = path_infos.GetPaths();
   for (std::size_t i = 0; i < inserted_paths.size(); i++) {
