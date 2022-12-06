@@ -192,12 +192,11 @@ void CompileObject::BuildObjectCompile(
                  user_target_schema.include_dirs)) {
       target_.dirty_ = true;
       target_.DirChanged();
-    }
-    target_.RecheckPaths(load_target_schema.internal_headers,
-                         user_target_schema.internal_headers);
-
-    if (!target_.dirty_ && !(load_target_schema.compile_dependencies ==
-                             user_target_schema.compile_dependencies)) {
+    } else if (!(load_target_schema.headers == user_target_schema.headers)) {
+      target_.dirty_ = true;
+      target_.PathChanged();
+    } else if (!(load_target_schema.compile_dependencies ==
+                 user_target_schema.compile_dependencies)) {
       target_.dirty_ = true;
       target_.PathChanged();
     }
@@ -218,8 +217,7 @@ void CompileObject::PreObjectCompile() {
       internal::path_schema_convert(target_user_schema.sources);
 
   // Convert user_header_files to current_header_files
-  target_user_schema.internal_headers =
-      internal::path_schema_convert(target_user_schema.headers);
+  target_user_schema.headers.ComputeHashForAll();
 
   // Convert user_compile_dependencies to current_compile_dependencies
   target_user_schema.compile_dependencies.ComputeHashForAll();

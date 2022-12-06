@@ -97,9 +97,10 @@ void CompilePch::BuildCompile() {
                  user_target_schema.include_dirs)) {
       target_.dirty_ = true;
       target_.DirChanged();
+    } else if (!(load_target_schema.headers == user_target_schema.headers)) {
+      target_.dirty_ = true;
+      target_.PathChanged();
     }
-    target_.RecheckPaths(load_target_schema.internal_headers,
-                         user_target_schema.internal_headers);
     target_.RecheckPaths(load_target_schema.internal_pchs,
                          user_target_schema.internal_pchs);
     if (!load_target_schema.pch_compiled) {
@@ -167,8 +168,7 @@ std::string CompilePch::ConstructCompileCommand() const {
 void CompilePch::PreCompile() {
   auto &target_user_schema = target_.user_;
 
-  target_user_schema.internal_headers =
-      internal::path_schema_convert(target_user_schema.headers);
+  target_user_schema.headers.ComputeHashForAll();
 
   target_user_schema.internal_pchs =
       internal::path_schema_convert(target_user_schema.pchs);

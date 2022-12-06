@@ -246,7 +246,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     CHECK_TRUE(is_loaded);
     CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
     CHECK_EQUAL(serialization.GetLoad().include_dirs.GetPaths().size(), 1);
-    CHECK_EQUAL(serialization.GetLoad().internal_headers.size(), 0);
+    CHECK_EQUAL(serialization.GetLoad().headers.GetPaths().size(), 0);
   }
 
   // Add header
@@ -270,7 +270,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     CHECK_TRUE(is_loaded);
     CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
     CHECK_EQUAL(serialization.GetLoad().include_dirs.GetPaths().size(), 1);
-    CHECK_EQUAL(serialization.GetLoad().internal_headers.size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().headers.GetPaths().size(), 1);
   }
 
   // Update header
@@ -300,7 +300,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     CHECK_TRUE(is_loaded);
     CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
     CHECK_EQUAL(serialization.GetLoad().include_dirs.GetPaths().size(), 1);
-    CHECK_EQUAL(serialization.GetLoad().internal_headers.size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().headers.GetPaths().size(), 1);
   }
 
   // Remove header
@@ -323,7 +323,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     CHECK_TRUE(is_loaded);
     CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
     CHECK_EQUAL(serialization.GetLoad().include_dirs.GetPaths().size(), 1);
-    CHECK_EQUAL(serialization.GetLoad().internal_headers.size(), 0);
+    CHECK_EQUAL(serialization.GetLoad().headers.GetPaths().size(), 0);
   }
 
   mock().checkExpectations();

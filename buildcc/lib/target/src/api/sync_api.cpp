@@ -185,9 +185,7 @@ void SyncApi<T>::SpecializedInsert(TargetType target,
           std::make_move_iterator(target.user_.sources.end()));
       break;
     case SyncOption::HeaderFiles:
-      t.user_.headers.insert(
-          std::make_move_iterator(target.user_.headers.begin()),
-          std::make_move_iterator(target.user_.headers.end()));
+      t.user_.headers.Insert(std::move(target.user_.headers));
       break;
     case SyncOption::PchFiles:
       t.user_.pchs.insert(std::make_move_iterator(target.user_.pchs.begin()),

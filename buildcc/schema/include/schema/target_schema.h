@@ -30,7 +30,7 @@ struct TargetSchema {
   TargetType type{TargetType::Undefined};
 
   path_unordered_set internal_sources;
-  path_unordered_set internal_headers;
+  PathInfoList headers;
   path_unordered_set internal_pchs;
 
   PathInfoList libs;
@@ -90,7 +90,7 @@ public:
     j[kName] = schema.name;
     j[kType] = schema.type;
     j[kSources] = schema.internal_sources;
-    j[kHeaders] = schema.internal_headers;
+    j[kHeaders] = schema.headers;
     j[kPchs] = schema.internal_pchs;
     j[kLibs] = schema.libs;
     j[kExternalLibs] = schema.external_libs;
@@ -116,7 +116,7 @@ public:
     j.at(kName).get_to(schema.name);
     j.at(kType).get_to(schema.type);
     j.at(kSources).get_to(schema.internal_sources);
-    j.at(kHeaders).get_to(schema.internal_headers);
+    j.at(kHeaders).get_to(schema.headers);
     j.at(kPchs).get_to(schema.internal_pchs);
     j.at(kLibs).get_to(schema.libs);
     j.at(kExternalLibs).get_to(schema.external_libs);
