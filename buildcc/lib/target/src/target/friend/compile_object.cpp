@@ -188,9 +188,11 @@ void CompileObject::BuildObjectCompile(
                  user_target_schema.cpp_compile_flags)) {
       target_.dirty_ = true;
       target_.FlagChanged();
+    } else if (!(load_target_schema.include_dirs ==
+                 user_target_schema.include_dirs)) {
+      target_.dirty_ = true;
+      target_.DirChanged();
     }
-    target_.RecheckDirs(load_target_schema.include_dirs,
-                        user_target_schema.include_dirs);
     target_.RecheckPaths(load_target_schema.internal_headers,
                          user_target_schema.internal_headers);
 

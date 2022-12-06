@@ -80,21 +80,26 @@ void CompilePch::BuildCompile() {
   if (!serialization.IsLoaded()) {
     target_.dirty_ = true;
   } else {
-    target_.RecheckFlags(load_target_schema.preprocessor_flags,
-                         user_target_schema.preprocessor_flags);
-    target_.RecheckFlags(load_target_schema.common_compile_flags,
-                         user_target_schema.common_compile_flags);
-    target_.RecheckFlags(load_target_schema.c_compile_flags,
-                         user_target_schema.c_compile_flags);
-    target_.RecheckFlags(load_target_schema.cpp_compile_flags,
-                         user_target_schema.cpp_compile_flags);
-    target_.RecheckDirs(load_target_schema.include_dirs,
-                        user_target_schema.include_dirs);
+    if (target_.dirty_) {
+    } else if (!(load_target_schema.preprocessor_flags ==
+                 user_target_schema.preprocessor_flags) ||
+               !(load_target_schema.common_compile_flags ==
+                 user_target_schema.common_compile_flags) ||
+               !(load_target_schema.pch_compile_flags ==
+                 user_target_schema.pch_compile_flags) ||
+               !(load_target_schema.c_compile_flags ==
+                 user_target_schema.c_compile_flags) ||
+               !(load_target_schema.cpp_compile_flags ==
+                 user_target_schema.cpp_compile_flags)) {
+      target_.dirty_ = true;
+      target_.FlagChanged();
+    } else if (!(load_target_schema.include_dirs ==
+                 user_target_schema.include_dirs)) {
+      target_.dirty_ = true;
+      target_.DirChanged();
+    }
     target_.RecheckPaths(load_target_schema.internal_headers,
                          user_target_schema.internal_headers);
-
-    target_.RecheckFlags(load_target_schema.pch_compile_flags,
-                         user_target_schema.pch_compile_flags);
     target_.RecheckPaths(load_target_schema.internal_pchs,
                          user_target_schema.internal_pchs);
     if (!load_target_schema.pch_compiled) {

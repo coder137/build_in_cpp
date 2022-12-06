@@ -37,9 +37,9 @@ public:
     return t.user_.headers;
   }
 
-  const fs_unordered_set &GetIncludeDirs() const {
+  const std::vector<std::string> &GetIncludeDirs() const {
     const auto &t = static_cast<const T &>(*this);
-    return t.user_.include_dirs;
+    return t.user_.include_dirs.GetPaths();
   }
 
   void AddHeaderAbsolute(const fs::path &absolute_filepath) {
@@ -63,7 +63,7 @@ public:
                              bool glob_headers = false) {
     auto &t = static_cast<T &>(*this);
 
-    t.user_.include_dirs.insert(absolute_include_dir);
+    t.user_.include_dirs.Emplace(absolute_include_dir);
 
     if (glob_headers) {
       GlobHeadersAbsolute(absolute_include_dir);

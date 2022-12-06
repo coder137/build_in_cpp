@@ -107,7 +107,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     include_compile.AddSource(DUMMY_MAIN_C);
     include_compile.AddSource(INCLUDE_HEADER_SOURCE);
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
-    // Duplicate include directory
+    // Duplicate include directory (will be reflected)
     include_compile.AddIncludeDir(RELATIVE_INCLUDE_DIR);
 
     buildcc::env::m::CommandExpect_Execute(2, true);
@@ -120,17 +120,19 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
     const auto &loaded_sources = serialization.GetLoad().internal_sources;
-    const auto &loaded_dirs = serialization.GetLoad().include_dirs;
+    const auto &loaded_dirs = serialization.GetLoad().include_dirs.GetPaths();
 
     CHECK_EQUAL(loaded_sources.size(), 2);
-    CHECK_EQUAL(loaded_dirs.size(), 1);
+    CHECK_EQUAL(loaded_dirs.size(), 2);
 
     CHECK_FALSE(loaded_sources.find(dummy_c_file) == loaded_sources.end());
     CHECK_FALSE(loaded_sources.find(include_header_file) ==
                 loaded_sources.end());
 
-    CHECK_FALSE(loaded_dirs.find(include_header_path.string()) ==
-                loaded_dirs.end());
+    std::unordered_set<std::string> unordered_loaded_dirs(loaded_dirs.begin(),
+                                                          loaded_dirs.end());
+    CHECK_FALSE(unordered_loaded_dirs.find(include_header_path.string()) ==
+                unordered_loaded_dirs.end());
   }
   {
     // * 1 Adding new include directory
@@ -153,7 +155,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
     const auto &loaded_sources = serialization.GetLoad().internal_sources;
-    const auto &loaded_dirs = serialization.GetLoad().include_dirs;
+    const auto &loaded_dirs = serialization.GetLoad().include_dirs.GetPaths();
 
     CHECK_EQUAL(loaded_sources.size(), 2);
     CHECK_EQUAL(loaded_dirs.size(), 2);
@@ -161,8 +163,11 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     CHECK_FALSE(loaded_sources.find(dummy_c_file) == loaded_sources.end());
     CHECK_FALSE(loaded_sources.find(include_header_file) ==
                 loaded_sources.end());
-    CHECK_FALSE(loaded_dirs.find(include_header_path.string()) ==
-                loaded_dirs.end());
+
+    std::unordered_set<std::string> unordered_loaded_dirs(loaded_dirs.begin(),
+                                                          loaded_dirs.end());
+    CHECK_FALSE(unordered_loaded_dirs.find(include_header_path.string()) ==
+                unordered_loaded_dirs.end());
   }
   {
     // * Remove include directory
@@ -183,7 +188,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
     const auto &loaded_sources = serialization.GetLoad().internal_sources;
-    const auto &loaded_dirs = serialization.GetLoad().include_dirs;
+    const auto &loaded_dirs = serialization.GetLoad().include_dirs.GetPaths();
 
     CHECK_EQUAL(loaded_sources.size(), 2);
     CHECK_EQUAL(loaded_dirs.size(), 1);
@@ -191,8 +196,11 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
     CHECK_FALSE(loaded_sources.find(dummy_c_file) == loaded_sources.end());
     CHECK_FALSE(loaded_sources.find(include_header_file) ==
                 loaded_sources.end());
-    CHECK_FALSE(loaded_dirs.find(include_header_path.string()) ==
-                loaded_dirs.end());
+
+    std::unordered_set<std::string> unordered_loaded_dirs(loaded_dirs.begin(),
+                                                          loaded_dirs.end());
+    CHECK_FALSE(unordered_loaded_dirs.find(include_header_path.string()) ==
+                unordered_loaded_dirs.end());
   }
 
   mock().checkExpectations();
@@ -237,7 +245,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
     CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
-    CHECK_EQUAL(serialization.GetLoad().include_dirs.size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().include_dirs.GetPaths().size(), 1);
     CHECK_EQUAL(serialization.GetLoad().internal_headers.size(), 0);
   }
 
@@ -261,7 +269,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
     CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
-    CHECK_EQUAL(serialization.GetLoad().include_dirs.size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().include_dirs.GetPaths().size(), 1);
     CHECK_EQUAL(serialization.GetLoad().internal_headers.size(), 1);
   }
 
@@ -291,7 +299,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
     CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
-    CHECK_EQUAL(serialization.GetLoad().include_dirs.size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().include_dirs.GetPaths().size(), 1);
     CHECK_EQUAL(serialization.GetLoad().internal_headers.size(), 1);
   }
 
@@ -314,7 +322,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
     CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
-    CHECK_EQUAL(serialization.GetLoad().include_dirs.size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().include_dirs.GetPaths().size(), 1);
     CHECK_EQUAL(serialization.GetLoad().internal_headers.size(), 0);
   }
 

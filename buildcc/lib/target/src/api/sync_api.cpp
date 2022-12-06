@@ -197,9 +197,7 @@ void SyncApi<T>::SpecializedInsert(TargetType target,
       t.user_.libs.Insert(std::move(target.user_.libs));
       break;
     case SyncOption::IncludeDirs:
-      t.user_.include_dirs.insert(
-          std::make_move_iterator(target.user_.include_dirs.begin()),
-          std::make_move_iterator(target.user_.include_dirs.end()));
+      t.user_.include_dirs.Insert(std::move(target.user_.include_dirs));
       break;
     case SyncOption::LibDirs:
       t.user_.lib_dirs.Insert(std::move(target.user_.lib_dirs));

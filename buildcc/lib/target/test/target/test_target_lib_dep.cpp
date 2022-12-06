@@ -61,7 +61,7 @@ TEST(TargetTestLibDep, StaticLibrary_SimpleBuildTest) {
   CHECK_TRUE(loaded);
 
   CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 1);
-  CHECK_EQUAL(serialization.GetLoad().include_dirs.size(), 1);
+  CHECK_EQUAL(serialization.GetLoad().include_dirs.GetPaths().size(), 1);
 }
 
 TEST(TargetTestLibDep, TargetDep_RebuildTest) {

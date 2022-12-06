@@ -72,7 +72,7 @@ void Target::Build() {
   // Target default arguments
   command_.AddDefaultArguments({
       {kIncludeDirs,
-       internal::aggregate_with_prefix<fs_unordered_set>(
+       internal::aggregate_with_prefix<std::vector<std::string>>(
            toolchain_.GetConfig().prefix_include_dir, GetIncludeDirs())},
       {kLibDirs, internal::aggregate_with_prefix<std::vector<std::string>>(
                      toolchain_.GetConfig().prefix_lib_dir, GetLibDirs())},

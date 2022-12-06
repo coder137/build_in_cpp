@@ -36,7 +36,7 @@ struct TargetSchema {
   PathInfoList libs;
   std::vector<std::string> external_libs;
 
-  fs_unordered_set include_dirs;
+  PathList include_dirs;
   PathList lib_dirs;
 
   std::vector<std::string> preprocessor_flags;
