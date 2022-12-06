@@ -36,9 +36,8 @@ struct TargetSchema {
   std::vector<std::string> external_libs;
 
   fs_unordered_set include_dirs;
-  fs_unordered_set lib_dirs;
+  PathList lib_dirs;
 
-  // TODO, Replace all of this with std::vector<std::string>
   std::vector<std::string> preprocessor_flags;
   std::vector<std::string> common_compile_flags;
   std::vector<std::string> pch_compile_flags;

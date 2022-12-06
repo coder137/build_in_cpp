@@ -57,7 +57,7 @@ TEST(TargetTestExternalLib, TestAddLibDir) {
       exe.GetTargetBuildDir() / (std::string(EXENAME) + ".bin"));
   bool loaded = serialization.LoadFromFile();
   CHECK_TRUE(loaded);
-  CHECK_EQUAL(serialization.GetLoad().lib_dirs.size(), 1);
+  CHECK_EQUAL(serialization.GetLoad().lib_dirs.GetPaths().size(), 1);
   CHECK_EQUAL(serialization.GetLoad().external_libs.size(), 0);
 }
 
@@ -86,7 +86,7 @@ TEST(TargetTestExternalLib, TestAddExternalLibDep_Simple) {
   bool loaded = serialization.LoadFromFile();
   CHECK_TRUE(loaded);
 
-  CHECK_EQUAL(serialization.GetLoad().lib_dirs.size(), 1);
+  CHECK_EQUAL(serialization.GetLoad().lib_dirs.GetPaths().size(), 1);
   CHECK_EQUAL(serialization.GetLoad().external_libs.size(), 1);
 }
 

@@ -191,8 +191,20 @@ public:
     paths_.emplace_back(std::move(path_str));
   }
 
+  // TODO, Create a move version of Emplace(std::string &&pstr)
+
+  void Insert(const PathList &other) {
+    paths_.insert(paths_.end(), other.paths_.begin(), other.paths_.end());
+  }
+
+  // TODO, Create a move version of Insert (PathList &&)
+
+  // TODO, Remove this (redundant, use operator == overload instead)
   bool IsEqual(const PathList &other) const { return paths_ == other.paths_; }
+
   const std::vector<std::string> &GetPaths() const { return paths_; }
+
+  bool operator==(const PathList &other) const { return IsEqual(other); }
 
   friend void to_json(json &j, const PathList &plist) { j = plist.paths_; }
 
@@ -252,11 +264,14 @@ public:
     infos_.emplace_back(PathInfo(path_str, hash));
   }
 
+  // TODO, Create a move version of Emplace(std::string &&pstr, std::string
+  // &&hash)
+
   void Insert(const PathInfoList &other) {
-    for (const auto &info : other.infos_) {
-      Emplace(info.path, info.hash);
-    }
+    infos_.insert(infos_.end(), other.infos_.begin(), other.infos_.end());
   }
+
+  // TODO, Create a move version of Insert(PathInfoList &&other)
 
   void ComputeHashForAll() {
     for (auto &info : infos_) {
@@ -264,6 +279,7 @@ public:
     }
   }
 
+  // TODO, Remove redundant function (use operator == overload)
   bool IsEqual(const PathInfoList &other) const {
     return infos_ == other.infos_;
   }
@@ -293,6 +309,8 @@ public:
                       fmt::format("{} not found", path_str));
     return std::to_string(last_write_timestamp);
   }
+
+  bool operator==(const PathInfoList &other) const { return IsEqual(other); }
 
   friend void to_json(json &j, const PathInfoList &plist) { j = plist.infos_; }
 

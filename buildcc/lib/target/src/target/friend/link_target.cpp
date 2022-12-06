@@ -79,9 +79,11 @@ void LinkTarget::BuildLink() {
         !(target_load_schema.link_flags == target_user_schema.link_flags)) {
       target_.dirty_ = true;
       target_.FlagChanged();
+    } else if (!(target_load_schema.lib_dirs.IsEqual(
+                   target_user_schema.lib_dirs))) {
+      target_.dirty_ = true;
+      target_.DirChanged();
     }
-    target_.RecheckDirs(target_load_schema.lib_dirs,
-                        target_user_schema.lib_dirs);
     target_.RecheckExternalLib(target_load_schema.external_libs,
                                target_user_schema.external_libs);
     if (!target_.dirty_ && !target_load_schema.link_dependencies.IsEqual(

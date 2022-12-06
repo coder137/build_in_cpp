@@ -29,10 +29,15 @@ template <typename T> std::string aggregate(const T &list) {
   return fmt::format("{}", fmt::join(list, " "));
 }
 
-std::string aggregate(const buildcc::fs_unordered_set &paths);
-
-std::string aggregate_with_prefix(const std::string &prefix,
-                                  const fs_unordered_set &dirs);
+template <typename T>
+std::string aggregate_with_prefix(const std::string &prefix, const T &list) {
+  std::vector<std::string> agg_list;
+  for (const auto &l : list) {
+    auto formatted_output = fmt::format("{}{}", prefix, l);
+    agg_list.emplace_back(std::move(formatted_output));
+  }
+  return aggregate(agg_list);
+}
 
 } // namespace buildcc::internal
 
