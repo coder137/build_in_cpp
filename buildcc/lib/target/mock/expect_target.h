@@ -19,6 +19,7 @@ void TargetExpect_PathRemoved(unsigned int calls, Target *target);
 void TargetExpect_PathAdded(unsigned int calls, Target *target);
 void TargetExpect_PathUpdated(unsigned int calls, Target *target);
 
+void TargetExpect_PathChanged(unsigned int calls, Target *target);
 void TargetExpect_DirChanged(unsigned int calls, Target *target);
 void TargetExpect_FlagChanged(unsigned int calls, Target *target);
 void TargetExpect_ExternalLibChanged(unsigned int calls, Target *target);

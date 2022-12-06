@@ -40,9 +40,9 @@ public:
     return t.user_.compile_dependencies;
   }
 
-  const fs_unordered_set &GetLinkDependencies() const {
+  std::vector<std::string> GetLinkDependencies() const {
     const auto &t = static_cast<const T &>(*this);
-    return t.user_.link_dependencies;
+    return t.user_.link_dependencies.GetPaths();
   }
 
   /**
@@ -73,7 +73,7 @@ public:
   void AddLinkDependencyAbsolute(const fs::path &absolute_path) {
     auto &t = static_cast<T &>(*this);
 
-    t.user_.link_dependencies.insert(absolute_path);
+    t.user_.link_dependencies.Emplace(absolute_path, "");
   }
 
   /**

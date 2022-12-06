@@ -119,6 +119,7 @@ private:
   void PathAdded();
   void PathUpdated();
 
+  void PathChanged();
   void DirChanged();
   void FlagChanged();
   void ExternalLibChanged();

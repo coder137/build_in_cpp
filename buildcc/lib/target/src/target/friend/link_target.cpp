@@ -62,8 +62,7 @@ void LinkTarget::PreLink() {
   target_user_schema.internal_libs =
       path_schema_convert(target_user_schema.libs);
 
-  target_user_schema.internal_link_dependencies =
-      path_schema_convert(target_user_schema.link_dependencies);
+  target_user_schema.link_dependencies.ComputeHashForAll();
 }
 
 void LinkTarget::BuildLink() {
@@ -82,8 +81,11 @@ void LinkTarget::BuildLink() {
                         target_user_schema.lib_dirs);
     target_.RecheckExternalLib(target_load_schema.external_libs,
                                target_user_schema.external_libs);
-    target_.RecheckPaths(target_load_schema.internal_link_dependencies,
-                         target_user_schema.internal_link_dependencies);
+    if (!target_.dirty_ && !target_load_schema.link_dependencies.IsEqual(
+                               target_user_schema.link_dependencies)) {
+      target_.dirty_ = true;
+      target_.PathChanged();
+    }
     path_unordered_set target_loaded_libs(
         target_load_schema.internal_libs.begin(),
         target_load_schema.internal_libs.end());

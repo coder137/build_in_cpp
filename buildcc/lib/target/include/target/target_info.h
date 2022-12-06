@@ -43,7 +43,6 @@ struct UserTargetSchema : public internal::TargetSchema {
   std::vector<fs::path> libs;
 
   fs_unordered_set compile_dependencies;
-  fs_unordered_set link_dependencies;
 };
 
 // NOTE: BaseTarget info is meant to hold information that is common to
