@@ -35,9 +35,9 @@ public:
   // TODO, Rename AddObjectDependency
   // TODO, Rename AddTargetDependency
 
-  const fs_unordered_set &GetCompileDependencies() const {
+  std::vector<std::string> GetCompileDependencies() const {
     const auto &t = static_cast<const T &>(*this);
-    return t.user_.compile_dependencies;
+    return t.user_.compile_dependencies.GetPaths();
   }
 
   std::vector<std::string> GetLinkDependencies() const {
@@ -52,7 +52,7 @@ public:
   void AddCompileDependencyAbsolute(const fs::path &absolute_path) {
     auto &t = static_cast<T &>(*this);
 
-    t.user_.compile_dependencies.insert(absolute_path);
+    t.user_.compile_dependencies.Emplace(absolute_path, "");
   }
 
   /**

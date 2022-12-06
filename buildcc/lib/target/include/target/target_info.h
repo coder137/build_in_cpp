@@ -39,8 +39,6 @@ struct UserTargetSchema : public internal::TargetSchema {
   fs_unordered_set sources;
   fs_unordered_set headers;
   fs_unordered_set pchs;
-
-  fs_unordered_set compile_dependencies;
 };
 
 // NOTE: BaseTarget info is meant to hold information that is common to

@@ -48,7 +48,7 @@ struct TargetSchema {
   std::vector<std::string> cpp_compile_flags;
   std::vector<std::string> link_flags;
 
-  path_unordered_set internal_compile_dependencies;
+  PathInfoList compile_dependencies;
   PathInfoList link_dependencies;
 
   // TODO, Verify this using fs::exists
@@ -106,7 +106,7 @@ public:
     j[kCppCompileFlags] = schema.cpp_compile_flags;
     j[kLinkFlags] = schema.link_flags;
 
-    j[kCompileDependencies] = schema.internal_compile_dependencies;
+    j[kCompileDependencies] = schema.compile_dependencies;
     j[kLinkDependencies] = schema.link_dependencies;
     j[kPchCompiled] = schema.pch_compiled;
     j[kTargetLinked] = schema.target_linked;
@@ -132,7 +132,7 @@ public:
     j.at(kCppCompileFlags).get_to(schema.cpp_compile_flags);
     j.at(kLinkFlags).get_to(schema.link_flags);
 
-    j.at(kCompileDependencies).get_to(schema.internal_compile_dependencies);
+    j.at(kCompileDependencies).get_to(schema.compile_dependencies);
     j.at(kLinkDependencies).get_to(schema.link_dependencies);
     j.at(kPchCompiled).get_to(schema.pch_compiled);
     j.at(kTargetLinked).get_to(schema.target_linked);

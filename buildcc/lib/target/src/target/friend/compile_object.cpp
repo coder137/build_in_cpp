@@ -173,24 +173,32 @@ void CompileObject::BuildObjectCompile(
   if (!serialization.IsLoaded()) {
     target_.dirty_ = true;
   } else {
-    target_.RecheckFlags(load_target_schema.preprocessor_flags,
-                         user_target_schema.preprocessor_flags);
-    target_.RecheckFlags(load_target_schema.common_compile_flags,
-                         user_target_schema.common_compile_flags);
-    target_.RecheckFlags(load_target_schema.pch_object_flags,
-                         user_target_schema.pch_object_flags);
-    target_.RecheckFlags(load_target_schema.asm_compile_flags,
-                         user_target_schema.asm_compile_flags);
-    target_.RecheckFlags(load_target_schema.c_compile_flags,
-                         user_target_schema.c_compile_flags);
-    target_.RecheckFlags(load_target_schema.cpp_compile_flags,
-                         user_target_schema.cpp_compile_flags);
+    if (target_.dirty_) {
+    } else if (!(load_target_schema.preprocessor_flags ==
+                 user_target_schema.preprocessor_flags) ||
+               !(load_target_schema.common_compile_flags ==
+                 user_target_schema.common_compile_flags) ||
+               !(load_target_schema.pch_object_flags ==
+                 user_target_schema.pch_object_flags) ||
+               !(load_target_schema.asm_compile_flags ==
+                 user_target_schema.asm_compile_flags) ||
+               !(load_target_schema.c_compile_flags ==
+                 user_target_schema.c_compile_flags) ||
+               !(load_target_schema.cpp_compile_flags ==
+                 user_target_schema.cpp_compile_flags)) {
+      target_.dirty_ = true;
+      target_.FlagChanged();
+    }
     target_.RecheckDirs(load_target_schema.include_dirs,
                         user_target_schema.include_dirs);
     target_.RecheckPaths(load_target_schema.internal_headers,
                          user_target_schema.internal_headers);
-    target_.RecheckPaths(load_target_schema.internal_compile_dependencies,
-                         user_target_schema.internal_compile_dependencies);
+
+    if (!target_.dirty_ && !(load_target_schema.compile_dependencies ==
+                             user_target_schema.compile_dependencies)) {
+      target_.dirty_ = true;
+      target_.PathChanged();
+    }
   }
 
   if (target_.dirty_) {
@@ -212,8 +220,7 @@ void CompileObject::PreObjectCompile() {
       internal::path_schema_convert(target_user_schema.headers);
 
   // Convert user_compile_dependencies to current_compile_dependencies
-  target_user_schema.internal_compile_dependencies =
-      internal::path_schema_convert(target_user_schema.compile_dependencies);
+  target_user_schema.compile_dependencies.ComputeHashForAll();
 }
 
 void CompileObject::CompileSources(std::vector<internal::Path> &source_files) {

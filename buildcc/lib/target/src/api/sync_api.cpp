@@ -172,9 +172,8 @@ void SyncApi<T>::SpecializedInsert(TargetType target,
           std::make_move_iterator(target.user_.link_flags.end()));
       break;
     case SyncOption::CompileDependencies:
-      t.user_.compile_dependencies.insert(
-          std::make_move_iterator(target.user_.compile_dependencies.begin()),
-          std::make_move_iterator(target.user_.compile_dependencies.end()));
+      t.user_.compile_dependencies.Insert(
+          std::move(target.user_.compile_dependencies));
       break;
     case SyncOption::LinkDependencies:
       t.user_.link_dependencies.Insert(
