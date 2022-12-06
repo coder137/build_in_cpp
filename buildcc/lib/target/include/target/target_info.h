@@ -37,7 +37,6 @@ namespace buildcc {
 // TODO, Make this private
 struct UserTargetSchema : public internal::TargetSchema {
   fs_unordered_set sources;
-  fs_unordered_set pchs;
 };
 
 // NOTE: BaseTarget info is meant to hold information that is common to

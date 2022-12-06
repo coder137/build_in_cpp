@@ -20,7 +20,7 @@ namespace buildcc::internal {
 
 // PUBLIC
 void TargetSerialization::UpdatePchCompiled(const TargetSchema &store) {
-  store_.internal_pchs = store.internal_pchs;
+  store_.pchs = store.pchs;
   store_.pch_compiled = true;
 }
 
@@ -35,7 +35,7 @@ void TargetSerialization::UpdateTargetCompiled() {
 
 void TargetSerialization::UpdateStore(const TargetSchema &store) {
   TargetSchema temp = store;
-  temp.internal_pchs = store_.internal_pchs;
+  temp.pchs = store_.pchs;
   temp.pch_compiled = store_.pch_compiled;
   temp.internal_sources = store_.internal_sources;
   temp.target_linked = store_.target_linked;

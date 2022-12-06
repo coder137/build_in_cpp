@@ -55,7 +55,7 @@ void Target::Build() {
   env::log_trace(name_, __FUNCTION__);
 
   // PCH state
-  if (!user_.pchs.empty()) {
+  if (!user_.pchs.GetPathInfos().empty()) {
     state_.PchDetected();
   }
 

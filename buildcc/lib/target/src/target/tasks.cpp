@@ -59,8 +59,8 @@ void CompilePch::Task() {
 
     // For Graph generation
     for (const auto &p : target_.GetPchFiles()) {
-      std::string name =
-          fmt::format("{}", p.lexically_relative(Project::GetRootDir()));
+      std::string name = fmt::format(
+          "{}", fs::path(p).lexically_relative(Project::GetRootDir()));
       subflow.placeholder().name(name);
     }
   });

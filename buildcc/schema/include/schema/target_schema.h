@@ -31,7 +31,7 @@ struct TargetSchema {
 
   path_unordered_set internal_sources;
   PathInfoList headers;
-  path_unordered_set internal_pchs;
+  PathInfoList pchs;
 
   PathInfoList libs;
   std::vector<std::string> external_libs;
@@ -91,7 +91,7 @@ public:
     j[kType] = schema.type;
     j[kSources] = schema.internal_sources;
     j[kHeaders] = schema.headers;
-    j[kPchs] = schema.internal_pchs;
+    j[kPchs] = schema.pchs;
     j[kLibs] = schema.libs;
     j[kExternalLibs] = schema.external_libs;
     j[kIncludeDirs] = schema.include_dirs;
@@ -117,7 +117,7 @@ public:
     j.at(kType).get_to(schema.type);
     j.at(kSources).get_to(schema.internal_sources);
     j.at(kHeaders).get_to(schema.headers);
-    j.at(kPchs).get_to(schema.internal_pchs);
+    j.at(kPchs).get_to(schema.pchs);
     j.at(kLibs).get_to(schema.libs);
     j.at(kExternalLibs).get_to(schema.external_libs);
     j.at(kIncludeDirs).get_to(schema.include_dirs);

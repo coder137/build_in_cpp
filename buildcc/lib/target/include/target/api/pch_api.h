@@ -31,9 +31,9 @@ namespace buildcc::internal {
 // TargetEnv
 template <typename T> class PchApi {
 public:
-  const fs_unordered_set &GetPchFiles() const {
+  std::vector<std::string> GetPchFiles() const {
     const auto &t = static_cast<const T &>(*this);
-    return t.user_.pchs;
+    return t.user_.pchs.GetPaths();
   }
 
   void AddPchAbsolute(const fs::path &absolute_filepath) {
@@ -42,7 +42,7 @@ public:
     t.toolchain_.GetConfig().ExpectsValidHeader(absolute_filepath);
 
     const fs::path absolute_pch = fs::path(absolute_filepath).make_preferred();
-    t.user_.pchs.insert(absolute_pch);
+    t.user_.pchs.Emplace(absolute_pch, "");
   }
 
   void AddPch(const fs::path &relative_filename,
