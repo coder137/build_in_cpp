@@ -125,41 +125,49 @@ void SyncApi<T>::SpecializedInsert(TargetType target,
     switch (o) {
     case SyncOption::PreprocessorFlags:
       t.user_.preprocessor_flags.insert(
+          t.user_.preprocessor_flags.end(),
           std::make_move_iterator(target.user_.preprocessor_flags.begin()),
           std::make_move_iterator(target.user_.preprocessor_flags.end()));
       break;
     case SyncOption::CommonCompileFlags:
       t.user_.common_compile_flags.insert(
+          t.user_.common_compile_flags.end(),
           std::make_move_iterator(target.user_.common_compile_flags.begin()),
           std::make_move_iterator(target.user_.common_compile_flags.end()));
       break;
     case SyncOption::PchCompileFlags:
       t.user_.pch_compile_flags.insert(
+          t.user_.pch_compile_flags.end(),
           std::make_move_iterator(target.user_.pch_compile_flags.begin()),
           std::make_move_iterator(target.user_.pch_compile_flags.end()));
       break;
     case SyncOption::PchObjectFlags:
       t.user_.pch_object_flags.insert(
+          t.user_.pch_object_flags.end(),
           std::make_move_iterator(target.user_.pch_object_flags.begin()),
           std::make_move_iterator(target.user_.pch_object_flags.end()));
       break;
     case SyncOption::AsmCompileFlags:
       t.user_.asm_compile_flags.insert(
+          t.user_.asm_compile_flags.end(),
           std::make_move_iterator(target.user_.asm_compile_flags.begin()),
           std::make_move_iterator(target.user_.asm_compile_flags.end()));
       break;
     case SyncOption::CCompileFlags:
       t.user_.c_compile_flags.insert(
+          t.user_.c_compile_flags.end(),
           std::make_move_iterator(target.user_.c_compile_flags.begin()),
           std::make_move_iterator(target.user_.c_compile_flags.end()));
       break;
     case SyncOption::CppCompileFlags:
       t.user_.cpp_compile_flags.insert(
+          t.user_.cpp_compile_flags.end(),
           std::make_move_iterator(target.user_.cpp_compile_flags.begin()),
           std::make_move_iterator(target.user_.cpp_compile_flags.end()));
       break;
     case SyncOption::LinkFlags:
       t.user_.link_flags.insert(
+          t.user_.link_flags.end(),
           std::make_move_iterator(target.user_.link_flags.begin()),
           std::make_move_iterator(target.user_.link_flags.end()));
       break;

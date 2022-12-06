@@ -39,14 +39,14 @@ struct TargetSchema {
   fs_unordered_set lib_dirs;
 
   // TODO, Replace all of this with std::vector<std::string>
-  std::unordered_set<std::string> preprocessor_flags;
-  std::unordered_set<std::string> common_compile_flags;
-  std::unordered_set<std::string> pch_compile_flags;
-  std::unordered_set<std::string> pch_object_flags;
-  std::unordered_set<std::string> asm_compile_flags;
-  std::unordered_set<std::string> c_compile_flags;
-  std::unordered_set<std::string> cpp_compile_flags;
-  std::unordered_set<std::string> link_flags;
+  std::vector<std::string> preprocessor_flags;
+  std::vector<std::string> common_compile_flags;
+  std::vector<std::string> pch_compile_flags;
+  std::vector<std::string> pch_object_flags;
+  std::vector<std::string> asm_compile_flags;
+  std::vector<std::string> c_compile_flags;
+  std::vector<std::string> cpp_compile_flags;
+  std::vector<std::string> link_flags;
 
   path_unordered_set internal_compile_dependencies;
   PathInfoList link_dependencies;

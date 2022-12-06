@@ -75,9 +75,8 @@ void Target::RecheckDirs(const fs_unordered_set &previous_dirs,
                  std::bind(&Target::DirChanged, this));
 }
 
-void Target::RecheckFlags(
-    const std::unordered_set<std::string> &previous_flags,
-    const std::unordered_set<std::string> &current_flags) {
+void Target::RecheckFlags(const std::vector<std::string> &previous_flags,
+                          const std::vector<std::string> &current_flags) {
   RecheckChanged(previous_flags, current_flags,
                  std::bind(&Target::FlagChanged, this));
 }

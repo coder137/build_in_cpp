@@ -75,8 +75,11 @@ void LinkTarget::BuildLink() {
   if (!serialization.IsLoaded()) {
     target_.dirty_ = true;
   } else {
-    target_.RecheckFlags(target_load_schema.link_flags,
-                         target_user_schema.link_flags);
+    if (!target_.dirty_ &&
+        !(target_load_schema.link_flags == target_user_schema.link_flags)) {
+      target_.dirty_ = true;
+      target_.FlagChanged();
+    }
     target_.RecheckDirs(target_load_schema.lib_dirs,
                         target_user_schema.lib_dirs);
     target_.RecheckExternalLib(target_load_schema.external_libs,
