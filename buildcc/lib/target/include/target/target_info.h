@@ -40,8 +40,6 @@ struct UserTargetSchema : public internal::TargetSchema {
   fs_unordered_set headers;
   fs_unordered_set pchs;
 
-  std::vector<fs::path> libs;
-
   fs_unordered_set compile_dependencies;
 };
 

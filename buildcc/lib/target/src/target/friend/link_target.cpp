@@ -41,7 +41,8 @@ void LinkTarget::CacheLinkCommand() {
           {kOutput, output_target},
           {kCompiledSources, aggregated_compiled_sources},
           {kLibDeps,
-           fmt::format("{} {}", internal::aggregate(target_user_schema.libs),
+           fmt::format("{} {}",
+                       internal::aggregate(target_user_schema.libs.GetPaths()),
                        internal::aggregate(target_user_schema.external_libs))},
       });
 }
@@ -59,8 +60,7 @@ fs::path LinkTarget::ConstructOutputPath() const {
 void LinkTarget::PreLink() {
   auto &target_user_schema = target_.user_;
 
-  target_user_schema.internal_libs =
-      path_schema_convert(target_user_schema.libs);
+  target_user_schema.libs.ComputeHashForAll();
 
   target_user_schema.link_dependencies.ComputeHashForAll();
 }
@@ -75,30 +75,27 @@ void LinkTarget::BuildLink() {
   if (!serialization.IsLoaded()) {
     target_.dirty_ = true;
   } else {
-    if (!target_.dirty_ &&
-        !(target_load_schema.link_flags == target_user_schema.link_flags)) {
+    if (target_.dirty_) {
+      // Skip all the other else if checks
+    } else if (!(target_load_schema.link_flags ==
+                 target_user_schema.link_flags)) {
       target_.dirty_ = true;
       target_.FlagChanged();
-    } else if (!(target_load_schema.lib_dirs.IsEqual(
-                   target_user_schema.lib_dirs))) {
+    } else if (!(target_load_schema.lib_dirs == target_user_schema.lib_dirs)) {
       target_.dirty_ = true;
       target_.DirChanged();
-    }
-    target_.RecheckExternalLib(target_load_schema.external_libs,
-                               target_user_schema.external_libs);
-    if (!target_.dirty_ && !target_load_schema.link_dependencies.IsEqual(
-                               target_user_schema.link_dependencies)) {
+    } else if (!(target_load_schema.external_libs ==
+                 target_user_schema.external_libs)) {
+      target_.dirty_ = true;
+      target_.ExternalLibChanged();
+    } else if (!(target_load_schema.link_dependencies ==
+                 target_user_schema.link_dependencies)) {
       target_.dirty_ = true;
       target_.PathChanged();
-    }
-    path_unordered_set target_loaded_libs(
-        target_load_schema.internal_libs.begin(),
-        target_load_schema.internal_libs.end());
-    path_unordered_set target_user_libs(
-        target_user_schema.internal_libs.begin(),
-        target_user_schema.internal_libs.end());
-    target_.RecheckPaths(target_loaded_libs, target_user_libs);
-    if (!target_load_schema.target_linked) {
+    } else if (!(target_load_schema.libs == target_user_schema.libs)) {
+      target_.dirty_ = true;
+      target_.PathChanged();
+    } else if (!target_load_schema.target_linked) {
       target_.dirty_ = true;
     }
   }

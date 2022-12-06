@@ -41,9 +41,9 @@ namespace buildcc::internal {
 // Target::GetTargetPath
 template <typename T> class LibApi {
 public:
-  const std::vector<fs::path> &GetLibDeps() const {
+  std::vector<std::string> GetLibDeps() const {
     const auto &t = static_cast<const T &>(*this);
-    return t.user_.libs;
+    return t.user_.libs.GetPaths();
   }
 
   const std::vector<std::string> &GetExternalLibDeps() const {
