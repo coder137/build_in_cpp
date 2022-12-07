@@ -94,12 +94,14 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  auto dummy_c_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / DUMMY_MAIN_C).make_preferred().string());
-  auto include_header_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / INCLUDE_HEADER_SOURCE).make_preferred().string());
-  auto include_header_path =
-      (source_path / RELATIVE_INCLUDE_DIR).make_preferred();
+  auto dummy_c_file = buildcc::internal::Path::ToPathString(
+      fs::path(source_path / DUMMY_MAIN_C).string());
+
+  auto include_header_file = buildcc::internal::Path::ToPathString(
+      fs::path(source_path / INCLUDE_HEADER_SOURCE).string());
+
+  auto include_header_path = buildcc::internal::Path::ToPathString(
+      fs::path(source_path / RELATIVE_INCLUDE_DIR).string());
 
   {
     buildcc::BaseTarget include_compile(NAME, buildcc::TargetType::Executable,
@@ -119,7 +121,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
         intermediate_path / (std::string(NAME) + ".bin"));
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
-    const auto &loaded_sources = serialization.GetLoad().internal_sources;
+    const auto &loaded_sources =
+        serialization.GetLoad().sources.GetUnorderedPathInfos();
     const auto &loaded_dirs = serialization.GetLoad().include_dirs.GetPaths();
 
     CHECK_EQUAL(loaded_sources.size(), 2);
@@ -131,7 +134,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
 
     std::unordered_set<std::string> unordered_loaded_dirs(loaded_dirs.begin(),
                                                           loaded_dirs.end());
-    CHECK_FALSE(unordered_loaded_dirs.find(include_header_path.string()) ==
+    CHECK_FALSE(unordered_loaded_dirs.find(include_header_path) ==
                 unordered_loaded_dirs.end());
   }
   {
@@ -154,7 +157,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
         intermediate_path / (std::string(NAME) + ".bin"));
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
-    const auto &loaded_sources = serialization.GetLoad().internal_sources;
+    const auto &loaded_sources =
+        serialization.GetLoad().sources.GetUnorderedPathInfos();
     const auto &loaded_dirs = serialization.GetLoad().include_dirs.GetPaths();
 
     CHECK_EQUAL(loaded_sources.size(), 2);
@@ -166,7 +170,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
 
     std::unordered_set<std::string> unordered_loaded_dirs(loaded_dirs.begin(),
                                                           loaded_dirs.end());
-    CHECK_FALSE(unordered_loaded_dirs.find(include_header_path.string()) ==
+    CHECK_FALSE(unordered_loaded_dirs.find(include_header_path) ==
                 unordered_loaded_dirs.end());
   }
   {
@@ -187,7 +191,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
         intermediate_path / (std::string(NAME) + ".bin"));
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
-    const auto &loaded_sources = serialization.GetLoad().internal_sources;
+    const auto &loaded_sources =
+        serialization.GetLoad().sources.GetUnorderedPathInfos();
     const auto &loaded_dirs = serialization.GetLoad().include_dirs.GetPaths();
 
     CHECK_EQUAL(loaded_sources.size(), 2);
@@ -199,7 +204,7 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
 
     std::unordered_set<std::string> unordered_loaded_dirs(loaded_dirs.begin(),
                                                           loaded_dirs.end());
-    CHECK_FALSE(unordered_loaded_dirs.find(include_header_path.string()) ==
+    CHECK_FALSE(unordered_loaded_dirs.find(include_header_path) ==
                 unordered_loaded_dirs.end());
   }
 
@@ -244,7 +249,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
         intermediate_path / (std::string(NAME) + ".bin"));
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
-    CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
+    CHECK_EQUAL(serialization.GetLoad().sources.GetUnorderedPathInfos().size(),
+                2);
     CHECK_EQUAL(serialization.GetLoad().include_dirs.GetPaths().size(), 1);
     CHECK_EQUAL(serialization.GetLoad().headers.GetPaths().size(), 0);
   }
@@ -268,7 +274,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
         intermediate_path / (std::string(NAME) + ".bin"));
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
-    CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
+    CHECK_EQUAL(serialization.GetLoad().sources.GetUnorderedPathInfos().size(),
+                2);
     CHECK_EQUAL(serialization.GetLoad().include_dirs.GetPaths().size(), 1);
     CHECK_EQUAL(serialization.GetLoad().headers.GetPaths().size(), 1);
   }
@@ -298,7 +305,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
         intermediate_path / (std::string(NAME) + ".bin"));
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
-    CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
+    CHECK_EQUAL(serialization.GetLoad().sources.GetUnorderedPathInfos().size(),
+                2);
     CHECK_EQUAL(serialization.GetLoad().include_dirs.GetPaths().size(), 1);
     CHECK_EQUAL(serialization.GetLoad().headers.GetPaths().size(), 1);
   }
@@ -321,7 +329,8 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
         intermediate_path / (std::string(NAME) + ".bin"));
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
-    CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 2);
+    CHECK_EQUAL(serialization.GetLoad().sources.GetUnorderedPathInfos().size(),
+                2);
     CHECK_EQUAL(serialization.GetLoad().include_dirs.GetPaths().size(), 1);
     CHECK_EQUAL(serialization.GetLoad().headers.GetPaths().size(), 0);
   }

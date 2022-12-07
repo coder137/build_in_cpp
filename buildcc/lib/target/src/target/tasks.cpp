@@ -83,25 +83,27 @@ void CompileObject::Task() {
       return;
     }
 
-    std::vector<internal::Path> selected_source_files;
-    std::vector<internal::Path> selected_dummy_source_files;
+    std::vector<internal::PathInfo> selected_source_files;
+    std::vector<internal::PathInfo> selected_dummy_source_files;
 
     try {
       BuildObjectCompile(selected_source_files, selected_dummy_source_files);
-      for (const auto &piter : selected_dummy_source_files) {
-        target_.serialization_.AddSource(piter);
+      for (const auto &path_info : selected_dummy_source_files) {
+        target_.serialization_.AddSource(path_info.path, path_info.hash);
       }
 
-      for (const auto &s : selected_source_files) {
+      for (const auto &path_info : selected_source_files) {
         std::string name = fmt::format(
-            "{}", s.pathname.lexically_relative(Project::GetRootDir()));
+            "{}",
+            fs::path(path_info.path).lexically_relative(Project::GetRootDir()));
         (void)subflow
-            .emplace([this, s]() {
+            .emplace([this, path_info]() {
               try {
-                bool success =
-                    env::Command::Execute(GetObjectData(s.pathname).command);
+                bool success = env::Command::Execute(
+                    GetObjectData(path_info.path).command);
                 env::assert_fatal(success, "Could not compile source");
-                target_.serialization_.AddSource(s);
+                target_.serialization_.AddSource(path_info.path,
+                                                 path_info.hash);
               } catch (...) {
                 env::set_task_state(env::TaskState::FAILURE);
               }
@@ -110,9 +112,10 @@ void CompileObject::Task() {
       }
 
       // For graph generation
-      for (const auto &ds : selected_dummy_source_files) {
-        std::string name = fmt::format(
-            "{}", ds.pathname.lexically_relative(Project::GetRootDir()));
+      for (const auto &dummy_path_info : selected_dummy_source_files) {
+        std::string name =
+            fmt::format("{}", fs::path(dummy_path_info.path)
+                                  .lexically_relative(Project::GetRootDir()));
         (void)subflow.placeholder().name(name);
       }
     } catch (...) {

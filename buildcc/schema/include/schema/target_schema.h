@@ -29,7 +29,7 @@ struct TargetSchema {
   std::string name;
   TargetType type{TargetType::Undefined};
 
-  path_unordered_set internal_sources;
+  PathInfoList sources;
   PathInfoList headers;
   PathInfoList pchs;
 
@@ -89,7 +89,7 @@ public:
   friend void to_json(json &j, const TargetSchema &schema) {
     j[kName] = schema.name;
     j[kType] = schema.type;
-    j[kSources] = schema.internal_sources;
+    j[kSources] = schema.sources;
     j[kHeaders] = schema.headers;
     j[kPchs] = schema.pchs;
     j[kLibs] = schema.libs;
@@ -115,7 +115,7 @@ public:
   friend void from_json(const json &j, TargetSchema &schema) {
     j.at(kName).get_to(schema.name);
     j.at(kType).get_to(schema.type);
-    j.at(kSources).get_to(schema.internal_sources);
+    j.at(kSources).get_to(schema.sources);
     j.at(kHeaders).get_to(schema.headers);
     j.at(kPchs).get_to(schema.pchs);
     j.at(kLibs).get_to(schema.libs);

@@ -33,7 +33,7 @@ public:
 
   void UpdatePchCompiled(const TargetSchema &store);
   void UpdateTargetCompiled();
-  void AddSource(const internal::Path &source);
+  void AddSource(const std::string &source, const std::string &hash);
   void UpdateStore(const TargetSchema &store);
 
   const TargetSchema &GetLoad() const { return load_; }

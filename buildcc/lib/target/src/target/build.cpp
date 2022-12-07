@@ -61,12 +61,12 @@ void Target::Build() {
 
   // Source - Object relation
   // Source state
-  for (const auto &abs_source : user_.sources) {
+  for (const auto &source_info : user_.sources.GetPathInfos()) {
     // Set state
-    state_.SourceDetected(toolchain_.GetConfig().GetFileExt(abs_source));
+    state_.SourceDetected(toolchain_.GetConfig().GetFileExt(source_info.path));
 
     // Relate input source with output object
-    compile_object_.AddObjectData(abs_source);
+    compile_object_.AddObjectData(source_info.path);
   }
 
   // Target default arguments

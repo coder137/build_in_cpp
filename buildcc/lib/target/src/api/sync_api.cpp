@@ -180,9 +180,7 @@ void SyncApi<T>::SpecializedInsert(TargetType target,
           std::move(target.user_.link_dependencies));
       break;
     case SyncOption::SourceFiles:
-      t.user_.sources.insert(
-          std::make_move_iterator(target.user_.sources.begin()),
-          std::make_move_iterator(target.user_.sources.end()));
+      t.user_.sources.Insert(std::move(target.user_.sources));
       break;
     case SyncOption::HeaderFiles:
       t.user_.headers.Insert(std::move(target.user_.headers));

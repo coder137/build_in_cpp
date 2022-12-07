@@ -34,11 +34,6 @@
 
 namespace buildcc {
 
-// TODO, Make this private
-struct UserTargetSchema : public internal::TargetSchema {
-  fs_unordered_set sources;
-};
-
 // NOTE: BaseTarget info is meant to hold information that is common to
 // multiple targets
 // It is also meant to be used in situations where we do not need to build
@@ -71,7 +66,7 @@ protected:
   const BaseToolchain &toolchain_;
   TargetEnv env_;
 
-  UserTargetSchema user_;
+  internal::TargetSchema user_;
 
 private:
   void Initialize();

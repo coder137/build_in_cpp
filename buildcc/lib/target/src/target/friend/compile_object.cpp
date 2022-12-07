@@ -162,8 +162,8 @@ CompileObject::ConstructObjectPath(const fs::path &absolute_source_file) const {
 }
 
 void CompileObject::BuildObjectCompile(
-    std::vector<internal::Path> &source_files,
-    std::vector<internal::Path> &dummy_source_files) {
+    std::vector<internal::PathInfo> &source_files,
+    std::vector<internal::PathInfo> &dummy_source_files) {
   PreObjectCompile();
 
   const auto &serialization = target_.serialization_;
@@ -213,8 +213,7 @@ void CompileObject::PreObjectCompile() {
   auto &target_user_schema = target_.user_;
 
   // Convert user_source_files to current_source_files
-  target_user_schema.internal_sources =
-      internal::path_schema_convert(target_user_schema.sources);
+  target_user_schema.sources.ComputeHashForAll();
 
   // Convert user_header_files to current_header_files
   target_user_schema.headers.ComputeHashForAll();
@@ -223,54 +222,45 @@ void CompileObject::PreObjectCompile() {
   target_user_schema.compile_dependencies.ComputeHashForAll();
 }
 
-void CompileObject::CompileSources(std::vector<internal::Path> &source_files) {
+void CompileObject::CompileSources(
+    std::vector<internal::PathInfo> &source_files) {
   const auto &target_user_schema = target_.user_;
-  source_files =
-      std::vector<internal::Path>(target_user_schema.internal_sources.begin(),
-                                  target_user_schema.internal_sources.end());
+  target_user_schema.sources.GetPathInfos();
+  source_files = target_user_schema.sources.GetPathInfos();
 }
 
 void CompileObject::RecompileSources(
-    std::vector<internal::Path> &source_files,
-    std::vector<internal::Path> &dummy_source_files) {
+    std::vector<internal::PathInfo> &source_files,
+    std::vector<internal::PathInfo> &dummy_source_files) {
   const auto &serialization = target_.serialization_;
   const auto &user_target_schema = target_.user_;
-  const auto &previous_source_files = serialization.GetLoad().internal_sources;
+  auto previous_source_files =
+      serialization.GetLoad().sources.GetUnorderedPathInfos();
 
-  // * Cannot find previous source in current source files
-  const bool is_source_removed =
-      std::any_of(previous_source_files.begin(), previous_source_files.end(),
-                  [&](const internal::Path &p) {
-                    return user_target_schema.internal_sources.find(p) ==
-                           user_target_schema.internal_sources.end();
-                  });
-
-  if (is_source_removed) {
-    target_.dirty_ = true;
-    target_.SourceRemoved();
-  }
-
-  for (const auto &current_file : user_target_schema.internal_sources) {
-    // Find current_file in the loaded sources
-    auto iter = previous_source_files.find(current_file);
-
-    if (iter == previous_source_files.end()) {
-      // *1 New source file added to build
-      source_files.push_back(current_file);
+  for (const auto &current_path_info :
+       user_target_schema.sources.GetPathInfos()) {
+    const auto &current_path = current_path_info.path;
+    if (previous_source_files.count(current_path) == 0) {
+      // Added
+      source_files.push_back(current_path_info);
       target_.dirty_ = true;
       target_.SourceAdded();
     } else {
-      // *2 Current file is updated
-      if (current_file.last_write_timestamp > iter->last_write_timestamp) {
-        source_files.push_back(current_file);
+      if (!(previous_source_files.at(current_path) == current_path_info.hash)) {
+        // Updated
+        source_files.push_back(current_path_info);
         target_.dirty_ = true;
         target_.SourceUpdated();
       } else {
-        // ELSE
-        // *3 Do nothing
-        dummy_source_files.push_back(current_file);
+        dummy_source_files.push_back(current_path_info);
       }
+      previous_source_files.erase(current_path);
     }
+  }
+
+  if (!previous_source_files.empty()) {
+    target_.dirty_ = true;
+    target_.SourceRemoved();
   }
 }
 

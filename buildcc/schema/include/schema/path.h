@@ -34,7 +34,9 @@ using json = nlohmann::ordered_json;
 
 namespace buildcc::internal {
 
-// TODO, Update this
+// TODO, Remove this
+// Use PathInfo instead
+// Migrate important APIs to the PathInfo struct
 struct Path {
 private:
   static constexpr const char *const kPathName = "path";
@@ -204,6 +206,12 @@ public:
 
   const std::vector<std::string> &GetPaths() const { return paths_; }
 
+  std::unordered_set<std::string> GetUnorderedPaths() const {
+    std::unordered_set<std::string> unordered_paths(paths_.begin(),
+                                                    paths_.end());
+    return unordered_paths;
+  }
+
   bool operator==(const PathList &other) const { return IsEqual(other); }
 
   friend void to_json(json &j, const PathList &plist) { j = plist.paths_; }
@@ -216,40 +224,39 @@ private:
   std::vector<std::string> paths_;
 };
 
+struct PathInfo {
+private:
+  static constexpr const char *const kPath = "path";
+  static constexpr const char *const kHash = "hash";
+
+public:
+  PathInfo() = default;
+  PathInfo(const std::string &p, const std::string &h) : path(p), hash(h) {}
+
+  bool operator==(const PathInfo &other) const {
+    return ((path == other.path) && (hash == other.hash));
+  }
+
+  friend void to_json(json &j, const PathInfo &info) {
+    j[kPath] = info.path;
+    j[kHash] = info.hash;
+  }
+
+  friend void from_json(const json &j, PathInfo &info) {
+    j.at(kPath).get_to(info.path);
+    j.at(kHash).get_to(info.hash);
+  }
+
+  std::string path;
+  std::string hash;
+};
+
 /**
  * @brief Stores path + path hash in a hashmap
  *
  */
 class PathInfoList {
-private:
 public:
-  struct PathInfo {
-  private:
-    static constexpr const char *const kPath = "path";
-    static constexpr const char *const kHash = "hash";
-
-  public:
-    PathInfo() = default;
-    PathInfo(const std::string &p, const std::string &h) : path(p), hash(h) {}
-
-    bool operator==(const PathInfo &other) const {
-      return ((path == other.path) && (hash == other.hash));
-    }
-
-    friend void to_json(json &j, const PathInfo &info) {
-      j[kPath] = info.path;
-      j[kHash] = info.hash;
-    }
-
-    friend void from_json(const json &j, PathInfo &info) {
-      j.at(kPath).get_to(info.path);
-      j.at(kHash).get_to(info.hash);
-    }
-
-    std::string path;
-    std::string hash;
-  };
-
   PathInfoList() = default;
   explicit PathInfoList(
       std::initializer_list<std::pair<const std::string, std::string>>
@@ -285,6 +292,14 @@ public:
   }
 
   const std::vector<PathInfo> &GetPathInfos() const { return infos_; }
+
+  std::unordered_map<std::string, std::string> GetUnorderedPathInfos() const {
+    std::unordered_map<std::string, std::string> unordered_path_infos;
+    for (const auto &info : infos_) {
+      unordered_path_infos.try_emplace(info.path, info.hash);
+    }
+    return unordered_path_infos;
+  }
 
   std::vector<std::string> GetPaths() const {
     std::vector<std::string> paths;

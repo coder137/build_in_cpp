@@ -111,10 +111,13 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
   bool is_loaded = serialization.LoadFromFile();
   CHECK_TRUE(is_loaded);
 
-  const auto &loaded_sources = serialization.GetLoad().internal_sources;
+  const auto &loaded_sources =
+      serialization.GetLoad().sources.GetUnorderedPathInfos();
   CHECK_EQUAL(loaded_sources.size(), 1);
-  auto dummy_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / DUMMY_MAIN).make_preferred().string());
+  auto dummy_file = buildcc::internal::Path::ToPathString(
+      fs::path(source_path / DUMMY_MAIN).string());
+  // buildcc::internal::Path::CreateExistingPath(
+  //     (source_path / DUMMY_MAIN).make_preferred().string());
   CHECK_FALSE(loaded_sources.find(dummy_file) == loaded_sources.end());
 }
 
@@ -129,12 +132,12 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
 
   // Delete
   fs::remove_all(intermediate_path);
-  auto dummy_c_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / DUMMY_MAIN_C).make_preferred().string());
-  auto dummy_cpp_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / DUMMY_MAIN_CPP).make_preferred().string());
-  auto new_source_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / NEW_SOURCE).make_preferred().string());
+  auto dummy_c_file = buildcc::internal::Path::ToPathString(
+      (source_path / DUMMY_MAIN_C).string());
+  auto dummy_cpp_file = buildcc::internal::Path::ToPathString(
+      (source_path / DUMMY_MAIN_CPP).string());
+  auto new_source_file = buildcc::internal::Path::ToPathString(
+      (source_path / NEW_SOURCE).string());
 
   {
     buildcc::BaseTarget simple(NAME, buildcc::TargetType::Executable, gcc,
@@ -155,7 +158,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
 
-    const auto &loaded_sources = serialization.GetLoad().internal_sources;
+    const auto &loaded_sources =
+        serialization.GetLoad().sources.GetUnorderedPathInfos();
     CHECK_EQUAL(loaded_sources.size(), 2);
 
     CHECK_FALSE(loaded_sources.find(dummy_c_file) == loaded_sources.end());
@@ -187,7 +191,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
 
-    const auto &loaded_sources = serialization.GetLoad().internal_sources;
+    const auto &loaded_sources =
+        serialization.GetLoad().sources.GetUnorderedPathInfos();
     CHECK_EQUAL(loaded_sources.size(), 2);
     CHECK_FALSE(loaded_sources.find(dummy_cpp_file) == loaded_sources.end());
     CHECK_FALSE(loaded_sources.find(new_source_file) == loaded_sources.end());
@@ -218,7 +223,8 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
     bool is_loaded = serialization.LoadFromFile();
     CHECK_TRUE(is_loaded);
 
-    const auto &loaded_sources = serialization.GetLoad().internal_sources;
+    const auto &loaded_sources =
+        serialization.GetLoad().sources.GetUnorderedPathInfos();
     CHECK_EQUAL(loaded_sources.size(), 2);
     CHECK_FALSE(loaded_sources.find(dummy_cpp_file) == loaded_sources.end());
     CHECK_FALSE(loaded_sources.find(new_source_file) == loaded_sources.end());
