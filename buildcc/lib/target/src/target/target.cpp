@@ -61,33 +61,6 @@ void Target::Initialize() {
   tf_.name(path);
 }
 
-// Rechecks
-void Target::RecheckPaths(const internal::path_unordered_set &previous_path,
-                          const internal::path_unordered_set &current_path) {
-  BuilderInterface::RecheckPaths(
-      previous_path, current_path, [&]() { PathRemoved(); },
-      [&]() { PathAdded(); }, [&]() { PathUpdated(); });
-}
-
-void Target::RecheckDirs(const fs_unordered_set &previous_dirs,
-                         const fs_unordered_set &current_dirs) {
-  RecheckChanged(previous_dirs, current_dirs,
-                 std::bind(&Target::DirChanged, this));
-}
-
-void Target::RecheckFlags(const std::vector<std::string> &previous_flags,
-                          const std::vector<std::string> &current_flags) {
-  RecheckChanged(previous_flags, current_flags,
-                 std::bind(&Target::FlagChanged, this));
-}
-
-void Target::RecheckExternalLib(
-    const std::vector<std::string> &previous_external_libs,
-    const std::vector<std::string> &current_external_libs) {
-  RecheckChanged(previous_external_libs, current_external_libs,
-                 std::bind(&Target::ExternalLibChanged, this));
-}
-
 env::optional<std::string> Target::SelectCompileFlags(FileExt ext) const {
   switch (ext) {
   case FileExt::Asm:

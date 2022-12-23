@@ -114,7 +114,7 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
   const auto &loaded_sources =
       serialization.GetLoad().sources.GetUnorderedPathInfos();
   CHECK_EQUAL(loaded_sources.size(), 1);
-  auto dummy_file = buildcc::internal::Path::ToPathString(
+  auto dummy_file = buildcc::internal::PathInfo::ToPathString(
       fs::path(source_path / DUMMY_MAIN).string());
   // buildcc::internal::Path::CreateExistingPath(
   //     (source_path / DUMMY_MAIN).make_preferred().string());
@@ -132,11 +132,11 @@ TEST(TargetTestSourceGroup, Target_Build_SourceRecompile) {
 
   // Delete
   fs::remove_all(intermediate_path);
-  auto dummy_c_file = buildcc::internal::Path::ToPathString(
+  auto dummy_c_file = buildcc::internal::PathInfo::ToPathString(
       (source_path / DUMMY_MAIN_C).string());
-  auto dummy_cpp_file = buildcc::internal::Path::ToPathString(
+  auto dummy_cpp_file = buildcc::internal::PathInfo::ToPathString(
       (source_path / DUMMY_MAIN_CPP).string());
-  auto new_source_file = buildcc::internal::Path::ToPathString(
+  auto new_source_file = buildcc::internal::PathInfo::ToPathString(
       (source_path / NEW_SOURCE).string());
 
   {

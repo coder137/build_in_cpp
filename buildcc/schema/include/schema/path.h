@@ -95,42 +95,6 @@ public:
     return pathname == other_pathname;
   }
 
-  /**
-   * @brief Sanitizes a fs::path or std::string to a standard path string
-   * - Converts backslash (\) to forward slash (/)
-   * - Makes fs::lexically_normal (see std::filesystem library impl)
-   *
-   * @param str User provided fs::path/std::string
-   * @return std::string Sanitized path as std::string
-   */
-  static std::string ToPathString(const std::string &str) {
-    auto path_str = str;
-    path_str = fs::path(path_str).make_preferred().lexically_normal().string();
-    return path_str;
-  }
-
-  /**
-   * @brief Formats a fs::path or std::string for display
-   * - All the sanitization as done in `ToPathString`
-   * Additionally
-   * - Adds quotation marks ("") when a space is detected
-   * For example: test/hello world/ -> "test/hello world/"
-   *
-   * NOTE: Use this API only in places where you would like to output to
-   * console/run or create command through subprocess
-   *
-   * @param str User provided fs::path/std::string
-   * @return std::string Sanitized path as std::string for display
-   */
-  static std::string ToPathDisplayString(const std::string &str) {
-    auto path_str = ToPathString(str);
-    // if spaces are present in the path string, surround this with brackets
-    if (path_str.find(' ') != std::string::npos) {
-      path_str = fmt::format("\"{}\"", path_str);
-    }
-    return path_str;
-  }
-
   // JSON specialization
 
   friend void to_json(json &j, const Path &p) {
@@ -172,9 +136,70 @@ public:
   size_t operator()(const fs::path &p) const { return fs::hash_value(p); }
 };
 
-// TODO, Remove this
-using path_unordered_set = std::unordered_set<Path, PathHash>;
 using fs_unordered_set = std::unordered_set<fs::path, PathHash>;
+
+struct PathInfo {
+private:
+  static constexpr const char *const kPath = "path";
+  static constexpr const char *const kHash = "hash";
+
+public:
+  PathInfo() = default;
+  PathInfo(const std::string &p, const std::string &h) : path(p), hash(h) {}
+
+  bool operator==(const PathInfo &other) const {
+    return ((path == other.path) && (hash == other.hash));
+  }
+
+  /**
+   * @brief Sanitizes a fs::path or std::string to a standard path string
+   * - Converts backslash (\) to forward slash (/)
+   * - Makes fs::lexically_normal (see std::filesystem library impl)
+   *
+   * @param str User provided fs::path/std::string
+   * @return std::string Sanitized path as std::string
+   */
+  static std::string ToPathString(const std::string &str) {
+    auto path_str = str;
+    path_str = fs::path(path_str).make_preferred().lexically_normal().string();
+    return path_str;
+  }
+
+  /**
+   * @brief Formats a fs::path or std::string for display
+   * - All the sanitization as done in `ToPathString`
+   * Additionally
+   * - Adds quotation marks ("") when a space is detected
+   * For example: test/hello world/ -> "test/hello world/"
+   *
+   * NOTE: Use this API only in places where you would like to output to
+   * console/run or create command through subprocess
+   *
+   * @param str User provided fs::path/std::string
+   * @return std::string Sanitized path as std::string for display
+   */
+  static std::string ToPathDisplayString(const std::string &str) {
+    auto path_str = ToPathString(str);
+    // if spaces are present in the path string, surround this with brackets
+    if (path_str.find(' ') != std::string::npos) {
+      path_str = fmt::format("\"{}\"", path_str);
+    }
+    return path_str;
+  }
+
+  friend void to_json(json &j, const PathInfo &info) {
+    j[kPath] = info.path;
+    j[kHash] = info.hash;
+  }
+
+  friend void from_json(const json &j, PathInfo &info) {
+    j.at(kPath).get_to(info.path);
+    j.at(kHash).get_to(info.hash);
+  }
+
+  std::string path;
+  std::string hash;
+};
 
 /**
  * @brief Stores path
@@ -189,7 +214,7 @@ public:
   }
 
   void Emplace(const std::string &pstr) {
-    auto path_str = Path::ToPathString(pstr);
+    auto path_str = PathInfo::ToPathString(pstr);
     paths_.emplace_back(std::move(path_str));
   }
 
@@ -224,33 +249,6 @@ private:
   std::vector<std::string> paths_;
 };
 
-struct PathInfo {
-private:
-  static constexpr const char *const kPath = "path";
-  static constexpr const char *const kHash = "hash";
-
-public:
-  PathInfo() = default;
-  PathInfo(const std::string &p, const std::string &h) : path(p), hash(h) {}
-
-  bool operator==(const PathInfo &other) const {
-    return ((path == other.path) && (hash == other.hash));
-  }
-
-  friend void to_json(json &j, const PathInfo &info) {
-    j[kPath] = info.path;
-    j[kHash] = info.hash;
-  }
-
-  friend void from_json(const json &j, PathInfo &info) {
-    j.at(kPath).get_to(info.path);
-    j.at(kHash).get_to(info.hash);
-  }
-
-  std::string path;
-  std::string hash;
-};
-
 /**
  * @brief Stores path + path hash in a hashmap
  *
@@ -267,7 +265,7 @@ public:
   }
 
   void Emplace(const std::string &pstr, const std::string &hash) {
-    auto path_str = Path::ToPathString(pstr);
+    auto path_str = PathInfo::ToPathString(pstr);
     infos_.emplace_back(PathInfo(path_str, hash));
   }
 
@@ -311,7 +309,7 @@ public:
 
   // TODO, Add Compute Strategy enum
   static std::string ComputeHash(const std::string &pstr) {
-    auto path_str = Path::ToPathString(pstr);
+    auto path_str = PathInfo::ToPathString(pstr);
 
     // TODO, There might be a file checksum hash compute strategy
     // This is the timestamp hash compute strategy
@@ -336,40 +334,6 @@ public:
 private:
   std::vector<PathInfo> infos_;
 };
-
-// TODO, Remove this
-inline std::vector<Path>
-path_schema_convert(const std::vector<fs::path> &path_list,
-                    const std::function<Path(const fs::path &)> &cb =
-                        Path::CreateExistingPath) {
-  std::vector<Path> internal_path_list;
-  for (const auto &p : path_list) {
-    internal_path_list.push_back(cb(p));
-  }
-  return internal_path_list;
-}
-
-// TODO, Remove this
-inline path_unordered_set
-path_schema_convert(const fs_unordered_set &path_set,
-                    const std::function<Path(const fs::path &)> &cb =
-                        Path::CreateExistingPath) {
-  path_unordered_set internal_path_set;
-  for (const auto &p : path_set) {
-    internal_path_set.insert(cb(p));
-  }
-  return internal_path_set;
-}
-
-// TODO, Remove this
-inline fs_unordered_set
-path_schema_convert(const path_unordered_set &internal_path_set) {
-  fs_unordered_set path_set;
-  for (const auto &p : internal_path_set) {
-    path_set.insert(p.pathname);
-  }
-  return path_set;
-}
 
 } // namespace buildcc::internal
 

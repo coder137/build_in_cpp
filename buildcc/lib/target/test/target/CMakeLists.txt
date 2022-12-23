@@ -18,17 +18,11 @@ target_link_libraries(test_toolchain_flag_api PRIVATE target_interface)
 add_test(NAME test_toolchain_flag_api COMMAND test_toolchain_flag_api)
 
 # Interfaces
-add_executable(test_builder_interface
-    test_builder_interface.cpp
-)
-target_link_libraries(test_builder_interface PRIVATE target_interface)
-
 add_executable(test_serialization_interface
     test_serialization_interface.cpp
 )
 target_link_libraries(test_serialization_interface PRIVATE target_interface)
 
-add_test(NAME test_builder_interface COMMAND test_builder_interface)
 add_test(NAME test_serialization_interface COMMAND test_serialization_interface
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )

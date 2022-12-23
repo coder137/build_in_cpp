@@ -94,13 +94,13 @@ TEST(TargetTestIncludeDirGroup, TargetBuildIncludeDir) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  auto dummy_c_file = buildcc::internal::Path::ToPathString(
+  auto dummy_c_file = buildcc::internal::PathInfo::ToPathString(
       fs::path(source_path / DUMMY_MAIN_C).string());
 
-  auto include_header_file = buildcc::internal::Path::ToPathString(
+  auto include_header_file = buildcc::internal::PathInfo::ToPathString(
       fs::path(source_path / INCLUDE_HEADER_SOURCE).string());
 
-  auto include_header_path = buildcc::internal::Path::ToPathString(
+  auto include_header_path = buildcc::internal::PathInfo::ToPathString(
       fs::path(source_path / RELATIVE_INCLUDE_DIR).string());
 
   {

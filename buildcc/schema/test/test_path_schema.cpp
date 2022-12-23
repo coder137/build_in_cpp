@@ -18,7 +18,8 @@ TEST_GROUP(PathSchemaTestGroup)
 TEST(PathSchemaTestGroup, PathList) { buildcc::internal::PathList paths; }
 
 TEST(PathSchemaTestGroup, Path_ToPathString) {
-  auto path_str = buildcc::internal::Path::ToPathString("hello/\\first.txt");
+  auto path_str =
+      buildcc::internal::PathInfo::ToPathString("hello/\\first.txt");
 
   if constexpr (buildcc::env::is_win()) {
     STRCMP_EQUAL("hello\\first.txt", path_str.c_str());
