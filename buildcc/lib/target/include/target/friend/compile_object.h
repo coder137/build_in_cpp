@@ -54,11 +54,10 @@ public:
   void Task();
 
   const ObjectData &GetObjectData(const fs::path &absolute_source) const;
-  const std::unordered_map<fs::path, ObjectData, internal::PathHash> &
-  GetObjectDataMap() const {
+  const std::unordered_map<std::string, ObjectData> &GetObjectDataMap() const {
     return object_files_;
   }
-  fs_unordered_set GetCompiledSources() const;
+  std::vector<std::string> GetCompiledSources() const;
   tf::Task &GetTask() { return compile_task_; }
 
 private:
@@ -76,7 +75,7 @@ private:
 private:
   Target &target_;
 
-  std::unordered_map<fs::path, ObjectData, internal::PathHash> object_files_;
+  std::unordered_map<std::string, ObjectData> object_files_;
   tf::Task compile_task_;
 };
 

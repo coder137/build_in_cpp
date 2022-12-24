@@ -37,7 +37,7 @@ TEST(ToolchainSpecializedTestGroup, GCC) {
   fs::path current_directory = fs::current_path();
   buildcc::ToolchainFindConfig find_config;
   find_config.env_vars.clear();
-  find_config.absolute_search_paths.insert(current_directory);
+  find_config.absolute_search_paths.push_back(current_directory);
 
   std::vector<std::string> version_stdout{"version"};
   std::vector<std::string> arch_stdout{"arch"};
@@ -60,7 +60,7 @@ TEST(ToolchainSpecializedTestGroup, GCC_Fail) {
   fs::path current_directory = fs::current_path();
   buildcc::ToolchainFindConfig find_config;
   find_config.env_vars.clear();
-  find_config.absolute_search_paths.insert(current_directory);
+  find_config.absolute_search_paths.push_back(current_directory);
 
   {
     std::vector<std::string> version_stdout{"version"};
@@ -107,7 +107,7 @@ TEST(ToolchainSpecializedTestGroup, MINGW) {
   fs::path current_directory = fs::current_path();
   buildcc::ToolchainFindConfig find_config;
   find_config.env_vars.clear();
-  find_config.absolute_search_paths.insert(current_directory);
+  find_config.absolute_search_paths.push_back(current_directory);
 
   std::vector<std::string> version_stdout{"version"};
   std::vector<std::string> arch_stdout{"arch"};
@@ -139,7 +139,7 @@ TEST(ToolchainSpecializedTestGroup, MSVC) {
   fs::path current_directory = fs::current_path();
   buildcc::ToolchainFindConfig find_config;
   find_config.env_vars.clear();
-  find_config.absolute_search_paths.insert(current_directory);
+  find_config.absolute_search_paths.push_back(current_directory);
 
   char vscmd_ver[] = "VSCMD_VER=version";
   char vscmd_arg_host_arch[] = "VSCMD_ARG_HOST_ARCH=host";
@@ -171,7 +171,7 @@ TEST(ToolchainSpecializedTestGroup, MSVC_Fail) {
   fs::path current_directory = fs::current_path();
   buildcc::ToolchainFindConfig find_config;
   find_config.env_vars.clear();
-  find_config.absolute_search_paths.insert(current_directory);
+  find_config.absolute_search_paths.push_back(current_directory);
 
   {
     char vscmd_ver[] = "VSCMD_VER";
@@ -231,7 +231,7 @@ TEST(ToolchainSpecializedTestGroup, Clang) {
   fs::path current_directory = fs::current_path();
   buildcc::ToolchainFindConfig find_config;
   find_config.env_vars.clear();
-  find_config.absolute_search_paths.insert(current_directory);
+  find_config.absolute_search_paths.push_back(current_directory);
 
   std::vector<std::string> version_stdout{"version"};
   std::vector<std::string> arch_stdout{"arch"};

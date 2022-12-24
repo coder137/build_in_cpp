@@ -136,8 +136,6 @@ public:
   size_t operator()(const fs::path &p) const { return fs::hash_value(p); }
 };
 
-using fs_unordered_set = std::unordered_set<fs::path, PathHash>;
-
 struct PathInfo {
 private:
   static constexpr const char *const kPath = "path";
@@ -350,8 +348,6 @@ inline std::string path_as_display_string(const fs::path &p) {
 inline fs::path string_as_path(const std::string &str) {
   return internal::Path(str).pathname;
 }
-
-using fs_unordered_set = internal::fs_unordered_set;
 
 } // namespace buildcc
 

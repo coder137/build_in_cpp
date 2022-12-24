@@ -43,12 +43,12 @@ namespace buildcc {
  */
 struct ToolchainFindConfig {
   ToolchainFindConfig(
-      const std::unordered_set<std::string> &env_vars = {"PATH"},
-      const fs_unordered_set &absolute_search_paths = {})
+      const std::vector<std::string> &env_vars = {"PATH"},
+      const std::vector<std::string> &absolute_search_paths = {})
       : env_vars(env_vars), absolute_search_paths(absolute_search_paths) {}
 
-  std::unordered_set<std::string> env_vars;
-  fs_unordered_set absolute_search_paths;
+  std::vector<std::string> env_vars;
+  std::vector<std::string> absolute_search_paths;
 };
 
 template <typename T> class ToolchainFind {

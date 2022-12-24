@@ -34,13 +34,13 @@ void CompileObject::AddObjectData(const fs::path &absolute_source_path) {
       ConstructObjectPath(absolute_source_path);
   fs::create_directories(absolute_object_path.parent_path());
 
-  object_files_.emplace(absolute_source_path,
-                        ObjectData(absolute_object_path, ""));
+  object_files_.try_emplace(
+      internal::PathInfo::ToPathString(absolute_source_path),
+      absolute_object_path, "");
 }
 
 void CompileObject::CacheCompileCommands() {
-  for (auto &object_iter : object_files_) {
-    const fs::path &absolute_current_source = object_iter.first;
+  for (auto &[absolute_current_source, object_data] : object_files_) {
 
     const std::string output =
         fmt::format("{}", GetObjectData(absolute_current_source).output);
@@ -52,7 +52,7 @@ void CompileObject::CacheCompileCommands() {
         target_.SelectCompileFlags(type).value_or("");
     const std::string selected_compiler =
         fmt::format("{}", fs::path(target_.SelectCompiler(type).value_or("")));
-    object_iter.second.command = target_.command_.Construct(
+    object_data.command = target_.command_.Construct(
         target_.GetConfig().compile_command,
         {
             {kCompiler, selected_compiler},
@@ -63,17 +63,18 @@ void CompileObject::CacheCompileCommands() {
   }
 }
 
-fs_unordered_set CompileObject::GetCompiledSources() const {
-  fs_unordered_set compiled_sources;
-  for (const auto &p : object_files_) {
-    compiled_sources.insert(p.second.output);
+std::vector<std::string> CompileObject::GetCompiledSources() const {
+  std::vector<std::string> compiled_sources;
+  for (const auto &[_, object_data] : object_files_) {
+    compiled_sources.push_back(object_data.output);
   }
   return compiled_sources;
 }
 
 const CompileObject::ObjectData &
 CompileObject::GetObjectData(const fs::path &absolute_source) const {
-  const auto fiter = object_files_.find(absolute_source);
+  const auto fiter =
+      object_files_.find(internal::PathInfo::ToPathString(absolute_source));
   env::assert_fatal(fiter != object_files_.end(),
                     fmt::format("{} not found", absolute_source));
   return object_files_.at(absolute_source);

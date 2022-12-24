@@ -68,12 +68,13 @@ ToolchainFind<T>::Find(const ToolchainFindConfig &config) const {
   // Initialization
   const T &t = static_cast<const T &>(*this);
   std::vector<fs::path> found_toolchains;
-  fs_unordered_set absolute_search_paths(config.absolute_search_paths);
+  std::vector<std::string> absolute_search_paths(config.absolute_search_paths);
 
   // Parse config envs and add it to absolute search paths
-  for (const std::string &env_var : config.env_vars) {
+  for (const auto &env_var : config.env_vars) {
     std::vector<std::string> paths = ParseEnvVarToPaths(env_var);
-    absolute_search_paths.insert(paths.begin(), paths.end());
+    absolute_search_paths.insert(absolute_search_paths.end(), paths.begin(),
+                                 paths.end());
   }
 
   // Over the absolute search paths
