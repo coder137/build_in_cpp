@@ -225,10 +225,6 @@ TEST(TargetTestIncludeDirGroup, TargetBuildHeaderFile) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  auto dummy_c_file =
-      buildcc::internal::Path::CreateExistingPath((source_path / DUMMY_MAIN_C));
-  auto include_header_file = buildcc::internal::Path::CreateExistingPath(
-      (source_path / INCLUDE_HEADER_SOURCE));
   auto include_header_path =
       (source_path / RELATIVE_INCLUDE_DIR).make_preferred();
 

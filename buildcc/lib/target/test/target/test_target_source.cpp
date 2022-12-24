@@ -116,8 +116,6 @@ TEST(TargetTestSourceGroup, Target_Build_SourceCompile) {
   CHECK_EQUAL(loaded_sources.size(), 1);
   auto dummy_file = buildcc::internal::PathInfo::ToPathString(
       fs::path(source_path / DUMMY_MAIN).string());
-  // buildcc::internal::Path::CreateExistingPath(
-  //     (source_path / DUMMY_MAIN).make_preferred().string());
   CHECK_FALSE(loaded_sources.find(dummy_file) == loaded_sources.end());
 }
 

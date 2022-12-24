@@ -34,108 +34,6 @@ using json = nlohmann::ordered_json;
 
 namespace buildcc::internal {
 
-// TODO, Remove this
-// Use PathInfo instead
-// Migrate important APIs to the PathInfo struct
-struct Path {
-private:
-  static constexpr const char *const kPathName = "path";
-  static constexpr const char *const kHashName = "hash";
-
-public:
-  Path() = default;
-  Path(const fs::path &path, std::uint64_t timestamp = 0)
-      : pathname(path), last_write_timestamp(timestamp) {
-    pathname.lexically_normal().make_preferred();
-  }
-
-  /**
-   * @brief Create a Existing Path object and sets last_write_timstamp to file
-   * timestamp
-   * NOTE, Throws buildcc::env::assert_exception if file not found
-   *
-   * @param pathname
-   * @return Path
-   */
-  static Path CreateExistingPath(const fs::path &pathname) {
-    std::error_code errcode;
-    uint64_t last_write_timestamp =
-        std::filesystem::last_write_time(pathname, errcode)
-            .time_since_epoch()
-            .count();
-    env::assert_fatal(errcode.value() == 0,
-                      fmt::format("{} not found", pathname));
-
-    return Path(pathname, last_write_timestamp);
-  }
-
-  /**
-   * @brief Get fs::path as std::string while keeping the preferred os
-   * path delimiters
-   * '\\' for windows and '/' for linux
-   *
-   * @return std::string
-   */
-  std::string GetPathAsString() const { return pathname.string(); }
-
-  /**
-   * @brief Get fs::path as std::string for display
-   * Converts '\\' to '/' for conformity
-   *
-   * @return std::string
-   */
-  std::string GetPathAsStringForDisplay() const {
-    return Quote(ConvertPathToString());
-  }
-
-  // Used during find operation
-  bool operator==(const Path &p) const { return pathname == p.pathname; }
-
-  bool operator==(const fs::path &other_pathname) const {
-    return pathname == other_pathname;
-  }
-
-  // JSON specialization
-
-  friend void to_json(json &j, const Path &p) {
-    j[kPathName] = p.pathname;
-    j[kHashName] = p.last_write_timestamp;
-  }
-
-  friend void from_json(const json &j, Path &p) {
-    j.at(kPathName).get_to(p.pathname);
-    j.at(kHashName).get_to(p.last_write_timestamp);
-  }
-
-private:
-  std::string Quote(const std::string &str) const {
-    if (str.find(" ") == std::string::npos) {
-      return str;
-    }
-    return fmt::format("\"{}\"", str);
-  }
-
-  std::string ConvertPathToString() const {
-    std::string pstr = pathname.string();
-    std::replace(pstr.begin(), pstr.end(), '\\', '/');
-    return pstr;
-  }
-
-public:
-  fs::path pathname;
-  // TODO, Change this to std::string hash
-  std::uint64_t last_write_timestamp{0};
-};
-
-// TODO, Remove this
-// Used by Path
-class PathHash {
-public:
-  size_t operator()(const Path &p) const { return fs::hash_value(p.pathname); }
-
-  size_t operator()(const fs::path &p) const { return fs::hash_value(p); }
-};
-
 struct PathInfo {
 private:
   static constexpr const char *const kPath = "path";
@@ -337,16 +235,16 @@ private:
 
 namespace buildcc {
 
-inline std::string path_as_string(const fs::path &p) {
-  return internal::Path(p).GetPathAsString();
+inline std::string path_as_string(const std::string &p) {
+  return internal::PathInfo::ToPathString(p);
 }
 
-inline std::string path_as_display_string(const fs::path &p) {
-  return internal::Path(p).GetPathAsStringForDisplay();
+inline std::string path_as_display_string(const std::string &p) {
+  return internal::PathInfo::ToPathDisplayString(p);
 }
 
-inline fs::path string_as_path(const std::string &str) {
-  return internal::Path(str).pathname;
+inline fs::path string_as_path(const std::string &p) {
+  return path_as_string(p);
 }
 
 } // namespace buildcc
