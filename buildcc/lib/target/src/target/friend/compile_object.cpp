@@ -63,8 +63,8 @@ void CompileObject::CacheCompileCommands() {
   }
 }
 
-std::vector<std::string> CompileObject::GetCompiledSources() const {
-  std::vector<std::string> compiled_sources;
+std::vector<fs::path> CompileObject::GetCompiledSources() const {
+  std::vector<fs::path> compiled_sources;
   for (const auto &[_, object_data] : object_files_) {
     compiled_sources.push_back(object_data.output);
   }
@@ -73,11 +73,12 @@ std::vector<std::string> CompileObject::GetCompiledSources() const {
 
 const CompileObject::ObjectData &
 CompileObject::GetObjectData(const fs::path &absolute_source) const {
-  const auto fiter =
-      object_files_.find(internal::PathInfo::ToPathString(absolute_source));
+  const auto sanitized_source =
+      internal::PathInfo::ToPathString(absolute_source);
+  const auto fiter = object_files_.find(sanitized_source);
   env::assert_fatal(fiter != object_files_.end(),
                     fmt::format("{} not found", absolute_source));
-  return object_files_.at(absolute_source);
+  return object_files_.at(sanitized_source);
 }
 
 // PRIVATE

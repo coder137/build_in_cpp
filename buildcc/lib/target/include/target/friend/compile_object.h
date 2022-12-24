@@ -57,7 +57,7 @@ public:
   const std::unordered_map<std::string, ObjectData> &GetObjectDataMap() const {
     return object_files_;
   }
-  std::vector<std::string> GetCompiledSources() const;
+  std::vector<fs::path> GetCompiledSources() const;
   tf::Task &GetTask() { return compile_task_; }
 
 private:

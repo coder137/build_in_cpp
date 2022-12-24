@@ -55,10 +55,8 @@ public:
    * @param str User provided fs::path/std::string
    * @return std::string Sanitized path as std::string
    */
-  static std::string ToPathString(const std::string &str) {
-    auto path_str = str;
-    path_str = fs::path(path_str).make_preferred().lexically_normal().string();
-    return path_str;
+  static std::string ToPathString(const fs::path &p) {
+    return fs::path(p).make_preferred().lexically_normal().string();
   }
 
   /**
@@ -74,8 +72,8 @@ public:
    * @param str User provided fs::path/std::string
    * @return std::string Sanitized path as std::string for display
    */
-  static std::string ToPathDisplayString(const std::string &str) {
-    auto path_str = ToPathString(str);
+  static std::string ToPathDisplayString(const fs::path &p) {
+    auto path_str = ToPathString(p);
     // if spaces are present in the path string, surround this with brackets
     if (path_str.find(' ') != std::string::npos) {
       path_str = fmt::format("\"{}\"", path_str);
@@ -109,8 +107,8 @@ public:
     }
   }
 
-  void Emplace(const std::string &pstr) {
-    auto path_str = PathInfo::ToPathString(pstr);
+  void Emplace(const fs::path &p) {
+    auto path_str = PathInfo::ToPathString(p);
     paths_.emplace_back(std::move(path_str));
   }
 
@@ -160,8 +158,8 @@ public:
     }
   }
 
-  void Emplace(const std::string &pstr, const std::string &hash) {
-    auto path_str = PathInfo::ToPathString(pstr);
+  void Emplace(const fs::path &p, const std::string &hash) {
+    auto path_str = PathInfo::ToPathString(p);
     infos_.emplace_back(PathInfo(path_str, hash));
   }
 
@@ -235,11 +233,11 @@ private:
 
 namespace buildcc {
 
-inline std::string path_as_string(const std::string &p) {
+inline std::string path_as_string(const fs::path &p) {
   return internal::PathInfo::ToPathString(p);
 }
 
-inline std::string path_as_display_string(const std::string &p) {
+inline std::string path_as_display_string(const fs::path &p) {
   return internal::PathInfo::ToPathDisplayString(p);
 }
 
