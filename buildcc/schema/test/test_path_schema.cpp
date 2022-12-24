@@ -31,6 +31,20 @@ TEST(PathSchemaTestGroup, Path_ToPathString) {
   }
 }
 
+TEST(PathSchemaTestGroup, Path_ToPathDisplayString) {
+  auto path_str = buildcc::internal::PathInfo::ToPathDisplayString(
+      "hello/\\first/hello world.txt");
+
+  if constexpr (buildcc::env::is_win()) {
+    STRCMP_EQUAL("\"hello\\first\\hello world.txt\"", path_str.c_str());
+  } else if constexpr (buildcc::env::is_linux() || buildcc::env::is_mac() ||
+                       buildcc::env::is_unix()) {
+    STRCMP_EQUAL("\"hello/\\first/hello world.txt\"", path_str.c_str());
+  } else {
+    FAIL("Operating system not supported");
+  }
+}
+
 TEST(PathSchemaTestGroup, PathInfoList_OrderedEmplace) {
   buildcc::internal::PathInfoList path_infos;
 
