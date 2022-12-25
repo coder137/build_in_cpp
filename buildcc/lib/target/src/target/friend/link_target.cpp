@@ -96,6 +96,8 @@ void LinkTarget::BuildLink() {
       target_.dirty_ = true;
       target_.PathChanged();
     } else if (!target_load_schema.target_linked) {
+      // TODO, Replace this with fs::exists to check if linked target is present
+      // or no
       target_.dirty_ = true;
     }
   }
