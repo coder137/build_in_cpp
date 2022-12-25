@@ -31,6 +31,7 @@ static buildcc::Toolchain gcc(buildcc::ToolchainId::Gcc, "gcc",
 TEST_GROUP(TargetTestPreprocessorFlagGroup)
 {
     void teardown() {
+      mock().checkExpectations();
       mock().clear();
     }
 };
@@ -147,27 +148,54 @@ TEST(TargetTestCommonCompileFlagsGroup, Target_AddCommonCompileFlag) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::BaseTarget simple(NAME, buildcc::TargetType::Executable, gcc,
-                             "data");
-  simple.AddSource(DUMMY_MAIN);
-  simple.AddCommonCompileFlag("-O0");
-  simple.AddCommonCompileFlag("-g");
+  {
+    buildcc::BaseTarget simple(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    simple.AddSource(DUMMY_MAIN);
+    simple.AddCommonCompileFlag("-O0");
+    simple.AddCommonCompileFlag("-g");
 
-  buildcc::env::m::CommandExpect_Execute(1, true);
-  buildcc::env::m::CommandExpect_Execute(1, true);
-  simple.Build();
-  buildcc::m::TargetRunner(simple);
-  CHECK_TRUE(simple.IsBuilt());
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    simple.Build();
+    buildcc::m::TargetRunner(simple);
+    CHECK_TRUE(simple.IsBuilt());
 
-  mock().checkExpectations();
+    mock().checkExpectations();
 
-  // Verify binary
-  buildcc::internal::TargetSerialization serialization(
-      simple.GetTargetBuildDir() / (std::string(NAME) + ".bin"));
-  bool loaded = serialization.LoadFromFile();
-  CHECK_TRUE(loaded);
+    // Verify binary
+    buildcc::internal::TargetSerialization serialization(
+        simple.GetTargetBuildDir() / (std::string(NAME) + ".bin"));
+    bool loaded = serialization.LoadFromFile();
+    CHECK_TRUE(loaded);
 
-  CHECK_EQUAL(serialization.GetLoad().common_compile_flags.size(), 2);
+    CHECK_EQUAL(serialization.GetLoad().common_compile_flags.size(), 2);
+  }
+
+  // Trigger Rebuild for Common Compile flag
+  {
+    buildcc::BaseTarget simple(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    simple.AddSource(DUMMY_MAIN);
+    simple.AddCommonCompileFlag("-O0");
+
+    buildcc::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    simple.Build();
+    buildcc::m::TargetRunner(simple);
+    CHECK_TRUE(simple.IsBuilt());
+
+    mock().checkExpectations();
+
+    // Verify binary
+    buildcc::internal::TargetSerialization serialization(
+        simple.GetTargetBuildDir() / (std::string(NAME) + ".bin"));
+    bool loaded = serialization.LoadFromFile();
+    CHECK_TRUE(loaded);
+
+    CHECK_EQUAL(serialization.GetLoad().common_compile_flags.size(), 1);
+  }
 }
 
 TEST(TargetTestCommonCompileFlagsGroup, Target_ChangedCommonCompileFlag) {
@@ -476,26 +504,53 @@ TEST(TargetTestCppCompileFlagsGroup, Target_AddCompileFlag) {
   // Delete
   fs::remove_all(intermediate_path);
 
-  buildcc::BaseTarget simple(NAME, buildcc::TargetType::Executable, gcc,
-                             "data");
-  simple.AddSource(DUMMY_MAIN);
-  simple.AddCppCompileFlag("-std=c++17");
+  {
+    buildcc::BaseTarget simple(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    simple.AddSource(DUMMY_MAIN);
+    simple.AddCppCompileFlag("-std=c++17");
 
-  buildcc::env::m::CommandExpect_Execute(1, true);
-  buildcc::env::m::CommandExpect_Execute(1, true);
-  simple.Build();
-  buildcc::m::TargetRunner(simple);
-  CHECK_TRUE(simple.IsBuilt());
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    simple.Build();
+    buildcc::m::TargetRunner(simple);
+    CHECK_TRUE(simple.IsBuilt());
 
-  mock().checkExpectations();
+    mock().checkExpectations();
 
-  // Verify binary
-  buildcc::internal::TargetSerialization serialization(
-      simple.GetTargetBuildDir() / (std::string(NAME) + ".bin"));
-  bool loaded = serialization.LoadFromFile();
-  CHECK_TRUE(loaded);
+    // Verify binary
+    buildcc::internal::TargetSerialization serialization(
+        simple.GetTargetBuildDir() / (std::string(NAME) + ".bin"));
+    bool loaded = serialization.LoadFromFile();
+    CHECK_TRUE(loaded);
 
-  CHECK_EQUAL(serialization.GetLoad().cpp_compile_flags.size(), 1);
+    CHECK_EQUAL(serialization.GetLoad().cpp_compile_flags.size(), 1);
+  }
+
+  // Trigger rebuild for Cpp Compile flag
+  {
+    buildcc::BaseTarget simple(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    simple.AddSource(DUMMY_MAIN);
+    simple.AddCppCompileFlag("-std=c++20");
+
+    buildcc::m::TargetExpect_FlagChanged(1, &simple);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    simple.Build();
+    buildcc::m::TargetRunner(simple);
+    CHECK_TRUE(simple.IsBuilt());
+
+    mock().checkExpectations();
+
+    // Verify binary
+    buildcc::internal::TargetSerialization serialization(
+        simple.GetTargetBuildDir() / (std::string(NAME) + ".bin"));
+    bool loaded = serialization.LoadFromFile();
+    CHECK_TRUE(loaded);
+
+    CHECK_EQUAL(serialization.GetLoad().cpp_compile_flags.size(), 1);
+  }
 }
 
 TEST(TargetTestCppCompileFlagsGroup, Target_ChangedCompileFlag) {
