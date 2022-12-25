@@ -389,7 +389,7 @@ TEST(TargetPchTestGroup, Target_AddPchs_FlagsRebuild) {
     CHECK_TRUE(exists);
   }
 
-  // Added PchCompileFlag
+  // Added Preprocessor flag
   {
     buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
                                "data");
@@ -409,6 +409,7 @@ TEST(TargetPchTestGroup, Target_AddPchs_FlagsRebuild) {
   {
     buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
                                "data");
+    target.AddPreprocessorFlag("-H");
     target.AddCommonCompileFlag("-H");
     target.AddPch("pch/pch_header_1.h");
 
@@ -425,6 +426,8 @@ TEST(TargetPchTestGroup, Target_AddPchs_FlagsRebuild) {
   {
     buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
                                "data");
+    target.AddPreprocessorFlag("-H");
+    target.AddCommonCompileFlag("-H");
     target.AddPchCompileFlag("-H");
     target.AddPch("pch/pch_header_1.h");
 
@@ -441,6 +444,9 @@ TEST(TargetPchTestGroup, Target_AddPchs_FlagsRebuild) {
   {
     buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
                                "data");
+    target.AddPreprocessorFlag("-H");
+    target.AddCommonCompileFlag("-H");
+    target.AddPchCompileFlag("-H");
     target.AddCCompileFlag("-H");
     target.AddPch("pch/pch_header_1.h");
 
@@ -453,10 +459,14 @@ TEST(TargetPchTestGroup, Target_AddPchs_FlagsRebuild) {
     CHECK_TRUE(exists);
   }
 
-  // Added CppCompileFlag
+  // Keep CCompileFlag, Added CppCompileFlag
   {
     buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
                                "data");
+    target.AddPreprocessorFlag("-H");
+    target.AddCommonCompileFlag("-H");
+    target.AddPchCompileFlag("-H");
+    target.AddCCompileFlag("-H");
     target.AddCppCompileFlag("-H");
     target.AddPch("pch/pch_header_1.h");
 

@@ -81,6 +81,7 @@ void CompilePch::BuildCompile() {
     target_.dirty_ = true;
   } else {
     if (target_.dirty_) {
+      // Rebuild is target is dirty, no need for additional rechecks
     } else if (!(load_target_schema.preprocessor_flags ==
                  user_target_schema.preprocessor_flags) ||
                !(load_target_schema.common_compile_flags ==
