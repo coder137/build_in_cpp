@@ -41,9 +41,9 @@ namespace buildcc::internal {
 // Target::GetTargetPath
 template <typename T> class LibApi {
 public:
-  const std::vector<fs::path> &GetLibDeps() const {
+  std::vector<std::string> GetLibDeps() const {
     const auto &t = static_cast<const T &>(*this);
-    return t.user_.libs;
+    return t.user_.libs.GetPaths();
   }
 
   const std::vector<std::string> &GetExternalLibDeps() const {
@@ -51,14 +51,14 @@ public:
     return t.user_.external_libs;
   }
 
-  const fs_unordered_set &GetLibDirs() const {
+  const std::vector<std::string> &GetLibDirs() const {
     const auto &t = static_cast<const T &>(*this);
-    return t.user_.lib_dirs;
+    return t.user_.lib_dirs.GetPaths();
   }
 
   void AddLibDirAbsolute(const fs::path &absolute_lib_dir) {
     auto &t = static_cast<T &>(*this);
-    t.user_.lib_dirs.insert(absolute_lib_dir);
+    t.user_.lib_dirs.Emplace(absolute_lib_dir);
   }
 
   void AddLibDir(const fs::path &relative_lib_dir) {

@@ -25,6 +25,7 @@
 TEST_GROUP(TargetPchTestGroup)
 {
     void teardown() {
+        mock().checkExpectations();
         mock().clear();
     }
 };
@@ -246,24 +247,237 @@ TEST(TargetPchTestGroup, Target_AddPch_CppRebuild) {
   mock().checkExpectations();
 }
 
-TEST(TargetPchTestGroup, Target_AddPchCompileFlag_Build) {
-  constexpr const char *const NAME = "AddPchCompileFlag_Build.exe";
+TEST(TargetPchTestGroup, Target_AddPch_IncludeDirsRebuild) {
+  constexpr const char *const NAME = "AddPch_IncludeDirsRebuild.exe";
 
-  buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
-                             "data");
-  target.AddPchCompileFlag("-H");
-  target.AddPch("pch/pch_header_1.h");
-  target.AddPch("pch/pch_header_2.h");
+  {
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    target.AddPch("pch/pch_header_1.h");
+    target.AddIncludeDir("pch");
 
-  buildcc::env::m::CommandExpect_Execute(1, true);
-  buildcc::env::m::CommandExpect_Execute(1, true);
-  target.Build();
-  buildcc::m::TargetRunner(target);
-  bool exists = fs::exists(target.GetPchHeaderPath());
-  CHECK_TRUE(exists);
-  CHECK_EQUAL(target.GetPchCompileFlags().size(), 1);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    target.Build();
+    buildcc::m::TargetRunner(target);
+    bool exists = fs::exists(target.GetPchHeaderPath());
+    CHECK_TRUE(exists);
+  }
 
-  mock().checkExpectations();
+  // No Change
+  {
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    target.AddPch("pch/pch_header_1.h");
+    target.AddIncludeDir("pch");
+
+    target.Build();
+    buildcc::m::TargetRunner(target);
+    bool exists = fs::exists(target.GetPchHeaderPath());
+    CHECK_TRUE(exists);
+  }
+
+  // Remove
+  {
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    target.AddPch("pch/pch_header_1.h");
+    // target.AddIncludeDir("pch");
+
+    buildcc::m::TargetExpect_DirChanged(1, &target);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    target.Build();
+    buildcc::m::TargetRunner(target);
+    bool exists = fs::exists(target.GetPchHeaderPath());
+    CHECK_TRUE(exists);
+  }
+
+  // Added
+  {
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    target.AddPch("pch/pch_header_1.h");
+    target.AddIncludeDir("pch");
+
+    buildcc::m::TargetExpect_DirChanged(1, &target);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    target.Build();
+    buildcc::m::TargetRunner(target);
+    bool exists = fs::exists(target.GetPchHeaderPath());
+    CHECK_TRUE(exists);
+  }
+}
+
+TEST(TargetPchTestGroup, Target_AddPch_HeadersRebuild) {
+  constexpr const char *const NAME = "AddPch_HeadersRebuild.exe";
+
+  {
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    target.AddPch("pch/pch_header_1.h");
+    target.AddHeader("pch/pch_header_1.h");
+
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    target.Build();
+    buildcc::m::TargetRunner(target);
+    bool exists = fs::exists(target.GetPchHeaderPath());
+    CHECK_TRUE(exists);
+  }
+
+  // No Change
+  {
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    target.AddPch("pch/pch_header_1.h");
+    target.AddHeader("pch/pch_header_1.h");
+
+    target.Build();
+    buildcc::m::TargetRunner(target);
+    bool exists = fs::exists(target.GetPchHeaderPath());
+    CHECK_TRUE(exists);
+  }
+
+  // Remove
+  {
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    target.AddPch("pch/pch_header_1.h");
+    // target.AddHeader("pch/pch_header_1.h");
+
+    buildcc::m::TargetExpect_PathChanged(1, &target);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    target.Build();
+    buildcc::m::TargetRunner(target);
+    bool exists = fs::exists(target.GetPchHeaderPath());
+    CHECK_TRUE(exists);
+  }
+
+  // Added
+  {
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    target.AddPch("pch/pch_header_1.h");
+    target.AddHeader("pch/pch_header_1.h");
+
+    buildcc::m::TargetExpect_PathChanged(1, &target);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    target.Build();
+    buildcc::m::TargetRunner(target);
+    bool exists = fs::exists(target.GetPchHeaderPath());
+    CHECK_TRUE(exists);
+  }
+}
+
+TEST(TargetPchTestGroup, Target_AddPchs_FlagsRebuild) {
+  constexpr const char *const NAME = "Target_AddPchs_FlagsRebuild.exe";
+
+  {
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    target.AddPch("pch/pch_header_1.h");
+
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    target.Build();
+    buildcc::m::TargetRunner(target);
+    bool exists = fs::exists(target.GetPchHeaderPath());
+    CHECK_TRUE(exists);
+  }
+
+  // Added Preprocessor flag
+  {
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    target.AddPreprocessorFlag("-H");
+    target.AddPch("pch/pch_header_1.h");
+
+    buildcc::m::TargetExpect_FlagChanged(1, &target);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    target.Build();
+    buildcc::m::TargetRunner(target);
+    bool exists = fs::exists(target.GetPchHeaderPath());
+    CHECK_TRUE(exists);
+  }
+
+  // Added CommonCompileFlag
+  {
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    target.AddPreprocessorFlag("-H");
+    target.AddCommonCompileFlag("-H");
+    target.AddPch("pch/pch_header_1.h");
+
+    buildcc::m::TargetExpect_FlagChanged(1, &target);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    target.Build();
+    buildcc::m::TargetRunner(target);
+    bool exists = fs::exists(target.GetPchHeaderPath());
+    CHECK_TRUE(exists);
+  }
+
+  // Added PchCompileFlag
+  {
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    target.AddPreprocessorFlag("-H");
+    target.AddCommonCompileFlag("-H");
+    target.AddPchCompileFlag("-H");
+    target.AddPch("pch/pch_header_1.h");
+
+    buildcc::m::TargetExpect_FlagChanged(1, &target);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    target.Build();
+    buildcc::m::TargetRunner(target);
+    bool exists = fs::exists(target.GetPchHeaderPath());
+    CHECK_TRUE(exists);
+  }
+
+  // Added CCompileFlag
+  {
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    target.AddPreprocessorFlag("-H");
+    target.AddCommonCompileFlag("-H");
+    target.AddPchCompileFlag("-H");
+    target.AddCCompileFlag("-H");
+    target.AddPch("pch/pch_header_1.h");
+
+    buildcc::m::TargetExpect_FlagChanged(1, &target);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    target.Build();
+    buildcc::m::TargetRunner(target);
+    bool exists = fs::exists(target.GetPchHeaderPath());
+    CHECK_TRUE(exists);
+  }
+
+  // Keep CCompileFlag, Added CppCompileFlag
+  {
+    buildcc::BaseTarget target(NAME, buildcc::TargetType::Executable, gcc,
+                               "data");
+    target.AddPreprocessorFlag("-H");
+    target.AddCommonCompileFlag("-H");
+    target.AddPchCompileFlag("-H");
+    target.AddCCompileFlag("-H");
+    target.AddCppCompileFlag("-H");
+    target.AddPch("pch/pch_header_1.h");
+
+    buildcc::m::TargetExpect_FlagChanged(1, &target);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    buildcc::env::m::CommandExpect_Execute(1, true);
+    target.Build();
+    buildcc::m::TargetRunner(target);
+    bool exists = fs::exists(target.GetPchHeaderPath());
+    CHECK_TRUE(exists);
+  }
 }
 
 TEST(TargetPchTestGroup, Target_AddPchObjectFlag_Build) {

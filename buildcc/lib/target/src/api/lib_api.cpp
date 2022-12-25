@@ -24,7 +24,7 @@ namespace buildcc::internal {
 template <typename T> void LibApi<T>::AddLibDep(const BaseTarget &lib_dep) {
   T &t = static_cast<T &>(*this);
 
-  t.user_.libs.push_back(lib_dep.GetTargetPath());
+  t.user_.libs.Emplace(lib_dep.GetTargetPath(), "");
 }
 
 template class LibApi<TargetInfo>;

@@ -29,27 +29,29 @@ struct TargetSchema {
   std::string name;
   TargetType type{TargetType::Undefined};
 
-  path_unordered_set internal_sources;
-  path_unordered_set internal_headers;
-  path_unordered_set internal_pchs;
-  std::vector<Path> internal_libs;
+  PathInfoList sources;
+  PathInfoList headers;
+  PathInfoList pchs;
+
+  PathInfoList libs;
   std::vector<std::string> external_libs;
 
-  fs_unordered_set include_dirs;
-  fs_unordered_set lib_dirs;
+  PathList include_dirs;
+  PathList lib_dirs;
 
-  std::unordered_set<std::string> preprocessor_flags;
-  std::unordered_set<std::string> common_compile_flags;
-  std::unordered_set<std::string> pch_compile_flags;
-  std::unordered_set<std::string> pch_object_flags;
-  std::unordered_set<std::string> asm_compile_flags;
-  std::unordered_set<std::string> c_compile_flags;
-  std::unordered_set<std::string> cpp_compile_flags;
-  std::unordered_set<std::string> link_flags;
+  std::vector<std::string> preprocessor_flags;
+  std::vector<std::string> common_compile_flags;
+  std::vector<std::string> pch_compile_flags;
+  std::vector<std::string> pch_object_flags;
+  std::vector<std::string> asm_compile_flags;
+  std::vector<std::string> c_compile_flags;
+  std::vector<std::string> cpp_compile_flags;
+  std::vector<std::string> link_flags;
 
-  path_unordered_set internal_compile_dependencies;
-  path_unordered_set internal_link_dependencies;
+  PathInfoList compile_dependencies;
+  PathInfoList link_dependencies;
 
+  // TODO, Verify this using fs::exists
   bool pch_compiled{false};
   bool target_linked{false};
 
@@ -87,10 +89,10 @@ public:
   friend void to_json(json &j, const TargetSchema &schema) {
     j[kName] = schema.name;
     j[kType] = schema.type;
-    j[kSources] = schema.internal_sources;
-    j[kHeaders] = schema.internal_headers;
-    j[kPchs] = schema.internal_pchs;
-    j[kLibs] = schema.internal_libs;
+    j[kSources] = schema.sources;
+    j[kHeaders] = schema.headers;
+    j[kPchs] = schema.pchs;
+    j[kLibs] = schema.libs;
     j[kExternalLibs] = schema.external_libs;
     j[kIncludeDirs] = schema.include_dirs;
     j[kLibDirs] = schema.lib_dirs;
@@ -104,8 +106,8 @@ public:
     j[kCppCompileFlags] = schema.cpp_compile_flags;
     j[kLinkFlags] = schema.link_flags;
 
-    j[kCompileDependencies] = schema.internal_compile_dependencies;
-    j[kLinkDependencies] = schema.internal_link_dependencies;
+    j[kCompileDependencies] = schema.compile_dependencies;
+    j[kLinkDependencies] = schema.link_dependencies;
     j[kPchCompiled] = schema.pch_compiled;
     j[kTargetLinked] = schema.target_linked;
   }
@@ -113,10 +115,10 @@ public:
   friend void from_json(const json &j, TargetSchema &schema) {
     j.at(kName).get_to(schema.name);
     j.at(kType).get_to(schema.type);
-    j.at(kSources).get_to(schema.internal_sources);
-    j.at(kHeaders).get_to(schema.internal_headers);
-    j.at(kPchs).get_to(schema.internal_pchs);
-    j.at(kLibs).get_to(schema.internal_libs);
+    j.at(kSources).get_to(schema.sources);
+    j.at(kHeaders).get_to(schema.headers);
+    j.at(kPchs).get_to(schema.pchs);
+    j.at(kLibs).get_to(schema.libs);
     j.at(kExternalLibs).get_to(schema.external_libs);
     j.at(kIncludeDirs).get_to(schema.include_dirs);
     j.at(kLibDirs).get_to(schema.lib_dirs);
@@ -130,8 +132,8 @@ public:
     j.at(kCppCompileFlags).get_to(schema.cpp_compile_flags);
     j.at(kLinkFlags).get_to(schema.link_flags);
 
-    j.at(kCompileDependencies).get_to(schema.internal_compile_dependencies);
-    j.at(kLinkDependencies).get_to(schema.internal_link_dependencies);
+    j.at(kCompileDependencies).get_to(schema.compile_dependencies);
+    j.at(kLinkDependencies).get_to(schema.link_dependencies);
     j.at(kPchCompiled).get_to(schema.pch_compiled);
     j.at(kTargetLinked).get_to(schema.target_linked);
   }

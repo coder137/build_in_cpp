@@ -40,7 +40,7 @@ TEST(ToolchainFindTestGroup, FindToolchain_ThroughEnvVar) {
 
   buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
-  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
+  config.env_vars.push_back("CUSTOM_BUILDCC_PATH");
 
   std::vector<fs::path> found_toolchains = gcc.Find(config);
   CHECK_TRUE(!found_toolchains.empty());
@@ -52,8 +52,8 @@ TEST(ToolchainFindTestGroup, FindToolchain_ThroughAbsolutePath) {
       buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
 
   buildcc::ToolchainFindConfig config;
-  config.absolute_search_paths.insert(fs::current_path() / "toolchains" /
-                                      "gcc");
+  config.absolute_search_paths.push_back(fs::current_path() / "toolchains" /
+                                         "gcc");
   config.env_vars.clear();
 
   std::vector<fs::path> found_toolchains = gcc.Find(config);
@@ -66,8 +66,8 @@ TEST(ToolchainFindTestGroup, FindToolchain_DirectoryDoesntExist) {
       buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
 
   buildcc::ToolchainFindConfig config;
-  config.absolute_search_paths.insert(fs::current_path() / "toolchains" /
-                                      "directory_doesnt_exist");
+  config.absolute_search_paths.push_back(fs::current_path() / "toolchains" /
+                                         "directory_doesnt_exist");
   config.env_vars.clear();
 
   std::vector<fs::path> found_toolchains = gcc.Find(config);
@@ -80,8 +80,8 @@ TEST(ToolchainFindTestGroup, FindToolchain_NoDirectoryFound) {
       buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
 
   buildcc::ToolchainFindConfig config;
-  config.absolute_search_paths.insert(fs::current_path() / "toolchains" /
-                                      "gcc" / "ar");
+  config.absolute_search_paths.push_back(fs::current_path() / "toolchains" /
+                                         "gcc" / "ar");
   config.env_vars.clear();
 
   std::vector<fs::path> found_toolchains = gcc.Find(config);
@@ -94,7 +94,7 @@ TEST(ToolchainFindTestGroup, FindToolchain_NoToolchainFound) {
       buildcc::ToolchainExecutables("as", "gcc", "g++", "ar", "ld"));
 
   buildcc::ToolchainFindConfig config;
-  config.absolute_search_paths.insert(fs::current_path() / "toolchains");
+  config.absolute_search_paths.push_back(fs::current_path() / "toolchains");
   config.env_vars.clear();
 
   std::vector<fs::path> found_toolchains = gcc.Find(config);

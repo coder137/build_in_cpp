@@ -60,8 +60,8 @@ TEST(TargetTestLibDep, StaticLibrary_SimpleBuildTest) {
   bool loaded = serialization.LoadFromFile();
   CHECK_TRUE(loaded);
 
-  CHECK_EQUAL(serialization.GetLoad().internal_sources.size(), 1);
-  CHECK_EQUAL(serialization.GetLoad().include_dirs.size(), 1);
+  CHECK_EQUAL(serialization.GetLoad().sources.GetPathInfos().size(), 1);
+  CHECK_EQUAL(serialization.GetLoad().include_dirs.GetPaths().size(), 1);
 }
 
 TEST(TargetTestLibDep, TargetDep_RebuildTest) {

@@ -13,12 +13,8 @@ static constexpr const char *const SOURCE_ADDED_FUNCTION =
 static constexpr const char *const SOURCE_UPDATED_FUNCTION =
     "Target::SourceUpdated";
 
-static constexpr const char *const PATH_REMOVED_FUNCTION =
-    "Target::PathRemoved";
-static constexpr const char *const PATH_ADDED_FUNCTION = "Target::PathAdded";
-static constexpr const char *const PATH_UPDATED_FUNCTION =
-    "Target::PathUpdated";
-
+static constexpr const char *const PATH_CHANGED_FUNCTION =
+    "Target::PathChanged";
 static constexpr const char *const DIR_CHANGED_FUNCTION = "Target::DirChanged";
 static constexpr const char *const FLAG_CHANGED_FUNCTION =
     "Target::FlagChanged";
@@ -37,14 +33,12 @@ void Target::SourceUpdated() {
 }
 
 // Path rechecks
-void Target::PathRemoved() {
-  mock().actualCall(PATH_REMOVED_FUNCTION).onObject(this);
-}
-void Target::PathAdded() {
-  mock().actualCall(PATH_ADDED_FUNCTION).onObject(this);
-}
-void Target::PathUpdated() {
-  mock().actualCall(PATH_UPDATED_FUNCTION).onObject(this);
+void Target::PathRemoved() { PathChanged(); }
+void Target::PathAdded() { PathChanged(); }
+void Target::PathUpdated() { PathChanged(); }
+
+void Target::PathChanged() {
+  mock().actualCall(PATH_CHANGED_FUNCTION).onObject(this);
 }
 
 void Target::DirChanged() {
@@ -72,13 +66,17 @@ void TargetExpect_SourceUpdated(unsigned int calls, Target *target) {
 }
 
 void TargetExpect_PathRemoved(unsigned int calls, Target *target) {
-  mock().expectNCalls(calls, PATH_REMOVED_FUNCTION).onObject(target);
+  TargetExpect_PathChanged(calls, target);
 }
 void TargetExpect_PathAdded(unsigned int calls, Target *target) {
-  mock().expectNCalls(calls, PATH_ADDED_FUNCTION).onObject(target);
+  TargetExpect_PathChanged(calls, target);
 }
 void TargetExpect_PathUpdated(unsigned int calls, Target *target) {
-  mock().expectNCalls(calls, PATH_UPDATED_FUNCTION).onObject(target);
+  TargetExpect_PathChanged(calls, target);
+}
+
+void TargetExpect_PathChanged(unsigned int calls, Target *target) {
+  mock().expectNCalls(calls, PATH_CHANGED_FUNCTION).onObject(target);
 }
 
 void TargetExpect_DirChanged(unsigned int calls, Target *target) {

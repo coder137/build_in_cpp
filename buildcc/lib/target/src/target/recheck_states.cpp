@@ -30,6 +30,7 @@ void Target::PathRemoved() {}
 void Target::PathAdded() {}
 void Target::PathUpdated() {}
 
+void Target::PathChanged() {}
 void Target::DirChanged() {}
 void Target::FlagChanged() {}
 void Target::ExternalLibChanged() {}

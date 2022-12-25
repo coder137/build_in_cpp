@@ -34,63 +34,17 @@ using json = nlohmann::ordered_json;
 
 namespace buildcc::internal {
 
-// TODO, Update this
-struct Path {
+struct PathInfo {
 private:
-  static constexpr const char *const kPathName = "path";
-  static constexpr const char *const kHashName = "hash";
+  static constexpr const char *const kPath = "path";
+  static constexpr const char *const kHash = "hash";
 
 public:
-  Path() = default;
-  Path(const fs::path &path, std::uint64_t timestamp = 0)
-      : pathname(path), last_write_timestamp(timestamp) {
-    pathname.lexically_normal().make_preferred();
-  }
+  PathInfo() = default;
+  PathInfo(const std::string &p, const std::string &h) : path(p), hash(h) {}
 
-  /**
-   * @brief Create a Existing Path object and sets last_write_timstamp to file
-   * timestamp
-   * NOTE, Throws buildcc::env::assert_exception if file not found
-   *
-   * @param pathname
-   * @return Path
-   */
-  static Path CreateExistingPath(const fs::path &pathname) {
-    std::error_code errcode;
-    uint64_t last_write_timestamp =
-        std::filesystem::last_write_time(pathname, errcode)
-            .time_since_epoch()
-            .count();
-    env::assert_fatal(errcode.value() == 0,
-                      fmt::format("{} not found", pathname));
-
-    return Path(pathname, last_write_timestamp);
-  }
-
-  /**
-   * @brief Get fs::path as std::string while keeping the preferred os
-   * path delimiters
-   * '\\' for windows and '/' for linux
-   *
-   * @return std::string
-   */
-  std::string GetPathAsString() const { return pathname.string(); }
-
-  /**
-   * @brief Get fs::path as std::string for display
-   * Converts '\\' to '/' for conformity
-   *
-   * @return std::string
-   */
-  std::string GetPathAsStringForDisplay() const {
-    return Quote(ConvertPathToString());
-  }
-
-  // Used during find operation
-  bool operator==(const Path &p) const { return pathname == p.pathname; }
-
-  bool operator==(const fs::path &other_pathname) const {
-    return pathname == other_pathname;
+  bool operator==(const PathInfo &other) const {
+    return ((path == other.path) && (hash == other.hash));
   }
 
   /**
@@ -101,11 +55,8 @@ public:
    * @param str User provided fs::path/std::string
    * @return std::string Sanitized path as std::string
    */
-  static std::string ToPathString(const std::string &str) {
-    auto path_str = str;
-    std::replace(path_str.begin(), path_str.end(), '\\', '/');
-    path_str = fs::path(path_str).lexically_normal().string();
-    return path_str;
+  static std::string ToPathString(const fs::path &p) {
+    return fs::path(p).make_preferred().lexically_normal().string();
   }
 
   /**
@@ -121,8 +72,8 @@ public:
    * @param str User provided fs::path/std::string
    * @return std::string Sanitized path as std::string for display
    */
-  static std::string ToPathDisplayString(const std::string &str) {
-    auto path_str = ToPathString(str);
+  static std::string ToPathDisplayString(const fs::path &p) {
+    auto path_str = ToPathString(p);
     // if spaces are present in the path string, surround this with brackets
     if (path_str.find(' ') != std::string::npos) {
       path_str = fmt::format("\"{}\"", path_str);
@@ -130,50 +81,19 @@ public:
     return path_str;
   }
 
-  // JSON specialization
-
-  friend void to_json(json &j, const Path &p) {
-    j[kPathName] = p.pathname;
-    j[kHashName] = p.last_write_timestamp;
+  friend void to_json(json &j, const PathInfo &info) {
+    j[kPath] = info.path;
+    j[kHash] = info.hash;
   }
 
-  friend void from_json(const json &j, Path &p) {
-    j.at(kPathName).get_to(p.pathname);
-    j.at(kHashName).get_to(p.last_write_timestamp);
+  friend void from_json(const json &j, PathInfo &info) {
+    j.at(kPath).get_to(info.path);
+    j.at(kHash).get_to(info.hash);
   }
 
-private:
-  std::string Quote(const std::string &str) const {
-    if (str.find(" ") == std::string::npos) {
-      return str;
-    }
-    return fmt::format("\"{}\"", str);
-  }
-
-  std::string ConvertPathToString() const {
-    std::string pstr = pathname.string();
-    std::replace(pstr.begin(), pstr.end(), '\\', '/');
-    return pstr;
-  }
-
-public:
-  fs::path pathname;
-  // TODO, Change this to std::string hash
-  std::uint64_t last_write_timestamp{0};
+  std::string path;
+  std::string hash;
 };
-
-// TODO, Remove this
-// Used by Path
-class PathHash {
-public:
-  size_t operator()(const Path &p) const { return fs::hash_value(p.pathname); }
-
-  size_t operator()(const fs::path &p) const { return fs::hash_value(p); }
-};
-
-// TODO, Remove this
-using path_unordered_set = std::unordered_set<Path, PathHash>;
-using fs_unordered_set = std::unordered_set<fs::path, PathHash>;
 
 /**
  * @brief Stores path
@@ -187,13 +107,31 @@ public:
     }
   }
 
-  void Emplace(const std::string &pstr) {
-    auto path_str = Path::ToPathString(pstr);
-    paths_.emplace(std::move(path_str));
+  void Emplace(const fs::path &p) {
+    auto path_str = PathInfo::ToPathString(p);
+    paths_.emplace_back(std::move(path_str));
   }
 
+  // TODO, Create a move version of Emplace(std::string &&pstr)
+
+  void Insert(const PathList &other) {
+    paths_.insert(paths_.end(), other.paths_.begin(), other.paths_.end());
+  }
+
+  // TODO, Create a move version of Insert (PathList &&)
+
+  // TODO, Remove this (redundant, use operator == overload instead)
   bool IsEqual(const PathList &other) const { return paths_ == other.paths_; }
-  const std::unordered_set<std::string> &GetPaths() const { return paths_; }
+
+  const std::vector<std::string> &GetPaths() const { return paths_; }
+
+  std::unordered_set<std::string> GetUnorderedPaths() const {
+    std::unordered_set<std::string> unordered_paths(paths_.begin(),
+                                                    paths_.end());
+    return unordered_paths;
+  }
+
+  bool operator==(const PathList &other) const { return IsEqual(other); }
 
   friend void to_json(json &j, const PathList &plist) { j = plist.paths_; }
 
@@ -202,7 +140,7 @@ public:
   }
 
 private:
-  std::unordered_set<std::string> paths_;
+  std::vector<std::string> paths_;
 };
 
 /**
@@ -210,10 +148,6 @@ private:
  *
  */
 class PathInfoList {
-private:
-  static constexpr const char *const kPath = "path";
-  static constexpr const char *const kHash = "hash";
-
 public:
   PathInfoList() = default;
   explicit PathInfoList(
@@ -224,43 +158,52 @@ public:
     }
   }
 
-  void Emplace(const std::string &pstr, const std::string &hash) {
-    auto path_str = Path::ToPathString(pstr);
-    path_infos_.emplace(std::move(path_str), hash);
+  void Emplace(const fs::path &p, const std::string &hash) {
+    auto path_str = PathInfo::ToPathString(p);
+    infos_.emplace_back(PathInfo(path_str, hash));
   }
 
+  // TODO, Create a move version of Emplace(std::string &&pstr, std::string
+  // &&hash)
+
+  void Insert(const PathInfoList &other) {
+    infos_.insert(infos_.end(), other.infos_.begin(), other.infos_.end());
+  }
+
+  // TODO, Create a move version of Insert(PathInfoList &&other)
+
   void ComputeHashForAll() {
-    for (auto &[path_str, hash] : path_infos_) {
-      hash = ComputeHash(path_str);
+    for (auto &info : infos_) {
+      info.hash = ComputeHash(info.path);
     }
   }
 
-  const std::string &GetHash(const std::string &str) const {
-    auto path_str = Path::ToPathString(str);
-    const bool found = path_infos_.find(path_str) != path_infos_.end();
-    env::assert_fatal(found, "");
-    return path_infos_.at(path_str);
-  }
-
+  // TODO, Remove redundant function (use operator == overload)
   bool IsEqual(const PathInfoList &other) const {
-    return path_infos_ == other.path_infos_;
+    return infos_ == other.infos_;
   }
 
-  const std::unordered_map<std::string, std::string> &GetPathInfos() const {
-    return path_infos_;
+  const std::vector<PathInfo> &GetPathInfos() const { return infos_; }
+
+  std::unordered_map<std::string, std::string> GetUnorderedPathInfos() const {
+    std::unordered_map<std::string, std::string> unordered_path_infos;
+    for (const auto &info : infos_) {
+      unordered_path_infos.try_emplace(info.path, info.hash);
+    }
+    return unordered_path_infos;
   }
 
-  std::unordered_set<std::string> GetPaths() const {
-    std::unordered_set<std::string> paths;
-    for (const auto &[path_str, hash] : path_infos_) {
-      paths.emplace(path_str);
+  std::vector<std::string> GetPaths() const {
+    std::vector<std::string> paths;
+    for (const auto &info : infos_) {
+      paths.emplace_back(info.path);
     }
     return paths;
   }
 
   // TODO, Add Compute Strategy enum
   static std::string ComputeHash(const std::string &pstr) {
-    auto path_str = Path::ToPathString(pstr);
+    auto path_str = PathInfo::ToPathString(pstr);
 
     // TODO, There might be a file checksum hash compute strategy
     // This is the timestamp hash compute strategy
@@ -274,69 +217,33 @@ public:
     return std::to_string(last_write_timestamp);
   }
 
-  friend void to_json(json &j, const PathInfoList &plist) {
-    j = plist.path_infos_;
-  }
+  bool operator==(const PathInfoList &other) const { return IsEqual(other); }
+
+  friend void to_json(json &j, const PathInfoList &plist) { j = plist.infos_; }
 
   friend void from_json(const json &j, PathInfoList &plist) {
-    j.get_to(plist.path_infos_);
+    j.get_to(plist.infos_);
   }
 
 private:
-  std::unordered_map<std::string, std::string> path_infos_;
+  std::vector<PathInfo> infos_;
 };
-
-// TODO, Remove this
-inline std::vector<Path>
-path_schema_convert(const std::vector<fs::path> &path_list,
-                    const std::function<Path(const fs::path &)> &cb =
-                        Path::CreateExistingPath) {
-  std::vector<Path> internal_path_list;
-  for (const auto &p : path_list) {
-    internal_path_list.push_back(cb(p));
-  }
-  return internal_path_list;
-}
-
-// TODO, Remove this
-inline path_unordered_set
-path_schema_convert(const fs_unordered_set &path_set,
-                    const std::function<Path(const fs::path &)> &cb =
-                        Path::CreateExistingPath) {
-  path_unordered_set internal_path_set;
-  for (const auto &p : path_set) {
-    internal_path_set.insert(cb(p));
-  }
-  return internal_path_set;
-}
-
-// TODO, Remove this
-inline fs_unordered_set
-path_schema_convert(const path_unordered_set &internal_path_set) {
-  fs_unordered_set path_set;
-  for (const auto &p : internal_path_set) {
-    path_set.insert(p.pathname);
-  }
-  return path_set;
-}
 
 } // namespace buildcc::internal
 
 namespace buildcc {
 
 inline std::string path_as_string(const fs::path &p) {
-  return internal::Path(p).GetPathAsString();
+  return internal::PathInfo::ToPathString(p);
 }
 
 inline std::string path_as_display_string(const fs::path &p) {
-  return internal::Path(p).GetPathAsStringForDisplay();
+  return internal::PathInfo::ToPathDisplayString(p);
 }
 
-inline fs::path string_as_path(const std::string &str) {
-  return internal::Path(str).pathname;
+inline fs::path string_as_path(const std::string &p) {
+  return path_as_string(p);
 }
-
-using fs_unordered_set = internal::fs_unordered_set;
 
 } // namespace buildcc
 

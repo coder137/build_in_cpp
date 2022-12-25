@@ -20,13 +20,15 @@ namespace buildcc::internal {
 
 // PUBLIC
 void TargetSerialization::UpdatePchCompiled(const TargetSchema &store) {
-  store_.internal_pchs = store.internal_pchs;
+  store_.pchs = store.pchs;
   store_.pch_compiled = true;
 }
 
-void TargetSerialization::AddSource(const internal::Path &source) {
+// TODO, When you add source here you need to add it with the hash
+void TargetSerialization::AddSource(const std::string &source,
+                                    const std::string &hash) {
   std::scoped_lock guard(add_source_mutex);
-  store_.internal_sources.insert(source);
+  store_.sources.Emplace(source, hash);
 }
 
 void TargetSerialization::UpdateTargetCompiled() {
@@ -35,9 +37,9 @@ void TargetSerialization::UpdateTargetCompiled() {
 
 void TargetSerialization::UpdateStore(const TargetSchema &store) {
   TargetSchema temp = store;
-  temp.internal_pchs = store_.internal_pchs;
+  temp.pchs = store_.pchs;
   temp.pch_compiled = store_.pch_compiled;
-  temp.internal_sources = store_.internal_sources;
+  temp.sources = store_.sources;
   temp.target_linked = store_.target_linked;
   store_ = std::move(temp);
 }

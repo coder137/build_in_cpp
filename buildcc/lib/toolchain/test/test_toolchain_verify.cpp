@@ -51,7 +51,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_BaseToolchain_Failure) {
 
   buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
-  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
+  config.env_vars.push_back("CUSTOM_BUILDCC_PATH");
 
   CHECK_THROWS(std::exception, gcc.Verify(config));
 }
@@ -61,7 +61,8 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_BadAbsolutePath) {
 
   buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
-  config.absolute_search_paths.insert((fs::current_path() / "does_not_exist"));
+  config.absolute_search_paths.push_back(
+      (fs::current_path() / "does_not_exist"));
 
   CHECK_THROWS(std::exception, gcc.Verify(config));
 }
@@ -71,7 +72,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_PathContainsDir) {
 
   buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
-  config.absolute_search_paths.insert((fs::current_path() / "toolchains"));
+  config.absolute_search_paths.push_back((fs::current_path() / "toolchains"));
 
   CHECK_THROWS(std::exception, gcc.Verify(config));
 }
@@ -90,7 +91,7 @@ TEST(ToolchainVerifyTestGroup, VerifyToolchain_LockedFolder) {
 
   buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
-  config.absolute_search_paths.insert(
+  config.absolute_search_paths.push_back(
       (fs::current_path() / "toolchains" / "gcc"));
 
   CHECK_THROWS(std::exception, gcc.Verify(config));
@@ -129,7 +130,7 @@ TEST(ToolchainVerifyTestGroup, CustomToolchainInfo) {
 
   buildcc::ToolchainFindConfig config;
   config.env_vars.clear();
-  config.env_vars.insert("CUSTOM_BUILDCC_PATH");
+  config.env_vars.push_back("CUSTOM_BUILDCC_PATH");
 
   mock().expectOneCall("SetToolchainInfoCb");
   auto info = toolchain.Verify(config);

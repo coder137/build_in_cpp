@@ -31,16 +31,16 @@ namespace buildcc::internal {
 // TargetEnv
 template <typename T> class SourceApi {
 public:
-  const fs_unordered_set &GetSourceFiles() const {
+  std::vector<std::string> GetSourceFiles() const {
     const auto &t = static_cast<const T &>(*this);
-    return t.user_.sources;
+    return t.user_.sources.GetPaths();
   }
 
   void AddSourceAbsolute(const fs::path &absolute_source) {
     auto &t = static_cast<T &>(*this);
 
     t.toolchain_.GetConfig().ExpectsValidSource(absolute_source);
-    t.user_.sources.emplace(fs::path(absolute_source).make_preferred());
+    t.user_.sources.Emplace(absolute_source, "");
   }
 
   void GlobSourcesAbsolute(const fs::path &absolute_source_dir) {

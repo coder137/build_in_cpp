@@ -32,21 +32,21 @@ namespace buildcc::internal {
 // TargetEnv
 template <typename T> class IncludeApi {
 public:
-  const fs_unordered_set &GetHeaderFiles() const {
+  std::vector<std::string> GetHeaderFiles() const {
     const auto &t = static_cast<const T &>(*this);
-    return t.user_.headers;
+    return t.user_.headers.GetPaths();
   }
 
-  const fs_unordered_set &GetIncludeDirs() const {
+  const std::vector<std::string> &GetIncludeDirs() const {
     const auto &t = static_cast<const T &>(*this);
-    return t.user_.include_dirs;
+    return t.user_.include_dirs.GetPaths();
   }
 
   void AddHeaderAbsolute(const fs::path &absolute_filepath) {
     auto &t = static_cast<T &>(*this);
 
     t.toolchain_.GetConfig().ExpectsValidHeader(absolute_filepath);
-    t.user_.headers.insert(absolute_filepath);
+    t.user_.headers.Emplace(absolute_filepath, "");
   }
 
   void GlobHeadersAbsolute(const fs::path &absolute_path) {
@@ -63,7 +63,7 @@ public:
                              bool glob_headers = false) {
     auto &t = static_cast<T &>(*this);
 
-    t.user_.include_dirs.insert(absolute_include_dir);
+    t.user_.include_dirs.Emplace(absolute_include_dir);
 
     if (glob_headers) {
       GlobHeadersAbsolute(absolute_include_dir);

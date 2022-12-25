@@ -96,17 +96,6 @@ private:
   env::optional<std::string> SelectCompileFlags(FileExt ext) const;
   env::optional<std::string> SelectCompiler(FileExt ext) const;
 
-  // Recompilation checks
-  void RecheckPaths(const internal::path_unordered_set &previous_path,
-                    const internal::path_unordered_set &current_path);
-  void RecheckDirs(const fs_unordered_set &previous_dirs,
-                   const fs_unordered_set &current_dirs);
-  void RecheckFlags(const std::unordered_set<std::string> &previous_flags,
-                    const std::unordered_set<std::string> &current_flags);
-  void
-  RecheckExternalLib(const std::vector<std::string> &previous_external_libs,
-                     const std::vector<std::string> &current_external_libs);
-
   // Tasks
   void EndTask();
   void TaskDeps();
@@ -119,6 +108,7 @@ private:
   void PathAdded();
   void PathUpdated();
 
+  void PathChanged();
   void DirChanged();
   void FlagChanged();
   void ExternalLibChanged();

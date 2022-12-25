@@ -54,29 +54,28 @@ public:
   void Task();
 
   const ObjectData &GetObjectData(const fs::path &absolute_source) const;
-  const std::unordered_map<fs::path, ObjectData, internal::PathHash> &
-  GetObjectDataMap() const {
+  const std::unordered_map<std::string, ObjectData> &GetObjectDataMap() const {
     return object_files_;
   }
-  fs_unordered_set GetCompiledSources() const;
+  std::vector<fs::path> GetCompiledSources() const;
   tf::Task &GetTask() { return compile_task_; }
 
 private:
   fs::path ConstructObjectPath(const fs::path &absolute_source_file) const;
 
-  void BuildObjectCompile(std::vector<internal::Path> &source_files,
-                          std::vector<internal::Path> &dummy_source_files);
+  void BuildObjectCompile(std::vector<internal::PathInfo> &source_files,
+                          std::vector<internal::PathInfo> &dummy_source_files);
 
   void PreObjectCompile();
 
-  void CompileSources(std::vector<internal::Path> &source_files);
-  void RecompileSources(std::vector<internal::Path> &source_files,
-                        std::vector<internal::Path> &dummy_source_files);
+  void CompileSources(std::vector<internal::PathInfo> &source_files);
+  void RecompileSources(std::vector<internal::PathInfo> &source_files,
+                        std::vector<internal::PathInfo> &dummy_source_files);
 
 private:
   Target &target_;
 
-  std::unordered_map<fs::path, ObjectData, internal::PathHash> object_files_;
+  std::unordered_map<std::string, ObjectData> object_files_;
   tf::Task compile_task_;
 };
 

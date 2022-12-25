@@ -8,8 +8,6 @@ set(COMMON_TARGET_SRCS
     include/target/common/target_config.h
     include/target/common/target_state.h
     include/target/common/target_env.h
-
-    src/common/util.cpp
     include/target/common/util.h
 
     # API

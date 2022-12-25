@@ -34,13 +34,13 @@ void CompileObject::AddObjectData(const fs::path &absolute_source_path) {
       ConstructObjectPath(absolute_source_path);
   fs::create_directories(absolute_object_path.parent_path());
 
-  object_files_.emplace(absolute_source_path,
-                        ObjectData(absolute_object_path, ""));
+  object_files_.try_emplace(
+      internal::PathInfo::ToPathString(absolute_source_path),
+      absolute_object_path, "");
 }
 
 void CompileObject::CacheCompileCommands() {
-  for (auto &object_iter : object_files_) {
-    const fs::path &absolute_current_source = object_iter.first;
+  for (auto &[absolute_current_source, object_data] : object_files_) {
 
     const std::string output =
         fmt::format("{}", GetObjectData(absolute_current_source).output);
@@ -52,7 +52,7 @@ void CompileObject::CacheCompileCommands() {
         target_.SelectCompileFlags(type).value_or("");
     const std::string selected_compiler =
         fmt::format("{}", fs::path(target_.SelectCompiler(type).value_or("")));
-    object_iter.second.command = target_.command_.Construct(
+    object_data.command = target_.command_.Construct(
         target_.GetConfig().compile_command,
         {
             {kCompiler, selected_compiler},
@@ -63,20 +63,22 @@ void CompileObject::CacheCompileCommands() {
   }
 }
 
-fs_unordered_set CompileObject::GetCompiledSources() const {
-  fs_unordered_set compiled_sources;
-  for (const auto &p : object_files_) {
-    compiled_sources.insert(p.second.output);
+std::vector<fs::path> CompileObject::GetCompiledSources() const {
+  std::vector<fs::path> compiled_sources;
+  for (const auto &[_, object_data] : object_files_) {
+    compiled_sources.push_back(object_data.output);
   }
   return compiled_sources;
 }
 
 const CompileObject::ObjectData &
 CompileObject::GetObjectData(const fs::path &absolute_source) const {
-  const auto fiter = object_files_.find(absolute_source);
+  const auto sanitized_source =
+      internal::PathInfo::ToPathString(absolute_source);
+  const auto fiter = object_files_.find(sanitized_source);
   env::assert_fatal(fiter != object_files_.end(),
                     fmt::format("{} not found", absolute_source));
-  return object_files_.at(absolute_source);
+  return object_files_.at(sanitized_source);
 }
 
 // PRIVATE
@@ -162,8 +164,8 @@ CompileObject::ConstructObjectPath(const fs::path &absolute_source_file) const {
 }
 
 void CompileObject::BuildObjectCompile(
-    std::vector<internal::Path> &source_files,
-    std::vector<internal::Path> &dummy_source_files) {
+    std::vector<internal::PathInfo> &source_files,
+    std::vector<internal::PathInfo> &dummy_source_files) {
   PreObjectCompile();
 
   const auto &serialization = target_.serialization_;
@@ -173,24 +175,33 @@ void CompileObject::BuildObjectCompile(
   if (!serialization.IsLoaded()) {
     target_.dirty_ = true;
   } else {
-    target_.RecheckFlags(load_target_schema.preprocessor_flags,
-                         user_target_schema.preprocessor_flags);
-    target_.RecheckFlags(load_target_schema.common_compile_flags,
-                         user_target_schema.common_compile_flags);
-    target_.RecheckFlags(load_target_schema.pch_object_flags,
-                         user_target_schema.pch_object_flags);
-    target_.RecheckFlags(load_target_schema.asm_compile_flags,
-                         user_target_schema.asm_compile_flags);
-    target_.RecheckFlags(load_target_schema.c_compile_flags,
-                         user_target_schema.c_compile_flags);
-    target_.RecheckFlags(load_target_schema.cpp_compile_flags,
-                         user_target_schema.cpp_compile_flags);
-    target_.RecheckDirs(load_target_schema.include_dirs,
-                        user_target_schema.include_dirs);
-    target_.RecheckPaths(load_target_schema.internal_headers,
-                         user_target_schema.internal_headers);
-    target_.RecheckPaths(load_target_schema.internal_compile_dependencies,
-                         user_target_schema.internal_compile_dependencies);
+    if (target_.dirty_) {
+    } else if (!(load_target_schema.preprocessor_flags ==
+                 user_target_schema.preprocessor_flags) ||
+               !(load_target_schema.common_compile_flags ==
+                 user_target_schema.common_compile_flags) ||
+               !(load_target_schema.pch_object_flags ==
+                 user_target_schema.pch_object_flags) ||
+               !(load_target_schema.asm_compile_flags ==
+                 user_target_schema.asm_compile_flags) ||
+               !(load_target_schema.c_compile_flags ==
+                 user_target_schema.c_compile_flags) ||
+               !(load_target_schema.cpp_compile_flags ==
+                 user_target_schema.cpp_compile_flags)) {
+      target_.dirty_ = true;
+      target_.FlagChanged();
+    } else if (!(load_target_schema.include_dirs ==
+                 user_target_schema.include_dirs)) {
+      target_.dirty_ = true;
+      target_.DirChanged();
+    } else if (!(load_target_schema.headers == user_target_schema.headers)) {
+      target_.dirty_ = true;
+      target_.PathChanged();
+    } else if (!(load_target_schema.compile_dependencies ==
+                 user_target_schema.compile_dependencies)) {
+      target_.dirty_ = true;
+      target_.PathChanged();
+    }
   }
 
   if (target_.dirty_) {
@@ -204,66 +215,54 @@ void CompileObject::PreObjectCompile() {
   auto &target_user_schema = target_.user_;
 
   // Convert user_source_files to current_source_files
-  target_user_schema.internal_sources =
-      internal::path_schema_convert(target_user_schema.sources);
+  target_user_schema.sources.ComputeHashForAll();
 
   // Convert user_header_files to current_header_files
-  target_user_schema.internal_headers =
-      internal::path_schema_convert(target_user_schema.headers);
+  target_user_schema.headers.ComputeHashForAll();
 
   // Convert user_compile_dependencies to current_compile_dependencies
-  target_user_schema.internal_compile_dependencies =
-      internal::path_schema_convert(target_user_schema.compile_dependencies);
+  target_user_schema.compile_dependencies.ComputeHashForAll();
 }
 
-void CompileObject::CompileSources(std::vector<internal::Path> &source_files) {
+void CompileObject::CompileSources(
+    std::vector<internal::PathInfo> &source_files) {
   const auto &target_user_schema = target_.user_;
-  source_files =
-      std::vector<internal::Path>(target_user_schema.internal_sources.begin(),
-                                  target_user_schema.internal_sources.end());
+  target_user_schema.sources.GetPathInfos();
+  source_files = target_user_schema.sources.GetPathInfos();
 }
 
 void CompileObject::RecompileSources(
-    std::vector<internal::Path> &source_files,
-    std::vector<internal::Path> &dummy_source_files) {
+    std::vector<internal::PathInfo> &source_files,
+    std::vector<internal::PathInfo> &dummy_source_files) {
   const auto &serialization = target_.serialization_;
   const auto &user_target_schema = target_.user_;
-  const auto &previous_source_files = serialization.GetLoad().internal_sources;
+  auto previous_source_files =
+      serialization.GetLoad().sources.GetUnorderedPathInfos();
 
-  // * Cannot find previous source in current source files
-  const bool is_source_removed =
-      std::any_of(previous_source_files.begin(), previous_source_files.end(),
-                  [&](const internal::Path &p) {
-                    return user_target_schema.internal_sources.find(p) ==
-                           user_target_schema.internal_sources.end();
-                  });
-
-  if (is_source_removed) {
-    target_.dirty_ = true;
-    target_.SourceRemoved();
-  }
-
-  for (const auto &current_file : user_target_schema.internal_sources) {
-    // Find current_file in the loaded sources
-    auto iter = previous_source_files.find(current_file);
-
-    if (iter == previous_source_files.end()) {
-      // *1 New source file added to build
-      source_files.push_back(current_file);
+  for (const auto &current_path_info :
+       user_target_schema.sources.GetPathInfos()) {
+    const auto &current_path = current_path_info.path;
+    if (previous_source_files.count(current_path) == 0) {
+      // Added
+      source_files.push_back(current_path_info);
       target_.dirty_ = true;
       target_.SourceAdded();
     } else {
-      // *2 Current file is updated
-      if (current_file.last_write_timestamp > iter->last_write_timestamp) {
-        source_files.push_back(current_file);
+      if (!(previous_source_files.at(current_path) == current_path_info.hash)) {
+        // Updated
+        source_files.push_back(current_path_info);
         target_.dirty_ = true;
         target_.SourceUpdated();
       } else {
-        // ELSE
-        // *3 Do nothing
-        dummy_source_files.push_back(current_file);
+        dummy_source_files.push_back(current_path_info);
       }
+      previous_source_files.erase(current_path);
     }
+  }
+
+  if (!previous_source_files.empty()) {
+    target_.dirty_ = true;
+    target_.SourceRemoved();
   }
 }
 
