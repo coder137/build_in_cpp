@@ -80,18 +80,16 @@ void CompilePch::BuildCompile() {
   if (!serialization.IsLoaded()) {
     target_.dirty_ = true;
   } else {
-    if (target_.dirty_) {
-      // Rebuild is target is dirty, no need for additional rechecks
-    } else if (!(load_target_schema.preprocessor_flags ==
-                 user_target_schema.preprocessor_flags) ||
-               !(load_target_schema.common_compile_flags ==
-                 user_target_schema.common_compile_flags) ||
-               !(load_target_schema.pch_compile_flags ==
-                 user_target_schema.pch_compile_flags) ||
-               !(load_target_schema.c_compile_flags ==
-                 user_target_schema.c_compile_flags) ||
-               !(load_target_schema.cpp_compile_flags ==
-                 user_target_schema.cpp_compile_flags)) {
+    if (!(load_target_schema.preprocessor_flags ==
+          user_target_schema.preprocessor_flags) ||
+        !(load_target_schema.common_compile_flags ==
+          user_target_schema.common_compile_flags) ||
+        !(load_target_schema.pch_compile_flags ==
+          user_target_schema.pch_compile_flags) ||
+        !(load_target_schema.c_compile_flags ==
+          user_target_schema.c_compile_flags) ||
+        !(load_target_schema.cpp_compile_flags ==
+          user_target_schema.cpp_compile_flags)) {
       target_.dirty_ = true;
       target_.FlagChanged();
     } else if (!(load_target_schema.include_dirs ==
@@ -103,6 +101,8 @@ void CompilePch::BuildCompile() {
       target_.dirty_ = true;
       target_.PathChanged();
     } else if (!load_target_schema.pch_compiled) {
+      // TODO, Replace this with fs::exists to check if compiled pch file is
+      // present or no
       target_.dirty_ = true;
     }
   }
