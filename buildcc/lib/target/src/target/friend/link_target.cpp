@@ -89,10 +89,8 @@ void LinkTarget::BuildLink() {
       target_.dirty_ = true;
       target_.ExternalLibChanged();
     } else if (!(target_load_schema.link_dependencies ==
-                 target_user_schema.link_dependencies)) {
-      target_.dirty_ = true;
-      target_.PathChanged();
-    } else if (!(target_load_schema.libs == target_user_schema.libs)) {
+                 target_user_schema.link_dependencies) ||
+               !(target_load_schema.libs == target_user_schema.libs)) {
       target_.dirty_ = true;
       target_.PathChanged();
     } else if (!target_load_schema.target_linked) {
