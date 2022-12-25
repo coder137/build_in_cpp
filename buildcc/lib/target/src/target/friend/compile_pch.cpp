@@ -97,10 +97,8 @@ void CompilePch::BuildCompile() {
                  user_target_schema.include_dirs)) {
       target_.dirty_ = true;
       target_.DirChanged();
-    } else if (!(load_target_schema.headers == user_target_schema.headers)) {
-      target_.dirty_ = true;
-      target_.PathChanged();
-    } else if (!(load_target_schema.pchs == user_target_schema.pchs)) {
+    } else if (!(load_target_schema.headers == user_target_schema.headers) ||
+               !(load_target_schema.pchs == user_target_schema.pchs)) {
       target_.dirty_ = true;
       target_.PathChanged();
     } else if (!load_target_schema.pch_compiled) {
