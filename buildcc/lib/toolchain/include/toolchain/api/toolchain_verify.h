@@ -92,7 +92,8 @@ constexpr const char *const kVerifiedToolchainFormat = R"({{
 template <>
 struct fmt::formatter<buildcc::ToolchainCompilerInfo> : formatter<std::string> {
   template <typename FormatContext>
-  auto format(const buildcc::ToolchainCompilerInfo &vt, FormatContext &ctx) {
+  auto format(const buildcc::ToolchainCompilerInfo &vt,
+              FormatContext &ctx) const {
     std::string verified_toolchain_info =
         fmt::format(kVerifiedToolchainFormat, vt.path.string(),
                     vt.compiler_version, vt.target_arch);
