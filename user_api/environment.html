@@ -1,22 +1,23 @@
 <!doctype html>
-<html class="no-js" lang="en">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Examples" href="../examples/toc.html" /><link rel="prev" title="Supported Plugins" href="supported_plugins.html" />
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Examples" href="../examples/toc.html"><link rel="prev" title="Supported Plugins" href="supported_plugins.html">
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+    <!-- Generated with Sphinx 7.2.6 and Furo 2025.12.19 -->
         <title>Environment - BuildCC 0.1.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=acfd86a5" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
 
 
 <style>
   body {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
   
   }
   @media not print {
@@ -67,7 +68,7 @@
   <symbol id="svg-sun" viewBox="0 0 24 24">
     <title>Light mode</title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
       <circle cx="12" cy="12" r="5"></circle>
       <line x1="12" y1="1" x2="12" y2="3"></line>
       <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -82,34 +83,73 @@
   <symbol id="svg-moon" viewBox="0 0 24 24">
     <title>Dark mode</title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
     </svg>
   </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
     </svg>
   </symbol>
 </svg>
 
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
-</label>
-<label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
-</label>
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
 
 
@@ -117,8 +157,7 @@
   <header class="mobile-header">
     <div class="header-left">
       <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
       </label>
     </div>
     <div class="header-center">
@@ -126,16 +165,15 @@
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
           <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
   </header>
@@ -143,7 +181,6 @@
     <div class="sidebar-container">
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
-  
   
   <span class="sidebar-brand-text">BuildCC 0.1.1 documentation</span>
   
@@ -156,7 +193,7 @@
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../intro/toc.html">Introduction</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../arch/toc.html">Architecture</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../arch/toc.html">Architecture</a><input aria-label="Toggle navigation of Architecture" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../arch/project_layout.html">Project Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../arch/software_heirarchy.html">Software Heirarchy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../arch/serialization_schema.html">Serialization Schema</a></li>
@@ -168,7 +205,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../arch/style_guide.html">Style Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a><input aria-label="Toggle navigation of Getting Started" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_setup.html">BuildExe Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_script_example.html">BuildExe “Script” example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_immediate_example.html">BuildExe “Immediate” example</a></li>
@@ -178,7 +215,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/all_default_build_options.html">Build Options for “scripts”</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">User API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">User API</a><input aria-label="Toggle navigation of User API" checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="args.html">Args</a></li>
 <li class="toctree-l2"><a class="reference internal" href="register.html">Register</a></li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain_utils.html">Toolchain Utils</a></li>
@@ -197,7 +234,7 @@
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Environment</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/toc.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/toc.html">Examples</a><input aria-label="Toggle navigation of Examples" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples/hybrid.html">Hybrid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/gcc.html">GCC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/msvc.html">MSVC</a></li>
@@ -224,43 +261,47 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/user_api/environment.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
 <div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
               <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
           <label class="toc-overlay-icon toc-content-icon" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
-        <article role="main">
-          <div class="section" id="environment">
-<h1>Environment<a class="headerlink" href="#environment" title="Permalink to this heading">#</a></h1>
-<div class="section" id="env-h">
-<h2>env.h<a class="headerlink" href="#env-h" title="Permalink to this heading">#</a></h2>
+        <article role="main" id="furo-main-content">
+          <section id="environment">
+<h1>Environment<a class="headerlink" href="#environment" title="Link to this heading">¶</a></h1>
+<section id="env-h">
+<h2>env.h<a class="headerlink" href="#env-h" title="Link to this heading">¶</a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc7ProjectE">
-<span id="_CPPv3N7buildcc7ProjectE"></span><span id="_CPPv2N7buildcc7ProjectE"></span><span id="buildcc::Project"></span><span class="target" id="classbuildcc_1_1Project"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Project</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc7ProjectE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc7ProjectE"></span><span id="_CPPv2N7buildcc7ProjectE"></span><span id="buildcc::Project"></span><span class="target" id="classbuildcc_1_1Project"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Project</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc7ProjectE" title="Link to this definition">¶</a><br /></dt>
 <dd><div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc7Project7ProjectEv">
-<span id="_CPPv3N7buildcc7Project7ProjectEv"></span><span id="_CPPv2N7buildcc7Project7ProjectEv"></span><span id="buildcc::Project::Project"></span><span class="target" id="classbuildcc_1_1Project_1a98c15deb819ed0b3f82c99865597e886"></span><span class="sig-name descname"><span class="n"><span class="pre">Project</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N7buildcc7Project7ProjectEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc7Project7ProjectEv"></span><span id="_CPPv2N7buildcc7Project7ProjectEv"></span><span id="buildcc::Project::Project"></span><span class="target" id="classbuildcc_1_1Project_1a98c15deb819ed0b3f82c99865597e886"></span><span class="sig-name descname"><span class="n"><span class="pre">Project</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N7buildcc7Project7ProjectEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc7Project7ProjectERK7Project">
-<span id="_CPPv3N7buildcc7Project7ProjectERK7Project"></span><span id="_CPPv2N7buildcc7Project7ProjectERK7Project"></span><span id="buildcc::Project::Project__ProjectCR"></span><span class="target" id="classbuildcc_1_1Project_1a61fdb35edb2c567517961ff986fab57a"></span><span class="sig-name descname"><span class="n"><span class="pre">Project</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7buildcc7Project7ProjectERK7Project" title="buildcc::Project::Project"><span class="n"><span class="pre">Project</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N7buildcc7Project7ProjectERK7Project" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc7Project7ProjectERK7Project"></span><span id="_CPPv2N7buildcc7Project7ProjectERK7Project"></span><span id="buildcc::Project::Project__ProjectCR"></span><span class="target" id="classbuildcc_1_1Project_1a61fdb35edb2c567517961ff986fab57a"></span><span class="sig-name descname"><span class="n"><span class="pre">Project</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7buildcc7Project7ProjectERK7Project" title="buildcc::Project::Project"><span class="n"><span class="pre">Project</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N7buildcc7Project7ProjectERK7Project" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc7Project7ProjectERR7Project">
-<span id="_CPPv3N7buildcc7Project7ProjectERR7Project"></span><span id="_CPPv2N7buildcc7Project7ProjectERR7Project"></span><span id="buildcc::Project::Project__ProjectRR"></span><span class="target" id="classbuildcc_1_1Project_1a53f7f748e4f079383207fa628568b4fc"></span><span class="sig-name descname"><span class="n"><span class="pre">Project</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N7buildcc7Project7ProjectERR7Project" title="buildcc::Project::Project"><span class="n"><span class="pre">Project</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N7buildcc7Project7ProjectERR7Project" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc7Project7ProjectERR7Project"></span><span id="_CPPv2N7buildcc7Project7ProjectERR7Project"></span><span id="buildcc::Project::Project__ProjectRR"></span><span class="target" id="classbuildcc_1_1Project_1a53f7f748e4f079383207fa628568b4fc"></span><span class="sig-name descname"><span class="n"><span class="pre">Project</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N7buildcc7Project7ProjectERR7Project" title="buildcc::Project::Project"><span class="n"><span class="pre">Project</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N7buildcc7Project7ProjectERR7Project" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -268,130 +309,136 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc7Project4InitERKN2fs4pathERKN2fs4pathE">
-<span id="_CPPv3N7buildcc7Project4InitERKN2fs4pathERKN2fs4pathE"></span><span id="_CPPv2N7buildcc7Project4InitERKN2fs4pathERKN2fs4pathE"></span><span id="buildcc::Project::Init__fs::pathCR.fs::pathCR"></span><span class="target" id="classbuildcc_1_1Project_1a287b43effcfdb9630208682acc3da31b"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Init</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">project_root_dir</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">project_build_dir</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc7Project4InitERKN2fs4pathERKN2fs4pathE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc7Project4InitERKN2fs4pathERKN2fs4pathE"></span><span id="_CPPv2N7buildcc7Project4InitERKN2fs4pathERKN2fs4pathE"></span><span id="buildcc::Project::Init__fs::pathCR.fs::pathCR"></span><span class="target" id="classbuildcc_1_1Project_1a287b43effcfdb9630208682acc3da31b"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Init</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">project_root_dir</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">project_build_dir</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc7Project4InitERKN2fs4pathERKN2fs4pathE" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc7Project6DeinitEv">
-<span id="_CPPv3N7buildcc7Project6DeinitEv"></span><span id="_CPPv2N7buildcc7Project6DeinitEv"></span><span id="buildcc::Project::Deinit"></span><span class="target" id="classbuildcc_1_1Project_1a1afe384c295f9204cf12d3a22e5cc1e7"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Deinit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc7Project6DeinitEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc7Project6DeinitEv"></span><span id="_CPPv2N7buildcc7Project6DeinitEv"></span><span id="buildcc::Project::Deinit"></span><span class="target" id="classbuildcc_1_1Project_1a1afe384c295f9204cf12d3a22e5cc1e7"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Deinit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc7Project6DeinitEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc7Project6IsInitEv">
-<span id="_CPPv3N7buildcc7Project6IsInitEv"></span><span id="_CPPv2N7buildcc7Project6IsInitEv"></span><span id="buildcc::Project::IsInit"></span><span class="target" id="classbuildcc_1_1Project_1a76c23c4fbbd857a1ce019da9b7648065"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsInit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc7Project6IsInitEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc7Project6IsInitEv"></span><span id="_CPPv2N7buildcc7Project6IsInitEv"></span><span id="buildcc::Project::IsInit"></span><span class="target" id="classbuildcc_1_1Project_1a76c23c4fbbd857a1ce019da9b7648065"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsInit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc7Project6IsInitEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc7Project10GetRootDirEv">
-<span id="_CPPv3N7buildcc7Project10GetRootDirEv"></span><span id="_CPPv2N7buildcc7Project10GetRootDirEv"></span><span id="buildcc::Project::GetRootDir"></span><span class="target" id="classbuildcc_1_1Project_1add561da714b3727a0e713d1b07c86d12"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetRootDir</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc7Project10GetRootDirEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc7Project10GetRootDirEv"></span><span id="_CPPv2N7buildcc7Project10GetRootDirEv"></span><span id="buildcc::Project::GetRootDir"></span><span class="target" id="classbuildcc_1_1Project_1add561da714b3727a0e713d1b07c86d12"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetRootDir</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc7Project10GetRootDirEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc7Project11GetBuildDirEv">
-<span id="_CPPv3N7buildcc7Project11GetBuildDirEv"></span><span id="_CPPv2N7buildcc7Project11GetBuildDirEv"></span><span id="buildcc::Project::GetBuildDir"></span><span class="target" id="classbuildcc_1_1Project_1a96548a5f5288a14786e6469fb6d81d9b"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetBuildDir</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc7Project11GetBuildDirEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc7Project11GetBuildDirEv"></span><span id="_CPPv2N7buildcc7Project11GetBuildDirEv"></span><span id="buildcc::Project::GetBuildDir"></span><span class="target" id="classbuildcc_1_1Project_1a96548a5f5288a14786e6469fb6d81d9b"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetBuildDir</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc7Project11GetBuildDirEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
 </dd></dl>
 
-</div>
-<div class="section" id="logging-h">
-<h2>logging.h<a class="headerlink" href="#logging-h" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="logging-h">
+<h2>logging.h<a class="headerlink" href="#logging-h" title="Link to this heading">¶</a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env9log_traceENSt11string_viewENSt11string_viewE">
-<span id="_CPPv3N7buildcc3env9log_traceENSt11string_viewENSt11string_viewE"></span><span id="_CPPv2N7buildcc3env9log_traceENSt11string_viewENSt11string_viewE"></span><span id="buildcc::env::log_trace__std::string_view.std::string_view"></span><span class="target" id="namespacebuildcc_1_1env_1ac54ba2a32300bb6160fd8278d498895f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">log_trace</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env9log_traceENSt11string_viewENSt11string_viewE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env9log_traceENSt11string_viewENSt11string_viewE"></span><span id="_CPPv2N7buildcc3env9log_traceENSt11string_viewENSt11string_viewE"></span><span id="buildcc::env::log_trace__std::string_view.std::string_view"></span><span class="target" id="namespacebuildcc_1_1env_1ac54ba2a32300bb6160fd8278d498895f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">log_trace</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env9log_traceENSt11string_viewENSt11string_viewE" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env9log_debugENSt11string_viewENSt11string_viewE">
-<span id="_CPPv3N7buildcc3env9log_debugENSt11string_viewENSt11string_viewE"></span><span id="_CPPv2N7buildcc3env9log_debugENSt11string_viewENSt11string_viewE"></span><span id="buildcc::env::log_debug__std::string_view.std::string_view"></span><span class="target" id="namespacebuildcc_1_1env_1a150ebc1033094233d297def366f9f5cd"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">log_debug</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env9log_debugENSt11string_viewENSt11string_viewE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env9log_debugENSt11string_viewENSt11string_viewE"></span><span id="_CPPv2N7buildcc3env9log_debugENSt11string_viewENSt11string_viewE"></span><span id="buildcc::env::log_debug__std::string_view.std::string_view"></span><span class="target" id="namespacebuildcc_1_1env_1a150ebc1033094233d297def366f9f5cd"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">log_debug</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env9log_debugENSt11string_viewENSt11string_viewE" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env8log_infoENSt11string_viewENSt11string_viewE">
-<span id="_CPPv3N7buildcc3env8log_infoENSt11string_viewENSt11string_viewE"></span><span id="_CPPv2N7buildcc3env8log_infoENSt11string_viewENSt11string_viewE"></span><span id="buildcc::env::log_info__std::string_view.std::string_view"></span><span class="target" id="namespacebuildcc_1_1env_1aaf0e6087d5ea5aa1db6e5cda2daa2795"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">log_info</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env8log_infoENSt11string_viewENSt11string_viewE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env8log_infoENSt11string_viewENSt11string_viewE"></span><span id="_CPPv2N7buildcc3env8log_infoENSt11string_viewENSt11string_viewE"></span><span id="buildcc::env::log_info__std::string_view.std::string_view"></span><span class="target" id="namespacebuildcc_1_1env_1aaf0e6087d5ea5aa1db6e5cda2daa2795"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">log_info</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env8log_infoENSt11string_viewENSt11string_viewE" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env11log_warningENSt11string_viewENSt11string_viewE">
-<span id="_CPPv3N7buildcc3env11log_warningENSt11string_viewENSt11string_viewE"></span><span id="_CPPv2N7buildcc3env11log_warningENSt11string_viewENSt11string_viewE"></span><span id="buildcc::env::log_warning__std::string_view.std::string_view"></span><span class="target" id="namespacebuildcc_1_1env_1ac66aeca0d1514f33f5f4fd3f440d3adb"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">log_warning</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env11log_warningENSt11string_viewENSt11string_viewE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env11log_warningENSt11string_viewENSt11string_viewE"></span><span id="_CPPv2N7buildcc3env11log_warningENSt11string_viewENSt11string_viewE"></span><span id="buildcc::env::log_warning__std::string_view.std::string_view"></span><span class="target" id="namespacebuildcc_1_1env_1ac66aeca0d1514f33f5f4fd3f440d3adb"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">log_warning</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env11log_warningENSt11string_viewENSt11string_viewE" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env12log_criticalENSt11string_viewENSt11string_viewE">
-<span id="_CPPv3N7buildcc3env12log_criticalENSt11string_viewENSt11string_viewE"></span><span id="_CPPv2N7buildcc3env12log_criticalENSt11string_viewENSt11string_viewE"></span><span id="buildcc::env::log_critical__std::string_view.std::string_view"></span><span class="target" id="namespacebuildcc_1_1env_1aeaf36b51ab38a4c440f07deec46ead72"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">log_critical</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env12log_criticalENSt11string_viewENSt11string_viewE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env12log_criticalENSt11string_viewENSt11string_viewE"></span><span id="_CPPv2N7buildcc3env12log_criticalENSt11string_viewENSt11string_viewE"></span><span id="buildcc::env::log_critical__std::string_view.std::string_view"></span><span class="target" id="namespacebuildcc_1_1env_1aeaf36b51ab38a4c440f07deec46ead72"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">log_critical</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env12log_criticalENSt11string_viewENSt11string_viewE" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
+</section>
+<section id="assert-fatal-h">
+<h2>assert_fatal.h<a class="headerlink" href="#assert-fatal-h" title="Link to this heading">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfunction: Unable to resolve function “assert_fatal” with arguments ([[maybe_unused]] const char*) in doxygen xml output for project “buildcc_documentation” from directory: /home/runner/work/build_in_cpp/build_in_cpp/build/xml.
+Potential matches:
+</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">template</span><span class="o">&lt;</span><span class="nb">bool</span> <span class="n">expr</span><span class="o">&gt;</span> <span class="n">void</span> <span class="n">assert_fatal</span><span class="p">(</span><span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">message</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">template</span><span class="o">&lt;</span><span class="nb">bool</span> <span class="n">expr</span><span class="o">&gt;</span> <span class="n">void</span> <span class="n">assert_fatal</span><span class="p">(</span><span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">message</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">void</span> <span class="n">assert_fatal</span><span class="p">(</span><span class="nb">bool</span> <span class="n">expression</span><span class="p">,</span> <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">message</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">void</span> <span class="n">assert_fatal</span><span class="p">(</span><span class="nb">bool</span> <span class="n">expression</span><span class="p">,</span> <span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">message</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="assert-fatal-h">
-<h2>assert_fatal.h<a class="headerlink" href="#assert-fatal-h" title="Permalink to this heading">#</a></h2>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I_bEN7buildcc3env12assert_fatalEvPKc">
-<span id="_CPPv3I_bEN7buildcc3env12assert_fatalEPKc"></span><span id="_CPPv2I_bEN7buildcc3env12assert_fatalEPKc"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">expr</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacebuildcc_1_1env_1a56de12e5a0ec91323b6f0c79354fb06b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">assert_fatal</span></span></span><span class="sig-paren">(</span><span class="p"><span class="pre">[[</span></span><span class="pre">maybe_unused</span><span class="p"><span class="pre">]]</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_bEN7buildcc3env12assert_fatalEvPKc" title="Permalink to this definition">#</a><br /></dt>
-<dd><p>Compile time expr asserts fatally when false. </p>
-</dd></dl>
-
+</div>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I_bEN7buildcc3env12assert_fatalEvRKNSt6stringE">
-<span id="_CPPv3I_bEN7buildcc3env12assert_fatalERKNSt6stringE"></span><span id="_CPPv2I_bEN7buildcc3env12assert_fatalERKNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">expr</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacebuildcc_1_1env_1aa43d4e7a2202c07a3849075187110c76"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">assert_fatal</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_bEN7buildcc3env12assert_fatalEvRKNSt6stringE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3I_bEN7buildcc3env12assert_fatalERKNSt6stringE"></span><span id="_CPPv2I_bEN7buildcc3env12assert_fatalERKNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">expr</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacebuildcc_1_1env_1aa43d4e7a2202c07a3849075187110c76"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">assert_fatal</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_bEN7buildcc3env12assert_fatalEvRKNSt6stringE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Compile time expr asserts fatally when false. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env12assert_fatalEbPKc">
-<span id="_CPPv3N7buildcc3env12assert_fatalEbPKc"></span><span id="_CPPv2N7buildcc3env12assert_fatalEbPKc"></span><span id="buildcc::env::assert_fatal__b.cCP"></span><span class="target" id="namespacebuildcc_1_1env_1ab1ba5138e7d6695da7f0cabe512d17da"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">assert_fatal</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">expression</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env12assert_fatalEbPKc" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env12assert_fatalEbPKc"></span><span id="_CPPv2N7buildcc3env12assert_fatalEbPKc"></span><span id="buildcc::env::assert_fatal__b.cCP"></span><span class="target" id="namespacebuildcc_1_1env_1ab1ba5138e7d6695da7f0cabe512d17da"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">assert_fatal</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">expression</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env12assert_fatalEbPKc" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Runtime expr asserts fatally when false. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env12assert_fatalEbRKNSt6stringE">
-<span id="_CPPv3N7buildcc3env12assert_fatalEbRKNSt6stringE"></span><span id="_CPPv2N7buildcc3env12assert_fatalEbRKNSt6stringE"></span><span id="buildcc::env::assert_fatal__b.ssCR"></span><span class="target" id="namespacebuildcc_1_1env_1a6f5f69ed6625e3f92eac05e99f932035"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">assert_fatal</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">expression</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env12assert_fatalEbRKNSt6stringE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env12assert_fatalEbRKNSt6stringE"></span><span id="_CPPv2N7buildcc3env12assert_fatalEbRKNSt6stringE"></span><span id="buildcc::env::assert_fatal__b.ssCR"></span><span class="target" id="namespacebuildcc_1_1env_1a6f5f69ed6625e3f92eac05e99f932035"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">assert_fatal</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">expression</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env12assert_fatalEbRKNSt6stringE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Runtime expr asserts fatally when false. </p>
 </dd></dl>
 
 <dl class="cpp macro">
 <dt class="sig sig-object cpp" id="c.ASSERT_FATAL">
-<span class="target" id="assert__fatal_8h_1a6bc38d878212df251ab8de0b18aa57c1"></span><span class="sig-name descname"><span class="n"><span class="pre">ASSERT_FATAL</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">expr</span></span>, <span class="n"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.ASSERT_FATAL" title="Permalink to this definition">#</a><br /></dt>
+<span class="target" id="assert__fatal_8h_1a6bc38d878212df251ab8de0b18aa57c1"></span><span class="sig-name descname"><span class="n"><span class="pre">ASSERT_FATAL</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">expr</span></span>, <span class="n"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.ASSERT_FATAL" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Runtime expr asserts fatally when false. </p>
 </dd></dl>
 
-</div>
-<div class="section" id="command-h">
-<h2>command.h<a class="headerlink" href="#command-h" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="command-h">
+<h2>command.h<a class="headerlink" href="#command-h" title="Link to this heading">¶</a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env7CommandE">
-<span id="_CPPv3N7buildcc3env7CommandE"></span><span id="_CPPv2N7buildcc3env7CommandE"></span><span id="buildcc::env::Command"></span><span class="target" id="classbuildcc_1_1env_1_1Command"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Command</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc3env7CommandE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env7CommandE"></span><span id="_CPPv2N7buildcc3env7CommandE"></span><span id="buildcc::env::Command"></span><span class="target" id="classbuildcc_1_1env_1_1Command"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Command</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc3env7CommandE" title="Link to this definition">¶</a><br /></dt>
 <dd><div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env7Command7CommandEv">
-<span id="_CPPv3N7buildcc3env7Command7CommandEv"></span><span id="_CPPv2N7buildcc3env7Command7CommandEv"></span><span id="buildcc::env::Command::Command"></span><span class="target" id="classbuildcc_1_1env_1_1Command_1a13f2e6e724f258dfefe803f8e03fcccd"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Command</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N7buildcc3env7Command7CommandEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env7Command7CommandEv"></span><span id="_CPPv2N7buildcc3env7Command7CommandEv"></span><span id="buildcc::env::Command::Command"></span><span class="target" id="classbuildcc_1_1env_1_1Command_1a13f2e6e724f258dfefe803f8e03fcccd"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Command</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N7buildcc3env7Command7CommandEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env7Command18AddDefaultArgumentERKNSt6stringERKNSt6stringE">
-<span id="_CPPv3N7buildcc3env7Command18AddDefaultArgumentERKNSt6stringERKNSt6stringE"></span><span id="_CPPv2N7buildcc3env7Command18AddDefaultArgumentERKNSt6stringERKNSt6stringE"></span><span id="buildcc::env::Command::AddDefaultArgument__ssCR.ssCR"></span><span class="target" id="classbuildcc_1_1env_1_1Command_1af62e8fd804fff6629ad5cb05babe6556"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddDefaultArgument</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env7Command18AddDefaultArgumentERKNSt6stringERKNSt6stringE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env7Command18AddDefaultArgumentERKNSt6stringERKNSt6stringE"></span><span id="_CPPv2N7buildcc3env7Command18AddDefaultArgumentERKNSt6stringERKNSt6stringE"></span><span id="buildcc::env::Command::AddDefaultArgument__ssCR.ssCR"></span><span class="target" id="classbuildcc_1_1env_1_1Command_1af62e8fd804fff6629ad5cb05babe6556"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddDefaultArgument</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env7Command18AddDefaultArgumentERKNSt6stringERKNSt6stringE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Add key-value pairs that are used by fmt as identifiers Example: {“key”, “value”} -&gt; fmt::format(“{key}”) -&gt; “value”. </p>
 <p>NOTE: These default arguments persist throughout the lifetime of the <a class="reference internal" href="#classbuildcc_1_1env_1_1Command"><span class="std std-ref">Command</span></a> object </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env7Command19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE">
-<span id="_CPPv3N7buildcc3env7Command19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE"></span><span id="_CPPv2N7buildcc3env7Command19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE"></span><span id="buildcc::env::Command::AddDefaultArguments__std::unordered_map:ss.ss:CR"></span><span class="target" id="classbuildcc_1_1env_1_1Command_1a53d43561a508171304312c71453cefac"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddDefaultArguments</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">arguments</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env7Command19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env7Command19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE"></span><span id="_CPPv2N7buildcc3env7Command19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE"></span><span id="buildcc::env::Command::AddDefaultArguments__std::unordered_map:ss.ss:CR"></span><span class="target" id="classbuildcc_1_1env_1_1Command_1a53d43561a508171304312c71453cefac"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddDefaultArguments</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">arguments</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env7Command19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Add multiple key-value pairs that are used by fmt as identifiers Example: {“key”, “value”} -&gt; fmt::format(“{key}”) -&gt; “value”. </p>
 <p>NOTE: These default arguments persist throughout the lifetime of the <a class="reference internal" href="#classbuildcc_1_1env_1_1Command"><span class="std std-ref">Command</span></a> object </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7buildcc3env7Command9ConstructERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE">
-<span id="_CPPv3NK7buildcc3env7Command9ConstructERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE"></span><span id="_CPPv2NK7buildcc3env7Command9ConstructERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE"></span><span id="buildcc::env::Command::Construct__ssCR.std::unordered_map:cCP.ss:CRC"></span><span class="target" id="classbuildcc_1_1env_1_1Command_1a9bba3ba4ac2ebaf51f37f93eb0fcef0c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Construct</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pattern</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">arguments</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc3env7Command9ConstructERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK7buildcc3env7Command9ConstructERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE"></span><span id="_CPPv2NK7buildcc3env7Command9ConstructERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE"></span><span id="buildcc::env::Command::Construct__ssCR.std::unordered_map:cCP.ss:CRC"></span><span class="target" id="classbuildcc_1_1env_1_1Command_1a9bba3ba4ac2ebaf51f37f93eb0fcef0c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Construct</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pattern</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">arguments</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc3env7Command9ConstructERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Construct a specialized string using input pattern and supplied arguments. </p>
 <p>NOTE: These arguments are only valid for the <code class="docutils literal notranslate"><span class="pre">Construct</span></code> function call </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7buildcc3env7Command20GetDefaultValueByKeyERKNSt6stringE">
-<span id="_CPPv3NK7buildcc3env7Command20GetDefaultValueByKeyERKNSt6stringE"></span><span id="_CPPv2NK7buildcc3env7Command20GetDefaultValueByKeyERKNSt6stringE"></span><span id="buildcc::env::Command::GetDefaultValueByKey__ssCRC"></span><span class="target" id="classbuildcc_1_1env_1_1Command_1a2ffa4e08645b40f177d6d2181c8e81fc"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetDefaultValueByKey</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc3env7Command20GetDefaultValueByKeyERKNSt6stringE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK7buildcc3env7Command20GetDefaultValueByKeyERKNSt6stringE"></span><span id="_CPPv2NK7buildcc3env7Command20GetDefaultValueByKeyERKNSt6stringE"></span><span id="buildcc::env::Command::GetDefaultValueByKey__ssCRC"></span><span class="target" id="classbuildcc_1_1env_1_1Command_1a2ffa4e08645b40f177d6d2181c8e81fc"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetDefaultValueByKey</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7buildcc3env7Command20GetDefaultValueByKeyERKNSt6stringE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the Default Value By Key object NOTE: Only works when key/value pairs are added to DefaultArgument(s) Assert Fatal if default value is not found. </p>
 </dd></dl>
 
@@ -400,10 +447,10 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env7Command7ExecuteERKNSt6stringERK8optionalIN2fs4pathEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE">
-<span id="_CPPv3N7buildcc3env7Command7ExecuteERKNSt6stringERK8optionalIN2fs4pathEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE"></span><span id="_CPPv2N7buildcc3env7Command7ExecuteERKNSt6stringERK8optionalIN2fs4pathEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE"></span><span id="buildcc::env::Command::Execute__ssCR.optional:fs::path:CR.std::vector:ss:P.std::vector:ss:P"></span><span class="target" id="classbuildcc_1_1env_1_1Command_1a6a82cb19f2ee498ebf2d753e0d976b28"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Execute</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">command</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">working_directory</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">stdout_data</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">stderr_data</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env7Command7ExecuteERKNSt6stringERK8optionalIN2fs4pathEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env7Command7ExecuteERKNSt6stringERK8optionalIN2fs4pathEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE"></span><span id="_CPPv2N7buildcc3env7Command7ExecuteERKNSt6stringERK8optionalIN2fs4pathEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE"></span><span id="buildcc::env::Command::Execute__ssCR.optional:fs::path:CR.std::vector:ss:P.std::vector:ss:P"></span><span class="target" id="classbuildcc_1_1env_1_1Command_1a6a82cb19f2ee498ebf2d753e0d976b28"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Execute</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">command</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">working_directory</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">stdout_data</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">stderr_data</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env7Command7ExecuteERKNSt6stringERK8optionalIN2fs4pathEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Execute a particular command over a subprocess and optionally redirect stdout and stderr to user supplied dynamic string lists. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>command</strong> – <a class="reference internal" href="#classbuildcc_1_1env_1_1Command"><span class="std std-ref">Command</span></a> is run on the shell </p></li>
 <li><p><strong>working_directory</strong> – Current working directory </p></li>
@@ -411,10 +458,10 @@
 <li><p><strong>stderr_data</strong> – Redirect stderr to user OR default print to console </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>true when exit code = 0 </p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>false when exit code != 0 </p>
 </dd>
 </dl>
@@ -423,100 +470,100 @@
 </div>
 </dd></dl>
 
-</div>
-<div class="section" id="host-compiler-h">
-<h2>host_compiler.h<a class="headerlink" href="#host-compiler-h" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="host-compiler-h">
+<h2>host_compiler.h<a class="headerlink" href="#host-compiler-h" title="Link to this heading">¶</a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env6is_gccEv">
-<span id="_CPPv3N7buildcc3env6is_gccEv"></span><span id="_CPPv2N7buildcc3env6is_gccEv"></span><span id="buildcc::env::is_gccCE"></span><span class="target" id="namespacebuildcc_1_1env_1a8e163e5672c8e4ffe96bd5123d8a6ce7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_gcc</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env6is_gccEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env6is_gccEv"></span><span id="_CPPv2N7buildcc3env6is_gccEv"></span><span id="buildcc::env::is_gccCE"></span><span class="target" id="namespacebuildcc_1_1env_1a8e163e5672c8e4ffe96bd5123d8a6ce7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_gcc</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env6is_gccEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env8is_mingwEv">
-<span id="_CPPv3N7buildcc3env8is_mingwEv"></span><span id="_CPPv2N7buildcc3env8is_mingwEv"></span><span id="buildcc::env::is_mingwCE"></span><span class="target" id="namespacebuildcc_1_1env_1a9c8935edc7bc2acc85514e3defdb9b67"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_mingw</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env8is_mingwEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env8is_mingwEv"></span><span id="_CPPv2N7buildcc3env8is_mingwEv"></span><span id="buildcc::env::is_mingwCE"></span><span class="target" id="namespacebuildcc_1_1env_1a9c8935edc7bc2acc85514e3defdb9b67"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_mingw</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env8is_mingwEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env8is_clangEv">
-<span id="_CPPv3N7buildcc3env8is_clangEv"></span><span id="_CPPv2N7buildcc3env8is_clangEv"></span><span id="buildcc::env::is_clangCE"></span><span class="target" id="namespacebuildcc_1_1env_1ab9b0f9a12b6940ed2aaba61ba5cb2264"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_clang</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env8is_clangEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env8is_clangEv"></span><span id="_CPPv2N7buildcc3env8is_clangEv"></span><span id="buildcc::env::is_clangCE"></span><span class="target" id="namespacebuildcc_1_1env_1ab9b0f9a12b6940ed2aaba61ba5cb2264"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_clang</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env8is_clangEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env7is_msvcEv">
-<span id="_CPPv3N7buildcc3env7is_msvcEv"></span><span id="_CPPv2N7buildcc3env7is_msvcEv"></span><span id="buildcc::env::is_msvcCE"></span><span class="target" id="namespacebuildcc_1_1env_1a192da21428ab15e2b694f94fcc67b7e1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_msvc</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env7is_msvcEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env7is_msvcEv"></span><span id="_CPPv2N7buildcc3env7is_msvcEv"></span><span id="buildcc::env::is_msvcCE"></span><span class="target" id="namespacebuildcc_1_1env_1a192da21428ab15e2b694f94fcc67b7e1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_msvc</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env7is_msvcEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-</div>
-<div class="section" id="host-os-h">
-<h2>host_os.h<a class="headerlink" href="#host-os-h" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="host-os-h">
+<h2>host_os.h<a class="headerlink" href="#host-os-h" title="Link to this heading">¶</a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env8is_linuxEv">
-<span id="_CPPv3N7buildcc3env8is_linuxEv"></span><span id="_CPPv2N7buildcc3env8is_linuxEv"></span><span id="buildcc::env::is_linuxCE"></span><span class="target" id="namespacebuildcc_1_1env_1afe9f1a70a46afa8a1fb13c377adcc107"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_linux</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env8is_linuxEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env8is_linuxEv"></span><span id="_CPPv2N7buildcc3env8is_linuxEv"></span><span id="buildcc::env::is_linuxCE"></span><span class="target" id="namespacebuildcc_1_1env_1afe9f1a70a46afa8a1fb13c377adcc107"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_linux</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env8is_linuxEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env6is_winEv">
-<span id="_CPPv3N7buildcc3env6is_winEv"></span><span id="_CPPv2N7buildcc3env6is_winEv"></span><span id="buildcc::env::is_winCE"></span><span class="target" id="namespacebuildcc_1_1env_1a6b7bc1a77bef265591f7feea0e8c875d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_win</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env6is_winEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env6is_winEv"></span><span id="_CPPv2N7buildcc3env6is_winEv"></span><span id="buildcc::env::is_winCE"></span><span class="target" id="namespacebuildcc_1_1env_1a6b7bc1a77bef265591f7feea0e8c875d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_win</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env6is_winEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env6is_macEv">
-<span id="_CPPv3N7buildcc3env6is_macEv"></span><span id="_CPPv2N7buildcc3env6is_macEv"></span><span id="buildcc::env::is_macCE"></span><span class="target" id="namespacebuildcc_1_1env_1a8eab8914eaa9ec25b43a2dde3aa2fe0e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_mac</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env6is_macEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env6is_macEv"></span><span id="_CPPv2N7buildcc3env6is_macEv"></span><span id="buildcc::env::is_macCE"></span><span class="target" id="namespacebuildcc_1_1env_1a8eab8914eaa9ec25b43a2dde3aa2fe0e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_mac</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env6is_macEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env7is_unixEv">
-<span id="_CPPv3N7buildcc3env7is_unixEv"></span><span id="_CPPv2N7buildcc3env7is_unixEv"></span><span id="buildcc::env::is_unixCE"></span><span class="target" id="namespacebuildcc_1_1env_1a8ce275d550c72c359b0836ea948e08e4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_unix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env7is_unixEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env7is_unixEv"></span><span id="_CPPv2N7buildcc3env7is_unixEv"></span><span id="buildcc::env::is_unixCE"></span><span class="target" id="namespacebuildcc_1_1env_1a8ce275d550c72c359b0836ea948e08e4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_unix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env7is_unixEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enum-class">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc4OsIdE">
-<span id="_CPPv3N7buildcc4OsIdE"></span><span id="_CPPv2N7buildcc4OsIdE"></span><span class="target" id="namespacebuildcc_1ac02cca905c5b3a1776eea033970a103f"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">OsId</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc4OsIdE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc4OsIdE"></span><span id="_CPPv2N7buildcc4OsIdE"></span><span class="target" id="namespacebuildcc_1ac02cca905c5b3a1776eea033970a103f"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">OsId</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc4OsIdE" title="Link to this definition">¶</a><br /></dt>
 <dd><p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc4OsId5LinuxE">
-<span id="_CPPv3N7buildcc4OsId5LinuxE"></span><span id="_CPPv2N7buildcc4OsId5LinuxE"></span><span class="target" id="namespacebuildcc_1ac02cca905c5b3a1776eea033970a103faedc9f0a5a5d57797bf68e37364743831"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Linux</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc4OsId5LinuxE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc4OsId5LinuxE"></span><span id="_CPPv2N7buildcc4OsId5LinuxE"></span><span class="target" id="namespacebuildcc_1ac02cca905c5b3a1776eea033970a103faedc9f0a5a5d57797bf68e37364743831"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Linux</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc4OsId5LinuxE" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc4OsId3WinE">
-<span id="_CPPv3N7buildcc4OsId3WinE"></span><span id="_CPPv2N7buildcc4OsId3WinE"></span><span class="target" id="namespacebuildcc_1ac02cca905c5b3a1776eea033970a103fa119eac47719cc9be7b99124712e229da"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Win</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc4OsId3WinE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc4OsId3WinE"></span><span id="_CPPv2N7buildcc4OsId3WinE"></span><span class="target" id="namespacebuildcc_1ac02cca905c5b3a1776eea033970a103fa119eac47719cc9be7b99124712e229da"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Win</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc4OsId3WinE" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc4OsId3MacE">
-<span id="_CPPv3N7buildcc4OsId3MacE"></span><span id="_CPPv2N7buildcc4OsId3MacE"></span><span class="target" id="namespacebuildcc_1ac02cca905c5b3a1776eea033970a103fa1748c0644a50090814d3e170723ccc5c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Mac</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc4OsId3MacE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc4OsId3MacE"></span><span id="_CPPv2N7buildcc4OsId3MacE"></span><span class="target" id="namespacebuildcc_1ac02cca905c5b3a1776eea033970a103fa1748c0644a50090814d3e170723ccc5c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Mac</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc4OsId3MacE" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc4OsId4UnixE">
-<span id="_CPPv3N7buildcc4OsId4UnixE"></span><span id="_CPPv2N7buildcc4OsId4UnixE"></span><span class="target" id="namespacebuildcc_1ac02cca905c5b3a1776eea033970a103fa6ec1bd1ea6a5d67a63b20c8f6172bddd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Unix</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc4OsId4UnixE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc4OsId4UnixE"></span><span id="_CPPv2N7buildcc4OsId4UnixE"></span><span class="target" id="namespacebuildcc_1ac02cca905c5b3a1776eea033970a103fa6ec1bd1ea6a5d67a63b20c8f6172bddd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Unix</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc4OsId4UnixE" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc4OsId9UndefinedE">
-<span id="_CPPv3N7buildcc4OsId9UndefinedE"></span><span id="_CPPv2N7buildcc4OsId9UndefinedE"></span><span class="target" id="namespacebuildcc_1ac02cca905c5b3a1776eea033970a103faec0fc0100c4fc1ce4eea230c3dc10360"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Undefined</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc4OsId9UndefinedE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc4OsId9UndefinedE"></span><span id="_CPPv2N7buildcc4OsId9UndefinedE"></span><span class="target" id="namespacebuildcc_1ac02cca905c5b3a1776eea033970a103faec0fc0100c4fc1ce4eea230c3dc10360"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Undefined</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc4OsId9UndefinedE" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc11get_host_osEv">
-<span id="_CPPv3N7buildcc11get_host_osEv"></span><span id="_CPPv2N7buildcc11get_host_osEv"></span><span id="buildcc::get_host_osCE"></span><span class="target" id="namespacebuildcc_1a80b4c0d0aac23fa1878e22763e955b45"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7buildcc4OsIdE" title="buildcc::OsId"><span class="n"><span class="pre">OsId</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">get_host_os</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc11get_host_osEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc11get_host_osEv"></span><span id="_CPPv2N7buildcc11get_host_osEv"></span><span id="buildcc::get_host_osCE"></span><span class="target" id="namespacebuildcc_1a80b4c0d0aac23fa1878e22763e955b45"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7buildcc4OsIdE" title="buildcc::OsId"><span class="n"><span class="pre">OsId</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">get_host_os</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc11get_host_osEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-</div>
-<div class="section" id="host-os-util-h">
-<h2>host_os_util.h<a class="headerlink" href="#host-os-util-h" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="host-os-util-h">
+<h2>host_os_util.h<a class="headerlink" href="#host-os-util-h" title="Link to this heading">¶</a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env19get_os_envvar_delimEv">
-<span id="_CPPv3N7buildcc3env19get_os_envvar_delimEv"></span><span id="_CPPv2N7buildcc3env19get_os_envvar_delimEv"></span><span id="buildcc::env::get_os_envvar_delimCE"></span><span class="target" id="namespacebuildcc_1_1env_1a47a7976e7ac6f5ecd6daaec1a25c7516"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">get_os_envvar_delim</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env19get_os_envvar_delimEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env19get_os_envvar_delimEv"></span><span id="_CPPv2N7buildcc3env19get_os_envvar_delimEv"></span><span id="buildcc::env::get_os_envvar_delimCE"></span><span class="target" id="namespacebuildcc_1_1env_1aa018d36377610743f54d5e903aeb4077"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">get_os_envvar_delim</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env19get_os_envvar_delimEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the OS environment variable delimiter ; for windows : for linux, unix and mac. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>constexpr char const* for supported operating systems </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>nullptr otherwise with a critical message to raise an issue </p>
 </dd>
 </dl>
@@ -524,58 +571,58 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env27get_os_executable_extensionEv">
-<span id="_CPPv3N7buildcc3env27get_os_executable_extensionEv"></span><span id="_CPPv2N7buildcc3env27get_os_executable_extensionEv"></span><span id="buildcc::env::get_os_executable_extensionCE"></span><span class="target" id="namespacebuildcc_1_1env_1a268fc4bcf69248c99dd89204b2125748"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">get_os_executable_extension</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env27get_os_executable_extensionEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env27get_os_executable_extensionEv"></span><span id="_CPPv2N7buildcc3env27get_os_executable_extensionEv"></span><span id="buildcc::env::get_os_executable_extensionCE"></span><span class="target" id="namespacebuildcc_1_1env_1a9df388af605cba3bc85483358f6960c9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">get_os_executable_extension</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env27get_os_executable_extensionEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the OS executable extension “.exe” for windows “” for linux, unix and mac. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>constexpr const char* for supported operating systems </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>nullptr otherwise with a critical message to raise an issue </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="task-state-h">
-<h2>task_state.h<a class="headerlink" href="#task-state-h" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="task-state-h">
+<h2>task_state.h<a class="headerlink" href="#task-state-h" title="Link to this heading">¶</a></h2>
 <dl class="cpp enum-class">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env9TaskStateE">
-<span id="_CPPv3N7buildcc3env9TaskStateE"></span><span id="_CPPv2N7buildcc3env9TaskStateE"></span><span class="target" id="namespacebuildcc_1_1env_1a0108e86ddf0a956c08ec5c3f9cc13257"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TaskState</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc3env9TaskStateE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env9TaskStateE"></span><span id="_CPPv2N7buildcc3env9TaskStateE"></span><span class="target" id="namespacebuildcc_1_1env_1a0108e86ddf0a956c08ec5c3f9cc13257"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TaskState</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc3env9TaskStateE" title="Link to this definition">¶</a><br /></dt>
 <dd><p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env9TaskState7SUCCESSE">
-<span id="_CPPv3N7buildcc3env9TaskState7SUCCESSE"></span><span id="_CPPv2N7buildcc3env9TaskState7SUCCESSE"></span><span class="target" id="namespacebuildcc_1_1env_1a0108e86ddf0a956c08ec5c3f9cc13257ad0749aaba8b833466dfcbb0428e4f89c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SUCCESS</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc3env9TaskState7SUCCESSE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env9TaskState7SUCCESSE"></span><span id="_CPPv2N7buildcc3env9TaskState7SUCCESSE"></span><span class="target" id="namespacebuildcc_1_1env_1a0108e86ddf0a956c08ec5c3f9cc13257ad0749aaba8b833466dfcbb0428e4f89c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SUCCESS</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc3env9TaskState7SUCCESSE" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env9TaskState7FAILUREE">
-<span id="_CPPv3N7buildcc3env9TaskState7FAILUREE"></span><span id="_CPPv2N7buildcc3env9TaskState7FAILUREE"></span><span class="target" id="namespacebuildcc_1_1env_1a0108e86ddf0a956c08ec5c3f9cc13257a36fc6065a3e970bc3e6b2e59da52bf2a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FAILURE</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc3env9TaskState7FAILUREE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env9TaskState7FAILUREE"></span><span id="_CPPv2N7buildcc3env9TaskState7FAILUREE"></span><span class="target" id="namespacebuildcc_1_1env_1a0108e86ddf0a956c08ec5c3f9cc13257a36fc6065a3e970bc3e6b2e59da52bf2a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FAILURE</span></span></span><a class="headerlink" href="#_CPPv4N7buildcc3env9TaskState7FAILUREE" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env14get_task_stateEv">
-<span id="_CPPv3N7buildcc3env14get_task_stateEv"></span><span id="_CPPv2N7buildcc3env14get_task_stateEv"></span><span id="buildcc::env::get_task_state"></span><span class="target" id="namespacebuildcc_1_1env_1a9bcd2376e269256c3c216d6770569ca8"></span><a class="reference internal" href="#_CPPv4N7buildcc3env9TaskStateE" title="buildcc::env::TaskState"><span class="n"><span class="pre">TaskState</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">get_task_state</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env14get_task_stateEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env14get_task_stateEv"></span><span id="_CPPv2N7buildcc3env14get_task_stateEv"></span><span id="buildcc::env::get_task_state"></span><span class="target" id="namespacebuildcc_1_1env_1a9bcd2376e269256c3c216d6770569ca8"></span><a class="reference internal" href="#_CPPv4N7buildcc3env9TaskStateE" title="buildcc::env::TaskState"><span class="n"><span class="pre">TaskState</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">get_task_state</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env14get_task_stateEv" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-</div>
-<div class="section" id="util-h">
-<h2>util.h<a class="headerlink" href="#util-h" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="util-h">
+<h2>util.h<a class="headerlink" href="#util-h" title="Link to this heading">¶</a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env9save_fileEPKcRKNSt6stringEb">
-<span id="_CPPv3N7buildcc3env9save_fileEPKcRKNSt6stringEb"></span><span id="_CPPv2N7buildcc3env9save_fileEPKcRKNSt6stringEb"></span><span id="buildcc::env::save_file__cCP.ssCR.b"></span><span class="target" id="namespacebuildcc_1_1env_1a59eca6e77cc22cb24d0b7af42e4973da"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">save_file</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">buf</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">binary</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env9save_fileEPKcRKNSt6stringEb" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env9save_fileEPKcRKNSt6stringEb"></span><span id="_CPPv2N7buildcc3env9save_fileEPKcRKNSt6stringEb"></span><span id="buildcc::env::save_file__cCP.ssCR.b"></span><span class="target" id="namespacebuildcc_1_1env_1a59eca6e77cc22cb24d0b7af42e4973da"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">save_file</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">buf</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">binary</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env9save_fileEPKcRKNSt6stringEb" title="Link to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7buildcc3env9load_fileEPKcbPNSt6stringE">
-<span id="_CPPv3N7buildcc3env9load_fileEPKcbPNSt6stringE"></span><span id="_CPPv2N7buildcc3env9load_fileEPKcbPNSt6stringE"></span><span id="buildcc::env::load_file__cCP.b.ssP"></span><span class="target" id="namespacebuildcc_1_1env_1adda7577432872c62c96dea2e8f34a7b0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">load_file</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">binary</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">buf</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env9load_fileEPKcbPNSt6stringE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N7buildcc3env9load_fileEPKcbPNSt6stringE"></span><span id="_CPPv2N7buildcc3env9load_fileEPKcbPNSt6stringE"></span><span id="buildcc::env::load_file__cCP.b.ssP"></span><span class="target" id="namespacebuildcc_1_1env_1adda7577432872c62c96dea2e8f34a7b0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">buildcc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">load_file</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">binary</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">buf</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7buildcc3env9load_fileEPKcbPNSt6stringE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Condition under which code throws and should terminate 1: fs::file_size -&gt; filesystem_error, bad_alloc error 2: resize -&gt; length_error, bad_alloc error 3: ifs.read -&gt; badbit 4: </p>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
         </article>
       </div>
@@ -633,15 +680,81 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Environment</a><ul>
-<li><a class="reference internal" href="#env-h">env.h</a></li>
-<li><a class="reference internal" href="#logging-h">logging.h</a></li>
-<li><a class="reference internal" href="#assert-fatal-h">assert_fatal.h</a></li>
-<li><a class="reference internal" href="#command-h">command.h</a></li>
-<li><a class="reference internal" href="#host-compiler-h">host_compiler.h</a></li>
-<li><a class="reference internal" href="#host-os-h">host_os.h</a></li>
-<li><a class="reference internal" href="#host-os-util-h">host_os_util.h</a></li>
-<li><a class="reference internal" href="#task-state-h">task_state.h</a></li>
-<li><a class="reference internal" href="#util-h">util.h</a></li>
+<li><a class="reference internal" href="#env-h">env.h</a><ul>
+<li><a class="reference internal" href="#_CPPv4N7buildcc7ProjectE"><code class="docutils literal notranslate"><span class="pre">buildcc::Project</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc7Project7ProjectEv"><code class="docutils literal notranslate"><span class="pre">Project()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc7Project7ProjectERK7Project"><code class="docutils literal notranslate"><span class="pre">Project()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc7Project7ProjectERR7Project"><code class="docutils literal notranslate"><span class="pre">Project()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc7Project4InitERKN2fs4pathERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">Init()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc7Project6DeinitEv"><code class="docutils literal notranslate"><span class="pre">Deinit()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc7Project6IsInitEv"><code class="docutils literal notranslate"><span class="pre">IsInit()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc7Project10GetRootDirEv"><code class="docutils literal notranslate"><span class="pre">GetRootDir()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc7Project11GetBuildDirEv"><code class="docutils literal notranslate"><span class="pre">GetBuildDir()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#logging-h">logging.h</a><ul>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env9log_traceENSt11string_viewENSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">log_trace()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env9log_debugENSt11string_viewENSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">log_debug()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env8log_infoENSt11string_viewENSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">log_info()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env11log_warningENSt11string_viewENSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">log_warning()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env12log_criticalENSt11string_viewENSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">log_critical()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#assert-fatal-h">assert_fatal.h</a><ul>
+<li><a class="reference internal" href="#_CPPv4I_bEN7buildcc3env12assert_fatalEvRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">assert_fatal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env12assert_fatalEbPKc"><code class="docutils literal notranslate"><span class="pre">assert_fatal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env12assert_fatalEbRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">assert_fatal()</span></code></a></li>
+<li><a class="reference internal" href="#c.ASSERT_FATAL"><code class="docutils literal notranslate"><span class="pre">ASSERT_FATAL</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#command-h">command.h</a><ul>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env7CommandE"><code class="docutils literal notranslate"><span class="pre">buildcc::env::Command</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env7Command7CommandEv"><code class="docutils literal notranslate"><span class="pre">Command()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env7Command18AddDefaultArgumentERKNSt6stringERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">AddDefaultArgument()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env7Command19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">AddDefaultArguments()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7buildcc3env7Command9ConstructERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">Construct()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7buildcc3env7Command20GetDefaultValueByKeyERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">GetDefaultValueByKey()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env7Command7ExecuteERKNSt6stringERK8optionalIN2fs4pathEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">Execute()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#host-compiler-h">host_compiler.h</a><ul>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env6is_gccEv"><code class="docutils literal notranslate"><span class="pre">is_gcc()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env8is_mingwEv"><code class="docutils literal notranslate"><span class="pre">is_mingw()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env8is_clangEv"><code class="docutils literal notranslate"><span class="pre">is_clang()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env7is_msvcEv"><code class="docutils literal notranslate"><span class="pre">is_msvc()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#host-os-h">host_os.h</a><ul>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env8is_linuxEv"><code class="docutils literal notranslate"><span class="pre">is_linux()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env6is_winEv"><code class="docutils literal notranslate"><span class="pre">is_win()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env6is_macEv"><code class="docutils literal notranslate"><span class="pre">is_mac()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env7is_unixEv"><code class="docutils literal notranslate"><span class="pre">is_unix()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc4OsIdE"><code class="docutils literal notranslate"><span class="pre">OsId</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc4OsId5LinuxE"><code class="docutils literal notranslate"><span class="pre">Linux</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc4OsId3WinE"><code class="docutils literal notranslate"><span class="pre">Win</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc4OsId3MacE"><code class="docutils literal notranslate"><span class="pre">Mac</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc4OsId4UnixE"><code class="docutils literal notranslate"><span class="pre">Unix</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc4OsId9UndefinedE"><code class="docutils literal notranslate"><span class="pre">Undefined</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc11get_host_osEv"><code class="docutils literal notranslate"><span class="pre">get_host_os()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#host-os-util-h">host_os_util.h</a><ul>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env19get_os_envvar_delimEv"><code class="docutils literal notranslate"><span class="pre">get_os_envvar_delim()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env27get_os_executable_extensionEv"><code class="docutils literal notranslate"><span class="pre">get_os_executable_extension()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#task-state-h">task_state.h</a><ul>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env9TaskStateE"><code class="docutils literal notranslate"><span class="pre">TaskState</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env9TaskState7SUCCESSE"><code class="docutils literal notranslate"><span class="pre">SUCCESS</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env9TaskState7FAILUREE"><code class="docutils literal notranslate"><span class="pre">FAILURE</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env14get_task_stateEv"><code class="docutils literal notranslate"><span class="pre">get_task_state()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#util-h">util.h</a><ul>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env9save_fileEPKcRKNSt6stringEb"><code class="docutils literal notranslate"><span class="pre">save_file()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7buildcc3env9load_fileEPKcbPNSt6stringE"><code class="docutils literal notranslate"><span class="pre">load_file()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -653,12 +766,9 @@
       
     </aside>
   </div>
-</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/scripts/furo.js"></script>
+</div><script src="../_static/documentation_options.js?v=a58bc63e"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>

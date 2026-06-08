@@ -1,22 +1,23 @@
 <!doctype html>
-<html class="no-js" lang="en">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Args" href="args.html" /><link rel="prev" title="Build Options for “scripts”" href="../getting_started/all_default_build_options.html" />
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Args" href="args.html"><link rel="prev" title="Build Options for “scripts”" href="../getting_started/all_default_build_options.html">
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+    <!-- Generated with Sphinx 7.2.6 and Furo 2025.12.19 -->
         <title>User API - BuildCC 0.1.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=acfd86a5" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
 
 
 <style>
   body {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
   
   }
   @media not print {
@@ -67,7 +68,7 @@
   <symbol id="svg-sun" viewBox="0 0 24 24">
     <title>Light mode</title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
       <circle cx="12" cy="12" r="5"></circle>
       <line x1="12" y1="1" x2="12" y2="3"></line>
       <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -82,34 +83,73 @@
   <symbol id="svg-moon" viewBox="0 0 24 24">
     <title>Dark mode</title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
     </svg>
   </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
     </svg>
   </symbol>
 </svg>
 
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
-</label>
-<label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
-</label>
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
 
 
@@ -117,8 +157,7 @@
   <header class="mobile-header">
     <div class="header-left">
       <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
       </label>
     </div>
     <div class="header-center">
@@ -126,16 +165,15 @@
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
           <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
       <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
   </header>
@@ -143,7 +181,6 @@
     <div class="sidebar-container">
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
-  
   
   <span class="sidebar-brand-text">BuildCC 0.1.1 documentation</span>
   
@@ -156,7 +193,7 @@
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../intro/toc.html">Introduction</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../arch/toc.html">Architecture</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../arch/toc.html">Architecture</a><input aria-label="Toggle navigation of Architecture" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../arch/project_layout.html">Project Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../arch/software_heirarchy.html">Software Heirarchy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../arch/serialization_schema.html">Serialization Schema</a></li>
@@ -168,7 +205,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../arch/style_guide.html">Style Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/toc.html">Getting Started</a><input aria-label="Toggle navigation of Getting Started" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_setup.html">BuildExe Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_script_example.html">BuildExe “Script” example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/buildexe_immediate_example.html">BuildExe “Immediate” example</a></li>
@@ -178,7 +215,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/all_default_build_options.html">Build Options for “scripts”</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">User API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">User API</a><input aria-label="Toggle navigation of User API" checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="args.html">Args</a></li>
 <li class="toctree-l2"><a class="reference internal" href="register.html">Register</a></li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain_utils.html">Toolchain Utils</a></li>
@@ -197,7 +234,7 @@
 <li class="toctree-l2"><a class="reference internal" href="environment.html">Environment</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/toc.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/toc.html">Examples</a><input aria-label="Toggle navigation of Examples" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples/hybrid.html">Hybrid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/gcc.html">GCC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/msvc.html">MSVC</a></li>
@@ -224,122 +261,565 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/user_api/toc.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
 <div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
               <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
           <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
-        <article role="main">
-          <div class="section" id="user-api">
-<h1>User API<a class="headerlink" href="#user-api" title="Permalink to this heading">#</a></h1>
+        <article role="main" id="furo-main-content">
+          <section id="user-api">
+<h1>User API<a class="headerlink" href="#user-api" title="Link to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="args.html">Args</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="args.html#args-h">args.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="args.html#args-h">args.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4ArgsE"><code class="docutils literal notranslate"><span class="pre">buildcc::Args</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args4ArgsEv"><code class="docutils literal notranslate"><span class="pre">Args()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args4ArgsERK4Args"><code class="docutils literal notranslate"><span class="pre">Args()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args4ArgsERR4Args"><code class="docutils literal notranslate"><span class="pre">Args()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args4InitEv"><code class="docutils literal notranslate"><span class="pre">Init()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args6DeinitEv"><code class="docutils literal notranslate"><span class="pre">Deinit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args6IsInitEv"><code class="docutils literal notranslate"><span class="pre">IsInit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args8IsParsedEv"><code class="docutils literal notranslate"><span class="pre">IsParsed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args5CleanEv"><code class="docutils literal notranslate"><span class="pre">Clean()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args11GetLogLevelEv"><code class="docutils literal notranslate"><span class="pre">GetLogLevel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args17GetProjectRootDirEv"><code class="docutils literal notranslate"><span class="pre">GetProjectRootDir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args18GetProjectBuildDirEv"><code class="docutils literal notranslate"><span class="pre">GetProjectBuildDir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args8InstanceE"><code class="docutils literal notranslate"><span class="pre">buildcc::Args::Instance</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args8Instance12AddToolchainERKNSt6stringERKNSt6stringER12ArgToolchainRK12ArgToolchain"><code class="docutils literal notranslate"><span class="pre">AddToolchain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args8Instance9AddTargetERKNSt6stringERKNSt6stringER9ArgTargetRK9ArgTarget"><code class="docutils literal notranslate"><span class="pre">AddTarget()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args8Instance17AddCustomCallbackERKNSt8functionIFvRN3CLI3AppEEEE"><code class="docutils literal notranslate"><span class="pre">AddCustomCallback()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args8Instance13AddCustomDataER9ArgCustom"><code class="docutils literal notranslate"><span class="pre">AddCustomData()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args8Instance5ParseEiPPCKc"><code class="docutils literal notranslate"><span class="pre">Parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args8InternalE"><code class="docutils literal notranslate"><span class="pre">buildcc::Args::Internal</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args8Internal8instanceE"><code class="docutils literal notranslate"><span class="pre">instance</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args8Internal3appE"><code class="docutils literal notranslate"><span class="pre">app</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args8Internal9toolchainE"><code class="docutils literal notranslate"><span class="pre">toolchain</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc4Args8Internal6targetE"><code class="docutils literal notranslate"><span class="pre">target</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc9ArgCustomE"><code class="docutils literal notranslate"><span class="pre">buildcc::ArgCustom</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc9ArgCustom3AddERN3CLI3AppE"><code class="docutils literal notranslate"><span class="pre">Add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc17ArgToolchainStateE"><code class="docutils literal notranslate"><span class="pre">buildcc::ArgToolchainState</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc17ArgToolchainState17ArgToolchainStateEbb"><code class="docutils literal notranslate"><span class="pre">ArgToolchainState()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc17ArgToolchainState5buildE"><code class="docutils literal notranslate"><span class="pre">build</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc17ArgToolchainState4testE"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc12ArgToolchainE"><code class="docutils literal notranslate"><span class="pre">buildcc::ArgToolchain</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc12ArgToolchain12ArgToolchainEv"><code class="docutils literal notranslate"><span class="pre">ArgToolchain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc12ArgToolchain12ArgToolchainE11ToolchainIdRKNSt6stringERK20ToolchainExecutablesRK15ToolchainConfig"><code class="docutils literal notranslate"><span class="pre">ArgToolchain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc12ArgToolchain18ConstructToolchainEv"><code class="docutils literal notranslate"><span class="pre">ConstructToolchain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc12ArgToolchain5stateE"><code class="docutils literal notranslate"><span class="pre">state</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc12ArgToolchain2idE"><code class="docutils literal notranslate"><span class="pre">id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc12ArgToolchain4nameE"><code class="docutils literal notranslate"><span class="pre">name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc12ArgToolchain11executablesE"><code class="docutils literal notranslate"><span class="pre">executables</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc12ArgToolchain6configE"><code class="docutils literal notranslate"><span class="pre">config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc9ArgTargetE"><code class="docutils literal notranslate"><span class="pre">buildcc::ArgTarget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc9ArgTarget9ArgTargetEv"><code class="docutils literal notranslate"><span class="pre">ArgTarget()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc9ArgTarget15GetTargetConfigEv"><code class="docutils literal notranslate"><span class="pre">GetTargetConfig()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc9ArgTarget15compile_commandE"><code class="docutils literal notranslate"><span class="pre">compile_command</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="args.html#_CPPv4N7buildcc9ArgTarget12link_commandE"><code class="docutils literal notranslate"><span class="pre">link_command</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="args.html#example">Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="register.html">Register</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="register.html#register-h">register.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="register.html#test-info-h">test_info.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register.html#register-h">register.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3RegE"><code class="docutils literal notranslate"><span class="pre">buildcc::Reg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg3RegEv"><code class="docutils literal notranslate"><span class="pre">Reg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg3RegERK3Reg"><code class="docutils literal notranslate"><span class="pre">Reg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg3RegERR3Reg"><code class="docutils literal notranslate"><span class="pre">Reg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg4InitEv"><code class="docutils literal notranslate"><span class="pre">Init()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg6DeinitEv"><code class="docutils literal notranslate"><span class="pre">Deinit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg3RunERKNSt8functionIFvvEEE"><code class="docutils literal notranslate"><span class="pre">Run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg4CallEb"><code class="docutils literal notranslate"><span class="pre">Call()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg9ToolchainERK17ArgToolchainState"><code class="docutils literal notranslate"><span class="pre">Toolchain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg11GetTaskflowEv"><code class="docutils literal notranslate"><span class="pre">GetTaskflow()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg16CallbackInstanceE"><code class="docutils literal notranslate"><span class="pre">buildcc::Reg::CallbackInstance</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg16CallbackInstance16CallbackInstanceEb"><code class="docutils literal notranslate"><span class="pre">CallbackInstance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4I0DpEN7buildcc3Reg16CallbackInstance4FuncER16CallbackInstanceRK1CDpRR6Params"><code class="docutils literal notranslate"><span class="pre">Func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4I00DpEN7buildcc3Reg16CallbackInstance5BuildER16CallbackInstanceRK1CR1TDpRR6Params"><code class="docutils literal notranslate"><span class="pre">Build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg8InstanceE"><code class="docutils literal notranslate"><span class="pre">buildcc::Reg::Instance</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4I00DpEN7buildcc3Reg8Instance5BuildEvRK1CR1TDpRR6Params"><code class="docutils literal notranslate"><span class="pre">Build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg8Instance3DepERKN8internal16BuilderInterfaceERKN8internal16BuilderInterfaceE"><code class="docutils literal notranslate"><span class="pre">Dep()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg8Instance4TestERKNSt6stringERK10BaseTargetRK10TestConfig"><code class="docutils literal notranslate"><span class="pre">Test()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg8Instance8RunBuildEv"><code class="docutils literal notranslate"><span class="pre">RunBuild()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg8Instance7RunTestEv"><code class="docutils literal notranslate"><span class="pre">RunTest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4NK7buildcc3Reg8Instance11GetTaskflowEv"><code class="docutils literal notranslate"><span class="pre">GetTaskflow()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4I0DpEN7buildcc3Reg8Instance8CallbackEvRK1CDpRR6Params"><code class="docutils literal notranslate"><span class="pre">Callback()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4I0DpEN7buildcc3Reg8Instance10CallbackIfEvbRK1CDpRR6Params"><code class="docutils literal notranslate"><span class="pre">CallbackIf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg17ToolchainInstanceE"><code class="docutils literal notranslate"><span class="pre">buildcc::Reg::ToolchainInstance</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg17ToolchainInstance17ToolchainInstanceERK17ArgToolchainState"><code class="docutils literal notranslate"><span class="pre">ToolchainInstance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4I0DpEN7buildcc3Reg17ToolchainInstance4FuncER17ToolchainInstanceRK1CDpRR6Params"><code class="docutils literal notranslate"><span class="pre">Func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4I00DpEN7buildcc3Reg17ToolchainInstance5BuildER17ToolchainInstanceRK1CR1TDpRR6Params"><code class="docutils literal notranslate"><span class="pre">Build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4I0EN7buildcc3Reg17ToolchainInstance12BuildPackageER17ToolchainInstanceR1P"><code class="docutils literal notranslate"><span class="pre">BuildPackage()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg17ToolchainInstance3DepERKN8internal16BuilderInterfaceERKN8internal16BuilderInterfaceE"><code class="docutils literal notranslate"><span class="pre">Dep()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc3Reg17ToolchainInstance4TestERKNSt6stringERK10BaseTargetRK10TestConfig"><code class="docutils literal notranslate"><span class="pre">Test()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="register.html#test-info-h">test_info.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc10TestConfigE"><code class="docutils literal notranslate"><span class="pre">buildcc::TestConfig</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc10TestConfig10TestConfigERKNSt13unordered_mapIPKcNSt6stringEEERKN3env8optionalIN2fs4pathEEERK10TestOutput"><code class="docutils literal notranslate"><span class="pre">TestConfig()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4NK7buildcc10TestConfig12GetArgumentsEv"><code class="docutils literal notranslate"><span class="pre">GetArguments()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4NK7buildcc10TestConfig19GetWorkingDirectoryEv"><code class="docutils literal notranslate"><span class="pre">GetWorkingDirectory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4NK7buildcc10TestConfig13GetTestOutputEv"><code class="docutils literal notranslate"><span class="pre">GetTestOutput()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc10TestOutputE"><code class="docutils literal notranslate"><span class="pre">buildcc::TestOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc10TestOutput4TypeE"><code class="docutils literal notranslate"><span class="pre">Type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc10TestOutput4Type16DefaultBehaviourE"><code class="docutils literal notranslate"><span class="pre">DefaultBehaviour</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc10TestOutput4Type17TestPrintOnStderrE"><code class="docutils literal notranslate"><span class="pre">TestPrintOnStderr</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc10TestOutput4Type17TestPrintOnStdoutE"><code class="docutils literal notranslate"><span class="pre">TestPrintOnStdout</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc10TestOutput4Type26TestPrintOnStderrAndStdoutE"><code class="docutils literal notranslate"><span class="pre">TestPrintOnStderrAndStdout</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc10TestOutput4Type12UserRedirectE"><code class="docutils literal notranslate"><span class="pre">UserRedirect</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4N7buildcc10TestOutput10TestOutputE4TypePNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">TestOutput()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4NK7buildcc10TestOutput7GetTypeEv"><code class="docutils literal notranslate"><span class="pre">GetType()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4NK7buildcc10TestOutput23GetRedirectStdoutToUserEv"><code class="docutils literal notranslate"><span class="pre">GetRedirectStdoutToUser()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="register.html#_CPPv4NK7buildcc10TestOutput23GetRedirectStderrToUserEv"><code class="docutils literal notranslate"><span class="pre">GetRedirectStderrToUser()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="register.html#example">Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="toolchain_utils.html">Toolchain Utils</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="toolchain_utils.html#file-ext-h">file_ext.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="toolchain_utils.html#toolchain-config-h">toolchain_config.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="toolchain_utils.html#toolchain-id-h">toolchain_id.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="toolchain_utils.html#toolchain-executables-h">toolchain_executables.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain_utils.html#file-ext-h">file_ext.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc7FileExtE"><code class="docutils literal notranslate"><span class="pre">FileExt</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc7FileExt3AsmE"><code class="docutils literal notranslate"><span class="pre">Asm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc7FileExt1CE"><code class="docutils literal notranslate"><span class="pre">C</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc7FileExt3CppE"><code class="docutils literal notranslate"><span class="pre">Cpp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc7FileExt6HeaderE"><code class="docutils literal notranslate"><span class="pre">Header</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc7FileExt7InvalidE"><code class="docutils literal notranslate"><span class="pre">Invalid</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain_utils.html#toolchain-config-h">toolchain_config.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc15ToolchainConfigE"><code class="docutils literal notranslate"><span class="pre">buildcc::ToolchainConfig</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc15ToolchainConfig15ToolchainConfigEv"><code class="docutils literal notranslate"><span class="pre">ToolchainConfig()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4NK7buildcc15ToolchainConfig10GetFileExtERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">GetFileExt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4NK7buildcc15ToolchainConfig13IsValidSourceERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">IsValidSource()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4NK7buildcc15ToolchainConfig13IsValidHeaderERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">IsValidHeader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4NK7buildcc15ToolchainConfig18ExpectsValidSourceERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">ExpectsValidSource()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4NK7buildcc15ToolchainConfig18ExpectsValidHeaderERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">ExpectsValidHeader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc15ToolchainConfig7obj_extE"><code class="docutils literal notranslate"><span class="pre">obj_ext</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc15ToolchainConfig14pch_header_extE"><code class="docutils literal notranslate"><span class="pre">pch_header_ext</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc15ToolchainConfig15pch_compile_extE"><code class="docutils literal notranslate"><span class="pre">pch_compile_ext</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc15ToolchainConfig18prefix_include_dirE"><code class="docutils literal notranslate"><span class="pre">prefix_include_dir</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc15ToolchainConfig14prefix_lib_dirE"><code class="docutils literal notranslate"><span class="pre">prefix_lib_dir</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc15ToolchainConfig11valid_c_extE"><code class="docutils literal notranslate"><span class="pre">valid_c_ext</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc15ToolchainConfig13valid_cpp_extE"><code class="docutils literal notranslate"><span class="pre">valid_cpp_ext</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc15ToolchainConfig13valid_asm_extE"><code class="docutils literal notranslate"><span class="pre">valid_asm_ext</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc15ToolchainConfig16valid_header_extE"><code class="docutils literal notranslate"><span class="pre">valid_header_ext</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain_utils.html#toolchain-id-h">toolchain_id.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc11ToolchainIdE"><code class="docutils literal notranslate"><span class="pre">ToolchainId</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc11ToolchainId3GccE"><code class="docutils literal notranslate"><span class="pre">Gcc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc11ToolchainId4MsvcE"><code class="docutils literal notranslate"><span class="pre">Msvc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc11ToolchainId5ClangE"><code class="docutils literal notranslate"><span class="pre">Clang</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc11ToolchainId5MinGWE"><code class="docutils literal notranslate"><span class="pre">MinGW</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc11ToolchainId6CustomE"><code class="docutils literal notranslate"><span class="pre">Custom</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc11ToolchainId9UndefinedE"><code class="docutils literal notranslate"><span class="pre">Undefined</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain_utils.html#toolchain-executables-h">toolchain_executables.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc20ToolchainExecutablesE"><code class="docutils literal notranslate"><span class="pre">buildcc::ToolchainExecutables</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc20ToolchainExecutables20ToolchainExecutablesEv"><code class="docutils literal notranslate"><span class="pre">ToolchainExecutables()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc20ToolchainExecutables20ToolchainExecutablesENSt11string_viewENSt11string_viewENSt11string_viewENSt11string_viewENSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">ToolchainExecutables()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc20ToolchainExecutables9assemblerE"><code class="docutils literal notranslate"><span class="pre">assembler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc20ToolchainExecutables10c_compilerE"><code class="docutils literal notranslate"><span class="pre">c_compiler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc20ToolchainExecutables12cpp_compilerE"><code class="docutils literal notranslate"><span class="pre">cpp_compiler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc20ToolchainExecutables8archiverE"><code class="docutils literal notranslate"><span class="pre">archiver</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain_utils.html#_CPPv4N7buildcc20ToolchainExecutables6linkerE"><code class="docutils literal notranslate"><span class="pre">linker</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="toolchain.html">Toolchain</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-h">toolchain.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-find-h">toolchain_find.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-verify-h">toolchain_verify.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-h">toolchain.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc9ToolchainE"><code class="docutils literal notranslate"><span class="pre">buildcc::Toolchain</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc9Toolchain9ToolchainE11ToolchainIdNSt11string_viewERK20ToolchainExecutablesRK15ToolchainConfig"><code class="docutils literal notranslate"><span class="pre">Toolchain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc9ToolchainD0Ev"><code class="docutils literal notranslate"><span class="pre">~Toolchain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc9Toolchain9ToolchainERR9Toolchain"><code class="docutils literal notranslate"><span class="pre">Toolchain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc9ToolchainaSERR9Toolchain"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc9Toolchain9ToolchainERK9Toolchain"><code class="docutils literal notranslate"><span class="pre">Toolchain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc9ToolchainaSERK9Toolchain"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4NK7buildcc9Toolchain5GetIdEv"><code class="docutils literal notranslate"><span class="pre">GetId()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4NK7buildcc9Toolchain7GetNameEv"><code class="docutils literal notranslate"><span class="pre">GetName()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4NK7buildcc9Toolchain12GetAssemblerEv"><code class="docutils literal notranslate"><span class="pre">GetAssembler()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4NK7buildcc9Toolchain12GetCCompilerEv"><code class="docutils literal notranslate"><span class="pre">GetCCompiler()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4NK7buildcc9Toolchain14GetCppCompilerEv"><code class="docutils literal notranslate"><span class="pre">GetCppCompiler()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4NK7buildcc9Toolchain11GetArchiverEv"><code class="docutils literal notranslate"><span class="pre">GetArchiver()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4NK7buildcc9Toolchain9GetLinkerEv"><code class="docutils literal notranslate"><span class="pre">GetLinker()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4NK7buildcc9Toolchain23GetToolchainExecutablesEv"><code class="docutils literal notranslate"><span class="pre">GetToolchainExecutables()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4NK7buildcc9Toolchain9GetConfigEv"><code class="docutils literal notranslate"><span class="pre">GetConfig()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc13BaseToolchainE"><code class="docutils literal notranslate"><span class="pre">BaseToolchain</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-find-h">toolchain_find.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4I0EN7buildcc13ToolchainFindE"><code class="docutils literal notranslate"><span class="pre">buildcc::ToolchainFind</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4NK7buildcc13ToolchainFind4FindERK19ToolchainFindConfig"><code class="docutils literal notranslate"><span class="pre">Find()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc19ToolchainFindConfigE"><code class="docutils literal notranslate"><span class="pre">buildcc::ToolchainFindConfig</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc19ToolchainFindConfig19ToolchainFindConfigERKNSt6vectorINSt6stringEEERKNSt6vectorIN2fs4pathEEE"><code class="docutils literal notranslate"><span class="pre">ToolchainFindConfig()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc19ToolchainFindConfig8env_varsE"><code class="docutils literal notranslate"><span class="pre">env_vars</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc19ToolchainFindConfig21absolute_search_pathsE"><code class="docutils literal notranslate"><span class="pre">absolute_search_paths</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-verify-h">toolchain_verify.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4I0EN7buildcc15ToolchainVerifyE"><code class="docutils literal notranslate"><span class="pre">buildcc::ToolchainVerify</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc15ToolchainVerify15ToolchainVerifyEv"><code class="docutils literal notranslate"><span class="pre">ToolchainVerify()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc15ToolchainVerify6VerifyERK19ToolchainFindConfig"><code class="docutils literal notranslate"><span class="pre">Verify()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc15ToolchainVerify18SetToolchainInfoCbERK15ToolchainInfoCb"><code class="docutils literal notranslate"><span class="pre">SetToolchainInfoCb()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4NK7buildcc15ToolchainVerify18GetToolchainInfoCbEv"><code class="docutils literal notranslate"><span class="pre">GetToolchainInfoCb()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc21ToolchainCompilerInfoE"><code class="docutils literal notranslate"><span class="pre">buildcc::ToolchainCompilerInfo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4NK7buildcc21ToolchainCompilerInfo8ToStringEv"><code class="docutils literal notranslate"><span class="pre">ToString()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc21ToolchainCompilerInfo4pathE"><code class="docutils literal notranslate"><span class="pre">path</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc21ToolchainCompilerInfo16compiler_versionE"><code class="docutils literal notranslate"><span class="pre">compiler_version</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc21ToolchainCompilerInfo11target_archE"><code class="docutils literal notranslate"><span class="pre">target_arch</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html#example-for-default-toolchain">Example for Default Toolchain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html#example-for-custom-toolchain">Example for Custom Toolchain</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="toolchain.html#specialized-toolchain">Specialized Toolchain</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-gcc-h">toolchain_gcc.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-mingw-h">toolchain_mingw.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-msvc-h">toolchain_msvc.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-gcc-h">toolchain_gcc.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc13Toolchain_gccE"><code class="docutils literal notranslate"><span class="pre">buildcc::Toolchain_gcc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc13Toolchain_gcc13Toolchain_gccERKNSt6stringERKN3env8optionalI20ToolchainExecutablesEERKN3env8optionalI15ToolchainConfigEE"><code class="docutils literal notranslate"><span class="pre">Toolchain_gcc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc13Toolchain_gccD0Ev"><code class="docutils literal notranslate"><span class="pre">~Toolchain_gcc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc13Toolchain_gcc13Toolchain_gccERK13Toolchain_gcc"><code class="docutils literal notranslate"><span class="pre">Toolchain_gcc()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-mingw-h">toolchain_mingw.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc15Toolchain_mingwE"><code class="docutils literal notranslate"><span class="pre">buildcc::Toolchain_mingw</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc15Toolchain_mingw15Toolchain_mingwERKNSt6stringERKN3env8optionalI20ToolchainExecutablesEERKN3env8optionalI15ToolchainConfigEE"><code class="docutils literal notranslate"><span class="pre">Toolchain_mingw()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc15Toolchain_mingwD0Ev"><code class="docutils literal notranslate"><span class="pre">~Toolchain_mingw()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc15Toolchain_mingw15Toolchain_mingwERK15Toolchain_mingw"><code class="docutils literal notranslate"><span class="pre">Toolchain_mingw()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolchain.html#toolchain-msvc-h">toolchain_msvc.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc14Toolchain_msvcE"><code class="docutils literal notranslate"><span class="pre">buildcc::Toolchain_msvc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc14Toolchain_msvc14Toolchain_msvcERKNSt6stringERKN3env8optionalI20ToolchainExecutablesEERKN3env8optionalI15ToolchainConfigEE"><code class="docutils literal notranslate"><span class="pre">Toolchain_msvc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc14Toolchain_msvcD0Ev"><code class="docutils literal notranslate"><span class="pre">~Toolchain_msvc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolchain.html#_CPPv4N7buildcc14Toolchain_msvc14Toolchain_msvcERK14Toolchain_msvc"><code class="docutils literal notranslate"><span class="pre">Toolchain_msvc()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="toolchain.html#example">Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="target_utils.html">Target Utils</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="target_utils.html#target-type-h">target_type.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target_utils.html#target-env-h">target_env.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target_utils.html#target-config-h">target_config.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target_utils.html#target-state-h">target_state.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target_utils.html#target-type-h">target_type.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc10TargetTypeE"><code class="docutils literal notranslate"><span class="pre">TargetType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc10TargetType10ExecutableE"><code class="docutils literal notranslate"><span class="pre">Executable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc10TargetType13StaticLibraryE"><code class="docutils literal notranslate"><span class="pre">StaticLibrary</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc10TargetType14DynamicLibraryE"><code class="docutils literal notranslate"><span class="pre">DynamicLibrary</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc10TargetType9UndefinedE"><code class="docutils literal notranslate"><span class="pre">Undefined</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="target_utils.html#target-env-h">target_env.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc9TargetEnvE"><code class="docutils literal notranslate"><span class="pre">buildcc::TargetEnv</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc9TargetEnv9TargetEnvEPKc"><code class="docutils literal notranslate"><span class="pre">TargetEnv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc9TargetEnv9TargetEnvERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">TargetEnv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc9TargetEnv9TargetEnvERKN2fs4pathERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">TargetEnv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4NK7buildcc9TargetEnv16GetTargetRootDirEv"><code class="docutils literal notranslate"><span class="pre">GetTargetRootDir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4NK7buildcc9TargetEnv17GetTargetBuildDirEv"><code class="docutils literal notranslate"><span class="pre">GetTargetBuildDir()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="target_utils.html#target-config-h">target_config.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc12TargetConfigE"><code class="docutils literal notranslate"><span class="pre">buildcc::TargetConfig</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc12TargetConfig12TargetConfigEv"><code class="docutils literal notranslate"><span class="pre">TargetConfig()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc12TargetConfig10target_extE"><code class="docutils literal notranslate"><span class="pre">target_ext</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc12TargetConfig11pch_commandE"><code class="docutils literal notranslate"><span class="pre">pch_command</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc12TargetConfig15compile_commandE"><code class="docutils literal notranslate"><span class="pre">compile_command</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc12TargetConfig12link_commandE"><code class="docutils literal notranslate"><span class="pre">link_command</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="target_utils.html#target-state-h">target_state.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc11TargetStateE"><code class="docutils literal notranslate"><span class="pre">buildcc::TargetState</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc11TargetState14BuildCompletedEv"><code class="docutils literal notranslate"><span class="pre">BuildCompleted()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc11TargetState14SourceDetectedE7FileExt"><code class="docutils literal notranslate"><span class="pre">SourceDetected()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4N7buildcc11TargetState11PchDetectedEv"><code class="docutils literal notranslate"><span class="pre">PchDetected()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4NK7buildcc11TargetState7IsBuiltEv"><code class="docutils literal notranslate"><span class="pre">IsBuilt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4NK7buildcc11TargetState11ContainsPchEv"><code class="docutils literal notranslate"><span class="pre">ContainsPch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4NK7buildcc11TargetState11ContainsAsmEv"><code class="docutils literal notranslate"><span class="pre">ContainsAsm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4NK7buildcc11TargetState9ContainsCEv"><code class="docutils literal notranslate"><span class="pre">ContainsC()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target_utils.html#_CPPv4NK7buildcc11TargetState11ContainsCppEv"><code class="docutils literal notranslate"><span class="pre">ContainsCpp()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="generator.html">Template Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generator.html#file-generator">File Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generator.html#custom-generator">Custom Generator</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="generator.html#custom-generator-h">custom_generator.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generator.html#custom-generator-h">custom_generator.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generator.html#_CPPv4N7buildcc15CustomGeneratorE"><code class="docutils literal notranslate"><span class="pre">buildcc::CustomGenerator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generator.html#_CPPv4N7buildcc15CustomGenerator15CustomGeneratorERKNSt6stringERK9TargetEnv"><code class="docutils literal notranslate"><span class="pre">CustomGenerator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generator.html#_CPPv4N7buildcc15CustomGeneratorD0Ev"><code class="docutils literal notranslate"><span class="pre">~CustomGenerator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generator.html#_CPPv4N7buildcc15CustomGenerator15CustomGeneratorERK15CustomGenerator"><code class="docutils literal notranslate"><span class="pre">CustomGenerator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generator.html#_CPPv4N7buildcc15CustomGenerator10AddPatternERKNSt6stringERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">AddPattern()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generator.html#_CPPv4N7buildcc15CustomGenerator11AddPatternsERKNSt13unordered_mapINSt6stringENSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">AddPatterns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generator.html#_CPPv4NK7buildcc15CustomGenerator12ParsePatternERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">ParsePattern()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generator.html#_CPPv4N7buildcc15CustomGenerator9AddIdInfoERKNSt6stringERKNSt13unordered_setINSt6stringEEERKNSt13unordered_setINSt6stringEEERK10GenerateCbRKNSt10shared_ptrI17CustomBlobHandlerEE"><code class="docutils literal notranslate"><span class="pre">AddIdInfo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generator.html#_CPPv4N7buildcc15CustomGenerator5BuildEv"><code class="docutils literal notranslate"><span class="pre">Build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generator.html#_CPPv4NK7buildcc15CustomGenerator7GetNameEv"><code class="docutils literal notranslate"><span class="pre">GetName()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generator.html#_CPPv4NK7buildcc15CustomGenerator13GetBinaryPathEv"><code class="docutils literal notranslate"><span class="pre">GetBinaryPath()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generator.html#_CPPv4NK7buildcc15CustomGenerator10GetRootDirEv"><code class="docutils literal notranslate"><span class="pre">GetRootDir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generator.html#_CPPv4NK7buildcc15CustomGenerator11GetBuildDirEv"><code class="docutils literal notranslate"><span class="pre">GetBuildDir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generator.html#_CPPv4NK7buildcc15CustomGenerator3GetERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Get()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="generator.html#example">Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="target.html">Target Info APIs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="target.html#source-api-h">source_api.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html#include-api-h">include_api.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html#lib-api-h">lib_api.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html#pch-api-h">pch_api.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html#flag-api-h">flag_api.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html#deps-api-h">deps_api.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html#sync-api-h">sync_api.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#source-api-h">source_api.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4I0EN7buildcc8internal9SourceApiE"><code class="docutils literal notranslate"><span class="pre">buildcc::internal::SourceApi</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal9SourceApi14GetSourceFilesEv"><code class="docutils literal notranslate"><span class="pre">GetSourceFiles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal9SourceApi17AddSourceAbsoluteERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">AddSourceAbsolute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal9SourceApi19GlobSourcesAbsoluteERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">GlobSourcesAbsolute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal9SourceApi9AddSourceERKN2fs4pathERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">AddSource()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal9SourceApi11GlobSourcesERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">GlobSources()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#include-api-h">include_api.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4I0EN7buildcc8internal10IncludeApiE"><code class="docutils literal notranslate"><span class="pre">buildcc::internal::IncludeApi</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal10IncludeApi14GetHeaderFilesEv"><code class="docutils literal notranslate"><span class="pre">GetHeaderFiles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal10IncludeApi14GetIncludeDirsEv"><code class="docutils literal notranslate"><span class="pre">GetIncludeDirs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal10IncludeApi17AddHeaderAbsoluteERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">AddHeaderAbsolute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal10IncludeApi19GlobHeadersAbsoluteERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">GlobHeadersAbsolute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal10IncludeApi21AddIncludeDirAbsoluteERKN2fs4pathEb"><code class="docutils literal notranslate"><span class="pre">AddIncludeDirAbsolute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal10IncludeApi9AddHeaderERKN2fs4pathERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">AddHeader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal10IncludeApi11GlobHeadersERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">GlobHeaders()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal10IncludeApi13AddIncludeDirERKN2fs4pathEb"><code class="docutils literal notranslate"><span class="pre">AddIncludeDir()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#lib-api-h">lib_api.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4I0EN7buildcc8internal6LibApiE"><code class="docutils literal notranslate"><span class="pre">buildcc::internal::LibApi</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal6LibApi10GetLibDepsEv"><code class="docutils literal notranslate"><span class="pre">GetLibDeps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal6LibApi18GetExternalLibDepsEv"><code class="docutils literal notranslate"><span class="pre">GetExternalLibDeps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal6LibApi10GetLibDirsEv"><code class="docutils literal notranslate"><span class="pre">GetLibDirs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal6LibApi17AddLibDirAbsoluteERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">AddLibDirAbsolute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal6LibApi9AddLibDirERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">AddLibDir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal6LibApi9AddLibDepERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">AddLibDep()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal6LibApi9AddLibDepERK6Target"><code class="docutils literal notranslate"><span class="pre">AddLibDep()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#pch-api-h">pch_api.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4I0EN7buildcc8internal6PchApiE"><code class="docutils literal notranslate"><span class="pre">buildcc::internal::PchApi</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal6PchApi11GetPchFilesEv"><code class="docutils literal notranslate"><span class="pre">GetPchFiles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal6PchApi14AddPchAbsoluteERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">AddPchAbsolute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal6PchApi6AddPchERKN2fs4pathERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">AddPch()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#flag-api-h">flag_api.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4I0EN7buildcc8internal7FlagApiE"><code class="docutils literal notranslate"><span class="pre">buildcc::internal::FlagApi</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7FlagApi19AddPreprocessorFlagERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">AddPreprocessorFlag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7FlagApi20AddCommonCompileFlagERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">AddCommonCompileFlag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7FlagApi17AddPchCompileFlagERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">AddPchCompileFlag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7FlagApi16AddPchObjectFlagERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">AddPchObjectFlag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7FlagApi17AddAsmCompileFlagERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">AddAsmCompileFlag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7FlagApi15AddCCompileFlagERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">AddCCompileFlag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7FlagApi17AddCppCompileFlagERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">AddCppCompileFlag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7FlagApi11AddLinkFlagERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">AddLinkFlag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal7FlagApi20GetPreprocessorFlagsEv"><code class="docutils literal notranslate"><span class="pre">GetPreprocessorFlags()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal7FlagApi21GetCommonCompileFlagsEv"><code class="docutils literal notranslate"><span class="pre">GetCommonCompileFlags()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal7FlagApi18GetPchCompileFlagsEv"><code class="docutils literal notranslate"><span class="pre">GetPchCompileFlags()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal7FlagApi17GetPchObjectFlagsEv"><code class="docutils literal notranslate"><span class="pre">GetPchObjectFlags()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal7FlagApi18GetAsmCompileFlagsEv"><code class="docutils literal notranslate"><span class="pre">GetAsmCompileFlags()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal7FlagApi16GetCCompileFlagsEv"><code class="docutils literal notranslate"><span class="pre">GetCCompileFlags()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal7FlagApi18GetCppCompileFlagsEv"><code class="docutils literal notranslate"><span class="pre">GetCppCompileFlags()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal7FlagApi12GetLinkFlagsEv"><code class="docutils literal notranslate"><span class="pre">GetLinkFlags()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#deps-api-h">deps_api.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4I0EN7buildcc8internal7DepsApiE"><code class="docutils literal notranslate"><span class="pre">buildcc::internal::DepsApi</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal7DepsApi22GetCompileDependenciesEv"><code class="docutils literal notranslate"><span class="pre">GetCompileDependencies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal7DepsApi19GetLinkDependenciesEv"><code class="docutils literal notranslate"><span class="pre">GetLinkDependencies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7DepsApi28AddCompileDependencyAbsoluteERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">AddCompileDependencyAbsolute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7DepsApi20AddCompileDependencyERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">AddCompileDependency()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7DepsApi25AddLinkDependencyAbsoluteERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">AddLinkDependencyAbsolute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7DepsApi17AddLinkDependencyERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">AddLinkDependency()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#sync-api-h">sync_api.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4I0EN7buildcc8internal7SyncApiE"><code class="docutils literal notranslate"><span class="pre">buildcc::internal::SyncApi</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7SyncApi4CopyERK1TNSt16initializer_listI10SyncOptionEE"><code class="docutils literal notranslate"><span class="pre">Copy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7SyncApi4CopyERR1TNSt16initializer_listI10SyncOptionEE"><code class="docutils literal notranslate"><span class="pre">Copy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7SyncApi6InsertERK1TNSt16initializer_listI10SyncOptionEE"><code class="docutils literal notranslate"><span class="pre">Insert()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc8internal7SyncApi6InsertERR1TNSt16initializer_listI10SyncOptionEE"><code class="docutils literal notranslate"><span class="pre">Insert()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="target.html#targetinfo">TargetInfo</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="target.html#target-info-h">target_info.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target-info-h">target_info.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc10TargetInfoE"><code class="docutils literal notranslate"><span class="pre">buildcc::TargetInfo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc10TargetInfo10TargetInfoERK13BaseToolchainRK9TargetEnv"><code class="docutils literal notranslate"><span class="pre">TargetInfo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc14BaseTargetInfoE"><code class="docutils literal notranslate"><span class="pre">BaseTargetInfo</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="target.html#target-apis">Target APIs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="target.html#target-env-h">target_env.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target-env-h">target_env.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4I0EN7buildcc8internal12TargetEnvApiE"><code class="docutils literal notranslate"><span class="pre">buildcc::internal::TargetEnvApi</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal12TargetEnvApi16GetTargetRootDirEv"><code class="docutils literal notranslate"><span class="pre">GetTargetRootDir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4NK7buildcc8internal12TargetEnvApi17GetTargetBuildDirEv"><code class="docutils literal notranslate"><span class="pre">GetTargetBuildDir()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="target.html#target">Target</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="target.html#target-h">target.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target-h">target.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc6TargetE"><code class="docutils literal notranslate"><span class="pre">buildcc::Target</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc6Target6TargetERKNSt6stringE10TargetTypeRK9ToolchainRK9TargetEnvRK12TargetConfig"><code class="docutils literal notranslate"><span class="pre">Target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc6TargetD0Ev"><code class="docutils literal notranslate"><span class="pre">~Target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc6Target6TargetERK6Target"><code class="docutils literal notranslate"><span class="pre">Target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc6Target5BuildEv"><code class="docutils literal notranslate"><span class="pre">Build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc10BaseTargetE"><code class="docutils literal notranslate"><span class="pre">BaseTarget</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="target.html#specialized-target">Specialized Target</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="target.html#target-custom-h">target_custom.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html#target-gcc-h">target_gcc.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html#target-msvc-h">target_msvc.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target.html#target-generic-h">target_generic.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target-custom-h">target_custom.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc13Target_customE"><code class="docutils literal notranslate"><span class="pre">Target_custom</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target-gcc-h">target_gcc.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc20ExecutableTarget_gccE"><code class="docutils literal notranslate"><span class="pre">buildcc::ExecutableTarget_gcc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc20ExecutableTarget_gcc20ExecutableTarget_gccERKNSt6stringERK13BaseToolchainRK9TargetEnvRK12TargetConfig"><code class="docutils literal notranslate"><span class="pre">ExecutableTarget_gcc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc16StaticTarget_gccE"><code class="docutils literal notranslate"><span class="pre">buildcc::StaticTarget_gcc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc16StaticTarget_gcc16StaticTarget_gccERKNSt6stringERK13BaseToolchainRK9TargetEnvRK12TargetConfig"><code class="docutils literal notranslate"><span class="pre">StaticTarget_gcc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc17DynamicTarget_gccE"><code class="docutils literal notranslate"><span class="pre">buildcc::DynamicTarget_gcc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc17DynamicTarget_gcc17DynamicTarget_gccERKNSt6stringERK13BaseToolchainRK9TargetEnvRK12TargetConfig"><code class="docutils literal notranslate"><span class="pre">DynamicTarget_gcc()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target-msvc-h">target_msvc.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc21ExecutableTarget_msvcE"><code class="docutils literal notranslate"><span class="pre">buildcc::ExecutableTarget_msvc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc21ExecutableTarget_msvc21ExecutableTarget_msvcERKNSt6stringERK13BaseToolchainRK9TargetEnvRK12TargetConfig"><code class="docutils literal notranslate"><span class="pre">ExecutableTarget_msvc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc17StaticTarget_msvcE"><code class="docutils literal notranslate"><span class="pre">buildcc::StaticTarget_msvc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc17StaticTarget_msvc17StaticTarget_msvcERKNSt6stringERK13BaseToolchainRK9TargetEnvRK12TargetConfig"><code class="docutils literal notranslate"><span class="pre">StaticTarget_msvc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc18DynamicTarget_msvcE"><code class="docutils literal notranslate"><span class="pre">buildcc::DynamicTarget_msvc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc18DynamicTarget_msvc18DynamicTarget_msvcERKNSt6stringERK13BaseToolchainRK9TargetEnvRK12TargetConfig"><code class="docutils literal notranslate"><span class="pre">DynamicTarget_msvc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc18DynamicTarget_msvc10GetDllPathEv"><code class="docutils literal notranslate"><span class="pre">GetDllPath()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="target.html#target-generic-h">target_generic.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc24ExecutableTarget_genericE"><code class="docutils literal notranslate"><span class="pre">buildcc::ExecutableTarget_generic</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc24ExecutableTarget_generic24ExecutableTarget_genericERKNSt6stringERK13BaseToolchainRK9TargetEnvRKN3env8optionalI12TargetConfigEE"><code class="docutils literal notranslate"><span class="pre">ExecutableTarget_generic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc24ExecutableTarget_genericD0Ev"><code class="docutils literal notranslate"><span class="pre">~ExecutableTarget_generic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc20StaticTarget_genericE"><code class="docutils literal notranslate"><span class="pre">buildcc::StaticTarget_generic</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc20StaticTarget_generic20StaticTarget_genericERKNSt6stringERK13BaseToolchainRK9TargetEnvRKN3env8optionalI12TargetConfigEE"><code class="docutils literal notranslate"><span class="pre">StaticTarget_generic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc21DynamicTarget_genericE"><code class="docutils literal notranslate"><span class="pre">buildcc::DynamicTarget_generic</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc21DynamicTarget_generic21DynamicTarget_genericERKNSt6stringERK13BaseToolchainRK9TargetEnvRKN3env8optionalI12TargetConfigEE"><code class="docutils literal notranslate"><span class="pre">DynamicTarget_generic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc14Target_genericE"><code class="docutils literal notranslate"><span class="pre">buildcc::Target_generic</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="target.html#_CPPv4N7buildcc14Target_generic14Target_genericERKNSt6stringE10TargetTypeRK13BaseToolchainRK9TargetEnvRKN3env8optionalI12TargetConfigEE"><code class="docutils literal notranslate"><span class="pre">Target_generic()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="target.html#example">Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="supported_plugins.html">Supported Plugins</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="supported_plugins.html#clang-compile-commands-h">clang_compile_commands.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_plugins.html#clang-compile-commands-h">clang_compile_commands.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="supported_plugins.html#_CPPv4N7buildcc6plugin20ClangCompileCommandsE"><code class="docutils literal notranslate"><span class="pre">buildcc::plugin::ClangCompileCommands</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="supported_plugins.html#_CPPv4N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERRNSt6vectorIPK10BaseTargetEE"><code class="docutils literal notranslate"><span class="pre">ClangCompileCommands()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="supported_plugins.html#_CPPv4N7buildcc6plugin20ClangCompileCommands20ClangCompileCommandsERK20ClangCompileCommands"><code class="docutils literal notranslate"><span class="pre">ClangCompileCommands()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="supported_plugins.html#_CPPv4N7buildcc6plugin20ClangCompileCommands9AddTargetEPK10BaseTarget"><code class="docutils literal notranslate"><span class="pre">AddTarget()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="supported_plugins.html#_CPPv4N7buildcc6plugin20ClangCompileCommands8GenerateEv"><code class="docutils literal notranslate"><span class="pre">Generate()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="supported_plugins.html#example">Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="environment.html">Environment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="environment.html#env-h">env.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="environment.html#logging-h">logging.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="environment.html#assert-fatal-h">assert_fatal.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="environment.html#command-h">command.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="environment.html#host-compiler-h">host_compiler.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="environment.html#host-os-h">host_os.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="environment.html#host-os-util-h">host_os_util.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="environment.html#task-state-h">task_state.h</a></li>
-<li class="toctree-l2"><a class="reference internal" href="environment.html#util-h">util.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html#env-h">env.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc7ProjectE"><code class="docutils literal notranslate"><span class="pre">buildcc::Project</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc7Project7ProjectEv"><code class="docutils literal notranslate"><span class="pre">Project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc7Project7ProjectERK7Project"><code class="docutils literal notranslate"><span class="pre">Project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc7Project7ProjectERR7Project"><code class="docutils literal notranslate"><span class="pre">Project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc7Project4InitERKN2fs4pathERKN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">Init()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc7Project6DeinitEv"><code class="docutils literal notranslate"><span class="pre">Deinit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc7Project6IsInitEv"><code class="docutils literal notranslate"><span class="pre">IsInit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc7Project10GetRootDirEv"><code class="docutils literal notranslate"><span class="pre">GetRootDir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc7Project11GetBuildDirEv"><code class="docutils literal notranslate"><span class="pre">GetBuildDir()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html#logging-h">logging.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env9log_traceENSt11string_viewENSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">log_trace()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env9log_debugENSt11string_viewENSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">log_debug()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env8log_infoENSt11string_viewENSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">log_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env11log_warningENSt11string_viewENSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">log_warning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env12log_criticalENSt11string_viewENSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">log_critical()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html#assert-fatal-h">assert_fatal.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4I_bEN7buildcc3env12assert_fatalEvRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">assert_fatal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env12assert_fatalEbPKc"><code class="docutils literal notranslate"><span class="pre">assert_fatal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env12assert_fatalEbRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">assert_fatal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#c.ASSERT_FATAL"><code class="docutils literal notranslate"><span class="pre">ASSERT_FATAL</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html#command-h">command.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env7CommandE"><code class="docutils literal notranslate"><span class="pre">buildcc::env::Command</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env7Command7CommandEv"><code class="docutils literal notranslate"><span class="pre">Command()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env7Command18AddDefaultArgumentERKNSt6stringERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">AddDefaultArgument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env7Command19AddDefaultArgumentsERKNSt13unordered_mapINSt6stringENSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">AddDefaultArguments()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4NK7buildcc3env7Command9ConstructERKNSt6stringERKNSt13unordered_mapIPKcNSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">Construct()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4NK7buildcc3env7Command20GetDefaultValueByKeyERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">GetDefaultValueByKey()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env7Command7ExecuteERKNSt6stringERK8optionalIN2fs4pathEEPNSt6vectorINSt6stringEEEPNSt6vectorINSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">Execute()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html#host-compiler-h">host_compiler.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env6is_gccEv"><code class="docutils literal notranslate"><span class="pre">is_gcc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env8is_mingwEv"><code class="docutils literal notranslate"><span class="pre">is_mingw()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env8is_clangEv"><code class="docutils literal notranslate"><span class="pre">is_clang()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env7is_msvcEv"><code class="docutils literal notranslate"><span class="pre">is_msvc()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html#host-os-h">host_os.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env8is_linuxEv"><code class="docutils literal notranslate"><span class="pre">is_linux()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env6is_winEv"><code class="docutils literal notranslate"><span class="pre">is_win()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env6is_macEv"><code class="docutils literal notranslate"><span class="pre">is_mac()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env7is_unixEv"><code class="docutils literal notranslate"><span class="pre">is_unix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc4OsIdE"><code class="docutils literal notranslate"><span class="pre">OsId</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc4OsId5LinuxE"><code class="docutils literal notranslate"><span class="pre">Linux</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc4OsId3WinE"><code class="docutils literal notranslate"><span class="pre">Win</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc4OsId3MacE"><code class="docutils literal notranslate"><span class="pre">Mac</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc4OsId4UnixE"><code class="docutils literal notranslate"><span class="pre">Unix</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc4OsId9UndefinedE"><code class="docutils literal notranslate"><span class="pre">Undefined</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc11get_host_osEv"><code class="docutils literal notranslate"><span class="pre">get_host_os()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html#host-os-util-h">host_os_util.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env19get_os_envvar_delimEv"><code class="docutils literal notranslate"><span class="pre">get_os_envvar_delim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env27get_os_executable_extensionEv"><code class="docutils literal notranslate"><span class="pre">get_os_executable_extension()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html#task-state-h">task_state.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env9TaskStateE"><code class="docutils literal notranslate"><span class="pre">TaskState</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env9TaskState7SUCCESSE"><code class="docutils literal notranslate"><span class="pre">SUCCESS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env9TaskState7FAILUREE"><code class="docutils literal notranslate"><span class="pre">FAILURE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env14get_task_stateEv"><code class="docutils literal notranslate"><span class="pre">get_task_state()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html#util-h">util.h</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env9save_fileEPKcRKNSt6stringEb"><code class="docutils literal notranslate"><span class="pre">save_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="environment.html#_CPPv4N7buildcc3env9load_fileEPKcbPNSt6stringE"><code class="docutils literal notranslate"><span class="pre">load_file()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </div>
-</div>
+</section>
 
         </article>
       </div>
@@ -390,12 +870,9 @@
       
     </aside>
   </div>
-</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/scripts/furo.js"></script>
+</div><script src="../_static/documentation_options.js?v=a58bc63e"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>

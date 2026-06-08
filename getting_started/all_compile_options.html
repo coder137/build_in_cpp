@@ -1,22 +1,23 @@
 <!doctype html>
-<html class="no-js" lang="en">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Build Options for “scripts”" href="all_default_build_options.html" /><link rel="prev" title="Walkthrough Examples" href="walkthroughs.html" />
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Build Options for “scripts”" href="all_default_build_options.html"><link rel="prev" title="Walkthrough Examples" href="walkthroughs.html">
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+    <!-- Generated with Sphinx 7.2.6 and Furo 2025.12.19 -->
         <title>Compile Options for BuildExe - BuildCC 0.1.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=acfd86a5" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
 
 
 <style>
   body {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
   
   }
   @media not print {
@@ -67,7 +68,7 @@
   <symbol id="svg-sun" viewBox="0 0 24 24">
     <title>Light mode</title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
       <circle cx="12" cy="12" r="5"></circle>
       <line x1="12" y1="1" x2="12" y2="3"></line>
       <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -82,34 +83,73 @@
   <symbol id="svg-moon" viewBox="0 0 24 24">
     <title>Dark mode</title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
     </svg>
   </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
     </svg>
   </symbol>
 </svg>
 
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
-</label>
-<label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
-</label>
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
 
 
@@ -117,8 +157,7 @@
   <header class="mobile-header">
     <div class="header-left">
       <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
       </label>
     </div>
     <div class="header-center">
@@ -126,16 +165,15 @@
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
           <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
   </header>
@@ -143,7 +181,6 @@
     <div class="sidebar-container">
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
-  
   
   <span class="sidebar-brand-text">BuildCC 0.1.1 documentation</span>
   
@@ -156,7 +193,7 @@
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../intro/toc.html">Introduction</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../arch/toc.html">Architecture</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../arch/toc.html">Architecture</a><input aria-label="Toggle navigation of Architecture" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../arch/project_layout.html">Project Layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../arch/software_heirarchy.html">Software Heirarchy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../arch/serialization_schema.html">Serialization Schema</a></li>
@@ -168,7 +205,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../arch/style_guide.html">Style Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">Getting Started</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="toc.html">Getting Started</a><input aria-label="Toggle navigation of Getting Started" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="buildexe_setup.html">BuildExe Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="buildexe_script_example.html">BuildExe “Script” example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="buildexe_immediate_example.html">BuildExe “Immediate” example</a></li>
@@ -178,7 +215,7 @@
 <li class="toctree-l2"><a class="reference internal" href="all_default_build_options.html">Build Options for “scripts”</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_api/toc.html">User API</a><input aria-label="Toggle navigation of User API" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/args.html">Args</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/register.html">Register</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_api/toolchain_utils.html">Toolchain Utils</a></li>
@@ -197,7 +234,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_api/environment.html">Environment</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/toc.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/toc.html">Examples</a><input aria-label="Toggle navigation of Examples" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples/hybrid.html">Hybrid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/gcc.html">GCC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/msvc.html">MSVC</a></li>
@@ -224,132 +261,136 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/getting_started/all_compile_options.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
 <div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
               <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
           <label class="toc-overlay-icon toc-content-icon" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
-        <article role="main">
-          <div class="section" id="compile-options-for-buildexe">
-<h1>Compile Options for BuildExe<a class="headerlink" href="#compile-options-for-buildexe" title="Permalink to this heading">#</a></h1>
+        <article role="main" id="furo-main-content">
+          <section id="compile-options-for-buildexe">
+<h1>Compile Options for BuildExe<a class="headerlink" href="#compile-options-for-buildexe" title="Link to this heading">¶</a></h1>
 <p>We can pass in configuration parameters through the Command Line but writing them inside a <code class="docutils literal notranslate"><span class="pre">.toml</span></code> file and passing it through the <code class="docutils literal notranslate"><span class="pre">--config</span></code> flag is much easier.</p>
-<div class="section" id="command-line-options">
-<h2>Command Line options<a class="headerlink" href="#command-line-options" title="Permalink to this heading">#</a></h2>
+<section id="command-line-options">
+<h2>Command Line options<a class="headerlink" href="#command-line-options" title="Link to this heading">¶</a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Options:
--h,--help                   Print this <span class="nb">help</span> message and <span class="nb">exit</span>
---help-all                  Expand individual options.
---config                    Read &lt;config&gt;.toml files.
---mode ENUM:value <span class="k">in</span> <span class="o">{</span>script-&gt;1,immediate-&gt;0<span class="o">}</span> OR <span class="o">{</span><span class="m">1</span>,0<span class="o">}</span> REQUIRED
-                            Provide BuildExe run mode
-<span class="o">[</span>Option Group: Root<span class="o">]</span>
+-h,--help<span class="w">                   </span>Print<span class="w"> </span>this<span class="w"> </span><span class="nb">help</span><span class="w"> </span>message<span class="w"> </span>and<span class="w"> </span><span class="nb">exit</span>
+--help-all<span class="w">                  </span>Expand<span class="w"> </span>individual<span class="w"> </span>options.
+--config<span class="w">                    </span>Read<span class="w"> </span>&lt;config&gt;.toml<span class="w"> </span>files.
+--mode<span class="w"> </span>ENUM:value<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">{</span>script-&gt;1,immediate-&gt;0<span class="o">}</span><span class="w"> </span>OR<span class="w"> </span><span class="o">{</span><span class="m">1</span>,0<span class="o">}</span><span class="w"> </span>REQUIRED
+<span class="w">                            </span>Provide<span class="w"> </span>BuildExe<span class="w"> </span>run<span class="w"> </span>mode
+<span class="o">[</span>Option<span class="w"> </span>Group:<span class="w"> </span>Root<span class="o">]</span>
 Options:
-    --clean                     Clean artifacts
-    --loglevel ENUM:value <span class="k">in</span> <span class="o">{</span>warning-&gt;3,info-&gt;2,debug-&gt;1,critical-&gt;5,trace-&gt;0<span class="o">}</span> OR <span class="o">{</span><span class="m">3</span>,2,1,5,0<span class="o">}</span>
-                                LogLevel settings
-    --root_dir TEXT REQUIRED    Project root directory <span class="o">(</span>relative to current directory<span class="o">)</span>
-    --build_dir TEXT REQUIRED   Project build dir <span class="o">(</span>relative to current directory<span class="o">)</span>
-<span class="o">[</span>Option Group: Project Info<span class="o">]</span>
+<span class="w">    </span>--clean<span class="w">                     </span>Clean<span class="w"> </span>artifacts
+<span class="w">    </span>--loglevel<span class="w"> </span>ENUM:value<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">{</span>warning-&gt;3,info-&gt;2,debug-&gt;1,critical-&gt;5,trace-&gt;0<span class="o">}</span><span class="w"> </span>OR<span class="w"> </span><span class="o">{</span><span class="m">3</span>,2,1,5,0<span class="o">}</span>
+<span class="w">                                </span>LogLevel<span class="w"> </span>settings
+<span class="w">    </span>--root_dir<span class="w"> </span>TEXT<span class="w"> </span>REQUIRED<span class="w">    </span>Project<span class="w"> </span>root<span class="w"> </span>directory<span class="w"> </span><span class="o">(</span>relative<span class="w"> </span>to<span class="w"> </span>current<span class="w"> </span>directory<span class="o">)</span>
+<span class="w">    </span>--build_dir<span class="w"> </span>TEXT<span class="w"> </span>REQUIRED<span class="w">   </span>Project<span class="w"> </span>build<span class="w"> </span>dir<span class="w"> </span><span class="o">(</span>relative<span class="w"> </span>to<span class="w"> </span>current<span class="w"> </span>directory<span class="o">)</span>
+<span class="o">[</span>Option<span class="w"> </span>Group:<span class="w"> </span>Project<span class="w"> </span>Info<span class="o">]</span>
 Options:
-    --name TEXT REQUIRED        Provide Target name
-    --type ENUM:value <span class="k">in</span> <span class="o">{</span>dynamicLibrary-&gt;2,staticLibrary-&gt;1,executable-&gt;0<span class="o">}</span> OR <span class="o">{</span><span class="m">2</span>,1,0<span class="o">}</span> REQUIRED
-                                Provide Target Type
-    --relative_to_root TEXT REQUIRED
-                                Provide Target relative to root
-<span class="o">[</span>Option Group: Target Inputs<span class="o">]</span>
+<span class="w">    </span>--name<span class="w"> </span>TEXT<span class="w"> </span>REQUIRED<span class="w">        </span>Provide<span class="w"> </span>Target<span class="w"> </span>name
+<span class="w">    </span>--type<span class="w"> </span>ENUM:value<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">{</span>dynamicLibrary-&gt;2,staticLibrary-&gt;1,executable-&gt;0<span class="o">}</span><span class="w"> </span>OR<span class="w"> </span><span class="o">{</span><span class="m">2</span>,1,0<span class="o">}</span><span class="w"> </span>REQUIRED
+<span class="w">                                </span>Provide<span class="w"> </span>Target<span class="w"> </span>Type
+<span class="w">    </span>--relative_to_root<span class="w"> </span>TEXT<span class="w"> </span>REQUIRED
+<span class="w">                                </span>Provide<span class="w"> </span>Target<span class="w"> </span>relative<span class="w"> </span>to<span class="w"> </span>root
+<span class="o">[</span>Option<span class="w"> </span>Group:<span class="w"> </span>Target<span class="w"> </span>Inputs<span class="o">]</span>
 Options:
-    --srcs TEXT ...             Provide <span class="nb">source</span> files
-    --includes TEXT ...         Provide include <span class="nb">dirs</span>
-    --lib_dirs TEXT ...         Provide lib <span class="nb">dirs</span>
-    --external_libs TEXT ...    Provide external libs
-    --preprocessor_flags TEXT ...
-                                Provide Preprocessor flags
-    --common_compile_flags TEXT ...
-                                Provide CommonCompile Flags
-    --asm_compile_flags TEXT ...
-                                Provide AsmCompile Flags
-    --c_compile_flags TEXT ...  Provide CCompile Flags
-    --cpp_compile_flags TEXT ...
-                                Provide CppCompile Flags
-    --link_flags TEXT ...       Provide Link Flags
+<span class="w">    </span>--srcs<span class="w"> </span>TEXT<span class="w"> </span>...<span class="w">             </span>Provide<span class="w"> </span><span class="nb">source</span><span class="w"> </span>files
+<span class="w">    </span>--includes<span class="w"> </span>TEXT<span class="w"> </span>...<span class="w">         </span>Provide<span class="w"> </span>include<span class="w"> </span><span class="nb">dirs</span>
+<span class="w">    </span>--lib_dirs<span class="w"> </span>TEXT<span class="w"> </span>...<span class="w">         </span>Provide<span class="w"> </span>lib<span class="w"> </span><span class="nb">dirs</span>
+<span class="w">    </span>--external_libs<span class="w"> </span>TEXT<span class="w"> </span>...<span class="w">    </span>Provide<span class="w"> </span>external<span class="w"> </span>libs
+<span class="w">    </span>--preprocessor_flags<span class="w"> </span>TEXT<span class="w"> </span>...
+<span class="w">                                </span>Provide<span class="w"> </span>Preprocessor<span class="w"> </span>flags
+<span class="w">    </span>--common_compile_flags<span class="w"> </span>TEXT<span class="w"> </span>...
+<span class="w">                                </span>Provide<span class="w"> </span>CommonCompile<span class="w"> </span>Flags
+<span class="w">    </span>--asm_compile_flags<span class="w"> </span>TEXT<span class="w"> </span>...
+<span class="w">                                </span>Provide<span class="w"> </span>AsmCompile<span class="w"> </span>Flags
+<span class="w">    </span>--c_compile_flags<span class="w"> </span>TEXT<span class="w"> </span>...<span class="w">  </span>Provide<span class="w"> </span>CCompile<span class="w"> </span>Flags
+<span class="w">    </span>--cpp_compile_flags<span class="w"> </span>TEXT<span class="w"> </span>...
+<span class="w">                                </span>Provide<span class="w"> </span>CppCompile<span class="w"> </span>Flags
+<span class="w">    </span>--link_flags<span class="w"> </span>TEXT<span class="w"> </span>...<span class="w">       </span>Provide<span class="w"> </span>Link<span class="w"> </span>Flags
 
 Subcommands:
 toolchain
-Select Toolchain
-Supported Toolchains:
-    host                        Host Toolchain
+Select<span class="w"> </span>Toolchain
+Supported<span class="w"> </span>Toolchains:
+<span class="w">    </span>host<span class="w">                        </span>Host<span class="w"> </span>Toolchain
 
 target
-Select Target
+Select<span class="w"> </span>Target
 
 script
 Options:
-    --configs TEXT ...          Config files <span class="k">for</span> script mode
+<span class="w">    </span>--configs<span class="w"> </span>TEXT<span class="w"> </span>...<span class="w">          </span>Config<span class="w"> </span>files<span class="w"> </span><span class="k">for</span><span class="w"> </span>script<span class="w"> </span>mode
 </pre></div>
 </div>
-</div>
-<div class="section" id="toml-file-options">
-<h2>TOML file options<a class="headerlink" href="#toml-file-options" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="toml-file-options">
+<h2>TOML file options<a class="headerlink" href="#toml-file-options" title="Link to this heading">¶</a></h2>
 <p>Relate the options below with the <strong>Command Line options</strong> above.</p>
 <p>You can also read the <a class="reference external" href="https://github.com/CLIUtils/CLI11">CLI11 README</a></p>
-<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Default (ungrouped) Options</span><span class="w"></span>
-<span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;script&quot;</span><span class="w"> </span><span class="c1"># REQUIRED script, immediate</span><span class="w"></span>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Default (ungrouped) Options</span>
+<span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;script&quot;</span><span class="w"> </span><span class="c1"># REQUIRED script, immediate</span>
 
-<span class="c1"># Root Options</span><span class="w"></span>
-<span class="n">clean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="w"> </span><span class="c1"># true, false</span><span class="w"></span>
-<span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;trace&quot;</span><span class="w"> </span><span class="c1"># &quot;trace&quot;, &quot;debug&quot;, &quot;info&quot;, &quot;warning&quot;, &quot;critical&quot;</span><span class="w"></span>
-<span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
-<span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
+<span class="c1"># Root Options</span>
+<span class="n">clean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c1"># true, false</span>
+<span class="n">loglevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;trace&quot;</span><span class="w"> </span><span class="c1"># &quot;trace&quot;, &quot;debug&quot;, &quot;info&quot;, &quot;warning&quot;, &quot;critical&quot;</span>
+<span class="n">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="c1"># REQUIRED</span>
+<span class="n">build_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="c1"># REQUIRED</span>
 
-<span class="c1"># Target Info Options</span><span class="w"></span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
-<span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;executable&quot;</span><span class="w"> </span><span class="c1"># REQUIRED, executable, staticLibrary, dynamicLibrary</span><span class="w"></span>
-<span class="n">relative_to_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="c1"># REQUIRED</span><span class="w"></span>
+<span class="c1"># Target Info Options</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="c1"># REQUIRED</span>
+<span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;executable&quot;</span><span class="w"> </span><span class="c1"># REQUIRED, executable, staticLibrary, dynamicLibrary</span>
+<span class="n">relative_to_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="c1"># REQUIRED</span>
 
-<span class="c1"># Target Inputs Options</span><span class="w"></span>
-<span class="n">srcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="n">includes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="n">lib_dirs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="n">external_libs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="n">preprocessor_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="n">common_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="n">asm_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="n">c_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="n">cpp_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="n">link_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="c1"># Target Inputs Options</span>
+<span class="n">srcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
+<span class="n">includes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
+<span class="n">lib_dirs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
+<span class="n">external_libs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
+<span class="n">preprocessor_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
+<span class="n">common_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
+<span class="n">asm_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
+<span class="n">c_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
+<span class="n">cpp_compile_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
+<span class="n">link_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
 
-<span class="c1"># Subcommand</span><span class="w"></span>
+<span class="c1"># Subcommand</span>
 
-<span class="c1"># Host Toolchain Options</span><span class="w"></span>
-<span class="p">[</span><span class="n">toolchain</span><span class="p">.</span><span class="n">host</span><span class="p">]</span><span class="w"> </span><span class="c1"># ALWAYS</span><span class="w"></span>
-<span class="n">build</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="w"> </span><span class="c1"># ALWAYS</span><span class="w"></span>
-<span class="n">test</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">false</span><span class="w"> </span><span class="c1"># ALWAYS</span><span class="w"></span>
+<span class="c1"># Host Toolchain Options</span>
+<span class="k">[toolchain.host]</span><span class="w"> </span><span class="c1"># ALWAYS</span>
+<span class="n">build</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c1"># ALWAYS</span>
+<span class="n">test</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="c1"># ALWAYS</span>
 
-<span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;gcc&quot;</span><span class="w"></span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;x86_64-linux-gnu&quot;</span><span class="w"></span>
-<span class="n">asm_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;as&quot;</span><span class="w"></span>
-<span class="n">c_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;gcc&quot;</span><span class="w"></span>
-<span class="n">cpp_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;g++&quot;</span><span class="w"></span>
-<span class="n">archiver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ar&quot;</span><span class="w"></span>
-<span class="n">linker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ld&quot;</span><span class="w"></span>
+<span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;gcc&quot;</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;x86_64-linux-gnu&quot;</span>
+<span class="n">asm_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;as&quot;</span>
+<span class="n">c_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;gcc&quot;</span>
+<span class="n">cpp_compiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;g++&quot;</span>
+<span class="n">archiver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ar&quot;</span>
+<span class="n">linker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ld&quot;</span>
 
-<span class="c1"># TODO, Add more options to narrow down search when multiple toolchains are installed</span><span class="w"></span>
+<span class="c1"># TODO, Add more options to narrow down search when multiple toolchains are installed</span>
 
-<span class="c1"># Script Options</span><span class="w"></span>
-<span class="k">[script]</span><span class="w"></span>
-<span class="n">configs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;build.toml&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;custom_toolchain.toml&quot;</span><span class="p">]</span><span class="w"> </span><span class="c1"># Converted to --config build.toml --config custom_toolchain.toml</span><span class="w"></span>
+<span class="c1"># Script Options</span>
+<span class="k">[script]</span>
+<span class="n">configs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;build.toml&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;custom_toolchain.toml&quot;</span><span class="p">]</span><span class="w"> </span><span class="c1"># Converted to --config build.toml --config custom_toolchain.toml</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
         </article>
       </div>
@@ -420,12 +461,9 @@ Options:
       
     </aside>
   </div>
-</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/scripts/furo.js"></script>
+</div><script src="../_static/documentation_options.js?v=a58bc63e"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>
