@@ -24,13 +24,6 @@ These third party libraries are added as submodules since they aren't meant to b
 
 - cpputest (Unit Testing / Mocking)
 
-## Utility
-
-- tl_optional (Better optional support)
-  - Synced with branch origin/master (May 2, 2021)
-  - Commit Id: c28fcf74d207fc667c4ed3dbae4c251ea551c8c1
-  - Needed fix: #45
-
 ## Tools
 
 - [x] clangformat (auto)

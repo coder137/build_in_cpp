@@ -179,4 +179,3 @@ _BuildCC_ is licensed under the Apache License, Version 2.0. See [LICENSE](LICEN
 - [Nlohmann::Json](https://github.com/nlohmann/json) (JSON Serialization) [MIT License] [Header Only]
 - [CLI11](https://github.com/CLIUtils/CLI11) (Argument Parsing) [BSD-3-Clause License] [Header Only]
 - [CppUTest](https://github.com/cpputest/cpputest) (Unit Testing/Mocking) [BSD-3-Clause License]
-- [Tl::Optional](https://github.com/TartanLlama/optional) (Optional support) [CC0-1.0 License]

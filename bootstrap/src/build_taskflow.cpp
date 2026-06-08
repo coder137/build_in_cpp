@@ -21,13 +21,13 @@ namespace buildcc {
 void taskflow_ho_cb(TargetInfo &info) {
   info.AddIncludeDir("");
   info.GlobHeaders("taskflow");
+  info.GlobHeaders("taskflow/algorithm");
   info.GlobHeaders("taskflow/core");
-  info.GlobHeaders("taskflow/core/algorithm");
   info.GlobHeaders("taskflow/cuda");
-  info.GlobHeaders("taskflow/cuda/cuda_algorithm");
+  info.GlobHeaders("taskflow/cuda/algorithm");
   info.GlobHeaders("taskflow/dsl");
   info.GlobHeaders("taskflow/sycl");
-  info.GlobHeaders("taskflow/sycl/sycl_algorithm");
+  info.GlobHeaders("taskflow/sycl/algorithm");
   info.GlobHeaders("taskflow/utility");
 }
 
