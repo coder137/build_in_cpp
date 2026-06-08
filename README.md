@@ -27,14 +27,13 @@ Build C, C++ and ASM files in C++
   - `C++17 filesystem` library support
   - `C++11 thread` library support
 - Third Party Libraries (See License below)
-  - Nlohmann::Json v3.11.2
-  - Taskflow v3.1.0
-  - CLI11 v2.1.0
-  - Tiny Process Library v2.0.4
-  - fmt v8.0.1
-  - spdlog v1.9.2
-  - CppUTest v4.0
-  - Tl::Optional (master)
+  - Nlohmann::Json
+  - Taskflow
+  - CLI11
+  - Tiny Process Library
+  - fmt
+  - spdlog
+  - CppUTest
 
 # General Information
 

@@ -200,6 +200,17 @@
                 "noTestsAction": "error",
                 "stopOnFailure": true
             }
+        },
+        {
+            "name": "msvc_dev_all",
+            "configurePreset": "msvc_dev_all",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": true
+            }
         }
     ]
 }
