@@ -27,6 +27,7 @@
 
 // Third party
 #include "fmt/format.h"
+#include "fmt/ranges.h"
 #include "nlohmann/json.hpp"
 
 namespace fs = std::filesystem;
@@ -251,7 +252,7 @@ inline fs::path string_as_path(const std::string &p) {
 
 template <> struct fmt::formatter<fs::path> : formatter<std::string> {
   template <typename FormatContext>
-  auto format(const fs::path &p, FormatContext &ctx) {
+  auto format(const fs::path &p, FormatContext &ctx) const {
     return formatter<std::string>::format(buildcc::path_as_display_string(p),
                                           ctx);
   }

@@ -106,7 +106,7 @@
             "name": "msvc_dev_all",
             "displayName": "MSVC all options",
             "description": "MSVC build with all developer options",
-            "generator": "Visual Studio 16 2019",
+            "generator": "Visual Studio 17 2022",
             "binaryDir": "${sourceDir}/_build_msvc_dev_all",
             "cacheVariables": {
                 "BUILDCC_INSTALL": true,
@@ -127,7 +127,7 @@
             "name": "msvc_analysis",
             "displayName": "MSVC Analysis",
             "description": "MSVC Analysis for CI/CD",
-            "generator": "Visual Studio 16 2019",
+            "generator": "Visual Studio 17 2022",
             "binaryDir": "${sourceDir}/_build_msvc_analysis",
             "cacheVariables": {
                 "BUILDCC_INSTALL": false,
@@ -193,6 +193,17 @@
         {
             "name": "gcc_dev_interface",
             "configurePreset": "gcc_dev_interface",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": true
+            }
+        },
+        {
+            "name": "msvc_dev_all",
+            "configurePreset": "msvc_dev_all",
             "output": {
                 "outputOnFailure": true
             },

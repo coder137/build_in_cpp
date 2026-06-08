@@ -13,8 +13,6 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-  schedule:
-    - cron: "43 11 * * 4"
 
 env:
   # Path to the CMake build directory.
@@ -25,11 +23,11 @@ env:
 jobs:
   analyze:
     name: Analyze
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           submodules: true
 
@@ -61,7 +59,7 @@ jobs:
 
       # Upload SARIF file as an Artifact to download and view
       - name: Upload SARIF as an Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: sarif-file
           path: ${{ steps.run-analysis.outputs.sarif }}

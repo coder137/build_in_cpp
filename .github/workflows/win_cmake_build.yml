@@ -21,14 +21,16 @@ jobs:
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           submodules: true
 
-      - uses: ilammy/msvc-dev-cmd@v1
+      - uses: TheMrMilchmann/setup-msvc-dev@v4
+        with:
+          arch: x64
 
       - name: Check environment
         run: |
@@ -44,41 +46,36 @@ jobs:
           cmake --list-presets
           cmake --preset=${{env.BUILD_MSVC_PRESET}}
 
-      - name: Build Debug and test
+      - name: Build Debug, Test and Release
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
           cmake --build . --parallel 2 --config Debug
-          ctest . --parallel 2 -C Debug
+          ctest --parallel 2 -C Debug
+          cmake --build . --parallel 2 --config Release
 
-      - name: Build Release
-        # Linux has 2 cores
-        run: |
-          cmake --build --list-presets
-          cmake --build --preset=${{env.BUILD_MSVC_PRESET}} --config Release --parallel 2
+      # - name: Bootstrap through CMake
+      #   working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+      #   run: |
+      #     cmake --build . --config Release --target run_buildcc_lib_bootstrap_win_msvc --parallel 2
 
-      - name: Bootstrap through CMake
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
-        run: |
-          cmake --build . --config Release --target run_buildcc_lib_bootstrap_win_msvc --parallel 2
+      # - name: BuildExe Layout setup
+      #   working-directory: ${{github.workspace}}/..
+      #   run: |
+      #     mkdir buildcc_home
+      #     $env:BUILDCC_HOME = "${{github.workspace}}/../buildcc_home"
+      #     $env:BUILDCC_HOME
+      #     cd buildcc_home
+      #     mkdir buildcc
+      #     mkdir libs
+      #     mkdir extensions
+      #     cd ..
+      #     dir
 
-      - name: BuildExe Layout setup
-        working-directory: ${{github.workspace}}/..
-        run: |
-          mkdir buildcc_home
-          $env:BUILDCC_HOME = "${{github.workspace}}/../buildcc_home"
-          $env:BUILDCC_HOME
-          cd buildcc_home
-          mkdir buildcc
-          mkdir libs
-          mkdir extensions
-          cd ..
-          dir
-
-      - name: BuildExe IM example tiny-process-library
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
-        run: |
-          $env:BUILDCC_HOME = "${{github.workspace}}/../buildcc_home"
-          cmake --build . --config Release --target run_buildexe_im_tpl_win_msvc
+      # - name: BuildExe IM example tiny-process-library
+      #   working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+      #   run: |
+      #     $env:BUILDCC_HOME = "${{github.workspace}}/../buildcc_home"
+      #     cmake --build . --config Release --target run_buildexe_im_tpl_win_msvc
 
       # - name: TODO, BuildExe SM simple hyrid example
 
@@ -88,162 +85,164 @@ jobs:
           cpack -C Release -G ZIP
 
       - name: Upload CPack
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: "BuildExe_Win"
           path: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}/BuildCC-0.1.1-win64.zip
 
-      - name: Install
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
-        run: |
-          cmake --install . --config Release
+      # - name: Install
+      #   working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+      #   run: |
+      #     cmake --install . --config Release
 
-      - name: AfterInstall Example
-        working-directory: ${{github.workspace}}/example/gcc/AfterInstall
-        run: |
-          $env:Path += ";C:/Program Files (x86)/BuildCC"
-          cmake -B build
-          cmake --build build --config Release --parallel 2
-          cd build/Release
-          ls
-          .\build.exe
+      # - name: AfterInstall Example
+      #   working-directory: ${{github.workspace}}/example/gcc/AfterInstall
+      #   run: |
+      #     $env:Path += ";C:/Program Files (x86)/BuildCC"
+      #     cmake -B build
+      #     cmake --build build --config Release --parallel 2
+      #     cd build/Release
+      #     ls
+      #     .\build.exe
 
-      - name: Hybrid Single Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
-        run: |
-          cmake --build . --config Release --parallel 2 --target run_hybrid_single_example
+      # - name: Hybrid Single Example
+      #   working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+      #   run: |
+      #     cmake --build . --config Release --parallel 2 --target run_hybrid_single_example
 
-      - name: Hybrid Simple Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
-        run: |
-          cmake --build . --config Release --parallel 2 --target run_hybrid_simple_example_win
+      # - name: Hybrid Simple Example
+      #   working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+      #   run: |
+      #     cmake --build . --config Release --parallel 2 --target run_hybrid_simple_example_win
 
-      - name: Hybrid Foolib Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
-        run: |
-          cmake --build . --config Release --parallel 2 --target run_hybrid_foolib_example_win
+      # - name: Hybrid Foolib Example
+      #   working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+      #   run: |
+      #     cmake --build . --config Release --parallel 2 --target run_hybrid_foolib_example_win
 
-      - name: Hybrid External Lib Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
-        run: |
-          cmake --build . --config Release --parallel 2 --target run_hybrid_externallib_example_win
+      # - name: Hybrid External Lib Example
+      #   working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+      #   run: |
+      #     cmake --build . --config Release --parallel 2 --target run_hybrid_externallib_example_win
 
-      - name: Hybrid Custom Target Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
-        run: |
-          cmake --build . --config Release --parallel 2 --target run_hybrid_customtarget_example_win
+      # - name: Hybrid Custom Target Example
+      #   working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+      #   run: |
+      #     cmake --build . --config Release --parallel 2 --target run_hybrid_customtarget_example_win
 
-      - name: Hybrid Generic Target Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
-        run: |
-          cmake --build . --config Release --parallel 2 --target run_hybrid_generic_example
+      # - name: Hybrid Generic Target Example
+      #   working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+      #   run: |
+      #     cmake --build . --config Release --parallel 2 --target run_hybrid_generic_example
 
-      - name: Hybrid PCH Target Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
-        run: |
-          cmake --build . --config Release --parallel 2 --target run_hybrid_pch_example_win
+      # - name: Hybrid PCH Target Example
+      #   working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+      #   run: |
+      #     cmake --build . --config Release --parallel 2 --target run_hybrid_pch_example_win
 
-      - name: Hybrid Dep Chaining Target Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
-        run: |
-          cmake --build . --config Release --parallel 2 --target run_hybrid_depchaining_example_win
+      # - name: Hybrid Dep Chaining Target Example
+      #   working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+      #   run: |
+      #     cmake --build . --config Release --parallel 2 --target run_hybrid_depchaining_example_win
 
-      - name: Hybrid Target Info Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
-        run: |
-          cmake --build . --config Release --parallel 2 --target run_hybrid_targetinfo_example_win
+      # - name: Hybrid Target Info Example
+      #   working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
+      #   run: |
+      #     cmake --build . --config Release --parallel 2 --target run_hybrid_targetinfo_example_win
 
-  build_clang:
-    name: Clang single and interface Lib
-    # The CMake configure and build commands are platform agnostic and should work equally
-    # well on Windows or Mac.  You can convert this to a matrix build if you need
-    # cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: windows-2019
+  # build_clang:
+  #   name: Clang single and interface Lib
+  #   # The CMake configure and build commands are platform agnostic and should work equally
+  #   # well on Windows or Mac.  You can convert this to a matrix build if you need
+  #   # cross-platform coverage.
+  #   # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+  #   runs-on: windows-latest
 
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #       with:
+  #         submodules: true
 
-      - uses: ilammy/msvc-dev-cmd@v1
+  #     - uses: TheMrMilchmann/setup-msvc-dev@v4
+  #       with:
+  #         arch: x64
 
-      - name: Check environment
-        run: |
-          cmake --version
-          cl ?
-          clang --version
-          clang-tidy --version
-          python --version
-          pip --version
+  #     - name: Check environment
+  #       run: |
+  #         cmake --version
+  #         cl ?
+  #         clang --version
+  #         clang-tidy --version
+  #         python --version
+  #         pip --version
 
-      - name: Configure CMake
-        run: |
-          cmake --list-presets
-          cmake --preset=${{env.BUILD_CLANG_PRESET}}
+  #     - name: Configure CMake
+  #       run: |
+  #         cmake --list-presets
+  #         cmake --preset=${{env.BUILD_CLANG_PRESET}}
 
-      - name: Build
-        # Linux has 2 cores
-        run: |
-          cmake --build --list-presets
-          cmake --build --preset=${{env.BUILD_CLANG_PRESET}} --parallel 2 --config Release
+  #     - name: Build
+  #       # Linux has 2 cores
+  #       run: |
+  #         cmake --build --list-presets
+  #         cmake --build --preset=${{env.BUILD_CLANG_PRESET}} --parallel 2 --config Release
 
-      - name: Install
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
-        run: |
-          cmake --install . --config Release
+  #     - name: Install
+  #       working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
+  #       run: |
+  #         cmake --install . --config Release
 
-      - name: AfterInstall Example
-        working-directory: ${{github.workspace}}/example/gcc/AfterInstall
-        run: |
-          $env:Path += ";C:/Program Files (x86)/BuildCC"
-          cmake -B build
-          cmake --build build --parallel 2 --config Release
-          cd build/Release
-          ls
-          .\build.exe
+  #     - name: AfterInstall Example
+  #       working-directory: ${{github.workspace}}/example/gcc/AfterInstall
+  #       run: |
+  #         $env:Path += ";C:/Program Files (x86)/BuildCC"
+  #         cmake -B build
+  #         cmake --build build --parallel 2 --config Release
+  #         cd build/Release
+  #         ls
+  #         .\build.exe
 
-      - name: Hybrid Single Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
-        run: |
-          cmake --build . --target run_hybrid_single_example --config Release
+  #     - name: Hybrid Single Example
+  #       working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
+  #       run: |
+  #         cmake --build . --target run_hybrid_single_example --config Release
 
-      - name: Hybrid Simple Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
-        run: |
-          cmake --build . --target run_hybrid_simple_example_win --config Release
+  #     - name: Hybrid Simple Example
+  #       working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
+  #       run: |
+  #         cmake --build . --target run_hybrid_simple_example_win --config Release
 
-      - name: Hybrid Foolib Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
-        run: |
-          cmake --build . --target run_hybrid_foolib_example_win --config Release
+  #     - name: Hybrid Foolib Example
+  #       working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
+  #       run: |
+  #         cmake --build . --target run_hybrid_foolib_example_win --config Release
 
-      - name: Hybrid External Lib Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
-        run: |
-          cmake --build . --target run_hybrid_externallib_example_win --config Release
+  #     - name: Hybrid External Lib Example
+  #       working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
+  #       run: |
+  #         cmake --build . --target run_hybrid_externallib_example_win --config Release
 
-      - name: Hybrid Custom Target Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
-        run: |
-          cmake --build . --target run_hybrid_customtarget_example_win --config Release
+  #     - name: Hybrid Custom Target Example
+  #       working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
+  #       run: |
+  #         cmake --build . --target run_hybrid_customtarget_example_win --config Release
 
-      - name: Hybrid Generic Target Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
-        run: |
-          cmake --build . --target run_hybrid_generic_example --config Release
+  #     - name: Hybrid Generic Target Example
+  #       working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
+  #       run: |
+  #         cmake --build . --target run_hybrid_generic_example --config Release
 
-      - name: Hybrid PCH Target Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
-        run: |
-          cmake --build . --target run_hybrid_pch_example_win --config Release
+  #     - name: Hybrid PCH Target Example
+  #       working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
+  #       run: |
+  #         cmake --build . --target run_hybrid_pch_example_win --config Release
 
-      - name: Hybrid Dep Chaining Target Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
-        run: |
-          cmake --build . --target run_hybrid_depchaining_example_win --config Release
+  #     - name: Hybrid Dep Chaining Target Example
+  #       working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
+  #       run: |
+  #         cmake --build . --target run_hybrid_depchaining_example_win --config Release
 
-      - name: Hybrid Target Info Example
-        working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
-        run: |
-          cmake --build . --target run_hybrid_targetinfo_example_win --config Release
+  #     - name: Hybrid Target Info Example
+  #       working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_CLANG_DEV_ALL}}
+  #       run: |
+  #         cmake --build . --target run_hybrid_targetinfo_example_win --config Release

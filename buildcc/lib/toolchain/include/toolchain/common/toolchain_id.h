@@ -35,7 +35,7 @@ enum class ToolchainId {
 template <>
 struct fmt::formatter<buildcc::ToolchainId> : formatter<std::string> {
   template <typename FormatContext>
-  auto format(buildcc::ToolchainId id, FormatContext &ctx) {
+  auto format(buildcc::ToolchainId id, FormatContext &ctx) const {
     std::string id_name;
     switch (id) {
     case buildcc::ToolchainId::Gcc:

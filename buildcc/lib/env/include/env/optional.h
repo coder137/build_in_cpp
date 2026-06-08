@@ -17,11 +17,11 @@
 #ifndef ENV_OPTIONAL_H_
 #define ENV_OPTIONAL_H_
 
-#include "tl/optional.hpp"
+#include <optional>
 
 namespace buildcc::env {
 
-template <typename T> using optional = tl::optional<T>;
+template <typename T> using optional = std::optional<T>;
 
 } // namespace buildcc::env
 

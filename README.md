@@ -27,14 +27,13 @@ Build C, C++ and ASM files in C++
   - `C++17 filesystem` library support
   - `C++11 thread` library support
 - Third Party Libraries (See License below)
-  - Nlohmann::Json v3.11.2
-  - Taskflow v3.1.0
-  - CLI11 v2.1.0
-  - Tiny Process Library v2.0.4
-  - fmt v8.0.1
-  - spdlog v1.9.2
-  - CppUTest v4.0
-  - Tl::Optional (master)
+  - Nlohmann::Json
+  - Taskflow
+  - CLI11
+  - Tiny Process Library
+  - fmt
+  - spdlog
+  - CppUTest
 
 # General Information
 
@@ -179,4 +178,3 @@ _BuildCC_ is licensed under the Apache License, Version 2.0. See [LICENSE](LICEN
 - [Nlohmann::Json](https://github.com/nlohmann/json) (JSON Serialization) [MIT License] [Header Only]
 - [CLI11](https://github.com/CLIUtils/CLI11) (Argument Parsing) [BSD-3-Clause License] [Header Only]
 - [CppUTest](https://github.com/cpputest/cpputest) (Unit Testing/Mocking) [BSD-3-Clause License]
-- [Tl::Optional](https://github.com/TartanLlama/optional) (Optional support) [CC0-1.0 License]
