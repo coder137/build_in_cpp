@@ -31,7 +31,6 @@ jobs:
       - uses: TheMrMilchmann/setup-msvc-dev@v4
         with:
           arch: x64
-          toolset: 17.14
 
       - name: Check environment
         run: |
