@@ -21,10 +21,10 @@ jobs:
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           submodules: true
 
@@ -88,7 +88,7 @@ jobs:
           cpack -C Release -G ZIP
 
       - name: Upload CPack
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: "BuildExe_Win"
           path: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}/BuildCC-0.1.1-win64.zip
@@ -159,10 +159,10 @@ jobs:
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           submodules: true
 
