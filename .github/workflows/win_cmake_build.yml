@@ -51,7 +51,7 @@ jobs:
         working-directory: ${{github.workspace}}/${{env.BUILD_FOLDER_MSVC_DEV_ALL}}
         run: |
           cmake --build . --parallel 2 --config Debug
-          ctest . --parallel 2 -C Debug
+          ctest --parallel 2 -C Debug
           cmake --build . --parallel 2 --config Release
 
       # - name: Bootstrap through CMake
